@@ -73,6 +73,7 @@
         <dependency>
             <groupId>net.canarymod</groupId>
             <artifactId>CanaryLib</artifactId>
+            <version>${api.version}</version>
         </dependency>
         <dependency>
             <groupId>net.minecraft</groupId>
@@ -104,45 +105,6 @@
                     <source>1.6</source>
                     <target>1.6</target>
                 </configuration>
-            </plugin>
-            <!-- Source plugin -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>2.2.1</version>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <!-- JavaDoc -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.7</version>
-                <configuration>
-                    <linksource>true</linksource>
-                    <doctitle>${project.name} ${project.version}</doctitle>
-                    <header>Generated: ${maven.build.timestamp.format}</header>
-                    <footer>
-                        <![CDATA[Licensed under the <a href="http://opensource.org/licenses/BSD-3-Clause">BSD 3-Clause License</a>]]></footer>
-                    <links>
-                        <link>http://docs.visualillusionsent.net/VIUtils/</link>
-                        <link>http://www.jdom.org/docs/apidocs/</link>
-                    </links>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>attach-javadocs</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
             <!-- Dependency shader -->
             <plugin>
@@ -232,6 +194,65 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>attach-sources-javadoc</id>
+
+            <build>
+                <plugins>
+                    <!-- Source plugin -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>2.2.1</version>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <!-- JavaDoc -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>2.7</version>
+                        <configuration>
+                            <linksource>true</linksource>
+                            <doctitle>${project.name} ${project.version}</doctitle>
+                            <header>Generated: ${maven.build.timestamp}</header>
+                            <footer>
+                                <![CDATA[Licensed under the <a href="http://opensource.org/licenses/BSD-3-Clause">BSD 3-Clause License</a>]]></footer>
+                            <links>
+                                <link>http://docs.visualillusionsent.net/VIUtils/1.2.1/</link>
+                                <link>http://www.jdom.org/docs/apidocs/</link>
+                            </links>
+                            <tags>
+                                <!-- Cause damagefilter uses @tags that don't exist... We need to make them exist -->
+                                <tag>
+                                    <name>PluginDev</name>
+                                    <placement>a</placement>
+                                    <head>PluginDev:</head>
+                                </tag>
+                            </tags>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
