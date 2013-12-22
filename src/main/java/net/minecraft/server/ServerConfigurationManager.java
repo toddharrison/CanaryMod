@@ -21,7 +21,6 @@ import net.canarymod.hook.player.PlayerRespawningHook;
 import net.canarymod.hook.player.PreConnectionHook;
 import net.canarymod.hook.player.TeleportHook;
 import net.canarymod.hook.system.ServerShutdownHook;
-import net.visualillusionsent.utils.DateUtils;
 
 import java.net.SocketAddress;
 import java.text.SimpleDateFormat;
@@ -335,7 +334,7 @@ public abstract class ServerConfigurationManager {
             return Translator.translate(srv.getDefaultBannedMessage());
         }
         if (!Canary.whitelist().isWhitelisted(s0) && Configuration.getServerConfig().isWhitelistEnabled()) {
-            return srv.getNotWhitelistedMessage();
+            return srv.getWhitelistMessage();
         }
 
         if (this.a.size() >= this.b) {
