@@ -1,6 +1,8 @@
 package net.canarymod.api;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import net.canarymod.api.entity.CanaryEntity;
 import net.canarymod.api.entity.Entity;
 import net.canarymod.api.entity.living.humanoid.CanaryPlayer;
@@ -57,8 +59,8 @@ public class CanaryEntityTracker implements EntityTracker {
     }
 
     @Override
-    public ArrayList<Entity> getTrackedEntities() {
-        ArrayList<Entity> entities = new ArrayList<Entity>();
+    public List<Entity> getTrackedEntities() {
+        List<Entity> entities = new ArrayList<Entity>();
 
         for (net.minecraft.server.EntityTrackerEntry e : tracker.getTrackedEntities()) {
             entities.add(e.getCanaryTrackerEntry().getEntity());

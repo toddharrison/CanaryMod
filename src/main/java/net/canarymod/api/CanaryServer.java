@@ -5,6 +5,8 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import net.canarymod.Canary;
 import net.canarymod.Main;
 import net.canarymod.api.entity.living.humanoid.CanaryPlayer;
@@ -48,7 +50,7 @@ import net.visualillusionsent.utils.TaskManager;
  */
 public class CanaryServer implements Server {
 
-    protected HashMap<String, ServerTimer> timers = new HashMap<String, ServerTimer>();
+    protected Map<String, ServerTimer> timers = new HashMap<String, ServerTimer>();
     private MinecraftServer server;
     private GUIControl currentGUI = null;
     String canaryVersion = null;
@@ -97,7 +99,7 @@ public class CanaryServer implements Server {
      */
     @Override
     public String[] getPlayerNameList() {
-        ArrayList<Player> players = getPlayerList();
+        List<Player> players = getPlayerList();
         String[] names = new String[players.size()];
 
         for (int i = 0; i < players.size(); i++) {
@@ -238,7 +240,7 @@ public class CanaryServer implements Server {
     }
 
     @Override
-    public ArrayList<Player> getPlayerList() {
+    public List<Player> getPlayerList() {
         return server.getConfigurationManager().getAllPlayers();
     }
 
