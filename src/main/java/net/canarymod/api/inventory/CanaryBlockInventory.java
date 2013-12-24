@@ -3,8 +3,8 @@ package net.canarymod.api.inventory;
 import net.canarymod.api.nbt.CanaryCompoundTag;
 import net.canarymod.api.world.blocks.CanaryTileEntity;
 import net.canarymod.config.Configuration;
-import net.minecraft.server.IInventory;
-import net.minecraft.server.ItemStack;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
 
 /**
  * ContainerBlock buffer between TileEntity and those with Inventories
@@ -95,11 +95,13 @@ public abstract class CanaryBlockInventory extends CanaryTileEntity implements I
                 if (item.getAmount() == remaining) {
                     removeItem(item.getSlot());
                     return;
-                } else if (item.getAmount() > remaining) {
+                }
+                else if (item.getAmount() > remaining) {
                     item.setAmount(item.getAmount() - remaining);
                     setSlot(item.getSlot(), item);
                     return;
-                } else {
+                }
+                else {
                     removeItem(item.getSlot());
                     remaining -= item.getAmount();
                 }
@@ -128,11 +130,13 @@ public abstract class CanaryBlockInventory extends CanaryTileEntity implements I
                 if (it.getAmount() == remaining) {
                     removeItem(it.getSlot());
                     return;
-                } else if (it.getAmount() > remaining) {
+                }
+                else if (it.getAmount() > remaining) {
                     it.setAmount(it.getAmount() - remaining);
                     setSlot(it.getSlot(), it);
                     return;
-                } else {
+                }
+                else {
                     removeItem(it.getSlot());
                     remaining -= it.getAmount();
                 }
@@ -368,7 +372,7 @@ public abstract class CanaryBlockInventory extends CanaryTileEntity implements I
             // Get an existing item with at least 1 spot free
             for (Item i : getContents()) {
                 if (i != null && item.getId() == i.getId() && item.getDamage() == i.getDamage()
-                        &&  i.getAmount() < i.getMaxAmount()) {
+                        && i.getAmount() < i.getMaxAmount()) {
                     itemExisting = i;
                 }
             }

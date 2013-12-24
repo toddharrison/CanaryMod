@@ -2,22 +2,22 @@ package net.canarymod.api.world.blocks;
 
 import net.canarymod.api.inventory.CanaryItem;
 import net.canarymod.api.inventory.Item;
-import net.minecraft.server.TileEntityRecordPlayer;
+import net.minecraft.block.BlockJukebox.TileEntityJukebox;
 
 /**
  * Jukebox wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryJukebox extends CanaryTileEntity implements Jukebox {
 
     /**
      * Constructs a new wrapper for TileEntityRecordPlayer
-     * 
+     *
      * @param tileentity
-     *            the TileEntityRecordPlayer to be wrapped
+     *         the TileEntityRecordPlayer to be wrapped
      */
-    public CanaryJukebox(TileEntityRecordPlayer tileentity) {
+    public CanaryJukebox(TileEntityJukebox tileentity) {
         super(tileentity);
     }
 
@@ -44,7 +44,7 @@ public class CanaryJukebox extends CanaryTileEntity implements Jukebox {
      * {@inheritDoc}
      */
     @Override
-    public TileEntityRecordPlayer getTileEntity() {
-        return (TileEntityRecordPlayer) tileentity;
+    public TileEntityJukebox getTileEntity() {
+        return (TileEntityJukebox) tileentity;
     }
 }

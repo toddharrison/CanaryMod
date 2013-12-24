@@ -205,7 +205,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
         WorldServer world;
 
         if (worldinfo == null) {
-            worldsettings = new WorldSettings(seed, EnumGameType.a(config.getGameMode().getId()), config.generatesStructures(), false, nmsWt);
+            worldsettings = new WorldSettings(seed, WorldSettings.GameType.a(config.getGameMode().getId()), config.generatesStructures(), false, nmsWt);
             PropertiesFile worldRaw = config.getFile();
             worldRaw.setString("world-seed", String.valueOf(seed));
             worldRaw.setInt("gamemode", 0);

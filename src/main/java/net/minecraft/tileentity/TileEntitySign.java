@@ -5,6 +5,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S33PacketUpdateSign;
+import net.minecraft.server.MinecraftServer;
 
 public class TileEntitySign extends TileEntity {
 
@@ -24,7 +25,7 @@ public class TileEntitySign extends TileEntity {
         nbttagcompound.a("Text2", this.a[1]);
         nbttagcompound.a("Text3", this.a[2]);
         nbttagcompound.a("Text4", this.a[3]);
-        nbttagcompound.a("Owner", this.d != null ? d.c_() : "");
+        nbttagcompound.a("Owner", this.k != null ? k.b_() : "");
     }
 
     public void a(NBTTagCompound nbttagcompound) {
@@ -37,7 +38,7 @@ public class TileEntitySign extends TileEntity {
                 this.a[i0] = this.a[i0].substring(0, 15);
             }
         }
-        this.owner_name = nbttagcompound.i("OwnerName");
+        this.owner_name = nbttagcompound.j("OwnerName");
     }
 
     public Packet m() {
@@ -61,7 +62,7 @@ public class TileEntitySign extends TileEntity {
             if (this.owner_name.isEmpty()) {
                 return null;
             }
-            this.k = MinecraftServer.G().af().f(owner_name);
+            this.k = MinecraftServer.G().af().e(owner_name);
         }
         //
         return this.k;

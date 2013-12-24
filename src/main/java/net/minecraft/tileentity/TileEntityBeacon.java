@@ -72,6 +72,7 @@ public class TileEntityBeacon extends TileEntity implements IInventory {
                 }
             }
         }
+    }
 
     private void y() {
         int i0 = this.l;
@@ -272,11 +273,11 @@ public class TileEntityBeacon extends TileEntity implements IInventory {
 
     // CanaryMod
     public void setPrimaryEffectDirectly(int effect) {
-        this.f = effect;
+        this.m = effect;
     }
 
     public void setSecondaryEffectDirectly(int effect) {
-        this.g = effect;
+        this.n = effect;
     }
 
     public void setLevels(int levels) {

@@ -16,9 +16,9 @@ public class TileEntityDaylightDetector extends TileEntity {
                 ((BlockDaylightDetector) this.h).e(this.b, this.c, this.d, this.e);
             }
         }
+    }
 
-        // CanaryMod
-
+    // CanaryMod
     public CanaryDaylightDetector getCanaryDaylightDetector() {
         return (CanaryDaylightDetector) complexBlock;
     }

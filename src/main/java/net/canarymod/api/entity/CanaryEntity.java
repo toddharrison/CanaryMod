@@ -15,7 +15,7 @@ import net.canarymod.api.world.World;
 import net.canarymod.api.world.position.Location;
 import net.canarymod.api.world.position.Position;
 import net.canarymod.api.world.position.Vector3D;
-import net.minecraft.server.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 
 import java.util.UUID;
 
@@ -26,9 +26,9 @@ import java.util.UUID;
  */
 public abstract class CanaryEntity implements Entity {
 
-    protected net.minecraft.server.Entity entity;
+    protected net.minecraft.entity.Entity entity;
 
-    public CanaryEntity(net.minecraft.server.Entity entity) {
+    public CanaryEntity(net.minecraft.entity.Entity entity) {
         this.entity = entity;
     }
 
@@ -395,5 +395,5 @@ public abstract class CanaryEntity implements Entity {
      *
      * @return entity
      */
-    public abstract net.minecraft.server.Entity getHandle();
+    public abstract net.minecraft.entity.Entity getHandle();
 }

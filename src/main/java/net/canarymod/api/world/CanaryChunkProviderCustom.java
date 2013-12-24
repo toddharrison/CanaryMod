@@ -1,13 +1,11 @@
 package net.canarymod.api.world;
 
-import java.util.List;
+import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.util.IProgressUpdate;
+import net.minecraft.world.ChunkPosition;
+import net.minecraft.world.chunk.IChunkProvider;
 
-import net.minecraft.server.Chunk;
-import net.minecraft.server.ChunkPosition;
-import net.minecraft.server.EnumCreatureType;
-import net.minecraft.server.IChunkProvider;
-import net.minecraft.server.IProgressUpdate;
-import net.minecraft.server.World;
+import java.util.List;
 
 /**
  * Implements an IChunkProvider and maps to a CanaryMod ChunkProvider implementation.
@@ -35,7 +33,7 @@ public class CanaryChunkProviderCustom implements IChunkProvider {
     //provideChunk
     @Override
     public Chunk d(int i0, int i1) {
-        CanaryChunk c = (CanaryChunk)provider.provideChunk(i0, i1);
+        CanaryChunk c = (CanaryChunk) provider.provideChunk(i0, i1);
         return c != null ? c.getHandle() : null;
     }
 
@@ -92,7 +90,7 @@ public class CanaryChunkProviderCustom implements IChunkProvider {
     //getLoadedChunkCount
     @Override
     public int f() {
-       return handle.f();
+        return handle.f();
     }
 
     //recreateStructures

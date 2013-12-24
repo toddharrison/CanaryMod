@@ -5,7 +5,7 @@ import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.config.Configuration;
 import net.canarymod.hook.system.PermissionCheckHook;
 import net.canarymod.user.Group;
-import net.minecraft.server.TileEntityCommandBlock;
+import net.minecraft.tileentity.TileEntityCommandBlock;
 
 /**
  * CommandBlock wrapper implementation
@@ -20,7 +20,7 @@ public class CanaryCommandBlock extends CanaryTileEntity implements CommandBlock
      * Constructs a wrapper for TileEntityCommandBlock
      *
      * @param tileentity
-     *            the TileEntityCommandBlock to wrap
+     *         the TileEntityCommandBlock to wrap
      */
     public CanaryCommandBlock(TileEntityCommandBlock tileentity) {
         super(tileentity);
@@ -32,7 +32,7 @@ public class CanaryCommandBlock extends CanaryTileEntity implements CommandBlock
      */
     @Override
     public String getName() {
-        return getTileEntity().c_();
+        return getTileEntity().getLogic().b_();
     }
 
     /**
@@ -74,7 +74,7 @@ public class CanaryCommandBlock extends CanaryTileEntity implements CommandBlock
      */
     @Override
     public void setCommand(String command) {
-        getTileEntity().b(command);
+        getTileEntity().getLogic().a(command);
     }
 
     /**
@@ -82,7 +82,7 @@ public class CanaryCommandBlock extends CanaryTileEntity implements CommandBlock
      */
     @Override
     public String getCommand() {
-        return getTileEntity().getCommand();
+        return getTileEntity().getLogic().i();
     }
 
     /**

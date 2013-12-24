@@ -6,8 +6,8 @@ import net.canarymod.api.nbt.CanaryStringTag;
 import net.canarymod.api.nbt.CompoundTag;
 import net.canarymod.api.nbt.ListTag;
 import net.canarymod.api.nbt.StringTag;
-import net.minecraft.server.ItemStack;
-import net.minecraft.server.NBTTagCompound;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
 /**
  * Item wrapper implementation
@@ -23,7 +23,8 @@ public class CanaryItem implements Item {
     /**
      * Constructs a new CanaryItem
      *
-     * @param itemStack the native Minecraft item stack to wrap
+     * @param itemStack
+     *         the native Minecraft item stack to wrap
      */
     public CanaryItem(ItemStack itemStack) {
         this.type = ItemType.fromIdAndData(itemStack.d, itemStack.k());
@@ -132,7 +133,8 @@ public class CanaryItem implements Item {
      * {@inheritDoc}
      */
     @Override
-    public void setMaxAmount(int amount) {}
+    public void setMaxAmount(int amount) {
+    }
 
     /**
      * {@inheritDoc}
@@ -487,14 +489,16 @@ public class CanaryItem implements Item {
      * Tests the given object to see if it equals this object
      *
      * @param obj
-     *            the object to test
+     *         the object to test
+     *
      * @return true if the two objects match
      */
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof ItemStack) {
             return ItemStack.b(item, (ItemStack) obj);
-        } else if (obj instanceof CanaryItem) {
+        }
+        else if (obj instanceof CanaryItem) {
             return ItemStack.b(item, ((CanaryItem) obj).getHandle());
         }
         return false;

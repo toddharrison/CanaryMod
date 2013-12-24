@@ -8,6 +8,7 @@ import net.minecraft.block.BlockHopper;
 import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.EntityMinecartHopper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -270,11 +271,11 @@ public class TileEntityHopper extends TileEntity implements IHopper {
             // CanaryMod: Hopper Transfer hook.
             net.canarymod.api.inventory.Hopper hookHopper = null;
 
-            if (hopper instanceof TileEntityHopper) {
-                hookHopper = (net.canarymod.api.inventory.Hopper) ((TileEntityHopper) hopper).getCanaryHopper();
+            if (ihopper instanceof TileEntityHopper) {
+                hookHopper = (net.canarymod.api.inventory.Hopper) ((TileEntityHopper) ihopper).getCanaryHopper();
             }
-            else if (hopper instanceof EntityMinecartHopper) {
-                hookHopper = (net.canarymod.api.inventory.Hopper) ((EntityMinecartHopper) hopper).entity;
+            else if (ihopper instanceof EntityMinecartHopper) {
+                hookHopper = (net.canarymod.api.inventory.Hopper) ((EntityMinecartHopper) ihopper).getCanaryEntity();
             }
             HopperTransferHook hook = (HopperTransferHook) new HopperTransferHook(hookHopper, new net.canarymod.api.inventory.CanaryItem(itemstack), true).call();
             if (hook.isCanceled()) {
@@ -460,6 +461,6 @@ public class TileEntityHopper extends TileEntity implements IHopper {
     }
 
     public IInventory getOutputInventory() {
-        return this.v();
+        return this.l();
     }
 }

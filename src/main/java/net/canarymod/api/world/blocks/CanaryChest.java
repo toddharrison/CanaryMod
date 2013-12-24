@@ -1,27 +1,27 @@
 package net.canarymod.api.world.blocks;
 
-import java.util.Arrays;
-
 import net.canarymod.api.inventory.CanaryBlockInventory;
 import net.canarymod.api.inventory.CanaryItem;
 import net.canarymod.api.inventory.InventoryType;
 import net.canarymod.api.inventory.Item;
-import net.minecraft.server.InventoryLargeChest;
-import net.minecraft.server.ItemStack;
-import net.minecraft.server.TileEntityChest;
+import net.minecraft.inventory.InventoryLargeChest;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntityChest;
+
+import java.util.Arrays;
 
 /**
  * Chest wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryChest extends CanaryBlockInventory implements Chest {
 
     /**
      * Constructs a new wrapper for TileEntityChest
-     * 
+     *
      * @param tileentity
-     *            the TileEntityChest to be wrapped
+     *         the TileEntityChest to be wrapped
      */
     public CanaryChest(TileEntityChest tileentity) {
         super(tileentity);

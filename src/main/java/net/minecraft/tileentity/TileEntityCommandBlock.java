@@ -8,7 +8,7 @@ import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 
-public class TileEntityCommandBlock extends TileEntity implements ICommandSender {
+public class TileEntityCommandBlock extends TileEntity {
 
     private final CommandBlockLogic a = new CommandBlockLogic() {
 
@@ -59,4 +59,9 @@ public class TileEntityCommandBlock extends TileEntity implements ICommandSender
     public CanaryCommandBlock getCanaryCommandBlock() {
         return (CanaryCommandBlock) complexBlock;
     }
+
+    public CommandBlockLogic getLogic() {
+        return this.a;
+    }
+    //
 }

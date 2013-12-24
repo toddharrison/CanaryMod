@@ -57,7 +57,7 @@ public class TileEntitySkull extends TileEntity {
 
     // CanaryMod
     public int getRotation() {
-        return this.b;
+        return this.i;
     }
 
     public CanarySkull getCanarySkull() {

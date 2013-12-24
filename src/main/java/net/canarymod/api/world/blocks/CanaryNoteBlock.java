@@ -1,20 +1,20 @@
 package net.canarymod.api.world.blocks;
 
-import net.minecraft.server.Material;
-import net.minecraft.server.TileEntityNote;
+import net.minecraft.block.material.Material;
+import net.minecraft.tileentity.TileEntityNote;
 
 /**
  * NoteBlock wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryNoteBlock extends CanaryTileEntity implements NoteBlock {
 
     /**
      * Constructs a new wrapper for TileEntityChest
-     * 
+     *
      * @param tileentity
-     *            the TileEntityChest to be wrapped
+     *         the TileEntityChest to be wrapped
      */
     public CanaryNoteBlock(TileEntityNote tileentity) {
         super(tileentity);

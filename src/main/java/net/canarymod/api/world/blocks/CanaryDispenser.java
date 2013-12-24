@@ -1,22 +1,21 @@
 package net.canarymod.api.world.blocks;
 
-import java.util.Arrays;
-
 import net.canarymod.api.entity.Entity;
 import net.canarymod.api.inventory.CanaryBlockInventory;
 import net.canarymod.api.inventory.CanaryItem;
 import net.canarymod.api.inventory.InventoryType;
 import net.canarymod.api.inventory.Item;
 import net.canarymod.api.world.CanaryWorld;
+import net.minecraft.item.ItemStack;
 import net.minecraft.server.BlockDispenser;
 import net.minecraft.server.BlockSourceImpl;
-import net.minecraft.server.IBehaviorDispenseItem;
-import net.minecraft.server.ItemStack;
-import net.minecraft.server.TileEntityDispenser;
+import net.minecraft.tileentity.TileEntityDispenser;
+
+import java.util.Arrays;
 
 /**
  * Dispenser wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryDispenser extends CanaryBlockInventory implements Dispenser {
@@ -24,9 +23,9 @@ public class CanaryDispenser extends CanaryBlockInventory implements Dispenser {
 
     /**
      * Constructs a new wrapper for TileEntityDispenser
-     * 
+     *
      * @param tileentity
-     *            the TileEntityDispenser to be wrapped
+     *         the TileEntityDispenser to be wrapped
      */
     public CanaryDispenser(TileEntityDispenser tileentity) {
         super(tileentity);
@@ -57,7 +56,8 @@ public class CanaryDispenser extends CanaryBlockInventory implements Dispenser {
 
         if (stack != null) {
             return dispense(((CanaryItem) stack).getHandle(), slot);
-        } else {
+        }
+        else {
             ((CanaryWorld) getWorld()).getHandle().e(1001, this.getX(), this.getY(), this.getZ(), 0);
         }
         return null;

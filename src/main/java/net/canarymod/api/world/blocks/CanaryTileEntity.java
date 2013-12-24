@@ -3,8 +3,8 @@ package net.canarymod.api.world.blocks;
 import net.canarymod.api.nbt.CanaryCompoundTag;
 import net.canarymod.api.nbt.CompoundTag;
 import net.canarymod.api.world.World;
-import net.minecraft.server.IInventory;
-import net.minecraft.server.NBTTagCompound;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.nbt.NBTTagCompound;
 
 /**
  * TileEntity implementation
@@ -13,7 +13,7 @@ import net.minecraft.server.NBTTagCompound;
  */
 public abstract class CanaryTileEntity implements TileEntity {
 
-    protected net.minecraft.server.TileEntity tileentity;
+    protected net.minecraft.tileentity.TileEntity tileentity;
     protected IInventory inventory;
 
     /**
@@ -22,14 +22,14 @@ public abstract class CanaryTileEntity implements TileEntity {
      * @param tileentity
      *         the TileEntityChest to be wrapped
      */
-    public CanaryTileEntity(net.minecraft.server.TileEntity tileentity) {
+    public CanaryTileEntity(net.minecraft.tileentity.TileEntity tileentity) {
         this.tileentity = tileentity;
     }
 
     public CanaryTileEntity(IInventory inventory) {
         this.inventory = inventory;
-        if (inventory instanceof net.minecraft.server.TileEntity) {
-            this.tileentity = (net.minecraft.server.TileEntity) inventory;
+        if (inventory instanceof net.minecraft.tileentity.TileEntity) {
+            this.tileentity = (net.minecraft.tileentity.TileEntity) inventory;
         }
     }
 
@@ -38,7 +38,7 @@ public abstract class CanaryTileEntity implements TileEntity {
      *
      * @return the TileEntity
      */
-    public abstract net.minecraft.server.TileEntity getTileEntity();
+    public abstract net.minecraft.tileentity.TileEntity getTileEntity();
 
     /** {@inheritDoc} */
     @Override
@@ -80,7 +80,7 @@ public abstract class CanaryTileEntity implements TileEntity {
     @Override
     public CompoundTag getDataTag() {
         if (tileentity != null) {
-            NBTTagCompound tag = new NBTTagCompound("tag");
+            NBTTagCompound tag = new NBTTagCompound();
             tileentity.b(tag);
             return new CanaryCompoundTag(tag);
         }

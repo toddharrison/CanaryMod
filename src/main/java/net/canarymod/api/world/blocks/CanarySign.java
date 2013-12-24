@@ -1,23 +1,24 @@
 package net.canarymod.api.world.blocks;
 
-import java.util.Arrays;
 import net.canarymod.api.entity.living.humanoid.CanaryPlayer;
 import net.canarymod.api.entity.living.humanoid.Player;
-import net.minecraft.server.EntityPlayer;
-import net.minecraft.server.TileEntitySign;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntitySign;
+
+import java.util.Arrays;
 
 /**
  * Sign wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanarySign extends CanaryTileEntity implements Sign {
 
     /**
      * Constructs a new wrapper for TileEntitySign
-     * 
+     *
      * @param tileentity
-     *            the TileEntitySign to be wrapped
+     *         the TileEntitySign to be wrapped
      */
     public CanarySign(TileEntitySign tileentity) {
         super(tileentity);
@@ -100,12 +101,12 @@ public class CanarySign extends CanaryTileEntity implements Sign {
 
     @Override
     public boolean isEditable() {
-        return getTileEntity().c;
+        return getTileEntity().j;
     }
 
     @Override
     public void setEditable(boolean edit) {
-        getTileEntity().c = edit;
+        getTileEntity().j = edit;
     }
 
     @Override
@@ -126,7 +127,7 @@ public class CanarySign extends CanaryTileEntity implements Sign {
 
     /**
      * Returns a String value representing this Block
-     * 
+     *
      * @return String representation of this block
      */
     @Override
@@ -159,9 +160,10 @@ public class CanarySign extends CanaryTileEntity implements Sign {
 
     /**
      * Corrects sign text to insure it matches perfectly to the expected length
-     * 
+     *
      * @param args
-     *            the String array
+     *         the String array
+     *
      * @return corrected String array
      */
     private String[] insureData(String[] args) {

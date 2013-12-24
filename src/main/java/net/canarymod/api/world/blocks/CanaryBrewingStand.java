@@ -1,26 +1,26 @@
 package net.canarymod.api.world.blocks;
 
-import java.util.Arrays;
-
 import net.canarymod.api.inventory.CanaryBlockInventory;
 import net.canarymod.api.inventory.CanaryItem;
 import net.canarymod.api.inventory.InventoryType;
 import net.canarymod.api.inventory.Item;
-import net.minecraft.server.ItemStack;
-import net.minecraft.server.TileEntityBrewingStand;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntityBrewingStand;
+
+import java.util.Arrays;
 
 /**
  * BrewingStand wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryBrewingStand extends CanaryBlockInventory implements BrewingStand {
 
     /**
      * Constructs a new wrapper for TileEntityBrewingStand
-     * 
+     *
      * @param tileentity
-     *            the TileEntityBrewingStand to be wrapped
+     *         the TileEntityBrewingStand to be wrapped
      */
     public CanaryBrewingStand(TileEntityBrewingStand tileentity) {
         super(tileentity);

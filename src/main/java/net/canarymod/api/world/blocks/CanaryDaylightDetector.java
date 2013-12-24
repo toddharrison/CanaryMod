@@ -1,19 +1,19 @@
 package net.canarymod.api.world.blocks;
 
-import net.minecraft.server.TileEntityDaylightDetector;
+import net.minecraft.tileentity.TileEntityDaylightDetector;
 
 /**
  * DaylightDetector wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryDaylightDetector extends CanaryTileEntity implements DaylightDetector {
 
     /**
      * Constructs a new wrapper for TileEntityDaylightDetector
-     * 
+     *
      * @param tileentity
-     *            the TileEntityDaylightDetector
+     *         the TileEntityDaylightDetector
      */
     public CanaryDaylightDetector(TileEntityDaylightDetector tileentity) {
         super(tileentity);

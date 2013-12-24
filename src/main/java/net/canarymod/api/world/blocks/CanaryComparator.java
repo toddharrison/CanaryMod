@@ -1,19 +1,19 @@
 package net.canarymod.api.world.blocks;
 
-import net.minecraft.server.TileEntityComparator;
+import net.minecraft.tileentity.TileEntityComparator;
 
 /**
  * Comparator wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryComparator extends CanaryTileEntity implements Comparator {
 
     /**
      * Constructs a new wrapper for TileEntityComparator
-     * 
+     *
      * @param tileentity
-     *            the TileEntityComparator wrapper
+     *         the TileEntityComparator wrapper
      */
     public CanaryComparator(TileEntityComparator tileentity) {
         super(tileentity);
