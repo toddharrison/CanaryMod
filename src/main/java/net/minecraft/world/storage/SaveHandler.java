@@ -39,7 +39,7 @@ public class SaveHandler implements ISaveHandler, IPlayerFileData {
 
         // CanaryMod put the players and data files into a global folder valid for all worlds
         this.c = new File(file1, "players");
-        this.d = new File(a, "data");
+        this.d = new File(this.b, "data");
         this.d.mkdirs();
         this.f = s0;
         this.worldbaseDir = file1;
@@ -58,7 +58,7 @@ public class SaveHandler implements ISaveHandler, IPlayerFileData {
      * @return
      */
     public String getBaseName() {
-        return this.e;
+        return this.f;
     }
 
     // CanaryMod
@@ -234,7 +234,7 @@ public class SaveHandler implements ISaveHandler, IPlayerFileData {
             file1.renameTo(file2);
         }
         catch (Exception exception) {
-            MinecraftServer.F().an().b("Failed to save player data for " + entityplayer.c_());
+            a.warn("Failed to save player data for " + entityplayer.b_());
         }
     }
 
@@ -311,7 +311,7 @@ public class SaveHandler implements ISaveHandler, IPlayerFileData {
             file1.renameTo(file2);
         }
         catch (Exception exception) {
-            MinecraftServer.F().an().b("Failed to save player data for " + player);
+            a.warn("Failed to save player data for " + player);
         }
     }
     // CanaryMod end

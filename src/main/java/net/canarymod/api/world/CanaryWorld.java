@@ -207,7 +207,7 @@ public class CanaryWorld implements World {
 
     @Override
     public Block getBlockAt(int x, int y, int z) {
-        short id = (short) world.a(x, y, z);
+        short id = (short) net.minecraft.block.Block.b(world.a(x, y, z));
         short data = getDataAt(x, y, z);
 
         return new CanaryBlock(id, data, x, y, z, this);

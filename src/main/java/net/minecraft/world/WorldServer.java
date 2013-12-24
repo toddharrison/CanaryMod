@@ -845,7 +845,7 @@ public class WorldServer extends World {
     }
 
     public CanaryEntityTracker getEntityTracker() {
-        return J.getCanaryEntityTracker();
+        return K.getCanaryEntityTracker();
     }
 
     /**
@@ -854,6 +854,6 @@ public class WorldServer extends World {
      * @return
      */
     public CanaryPlayerManager getPlayerManager() {
-        return K.getPlayerManager();
+        return L.getPlayerManager();
     }
 }

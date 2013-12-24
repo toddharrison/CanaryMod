@@ -260,9 +260,9 @@ public class Explosion {
 
                 if (block.o() == Material.a && block1.j() && this.j.nextInt(3) == 0) {
                     // CanaryMod ignition from EntityLargeFireball
-                    CanaryBlock block = (CanaryBlock) this.k.getCanaryWorld().getBlockAt(i0, i1 - 1, i2);
-                    block.setStatus((byte) 7); // 7 fireball hit
-                    IgnitionHook ignitionHook = (IgnitionHook) new IgnitionHook(block, null, null, IgnitionCause.FIREBALL_HIT).call();
+                    CanaryBlock cBlock = (CanaryBlock) this.k.getCanaryWorld().getBlockAt(i0, i1 - 1, i2);
+                    cBlock.setStatus((byte) 7); // 7 fireball hit
+                    IgnitionHook ignitionHook = (IgnitionHook) new IgnitionHook(cBlock, null, null, IgnitionCause.FIREBALL_HIT).call();
                     if (!ignitionHook.isCanceled()) {
                         this.k.b(i0, i1, i2, (Block) Blocks.ab);
                     }

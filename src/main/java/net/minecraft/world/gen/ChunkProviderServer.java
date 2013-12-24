@@ -1,5 +1,6 @@
 package net.minecraft.world.gen;
 
+import net.canarymod.NMSToolBox;
 import net.canarymod.api.world.CanaryChunkProviderServer;
 import net.canarymod.hook.world.ChunkCreatedHook;
 import net.canarymod.hook.world.ChunkCreationHook;
@@ -101,10 +102,10 @@ public class ChunkProviderServer implements IChunkProvider {
             chunk = this.f(i0, i1);
             if (chunk == null) {
                 // CanaryMod: ChunkCreation
-                ChunkCreationHook hook = (ChunkCreationHook) new ChunkCreationHook(i0, i1, h.getCanaryWorld()).call();
+                ChunkCreationHook hook = (ChunkCreationHook) new ChunkCreationHook(i0, i1, i.getCanaryWorld()).call();
                 byte[] blocks = hook.getBlockData();
                 if (blocks != null) {
-                    chunk = new Chunk(h, blocks, i0, i1);
+                    chunk = new Chunk(i, NMSToolBox.blockIdsToBlocks(blocks), i0, i1);
                     chunk.k = true; // is populated
                     chunk.b(); // lighting update
                     if (hook.getBiomeData() != null) {
@@ -129,7 +130,7 @@ public class ChunkProviderServer implements IChunkProvider {
                         throw new ReportedException(crashreport);
                     }
                     // CanaryMod: ChunkCreated
-                    new ChunkCreatedHook(chunk.getCanaryChunk(), h.getCanaryWorld()).call();
+                    new ChunkCreatedHook(chunk.getCanaryChunk(), i.getCanaryWorld()).call();
                     //
                 }
             }
@@ -139,7 +140,7 @@ public class ChunkProviderServer implements IChunkProvider {
             if (chunk != null) {
                 chunk.c();
                 // CanaryMod: ChunkLoaded
-                new ChunkLoadedHook(chunk.getCanaryChunk(), h.getCanaryWorld()).call();
+                new ChunkLoadedHook(chunk.getCanaryChunk(), i.getCanaryWorld()).call();
                 //
                 if (chunk.k && this.a(i0 + 1, i1 + 1) && this.a(i0, i1 + 1) && this.a(i0 + 1, i1)) {
                     this.a(this, i0, i1);
@@ -260,7 +261,7 @@ public class ChunkProviderServer implements IChunkProvider {
 
                     if (chunk != null) {
                         // CanaryMod: ChunkUnload
-                        ChunkUnloadHook hook = (ChunkUnloadHook) new ChunkUnloadHook(chunk.getCanaryChunk(), h.getCanaryWorld()).call();
+                        ChunkUnloadHook hook = (ChunkUnloadHook) new ChunkUnloadHook(chunk.getCanaryChunk(), i.getCanaryWorld()).call();
                         if (hook.isCanceled()) {
                             // TODO: Might need to return false instead ... unsure
                             return true;

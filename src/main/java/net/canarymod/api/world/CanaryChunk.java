@@ -1,14 +1,14 @@
 package net.canarymod.api.world;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import net.canarymod.api.entity.Entity;
 import net.canarymod.api.world.blocks.TileEntity;
 import net.canarymod.api.world.position.Position;
 import net.minecraft.server.ChunkPosition;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Chunk implementation
@@ -18,13 +18,13 @@ import net.minecraft.server.ChunkPosition;
  * @author Jos Kuijpers
  */
 public class CanaryChunk implements Chunk {
-    private net.minecraft.server.Chunk handle;
+    private net.minecraft.world.chunk.Chunk handle;
 
-    public CanaryChunk(net.minecraft.server.Chunk chunk) {
+    public CanaryChunk(net.minecraft.world.chunk.Chunk chunk) {
         this.handle = chunk;
     }
 
-    public net.minecraft.server.Chunk getHandle() {
+    public net.minecraft.world.chunk.Chunk getHandle() {
         return handle;
     }
 
@@ -170,7 +170,7 @@ public class CanaryChunk implements Chunk {
 
     @Override
     public void updateSkyLightMap(boolean force) {
-        if(force) {
+        if (force) {
             handle.q();
         }
         else {

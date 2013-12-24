@@ -64,6 +64,7 @@ public class Chunk {
     public int r;
     public long s;
     private int x;
+    private CanaryChunk canaryChunk; // CanaryMod: Chunk wrapper
 
     public Chunk(World world, int i0, int i1) {
         canaryChunk = new CanaryChunk(this); // CanaryMod: wrap chunk
@@ -434,7 +435,7 @@ public class Chunk {
     }
 
     public boolean a(int i0, int i1, int i2, Block block, int i3) {
-        return this.a(i0, i1, i2, i3, i4, true); // CanaryMod: Redirect
+        return this.a(i0, i1, i2, block, i3, true); // CanaryMod: Redirect
     }
 
     public boolean a(int i0, int i1, int i2, Block block, int i3, boolean checkPortal) { // CanaryMod: add Portal Check
@@ -593,8 +594,8 @@ public class Chunk {
 
         if (extendedblockstorage == null) {
 //          CanaryMod add new extended block storage
-            this.r[i1 >> 4] = new ExtendedBlockStorage(i3, true);
-            extendedblockstorage = this.r[i1 >> 4];
+            this.u[i1 >> 4] = new ExtendedBlockStorage(i3, true);
+            extendedblockstorage = this.u[i1 >> 4];
 //          return false;
         } //else {
         int i4 = extendedblockstorage.b(i0, i1 & 15, i2);
