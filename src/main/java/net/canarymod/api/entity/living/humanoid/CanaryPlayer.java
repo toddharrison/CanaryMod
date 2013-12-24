@@ -59,7 +59,6 @@ import net.minecraft.server.Packet202PlayerAbilities;
 import net.minecraft.server.WorldSettings;
 import net.visualillusionsent.utils.StringUtils;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -122,7 +121,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
             }
             else {
                 // This is a copy of the real player list already, no need to copy again (re: Collections.copy())
-                ArrayList<Player> receivers = Canary.getServer().getPlayerList();
+                List<Player> receivers = Canary.getServer().getPlayerList();
                 defaultChatpattern.put("%name", getDisplayName()); // Safe to get name now
                 defaultChatpattern.put("%message", out);
                 ChatHook hook = (ChatHook) new ChatHook(this, chatFormat, receivers, defaultChatpattern).call();

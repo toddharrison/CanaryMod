@@ -6,19 +6,19 @@ import net.canarymod.api.entity.living.humanoid.Player;
 import net.minecraft.server.Explosion;
 
 public class CanaryDamageSource implements DamageSource {
-    net.minecraft.server.DamageSource handle;
+    net.minecraft.util.DamageSource handle;
 
-    public CanaryDamageSource(net.minecraft.server.DamageSource handle) {
+    public CanaryDamageSource(net.minecraft.util.DamageSource handle) {
         this.handle = handle;
     }
 
-    public net.minecraft.server.DamageSource getHandle() {
+    public net.minecraft.util.DamageSource getHandle() {
         return handle;
     }
 
     @Override
     public Entity getDamageDealer() {
-        net.minecraft.server.Entity entity = handle.i();
+        net.minecraft.entity.Entity entity = handle.i();
         return (entity == null) ? null : entity.getCanaryEntity();
     }
 
