@@ -7,9 +7,9 @@ import java.util.List;
  */
 public class CanaryScoreDummyCriteria implements ScoreDummyCriteria {
 
-    private net.minecraft.server.ScoreDummyCriteria handle;
+    private net.minecraft.scoreboard.ScoreDummyCriteria handle;
 
-    public CanaryScoreDummyCriteria(net.minecraft.server.ScoreDummyCriteria handle) {
+    public CanaryScoreDummyCriteria(net.minecraft.scoreboard.ScoreDummyCriteria handle) {
         this.handle = handle;
     }
 
@@ -28,7 +28,7 @@ public class CanaryScoreDummyCriteria implements ScoreDummyCriteria {
         return handle.b();
     }
 
-    public net.minecraft.server.ScoreDummyCriteria getHandle() {
+    public net.minecraft.scoreboard.ScoreDummyCriteria getHandle() {
         return handle;
     }
 }

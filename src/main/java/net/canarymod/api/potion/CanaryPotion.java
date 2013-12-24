@@ -2,20 +2,20 @@ package net.canarymod.api.potion;
 
 /**
  * Potion wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryPotion implements Potion {
 
-    net.minecraft.server.Potion potion;
+    net.minecraft.potion.Potion potion;
 
     /**
      * Constructs a new wrapper for Potion
-     * 
+     *
      * @param potion
-     *            the Potion to wrap
+     *         the Potion to wrap
      */
-    public CanaryPotion(net.minecraft.server.Potion potion) {
+    public CanaryPotion(net.minecraft.potion.Potion potion) {
         this.potion = potion;
     }
 
@@ -77,10 +77,10 @@ public class CanaryPotion implements Potion {
 
     /**
      * Gets the Potion being wrapped
-     * 
+     *
      * @return potion
      */
-    public net.minecraft.server.Potion getHandle() {
+    public net.minecraft.potion.Potion getHandle() {
         return potion;
     }
 

@@ -7,9 +7,9 @@ import java.util.List;
  */
 public class CanaryScoreHealthCriteria implements ScoreHealthCriteria {
 
-    private net.minecraft.server.ScoreHealthCriteria handle;
+    private net.minecraft.scoreboard.ScoreHealthCriteria handle;
 
-    public CanaryScoreHealthCriteria(net.minecraft.server.ScoreHealthCriteria handle) {
+    public CanaryScoreHealthCriteria(net.minecraft.scoreboard.ScoreHealthCriteria handle) {
         this.handle = handle;
     }
 
@@ -28,7 +28,7 @@ public class CanaryScoreHealthCriteria implements ScoreHealthCriteria {
         return handle.b();
     }
 
-    public net.minecraft.server.ScoreHealthCriteria getHandle() {
+    public net.minecraft.scoreboard.ScoreHealthCriteria getHandle() {
         return handle;
     }
 }

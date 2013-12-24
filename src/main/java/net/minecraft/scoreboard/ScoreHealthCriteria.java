@@ -1,6 +1,8 @@
 package net.minecraft.scoreboard;
 
 import net.canarymod.api.scoreboard.CanaryScoreHealthCriteria;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.MathHelper;
 
 import java.util.Iterator;
 import java.util.List;

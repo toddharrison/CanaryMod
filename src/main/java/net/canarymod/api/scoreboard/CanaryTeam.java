@@ -1,11 +1,12 @@
 package net.canarymod.api.scoreboard;
 
-import java.util.ArrayList;
-import java.util.List;
 import net.canarymod.Canary;
 import net.canarymod.api.entity.living.humanoid.Player;
-import net.minecraft.server.ScorePlayerTeam;
-import net.minecraft.server.ServerScoreboard;
+import net.minecraft.scoreboard.ScorePlayerTeam;
+import net.minecraft.scoreboard.ServerScoreboard;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Somners
