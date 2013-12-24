@@ -777,8 +777,12 @@ public abstract class ServerConfigurationManager {
         throw new UnsupportedOperationException("SCM.f() is deprecated");
     }
 
-    public void b(String s0) {
+    public void a(String s0) {
         Canary.ops().addPlayer(s0); // CanaryMod: Re-route to our Ops listing
+    }
+
+    public void b(String s0) {
+        Canary.ops().removePlayer(s0); // CanaryMod: Re-route to our Ops listing
     }
 
     public boolean c(String s0) {

@@ -1,11 +1,9 @@
 package net.minecraft.server.dedicated;
 
 import net.canarymod.Canary;
-import net.canarymod.api.CanaryServer;
 import net.canarymod.config.Configuration;
 import net.canarymod.config.ServerConfiguration;
 import net.canarymod.config.WorldConfiguration;
-import net.canarymod.hook.system.ServerGuiStartHook;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.ServerCommand;
 import net.minecraft.crash.CrashReport;
@@ -194,13 +192,13 @@ public class DedicatedServer extends MinecraftServer implements IServer {
 
         if (!MinecraftServer.isHeadless()) {
             // CanaryMod moved GUI start to after plugins enable
-            au();
+            this.ay();
         }
 
         // CanaryMod changed call to initWorld
         net.canarymod.api.world.DimensionType wt = net.canarymod.api.world.DimensionType.fromName("NORMAL");
 
-        this.initWorld(this.L(), i2, worldtype, wt, s2);
+        this.initWorld(this.M(), i2, worldtype, wt, s2);
         //
         long i4 = System.nanoTime() - i1;
         String s4 = String.format("%.3fs", new Object[]{ Double.valueOf((double) i4 / 1.0E9D) });
@@ -247,10 +245,11 @@ public class DedicatedServer extends MinecraftServer implements IServer {
                 ;
             }
         }
+    }
 
-    public CrashReport b(CrashReport s0) {
-        s0 = super.b(s0);
-        s0.g().a("Is Modded", new Callable() {
+    public CrashReport b(CrashReport crashreport) {
+        crashreport = super.b(crashreport);
+        crashreport.g().a("Is Modded", new Callable() {
 
             public String call() {
                 String s0 = DedicatedServer.this.getServerModName();
@@ -342,6 +341,7 @@ public class DedicatedServer extends MinecraftServer implements IServer {
     }
 
     public void ay() {
+        /* Pending further corrections
         ServerGuiStartHook guiHook = (ServerGuiStartHook) new ServerGuiStartHook(MinecraftServerGui.preInit(this)).call(); // CanaryMod: PreInitialize the GUI without starting it
         if (guiHook.getGui() != null) {
             ((CanaryServer) Canary.getServer()).setCurrentGUI(guiHook.getGui());
@@ -352,6 +352,9 @@ public class DedicatedServer extends MinecraftServer implements IServer {
         ((CanaryServer) Canary.getServer()).getCurrentGUI().start();
         this.o = true;
         MinecraftServer.setHeadless(false);
+        */
+        MinecraftServerGui.a(this);
+        this.o = true;
     }
 
     public boolean ai() {
@@ -385,7 +388,7 @@ public class DedicatedServer extends MinecraftServer implements IServer {
             return false;
         }
         else {
-            ChunkCoordinates chunkcoordinates = world.K();
+            ChunkCoordinates chunkcoordinates = world.J();
             int i3 = MathHelper.a(i0 - chunkcoordinates.a);
             int i4 = MathHelper.a(i2 - chunkcoordinates.c);
             int i5 = Math.max(i3, i4);

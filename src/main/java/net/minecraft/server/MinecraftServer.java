@@ -14,6 +14,7 @@ import net.canarymod.api.CanaryServer;
 import net.canarymod.api.world.CanarySaveConverter;
 import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.api.world.CanaryWorldManager;
+import net.canarymod.api.world.DimensionType;
 import net.canarymod.config.Configuration;
 import net.canarymod.config.WorldConfiguration;
 import net.canarymod.hook.system.LoadWorldHook;
@@ -231,26 +232,26 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 
         if (dimType.getId() == 0) {
             if (this.O()) {
-                world = new DemoWorldServer(this, isavehandler, name, dimType.getId(), this.a, this.an());
+                world = new DemoWorldServer(this, isavehandler, name, dimType.getId(), this.a);
             }
             else {
-                world = new WorldServer(this, isavehandler, name, dimType.getId(), worldsettings, this.a, this.an());
+                world = new WorldServer(this, isavehandler, name, dimType.getId(), worldsettings, this.a);
             }
         }
         else {
-            world = new WorldServerMulti(this, isavehandler, name, dimType.getId(), worldsettings, (WorldServer) ((CanaryWorld) worldManager.getWorld(name, net.canarymod.api.world.DimensionType.fromName("NORMAL"), true)).getHandle(), this.a, this.an());
+            world = new WorldServerMulti(this, isavehandler, name, dimType.getId(), worldsettings, (WorldServer) ((CanaryWorld) worldManager.getWorld(name, net.canarymod.api.world.DimensionType.fromName("NORMAL"), true)).getHandle(), this.a);
         }
 
         world.a((IWorldAccess) (new WorldManager(this, world)));
-        if (!this.K()) {
-            world.M().a(EnumGameType.a(config.getGameMode().getId()));
+        if (!this.L()) {
+            world.M().a(WorldSettings.GameType.a(config.getGameMode().getId()));
         }
 
         this.t.a(new WorldServer[]{ world }); // Init player data files
 
-        // this.c(this.i()); // If we call this then worlds can't do custom difficulty, plus it doesn't work
-        world.r = config.getDifficulty().getId(); // Set difficulty directly based on WorldConfiguration setting
-        this.f(world); // Generate terrain
+        // this.a(this.j()); // If we call this then worlds can't do custom difficulty, plus it doesn't work
+        world.r = EnumDifficulty.a(config.getDifficulty().getId()); // Set difficulty directly based on WorldConfiguration setting
+        this.g(world); // Generate terrain
         worldManager.addWorld(world.getCanaryWorld());
         new LoadWorldHook(world.getCanaryWorld()).call();
     }
@@ -491,6 +492,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
                 h.error("Couldn\'t load server icon", exception);
             }
         }
+    }
 
     protected File r() {
         return new File(".");
@@ -576,8 +578,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
             if (this.w % 20 == 0) {
                 this.a.a("timeSync");
                 // this.t.a((Packet) (new S03PacketTimeUpdate(worldserver.H(), worldserver.I(), worldserver.N().b("doDaylightCycle"))), worldserver.t.i);
-                this.t.sendPacketToDimension(new S03PacketTimeUpdate(worldserver.H(), worldserver.I(), worldserver.N().b("doDaylightCycle"))), worldserver.t.i)
-                ;
+                this.t.sendPacketToDimension(new S03PacketTimeUpdate(worldserver.H(), worldserver.I(), worldserver.N().b("doDaylightCycle")), worldserver.getCanaryWorld().getName(), worldserver.t.i);
                 this.a.b();
             }
 
@@ -827,14 +828,18 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
                 return MinecraftServer.this.a.a ? MinecraftServer.this.a.c() : "N/A (disabled)";
             }
         });
-        if (this.b != null && this.b.length > 0 && this.b[0] != null) {
+        //if (this.b != null && this.b.length > 0 && this.b[0] != null) {
+        for (net.canarymod.api.world.World cWorld : this.getWorldManager().getAllWorlds()) {
+            if (cWorld.getType() != DimensionType.fromId(0))
+                continue; // CanaryMod: Skip non-default dimentional worlds
+            final WorldServer worldServer = (WorldServer) ((CanaryWorld) cWorld).getHandle();
             i0.g().a("Vec3 Pool Size", new Callable() {
 
                 public String call() {
-                    int i0 = MinecraftServer.this.b[0].U().c();
+                    int i0 = worldServer.U().c();
                     int i1 = 56 * i0;
                     int i2 = i1 / 1024 / 1024;
-                    int i3 = MinecraftServer.this.b[0].U().d();
+                    int i3 = worldServer.U().d();
                     int i4 = 56 * i3;
                     int i5 = i4 / 1024 / 1024;
 
@@ -1039,21 +1044,21 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
         playerusagesnooper.a("avg_tick_ms", Integer.valueOf((int) (MathHelper.a(this.f) * 1.0E-6D)));
         int i0 = 0;
 
-        for (int i1 = 0; i1 < this.b.length; ++i1) {
-            if (this.b[i1] != null) {
-                WorldServer worldserver = this.b[i1];
-                WorldInfo worldinfo = worldserver.M();
+        for (net.canarymod.api.world.World cWorld : this.getWorldManager().getAllWorlds()) {
+            WorldServer worldserver = (WorldServer) ((CanaryWorld) cWorld).getHandle();
+            //WorldServer worldserver = this.b[i1];
+            WorldInfo worldinfo = worldserver.M();
 
-                playerusagesnooper.a("world[" + i0 + "][dimension]", Integer.valueOf(worldserver.t.i));
-                playerusagesnooper.a("world[" + i0 + "][mode]", worldinfo.r());
-                playerusagesnooper.a("world[" + i0 + "][difficulty]", worldserver.r);
-                playerusagesnooper.a("world[" + i0 + "][hardcore]", Boolean.valueOf(worldinfo.t()));
-                playerusagesnooper.a("world[" + i0 + "][generator_name]", worldinfo.u().a());
-                playerusagesnooper.a("world[" + i0 + "][generator_version]", Integer.valueOf(worldinfo.u().d()));
-                playerusagesnooper.a("world[" + i0 + "][height]", Integer.valueOf(this.D));
-                playerusagesnooper.a("world[" + i0 + "][chunks_loaded]", Integer.valueOf(worldserver.K().f()));
-                ++i0;
-            }
+            playerusagesnooper.a("world[" + i0 + "][dimension]", Integer.valueOf(worldserver.t.i));
+            playerusagesnooper.a("world[" + i0 + "][mode]", worldinfo.r());
+            playerusagesnooper.a("world[" + i0 + "][difficulty]", worldserver.r);
+            playerusagesnooper.a("world[" + i0 + "][hardcore]", Boolean.valueOf(worldinfo.t()));
+            playerusagesnooper.a("world[" + i0 + "][generator_name]", worldinfo.u().a());
+            playerusagesnooper.a("world[" + i0 + "][generator_version]", Integer.valueOf(worldinfo.u().d()));
+            playerusagesnooper.a("world[" + i0 + "][height]", Integer.valueOf(this.D));
+            playerusagesnooper.a("world[" + i0 + "][chunks_loaded]", Integer.valueOf(worldserver.K().f()));
+            ++i0;
+            //}
         }
 
         playerusagesnooper.a("worlds", Integer.valueOf(i0));
@@ -1263,7 +1268,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
     }
 
     public boolean isRunning() {
-        return this.o();
+        return this.u;
     }
 
     /**

@@ -202,7 +202,7 @@ public class ItemInWorldManager {
             boolean flag0 = this.d(i0, i1, i2);
             // CanaryMod: BlockDestroyHook
             net.canarymod.api.world.blocks.Block cblock = ((EntityPlayerMP) b).getCanaryWorld().getBlockAt(i0, i1, i2);
-            block.setStatus((byte) 1); // Block break status.
+            cblock.setStatus((byte) 1); // Block break status.
             BlockDestroyHook hook = (BlockDestroyHook) new BlockDestroyHook(((EntityPlayerMP) b).getPlayer(), cblock).call();
             if (hook.isCanceled()) {
                 return false;

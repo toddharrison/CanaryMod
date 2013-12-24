@@ -140,7 +140,7 @@ public class DedicatedPlayerList extends ServerConfigurationManager {
     }
 
     public boolean c(String s0) {
-        return !this.n() || this.e(s0) || Canary.ops().isOpped(s0);
+        return !this.n() || this.d(s0) || Canary.ops().isOpped(s0);
     }
 
     public DedicatedServer s() {
