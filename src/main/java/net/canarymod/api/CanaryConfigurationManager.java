@@ -1,8 +1,5 @@
 package net.canarymod.api;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.canarymod.Canary;
 import net.canarymod.api.entity.living.humanoid.CanaryPlayer;
 import net.canarymod.api.entity.living.humanoid.Player;
@@ -10,8 +7,11 @@ import net.canarymod.api.packet.CanaryPacket;
 import net.canarymod.api.packet.Packet;
 import net.canarymod.api.world.DimensionType;
 import net.canarymod.api.world.World;
-import net.minecraft.server.EntityPlayerMP;
-import net.minecraft.server.ServerConfigurationManager;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.server.management.ServerConfigurationManager;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CanaryConfigurationManager implements ConfigurationManager {
 

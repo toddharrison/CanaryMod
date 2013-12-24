@@ -1,17 +1,17 @@
 package net.canarymod.api.nbt;
 
-import net.minecraft.server.NBTBase;
-import net.minecraft.server.NBTTagByte;
-import net.minecraft.server.NBTTagByteArray;
-import net.minecraft.server.NBTTagCompound;
-import net.minecraft.server.NBTTagDouble;
-import net.minecraft.server.NBTTagFloat;
-import net.minecraft.server.NBTTagInt;
-import net.minecraft.server.NBTTagIntArray;
-import net.minecraft.server.NBTTagList;
-import net.minecraft.server.NBTTagLong;
-import net.minecraft.server.NBTTagShort;
-import net.minecraft.server.NBTTagString;
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagByte;
+import net.minecraft.nbt.NBTTagByteArray;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagDouble;
+import net.minecraft.nbt.NBTTagFloat;
+import net.minecraft.nbt.NBTTagInt;
+import net.minecraft.nbt.NBTTagIntArray;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagLong;
+import net.minecraft.nbt.NBTTagShort;
+import net.minecraft.nbt.NBTTagString;
 
 public abstract class CanaryBaseTag implements BaseTag {
     protected final NBTBase tag;
@@ -22,12 +22,14 @@ public abstract class CanaryBaseTag implements BaseTag {
 
     @Override
     public String getName() {
-        return tag.e();
+        //return tag.e();
+        return ""; // The new NBTBase doesnt have this anymore
     }
 
     @Override
     public void setName(String name) {
-        tag.p(name);
+        //tag.p(name);
+        //The new NBTBase doesnt have this anymore
     }
 
     @Override
@@ -39,7 +41,8 @@ public abstract class CanaryBaseTag implements BaseTag {
     public boolean equals(Object obj) {
         if (obj instanceof CanaryBaseTag) {
             return ((CanaryBaseTag) obj).tag.equals(tag);
-        } else if (obj instanceof NBTBase) {
+        }
+        else if (obj instanceof NBTBase) {
             return obj.equals(tag);
         }
         return false;
@@ -54,9 +57,10 @@ public abstract class CanaryBaseTag implements BaseTag {
 
     /**
      * Wraps the given NBTBase in its corresponding Canary wrapper.
-     * 
+     *
      * @param tag
-     *            The NBTBase tag to wrap.
+     *         The NBTBase tag to wrap.
+     *
      * @return The wrapped tag. Null if the tag is of an unsupported type.
      */
     protected static CanaryBaseTag wrap(NBTBase tag) {

@@ -28,29 +28,9 @@ import net.canarymod.api.world.position.Location;
 import net.canarymod.api.world.position.Position;
 import net.canarymod.config.Configuration;
 import net.canarymod.config.WorldConfiguration;
-import net.minecraft.server.EntityLightningBolt;
-import net.minecraft.server.EntityPlayer;
-import net.minecraft.server.EnumGameType;
-import net.minecraft.server.EnumSkyBlock;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.Packet63WorldParticles;
-import net.minecraft.server.TileEntityBeacon;
-import net.minecraft.server.TileEntityBrewingStand;
-import net.minecraft.server.TileEntityChest;
-import net.minecraft.server.TileEntityCommandBlock;
-import net.minecraft.server.TileEntityComparator;
-import net.minecraft.server.TileEntityDaylightDetector;
-import net.minecraft.server.TileEntityDispenser;
-import net.minecraft.server.TileEntityDropper;
-import net.minecraft.server.TileEntityFurnace;
-import net.minecraft.server.TileEntityHopper;
-import net.minecraft.server.TileEntityMobSpawner;
-import net.minecraft.server.TileEntityNote;
-import net.minecraft.server.TileEntityRecordPlayer;
-import net.minecraft.server.TileEntitySign;
-import net.minecraft.server.TileEntitySkull;
-import net.minecraft.server.WorldInfo;
-import net.minecraft.server.WorldServer;
+import net.minecraft.world.WorldServer;
 import net.visualillusionsent.utils.TaskManager;
 
 import java.util.ArrayList;
@@ -119,7 +99,7 @@ public class CanaryWorld implements World {
         double d2 = world.s.nextFloat() * 0.7F + (1.0F - 0.7F) * 0.5D;
         double d3 = world.s.nextFloat() * 0.7F + (1.0F - 0.7F) * 0.5D;
 
-        net.minecraft.server.EntityItem oei = new net.minecraft.server.EntityItem(world, x + d1, y + d2, z + d3, ((CanaryItem) item).getHandle());
+        net.minecraft.entity.item.EntityItem oei = new net.minecraft.entity.item.EntityItem(world, x + d1, y + d2, z + d3, ((CanaryItem) item).getHandle());
 
         oei.b = 10;
         world.d(oei);
@@ -132,8 +112,8 @@ public class CanaryWorld implements World {
         List<EntityAnimal> animals = new ArrayList<EntityAnimal>();
 
         for (Object o : (ArrayList) ((ArrayList) world.e).clone()) {
-            if (((net.minecraft.server.Entity) o).getCanaryEntity() instanceof EntityAnimal) {
-                animals.add((EntityAnimal) ((net.minecraft.server.Entity) o).getCanaryEntity());
+            if (((net.minecraft.entity.Entity) o).getCanaryEntity() instanceof EntityAnimal) {
+                animals.add((EntityAnimal) ((net.minecraft.entity.Entity) o).getCanaryEntity());
             }
         }
         return animals;
@@ -145,8 +125,8 @@ public class CanaryWorld implements World {
         List<EntityMob> mobs = new ArrayList<EntityMob>();
 
         for (Object o : (ArrayList) ((ArrayList) world.e).clone()) {
-            if (((net.minecraft.server.Entity) o).getCanaryEntity() instanceof EntityMob) {
-                mobs.add((EntityMob) ((net.minecraft.server.Entity) o).getCanaryEntity());
+            if (((net.minecraft.entity.Entity) o).getCanaryEntity() instanceof EntityMob) {
+                mobs.add((EntityMob) ((net.minecraft.entity.Entity) o).getCanaryEntity());
             }
         }
         return mobs;
@@ -158,8 +138,8 @@ public class CanaryWorld implements World {
         List<Boat> boats = new ArrayList<Boat>();
 
         for (Object o : (ArrayList) ((ArrayList) world.e).clone()) {
-            if (((net.minecraft.server.Entity) o).getCanaryEntity() instanceof Boat) {
-                boats.add((Boat) ((net.minecraft.server.Entity) o).getCanaryEntity());
+            if (((net.minecraft.entity.Entity) o).getCanaryEntity() instanceof Boat) {
+                boats.add((Boat) ((net.minecraft.entity.Entity) o).getCanaryEntity());
             }
         }
         return boats;
@@ -171,8 +151,8 @@ public class CanaryWorld implements World {
         List<Minecart> minecarts = new ArrayList<Minecart>();
 
         for (Object o : (ArrayList) ((ArrayList) world.e).clone()) {
-            if (((net.minecraft.server.Entity) o).getCanaryEntity() instanceof Minecart) {
-                minecarts.add((Minecart) ((net.minecraft.server.Entity) o).getCanaryEntity());
+            if (((net.minecraft.entity.Entity) o).getCanaryEntity() instanceof Minecart) {
+                minecarts.add((Minecart) ((net.minecraft.entity.Entity) o).getCanaryEntity());
             }
         }
         return minecarts;
@@ -184,8 +164,8 @@ public class CanaryWorld implements World {
         List<Vehicle> vehicles = new ArrayList<Vehicle>();
 
         for (Object o : (ArrayList) ((ArrayList) world.e).clone()) {
-            if (((net.minecraft.server.Entity) o).getCanaryEntity() instanceof Vehicle) {
-                vehicles.add((Vehicle) ((net.minecraft.server.Entity) o).getCanaryEntity());
+            if (((net.minecraft.entity.Entity) o).getCanaryEntity() instanceof Vehicle) {
+                vehicles.add((Vehicle) ((net.minecraft.entity.Entity) o).getCanaryEntity());
             }
         }
         return vehicles;
@@ -197,8 +177,8 @@ public class CanaryWorld implements World {
         List<EntityItem> items = new ArrayList<EntityItem>();
 
         for (Object o : (ArrayList) ((ArrayList) world.e).clone()) {
-            if (((net.minecraft.server.Entity) o).getCanaryEntity() instanceof EntityItem) {
-                items.add((EntityItem) ((net.minecraft.server.Entity) o).getCanaryEntity());
+            if (((net.minecraft.entity.Entity) o).getCanaryEntity() instanceof EntityItem) {
+                items.add((EntityItem) ((net.minecraft.entity.Entity) o).getCanaryEntity());
             }
         }
         return items;
@@ -728,7 +708,7 @@ public class CanaryWorld implements World {
         }
     }
 
-    public net.minecraft.server.World getHandle() {
+    public net.minecraft.world.World getHandle() {
         return world;
     }
 

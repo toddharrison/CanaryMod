@@ -13,6 +13,7 @@ import net.canarymod.api.inventory.CanaryAnimalInventory;
 import net.canarymod.api.inventory.CanaryEnderChestInventory;
 import net.canarymod.api.inventory.Inventory;
 import net.canarymod.api.inventory.NativeCustomStorageInventory;
+import net.canarymod.api.nbt.CompoundTag;
 import net.canarymod.api.statistics.CanaryStat;
 import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.api.world.blocks.CanaryAnvil;
@@ -1116,6 +1117,10 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
         this.bp = container;
         this.bp.d = this.bY;
         this.bp.a((ICrafting) this);
+    }
+
+    public void setMetaData(CompoundTag meta) {
+        this.metadata = meta;
     }
     //
 }

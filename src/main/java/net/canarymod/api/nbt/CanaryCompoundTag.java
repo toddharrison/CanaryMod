@@ -1,13 +1,14 @@
 package net.canarymod.api.nbt;
 
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagCompound;
+
 import java.util.ArrayList;
 import java.util.Collection;
-import net.minecraft.server.NBTBase;
-import net.minecraft.server.NBTTagCompound;
 
 /**
  * CompoundTag wrapper implementation
- * 
+ *
  * @author Greg (gregthegeek)
  * @author Jason (darkdiplomat)
  */
@@ -15,9 +16,9 @@ public class CanaryCompoundTag extends CanaryBaseTag implements CompoundTag {
 
     /**
      * Constructs a new wrapper for NBTTagCompound
-     * 
+     *
      * @param tag
-     *            the NBTTagCompound to wrap
+     *         the NBTTagCompound to wrap
      */
     public CanaryCompoundTag(NBTTagCompound tag) {
         super(tag);
@@ -25,9 +26,9 @@ public class CanaryCompoundTag extends CanaryBaseTag implements CompoundTag {
 
     /**
      * Constructs a new CanaryCompoundTag and associated NBTTagCompound
-     * 
+     *
      * @param name
-     *            the name of the tag
+     *         the name of the tag
      */
     public CanaryCompoundTag(String name) {
         super(new NBTTagCompound(name));

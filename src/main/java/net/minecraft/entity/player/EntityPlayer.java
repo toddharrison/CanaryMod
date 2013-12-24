@@ -117,8 +117,8 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
     private boolean d;
     private ChunkCoordinates e;
     public PlayerCapabilities bF = new PlayerCapabilities();
-    public int bH; // level
-    public int bI; // total points
+    public int bG; // level
+    public int bH; // total points
     public float bI;
     private ItemStack f;
     private int g;
@@ -1770,7 +1770,7 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
         return metadata.getLong("TimePlayed") + (ToolBox.getUnixTimestamp() - currentSessionStart);
     }
 
-    protected void saveMeta() {
+    public void saveMeta() {
         metadata.put("TimePlayed", metadata.getLong("TimePlayed") + (ToolBox.getUnixTimestamp() - currentSessionStart));
         currentSessionStart = ToolBox.getUnixTimestamp(); // When saving, reset the start time so there isnt a duplicate addition of time stored
     }
@@ -1779,7 +1779,7 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
         return (CanaryHuman) entity;
     }
 
-    protected void initializeNewMeta() {
+    public void initializeNewMeta() {
         if (metadata == null) {
             metadata = new CanaryCompoundTag("Canary");
             metadata.put("FirstJoin", DateUtils.longToDateTime(System.currentTimeMillis()));

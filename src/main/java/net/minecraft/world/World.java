@@ -4,21 +4,47 @@ import net.canarymod.api.entity.living.humanoid.CanaryHuman;
 import net.canarymod.api.entity.vehicle.CanaryVehicle;
 import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.api.world.blocks.CanaryBlock;
+import net.canarymod.config.Configuration;
+import net.canarymod.config.WorldConfiguration;
 import net.canarymod.hook.entity.EntitySpawnHook;
 import net.canarymod.hook.entity.VehicleCollisionHook;
 import net.canarymod.hook.world.BlockUpdateHook;
+import net.canarymod.hook.world.TimeChangeHook;
+import net.canarymod.hook.world.WeatherChangeHook;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockHopper;
 import net.minecraft.block.BlockLiquid;
+import net.minecraft.block.BlockSlab;
+import net.minecraft.block.BlockSnow;
+import net.minecraft.block.BlockStairs;
 import net.minecraft.block.material.Material;
+import net.minecraft.command.IEntitySelector;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.INpc;
+import net.minecraft.entity.item.EntityBoat;
+import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.monster.EntityGolem;
+import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.passive.EntityAmbientCreature;
+import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.passive.EntityWaterMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.pathfinding.PathEntity;
+import net.minecraft.pathfinding.PathFinder;
 import net.minecraft.profiler.Profiler;
 import net.minecraft.scoreboard.Scoreboard;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Facing;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.ReportedException;
@@ -35,6 +61,7 @@ import net.minecraft.world.storage.MapStorage;
 import net.minecraft.world.storage.WorldInfo;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashSet;
@@ -1017,56 +1044,49 @@ public abstract class World implements IBlockAccess {
                 }
             }
         }
-    }
 
-    // CanaryMod: Implemented fix via M4411K4 VEHICLE_COLLISION hook
-    CanaryVehicle vehicle = null;
+        // CanaryMod: Implemented fix via M4411K4 VEHICLE_COLLISION hook
+        CanaryVehicle vehicle = null;
 
-    if(entity instanceof EntityMinecart||entity instanceof EntityBoat)
-
-    {
-        vehicle = (CanaryVehicle) entity.getCanaryEntity();
-    }
-
-    double d0 = 0.25D;
-    List list = this.b(entity, axisalignedbb.b(d0, d0, d0));
-
-    for(
-    int i9 = 0;
-    i9<list.size();++i9)
-
-    {
-        Entity entity1 = (Entity) list.get(i9); // CanaryMod: split these two lines
-        AxisAlignedBB axisalignedbb1 = entity1.J();
-
-        if (axisalignedbb1 != null && axisalignedbb1.b(axisalignedbb)) {
-            // CanaryMod: this collided with a boat
-            if (vehicle != null) {
-                VehicleCollisionHook vch = (VehicleCollisionHook) new VehicleCollisionHook(vehicle, entity.getCanaryEntity()).call();
-                if (vch.isCanceled()) {
-                    continue;
-                }
-            }
-            //
-            this.M.add(axisalignedbb1);
+        if (entity instanceof EntityMinecart || entity instanceof EntityBoat) {
+            vehicle = (CanaryVehicle) entity.getCanaryEntity();
         }
 
-        axisalignedbb1 = entity.g((Entity) list.get(i9));
-        if (axisalignedbb1 != null && axisalignedbb1.b(axisalignedbb)) {
-            // CanaryMod: this collided with entity
-            if (vehicle != null) {
-                VehicleCollisionHook vch = (VehicleCollisionHook) new VehicleCollisionHook(vehicle, entity.getCanaryEntity()).call();
-                if (vch.isCanceled()) {
-                    continue;
-                }
-            }
-            //
-            this.M.add(axisalignedbb1);
-        }
-    }
+        double d0 = 0.25D;
+        List list = this.b(entity, axisalignedbb.b(d0, d0, d0));
 
-    return this.M;
-}
+        for (int i9 = 0; i9 < list.size(); ++i9) {
+            Entity entity1 = (Entity) list.get(i9); // CanaryMod: split these two lines
+            AxisAlignedBB axisalignedbb1 = entity1.J();
+
+            if (axisalignedbb1 != null && axisalignedbb1.b(axisalignedbb)) {
+                // CanaryMod: this collided with a boat
+                if (vehicle != null) {
+                    VehicleCollisionHook vch = (VehicleCollisionHook) new VehicleCollisionHook(vehicle, entity.getCanaryEntity()).call();
+                    if (vch.isCanceled()) {
+                        continue;
+                    }
+                }
+                //
+                this.M.add(axisalignedbb1);
+            }
+
+            axisalignedbb1 = entity.g((Entity) list.get(i9));
+            if (axisalignedbb1 != null && axisalignedbb1.b(axisalignedbb)) {
+                // CanaryMod: this collided with entity
+                if (vehicle != null) {
+                    VehicleCollisionHook vch = (VehicleCollisionHook) new VehicleCollisionHook(vehicle, entity.getCanaryEntity()).call();
+                    if (vch.isCanceled()) {
+                        continue;
+                    }
+                }
+                //
+                this.M.add(axisalignedbb1);
+            }
+        }
+
+        return this.M;
+    }
 
     public List a(AxisAlignedBB axisalignedbb) {
         this.M.clear();
