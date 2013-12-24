@@ -1,11 +1,7 @@
 package net.canarymod.api.world;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Random;
+import java.util.*;
 
 import net.canarymod.Canary;
 import net.canarymod.api.CanaryServer;
@@ -22,9 +18,9 @@ import net.minecraft.server.WorldServer;
  */
 public class CanaryWorldManager implements WorldManager {
 
-    private HashMap<String, World> loadedWorlds;
-    private ArrayList<String> existingWorlds;
-    private HashMap<String, Boolean> markedForUnload;
+    private Map<String, World> loadedWorlds;
+    private List<String> existingWorlds;
+    private Map<String, Boolean> markedForUnload;
 
     public CanaryWorldManager() {
         DimensionType.registerType("NORMAL", 0);
@@ -222,7 +218,7 @@ public class CanaryWorldManager implements WorldManager {
     }
 
     @Override
-    public ArrayList<String> getExistingWorlds() {
+    public List<String> getExistingWorlds() {
         return existingWorlds; // TODO: This only reads base folders not the real dimension folders!
     }
 }

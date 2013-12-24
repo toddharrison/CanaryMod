@@ -128,8 +128,8 @@ public class CanaryWorld implements World {
 
     @SuppressWarnings("rawtypes")
     @Override
-    public ArrayList<EntityAnimal> getAnimalList() {
-        ArrayList<EntityAnimal> animals = new ArrayList<EntityAnimal>();
+    public List<EntityAnimal> getAnimalList() {
+        List<EntityAnimal> animals = new ArrayList<EntityAnimal>();
 
         for (Object o : (ArrayList) ((ArrayList) world.e).clone()) {
             if (((net.minecraft.server.Entity) o).getCanaryEntity() instanceof EntityAnimal) {
@@ -141,8 +141,8 @@ public class CanaryWorld implements World {
 
     @SuppressWarnings("rawtypes")
     @Override
-    public ArrayList<EntityMob> getMobList() {
-        ArrayList<EntityMob> mobs = new ArrayList<EntityMob>();
+    public List<EntityMob> getMobList() {
+        List<EntityMob> mobs = new ArrayList<EntityMob>();
 
         for (Object o : (ArrayList) ((ArrayList) world.e).clone()) {
             if (((net.minecraft.server.Entity) o).getCanaryEntity() instanceof EntityMob) {
@@ -154,8 +154,8 @@ public class CanaryWorld implements World {
 
     @SuppressWarnings("rawtypes")
     @Override
-    public ArrayList<Boat> getBoatList() {
-        ArrayList<Boat> boats = new ArrayList<Boat>();
+    public List<Boat> getBoatList() {
+        List<Boat> boats = new ArrayList<Boat>();
 
         for (Object o : (ArrayList) ((ArrayList) world.e).clone()) {
             if (((net.minecraft.server.Entity) o).getCanaryEntity() instanceof Boat) {
@@ -167,8 +167,8 @@ public class CanaryWorld implements World {
 
     @SuppressWarnings("rawtypes")
     @Override
-    public ArrayList<Minecart> getMinecartList() {
-        ArrayList<Minecart> minecarts = new ArrayList<Minecart>();
+    public List<Minecart> getMinecartList() {
+        List<Minecart> minecarts = new ArrayList<Minecart>();
 
         for (Object o : (ArrayList) ((ArrayList) world.e).clone()) {
             if (((net.minecraft.server.Entity) o).getCanaryEntity() instanceof Minecart) {
@@ -180,8 +180,8 @@ public class CanaryWorld implements World {
 
     @SuppressWarnings("rawtypes")
     @Override
-    public ArrayList<Vehicle> getVehicleList() {
-        ArrayList<Vehicle> vehicles = new ArrayList<Vehicle>();
+    public List<Vehicle> getVehicleList() {
+        List<Vehicle> vehicles = new ArrayList<Vehicle>();
 
         for (Object o : (ArrayList) ((ArrayList) world.e).clone()) {
             if (((net.minecraft.server.Entity) o).getCanaryEntity() instanceof Vehicle) {
@@ -193,8 +193,8 @@ public class CanaryWorld implements World {
 
     @SuppressWarnings("rawtypes")
     @Override
-    public ArrayList<EntityItem> getItemList() {
-        ArrayList<EntityItem> items = new ArrayList<EntityItem>();
+    public List<EntityItem> getItemList() {
+        List<EntityItem> items = new ArrayList<EntityItem>();
 
         for (Object o : (ArrayList) ((ArrayList) world.e).clone()) {
             if (((net.minecraft.server.Entity) o).getCanaryEntity() instanceof EntityItem) {
@@ -205,13 +205,13 @@ public class CanaryWorld implements World {
     }
 
     @Override
-    public ArrayList<Player> getPlayerList() {
+    public List<Player> getPlayerList() {
         return getPlayerManager().getManagedPlayers();
     }
 
     @Override
-    public ArrayList<EntityLiving> getEntityLivingList() {
-        ArrayList<EntityLiving> list = new ArrayList<EntityLiving>();
+    public List<EntityLiving> getEntityLivingList() {
+        List<EntityLiving> list = new ArrayList<EntityLiving>();
         for (Entity e : getEntityTracker().getTrackedEntities()) {
             if (e instanceof EntityLiving && !list.contains(e)) {
                 list.add((EntityLiving) e);
@@ -221,7 +221,7 @@ public class CanaryWorld implements World {
     }
 
     @Override
-    public ArrayList<Entity> getTrackedEntities() {
+    public List<Entity> getTrackedEntities() {
         return getEntityTracker().getTrackedEntities();
     }
 
