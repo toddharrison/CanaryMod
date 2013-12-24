@@ -1,6 +1,8 @@
 package net.canarymod.api;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import net.canarymod.Canary;
 import net.canarymod.api.entity.living.humanoid.CanaryPlayer;
 import net.canarymod.api.entity.living.humanoid.Player;
@@ -48,8 +50,8 @@ public class CanaryConfigurationManager implements ConfigurationManager {
     }
 
     @Override
-    public ArrayList<Player> getAllPlayers() {
-        ArrayList<Player> players = new ArrayList<Player>(manager.a.size());
+    public List<Player> getAllPlayers() {
+        List<Player> players = new ArrayList<Player>(manager.a.size());
 
         for (Object p : manager.a) {
             if (!(p instanceof EntityPlayerMP)) {
