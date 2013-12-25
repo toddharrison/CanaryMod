@@ -5,18 +5,18 @@ import net.canarymod.api.inventory.Item;
 
 /**
  * EntityItem wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryEntityItem extends CanaryEntity implements EntityItem {
 
     /**
      * Constructs a new wrapper for EntityItem
-     * 
+     *
      * @param entity
-     *            the EntityItem to be wrapped
+     *         the EntityItem to be wrapped
      */
-    public CanaryEntityItem(net.minecraft.server.EntityItem entity) {
+    public CanaryEntityItem(net.minecraft.entity.item.EntityItem entity) {
         super(entity);
     }
 
@@ -103,7 +103,7 @@ public class CanaryEntityItem extends CanaryEntity implements EntityItem {
      * {@inheritDoc}
      */
     @Override
-    public net.minecraft.server.EntityItem getHandle() {
-        return (net.minecraft.server.EntityItem) entity;
+    public net.minecraft.entity.item.EntityItem getHandle() {
+        return (net.minecraft.entity.item.EntityItem) entity;
     }
 }

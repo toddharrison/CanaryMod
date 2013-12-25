@@ -1,12 +1,13 @@
 package net.canarymod.api.inventory;
 
+import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.item.ItemStack;
+
 import java.util.Arrays;
-import net.minecraft.server.InventoryCrafting;
-import net.minecraft.server.ItemStack;
 
 /**
  * PlayerCraftingMatrix wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryPlayerCraftingMatrix extends CanaryEntityInventory implements PlayerCraftingMatrix {

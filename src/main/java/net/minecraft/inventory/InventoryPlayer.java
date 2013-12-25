@@ -5,6 +5,7 @@ import net.minecraft.block.Block;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
@@ -196,7 +197,7 @@ public class InventoryPlayer implements IInventory {
 
     // CanaryMod: Simulate Pickup (Its the same as a(ItemStack) but without altering the inventory
     public boolean canPickup(EntityItem entityitem) {
-        ItemStack itemstack = entityitem.d();
+        ItemStack itemstack = entityitem.f();
         int i;
 
         if (itemstack.i()) {

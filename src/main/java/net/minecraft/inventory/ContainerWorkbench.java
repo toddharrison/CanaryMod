@@ -4,10 +4,12 @@ import net.canarymod.api.inventory.CanaryItem;
 import net.canarymod.api.world.blocks.CanaryWorkbench;
 import net.canarymod.hook.player.CraftHook;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.network.play.server.S2FPacketSetSlot;
 import net.minecraft.world.World;
 
 public class ContainerWorkbench extends Container {
@@ -72,7 +74,7 @@ public class ContainerWorkbench extends Container {
         // Set custom result
         this.f.a(0, result);
         // And send player custom result
-        player.a.b(new Packet103SetSlot(this.d, 0, result));
+        player.a.a(new S2FPacketSetSlot(this.d, 0, result));
         //
     }
 

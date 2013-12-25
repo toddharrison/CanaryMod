@@ -3,6 +3,7 @@ package net.minecraft.inventory;
 import net.canarymod.api.inventory.Inventory;
 import net.canarymod.hook.player.InventoryHook;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

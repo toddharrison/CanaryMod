@@ -112,7 +112,7 @@ public class EntityItem extends Entity {
             if (!tmpTouch) {
                 ItemTouchGroundHook hook = (ItemTouchGroundHook) new ItemTouchGroundHook((net.canarymod.api.entity.EntityItem) getCanaryEntity()).call();
                 if (hook.isCanceled()) {
-                    this.x(); // kill the item
+                    this.B(); // kill the item
                 }
             }
             //
@@ -137,6 +137,7 @@ public class EntityItem extends Entity {
                 //
             }
         }
+    }
 
     private void k() {
         Iterator iterator = this.p.a(EntityItem.class, this.D.b(0.5D, 0.0D, 0.5D)).iterator();
@@ -260,9 +261,8 @@ public class EntityItem extends Entity {
             ItemStack itemstack = this.f();
             int i0 = itemstack.b;
 
-            if (this.b == 0 &&&&
-            (this.g == null || 6000 - this.a <= 200 || this.g.equals(entityplayer.b_())) && entityplayer.bn.canPickup(this))
-            { // CanaryMod: simulate pickup first
+            if (this.b == 0 &&
+                    (this.g == null || 6000 - this.a <= 200 || this.g.equals(entityplayer.b_())) && entityplayer.bn.canPickup(this)) { // CanaryMod: simulate pickup first
                 if (entityplayer.bn.a(itemstack)) {
                     if (itemstack.b() == Item.a(Blocks.r)) {
                         entityplayer.a((StatBase) AchievementList.g);

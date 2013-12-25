@@ -1,9 +1,11 @@
 package net.minecraft.inventory;
 
 import net.canarymod.api.entity.vehicle.CanaryHopperMinecart;
+import net.minecraft.entity.item.EntityMinecartHopper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntityHopper;
 
 public class ContainerHopper extends Container {
 

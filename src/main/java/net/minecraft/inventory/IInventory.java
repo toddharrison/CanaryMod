@@ -1,6 +1,5 @@
 package net.minecraft.inventory;
 
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 

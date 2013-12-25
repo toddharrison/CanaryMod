@@ -6,6 +6,7 @@ import net.canarymod.hook.player.AnvilUseHook;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -38,7 +39,7 @@ public class ContainerRepair extends Container {
     private String n;
     private final EntityPlayer o;
 
-    public ContainerRepair(InventoryPlayer inventoryplayer, final World world, int i0, int i1, int i2, EntityPlayer entityplayer) {
+    public ContainerRepair(InventoryPlayer inventoryplayer, final World world, final int i0, final int i1, final int i2, EntityPlayer entityplayer) {
         this.i = world;
         this.j = i0;
         this.k = i1;
@@ -48,26 +49,26 @@ public class ContainerRepair extends Container {
         this.a(new Slot(this.h, 1, 76, 47));
         this.a(new Slot(this.g, 2, 134, 47) {
 
-            public boolean a(ItemStack entityplayer2) {
+            public boolean a(ItemStack itemstack) {
                 return false;
             }
 
-            public boolean a(EntityPlayer entityplayer2) {
-                return (entityplayer2.bF.d || entityplayer2.bG >= ContainerRepair.this.a) && ContainerRepair.this.a > 0 && this.e();
+            public boolean a(EntityPlayer entityplayer) {
+                return (entityplayer.bF.d || entityplayer.bG >= ContainerRepair.this.a) && ContainerRepair.this.a > 0 && this.e();
             }
 
-            public void a(EntityPlayer entityplayer2, ItemStack itemstack1x) {
-                if (!entityplayer2.bF.d) {
-                    entityplayer2.a(-ContainerRepair.this.a);
+            public void a(EntityPlayer entityplayer, ItemStack itemstack) {
+                if (!entityplayer.bF.d) {
+                    entityplayer.a(-ContainerRepair.this.a);
                 }
 
                 ContainerRepair.this.h.a(0, (ItemStack) null);
                 if (ContainerRepair.this.m > 0) {
-                    ItemStack itemstack2x = ContainerRepair.this.h.a(1);
+                    ItemStack itemstack1 = ContainerRepair.this.h.a(1);
 
-                    if (itemstack2x != null && itemstack2x.b > ContainerRepair.this.m) {
-                        itemstack2x.b -= ContainerRepair.this.m;
-                        ContainerRepair.this.h.a(1, itemstack2x);
+                    if (itemstack1 != null && itemstack1.b > ContainerRepair.this.m) {
+                        itemstack1.b -= ContainerRepair.this.m;
+                        ContainerRepair.this.h.a(1, itemstack1);
                     }
                     else {
                         ContainerRepair.this.h.a(1, (ItemStack) null);
@@ -78,23 +79,23 @@ public class ContainerRepair extends Container {
                 }
 
                 ContainerRepair.this.a = 0;
-                if (!entityplayer2.bF.d && !itemstack1.E && itemstack1.a(itemstack2, i4, i5) == Blocks.bQ && entityplayer2.aI().nextFloat() < 0.12F) {
-                    int i3 = itemstack1.e(itemstack2, i4, i5);
-                    int i4x = i3 & 3;
-                    int i5x = i3 >> 2;
+                if (!entityplayer.bF.d && !world.E && world.a(i0, i1, i2) == Blocks.bQ && entityplayer.aI().nextFloat() < 0.12F) {
+                    int i3 = world.e(i0, i1, i2);
+                    int i4 = i3 & 3;
+                    int i5 = i3 >> 2;
 
-                    ++i5x;
-                    if (i5x > 2) {
-                        itemstack1.f(itemstack2, i4, i5);
-                        itemstack1.c(1020, itemstack2, i4, i5, 0);
+                    ++i5;
+                    if (i5 > 2) {
+                        world.f(i0, i1, i2);
+                        world.c(1020, i0, i1, i2, 0);
                     }
                     else {
-                        itemstack1.a(itemstack2, i4, i5, i4x | i5x << 2, 2);
-                        itemstack1.c(1021, itemstack2, i4, i5, 0);
+                        world.a(i0, i1, i2, i1 | i2 << 2, 2);
+                        world.c(1021, i0, i1, i2, 0);
                     }
                 }
-                else if (!itemstack1.E) {
-                    itemstack1.c(1021, itemstack2, i4, i5, 0);
+                else if (!world.E) {
+                    world.c(1021, i0, i1, i2, 0);
                 }
 
             }
@@ -104,12 +105,12 @@ public class ContainerRepair extends Container {
 
         for (i6 = 0; i6 < 3; ++i6) {
             for (int i7 = 0; i7 < 9; ++i7) {
-                this.a(new Slot(entityplayer2, i7 + i6 * 9 + 9, 8 + i7 * 18, 84 + i6 * 18));
+                this.a(new Slot(inventoryplayer, i7 + i6 * 9 + 9, 8 + i7 * 18, 84 + i6 * 18));
             }
         }
 
         for (i6 = 0; i6 < 9; ++i6) {
-            this.a(new Slot(entityplayer2, i6, 8 + i6 * 18, 142));
+            this.a(new Slot(inventoryplayer, i6, 8 + i6 * 18, 142));
         }
 
         this.inventory = new CanaryAnvil(this); // CanaryMod: Set inventory instance
@@ -460,11 +461,11 @@ public class ContainerRepair extends Container {
 
     // CanaryMod start
     public String getToolName() {
-        return this.m;
+        return this.n;
     }
 
     public Player getPlayer() {
-        return ((EntityPlayerMP) this.n).getPlayer();
+        return ((EntityPlayerMP) this.o).getPlayer();
     }
     // CanaryMod end
 }
