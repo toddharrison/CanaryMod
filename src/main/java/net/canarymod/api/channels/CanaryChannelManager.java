@@ -6,7 +6,7 @@ import net.canarymod.api.NetServerHandler;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.channels.ChannelManager;
 import net.canarymod.channels.CustomPayloadChannelException;
-import net.minecraft.server.Packet250CustomPayload;
+import net.minecraft.network.play.server.S3FPacketCustomPayload;
 
 /**
  * @author Somners
@@ -34,12 +34,13 @@ public class CanaryChannelManager extends ChannelManager {
             if (clients.containsKey(channel)) {
                 for (NetServerHandler handler : clients.get(channel)) {
                     if (handler.getUser().equals(player)) {
-                        ((CanaryNetServerHandler) handler).sendPacket(new Packet250CustomPayload(channel, bytestream));
+                        ((CanaryNetServerHandler) handler).sendPacket(new S3FPacketCustomPayload(channel, bytestream));
                         return true;
                     }
                 }
             }
-        } catch (CustomPayloadChannelException ex) {
+        }
+        catch (CustomPayloadChannelException ex) {
             Canary.logStacktrace(ex.getMessage(), ex);
         }
         return false;
@@ -60,11 +61,12 @@ public class CanaryChannelManager extends ChannelManager {
             }
             if (clients.containsKey(channel)) {
                 for (NetServerHandler handler : clients.get(channel)) {
-                    ((CanaryNetServerHandler) handler).sendPacket(new Packet250CustomPayload(channel, bytestream));
+                    ((CanaryNetServerHandler) handler).sendPacket(new S3FPacketCustomPayload(channel, bytestream));
                     toRet = true;
                 }
             }
-        } catch (CustomPayloadChannelException ex) {
+        }
+        catch (CustomPayloadChannelException ex) {
             Canary.logStacktrace(ex.getMessage(), ex);
         }
         return toRet;

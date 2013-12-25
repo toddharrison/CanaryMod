@@ -4,6 +4,8 @@ import net.canarymod.api.entity.EntityType;
 import net.canarymod.api.world.CanaryWorld;
 import net.minecraft.entity.effect.EntityLightningBolt;
 
+import static net.canarymod.api.entity.EntityType.LIGHTNINGBOLT;
+
 /**
  * LightningBolt wrapper implementation
  *
@@ -20,9 +22,12 @@ public class CanaryLightningBolt extends CanaryWeatherEffect implements Lightnin
      */
     @Override
     public EntityType getEntityType() {
-        return EntityType.LIGHTNINGBOLT;
+        return LIGHTNINGBOLT;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getFqName() {
         return "LightningBolt";

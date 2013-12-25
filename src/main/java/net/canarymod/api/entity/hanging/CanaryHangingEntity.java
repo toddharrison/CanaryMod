@@ -44,7 +44,7 @@ public abstract class CanaryHangingEntity extends CanaryEntity implements Hangin
      */
     @Override
     public boolean isOnValidSurface() {
-        return getHandle().c();
+        return getHandle().e();
     }
 
     /**

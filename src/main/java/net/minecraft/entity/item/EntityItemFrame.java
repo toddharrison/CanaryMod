@@ -69,10 +69,8 @@ public class EntityItemFrame extends EntityHanging {
 
     public void b(Entity entity, boolean flag0) {
         //CanaryMod start
-        HangingEntityDestroyHook hook = null;
-        boolean isPlayer = false;
+        HangingEntityDestroyHook hook;
         if (entity instanceof EntityPlayer) {
-            isPlayer = true;
             hook = (HangingEntityDestroyHook) new HangingEntityDestroyHook((HangingEntity) this.getCanaryEntity(), (Player) entity.getCanaryEntity(), CanaryDamageSource.getDamageSourceFromType(DamageType.GENERIC)).call();
         }
         else {

@@ -3,6 +3,8 @@ package net.canarymod.api.entity.hanging;
 import net.canarymod.api.entity.EntityType;
 import net.minecraft.entity.item.EntityPainting;
 
+import static net.canarymod.api.entity.EntityType.PAINTING;
+
 /**
  * Painting wrapper implementation
  *
@@ -25,9 +27,12 @@ public class CanaryPainting extends CanaryHangingEntity implements Painting {
      */
     @Override
     public EntityType getEntityType() {
-        return EntityType.PAINTING;
+        return PAINTING;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getFqName() {
         return "Painting";
@@ -38,7 +43,7 @@ public class CanaryPainting extends CanaryHangingEntity implements Painting {
      */
     @Override
     public ArtType getArtType() {
-        return ArtType.values()[((EntityPainting) entity).e.ordinal()];
+        return ArtType.values()[getHandle().e.ordinal()];
     }
 
     /**
@@ -46,7 +51,7 @@ public class CanaryPainting extends CanaryHangingEntity implements Painting {
      */
     @Override
     public void setArtType(ArtType type) {
-        ((EntityPainting) entity).e = EntityPainting.EnumArt.values()[type.ordinal()];
+        getHandle().e = EntityPainting.EnumArt.values()[type.ordinal()];
     }
 
     /**
@@ -54,7 +59,7 @@ public class CanaryPainting extends CanaryHangingEntity implements Painting {
      */
     @Override
     public int getSizeX() {
-        return ((EntityPainting) entity).d();
+        return getHandle().f();
     }
 
     /**
@@ -62,7 +67,7 @@ public class CanaryPainting extends CanaryHangingEntity implements Painting {
      */
     @Override
     public int getSizeY() {
-        return ((EntityPainting) entity).e();
+        return getHandle().i();
     }
 
     /**
@@ -70,7 +75,7 @@ public class CanaryPainting extends CanaryHangingEntity implements Painting {
      */
     @Override
     public int getOffsetX() {
-        return ((EntityPainting) entity).e.E;
+        return getHandle().e.E;
     }
 
     /**
@@ -78,7 +83,7 @@ public class CanaryPainting extends CanaryHangingEntity implements Painting {
      */
     @Override
     public int getOffsetY() {
-        return ((EntityPainting) entity).e.F;
+        return getHandle().e.F;
     }
 
     /**
