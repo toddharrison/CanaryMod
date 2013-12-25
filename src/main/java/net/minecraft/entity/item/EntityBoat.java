@@ -17,10 +17,12 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.play.server.S08PacketPlayerPosLook;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
@@ -96,8 +98,8 @@ public class EntityBoat extends Entity {
             // CanaryMod: VehicleDamage
             net.canarymod.api.entity.Entity attk = null;
 
-            if (damagesource.h() != null) {
-                attk = damagesource.h().getCanaryEntity();
+            if (damagesource.i() != null) {
+                attk = damagesource.i().getCanaryEntity();
             }
             VehicleDamageHook hook = (VehicleDamageHook) new VehicleDamageHook((CanaryBoat) this.entity, attk, new CanaryDamageSource(damagesource), (int) f0).call();
             if (hook.isCanceled()) {
@@ -147,8 +149,8 @@ public class EntityBoat extends Entity {
             this.a(this.e() - 1.0F);
         }
 
-        double ppX = this.r, ppY = this.s, ppZ = this.t; // CanaryMod: previousprevious
-        float prevRot = this.A, prevPit = this.B;
+        double ppX = this.q, ppY = this.r, ppZ = this.s; // CanaryMod: previousprevious
+        float prevRot = this.z, prevPit = this.A;
 
         this.q = this.t;
         this.r = this.u;
@@ -338,26 +340,23 @@ public class EntityBoat extends Entity {
             this.b(this.z, this.A);
             // CanaryMod: VehicleMove
             if (Math.floor(this.q) != Math.floor(this.t) || Math.floor(this.r) != Math.floor(this.u) || Math.floor(this.s) != Math.floor(this.v)) {
-                Vector3D from = new Vector3D(this.r, this.s, this.t);
-                Vector3D to = new Vector3D(this.u, this.v, this.w);
+                Vector3D from = new Vector3D(this.q, this.r, this.s);
+                Vector3D to = new Vector3D(this.t, this.u, this.v);
                 VehicleMoveHook vmh = (VehicleMoveHook) new VehicleMoveHook((Vehicle) this.entity, from, to).call();
                 if (vmh.isCanceled()) {
                     this.w = 0.0D;
                     this.x = 0.0D;
                     this.y = 0.0D;
-                    this.b(this.r, this.s, this.t, prevRot, prevPit);
-                    this.t = ppX;
-                    this.u = ppY;
-                    this.v = ppZ;
-                    this.V(); // Update rider
+                    this.b(this.q, this.r, this.s, prevRot, prevPit);
+                    this.q = ppX;
+                    this.r = ppY;
+                    this.s = ppZ;
                     if (this.n != null && this.n instanceof EntityPlayerMP) {
-                        double ox = Math.cos((double) this.A * 3.141592653589793D / 180.0D) * 0.4D;
-                        double oz = Math.sin((double) this.A * 3.141592653589793D / 180.0D) * 0.4D;
-                        ((EntityPlayerMP) this.n).a.b(new Packet13PlayerLookMove(this.t + ox, this.u + this.Y() + this.n.X(), this.w + this.Y(), this.x + oz, this.n.z, this.n.A, this.F));
-                        this.n.w = 0.0D;
-                        this.n.x = 0.0D;
-                        this.n.y = 0.0D;
+                        double ox = Math.cos((double) this.z * 3.141592653589793D / 180.0D) * 0.4D;
+                        double oz = Math.sin((double) this.z * 3.141592653589793D / 180.0D) * 0.4D;
+                        ((EntityPlayerMP) this.n).a.a(new S08PacketPlayerPosLook(this.t + ox, this.w + this.ae(), this.x + oz, this.n.z, this.n.A, true));
                     }
+                    this.ac(); // Update rider
                 }
             }
             //

@@ -1,14 +1,15 @@
 package net.canarymod.api.entity.vehicle;
 
-import java.util.Arrays;
 import net.canarymod.api.inventory.CanaryItem;
 import net.canarymod.api.inventory.Item;
 import net.canarymod.api.inventory.ItemType;
 import net.canarymod.api.nbt.CanaryCompoundTag;
 import net.canarymod.config.Configuration;
-import net.minecraft.server.EntityMinecart;
-import net.minecraft.server.EntityMinecartContainer;
-import net.minecraft.server.ItemStack;
+import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.item.EntityMinecartContainer;
+import net.minecraft.item.ItemStack;
+
+import java.util.Arrays;
 
 /**
  * @author Somners
@@ -97,11 +98,13 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
                 if (item.getAmount() == remaining) {
                     removeItem(item.getSlot());
                     return;
-                } else if (item.getAmount() > remaining) {
+                }
+                else if (item.getAmount() > remaining) {
                     item.setAmount(item.getAmount() - remaining);
                     setSlot(item.getSlot(), item);
                     return;
-                } else {
+                }
+                else {
                     removeItem(item.getSlot());
                     remaining -= item.getAmount();
                 }
@@ -130,11 +133,13 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
                 if (it.getAmount() == remaining) {
                     removeItem(it.getSlot());
                     return;
-                } else if (it.getAmount() > remaining) {
+                }
+                else if (it.getAmount() > remaining) {
                     it.setAmount(it.getAmount() - remaining);
                     setSlot(it.getSlot(), it);
                     return;
-                } else {
+                }
+                else {
                     removeItem(it.getSlot());
                     remaining -= it.getAmount();
                 }

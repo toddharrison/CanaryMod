@@ -2,12 +2,12 @@ package net.canarymod.api.entity.vehicle;
 
 import net.canarymod.api.entity.CanaryEntity;
 import net.canarymod.api.entity.Entity;
-import net.minecraft.server.EntityBoat;
-import net.minecraft.server.EntityMinecart;
+import net.minecraft.entity.item.EntityBoat;
+import net.minecraft.entity.item.EntityMinecart;
 
 /**
  * Vehicle implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public abstract class CanaryVehicle extends CanaryEntity implements Vehicle {

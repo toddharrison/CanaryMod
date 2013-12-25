@@ -1,4 +1,4 @@
-package net.minecraft.inventory;
+package net.minecraft.entity.player;
 
 import net.canarymod.hook.player.ItemPickupHook;
 import net.minecraft.block.Block;
@@ -6,8 +6,7 @@ import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;

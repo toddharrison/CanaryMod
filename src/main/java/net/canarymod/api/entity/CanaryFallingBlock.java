@@ -1,22 +1,22 @@
 package net.canarymod.api.entity;
 
 import net.canarymod.api.world.blocks.BlockType;
-import net.minecraft.server.EntityFallingSand;
+import net.minecraft.entity.item.EntityFallingBlock;
 
 /**
  * FallingBlock wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryFallingBlock extends CanaryEntity implements FallingBlock {
 
     /**
-     * Constructs a new wrapper for EntityFallingSand
-     * 
+     * Constructs a new wrapper for EntityFallingBlock
+     *
      * @param entity
-     *            the EntityFallingSand to be wrapped
+     *         the EntityFallingBlock to be wrapped
      */
-    public CanaryFallingBlock(EntityFallingSand entity) {
+    public CanaryFallingBlock(EntityFallingBlock entity) {
         super(entity);
     }
 
@@ -169,7 +169,7 @@ public class CanaryFallingBlock extends CanaryEntity implements FallingBlock {
      * {@inheritDoc}
      */
     @Override
-    public EntityFallingSand getHandle() {
-        return (EntityFallingSand) entity;
+    public EntityFallingBlock getHandle() {
+        return (EntityFallingBlock) entity;
     }
 }

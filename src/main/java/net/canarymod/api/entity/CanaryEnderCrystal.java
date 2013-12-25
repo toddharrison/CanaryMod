@@ -1,11 +1,12 @@
 package net.canarymod.api.entity;
 
+import net.minecraft.entity.item.EntityEnderCrystal;
+
 import java.util.Random;
-import net.minecraft.server.EntityEnderCrystal;
 
 /**
  * EnderCrystal wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryEnderCrystal extends CanaryEntity implements EnderCrystal {
@@ -15,9 +16,9 @@ public class CanaryEnderCrystal extends CanaryEntity implements EnderCrystal {
 
     /**
      * Constructs a new wrapper for EntityEnderCrystal
-     * 
+     *
      * @param entity
-     *            the EntityEnderCrystal to be wrapped
+     *         the EntityEnderCrystal to be wrapped
      */
     public CanaryEnderCrystal(EntityEnderCrystal entity) {
         super(entity);
@@ -106,7 +107,7 @@ public class CanaryEnderCrystal extends CanaryEntity implements EnderCrystal {
     @Override
     public void detonate() {
         this.destroy();
-        getHandle().q.a(getHandle(), this.getX(), this.getY(), this.getZ(), power, damageWorld);
+        getHandle().p.a(getHandle(), this.getX(), this.getY(), this.getZ(), power, damageWorld);
     }
 
     /**
@@ -137,19 +138,22 @@ public class CanaryEnderCrystal extends CanaryEntity implements EnderCrystal {
      * There is no fuse
      */
     @Override
-    public void setFuse(int fuse) {}
+    public void setFuse(int fuse) {
+    }
 
     /**
      * There is no fuse
      */
     @Override
-    public void increaseFuse(int increase) {}
+    public void increaseFuse(int increase) {
+    }
 
     /**
      * There is no fuse
      */
     @Override
-    public void decreaseFuse(int decrease) {}
+    public void decreaseFuse(int decrease) {
+    }
 
     /**
      * {@inheritDoc}

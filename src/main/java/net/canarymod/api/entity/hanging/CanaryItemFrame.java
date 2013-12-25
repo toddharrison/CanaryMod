@@ -3,20 +3,20 @@ package net.canarymod.api.entity.hanging;
 import net.canarymod.api.entity.EntityType;
 import net.canarymod.api.inventory.CanaryItem;
 import net.canarymod.api.inventory.Item;
-import net.minecraft.server.EntityItemFrame;
+import net.minecraft.entity.item.EntityItemFrame;
 
 /**
  * ItemFrame wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryItemFrame extends CanaryHangingEntity implements ItemFrame {
 
     /**
      * Constructs a new wrapper for EntityItemFrame
-     * 
+     *
      * @param entity
-     *            the EntityItemFrame to be wrapped
+     *         the EntityItemFrame to be wrapped
      */
     public CanaryItemFrame(EntityItemFrame entity) {
         super(entity);

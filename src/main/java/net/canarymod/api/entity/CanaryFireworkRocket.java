@@ -3,20 +3,20 @@ package net.canarymod.api.entity;
 import net.canarymod.api.inventory.CanaryItem;
 import net.canarymod.api.inventory.Item;
 import net.canarymod.api.inventory.ItemType;
-import net.minecraft.server.EntityFireworkRocket;
+import net.minecraft.entity.item.EntityFireworkRocket;
 
 /**
  * FireworkRocket wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryFireworkRocket extends CanaryEntity implements FireworkRocket {
 
     /**
      * Constructs a new wrapper for EntityFireworkRocket
-     * 
+     *
      * @param entity
-     *            the EntityFireworkRocket to be wrapped
+     *         the EntityFireworkRocket to be wrapped
      */
     public CanaryFireworkRocket(EntityFireworkRocket entity) {
         super(entity);

@@ -10,7 +10,7 @@ import net.minecraft.world.World;
 
 public class EntityMinecartMobSpawner extends EntityMinecart {
 
-    public final MobSpawnerBaseLogic a = new EntityMinecartMobSpawnerLogic() { // CanaryMod: private -> public
+    public final MobSpawnerBaseLogic a = new MobSpawnerBaseLogic() { // CanaryMod: private -> public
 
         public void a(int var1) {
             EntityMinecartMobSpawner.this.p.a(EntityMinecartMobSpawner.this, (byte) var1);

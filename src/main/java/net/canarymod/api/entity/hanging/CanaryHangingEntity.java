@@ -1,20 +1,20 @@
 package net.canarymod.api.entity.hanging;
 
 import net.canarymod.api.entity.CanaryEntity;
-import net.minecraft.server.EntityHanging;
+import net.minecraft.entity.EntityHanging;
 
 /**
  * HangingEntity wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public abstract class CanaryHangingEntity extends CanaryEntity implements HangingEntity {
 
     /**
      * Constructs a new wrapper for EntityHanging
-     * 
+     *
      * @param entity
-     *            the EntityHanging to be wrapped
+     *         the EntityHanging to be wrapped
      */
     public CanaryHangingEntity(EntityHanging entity) {
         super(entity);

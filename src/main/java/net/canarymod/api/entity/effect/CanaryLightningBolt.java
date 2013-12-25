@@ -1,14 +1,15 @@
-package net.canarymod.api.entity;
+package net.canarymod.api.entity.effect;
 
+import net.canarymod.api.entity.EntityType;
 import net.canarymod.api.world.CanaryWorld;
-import net.minecraft.server.EntityLightningBolt;
+import net.minecraft.entity.effect.EntityLightningBolt;
 
 /**
  * LightningBolt wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
-public class CanaryLightningBolt extends CanaryEntity implements LightningBolt {
+public class CanaryLightningBolt extends CanaryWeatherEffect implements LightningBolt {
 
     public CanaryLightningBolt(EntityLightningBolt entity) {
         super(entity);

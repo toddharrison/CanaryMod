@@ -7,8 +7,7 @@ import net.canarymod.api.entity.EntityType;
 import net.canarymod.api.inventory.CanaryItem;
 import net.canarymod.api.inventory.Item;
 import net.canarymod.api.world.CanaryWorld;
-import net.minecraft.server.EntityList;
-import net.minecraft.server.ItemStack;
+import net.minecraft.item.ItemStack;
 
 /**
  * Living Entity wrapper implementation
@@ -17,7 +16,7 @@ import net.minecraft.server.ItemStack;
  */
 public abstract class CanaryEntityLiving extends CanaryLivingBase implements EntityLiving {
 
-    public CanaryEntityLiving(net.minecraft.server.EntityLiving entity) {
+    public CanaryEntityLiving(net.minecraft.entity.EntityLiving entity) {
         super(entity);
     }
 
@@ -35,7 +34,7 @@ public abstract class CanaryEntityLiving extends CanaryLivingBase implements Ent
      */
     @Override
     public void playLivingSound() {
-        ((net.minecraft.server.EntityLiving) entity).p();
+        ((net.minecraft.entity.EntityLiving) entity).p();
     }
 
     /**
@@ -43,7 +42,7 @@ public abstract class CanaryEntityLiving extends CanaryLivingBase implements Ent
      */
     @Override
     public boolean spawn(EntityLiving... riders) {
-        net.minecraft.server.World world = ((CanaryWorld) getWorld()).getHandle();
+        net.minecraft.world.World world = ((CanaryWorld) getWorld()).getHandle();
 
         entity.b(getX() + 0.5d, getY(), getZ() + 0.5d, getRotation(), 0f);
         boolean toRet = world.d(entity);
@@ -52,7 +51,7 @@ public abstract class CanaryEntityLiving extends CanaryLivingBase implements Ent
             CanaryEntityLiving prev = this;
 
             for (EntityLiving rider : riders) {
-                net.minecraft.server.EntityLiving mob2 = (net.minecraft.server.EntityLiving) ((CanaryEntityLiving) rider).getHandle();
+                net.minecraft.entity.EntityLiving mob2 = (net.minecraft.entity.EntityLiving) ((CanaryEntityLiving) rider).getHandle();
 
                 mob2.b(getX(), getY(), getZ(), getRotation(), 0f);
                 world.d(mob2);
@@ -68,7 +67,7 @@ public abstract class CanaryEntityLiving extends CanaryLivingBase implements Ent
      */
     @Override
     public LivingBase getAttackTarget() {
-        net.minecraft.server.EntityLivingBase target = getHandle().m();
+        net.minecraft.entity.EntityLivingBase target = getHandle().m();
         if (target != null) {
             return (LivingBase) target.getCanaryEntity();
         }
@@ -81,9 +80,10 @@ public abstract class CanaryEntityLiving extends CanaryLivingBase implements Ent
     @Override
     public void setAttackTarget(LivingBase livingbase) {
         if (livingbase == null) {
-            getHandle().c((net.minecraft.server.EntityLivingBase) null);
-        } else {
-            getHandle().c((net.minecraft.server.EntityLivingBase) ((CanaryEntity) livingbase).getHandle());
+            getHandle().c((net.minecraft.entity.EntityLivingBase) null);
+        }
+        else {
+            getHandle().c((net.minecraft.entity.EntityLivingBase) ((CanaryEntity) livingbase).getHandle());
         }
     }
 
@@ -190,7 +190,7 @@ public abstract class CanaryEntityLiving extends CanaryLivingBase implements Ent
      */
     @Override
     public PathFinder getPathFinder() {
-        return ((net.minecraft.server.EntityLiving) entity).k().getCanaryPathFinder();
+        return ((net.minecraft.entity.EntityLiving) entity).k().getCanaryPathFinder();
     }
 
     /**
@@ -198,7 +198,7 @@ public abstract class CanaryEntityLiving extends CanaryLivingBase implements Ent
      */
     @Override
     public AIManager getAITaskManager() {
-        return ((net.minecraft.server.EntityLiving) entity).getTasks().getAIManager();
+        return ((net.minecraft.entity.EntityLiving) entity).getTasks().getAIManager();
     }
 
     /**
@@ -259,7 +259,7 @@ public abstract class CanaryEntityLiving extends CanaryLivingBase implements Ent
      * {@inheritDoc}
      */
     @Override
-    public net.minecraft.server.EntityLiving getHandle() {
-        return (net.minecraft.server.EntityLiving) entity;
+    public net.minecraft.entity.EntityLiving getHandle() {
+        return (net.minecraft.entity.EntityLiving) entity;
     }
 }

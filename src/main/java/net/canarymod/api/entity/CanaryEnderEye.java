@@ -1,20 +1,20 @@
 package net.canarymod.api.entity;
 
 import net.canarymod.api.world.position.Location;
-import net.minecraft.server.EntityEnderEye;
+import net.minecraft.entity.item.EntityEnderEye;
 
 /**
  * EnderEye wrapper
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryEnderEye extends CanaryEntity implements EnderEye {
 
     /**
      * Constructs a new wrapper for EntityEnderEye
-     * 
+     *
      * @param entity
-     *            the EntityEnderEye to be wrapped
+     *         the EntityEnderEye to be wrapped
      */
     public CanaryEnderEye(EntityEnderEye entity) {
         super(entity);

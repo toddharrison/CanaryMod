@@ -1,19 +1,19 @@
 package net.canarymod.api.entity.vehicle;
 
-import net.minecraft.server.EntityMinecart;
+import net.minecraft.entity.item.EntityMinecart;
 
 /**
  * Minecart wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public abstract class CanaryMinecart extends CanaryVehicle implements Minecart {
 
     /**
      * Constructs a new wrapper for EntityMinecart
-     * 
+     *
      * @param entity
-     *            the EntityMinecart to be wrapped
+     *         the EntityMinecart to be wrapped
      */
     public CanaryMinecart(EntityMinecart entity) {
         super(entity);

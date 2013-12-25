@@ -1,20 +1,20 @@
 package net.canarymod.api.entity.hanging;
 
 import net.canarymod.api.entity.EntityType;
-import net.minecraft.server.EntityPainting;
+import net.minecraft.entity.item.EntityPainting;
 
 /**
  * Painting wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryPainting extends CanaryHangingEntity implements Painting {
 
     /**
      * Constructs a new wrapper for EntityPaintings
-     * 
+     *
      * @param entity
-     *            the EntityItemFrame to be wrapped
+     *         the EntityItemFrame to be wrapped
      */
     public CanaryPainting(EntityPainting entity) {
         super(entity);
@@ -46,7 +46,7 @@ public class CanaryPainting extends CanaryHangingEntity implements Painting {
      */
     @Override
     public void setArtType(ArtType type) {
-        ((EntityPainting) entity).e = net.minecraft.server.EnumArt.values()[type.ordinal()];
+        ((EntityPainting) entity).e = EntityPainting.EnumArt.values()[type.ordinal()];
     }
 
     /**

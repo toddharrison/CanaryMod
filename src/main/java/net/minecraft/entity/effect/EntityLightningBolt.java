@@ -1,7 +1,7 @@
 package net.minecraft.entity.effect;
 
-import net.canarymod.api.entity.CanaryLightningBolt;
 import net.canarymod.api.entity.LightningBolt;
+import net.canarymod.api.entity.effect.CanaryLightningBolt;
 import net.canarymod.api.world.blocks.CanaryBlock;
 import net.canarymod.hook.entity.EntityLightningStruckHook;
 import net.canarymod.hook.world.IgnitionHook;
@@ -101,7 +101,7 @@ public class EntityLightningBolt extends EntityWeatherEffect {
 
                     if (this.p.a(i0, i1, i2).o() == Material.a && Blocks.ab.c(this.p, i0, i1, i2)) {
                         // CanaryMod: Ignition
-                        CanaryBlock ignited = (CanaryBlock) q.getCanaryWorld().getBlockAt(i0, i1, i2);
+                        CanaryBlock ignited = (CanaryBlock) getCanaryWorld().getBlockAt(i0, i1, i2);
                         ignited.setStatus((byte) 5); // LightningBolt Status 5
                         IgnitionHook hook = (IgnitionHook) new IgnitionHook(ignited, null, null, IgnitionCause.LIGHTNING_STRIKE).call();
                         if (!hook.isCanceled()) {

@@ -2,7 +2,7 @@ package net.canarymod.api.entity.vehicle;
 
 import net.canarymod.api.entity.EntityType;
 import net.canarymod.api.inventory.InventoryType;
-import net.minecraft.server.EntityMinecartHopper;
+import net.minecraft.entity.item.EntityMinecartHopper;
 
 /**
  * @author Somners

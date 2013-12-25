@@ -130,6 +130,7 @@ public class EntityEnderEye extends Entity {
                 }
             }
         }
+    }
 
     public void b(NBTTagCompound nbttagcompound) {
     }

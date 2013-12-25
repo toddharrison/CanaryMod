@@ -2,21 +2,21 @@ package net.canarymod.api.entity;
 
 import net.canarymod.api.entity.living.humanoid.EntityNonPlayableCharacter;
 import net.canarymod.api.entity.living.humanoid.Player;
-import net.minecraft.server.EntityPlayer;
-import net.minecraft.server.EntityXPOrb;
+import net.minecraft.entity.item.EntityXPOrb;
+import net.minecraft.entity.player.EntityPlayer;
 
 /**
  * XPOrb wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryXPOrb extends CanaryEntity implements XPOrb {
 
     /**
      * Constructs a new wrapper for EntityXPOrb
-     * 
+     *
      * @param entity
-     *            the EntityXPOrb to be wrapped
+     *         the EntityXPOrb to be wrapped
      */
     public CanaryXPOrb(EntityXPOrb entity) {
         super(entity);

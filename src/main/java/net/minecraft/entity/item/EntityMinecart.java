@@ -22,10 +22,12 @@ import net.minecraft.entity.EntityMinecartCommandBlock;
 import net.minecraft.entity.ai.EntityMinecartMobSpawner;
 import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.play.server.S08PacketPlayerPosLook;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
@@ -322,27 +324,24 @@ public abstract class EntityMinecart extends Entity {
 
             this.b(this.z, this.A);
             // CanaryMod: VehicleMove
-            if (Math.floor(this.r) != Math.floor(this.u) || Math.floor(this.s) != Math.floor(this.v) || Math.floor(this.t) != Math.floor(this.w)) {
-                Vector3D from = new Vector3D(this.r, this.s, this.t);
-                Vector3D to = new Vector3D(this.u, this.v, this.w);
+            if (Math.floor(this.t) != Math.floor(this.q) || Math.floor(this.u) != Math.floor(this.r) || Math.floor(this.v) != Math.floor(this.s)) {
+                Vector3D from = new Vector3D(this.q, this.r, this.s);
+                Vector3D to = new Vector3D(this.t, this.u, this.v);
                 VehicleMoveHook vmh = (VehicleMoveHook) new VehicleMoveHook((Vehicle) this.entity, from, to).call();
                 if (vmh.isCanceled()) {
+                    this.w = 0.0D;
                     this.x = 0.0D;
                     this.y = 0.0D;
-                    this.z = 0.0D;
-                    this.b(this.r, this.s, this.t, prevRot, prevPit);
-                    this.r = ppX;
-                    this.s = ppY;
-                    this.t = ppZ;
-                    this.V(); // Update rider
+                    this.b(this.q, this.r, this.s, prevRot, prevPit);
+                    this.q = ppX;
+                    this.r = ppY;
+                    this.s = ppZ;
                     if (this.n != null && this.n instanceof EntityPlayerMP) {
-                        double ox = Math.cos((double) this.A * 3.141592653589793D / 180.0D) * 0.4D;
-                        double oz = Math.sin((double) this.A * 3.141592653589793D / 180.0D) * 0.4D;
-                        ((EntityPlayerMP) this.n).a.b(new Packet13PlayerLookMove(this.u + ox, this.v + this.Y() + this.n.X(), this.v + this.X(), this.w + oz, this.n.A, this.n.B, this.F));
-                        this.n.x = 0.0D;
-                        this.n.y = 0.0D;
-                        this.n.z = 0.0D;
+                        double ox = Math.cos((double) this.z * 3.141592653589793D / 180.0D) * 0.4D;
+                        double oz = Math.sin((double) this.z * 3.141592653589793D / 180.0D) * 0.4D;
+                        ((EntityPlayerMP) this.n).a.a(new S08PacketPlayerPosLook(this.t + ox, this.u + this.ae(), this.v + oz, this.n.z, this.n.A, true));
                     }
+                    this.ac(); // Update rider
                 }
             }
             //
@@ -707,6 +706,7 @@ public abstract class EntityMinecart extends Entity {
         if (this.b != null && this.b.length() > 0) {
             nbttagcompound.a("CustomName", this.b);
         }
+    }
 
     public void f(Entity entity) {
         if (!this.p.E) {
