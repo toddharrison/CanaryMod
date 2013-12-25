@@ -201,7 +201,7 @@ public class BlockRedstoneWire extends Block {
         super.a(world, i0, i1, i2, block, i3);
         if (!world.E) {
             // CanaryMod: RedstoneChange (Wire Destroy)
-            int lvl = world.D(i0, i1, i2) - 1; // Subtract 1 from current in
+            int lvl = world.w(i0, i1, i2) - 1; // Subtract 1 from current in
             if (lvl > 0) {
                 new RedstoneChangeHook(new CanaryBlock(BlockType.RedstoneWire.getId(), (short) i3, i0, i1, i2, world.getCanaryWorld()), lvl, 0).call();
             }

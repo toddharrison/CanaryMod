@@ -28,6 +28,7 @@ public class BlockChest extends BlockContainer {
 
     private final Random b = new Random();
     public final int a;
+    private int oldLvl; // CanaryMod: store old
 
     protected BlockChest(int i0) {
         super(Material.d);

@@ -28,7 +28,7 @@ public class CommandToggleDownfall extends CommandBase {
         for (net.canarymod.api.world.World w : MinecraftServer.G().worldManager.getAllWorlds()) {
             WorldInfo worldinfo = ((CanaryWorld) w).getHandle().M();
 
-            if (worldserver != null && worldserver.getCanaryWorld().getType() == DimensionType.fromId(0)) {
+            if (((CanaryWorld) w).getHandle() != null && w.getType() == DimensionType.fromId(0)) {
                 worldinfo.b(!worldinfo.p());
             }
         }

@@ -2,6 +2,9 @@ package net.minecraft.command;
 
 import net.canarymod.Canary;
 import net.canarymod.api.world.CanaryWorld;
+import net.minecraft.entity.EntityMinecartCommandBlock;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.tileentity.TileEntityCommandBlock;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.GameRules;
 
@@ -29,8 +32,10 @@ public class CommandGameRule extends CommandBase {
             String s1 = astring[1];
             // CanaryMod: Fixes for MultiWorld
             GameRules gamerules =
-                    icommandsender instanceof EntityPlayerMP ? ((EntityPlayerMP) icommandsender).q.O()
-                            : icommandsender instanceof TileEntityCommandBlock ? ((TileEntityCommandBlock) icommandsender).k.O() : this.d();
+                    icommandsender instanceof EntityPlayerMP ? ((EntityPlayerMP) icommandsender).p.N()
+                            : icommandsender instanceof TileEntityCommandBlock ? ((TileEntityCommandBlock) icommandsender).w().N()
+                            : icommandsender instanceof EntityMinecartCommandBlock ? this.d() //NOT YET IMPLEMENTED
+                            : this.d();
             //
 
             if (gamerules.e(s0)) {
@@ -45,8 +50,10 @@ public class CommandGameRule extends CommandBase {
             s0 = astring[0];
             // CanaryMod: Fixes for MultiWorld
             GameRules gamerules1 =
-                    icommandsender instanceof EntityPlayerMP ? ((EntityPlayerMP) icommandsender).q.O()
-                            : icommandsender instanceof TileEntityCommandBlock ? ((TileEntityCommandBlock) icommandsender).k.O() : this.d();
+                    icommandsender instanceof EntityPlayerMP ? ((EntityPlayerMP) icommandsender).p.N() //
+                            : icommandsender instanceof TileEntityCommandBlock ? ((TileEntityCommandBlock) icommandsender).w().N() //
+                            : icommandsender instanceof EntityMinecartCommandBlock ? this.d() //NOT YET IMPLEMENTED
+                            : this.d(); //
             //
 
             if (gamerules1.e(s0)) {
@@ -71,8 +78,10 @@ public class CommandGameRule extends CommandBase {
     public List a(ICommandSender icommandsender, String[] astring) {
         // CanaryMod: Fixes for MultiWorld
         String[] rules =
-                icommandsender instanceof EntityPlayerMP ? ((EntityPlayerMP) icommandsender).q.O().b()
-                        : icommandsender instanceof TileEntityCommandBlock ? ((TileEntityCommandBlock) icommandsender).k.O().b() : this.d().b();
+                icommandsender instanceof EntityPlayerMP ? ((EntityPlayerMP) icommandsender).p.N().b() //
+                        : icommandsender instanceof TileEntityCommandBlock ? ((TileEntityCommandBlock) icommandsender).w().N().b() //
+                        : icommandsender instanceof EntityMinecartCommandBlock ? this.d().b() //NOT YET IMPLEMENTED
+                        : this.d().b(); //
         //
         return astring.length == 1 ? a(astring, rules) : (astring.length == 2 ? a(astring, new String[]{ "true", "false" }) : null);
     }

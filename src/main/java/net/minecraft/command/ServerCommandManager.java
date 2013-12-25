@@ -5,6 +5,7 @@ import net.canarymod.api.world.CanaryWorld;
 import net.minecraft.command.server.CommandAchievement;
 import net.minecraft.command.server.CommandBanIp;
 import net.minecraft.command.server.CommandBanPlayer;
+import net.minecraft.command.server.CommandBlockLogic;
 import net.minecraft.command.server.CommandBroadcast;
 import net.minecraft.command.server.CommandDeOp;
 import net.minecraft.command.server.CommandEmote;
@@ -99,7 +100,7 @@ public class ServerCommandManager extends CommandHandler implements IAdminComman
         boolean flag0 = true;
 
         // CanaryMod: Fix for MultiWorld
-        if (icommandsender instanceof TileEntityCommandBlock && !((CanaryWorld) Canary.getServer().getDefaultWorld()).getHandle().N().b("commandBlockOutput")) {
+        if (icommandsender instanceof CommandBlockLogic && !((CanaryWorld) Canary.getServer().getDefaultWorld()).getHandle().N().b("commandBlockOutput")) {
             flag0 = false;
         }
 

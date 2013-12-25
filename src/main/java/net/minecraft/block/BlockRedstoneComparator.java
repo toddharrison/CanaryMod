@@ -174,7 +174,7 @@ public class BlockRedstoneComparator extends BlockRedstoneDiode implements ITile
 
     public void a(World world, int i0, int i1, int i2, Block block, int i3) {
         // CanaryMod: Comparator break
-        int oldLvl = this.a_(world, i0, i1, i2).a();
+        int oldLvl = this.e((IBlockAccess) world, i0, i1, i2).a();
         if (oldLvl != 0) {
             new RedstoneChangeHook(new CanaryBlock(BlockType.RedstoneComparator.getId(), (short) 2, i0, i1, i2, world.getCanaryWorld()), oldLvl, 0).call();
         }

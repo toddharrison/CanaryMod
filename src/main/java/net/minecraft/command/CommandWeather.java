@@ -66,8 +66,10 @@ public class CommandWeather extends CommandBase {
                     throw new WrongUsageException("commands.weather.usage", new Object[0]);
                 }
             }
-
-        public List a (ICommandSender icommandsender, String[]astring){
-            return astring.length == 1 ? a(astring, new String[]{ "clear", "rain", "thunder" }) : null;
         }
     }
+
+    public List a(ICommandSender icommandsender, String[] astring) {
+        return astring.length == 1 ? a(astring, new String[]{ "clear", "rain", "thunder" }) : null;
+    }
+}

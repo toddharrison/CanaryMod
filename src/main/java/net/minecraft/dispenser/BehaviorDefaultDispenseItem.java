@@ -5,6 +5,7 @@ import net.minecraft.block.BlockDispenser;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntityDispenser;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
@@ -22,17 +23,15 @@ public class BehaviorDefaultDispenseItem implements IBehaviorDispenseItem {
     protected ItemStack b(IBlockSource iblocksource, ItemStack itemstack) {
         EnumFacing enumfacing = BlockDispenser.b(iblocksource.h());
         IPosition iposition = BlockDispenser.a(iblocksource);
-        ItemStack itemstack1 = itemstack.a(1);
 
         // CanaryMod: Dispense
         EntityItem temp = new EntityItem(iblocksource.k(), iposition.a(), iposition.b() - 0.3D, iposition.c(), itemstack);
         DispenseHook hook = (DispenseHook) new DispenseHook(((TileEntityDispenser) iblocksource.j()).getCanaryDispenser(), temp.getCanaryEntity()).call();
         if (!hook.isCanceled()) {
             ItemStack itemstack1 = itemstack.a(1);
-
             a(iblocksource.k(), itemstack1, 6, enumfacing, iposition);
         }
-        temp.x(); // Clear the temp EntityItem
+        temp.B(); // Clear the temp EntityItem
         //
         return itemstack;
     }

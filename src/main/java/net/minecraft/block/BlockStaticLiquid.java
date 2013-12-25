@@ -69,7 +69,7 @@ public class BlockStaticLiquid extends BlockLiquid {
 
             if (i3 == 0) {
                 i4 = i0;
-                int i5 = i2;
+                i5 = i2;
 
                 for (int i6 = 0; i6 < 3; ++i6) {
                     i0 = i4 + random.nextInt(3) - 1;
