@@ -1,11 +1,11 @@
 package net.canarymod.api.entity.living.monster;
 
 import net.canarymod.api.entity.EntityType;
-import net.minecraft.server.EntityCreeper;
+import net.minecraft.entity.monster.EntityCreeper;
 
 /**
  * Creeper wrapper implementation
- * 
+ *
  * @author Chris (damagefilter)
  * @author Jason (darkdiplomat)
  */
@@ -15,9 +15,9 @@ public class CanaryCreeper extends CanaryEntityMob implements Creeper {
 
     /**
      * Constructs a new wrapper for EntityCreeper
-     * 
+     *
      * @param entity
-     *            the EntityCreeper to wrap
+     *         the EntityCreeper to wrap
      */
     public CanaryCreeper(EntityCreeper entity) {
         super(entity);

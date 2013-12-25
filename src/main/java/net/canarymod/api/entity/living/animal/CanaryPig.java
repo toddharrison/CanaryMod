@@ -2,20 +2,20 @@ package net.canarymod.api.entity.living.animal;
 
 import net.canarymod.api.entity.EntityType;
 import net.canarymod.api.entity.vehicle.CanaryAnimalVehicle;
-import net.minecraft.server.EntityPig;
+import net.minecraft.entity.passive.EntityPig;
 
 /**
  * Pig wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryPig extends CanaryAnimalVehicle implements Pig {
 
     /**
      * Constructs a new wrapper for EntityPig
-     * 
+     *
      * @param entity
-     *            the EntityPig to wrap
+     *         the EntityPig to wrap
      */
     public CanaryPig(EntityPig entity) {
         super(entity);

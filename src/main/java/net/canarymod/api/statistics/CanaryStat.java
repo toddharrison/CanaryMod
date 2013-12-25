@@ -1,10 +1,10 @@
 package net.canarymod.api.statistics;
 
-import net.minecraft.server.StatBase;
+import net.minecraft.stats.StatBase;
 
 /**
  * Stat wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryStat implements Stat {
@@ -12,9 +12,9 @@ public class CanaryStat implements Stat {
 
     /**
      * Constructs a new StatBase wrapper
-     * 
+     *
      * @param statbase
-     *            the StatBase to wrap
+     *         the StatBase to wrap
      */
     public CanaryStat(StatBase statbase) {
         this.statbase = statbase;

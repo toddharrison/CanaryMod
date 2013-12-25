@@ -1,10 +1,10 @@
 package net.canarymod.api.entity;
 
-import net.minecraft.server.EntityLargeFireball;
+import net.minecraft.entity.projectile.EntityLargeFireball;
 
 /**
  * LargeFireball wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryLargeFireball extends CanaryFireball implements LargeFireball {
@@ -12,9 +12,9 @@ public class CanaryLargeFireball extends CanaryFireball implements LargeFireball
 
     /**
      * Constructs a new wrapper for EntityLargeFireball
-     * 
+     *
      * @param entity
-     *            the EntityLargeFireball to wrap
+     *         the EntityLargeFireball to wrap
      */
     public CanaryLargeFireball(EntityLargeFireball entity) {
         super(entity);
@@ -93,19 +93,22 @@ public class CanaryLargeFireball extends CanaryFireball implements LargeFireball
      * {@inheritDoc}
      */
     @Override
-    public void setFuse(int fuse) {}
+    public void setFuse(int fuse) {
+    }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void increaseFuse(int increase) {}
+    public void increaseFuse(int increase) {
+    }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void decreaseFuse(int decrease) {}
+    public void decreaseFuse(int decrease) {
+    }
 
     /**
      * {@inheritDoc}

@@ -36,18 +36,17 @@ public class NetHandlerStatusServer implements INetHandlerStatusServer {
     public void a(C00PacketServerQuery c00packetserverquery) {
         // CanaryMod: ServerListPingHook
         ServerStatusResponse ssr = this.a.at();
-        ServerListPingHook hook = (ServerListPingHook) new ServerListPingHook(ssr.a().e(), ssr.b().b(), ssr.b().a()).call();
+        ServerListPingHook hook = (ServerListPingHook) new ServerListPingHook(ssr.a().e(), ssr.b().b(), ssr.b().a(), ssr.d()).call();
         if (hook.isCanceled()) {
             // Response Denied!
             return;
         }
-        String serv_favicon = ssr.d(); //Maybe at some point i will make it to where this can be changed but for now I would rather not make a mess of it
         // Recreate the ServerStatusResponse to be sent so that the default isn't destroyed
         ssr = new ServerStatusResponse();
         ssr.a(new ServerStatusResponse.MinecraftProtocolVersionIdentifier("1.7.2", 4)); //Protocol (do not change this at all!)
         ssr.a(new ServerStatusResponse.PlayerCountData(hook.getMaxPlayers(), hook.getCurrentPlayers())); //Max/Online Players
         ssr.a((IChatComponent) (new ChatComponentText(hook.getMotd()))); //MOTD
-        ssr.a(serv_favicon); // Server Favicon
+        ssr.a(hook.getFavicon()); // Server Favicon
         this.b.a(new S00PacketServerInfo(ssr), new GenericFutureListener[0]);
         //
     }

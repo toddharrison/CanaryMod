@@ -1,11 +1,11 @@
 package net.canarymod.api.entity.living.animal;
 
 import net.canarymod.api.entity.EntityType;
-import net.minecraft.server.EntityCow;
+import net.minecraft.entity.passive.EntityCow;
 
 /**
  * Cow wrapper implementation
- * 
+ *
  * @author Chris (damagefilter)
  * @author Jason (darkdiplomat)
  */
@@ -13,9 +13,9 @@ public class CanaryCow extends CanaryEntityAnimal implements Cow {
 
     /**
      * Constructs a new wrapper for EntityCow
-     * 
+     *
      * @param entity
-     *            the EntityCow to wrap
+     *         the EntityCow to wrap
      */
     public CanaryCow(EntityCow entity) {
         super(entity);

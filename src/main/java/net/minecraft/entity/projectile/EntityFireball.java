@@ -208,8 +208,8 @@ public abstract class EntityFireball extends Entity {
         this.g = nbttagcompound.e("zTile");
         this.h = Block.e(nbttagcompound.d("inTile") & 255);
         this.i = nbttagcompound.d("inGround") == 1;
-        if (nbttagcompound.b("motionFactor")) { // CanaryMod: If motionFactor is stored, retrive it
-            this.motionFactor = nbttagcompound.g("motionFactor");
+        if (nbttagcompound.c("motionFactor")) { // CanaryMod: If motionFactor is stored, retrive it
+            this.motionFactor = nbttagcompound.h("motionFactor");
         }
 
         if (nbttagcompound.b("direction", 9)) {

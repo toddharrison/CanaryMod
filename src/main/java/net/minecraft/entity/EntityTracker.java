@@ -296,6 +296,6 @@ public class EntityTracker {
      * @return
      */
     public Set<EntityTrackerEntry> getTrackedEntities() {
-        return b;
+        return c;
     }
 }

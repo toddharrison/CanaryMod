@@ -1,10 +1,10 @@
 package net.canarymod.api.entity.living.humanoid;
 
-import net.minecraft.server.PlayerCapabilities;
+import net.minecraft.entity.player.PlayerCapabilities;
 
 /**
  * HumanCapabilities wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryHumanCapabilities implements HumanCapabilities {

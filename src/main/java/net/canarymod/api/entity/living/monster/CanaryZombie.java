@@ -1,20 +1,20 @@
 package net.canarymod.api.entity.living.monster;
 
 import net.canarymod.api.entity.EntityType;
-import net.minecraft.server.EntityZombie;
+import net.minecraft.entity.monster.EntityZombie;
 
 /**
  * Zombie wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryZombie extends CanaryEntityMob implements Zombie {
 
     /**
      * Constructs a new wrapper for EntityZombie
-     * 
+     *
      * @param entity
-     *            the EntityZombie to wrap
+     *         the EntityZombie to wrap
      */
     public CanaryZombie(EntityZombie entity) {
         super(entity);

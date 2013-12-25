@@ -1,20 +1,20 @@
 package net.canarymod.api.entity.living.monster;
 
 import net.canarymod.api.entity.EntityType;
-import net.minecraft.server.EntitySilverfish;
+import net.minecraft.entity.monster.EntitySilverfish;
 
 /**
  * Silverfish wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanarySilverfish extends CanaryEntityMob implements Silverfish {
 
     /**
      * Constructs a new wrapper for EntitySilverfish
-     * 
+     *
      * @param entity
-     *            the EntitySilverfish to wrap
+     *         the EntitySilverfish to wrap
      */
     public CanarySilverfish(EntitySilverfish entity) {
         super(entity);

@@ -1,10 +1,10 @@
 package net.canarymod.api.entity;
 
-import net.minecraft.server.EntityArrow;
+import net.minecraft.entity.projectile.EntityArrow;
 
 /**
  * Arrow Wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryArrow extends CanaryProjectile implements Arrow {

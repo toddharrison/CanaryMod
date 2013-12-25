@@ -6,11 +6,11 @@ import net.canarymod.api.entity.living.LivingBase;
 import net.canarymod.api.entity.vehicle.CanaryAnimalVehicle;
 import net.canarymod.api.inventory.CanaryAnimalInventory;
 import net.canarymod.api.inventory.Inventory;
-import net.minecraft.server.EntityHorse;
+import net.minecraft.entity.passive.EntityHorse;
 
 /**
  * Horse wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryHorse extends CanaryAnimalVehicle implements Horse {
@@ -252,7 +252,8 @@ public class CanaryHorse extends CanaryAnimalVehicle implements Horse {
      * {@inheritDoc}
      */
     @Override
-    public void setSitting(boolean sitting) {} // Horses can't sit
+    public void setSitting(boolean sitting) {
+    } // Horses can't sit
 
     /**
      * {@inheritDoc}

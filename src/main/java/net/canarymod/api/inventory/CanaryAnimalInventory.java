@@ -1,13 +1,14 @@
 package net.canarymod.api.inventory;
 
-import java.util.Arrays;
 import net.canarymod.api.entity.living.animal.EntityAnimal;
-import net.minecraft.server.AnimalChest;
-import net.minecraft.server.ItemStack;
+import net.minecraft.inventory.AnimalChest;
+import net.minecraft.item.ItemStack;
+
+import java.util.Arrays;
 
 /**
  * AnimalInventory implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryAnimalInventory extends CanaryEntityInventory implements AnimalInventory {

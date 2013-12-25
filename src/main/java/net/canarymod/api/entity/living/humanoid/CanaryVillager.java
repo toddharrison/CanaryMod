@@ -8,23 +8,23 @@ import net.canarymod.api.entity.living.CanaryEntityLiving;
 import net.canarymod.api.entity.living.LivingBase;
 import net.canarymod.api.world.CanaryVillage;
 import net.canarymod.api.world.Village;
-import net.minecraft.server.EntityPlayer;
-import net.minecraft.server.EntityVillager;
-import net.minecraft.server.MerchantRecipe;
-import net.minecraft.server.MerchantRecipeList;
+import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.village.MerchantRecipe;
+import net.minecraft.village.MerchantRecipeList;
 
 /**
  * Villager wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryVillager extends CanaryEntityLiving implements Villager {
 
     /**
      * Constructs a new wrapper for EntityVillager
-     * 
+     *
      * @param entity
-     *            the EntityVillager to wrap
+     *         the EntityVillager to wrap
      */
     public CanaryVillager(EntityVillager entity) {
         super(entity);
@@ -92,7 +92,7 @@ public class CanaryVillager extends CanaryEntityLiving implements Villager {
      */
     @Override
     public void setRevengeTarget(LivingBase targetEntity) {
-        getHandle().c((net.minecraft.server.EntityLivingBase) ((CanaryEntity) targetEntity).getHandle());
+        getHandle().c((net.minecraft.entity.EntityLivingBase) ((CanaryEntity) targetEntity).getHandle());
     }
 
     /**

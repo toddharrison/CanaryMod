@@ -5,18 +5,18 @@ import net.canarymod.api.potion.PotionType;
 
 /**
  * EntityPotion wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryEntityPotion extends CanaryEntityThrowable implements EntityPotion {
 
     /**
-     * Constructs a new wrapper for EntityXPOrb
-     * 
+     * Constructs a new wrapper for EntityPotion
+     *
      * @param entity
-     *            the EntityXPOrb to be wrapped
+     *         the EntityPotion to be wrapped
      */
-    public CanaryEntityPotion(net.minecraft.server.EntityPotion entity) {
+    public CanaryEntityPotion(net.minecraft.entity.projectile.EntityPotion entity) {
         super(entity);
     }
 
@@ -66,8 +66,8 @@ public class CanaryEntityPotion extends CanaryEntityThrowable implements EntityP
      * {@inheritDoc}
      */
     @Override
-    public net.minecraft.server.EntityPotion getHandle() {
-        return (net.minecraft.server.EntityPotion) entity;
+    public net.minecraft.entity.projectile.EntityPotion getHandle() {
+        return (net.minecraft.entity.projectile.EntityPotion) entity;
     }
 
 }

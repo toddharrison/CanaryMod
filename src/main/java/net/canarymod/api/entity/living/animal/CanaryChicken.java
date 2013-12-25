@@ -1,11 +1,11 @@
 package net.canarymod.api.entity.living.animal;
 
 import net.canarymod.api.entity.EntityType;
-import net.minecraft.server.EntityChicken;
+import net.minecraft.entity.passive.EntityChicken;
 
 /**
  * Chicken wrapper implementation
- * 
+ *
  * @author Chris (damagefilter)
  * @author Jason (darkdiplomat)
  */
@@ -13,9 +13,9 @@ public class CanaryChicken extends CanaryEntityAnimal implements Chicken {
 
     /**
      * Constructs a new wrapper for EntityChicken
-     * 
+     *
      * @param entity
-     *            the EntityChicken to be wrapped
+     *         the EntityChicken to be wrapped
      */
     public CanaryChicken(EntityChicken entity) {
         super(entity);

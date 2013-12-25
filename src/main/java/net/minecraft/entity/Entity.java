@@ -1127,7 +1127,7 @@ public abstract class Entity {
             this.b(this.t, this.u, this.v);
             this.b(this.z, this.A);
             // CanaryMod: allow the saving of persistent metadata
-            this.metadata = nbttagcompound.b("Canary") ? new CanaryCompoundTag(nbttagcompound.l("Canary")) : new CanaryCompoundTag("Canary");
+            this.metadata = nbttagcompound.c("Canary") ? new CanaryCompoundTag(nbttagcompound.m("Canary")) : new CanaryCompoundTag("Canary");
             // CanaryMod: END
             this.a(nbttagcompound);
             if (this.V()) {
@@ -1827,11 +1827,11 @@ public abstract class Entity {
      * @return
      */
     public CanaryWorld getCanaryWorld() {
-        return q.getCanaryWorld();
+        return p.getCanaryWorld();
     }
 
     public void setDimension(CanaryWorld dim) {
-        this.q = dim.getHandle();
+        this.p = dim.getHandle();
     }
 
     public CanaryEntity getCanaryEntity() {
@@ -1859,7 +1859,7 @@ public abstract class Entity {
             ChunkCoordinates ochunkcoordinates;
 
             if (dimensionTo == 1) {
-                ochunkcoordinates = oworldserverTo.K(); // XXX
+                ochunkcoordinates = oworldserverTo.J();
             }
             else {
                 ochunkcoordinates = oworldserverTo.l();

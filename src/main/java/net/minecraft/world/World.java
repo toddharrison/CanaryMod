@@ -2773,6 +2773,7 @@ public abstract class World implements IBlockAccess {
                 }
             }
         }
+    }
 
     public float b(double d0, double d1, double d2) {
         return this.B(MathHelper.c(d0), MathHelper.c(d1), MathHelper.c(d2));

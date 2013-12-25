@@ -31,7 +31,7 @@ public class CanaryCompoundTag extends CanaryBaseTag implements CompoundTag {
      *         the name of the tag
      */
     public CanaryCompoundTag(String name) {
-        super(new NBTTagCompound(name));
+        super(new NBTTagCompound());
     }
 
     /**

@@ -1,20 +1,20 @@
 package net.canarymod.api.entity.living.animal;
 
 import net.canarymod.api.entity.living.LivingBase;
-import net.minecraft.server.EntityTameable;
+import net.minecraft.entity.passive.EntityTameable;
 
 /**
  * Tameable wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public abstract class CanaryTameable extends CanaryEntityAnimal implements Tameable {
 
     /**
      * Constructs a new wrapper for EntityTameable
-     * 
+     *
      * @param entity
-     *            the EntityTameable to wrap
+     *         the EntityTameable to wrap
      */
     public CanaryTameable(EntityTameable entity) {
         super(entity);

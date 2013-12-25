@@ -1,20 +1,20 @@
 package net.canarymod.api.entity.throwable;
 
 import net.canarymod.api.entity.EntityType;
-import net.minecraft.server.EntitySnowball;
+import net.minecraft.entity.projectile.EntitySnowball;
 
 /**
  * Snowball wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanarySnowball extends CanaryEntityThrowable implements Snowball {
 
     /**
      * Constructs a new wrapper for EntitySnowball
-     * 
+     *
      * @param entity
-     *            the EntitySnowball to wrap
+     *         the EntitySnowball to wrap
      */
     public CanarySnowball(EntitySnowball entity) {
         super(entity);

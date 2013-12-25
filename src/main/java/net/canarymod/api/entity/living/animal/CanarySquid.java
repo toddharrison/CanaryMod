@@ -1,20 +1,20 @@
 package net.canarymod.api.entity.living.animal;
 
 import net.canarymod.api.entity.EntityType;
-import net.minecraft.server.EntitySquid;
+import net.minecraft.entity.passive.EntitySquid;
 
 /**
  * Squid wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanarySquid extends CanaryEntityAnimal implements Squid {
 
     /**
      * Constructs a new wrapper for EntitySquid
-     * 
+     *
      * @param entity
-     *            the EntitySquid to wrap
+     *         the EntitySquid to wrap
      */
     public CanarySquid(EntitySquid entity) {
         super(entity);

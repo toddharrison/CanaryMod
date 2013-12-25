@@ -7,22 +7,22 @@ import net.canarymod.api.inventory.Item;
 
 /**
  * Animal wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public abstract class CanaryEntityAnimal extends CanaryEntityLiving implements EntityAnimal {
 
-    public CanaryEntityAnimal(net.minecraft.server.EntityAnimal entity) {
+    public CanaryEntityAnimal(net.minecraft.entity.passive.EntityAnimal entity) {
         super(entity);
     }
 
     // For them squids ...
-    public CanaryEntityAnimal(net.minecraft.server.EntitySquid entity) {
+    public CanaryEntityAnimal(net.minecraft.entity.passive.EntitySquid entity) {
         super(entity);
     }
 
     // For them Bats...
-    public CanaryEntityAnimal(net.minecraft.server.EntityAmbientCreature entity) {
+    public CanaryEntityAnimal(net.minecraft.entity.passive.EntityAmbientCreature entity) {
         super(entity);
     }
 
@@ -37,7 +37,7 @@ public abstract class CanaryEntityAnimal extends CanaryEntityLiving implements E
         return getAnimalHandle().c(((CanaryItem) item).getHandle());
     }
 
-    private net.minecraft.server.EntityAnimal getAnimalHandle() {
-        return (net.minecraft.server.EntityAnimal) entity;
+    private net.minecraft.entity.passive.EntityAnimal getAnimalHandle() {
+        return (net.minecraft.entity.passive.EntityAnimal) entity;
     }
 }

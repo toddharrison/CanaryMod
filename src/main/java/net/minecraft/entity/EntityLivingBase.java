@@ -24,6 +24,7 @@ import net.minecraft.entity.ai.attributes.ServersideAttributeMap;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.EntityZombie;
+import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -48,6 +49,7 @@ import net.minecraft.scoreboard.Team;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.CombatTracker;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.IBlockAccess;
@@ -669,8 +671,8 @@ public abstract class EntityLivingBase extends Entity {
                 // CanaryMod: call DamageHook (Entity)
                 CanaryEntityLiving attacker = null;
 
-                if (damagesource instanceof EntityDamageSource && (damagesource).h() instanceof EntityLiving) {
-                    attacker = (CanaryEntityLiving) (damagesource).h().getCanaryEntity();
+                if (damagesource instanceof EntityDamageSource && (damagesource).i() instanceof EntityLiving) {
+                    attacker = (CanaryEntityLiving) (damagesource).i().getCanaryEntity();
                 }
                 DamageHook hook = new DamageHook(attacker, entity, new CanaryDamageSource(damagesource), (int) f0);
 
@@ -764,11 +766,12 @@ public abstract class EntityLivingBase extends Entity {
                     if (flag0 && s0 != null) {
                         this.a(s0, this.bf(), this.bg());
                     }
-
-                    return true;
                 }
+
+                return true;
             }
         }
+    }
 
     public void a(ItemStack itemstack) {
         this.a("random.break", 0.8F, 0.8F + this.p.s.nextFloat() * 0.4F);
@@ -1502,50 +1505,37 @@ public abstract class EntityLivingBase extends Entity {
             this.bg *= 0.9F;
             this.e(this.be, this.bf);
             this.p.C.b();
-            // CanaryMod: EntityMoveHook // TODO
-            if (!(this instanceof EntityPlayerMP) && (Math.floor(this.r) != Math.floor(this.u) || Math.floor(this.s) != Math.floor(this.v) || Math.floor(this.t) != Math.floor(this.w))) {
-                if (this instanceof EntityPig && ((EntityPig) this).bT() && this.n != null && this.n instanceof EntityPlayerMP) {
+            // CanaryMod: EntityMoveHook
+            Vector3D vecFrom = new Vector3D(this.q, this.r, this.s);
+            Vector3D vecTo = new Vector3D(this.t, this.u, this.v);
+            if (!(this instanceof EntityPlayerMP) && Vector3D.getDistance(vecFrom, vecTo) > 1.0) {
+                if (this instanceof EntityPig && ((EntityPig) this).bS() && this.n != null && this.n instanceof EntityPlayerMP) {
                     // Its a Pig Vehicle! This part is a bit ugly but its so far the only point i found that connects to pigs and actual moving
                     // CanaryMod: VehcileMoveHook (Pig) --
-                    Vector3D from = new Vector3D(this.r, this.s, this.t);
-                    Vector3D to = new Vector3D(this.u, this.v, this.w);
-                    VehicleMoveHook vmh = (VehicleMoveHook) new VehicleMoveHook((Vehicle) this.entity, from, to).call();
+                    VehicleMoveHook vmh = (VehicleMoveHook) new VehicleMoveHook((Vehicle) this.entity, vecFrom, vecTo).call();
                     // --
                     Location fromL = new Location(getCanaryWorld(), this.r, this.s, this.t, this.B, this.A);// Remember rotation and pitch are swapped in Location constructor...
                     EntityMoveHook emh = (EntityMoveHook) new EntityMoveHook(entity, fromL).call();
                     if (vmh.isCanceled() || emh.isCanceled()) {
+                        this.w = 0.0D;
                         this.x = 0.0D;
                         this.y = 0.0D;
-                        this.z = 0.0D;
-                        this.b(this.r, this.s, this.t, prevR, prevP);
-                        this.r = prevX;
-                        this.s = prevY;
-                        this.t = prevZ;
-                        this.V(); // Update rider
-                        if (this.n instanceof EntityPlayerMP) {
-                            double ox = Math.cos((double) this.A * 3.141592653589793D / 180.0D) * 0.4D;
-                            double oz = Math.sin((double) this.A * 3.141592653589793D / 180.0D) * 0.4D;
-                            ((EntityPlayerMP) this.n).a.b(new Packet13PlayerLookMove(this.u + ox, this.v + this.Y() + this.n.X(), this.v + this.Y(), this.w + oz, this.n.A, this.n.B, this.F));
-                            this.n.x = 0.0D;
-                            this.n.y = 0.0D;
-                            this.n.z = 0.0D;
-                        }
+                        this.b(this.q, this.r, this.s, prevR, prevP);
+                        this.q = prevX;
+                        this.r = prevY;
+                        this.s = prevZ;
+                        this.ac(); // Update rider
                     }
                 }
                 else {
-                    Location from = new Location(getCanaryWorld(), this.r, this.s, this.t, this.B, this.A);// Remember rotation and pitch are swapped in Location constructor...
+                    Location from = new Location(getCanaryWorld(), this.q, this.r, this.s, this.A, this.z);// Remember rotation and pitch are swapped in Location constructor...
                     EntityMoveHook hook = (EntityMoveHook) new EntityMoveHook(entity, from).call();
                     if (hook.isCanceled()) {
-                        this.b(this.r, this.s, this.t, prevR, prevP);
-                        this.r = prevX;
-                        this.s = prevY;
-                        this.t = prevZ;
-                        this.V(); // Update rider
-                        if (this.n != null && this.n instanceof EntityPlayerMP) {
-                            double ox = Math.cos((double) this.A * 3.141592653589793D / 180.0D) * 0.4D;
-                            double oz = Math.sin((double) this.A * 3.141592653589793D / 180.0D) * 0.4D;
-                            ((EntityPlayerMP) this.n).a.b(new Packet13PlayerLookMove(this.u + ox, this.v + this.Y() + this.n.X(), this.v + this.Y(), this.w + oz, this.n.A, this.n.B, this.F));
-                        }
+                        this.b(this.q, this.r, this.s, prevR, prevP);
+                        this.q = prevX;
+                        this.r = prevY;
+                        this.s = prevZ;
+                        this.ac();
                     }
                 }
             }
@@ -1557,6 +1547,7 @@ public abstract class EntityLivingBase extends Entity {
 
             this.p.C.b();
         }
+    }
 
     protected void bn() {
     }

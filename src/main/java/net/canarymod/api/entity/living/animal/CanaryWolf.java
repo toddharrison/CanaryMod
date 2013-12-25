@@ -2,20 +2,20 @@ package net.canarymod.api.entity.living.animal;
 
 import net.canarymod.api.DyeColor;
 import net.canarymod.api.entity.EntityType;
-import net.minecraft.server.EntityWolf;
+import net.minecraft.entity.passive.EntityWolf;
 
 /**
  * Wolf wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryWolf extends CanaryTameable implements Wolf {
 
     /**
      * Constructs a new wrapper for EntityWolf
-     * 
+     *
      * @param entity
-     *            the EntityWolf to wrap
+     *         the EntityWolf to wrap
      */
     public CanaryWolf(EntityWolf entity) {
         super(entity);

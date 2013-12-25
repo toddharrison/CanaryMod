@@ -2,20 +2,20 @@ package net.canarymod.api.entity.living.animal;
 
 import net.canarymod.api.DyeColor;
 import net.canarymod.api.entity.EntityType;
-import net.minecraft.server.EntitySheep;
+import net.minecraft.entity.passive.EntitySheep;
 
 /**
  * Sheep wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanarySheep extends CanaryEntityAnimal implements Sheep {
 
     /**
      * Constructs a new wrapper for EntitySheep
-     * 
+     *
      * @param entity
-     *            the EntitySheep to wrap
+     *         the EntitySheep to wrap
      */
     public CanarySheep(EntitySheep entity) {
         super(entity);

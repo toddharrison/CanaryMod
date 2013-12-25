@@ -1,12 +1,13 @@
 package net.canarymod.api.inventory;
 
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.item.ItemStack;
+
 import java.util.Arrays;
-import net.minecraft.server.InventoryPlayer;
-import net.minecraft.server.ItemStack;
 
 /**
  * PlayerInventory implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryPlayerInventory extends CanaryEntityInventory implements PlayerInventory {

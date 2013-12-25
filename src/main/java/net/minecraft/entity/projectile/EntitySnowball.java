@@ -49,3 +49,4 @@ public class EntitySnowball extends EntityThrowable {
             }
         }
     }
+}

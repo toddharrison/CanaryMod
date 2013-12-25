@@ -1215,4 +1215,13 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
 
         }
     }
+
+    /**
+     * gets the CanaryNetServerHandler wrapper
+     *
+     * @return
+     */
+    public CanaryNetServerHandler getCanaryServerHandler() {
+        return serverHandler;
+    }
 }

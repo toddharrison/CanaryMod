@@ -17,12 +17,10 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.play.server.S08PacketPlayerPosLook;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
@@ -351,11 +349,6 @@ public class EntityBoat extends Entity {
                     this.q = ppX;
                     this.r = ppY;
                     this.s = ppZ;
-                    if (this.n != null && this.n instanceof EntityPlayerMP) {
-                        double ox = Math.cos((double) this.z * 3.141592653589793D / 180.0D) * 0.4D;
-                        double oz = Math.sin((double) this.z * 3.141592653589793D / 180.0D) * 0.4D;
-                        ((EntityPlayerMP) this.n).a.a(new S08PacketPlayerPosLook(this.t + ox, this.w + this.ae(), this.x + oz, this.n.z, this.n.A, true));
-                    }
                     this.ac(); // Update rider
                 }
             }

@@ -301,6 +301,7 @@ public abstract class EntityCreature extends EntityLiving {
             this.m().a(true);
             this.bV();
         }
+    }
 
     protected void o(float f0) {
     }

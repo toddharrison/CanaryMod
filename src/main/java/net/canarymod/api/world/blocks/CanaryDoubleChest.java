@@ -1,16 +1,17 @@
 package net.canarymod.api.world.blocks;
 
-import java.util.Arrays;
 import net.canarymod.ToolBox;
 import net.canarymod.api.inventory.CanaryItem;
 import net.canarymod.api.inventory.Item;
-import net.minecraft.server.InventoryLargeChest;
-import net.minecraft.server.ItemStack;
-import net.minecraft.server.TileEntityChest;
+import net.minecraft.inventory.InventoryLargeChest;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntityChest;
+
+import java.util.Arrays;
 
 /**
  * DoubleChest implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryDoubleChest extends CanaryChest implements DoubleChest {
@@ -18,9 +19,9 @@ public class CanaryDoubleChest extends CanaryChest implements DoubleChest {
 
     /**
      * Constructs a new wrapper for InventoryLargeChest
-     * 
+     *
      * @param largechest
-     *            the InventoryLargeChest to be wrapped
+     *         the InventoryLargeChest to be wrapped
      */
     public CanaryDoubleChest(InventoryLargeChest largechest) {
         super((TileEntityChest) largechest.b);
@@ -72,7 +73,8 @@ public class CanaryDoubleChest extends CanaryChest implements DoubleChest {
         for (int index = 0; index < getSize(); index++) {
             if (index < aSize) {
                 stacksA[index] = stacks[index];
-            } else {
+            }
+            else {
                 stacksB[index - aSize] = stacks[index];
             }
         }
@@ -80,7 +82,7 @@ public class CanaryDoubleChest extends CanaryChest implements DoubleChest {
 
     /**
      * Gets the TileEntityChest part A
-     * 
+     *
      * @return part A
      */
     public TileEntityChest getHandleA() {
@@ -89,7 +91,7 @@ public class CanaryDoubleChest extends CanaryChest implements DoubleChest {
 
     /**
      * Gets the TileEntityChest part B
-     * 
+     *
      * @return part B
      */
     public TileEntityChest getHandleB() {

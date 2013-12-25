@@ -4,6 +4,7 @@ import net.canarymod.api.entity.hanging.HangingEntity;
 import net.canarymod.hook.entity.HangingEntityDestroyHook;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Direction;
@@ -205,7 +206,7 @@ public abstract class EntityHanging extends Entity {
 
                 if (entityplayer != null) {
                     // CanaryMod: HangingEntityDestory
-                    HangingEntityDestroyHook hook = (HangingEntityDestroyHook) new HangingEntityDestroyHook((HangingEntity) this.entity, ((EntityPlayerMP) entityplayer).getPlayer(), damagesource.damageSource).call();
+                    HangingEntityDestroyHook hook = (HangingEntityDestroyHook) new HangingEntityDestroyHook((HangingEntity) this.entity, ((EntityPlayerMP) entityplayer).getPlayer(), damagesource.getCanaryDamageSource()).call();
                     if (hook.isCanceled()) {
                         return false;
                     }

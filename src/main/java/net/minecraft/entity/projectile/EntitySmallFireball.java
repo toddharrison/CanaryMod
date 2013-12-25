@@ -74,7 +74,7 @@ public class EntitySmallFireball extends EntityFireball {
 
                     if (this.p.c(i0, i1, i2)) {
                         // CanaryMod: IgnitionHook
-                        CanaryBlock block = (CanaryBlock) this.q.getCanaryWorld().getBlockAt(i0, i1 - 1, i2);
+                        CanaryBlock block = (CanaryBlock) this.p.getCanaryWorld().getBlockAt(i0, i1 - 1, i2);
                         block.setStatus((byte) 7); // 7 fireball hit
                         IgnitionHook ignitionHook = (IgnitionHook) new IgnitionHook(block, null, null, IgnitionCause.FIREBALL_HIT).call();
                         if (!ignitionHook.isCanceled()) {

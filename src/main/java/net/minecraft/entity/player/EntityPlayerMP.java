@@ -38,9 +38,11 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IMerchant;
+import net.minecraft.entity.item.EntityMinecartChest;
 import net.minecraft.entity.item.EntityMinecartHopper;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.inventory.AnimalChest;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ContainerBeacon;
 import net.minecraft.inventory.ContainerBrewingStand;
@@ -55,6 +57,8 @@ import net.minecraft.inventory.ContainerRepair;
 import net.minecraft.inventory.ContainerWorkbench;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryEnderChest;
+import net.minecraft.inventory.InventoryLargeChest;
 import net.minecraft.inventory.InventoryMerchant;
 import net.minecraft.inventory.SlotCrafting;
 import net.minecraft.item.EnumAction;
@@ -69,11 +73,13 @@ import net.minecraft.network.play.server.S02PacketChat;
 import net.minecraft.network.play.server.S06PacketUpdateHealth;
 import net.minecraft.network.play.server.S0APacketUseBed;
 import net.minecraft.network.play.server.S0BPacketAnimation;
+import net.minecraft.network.play.server.S0CPacketSpawnPlayer;
 import net.minecraft.network.play.server.S13PacketDestroyEntities;
 import net.minecraft.network.play.server.S19PacketEntityStatus;
 import net.minecraft.network.play.server.S1BPacketEntityAttach;
 import net.minecraft.network.play.server.S1DPacketEntityEffect;
 import net.minecraft.network.play.server.S1EPacketRemoveEntityEffect;
+import net.minecraft.network.play.server.S1FPacketSetExperience;
 import net.minecraft.network.play.server.S26PacketMapChunkBulk;
 import net.minecraft.network.play.server.S2BPacketChangeGameState;
 import net.minecraft.network.play.server.S2DPacketOpenWindow;
@@ -97,6 +103,7 @@ import net.minecraft.stats.StatisticsFile;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityBeacon;
 import net.minecraft.tileentity.TileEntityBrewingStand;
+import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.tileentity.TileEntityDispenser;
 import net.minecraft.tileentity.TileEntityDropper;
 import net.minecraft.tileentity.TileEntityFurnace;
@@ -157,7 +164,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
 
     public EntityPlayerMP(MinecraftServer minecraftserver, WorldServer worldserver, GameProfile gameprofile, ItemInWorldManager iteminworldmanager) {
         super(worldserver, gameprofile);
-        WorldConfiguration cfg = Configuration.getWorldConfig(world.getCanaryWorld().getFqName());
+        WorldConfiguration cfg = Configuration.getWorldConfig(worldserver.getCanaryWorld().getFqName());
         iteminworldmanager.b = this;
         this.c = iteminworldmanager;
         this.bV = minecraftserver.af().o();
@@ -317,7 +324,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
                 // updates your health when it is changed.
                 if (!Configuration.getWorldConfig(getCanaryWorld().getFqName()).isHealthEnabled()) {
                     super.b(this.aZ());
-                    this.M = false;
+                    this.L = false;
                 }
                 else {
                     HealthChangeHook hook = (HealthChangeHook) new HealthChangeHook(getPlayer(), bP, this.aN()).call();
@@ -353,11 +360,11 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
                 this.bH = 0;
             }
             else if (this.bH != this.bT) {
-                ExperienceHook hook = new ExperienceHook(getPlayer(), this.bS, this.bI);
+                ExperienceHook hook = new ExperienceHook(getPlayer(), this.bT, this.bH);
 
                 if (!hook.isCanceled()) {
-                    this.bS = this.bI;
-                    this.a.b(new Packet43Experience(this.bJ, this.bI, this.bH));
+                    this.bT = this.bH;
+                    this.a.a(new S1FPacketSetExperience(this.bI, this.bH, this.bG));
                 }
             }
             //
@@ -500,7 +507,8 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
                 ChunkCoordinates chunkcoordinates = this.b.getWorld(this.getCanaryWorld().getName(), i0).l();
 
                 if (chunkcoordinates != null) {
-                    this.a.a((double) chunkcoordinates.a, (double) chunkcoordinates.b, (double) chunkcoordinates.c, 0.0F, 0.0F);
+                    // CanaryMod: Teleport Cause added
+                    this.a.a((double) chunkcoordinates.a, (double) chunkcoordinates.b, (double) chunkcoordinates.c, 0.0F, 0.0F, getCanaryWorld().getType().getId(), getCanaryWorld().getName(), TeleportHook.TeleportCause.PORTAL);
                 }
 
                 i0 = 1;
@@ -510,7 +518,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
             }
 
             // CanaryMod onPortalUse && onDimensionSwitch
-            Location goingTo = simulatePortalUse(i0, MinecraftServer.F().getWorld(getCanaryWorld().getName(), i0));
+            Location goingTo = simulatePortalUse(i0, MinecraftServer.G().getWorld(getCanaryWorld().getName(), i0));
 
             PortalUseHook puh = (PortalUseHook) new PortalUseHook(getPlayer(), goingTo).call();
             DimensionSwitchHook dsh = (DimensionSwitchHook) new DimensionSwitchHook(this.getCanaryEntity(), this.getCanaryEntity().getLocation(), goingTo).call();
@@ -519,7 +527,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
                 return;
             } //
             else {
-                this.b.af().a(this, i0);
+                this.b.af().a(this, getCanaryWorld().getName(), i0);
                 this.bT = -1;
                 this.bQ = -1.0F;
                 this.bR = -1;
@@ -554,7 +562,8 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
             S0APacketUseBed s0apacketusebed = new S0APacketUseBed(this, i0, i1, i2);
 
             this.r().q().a((Entity) this, (Packet) s0apacketusebed);
-            this.a.a(this.t, this.u, this.v, this.z, this.A);
+            // CanaryMod: Teleport Cause added
+            this.a.a(this.t, this.u, this.v, this.z, this.A, getCanaryWorld().getType().getId(), getCanaryWorld().getName(), TeleportHook.TeleportCause.BED);
             this.a.a((Packet) s0apacketusebed);
         }
 
@@ -568,6 +577,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
 
         super.a(flag0, flag1, flag2);
         if (this.a != null) {
+            // CanaryMod: Teleport Cause added
             this.a.a(this.t, this.u, this.v, this.z, this.A, getCanaryWorld().getType().getId(), getCanaryWorld().getName(), TeleportHook.TeleportCause.BED);
         }
     }
@@ -575,6 +585,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
     public void a(Entity entity) {
         super.a(entity);
         this.a.a((Packet) (new S1BPacketEntityAttach(0, this, this.n)));
+        // CanaryMod: Teleport Cause added
         this.a.a(this.t, this.u, this.v, this.z, this.A, getCanaryWorld().getType().getId(), getCanaryWorld().getName(), TeleportHook.TeleportCause.MOUNT_CHANGE);
     }
 
@@ -598,7 +609,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
 
     public void b(int i0, int i1, int i2) {
         // CanaryMod: InventoryHook
-        ContainerWorkbench container = new ContainerWorkbench(this.bn, this.q, i0, i1, i2);
+        ContainerWorkbench container = new ContainerWorkbench(this.bn, this.p, i0, i1, i2);
         CanaryWorkbench bench = (CanaryWorkbench) container.getInventory();
         InventoryHook hook = (InventoryHook) new InventoryHook(getPlayer(), bench, false).call();
         if (hook.isCanceled()) {
@@ -614,7 +625,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
 
     public void a(int i0, int i1, int i2, String s0) {
         // CanaryMod: InventoryHook
-        ContainerEnchantment container = new ContainerEnchantment(this.bn, this.q, i0, i1, i2);
+        ContainerEnchantment container = new ContainerEnchantment(this.bn, this.p, i0, i1, i2);
         CanaryEnchantmentTable table = (CanaryEnchantmentTable) container.getInventory();
         InventoryHook hook = (InventoryHook) new InventoryHook(getPlayer(), table, false).call();
         if (hook.isCanceled()) {
@@ -630,7 +641,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
 
     public void c(int i0, int i1, int i2) {
         // CanaryMod: InventoryHook
-        ContainerRepair container = new ContainerRepair(this.bn, this.q, i0, i1, i2, this);
+        ContainerRepair container = new ContainerRepair(this.bn, this.p, i0, i1, i2, this);
         CanaryAnvil anvil = (CanaryAnvil) container.getInventory();
         InventoryHook hook = (InventoryHook) new InventoryHook(getPlayer(), anvil, false).call();
         if (hook.isCanceled()) {
@@ -1037,32 +1048,37 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
         return this.bO;
     }
 
-    // CanaryMod
-    // Start: Custom Display name
+    // CanaryMod: Override
+    public GameProfile bH() {
+        if (this.getDisplayName() != this.b_()) {
+            // We need a new GameProfile to change the display name
+            return new GameProfile(this.as.toString().replaceAll("-", ""), this.getDisplayName());
+        }
+        return super.i;
+    }
+
     @Override
     public void setDisplayName(String name) {
         super.setDisplayName(name);
-        Packet20NamedEntitySpawn pkt = new Packet20NamedEntitySpawn(this);
+        S0CPacketSpawnPlayer pkt = new S0CPacketSpawnPlayer(this);
         for (Player p : Canary.getServer().getPlayerList()) {
             if (!p.getName().equals(this.c_())) {
-                ((CanaryPlayer) p).getHandle().a.b(pkt);
+                ((CanaryPlayer) p).getHandle().a.a(pkt);
             }
         }
     }
 
     public void updateSlot(int windowId, int slotIndex, ItemStack item) {
-        this.a.b(new Packet103SetSlot(windowId, slotIndex, item));
+        this.a.a(new S2FPacketSetSlot(windowId, slotIndex, item));
     }
 
     public boolean getColorEnabled() {
-        return this.bW;
+        return this.bX;
     }
 
     public int getViewDistance() {
-        return this.bU;
+        return this.bV;
     }
-
-    //
 
     /**
      * Get the CanaryEntity as CanaryPlayer
@@ -1086,36 +1102,36 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
         ChunkCoordinates chunkcoordinates = srv.l();
 
         if (chunkcoordinates != null) {
-            this.a.a((double) chunkcoordinates.a, (double) chunkcoordinates.b, (double) chunkcoordinates.c, 0.0F, 0.0F, srv.getCanaryWorld().getType().getId(), srv.getCanaryWorld().getName(), TeleportHook.TeleportCause.MOVEMENT);
+            this.a.a((double) chunkcoordinates.a, (double) chunkcoordinates.b, (double) chunkcoordinates.c, 0.0F, 0.0F, srv.getCanaryWorld().getType().getId(), srv.getCanaryWorld().getName(), TeleportHook.TeleportCause.PLUGIN);
         }
 
         // CanaryMod: Dimension switch hook.
-        Location goingTo = this.simulatePortalUse(srv.q, MinecraftServer.F().getWorld(this.getCanaryWorld().getName(), srv.q));
+        Location goingTo = this.simulatePortalUse(srv.q, MinecraftServer.G().getWorld(this.getCanaryWorld().getName(), srv.q));
         CancelableHook hook = (CancelableHook) new DimensionSwitchHook(this.getCanaryEntity(), this.getCanaryEntity().getLocation(), goingTo).call();
         if (hook.isCanceled()) {
             return;
         }//
 
         this.b.af().a(this, srv.getCanaryWorld().getName(), srv.getCanaryWorld().getType().getId());
-        this.bO = -1;
-        this.bP = -1;
-        this.bS = -1;
+        this.bT = -1;
+        this.bQ = -1.0F;
+        this.bR = -1;
     }
 
     // CanaryMod: Special methods for remote inventory opening
     public void openContainer(Container container, int containerId, int size) {
         this.bN();
-        this.a.b(new Packet100OpenWindow(this.bY, containerId, container.getInventory().getInventoryName(), size, true));
+        this.a.a(new S2DPacketOpenWindow(this.bZ, containerId, container.getInventory().getInventoryName(), size, true));
         this.bp = container;
-        this.bp.d = this.bY;
+        this.bp.d = this.bZ;
         this.bp.a((ICrafting) this);
     }
 
     public void openContainer(Container container, int containerId, int size, boolean flag) {
         this.bN();
-        this.a.b(new Packet100OpenWindow(this.bY, containerId, container.getInventory().getInventoryName(), size, flag));
+        this.a.a(new S2DPacketOpenWindow(this.bZ, containerId, container.getInventory().getInventoryName(), size, flag));
         this.bp = container;
-        this.bp.d = this.bY;
+        this.bp.d = this.bZ;
         this.bp.a((ICrafting) this);
     }
 

@@ -4,6 +4,7 @@ import net.canarymod.hook.entity.MobTargetHook;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
@@ -63,7 +64,7 @@ public abstract class EntityMob extends EntityCreature implements IMob {
             if (this.m != entity && this.n != entity) {
                 if (entity != this) {
                     // CanaryMod: MobTarget
-                    if (entity instanceof net.minecraft.server.EntityLiving) {
+                    if (entity instanceof EntityLiving) {
                         MobTargetHook hook = (MobTargetHook) new MobTargetHook((net.canarymod.api.entity.living.EntityLiving) this.getCanaryEntity(), (net.canarymod.api.entity.living.EntityLiving) entity.getCanaryEntity()).call();
                         if (!hook.isCanceled()) {
                             this.j = entity;

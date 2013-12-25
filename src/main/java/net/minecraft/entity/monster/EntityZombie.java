@@ -521,12 +521,12 @@ public class EntityZombie extends EntityMob {
 
     // CanaryMod
     public int getConvertTicks() {
-        return this.bs;
+        return this.bt;
     }
 
     public void stopConversion() {
-        this.v().b(12, Byte.valueOf((byte) 0));
-        this.bs = -1;
+        this.z().b(12, Byte.valueOf((byte) 0));
+        this.bt = -1;
     }
     //
 }

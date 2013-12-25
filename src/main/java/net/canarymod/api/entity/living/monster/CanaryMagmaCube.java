@@ -1,20 +1,20 @@
 package net.canarymod.api.entity.living.monster;
 
 import net.canarymod.api.entity.EntityType;
-import net.minecraft.server.EntityMagmaCube;
+import net.minecraft.entity.monster.EntityMagmaCube;
 
 /**
  * LavaSlime wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryMagmaCube extends CanarySlime implements MagmaCube {
 
     /**
      * Constructs a new wrapper for EntityMagmaCube
-     * 
+     *
      * @param entity
-     *            the EntityMagmaCube to wrap
+     *         the EntityMagmaCube to wrap
      */
     public CanaryMagmaCube(EntityMagmaCube entity) {
         super(entity);

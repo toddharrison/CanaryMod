@@ -5,14 +5,11 @@ import net.canarymod.api.entity.living.humanoid.npchelpers.EntityNPCJumpHelper;
 import net.canarymod.api.entity.living.humanoid.npchelpers.EntityNPCMoveHelper;
 import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.api.world.position.Location;
-import net.minecraft.server.ChatMessageComponent;
-import net.minecraft.server.ChunkCoordinates;
-import net.minecraft.server.DamageSource;
-import net.minecraft.server.Entity;
-import net.minecraft.server.EntityPlayer;
-import net.minecraft.server.EntityPlayerMP;
-import net.minecraft.server.NBTTagCompound;
-import net.minecraft.server.World;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.DamageSource;
+import net.minecraft.world.World;
 
 /**
  * NonPlayableCharacter (NPC) Entity class
@@ -39,19 +36,24 @@ public final class EntityNonPlayableCharacter extends EntityPlayer {
     }
 
     @Override
-    public void b(int i0) {} // NO PORTAL USE
+    public void b(int i0) {
+    } // NO PORTAL USE
 
     @Override
-    public void e(NBTTagCompound nbttagcompound) {} // NO NBTTag yet
+    public void e(NBTTagCompound nbttagcompound) {
+    } // NO NBTTag yet
 
     @Override
-    public void f(NBTTagCompound nbttagcompound) {} // NO NBTTag yet
+    public void f(NBTTagCompound nbttagcompound) {
+    } // NO NBTTag yet
 
     @Override
-    public void a(NBTTagCompound nbttagcompound) {} // NO NBTTag yet
+    public void a(NBTTagCompound nbttagcompound) {
+    } // NO NBTTag yet
 
     @Override
-    public void b(NBTTagCompound nbttagcompound) {} // NO NBTTag yet
+    public void b(NBTTagCompound nbttagcompound) {
+    } // NO NBTTag yet
 
     @Override
     public boolean c(NBTTagCompound nbttagcompound) { // NO NBTTag yet
@@ -66,7 +68,7 @@ public final class EntityNonPlayableCharacter extends EntityPlayer {
     @Override
     public void l_() {
         super.l_();
-        if (!this.M) {
+        if (!this.L) {
             getNPC().update();
         }
     }
@@ -109,11 +111,13 @@ public final class EntityNonPlayableCharacter extends EntityPlayer {
         return jump_helper;
     }
 
-    public void a(float f0) {} // Food Exhaustion stuff
+    public void a(float f0) {
+    } // Food Exhaustion stuff
 
     // ICommandSender things
     @Override
-    public void a(ChatMessageComponent chatmessagecomponent) {}
+    public void a(ChatMessageComponent chatmessagecomponent) {
+    }
 
     @Override
     public boolean a(int i0, String s0) {

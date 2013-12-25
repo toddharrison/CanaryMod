@@ -371,6 +371,7 @@ public class EntityArrow extends Entity implements IProjectile {
                 this.I();
             }
         }
+    }
 
     public void b(NBTTagCompound nbttagcompound) {
         nbttagcompound.a("xTile", (short) this.d);

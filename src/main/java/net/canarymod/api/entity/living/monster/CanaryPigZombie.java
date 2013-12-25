@@ -3,20 +3,20 @@ package net.canarymod.api.entity.living.monster;
 import net.canarymod.api.entity.EntityType;
 import net.canarymod.api.entity.living.humanoid.CanaryPlayer;
 import net.canarymod.api.entity.living.humanoid.Player;
-import net.minecraft.server.EntityPigZombie;
+import net.minecraft.entity.monster.EntityPigZombie;
 
 /**
  * PigZombie wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryPigZombie extends CanaryZombie implements PigZombie {
 
     /**
      * Constructs a new wrapper for EntityPigZombie
-     * 
+     *
      * @param entity
-     *            the EntityPigZombie to wrap
+     *         the EntityPigZombie to wrap
      */
     public CanaryPigZombie(EntityPigZombie entity) {
         super(entity);

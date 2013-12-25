@@ -1,8 +1,5 @@
 package net.canarymod.api;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.canarymod.api.entity.CanaryEntity;
 import net.canarymod.api.entity.Entity;
 import net.canarymod.api.entity.living.humanoid.CanaryPlayer;
@@ -12,29 +9,32 @@ import net.canarymod.api.packet.Packet;
 import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.api.world.World;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CanaryEntityTracker implements EntityTracker {
-    private net.minecraft.server.EntityTracker tracker;
+    private net.minecraft.entity.EntityTracker tracker;
 
     private CanaryWorld dim;
 
-    public CanaryEntityTracker(net.minecraft.server.EntityTracker tracker, CanaryWorld dim) {
+    public CanaryEntityTracker(net.minecraft.entity.EntityTracker tracker, CanaryWorld dim) {
         this.tracker = tracker;
         this.dim = dim;
     }
 
-    public net.minecraft.server.EntityTracker getHandle() {
+    public net.minecraft.entity.EntityTracker getHandle() {
         return tracker;
     }
 
     @Override
     public void trackEntity(Entity entity) {
-        tracker.a((net.minecraft.server.Entity) ((CanaryEntity) entity).getHandle());
+        tracker.a((net.minecraft.entity.Entity) ((CanaryEntity) entity).getHandle());
 
     }
 
     @Override
     public void untrackEntity(Entity entity) {
-        tracker.b((net.minecraft.server.Entity) ((CanaryEntity) entity).getHandle());
+        tracker.b((net.minecraft.entity.Entity) ((CanaryEntity) entity).getHandle());
 
     }
 
@@ -62,7 +62,7 @@ public class CanaryEntityTracker implements EntityTracker {
     public List<Entity> getTrackedEntities() {
         List<Entity> entities = new ArrayList<Entity>();
 
-        for (net.minecraft.server.EntityTrackerEntry e : tracker.getTrackedEntities()) {
+        for (net.minecraft.entity.EntityTrackerEntry e : tracker.getTrackedEntities()) {
             entities.add(e.getCanaryTrackerEntry().getEntity());
         }
         return entities;

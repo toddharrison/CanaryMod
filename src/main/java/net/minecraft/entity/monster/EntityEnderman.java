@@ -140,8 +140,7 @@ public class EntityEnderman extends EntityMob {
                     i2 = MathHelper.c(this.v - 2.0D + this.aa.nextDouble() * 4.0D);
                     block = this.p.a(i0, i1, i2);
                     // CanaryMod: Replace checking static array with checking the world config list for Ender Blocks
-                    if (Arrays.asList(Configuration.getWorldConfig(getCanaryWorld().getFqName()).getEnderBlocks()).contains(Block.b(block))
-                    {
+                    if (Arrays.asList(Configuration.getWorldConfig(getCanaryWorld().getFqName()).getEnderBlocks()).contains(Block.b(block))) {
                         // CanaryMod: call EndermanPickupBlockHook
                         EndermanPickupBlockHook hook = (EndermanPickupBlockHook) new EndermanPickupBlockHook((CanaryEnderman) entity, entity.getWorld().getBlockAt(i0, i1, i2)).call();
                         if (!hook.isCanceled()) {
@@ -223,6 +222,7 @@ public class EntityEnderman extends EntityMob {
 
             super.e();
         }
+    }
 
     public boolean bX() { // CanaryMod: protected -> public
         double d0 = this.t + (this.aa.nextDouble() - 0.5D) * 64.0D;

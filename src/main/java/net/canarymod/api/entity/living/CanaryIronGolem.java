@@ -3,20 +3,20 @@ package net.canarymod.api.entity.living;
 import net.canarymod.api.entity.EntityType;
 import net.canarymod.api.world.CanaryVillage;
 import net.canarymod.api.world.Village;
-import net.minecraft.server.EntityIronGolem;
+import net.minecraft.entity.monster.EntityIronGolem;
 
 /**
  * IronGolem wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryIronGolem extends CanaryEntityLiving implements IronGolem {
 
     /**
      * Constructs a new wrapper for EntityIronGolem
-     * 
+     *
      * @param entity
-     *            the EntityIronGolem to be wrapped
+     *         the EntityIronGolem to be wrapped
      */
     public CanaryIronGolem(EntityIronGolem entity) {
         super(entity);

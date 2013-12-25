@@ -522,13 +522,13 @@ public class EntityTrackerEntry {
             this.o.remove(entityplayermp);
             entityplayermp.g.add(Integer.valueOf(this.a.y()));
         }
+    }
 
-        /**
-         * get canaryMod EntityTracker entry
-         *
-         * @return
-         */
-
+    /**
+     * get canaryMod EntityTracker entry
+     *
+     * @return
+     */
     public CanaryEntityTrackerEntry getCanaryTrackerEntry() {
         return canaryEntry;
     }

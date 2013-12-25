@@ -27,7 +27,7 @@ public class EntityWitherSkull extends EntityFireball {
     }
 
     public float e() {
-        return /* this.d() ? 0.73F  : */super.c(); // CanaryMod: Motion Factor was made configurable
+        return /* this.d() ? 0.73F  : */super.e(); // CanaryMod: Motion Factor was made configurable
     }
 
     public boolean al() {

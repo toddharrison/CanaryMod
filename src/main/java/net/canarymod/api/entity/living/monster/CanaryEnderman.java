@@ -1,20 +1,20 @@
 package net.canarymod.api.entity.living.monster;
 
 import net.canarymod.api.entity.EntityType;
-import net.minecraft.server.EntityEnderman;
+import net.minecraft.entity.monster.EntityEnderman;
 
 /**
  * Enderman wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryEnderman extends CanaryEntityMob implements Enderman {
 
     /**
      * Constructs a new wrapper for EntityEnderman
-     * 
+     *
      * @param entity
-     *            the EntityEnderman to wrap
+     *         the EntityEnderman to wrap
      */
     public CanaryEnderman(EntityEnderman entity) {
         super(entity);

@@ -2,10 +2,9 @@ package net.canarymod.api.entity.living.humanoid;
 
 import net.canarymod.api.entity.EntityItem;
 import net.canarymod.api.entity.living.CanaryLivingBase;
-import net.canarymod.api.inventory.CanaryPlayerInventory;
 import net.canarymod.api.inventory.Item;
 import net.canarymod.api.inventory.PlayerInventory;
-import net.minecraft.server.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayer;
 
 /**
  * Human implementation

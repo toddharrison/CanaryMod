@@ -4,11 +4,11 @@ import net.canarymod.api.inventory.CanaryItem;
 import net.canarymod.api.inventory.Item;
 import net.canarymod.api.nbt.CanaryCompoundTag;
 import net.canarymod.api.nbt.CompoundTag;
-import net.minecraft.server.MerchantRecipe;
+import net.minecraft.village.MerchantRecipe;
 
 /**
  * VillagerTrade wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryVillagerTrade implements VillagerTrade {
@@ -16,9 +16,9 @@ public class CanaryVillagerTrade implements VillagerTrade {
 
     /**
      * Constructs a new wrapper for MerchantRecipe
-     * 
+     *
      * @param recipe
-     *            the MerchantRecipe to wrap
+     *         the MerchantRecipe to wrap
      */
     public CanaryVillagerTrade(MerchantRecipe recipe) {
         this.recipe = recipe;
@@ -26,11 +26,11 @@ public class CanaryVillagerTrade implements VillagerTrade {
 
     /**
      * Constructs a new wrapper for and new MerchantRecipe
-     * 
+     *
      * @param buying
-     *            the {@link Item} to set for buying
+     *         the {@link Item} to set for buying
      * @param selling
-     *            the {@link Item} to set for selling
+     *         the {@link Item} to set for selling
      */
     public CanaryVillagerTrade(Item buying, Item selling) {
         this.recipe = new MerchantRecipe(((CanaryItem) buying).getHandle(), ((CanaryItem) selling).getHandle());
@@ -38,13 +38,13 @@ public class CanaryVillagerTrade implements VillagerTrade {
 
     /**
      * Constructs a new wrapper for and new MerchantRecipe
-     * 
+     *
      * @param buying1
-     *            the {@link Item} to set for buying slot 1
+     *         the {@link Item} to set for buying slot 1
      * @param buying2
-     *            the {@link Item} to set for buying slot 2
+     *         the {@link Item} to set for buying slot 2
      * @param selling
-     *            the {@link Item} to set for selling
+     *         the {@link Item} to set for selling
      */
     public CanaryVillagerTrade(Item buying1, Item buying2, Item selling) {
         this.recipe = new MerchantRecipe(((CanaryItem) buying1).getHandle(), ((CanaryItem) buying2).getHandle(), ((CanaryItem) selling).getHandle());

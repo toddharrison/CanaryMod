@@ -3,20 +3,20 @@ package net.canarymod.api.entity.living.monster;
 import net.canarymod.api.entity.EntityType;
 import net.canarymod.api.entity.living.CanaryLivingBase;
 import net.canarymod.api.entity.living.LivingBase;
-import net.minecraft.server.EntityGhast;
+import net.minecraft.entity.monster.EntityGhast;
 
 /**
  * Ghast wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryGhast extends CanaryEntityMob implements Ghast {
 
     /**
      * Constructs a new wrapper for EntityGhast
-     * 
+     *
      * @param entity
-     *            the EntityGhast to wrap
+     *         the EntityGhast to wrap
      */
     public CanaryGhast(EntityGhast entity) {
         super(entity);
@@ -120,7 +120,7 @@ public class CanaryGhast extends CanaryEntityMob implements Ghast {
      */
     @Override
     public LivingBase getAttackTarget() {
-        net.minecraft.server.Entity target = getHandle().bq;
+        net.minecraft.entity.Entity target = getHandle().bq;
         if (target != null) {
             return (LivingBase) target.getCanaryEntity();
         }

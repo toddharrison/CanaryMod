@@ -1,20 +1,20 @@
 package net.canarymod.api.entity.living.animal;
 
 import net.canarymod.api.entity.EntityType;
-import net.minecraft.server.EntityBat;
+import net.minecraft.entity.passive.EntityBat;
 
 /**
  * Bat wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryBat extends CanaryEntityAnimal implements Bat {
 
     /**
      * Constructs a new wrapper for EntityBat
-     * 
+     *
      * @param entity
-     *            the EntityBat to be wrapped
+     *         the EntityBat to be wrapped
      */
     public CanaryBat(EntityBat entity) {
         super(entity);

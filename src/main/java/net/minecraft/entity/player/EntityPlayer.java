@@ -55,6 +55,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.network.play.server.S06PacketUpdateHealth;
+import net.minecraft.network.play.server.S1FPacketSetExperience;
 import net.minecraft.potion.Potion;
 import net.minecraft.scoreboard.Score;
 import net.minecraft.scoreboard.ScoreObjective;
@@ -125,7 +127,7 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
     protected float bJ = 0.1F;
     protected float bK = 0.02F;
     private int h;
-    private final GameProfile i;
+    protected final GameProfile i; // CanaryMod: private => protected
     public EntityFishHook bL;
 
     private String respawnWorld; // CanaryMod: Respawn world (for bed spawns)
@@ -153,6 +155,11 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
             @Override
             public EntityType getEntityType() {
                 return null;
+            }
+
+            @Override
+            public EntityPlayer getHandle() {
+                return (EntityPlayer) entity;
             }
         };
     }
@@ -599,7 +606,7 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
             if (this instanceof EntityPlayerMP) { // NO NPCs
                 ItemDropHook hook = (ItemDropHook) new ItemDropHook(((EntityPlayerMP) this).getPlayer(), (net.canarymod.api.entity.EntityItem) entityitem.getCanaryEntity()).call();
                 if (!hook.isCanceled()) {
-                    CanaryItem droppedItem = entityitem.d().getCanaryItem();
+                    CanaryItem droppedItem = entityitem.f().getCanaryItem();
 
                     if (droppedItem.getAmount() < 0) {
                         droppedItem.setAmount(1);
@@ -682,7 +689,7 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
             this.c = new ChunkCoordinates(nbttagcompound.f("SpawnX"), nbttagcompound.f("SpawnY"), nbttagcompound.f("SpawnZ"));
             this.d = nbttagcompound.n("SpawnForced");
             // CanaryMod added respawn world
-            this.respawnWorld = nbttagcompound.i("SpawnWorld");
+            this.respawnWorld = nbttagcompound.j("SpawnWorld");
         }
 
         this.bq.a(nbttagcompound);
@@ -1653,39 +1660,39 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
         updateXP();
     }
 
-    public void removeXP(int i) {
-        if (i > this.bI) { // Don't go below 0
-            i = this.bI;
+    public void removeXP(int rXp) {
+        if (rXp > this.bH) { // Don't go below 0
+            rXp = this.bH;
         }
 
-        this.bI -= (float) i / (float) this.bH();
+        this.bH -= (float) rXp / (float) this.bN();
 
         // Inverse of for loop in this.t(int)
-        for (this.bI -= i; this.bJ < 0.0F; this.bJ = this.bJ / this.bH() + 1.0F) {
-            this.bJ *= this.bH();
+        for (this.bH -= rXp; this.bI < 0.0F; this.bI = this.bI / this.bN() + 1.0F) {
+            this.bI *= this.bN();
             this.a(-1);
         }
         updateXP();
     }
 
     public void setXP(int i) {
-        if (i < this.bH) {
-            this.removeXP(this.bH - i);
+        if (i < this.bG) {
+            this.removeXP(this.bG - i);
         }
         else {
-            this.t(i - this.bH);
+            this.w(i - this.bG);
         }
         updateXP();
     }
 
     public void recalculateXP() {
-        this.bJ = this.bI / (float) this.bH();
-        this.bH = 0;
+        this.bI = this.bH / (float) this.bN();
+        this.bG = 0;
 
-        while (this.bJ >= 1.0F) {
-            this.bJ = (this.bJ - 1.0F) * this.bH();
-            this.bI++;
-            this.bJ /= this.bH();
+        while (this.bI >= 1.0F) {
+            this.bI = (this.bI - 1.0F) * this.bN();
+            this.bH++;
+            this.bI /= this.bN();
         }
 
         if (this instanceof EntityPlayerMP) {
@@ -1696,14 +1703,14 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
 
     private void updateXP() {
         CanaryPlayer player = ((CanaryPlayer) getCanaryEntity());
-        Packet43Experience packet = new Packet43Experience(this.bJ, this.bI, this.bH);
+        S1FPacketSetExperience packet = new S1FPacketSetExperience(this.bI, this.bH, this.bG);
 
         player.sendPacket(new CanaryPacket(packet));
     }
 
     private void updateLevels() {
         CanaryPlayer player = ((CanaryPlayer) getCanaryEntity());
-        Packet8UpdateHealth packet = new Packet8UpdateHealth(((CanaryPlayer) getCanaryEntity()).getHealth(), ((CanaryPlayer) getCanaryEntity()).getHunger(), ((CanaryPlayer) getCanaryEntity()).getExhaustionLevel());
+        S06PacketUpdateHealth packet = new S06PacketUpdateHealth(((CanaryPlayer) getCanaryEntity()).getHealth(), ((CanaryPlayer) getCanaryEntity()).getHunger(), ((CanaryPlayer) getCanaryEntity()).getExhaustionLevel());
 
         player.sendPacket(new CanaryPacket(packet));
     }
@@ -1722,7 +1729,7 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
 
     // Start: Custom Display Name
     public String getDisplayName() {
-        return metadata.getString("CustomName").isEmpty() ? this.c_() : metadata.getString("CustomName");
+        return metadata.getString("CustomName").isEmpty() ? this.b_() : metadata.getString("CustomName");
     }
 
     public void setDisplayName(String name) {
