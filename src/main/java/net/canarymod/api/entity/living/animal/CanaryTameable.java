@@ -8,7 +8,7 @@ import net.minecraft.entity.passive.EntityTameable;
  *
  * @author Jason (darkdiplomat)
  */
-public abstract class CanaryTameable extends CanaryEntityAnimal implements Tameable {
+public abstract class CanaryTameable extends CanaryAgeableAnimal implements Tameable {
 
     /**
      * Constructs a new wrapper for EntityTameable
@@ -25,7 +25,7 @@ public abstract class CanaryTameable extends CanaryEntityAnimal implements Tamea
      */
     @Override
     public LivingBase getOwner() {
-        return (LivingBase) getHandle().bV().getCanaryEntity();
+        return (LivingBase) getHandle().bZ().getCanaryEntity();
     }
 
     /**
@@ -33,7 +33,7 @@ public abstract class CanaryTameable extends CanaryEntityAnimal implements Tamea
      */
     @Override
     public String getOwnerName() {
-        return getHandle().h_();
+        return getHandle().b();
     }
 
     /**
@@ -57,7 +57,7 @@ public abstract class CanaryTameable extends CanaryEntityAnimal implements Tamea
      */
     @Override
     public boolean isTamed() {
-        return getHandle().bT();
+        return getHandle().bX();
     }
 
     /**
@@ -73,7 +73,7 @@ public abstract class CanaryTameable extends CanaryEntityAnimal implements Tamea
      */
     @Override
     public boolean isSitting() {
-        return getHandle().bU();
+        return getHandle().bY();
     }
 
     /**
@@ -81,7 +81,7 @@ public abstract class CanaryTameable extends CanaryEntityAnimal implements Tamea
      */
     @Override
     public void setSitting(boolean sitting) {
-        ((EntityTameable) entity).k(sitting);
+        getHandle().k(sitting);
     }
 
     /**

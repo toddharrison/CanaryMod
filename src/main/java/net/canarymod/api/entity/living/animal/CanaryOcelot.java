@@ -38,7 +38,7 @@ public class CanaryOcelot extends CanaryTameable implements Ocelot {
      */
     @Override
     public SkinType getSkinType() {
-        return SkinType.values()[getHandle().ca()];
+        return SkinType.values()[getHandle().ce()];
     }
 
     /**
@@ -46,23 +46,7 @@ public class CanaryOcelot extends CanaryTameable implements Ocelot {
      */
     @Override
     public void setSkinType(SkinType type) {
-        getHandle().p(type.ordinal());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int getGrowingAge() {
-        return getHandle().b();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setGrowingAge(int age) {
-        getHandle().a(age);
+        getHandle().s(type.ordinal());
     }
 
     /**

@@ -1,7 +1,7 @@
 package net.minecraft.entity.passive;
 
 import net.canarymod.api.entity.EntityType;
-import net.canarymod.api.entity.living.animal.CanaryEntityAnimal;
+import net.canarymod.api.entity.living.animal.CanaryAnimal;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -30,7 +30,7 @@ public abstract class EntityAnimal extends EntityAgeable implements IAnimals {
         super(world);
 
         //CanaryMod: Genericly wrapped animal
-        this.entity = new CanaryEntityAnimal(this) {
+        this.entity = new CanaryAnimal(this) {
 
             @Override
             public String getFqName() {

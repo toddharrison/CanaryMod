@@ -148,7 +148,7 @@ public class EntityBoat extends Entity {
         }
 
         double ppX = this.q, ppY = this.r, ppZ = this.s; // CanaryMod: previousprevious
-        float prevRot = this.z, prevPit = this.A;
+        float prevRot = this.B, prevPit = this.C;
 
         this.q = this.t;
         this.r = this.u;
@@ -337,18 +337,20 @@ public class EntityBoat extends Entity {
             this.z = (float) ((double) this.z + d12);
             this.b(this.z, this.A);
             // CanaryMod: VehicleMove
-            if (Math.floor(this.q) != Math.floor(this.t) || Math.floor(this.r) != Math.floor(this.u) || Math.floor(this.s) != Math.floor(this.v)) {
-                Vector3D from = new Vector3D(this.q, this.r, this.s);
-                Vector3D to = new Vector3D(this.t, this.u, this.v);
+            Vector3D from = new Vector3D(this.q, this.r, this.s);
+            Vector3D to = new Vector3D(this.t, this.u, this.v);
+            if (Vector3D.getDistance(from, to) > 1.0F) {
                 VehicleMoveHook vmh = (VehicleMoveHook) new VehicleMoveHook((Vehicle) this.entity, from, to).call();
                 if (vmh.isCanceled()) {
                     this.w = 0.0D;
                     this.x = 0.0D;
                     this.y = 0.0D;
-                    this.b(this.q, this.r, this.s, prevRot, prevPit);
+                    this.b(this.q, this.r, this.s, this.B, this.C);
                     this.q = ppX;
                     this.r = ppY;
                     this.s = ppZ;
+                    this.B = prevRot;
+                    this.C = prevPit;
                     this.ac(); // Update rider
                 }
             }

@@ -3,16 +3,11 @@ package net.minecraft.entity;
 import net.canarymod.api.CanaryDamageSource;
 import net.canarymod.api.entity.living.CanaryEntityLiving;
 import net.canarymod.api.entity.living.humanoid.EntityNonPlayableCharacter;
-import net.canarymod.api.entity.vehicle.Vehicle;
 import net.canarymod.api.potion.CanaryPotionEffect;
-import net.canarymod.api.world.position.Location;
-import net.canarymod.api.world.position.Vector3D;
 import net.canarymod.hook.entity.DamageHook;
 import net.canarymod.hook.entity.EntityDeathHook;
-import net.canarymod.hook.entity.EntityMoveHook;
 import net.canarymod.hook.entity.PotionEffectAppliedHook;
 import net.canarymod.hook.entity.PotionEffectFinishHook;
-import net.canarymod.hook.entity.VehicleMoveHook;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -24,7 +19,6 @@ import net.minecraft.entity.ai.attributes.ServersideAttributeMap;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.EntityZombie;
-import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -1420,9 +1414,6 @@ public abstract class EntityLivingBase extends Entity {
     }
 
     public void e() {
-        //TODO
-        double prevX = this.r, prevY = this.s, prevZ = this.t;
-        float prevR = this.A, prevP = this.B;
         if (this.bq > 0) {
             --this.bq;
         }
@@ -1505,41 +1496,6 @@ public abstract class EntityLivingBase extends Entity {
             this.bg *= 0.9F;
             this.e(this.be, this.bf);
             this.p.C.b();
-            // CanaryMod: EntityMoveHook
-            Vector3D vecFrom = new Vector3D(this.q, this.r, this.s);
-            Vector3D vecTo = new Vector3D(this.t, this.u, this.v);
-            if (!(this instanceof EntityPlayerMP) && Vector3D.getDistance(vecFrom, vecTo) > 1.0) {
-                if (this instanceof EntityPig && ((EntityPig) this).bS() && this.n != null && this.n instanceof EntityPlayerMP) {
-                    // Its a Pig Vehicle! This part is a bit ugly but its so far the only point i found that connects to pigs and actual moving
-                    // CanaryMod: VehcileMoveHook (Pig) --
-                    VehicleMoveHook vmh = (VehicleMoveHook) new VehicleMoveHook((Vehicle) this.entity, vecFrom, vecTo).call();
-                    // --
-                    Location fromL = new Location(getCanaryWorld(), this.r, this.s, this.t, this.B, this.A);// Remember rotation and pitch are swapped in Location constructor...
-                    EntityMoveHook emh = (EntityMoveHook) new EntityMoveHook(entity, fromL).call();
-                    if (vmh.isCanceled() || emh.isCanceled()) {
-                        this.w = 0.0D;
-                        this.x = 0.0D;
-                        this.y = 0.0D;
-                        this.b(this.q, this.r, this.s, prevR, prevP);
-                        this.q = prevX;
-                        this.r = prevY;
-                        this.s = prevZ;
-                        this.ac(); // Update rider
-                    }
-                }
-                else {
-                    Location from = new Location(getCanaryWorld(), this.q, this.r, this.s, this.A, this.z);// Remember rotation and pitch are swapped in Location constructor...
-                    EntityMoveHook hook = (EntityMoveHook) new EntityMoveHook(entity, from).call();
-                    if (hook.isCanceled()) {
-                        this.b(this.q, this.r, this.s, prevR, prevP);
-                        this.q = prevX;
-                        this.r = prevY;
-                        this.s = prevZ;
-                        this.ac();
-                    }
-                }
-            }
-            //
             this.p.C.a("push");
             if (!this.p.E) {
                 this.bo();

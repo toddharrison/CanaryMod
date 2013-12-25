@@ -3,15 +3,19 @@ package net.minecraft.entity;
 import net.canarymod.api.CanaryDamageSource;
 import net.canarymod.api.entity.CanaryEntity;
 import net.canarymod.api.entity.EntityType;
+import net.canarymod.api.entity.vehicle.Vehicle;
 import net.canarymod.api.nbt.CanaryCompoundTag;
 import net.canarymod.api.nbt.CompoundTag;
 import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.api.world.position.Location;
+import net.canarymod.api.world.position.Vector3D;
 import net.canarymod.config.Configuration;
 import net.canarymod.hook.CancelableHook;
 import net.canarymod.hook.entity.DamageHook;
 import net.canarymod.hook.entity.DimensionSwitchHook;
 import net.canarymod.hook.entity.EntityMountHook;
+import net.canarymod.hook.entity.EntityMoveHook;
+import net.canarymod.hook.entity.VehicleMoveHook;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
@@ -20,7 +24,10 @@ import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.enchantment.EnchantmentProtection;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.passive.EntityHorse;
+import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -252,6 +259,11 @@ public abstract class Entity {
     }
 
     public void C() {
+        // CanaryMod:
+        float prevPR = this.C, prevPP = this.B;
+        double prevPX = this.q, prevPY = this.r, prevPZ = this.s;
+        //
+
         this.p.C.a("entityBaseTick");
         if (this.n != null && this.n.L) {
             this.n = null;
@@ -343,6 +355,49 @@ public abstract class Entity {
                 --this.e;
             }
         }
+
+        // CanaryMod: EntityMoveHook
+        Location vecFrom = new Location(getCanaryWorld(), this.q, this.r, this.s, this.C, this.B);
+        Vector3D vecTo = new Vector3D(this.t, this.u, this.v);
+        if (!(this instanceof EntityPlayerMP) && Vector3D.getDistance(vecFrom, vecTo) > 1.0) {
+            boolean pHflag = this instanceof EntityPig || this instanceof EntityHorse;
+            boolean flage = pHflag ? ((EntityCreature) this).bS() : false;
+            if (pHflag && flage && this.m != null && this.m instanceof EntityPlayerMP) {
+                // Its an Animal Vehicle!
+                // CanaryMod: VehcileMoveHook (Pig/Horse) --
+                VehicleMoveHook vmh = (VehicleMoveHook) new VehicleMoveHook((Vehicle) this.entity, vecFrom, vecTo).call();
+                // Remember rotation and pitch are swapped in Location constructor...
+                EntityMoveHook emh = (EntityMoveHook) new EntityMoveHook(entity, vecFrom).call();
+                if (vmh.isCanceled() || emh.isCanceled()) {
+                    this.w = 0.0D;
+                    this.x = 0.0D;
+                    this.y = 0.0D;
+                    this.b(this.q, this.r, this.s, this.B, this.C);
+                    this.q = prevPX;
+                    this.r = prevPY;
+                    this.s = prevPZ;
+                    this.B = prevPR;
+                    this.C = prevPP;
+                    this.ac(); //Update Rider
+                }
+            }
+            else {
+                EntityMoveHook hook = (EntityMoveHook) new EntityMoveHook(entity, vecFrom).call();
+                if (hook.isCanceled()) {
+                    this.w = 0.0D;
+                    this.x = 0.0D;
+                    this.y = 0.0D;
+                    this.b(this.q, this.r, this.s, this.B, this.C);
+                    this.q = prevPX;
+                    this.r = prevPY;
+                    this.s = prevPZ;
+                    this.B = prevPR;
+                    this.C = prevPP;
+                    this.ac(); //Update Rider
+                }
+            }
+        }
+        //
 
         if (this.P()) {
             this.E();

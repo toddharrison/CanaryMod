@@ -263,8 +263,8 @@ public abstract class EntityMinecart extends Entity {
             }
         }
         else {
-            float prevRot = this.z, prevPit = this.A;
-            double ppX = this.r, ppY = this.s, ppZ = this.t;
+            float prevRot = this.B, prevPit = this.C;
+            double ppX = this.q, ppY = this.r, ppZ = this.s;
             this.q = this.t;
             this.r = this.u;
             this.s = this.v;
@@ -322,18 +322,20 @@ public abstract class EntityMinecart extends Entity {
 
             this.b(this.z, this.A);
             // CanaryMod: VehicleMove
-            if (Math.floor(this.t) != Math.floor(this.q) || Math.floor(this.u) != Math.floor(this.r) || Math.floor(this.v) != Math.floor(this.s)) {
-                Vector3D from = new Vector3D(this.q, this.r, this.s);
-                Vector3D to = new Vector3D(this.t, this.u, this.v);
+            Vector3D from = new Vector3D(this.q, this.r, this.s);
+            Vector3D to = new Vector3D(this.t, this.u, this.v);
+            if (Vector3D.getDistance(from, to) > 1.0F) {
                 VehicleMoveHook vmh = (VehicleMoveHook) new VehicleMoveHook((Vehicle) this.entity, from, to).call();
                 if (vmh.isCanceled()) {
                     this.w = 0.0D;
                     this.x = 0.0D;
                     this.y = 0.0D;
-                    this.b(this.q, this.r, this.s, prevRot, prevPit);
+                    this.b(this.q, this.r, this.s, this.B, this.C);
                     this.q = ppX;
                     this.r = ppY;
                     this.s = ppZ;
+                    this.B = prevRot;
+                    this.C = prevRot;
                     this.ac(); // Update rider
                 }
             }

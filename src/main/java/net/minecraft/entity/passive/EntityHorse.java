@@ -988,7 +988,6 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
             if (!this.p.E) {
                 this.i((float) this.a(SharedMonsterAttributes.d).e());
                 super.e(f0, f1);
-                //TODO Restore VehicleMove
             }
 
             if (this.E) {

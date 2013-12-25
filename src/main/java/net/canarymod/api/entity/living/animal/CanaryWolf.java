@@ -4,6 +4,8 @@ import net.canarymod.api.DyeColor;
 import net.canarymod.api.entity.EntityType;
 import net.minecraft.entity.passive.EntityWolf;
 
+import static net.canarymod.api.entity.EntityType.WOLF;
+
 /**
  * Wolf wrapper implementation
  *
@@ -26,7 +28,7 @@ public class CanaryWolf extends CanaryTameable implements Wolf {
      */
     @Override
     public EntityType getEntityType() {
-        return EntityType.WOLF;
+        return WOLF;
     }
 
     @Override
@@ -38,24 +40,8 @@ public class CanaryWolf extends CanaryTameable implements Wolf {
      * {@inheritDoc}
      */
     @Override
-    public int getGrowingAge() {
-        return getHandle().b();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setGrowingAge(int age) {
-        getHandle().a(age);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void setCollarColor(DyeColor color) {
-        getHandle().p(color.getColorCode());
+        getHandle().s(color.getColorCode());
     }
 
     /**
@@ -63,7 +49,7 @@ public class CanaryWolf extends CanaryTameable implements Wolf {
      */
     @Override
     public DyeColor getCollarColor() {
-        return DyeColor.values()[getHandle().cd()];
+        return DyeColor.values()[getHandle().ch()];
     }
 
     /**
@@ -71,7 +57,7 @@ public class CanaryWolf extends CanaryTameable implements Wolf {
      */
     @Override
     public boolean isAngry() {
-        return ((EntityWolf) entity).bY();
+        return getHandle().cg();
     }
 
     /**
@@ -79,7 +65,7 @@ public class CanaryWolf extends CanaryTameable implements Wolf {
      */
     @Override
     public void setAngry(boolean angry) {
-        ((EntityWolf) entity).m(angry);
+        getHandle().l(angry);
     }
 
     /**

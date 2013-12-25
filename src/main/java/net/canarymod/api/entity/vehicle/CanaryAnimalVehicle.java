@@ -1,7 +1,7 @@
 package net.canarymod.api.entity.vehicle;
 
 import net.canarymod.api.entity.Entity;
-import net.canarymod.api.entity.living.animal.CanaryEntityAnimal;
+import net.canarymod.api.entity.living.animal.CanaryAnimal;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.passive.EntityPig;
 
@@ -10,7 +10,7 @@ import net.minecraft.entity.passive.EntityPig;
  *
  * @author Jason (darkdiplomat)
  */
-public abstract class CanaryAnimalVehicle extends CanaryEntityAnimal implements Vehicle {
+public abstract class CanaryAnimalVehicle extends CanaryAnimal implements Vehicle {
 
     public CanaryAnimalVehicle(EntityPig entity) {
         super(entity);

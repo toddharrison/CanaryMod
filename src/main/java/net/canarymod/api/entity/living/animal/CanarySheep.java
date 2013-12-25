@@ -4,12 +4,14 @@ import net.canarymod.api.DyeColor;
 import net.canarymod.api.entity.EntityType;
 import net.minecraft.entity.passive.EntitySheep;
 
+import static net.canarymod.api.entity.EntityType.SHEEP;
+
 /**
  * Sheep wrapper implementation
  *
  * @author Jason (darkdiplomat)
  */
-public class CanarySheep extends CanaryEntityAnimal implements Sheep {
+public class CanarySheep extends CanaryAgeableAnimal implements Sheep {
 
     /**
      * Constructs a new wrapper for EntitySheep
@@ -26,7 +28,7 @@ public class CanarySheep extends CanaryEntityAnimal implements Sheep {
      */
     @Override
     public EntityType getEntityType() {
-        return EntityType.SHEEP;
+        return SHEEP;
     }
 
     @Override
@@ -47,7 +49,7 @@ public class CanarySheep extends CanaryEntityAnimal implements Sheep {
      */
     @Override
     public DyeColor getColor() {
-        return DyeColor.values()[getHandle().bT()];
+        return DyeColor.values()[getHandle().bX()];
     }
 
     /**
@@ -55,7 +57,7 @@ public class CanarySheep extends CanaryEntityAnimal implements Sheep {
      */
     @Override
     public void setColor(DyeColor color) {
-        getHandle().p(color.getDyeColorCode());
+        getHandle().s(color.getDyeColorCode());
     }
 
     /**
@@ -63,7 +65,7 @@ public class CanarySheep extends CanaryEntityAnimal implements Sheep {
      */
     @Override
     public boolean isSheared() {
-        return getHandle().bU();
+        return getHandle().bY();
     }
 
     /**
@@ -72,22 +74,6 @@ public class CanarySheep extends CanaryEntityAnimal implements Sheep {
     @Override
     public void setSheared(boolean sheared) {
         getHandle().i(sheared);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int getGrowingAge() {
-        return getHandle().b();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setGrowingAge(int age) {
-        getHandle().a(age);
     }
 
     /**

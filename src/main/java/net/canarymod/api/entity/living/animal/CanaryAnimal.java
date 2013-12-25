@@ -10,19 +10,19 @@ import net.canarymod.api.inventory.Item;
  *
  * @author Jason (darkdiplomat)
  */
-public abstract class CanaryEntityAnimal extends CanaryEntityLiving implements EntityAnimal {
+public abstract class CanaryAnimal extends CanaryEntityLiving implements EntityAnimal {
 
-    public CanaryEntityAnimal(net.minecraft.entity.passive.EntityAnimal entity) {
+    public CanaryAnimal(net.minecraft.entity.passive.EntityAnimal entity) {
         super(entity);
     }
 
     // For them squids ...
-    public CanaryEntityAnimal(net.minecraft.entity.passive.EntitySquid entity) {
+    public CanaryAnimal(net.minecraft.entity.passive.EntitySquid entity) {
         super(entity);
     }
 
     // For them Bats...
-    public CanaryEntityAnimal(net.minecraft.entity.passive.EntityAmbientCreature entity) {
+    public CanaryAnimal(net.minecraft.entity.passive.EntityAmbientCreature entity) {
         super(entity);
     }
 
