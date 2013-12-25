@@ -1,14 +1,15 @@
 package net.canarymod.api.inventory.recipes;
 
+import net.canarymod.api.inventory.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.ShapelessRecipes;
+
 import java.util.ArrayList;
 import java.util.List;
-import net.canarymod.api.inventory.Item;
-import net.minecraft.server.ItemStack;
-import net.minecraft.server.ShapelessRecipes;
 
 /**
  * Implementation of the ShapelessRecipes wrapper
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryShapelessRecipe extends CanaryRecipe implements ShapelessRecipe {

@@ -5,20 +5,20 @@ import net.canarymod.api.entity.living.LivingBase;
 
 /**
  * PotionEffect wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryPotionEffect implements PotionEffect {
 
-    net.minecraft.server.PotionEffect effect;
+    net.minecraft.potion.PotionEffect effect;
 
     /**
      * Constructs a new wrapper for PotionEffect
-     * 
+     *
      * @param effect
-     *            the PotionEffect to wrap
+     *         the PotionEffect to wrap
      */
-    public CanaryPotionEffect(net.minecraft.server.PotionEffect effect) {
+    public CanaryPotionEffect(net.minecraft.potion.PotionEffect effect) {
         this.effect = effect;
     }
 
@@ -67,17 +67,17 @@ public class CanaryPotionEffect implements PotionEffect {
      */
     @Override
     public void performEffect(LivingBase entity) {
-        net.minecraft.server.EntityLivingBase oLiving = (net.minecraft.server.EntityLivingBase) ((CanaryLivingBase) entity).getHandle();
+        net.minecraft.entity.EntityLivingBase oLiving = (net.minecraft.entity.EntityLivingBase) ((CanaryLivingBase) entity).getHandle();
 
         effect.b(oLiving);
     }
 
     /**
      * Gets the PotionEffect being wrapped
-     * 
+     *
      * @return the PotionEffect
      */
-    public net.minecraft.server.PotionEffect getHandle() {
+    public net.minecraft.potion.PotionEffect getHandle() {
         return effect;
     }
 

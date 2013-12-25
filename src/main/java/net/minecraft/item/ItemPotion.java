@@ -5,6 +5,7 @@ import net.canarymod.hook.player.EatHook;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.EntityPotion;
 import net.minecraft.init.Items;
 import net.minecraft.nbt.NBTTagCompound;
@@ -103,7 +104,7 @@ public class ItemPotion extends Item {
             return itemstack;
         }
         // Apply food changes
-        entityplayer.bI().a(hook.getLevelGain(), hook.getSaturationGain());
+        entityplayer.bO().a(hook.getLevelGain(), hook.getSaturationGain());
         // And finally add the effects
         if (hook.getPotionEffects() != null) {
             for (net.canarymod.api.potion.PotionEffect effect : hook.getPotionEffects()) {

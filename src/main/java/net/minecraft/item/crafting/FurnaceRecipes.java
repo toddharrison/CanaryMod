@@ -1,5 +1,6 @@
 package net.minecraft.item.crafting;
 
+import net.canarymod.api.inventory.CanaryItem;
 import net.canarymod.api.inventory.recipes.SmeltRecipe;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -11,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -117,7 +119,7 @@ public class FurnaceRecipes {
         for (Object key : this.b.keySet()) {
             int fromId = ((Integer) key).intValue();
             net.canarymod.api.inventory.Item result = ((ItemStack) this.b.get(key)).getCanaryItem();
-            float xp = this.c(result.getId());
+            float xp = this.b(((CanaryItem) result).getHandle());
             smelting_recipes.add(new SmeltRecipe(fromId, result, xp));
         }
         return smelting_recipes;

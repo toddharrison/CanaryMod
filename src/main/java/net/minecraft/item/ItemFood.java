@@ -5,6 +5,8 @@ import net.canarymod.hook.player.EatHook;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
 
@@ -36,7 +38,7 @@ public class ItemFood extends Item {
         // CanaryMod: Eat
         net.canarymod.api.potion.PotionEffect[] effects = null;
 
-        if (this instanceof ItemAppleGold && !world.I) {
+        if (this instanceof ItemAppleGold && !world.E) {
             if (itemstack.k() > 0) {
                 effects = new net.canarymod.api.potion.PotionEffect[]{
                         new CanaryPotionEffect(new PotionEffect(Potion.x.H, 2400, 0)), new CanaryPotionEffect(new PotionEffect(Potion.l.H, 600, 4)), new CanaryPotionEffect(new PotionEffect(Potion.m.H, 6000, 0)), new CanaryPotionEffect(new PotionEffect(Potion.n.H, 6000, 0))
@@ -46,10 +48,10 @@ public class ItemFood extends Item {
                 effects = new net.canarymod.api.potion.PotionEffect[]{ new CanaryPotionEffect(new PotionEffect(Potion.x.H, 2400, 0)) };
             }
         }
-        else if (!world.I && this.cv > 0 && world.s.nextFloat() < this.cF) {
-            effects = new net.canarymod.api.potion.PotionEffect[]{ new CanaryPotionEffect(new PotionEffect(this.cC, this.cD * 20, this.cE)) };
+        else if (!world.E && this.n > 0 && world.s.nextFloat() < this.q) {
+            effects = new net.canarymod.api.potion.PotionEffect[]{ new CanaryPotionEffect(new PotionEffect(this.n, this.o * 20, this.p)) };
         }
-        EatHook hook = (EatHook) new EatHook(((EntityPlayerMP) entityplayer).getPlayer(), itemstack.getCanaryItem(), this.g(), this.i(), effects).call();
+        EatHook hook = (EatHook) new EatHook(((EntityPlayerMP) entityplayer).getPlayer(), itemstack.getCanaryItem(), this.b, this.c, effects).call();
         if (!hook.isCanceled()) {
             --itemstack.b;
             entityplayer.bO().a(hook.getLevelGain(), hook.getSaturationGain());

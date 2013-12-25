@@ -3,6 +3,7 @@ package net.minecraft.item;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
+import net.canarymod.api.inventory.CanaryBaseItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirt;
 import net.minecraft.block.BlockDoublePlant;
@@ -619,8 +620,4 @@ public class Item {
     }
 
     //
-
-    static {
-        StatList.c();
-    }
 }

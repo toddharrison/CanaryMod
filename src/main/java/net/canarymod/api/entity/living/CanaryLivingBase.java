@@ -1,27 +1,25 @@
 package net.canarymod.api.entity.living;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import net.canarymod.Canary;
 import net.canarymod.api.CanaryDamageSource;
-import net.canarymod.api.packet.CanaryPacket;
 import net.canarymod.api.DamageSource;
 import net.canarymod.api.DamageType;
 import net.canarymod.api.entity.CanaryEntity;
 import net.canarymod.api.entity.Entity;
 import net.canarymod.api.entity.living.humanoid.Player;
+import net.canarymod.api.packet.CanaryPacket;
 import net.canarymod.api.potion.CanaryPotion;
 import net.canarymod.api.potion.CanaryPotionEffect;
 import net.canarymod.api.potion.Potion;
 import net.canarymod.api.potion.PotionEffect;
 import net.canarymod.api.potion.PotionEffectType;
 import net.canarymod.api.world.position.Location;
-import net.minecraft.server.EntityLivingBase;
-import net.minecraft.server.Packet12PlayerLook;
-import net.minecraft.server.Packet32EntityLook;
-import net.minecraft.server.RangedAttribute;
-import net.minecraft.server.SharedMonsterAttributes;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public abstract class CanaryLivingBase extends CanaryEntity implements LivingBase {
 
@@ -57,7 +55,7 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
      * {@inheritDoc}
      */
     @Override
-    public double getMaxHealth(){
+    public double getMaxHealth() {
         return getHandle().aX().a(SharedMonsterAttributes.a).b();
     }
 
@@ -65,7 +63,7 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
      * {@inheritDoc}
      */
     @Override
-    public void setMaxHealth(double maxHealth){
+    public void setMaxHealth(double maxHealth) {
         getHandle().a(SharedMonsterAttributes.a).a(maxHealth);
     }
 
@@ -168,7 +166,7 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
      */
     @Override
     public void addPotionEffect(PotionEffectType type, int duration, int amplifier) {
-        getHandle().c(new net.minecraft.server.PotionEffect(type.getID(), duration, amplifier));
+        getHandle().c(new net.minecraft.potion.PotionEffect(type.getID(), duration, amplifier));
     }
 
     /**
@@ -204,7 +202,7 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
         if (potion == null) {
             return null;
         }
-        net.minecraft.server.PotionEffect nms_potioneffect = ((net.minecraft.server.EntityLivingBase) entity).b(((CanaryPotion) potion).getHandle());
+        net.minecraft.potion.PotionEffect nms_potioneffect = ((net.minecraft.entity.EntityLivingBase) entity).b(((CanaryPotion) potion).getHandle());
         return nms_potioneffect != null ? new CanaryPotionEffect(nms_potioneffect) : null;
     }
 
@@ -214,10 +212,10 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
     @SuppressWarnings("unchecked")
     @Override
     public List<PotionEffect> getAllActivePotionEffects() {
-        Collection<net.minecraft.server.PotionEffect> effect_collection = ((net.minecraft.server.EntityLivingBase) entity).aL();
+        Collection<net.minecraft.potion.PotionEffect> effect_collection = ((net.minecraft.entity.EntityLivingBase) entity).aL();
         List<PotionEffect> list = new ArrayList<PotionEffect>();
 
-        for (net.minecraft.server.PotionEffect nms_effect : effect_collection) {
+        for (net.minecraft.potion.PotionEffect nms_effect : effect_collection) {
             list.add(new CanaryPotionEffect(nms_effect));
         }
         return list;
@@ -228,7 +226,7 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
      */
     @Override
     public LivingBase getRevengeTarget() {
-        net.minecraft.server.EntityLivingBase target = getHandle().aE();
+        net.minecraft.entity.EntityLivingBase target = getHandle().aE();
         if (target != null) {
             return (LivingBase) target.getCanaryEntity();
         }
@@ -241,8 +239,9 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
     @Override
     public void setRevengeTarget(LivingBase livingbase) {
         if (livingbase == null) {
-            getHandle().b((net.minecraft.server.EntityLivingBase) null);
-        } else {
+            getHandle().b((net.minecraft.entity.EntityLivingBase) null);
+        }
+        else {
             getHandle().b(((CanaryLivingBase) livingbase).getHandle());
         }
     }
@@ -252,7 +251,7 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
      */
     @Override
     public LivingBase getLastAssailant() {
-        net.minecraft.server.EntityLivingBase target = ((net.minecraft.server.EntityLivingBase) entity).aE();
+        net.minecraft.entity.EntityLivingBase target = ((net.minecraft.server.EntityLivingBase) entity).aE();
         if (target != null) {
             return (EntityLiving) target.getCanaryEntity();
         }
@@ -265,8 +264,9 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
     @Override
     public void setLastAssailant(LivingBase livingbase) {
         if (livingbase == null) {
-            getHandle().k((net.minecraft.server.Entity) null);
-        } else {
+            getHandle().k((net.minecraft.entity.Entity) null);
+        }
+        else {
             getHandle().k(((CanaryEntity) livingbase).getHandle());
         }
     }
@@ -291,7 +291,7 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
         setRotation((float) yaw);
         setPitch((float) pitch);
 
-        net.minecraft.server.Packet toSend;
+        net.minecraft.network.Packet toSend;
 
         if (isPlayer()) {
             toSend = new Packet12PlayerLook();
@@ -300,7 +300,8 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
             toSend2.e = (float) yaw;
             toSend2.f = (float) pitch;
             ((Player) this.entity).sendPacket(new CanaryPacket(toSend));
-        } else {
+        }
+        else {
             double rotation2 = Math.floor((yaw * 256F) / 360F);
             double pitch2 = Math.floor((pitch * 256F) / 360F);
 
@@ -355,7 +356,7 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
             return;
         }
         swingArm();
-        ((net.canarymod.api.entity.living.CanaryLivingBase) entity).getHandle().a(new net.minecraft.server.EntityDamageSource(getName(), getHandle()), damage);
+        ((net.canarymod.api.entity.living.CanaryLivingBase) entity).getHandle().a(new net.minecraft.util.EntityDamageSource(getName(), getHandle()), damage);
     }
 
     /**

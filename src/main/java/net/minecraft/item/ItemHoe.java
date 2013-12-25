@@ -8,6 +8,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 
@@ -29,10 +30,11 @@ public class ItemHoe extends Item {
         else {
             Block block = world.a(i0, i1, i2);
 
-            if ((i3 == 0 world.a(i0, i1 + 1, i2).o() != Material.a && (block != Blocks.c || block != Blocks.d)){
+            if ((i3 == 0 && world.a(i0, i1 + 1, i2).o() != Material.a && (block != Blocks.c || block != Blocks.d))) {
                 return false;
             }
-            else{
+            else {
+                Block block1 = Blocks.ak;
                 // CanaryMod: ItemUse
                 CanaryBlock clicked = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
 

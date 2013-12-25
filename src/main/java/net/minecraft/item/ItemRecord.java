@@ -6,6 +6,7 @@ import net.canarymod.hook.player.ItemUseHook;
 import net.minecraft.block.BlockJukebox;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 

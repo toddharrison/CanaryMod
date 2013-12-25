@@ -3,6 +3,7 @@ package net.minecraft.item;
 import net.canarymod.hook.player.EatHook;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
 import net.minecraft.world.World;
 
@@ -20,7 +21,7 @@ public class ItemBucketMilk extends Item {
             return itemstack;
         }
         // For those Lactose intolerant
-        entityplayer.bq.a(hook.getLevelGain(), hook.getSaturationGain());
+        entityplayer.bO().a(hook.getLevelGain(), hook.getSaturationGain());
         //
 
         if (!entityplayer.bF.d) {

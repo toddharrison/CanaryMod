@@ -8,6 +8,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.util.MovingObjectPosition;
@@ -164,7 +165,7 @@ public class ItemBucket extends Item {
                     // CanaryMod: BlockPlaceHook water/lava bucket
                     if (entityplayer != null) {
                         CanaryBlock clicked = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
-                        CanaryBlock placed = new CanaryBlock((short) this.a, (short) 0, i0, i1, i2, world.getCanaryWorld());
+                        CanaryBlock placed = new CanaryBlock((short) Block.b(this.a), (short) 0, i0, i1, i2, world.getCanaryWorld());
                         Player player = ((EntityPlayerMP) entityplayer).getPlayer();
                         BlockPlaceHook hook = (BlockPlaceHook) new BlockPlaceHook(player, clicked, placed).call();
                         if (hook.isCanceled()) {

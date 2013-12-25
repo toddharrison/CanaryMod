@@ -6,6 +6,7 @@ import net.canarymod.hook.player.BlockPlaceHook;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 
@@ -73,7 +74,7 @@ public class ItemBlock extends Item {
             int i5 = this.a.a(world, i0, i1, i2, i3, f0, f1, f2, i4);
             if (!handled) { // if ItemSlab didn't call BlockPlace
                 // set placed
-                CanaryBlock placed = new CanaryBlock((short) this.a, (short) i5, i0, i1, i2, world.getCanaryWorld());
+                CanaryBlock placed = new CanaryBlock((short) Block.b(this.a), (short) i5, i0, i1, i2, world.getCanaryWorld());
                 // Create and Call
                 BlockPlaceHook hook = (BlockPlaceHook) new BlockPlaceHook(((EntityPlayerMP) entityplayer).getPlayer(), clicked, placed).call();
                 if (hook.isCanceled()) {

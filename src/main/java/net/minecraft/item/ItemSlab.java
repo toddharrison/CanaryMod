@@ -6,6 +6,7 @@ import net.canarymod.hook.player.BlockPlaceHook;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
 
 public class ItemSlab extends ItemBlock {
@@ -13,6 +14,7 @@ public class ItemSlab extends ItemBlock {
     private final boolean b;
     private final BlockSlab c;
     private final BlockSlab d;
+    private BlockPlaceHook hook; // CanaryMod: helper
 
     public ItemSlab(Block block, BlockSlab blockslab, BlockSlab blockslab1, boolean flag0) {
         super(block);
@@ -53,7 +55,7 @@ public class ItemSlab extends ItemBlock {
 
             if ((i3 == 1 && !flag0 || i3 == 0 && flag0) && block == this.c && i5 == itemstack.k()) {
                 clicked.setFaceClicked(BlockFace.fromByte((byte) i3));
-                CanaryBlock placed = new CanaryBlock((short) i4, (short) i6, i0, i1, i2, world.getCanaryWorld());
+                CanaryBlock placed = new CanaryBlock((short) i4, (short) i5, i0, i1, i2, world.getCanaryWorld());
 
                 hook = (BlockPlaceHook) new BlockPlaceHook(((EntityPlayerMP) entityplayer).getPlayer(), clicked, placed).call();
                 if (hook.isCanceled()) {
@@ -113,7 +115,7 @@ public class ItemSlab extends ItemBlock {
 
         if (block == this.c && i5 == itemstack.k()) {
             // Call hook
-            CanaryBlock placed = new CanaryBlock((short) i4, (short) i6, i0, i1, i2, world.getCanaryWorld());
+            CanaryBlock placed = new CanaryBlock((short) i4, (short) i5, i0, i1, i2, world.getCanaryWorld());
 
             hook = (BlockPlaceHook) new BlockPlaceHook(((EntityPlayerMP) entityplayer).getPlayer(), clicked, placed).call();
             if (hook.isCanceled()) {

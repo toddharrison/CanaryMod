@@ -107,15 +107,15 @@ public class ShapedRecipes implements IRecipe {
 
     // CanaryMod
     public int getWidth() {
-        return this.b;
+        return this.a;
     }
 
     public int getHeight() {
-        return this.c;
+        return this.b;
     }
 
     public ItemStack[] getRecipeItems() {
-        return this.d;
+        return this.c;
     }
 
     public CanaryShapedRecipe getCanaryRecipe() {

@@ -6,6 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
@@ -42,7 +43,7 @@ public class ItemDoor extends Item {
                 else {
                     // CanaryMod: BlockPlaceHook
                     CanaryBlock clicked = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
-                    CanaryBlock placed = new CanaryBlock((short) block.cF, (short) 0, i0, i1 + 1, i2, world.getCanaryWorld());
+                    CanaryBlock placed = new CanaryBlock((short) Block.b(block), (short) 0, i0, i1 + 1, i2, world.getCanaryWorld());
                     BlockPlaceHook hook = (BlockPlaceHook) new BlockPlaceHook(((EntityPlayerMP) entityplayer).getPlayer(), clicked, placed).call();
                     if (hook.isCanceled()) {
                         return false;
