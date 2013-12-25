@@ -4,8 +4,7 @@ import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.packet.CanaryPacket;
 import net.canarymod.api.packet.Packet;
 import net.canarymod.chat.TextFormat;
-import net.minecraft.server.ChatMessageComponent;
-import net.minecraft.server.Packet3Chat;
+import net.minecraft.network.NetHandlerPlayServer;
 
 /**
  * Wrap up NetServerHandler to minimize entry point to notch code
@@ -14,9 +13,9 @@ import net.minecraft.server.Packet3Chat;
  */
 public class CanaryNetServerHandler implements NetServerHandler {
 
-    private net.minecraft.server.NetServerHandler handler;
+    private NetHandlerPlayServer handler;
 
-    public CanaryNetServerHandler(net.minecraft.server.NetServerHandler handle) {
+    public CanaryNetServerHandler(NetHandlerPlayServer handle) {
         handler = handle;
     }
 
@@ -26,7 +25,7 @@ public class CanaryNetServerHandler implements NetServerHandler {
 
     }
 
-    public void sendPacket(net.minecraft.server.Packet packet) {
+    public void sendPacket(net.minecraft.network.Packet packet) {
         handler.b(packet);
     }
 
@@ -35,7 +34,7 @@ public class CanaryNetServerHandler implements NetServerHandler {
         if (chatPacket.getPacketId() != 3) {
             return; // Not a chat packet :O
         }
-        handler.a((net.minecraft.server.Packet3Chat) ((CanaryPacket) chatPacket).getPacket());
+        handler.a((net.minecraft.network.Packet3Chat) ((CanaryPacket) chatPacket).getPacket());
 
     }
 
@@ -53,7 +52,8 @@ public class CanaryNetServerHandler implements NetServerHandler {
             handler.b(new Packet3Chat(ChatMessageComponent.d(subCut)));
             String lastColor = TextFormat.getLastColor(subCut);
             sendMessage((lastColor == null ? "" : lastColor) + newMsg);
-        } else {
+        }
+        else {
             handler.b(new Packet3Chat(ChatMessageComponent.d(msg)));
         }
     }
