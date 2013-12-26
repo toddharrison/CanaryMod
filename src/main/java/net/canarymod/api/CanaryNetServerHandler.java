@@ -5,6 +5,9 @@ import net.canarymod.api.packet.CanaryPacket;
 import net.canarymod.api.packet.Packet;
 import net.canarymod.chat.TextFormat;
 import net.minecraft.network.NetHandlerPlayServer;
+import net.minecraft.network.play.server.S02PacketChat;
+import net.minecraft.network.play.server.S07PacketRespawn;
+import net.minecraft.util.ChatComponentText;
 
 /**
  * Wrap up NetServerHandler to minimize entry point to notch code
@@ -21,12 +24,12 @@ public class CanaryNetServerHandler implements NetServerHandler {
 
     @Override
     public void sendPacket(Packet packet) {
-        handler.b(((CanaryPacket) packet).getPacket());
+        handler.a(((CanaryPacket) packet).getPacket());
 
     }
 
     public void sendPacket(net.minecraft.network.Packet packet) {
-        handler.b(packet);
+        handler.a(packet);
     }
 
     @Override
@@ -34,7 +37,7 @@ public class CanaryNetServerHandler implements NetServerHandler {
         if (chatPacket.getPacketId() != 3) {
             return; // Not a chat packet :O
         }
-        handler.a((net.minecraft.network.Packet3Chat) ((CanaryPacket) chatPacket).getPacket());
+        handler.a((S02PacketChat) ((CanaryPacket) chatPacket).getPacket());
 
     }
 
@@ -49,12 +52,12 @@ public class CanaryNetServerHandler implements NetServerHandler {
             String subCut = cutMsg.substring(0, finalCut);
             String newMsg = msg.substring(finalCut);
 
-            handler.b(new Packet3Chat(ChatMessageComponent.d(subCut)));
+            handler.a(new S02PacketChat(new ChatComponentText(subCut)));
             String lastColor = TextFormat.getLastColor(subCut);
             sendMessage((lastColor == null ? "" : lastColor) + newMsg);
         }
         else {
-            handler.b(new Packet3Chat(ChatMessageComponent.d(msg)));
+            handler.a(new S02PacketChat(new ChatComponentText(msg)));
         }
     }
 
@@ -69,12 +72,12 @@ public class CanaryNetServerHandler implements NetServerHandler {
         if (respawnPacket.getPacketId() != 9) {
             return; // Not a respawning packet :O
         }
-        handler.a((net.minecraft.server.Packet9Respawn) ((CanaryPacket) respawnPacket).getPacket());
+        handler.a((S07PacketRespawn) ((CanaryPacket) respawnPacket).getPacket());
     }
 
     @Override
     public Player getUser() {
-        return handler.c.getPlayer();
+        return handler.b.getPlayer();
     }
 
 }

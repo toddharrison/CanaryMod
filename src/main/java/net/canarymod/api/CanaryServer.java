@@ -1,15 +1,7 @@
 package net.canarymod.api;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import net.canarymod.Canary;
 import net.canarymod.Main;
-import net.canarymod.api.entity.living.humanoid.CanaryPlayer;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.gui.GUIControl;
 import net.canarymod.api.inventory.CanaryItem;
@@ -21,29 +13,35 @@ import net.canarymod.api.inventory.recipes.SmeltRecipe;
 import net.canarymod.api.nbt.CanaryCompoundTag;
 import net.canarymod.api.world.World;
 import net.canarymod.api.world.WorldManager;
-import net.canarymod.api.world.blocks.CanaryCommandBlock;
 import net.canarymod.api.world.blocks.CommandBlock;
 import net.canarymod.config.Configuration;
 import net.canarymod.hook.command.ConsoleCommandHook;
 import net.canarymod.hook.system.PermissionCheckHook;
 import net.canarymod.tasks.ServerTask;
 import net.canarymod.tasks.ServerTaskManager;
-import net.minecraft.server.CraftingManager;
-import net.minecraft.server.FurnaceRecipes;
-import net.minecraft.server.IRecipe;
-import net.minecraft.server.ItemStack;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.FurnaceRecipes;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.ShapedRecipes;
+import net.minecraft.item.crafting.ShapelessRecipes;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.play.server.S38PacketPlayerListItem;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.NBTTagCompound;
-import net.minecraft.server.ServerConfigurationManager;
-import net.minecraft.server.ShapedRecipes;
-import net.minecraft.server.ShapelessRecipes;
-import net.minecraft.server.TcpConnection;
-import net.minecraft.server.TextAreaLogHandler;
+import net.minecraft.server.dedicated.DedicatedServer;
+import net.minecraft.server.management.ServerConfigurationManager;
 import net.visualillusionsent.utils.TaskManager;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Main entry point of the software
- * 
+ *
  * @author Jos Kuijpers
  * @author Chris (damagefilter)
  * @author Jason (darkdiplomat)
@@ -58,9 +56,9 @@ public class CanaryServer implements Server {
 
     /**
      * Create a new Server Wrapper
-     * 
+     *
      * @param server
-     *            the MinecraftServer instance
+     *         the MinecraftServer instance
      */
     public CanaryServer(MinecraftServer server) {
         this.server = server;
@@ -74,7 +72,9 @@ public class CanaryServer implements Server {
     public String getHostname() {
         try {
             return InetAddress.getLocalHost().getHostName();
-        } catch (UnknownHostException e) {}
+        }
+        catch (UnknownHostException e) {
+        }
         return "local.host";
     }
 
@@ -137,7 +137,7 @@ public class CanaryServer implements Server {
         }
         String[] split = command.split(" ");
         if (!Canary.commands().parseCommand(this, split[0], split)) {
-            return server.G().a(getHandle(), command) > 0; // Vanilla Commands passed
+            ((DedicatedServer) server).a(command, server); // Vanilla Commands passed
         }
         return true;
     }
@@ -155,7 +155,7 @@ public class CanaryServer implements Server {
         }
         String[] split = command.split(" ");
         if (!Canary.commands().parseCommand(player, split[0], split)) {
-            return server.G().a(((CanaryPlayer) player).getHandle(), command) > 0; // Vanilla Commands passed
+            ((DedicatedServer) server).a(command, server); // Vanilla Commands passed
         }
         return true;
     }
@@ -172,7 +172,7 @@ public class CanaryServer implements Server {
             return true;
         }
         if (!Canary.commands().parseCommand(cmdBlock, command.split(" ")[0], command.split(" "))) {
-            return server.G().a(((CanaryCommandBlock) cmdBlock).getTileEntity(), command) > 0; // Vanilla Commands passed
+            ((DedicatedServer) server).a(command, server); // Vanilla Commands passed
         }
         return true;
     }
@@ -336,7 +336,8 @@ public class CanaryServer implements Server {
     public Recipe addRecipe(CraftingRecipe recipe) {
         if (recipe.hasShape()) {
             return CraftingManager.a().a(((CanaryItem) recipe.getResult()).getHandle(), ShapedRecipeHelper.createRecipeShape(recipe)).getCanaryRecipe();
-        } else {
+        }
+        else {
             ItemStack result = ((CanaryItem) recipe.getResult()).getHandle();
             Object[] rec = new Object[recipe.getItems().length];
 
@@ -358,7 +359,8 @@ public class CanaryServer implements Server {
         for (IRecipe recipe : server_recipes) {
             if (recipe instanceof ShapedRecipes) {
                 rtn_recipes.add(((ShapedRecipes) recipe).getCanaryRecipe());
-            } else if (recipe instanceof ShapelessRecipes) {
+            }
+            else if (recipe instanceof ShapelessRecipes) {
                 rtn_recipes.add(((ShapelessRecipes) recipe).getCanaryRecipe());
             }
             // if it's neither, something went wrong or its something I haven't included yet
@@ -379,7 +381,7 @@ public class CanaryServer implements Server {
      */
     @Override
     public void addSmeltingRecipe(SmeltRecipe recipe) {
-        FurnaceRecipes.a().a(recipe.getItemIDFrom(), ((CanaryItem) recipe.getResult()).getHandle(), recipe.getXP());
+        FurnaceRecipes.a().a(net.minecraft.item.Item.d(recipe.getItemIDFrom()), ((CanaryItem) recipe.getResult()).getHandle(), recipe.getXP());
     }
 
     /**
@@ -417,7 +419,8 @@ public class CanaryServer implements Server {
      */
     @Override
     public long[] getSentPacketCountArray() {
-        return server.f;
+        return null;
+        //return server.f;
     }
 
     /**
@@ -425,7 +428,8 @@ public class CanaryServer implements Server {
      */
     @Override
     public long[] getSentPacketSizeArray() {
-        return server.g;
+        return null;
+        //return server.g;
     }
 
     /**
@@ -433,12 +437,14 @@ public class CanaryServer implements Server {
      */
     @Override
     public long[] getReceivedPacketCountArray() {
-        return server.h;
+        return null;
+        //return server.h;
     }
 
     @Override
     public long[] getReceivedPacketSizeArray() {
-        return server.i;
+        return null;
+        //return server.i;
     }
 
     /**
@@ -446,7 +452,7 @@ public class CanaryServer implements Server {
      */
     @Override
     public long[] getTickTimeArray() {
-        return server.j;
+        return server.f;
     }
 
     /**
@@ -454,7 +460,8 @@ public class CanaryServer implements Server {
      */
     @Override
     public int getTcpReaderThreadCount() {
-        return TcpConnection.a.get();
+        return 0;
+        //return TcpConnection.a.get();
     }
 
     /**
@@ -462,7 +469,8 @@ public class CanaryServer implements Server {
      */
     @Override
     public int getTcpWriterThreadCount() {
-        return TcpConnection.b.get();
+        return 0;
+        //return TcpConnection.b.get();
     }
 
     /**
@@ -494,8 +502,10 @@ public class CanaryServer implements Server {
     @Override
     public String getServerGUILog() {
         if (!isHeadless()) {
-            return TextAreaLogHandler.getLogHandler().getLog();
-        } else {
+            return null;
+            //return TextAreaLogHandler.getLogHandler().getLog();
+        }
+        else {
             return null;
         }
     }
@@ -542,7 +552,7 @@ public class CanaryServer implements Server {
     @Override
     public void sendPlayerListEntry(PlayerListEntry entry) {
         if (Configuration.getServerConfig().isPlayerListEnabled()) {
-            server.af().a(new net.minecraft.server.Packet201PlayerInfo(entry.getName(), entry.isShown(), entry.getPing()));
+            server.af().a(new S38PacketPlayerListItem(entry.getName(), entry.isShown(), entry.getPing()));
         }
     }
 
@@ -578,7 +588,7 @@ public class CanaryServer implements Server {
     /**
      * The internal CanaryServer Tick monitor task.
      * Used to track ticks per second.
-     * 
+     *
      * @author Jason (darkdiplomat)
      */
     private final class TPSTracker extends ServerTask {

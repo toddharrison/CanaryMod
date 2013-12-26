@@ -161,14 +161,6 @@ public class CanaryCompoundTag extends CanaryBaseTag implements CompoundTag {
      */
     @Override
     public byte getByte(String key) {
-        return getHandle().c(key);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public short getShort(String key) {
         return getHandle().d(key);
     }
 
@@ -176,7 +168,7 @@ public class CanaryCompoundTag extends CanaryBaseTag implements CompoundTag {
      * {@inheritDoc}
      */
     @Override
-    public int getInt(String key) {
+    public short getShort(String key) {
         return getHandle().e(key);
     }
 
@@ -184,7 +176,7 @@ public class CanaryCompoundTag extends CanaryBaseTag implements CompoundTag {
      * {@inheritDoc}
      */
     @Override
-    public long getLong(String key) {
+    public int getInt(String key) {
         return getHandle().f(key);
     }
 
@@ -192,7 +184,7 @@ public class CanaryCompoundTag extends CanaryBaseTag implements CompoundTag {
      * {@inheritDoc}
      */
     @Override
-    public float getFloat(String key) {
+    public long getLong(String key) {
         return getHandle().g(key);
     }
 
@@ -200,7 +192,7 @@ public class CanaryCompoundTag extends CanaryBaseTag implements CompoundTag {
      * {@inheritDoc}
      */
     @Override
-    public double getDouble(String key) {
+    public float getFloat(String key) {
         return getHandle().h(key);
     }
 
@@ -208,7 +200,7 @@ public class CanaryCompoundTag extends CanaryBaseTag implements CompoundTag {
      * {@inheritDoc}
      */
     @Override
-    public String getString(String key) {
+    public double getDouble(String key) {
         return getHandle().i(key);
     }
 
@@ -216,7 +208,7 @@ public class CanaryCompoundTag extends CanaryBaseTag implements CompoundTag {
      * {@inheritDoc}
      */
     @Override
-    public byte[] getByteArray(String key) {
+    public String getString(String key) {
         return getHandle().j(key);
     }
 
@@ -224,7 +216,7 @@ public class CanaryCompoundTag extends CanaryBaseTag implements CompoundTag {
      * {@inheritDoc}
      */
     @Override
-    public int[] getIntArray(String key) {
+    public byte[] getByteArray(String key) {
         return getHandle().k(key);
     }
 
@@ -232,8 +224,16 @@ public class CanaryCompoundTag extends CanaryBaseTag implements CompoundTag {
      * {@inheritDoc}
      */
     @Override
+    public int[] getIntArray(String key) {
+        return getHandle().l(key);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public CompoundTag getCompoundTag(String key) {
-        return new CanaryCompoundTag(getHandle().l(key));
+        return new CanaryCompoundTag(getHandle().m(key));
     }
 
     /**
@@ -242,7 +242,7 @@ public class CanaryCompoundTag extends CanaryBaseTag implements CompoundTag {
     @SuppressWarnings("unchecked")
     @Override
     public ListTag<? extends CanaryBaseTag> getListTag(String key) {
-        return new CanaryListTag<CanaryBaseTag>(getHandle().m(key));
+        return new CanaryListTag<CanaryBaseTag>(getHandle().c(key, 0));
     }
 
     /**

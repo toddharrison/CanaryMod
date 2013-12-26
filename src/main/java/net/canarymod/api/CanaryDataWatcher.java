@@ -2,9 +2,9 @@ package net.canarymod.api;
 
 public class CanaryDataWatcher implements DataWatcher {
 
-    private net.minecraft.server.DataWatcher dataWatcher;
+    private net.minecraft.entity.DataWatcher dataWatcher;
 
-    public CanaryDataWatcher(net.minecraft.server.DataWatcher dw) {
+    public CanaryDataWatcher(net.minecraft.entity.DataWatcher dw) {
         dataWatcher = dw;
     }
 
@@ -40,7 +40,7 @@ public class CanaryDataWatcher implements DataWatcher {
         return dataWatcher.e(index);
     }
 
-    public net.minecraft.server.DataWatcher getHandle() {
+    public net.minecraft.entity.DataWatcher getHandle() {
         return dataWatcher;
     }
 }

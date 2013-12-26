@@ -1,6 +1,5 @@
 package net.canarymod.api.factory;
 
-import net.canarymod.NMSToolBox;
 import net.canarymod.api.CanaryMobSpawnerEntry;
 import net.canarymod.api.CanaryVillagerTrade;
 import net.canarymod.api.MobSpawnerEntry;
@@ -12,8 +11,6 @@ import net.canarymod.api.inventory.NativeCustomStorageInventory;
 import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.api.world.Chunk;
 import net.canarymod.api.world.World;
-
-import java.util.Arrays;
 
 /**
  * Object Factory implementation
@@ -82,9 +79,7 @@ public class CanaryObjectFactory implements ObjectFactory {
      * {@inheritDoc}
      */
     @Override
-    public Chunk newChunk(World world, int x, int z) { //TODO: This needs changed
-        byte[] data = new byte[32768];
-        Arrays.fill(data, (byte) 1);
-        return new net.minecraft.world.chunk.Chunk(((CanaryWorld) world).getHandle(), NMSToolBox.blockIdsToBlocks(data), x, z).getCanaryChunk();
+    public Chunk newChunk(World world, int x, int z) {
+        return new net.minecraft.world.chunk.Chunk(((CanaryWorld) world).getHandle(), x, z).getCanaryChunk();
     }
 }

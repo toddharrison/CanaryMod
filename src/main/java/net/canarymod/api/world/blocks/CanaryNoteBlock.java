@@ -25,7 +25,7 @@ public class CanaryNoteBlock extends CanaryTileEntity implements NoteBlock {
      */
     @Override
     public byte getInstrument() {
-        Material material = tileentity.az().g(getX(), getY() - 1, getZ());
+        Material material = tileentity.w().a(getX(), getY() - 1, getZ()).o();
         byte instrument = 0;
 
         if (material == Material.e) {
@@ -60,7 +60,7 @@ public class CanaryNoteBlock extends CanaryTileEntity implements NoteBlock {
      */
     @Override
     public void play() {
-        getTileEntity().a(tileentity.az(), getX(), getY(), getZ());
+        getTileEntity().a(tileentity.w(), getX(), getY(), getZ());
     }
 
     /**

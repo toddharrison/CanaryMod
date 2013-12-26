@@ -40,14 +40,6 @@ public class CanaryAnvil extends CanaryBlockInventory implements Anvil {
      */
     @Override
     public int getX() {
-        return container.i;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int getY() {
         return container.j;
     }
 
@@ -55,7 +47,7 @@ public class CanaryAnvil extends CanaryBlockInventory implements Anvil {
      * {@inheritDoc}
      */
     @Override
-    public int getZ() {
+    public int getY() {
         return container.k;
     }
 
@@ -63,8 +55,16 @@ public class CanaryAnvil extends CanaryBlockInventory implements Anvil {
      * {@inheritDoc}
      */
     @Override
+    public int getZ() {
+        return container.l;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public World getWorld() {
-        return container.h.getCanaryWorld();
+        return container.i.getCanaryWorld();
     }
 
     /**
@@ -181,11 +181,11 @@ public class CanaryAnvil extends CanaryBlockInventory implements Anvil {
     }
 
     private InventoryBasic getInventory() {
-        return (InventoryBasic) container.g;
+        return (InventoryBasic) container.h;
     }
 
     private InventoryCraftResult getCraftResult() {
-        return (InventoryCraftResult) container.f;
+        return (InventoryCraftResult) container.g;
     }
 
 }

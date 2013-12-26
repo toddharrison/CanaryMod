@@ -20,7 +20,7 @@ public class CanaryBiome implements Biome {
      */
     @Override
     public boolean canSpawnLightning() {
-        return handle.d();
+        return handle.e();
     }
 
     /**
@@ -28,7 +28,7 @@ public class CanaryBiome implements Biome {
      */
     @Override
     public boolean isTropic() {
-        return handle.e();
+        return handle.f();
     }
 
     /**
@@ -52,7 +52,7 @@ public class CanaryBiome implements Biome {
      */
     @Override
     public float getTemperature() {
-        return handle.j();
+        return handle.ao;
     }
 
     /**
@@ -68,7 +68,7 @@ public class CanaryBiome implements Biome {
      */
     @Override
     public BiomeType getBiomeType() {
-        return BiomeType.fromId((byte) handle.N);
+        return BiomeType.fromId((byte) handle.ay);
     }
 
     /**
@@ -100,7 +100,7 @@ public class CanaryBiome implements Biome {
      */
     @Override
     public boolean canSnow() {
-        return handle.c();
+        return handle.d();
     }
 
     /**

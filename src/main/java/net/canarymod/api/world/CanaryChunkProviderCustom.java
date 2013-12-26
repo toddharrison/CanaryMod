@@ -32,14 +32,14 @@ public class CanaryChunkProviderCustom implements IChunkProvider {
 
     //provideChunk
     @Override
-    public Chunk d(int i0, int i1) {
+    public net.minecraft.world.chunk.Chunk d(int i0, int i1) {
         CanaryChunk c = (CanaryChunk) provider.provideChunk(i0, i1);
         return c != null ? c.getHandle() : null;
     }
 
     //loadChunk
     @Override
-    public Chunk c(int i0, int i1) {
+    public net.minecraft.world.chunk.Chunk c(int i0, int i1) {
         return handle.c(i0, i1);
     }
 
@@ -83,7 +83,7 @@ public class CanaryChunkProviderCustom implements IChunkProvider {
 
     //Find closes structure
     @Override
-    public ChunkPosition a(World world, String s0, int i0, int i1, int i2) {
+    public ChunkPosition a(net.minecraft.world.World world, String s0, int i0, int i1, int i2) {
         return handle.a(world, s0, i0, i1, i2);
     }
 

@@ -3,7 +3,7 @@ package net.canarymod.api.world;
 import net.canarymod.api.entity.Entity;
 import net.canarymod.api.world.blocks.TileEntity;
 import net.canarymod.api.world.position.Position;
-import net.minecraft.server.ChunkPosition;
+import net.minecraft.world.ChunkPosition;
 
 import java.util.HashMap;
 import java.util.List;
@@ -40,12 +40,12 @@ public class CanaryChunk implements Chunk {
 
     @Override
     public int getBlockTypeAt(int x, int y, int z) {
-        return handle.a(x, y, z);
+        return net.minecraft.block.Block.b(handle.a(x, y, z));
     }
 
     @Override
     public void setBlockTypeAt(int x, int y, int z, int type) {
-        handle.b(x, y, z, type);
+        handle.a(x, y, z, net.minecraft.block.Block.e(type), 0);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class CanaryChunk implements Chunk {
 
     @Override
     public void setBlockDataAt(int x, int y, int z, int data) {
-        handle.b(x, y, z, data);
+        handle.a(x, y, z, data);
     }
 
     @Override
@@ -113,7 +113,7 @@ public class CanaryChunk implements Chunk {
         synchronized (handle.i) {
             for (ChunkPosition pos : (Set<ChunkPosition>) handle.i.keySet()) {
                 Position cPos = new Position(pos.a, pos.b, pos.c);
-                net.minecraft.server.TileEntity te = (net.minecraft.server.TileEntity) handle.i.get(pos);
+                net.minecraft.tileentity.TileEntity te = (net.minecraft.tileentity.TileEntity) handle.i.get(pos);
                 if (te.complexBlock != null) {
                     toRet.put(cPos, te.complexBlock);
                 }
@@ -132,7 +132,7 @@ public class CanaryChunk implements Chunk {
         List<Entity>[] toRet = new List[handle.j.length];
         for (int index = 0; index < handle.j.length; index++) {
             for (Object e : handle.j[index]) {
-                toRet[index].add(((net.minecraft.server.Entity) e).getCanaryEntity());
+                toRet[index].add(((net.minecraft.entity.Entity) e).getCanaryEntity());
             }
         }
         return toRet;
@@ -150,7 +150,7 @@ public class CanaryChunk implements Chunk {
 
     @Override
     public long getLastSaveTime() {
-        return handle.n;
+        return handle.p;
     }
 
     @Override
@@ -171,10 +171,10 @@ public class CanaryChunk implements Chunk {
     @Override
     public void updateSkyLightMap(boolean force) {
         if (force) {
-            handle.q();
+            handle.p();
         }
         else {
-            handle.k();
+            handle.o();
         }
     }
 

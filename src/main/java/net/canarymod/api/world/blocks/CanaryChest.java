@@ -86,7 +86,7 @@ public class CanaryChest extends CanaryBlockInventory implements Chest {
      */
     @Override
     public void clearContents() {
-        Arrays.fill(getTileEntity().i, null);
+        Arrays.fill(getTileEntity().p, null);
     }
 
     /**
@@ -94,7 +94,7 @@ public class CanaryChest extends CanaryBlockInventory implements Chest {
      */
     @Override
     public Item[] clearInventory() {
-        ItemStack[] items = Arrays.copyOf(getTileEntity().i, getSize());
+        ItemStack[] items = Arrays.copyOf(getTileEntity().p, getSize());
 
         clearContents();
         return CanaryItem.stackArrayToItemArray(items);
@@ -105,7 +105,7 @@ public class CanaryChest extends CanaryBlockInventory implements Chest {
      */
     @Override
     public Item[] getContents() {
-        return CanaryItem.stackArrayToItemArray(getTileEntity().i);
+        return CanaryItem.stackArrayToItemArray(getTileEntity().p);
     }
 
     /**

@@ -1,21 +1,16 @@
 package net.canarymod;
 
-import java.awt.GraphicsEnvironment;
-import java.io.File;
-import java.util.logging.Level;
-
 import net.canarymod.api.inventory.CanaryEnchantment;
 import net.canarymod.api.inventory.CanaryItem;
 import net.canarymod.api.inventory.Enchantment;
 import net.canarymod.api.inventory.Item;
 import net.canarymod.serialize.EnchantmentSerializer;
 import net.canarymod.serialize.ItemSerializer;
-import net.minecraft.server.LogAgent;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.TextAreaLogHandler;
+
+import java.awt.*;
 
 public class Main {
-    private static LogAgent la;
     private static CanaryMod mod;
 
     private static void initBird() {
@@ -38,7 +33,8 @@ public class Main {
         System.out.println("Starting: " + Canary.getImplementationTitle() + " " + Canary.getImplementationVersion() + " Specified By: " + Canary.getSpecificationTitle() + " " + Canary.getSpecificationVersion());
         try {
             Class.forName("org.sqlite.JDBC");
-        } catch (ClassNotFoundException e) {
+        }
+        catch (ClassNotFoundException e) {
         } // Need to initialize the SQLite driver for some reason, initialize here for plugin use as well
         try {
             MinecraftServer.setHeadless(GraphicsEnvironment.isHeadless());
@@ -47,20 +43,21 @@ public class Main {
                 String value = index == args.length - 1 ? null : args[index + 1];
                 if (key.equals("nogui") || key.equals("--nogui")) {
                     MinecraftServer.setHeadless(true);
-                } else if (key.equals("--universe") && value != null) {
+                }
+                else if (key.equals("--universe") && value != null) {
                     // Initialize Logging to universe argument
-                    la = new LogAgent("Minecraft-Server", (String) null, (new File(new File(value), "server.log")).getAbsolutePath());
+                    //la = new LogAgent("Minecraft-Server", (String) null, (new File(new File(value), "server.log")).getAbsolutePath());
                 }
             }
 
-            if (la == null) { // If universe wasn't set we need to initialize to the working directory
-                la = new LogAgent("Minecraft-Server", (String) null, (new File(new File("."), "server.log")).getAbsolutePath());
-            }
-            la.a().setLevel(Level.ALL);
+            //if (la == null) { // If universe wasn't set we need to initialize to the working directory
+            //    la = new LogAgent("Minecraft-Server", (String) null, (new File(new File("."), "server.log")).getAbsolutePath());
+            //}
+            //la.a().setLevel(Level.ALL);
 
-            if (!MinecraftServer.isHeadless()) {
-                TextAreaLogHandler.getLogHandler().poke();
-            }
+            //if (!MinecraftServer.isHeadless()) {
+            //    TextAreaLogHandler.getLogHandler().poke();
+            //}
 
             initBird(); // Initialize the Bird
             MinecraftServer.main(args); // Boot up the native server
@@ -77,7 +74,8 @@ public class Main {
             mod.initCommands();
             // and finally throw in the MOTDListner
             mod.initMOTDListener();
-        } catch (Throwable t) {
+        }
+        catch (Throwable t) {
             Canary.logStacktrace("Exception while starting the server: ", t);
         }
     }
@@ -89,12 +87,5 @@ public class Main {
      */
     public static void restart(boolean reloadCanary) {
         throw new UnsupportedOperationException("Restart is not implemented yet!");
-    }
-
-    /**
-     * INTERNAL USE ONLY
-     */
-    public static LogAgent getLogAgent() {
-        return la;
     }
 }

@@ -28,9 +28,26 @@ import net.canarymod.api.world.position.Location;
 import net.canarymod.api.world.position.Position;
 import net.canarymod.config.Configuration;
 import net.canarymod.config.WorldConfiguration;
+import net.minecraft.block.BlockJukebox;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.tileentity.TileEntityBeacon;
+import net.minecraft.tileentity.TileEntityBrewingStand;
+import net.minecraft.tileentity.TileEntityChest;
+import net.minecraft.tileentity.TileEntityCommandBlock;
+import net.minecraft.tileentity.TileEntityComparator;
+import net.minecraft.tileentity.TileEntityDaylightDetector;
+import net.minecraft.tileentity.TileEntityDispenser;
+import net.minecraft.tileentity.TileEntityDropper;
+import net.minecraft.tileentity.TileEntityFurnace;
+import net.minecraft.tileentity.TileEntityHopper;
+import net.minecraft.tileentity.TileEntityMobSpawner;
+import net.minecraft.tileentity.TileEntityNote;
+import net.minecraft.tileentity.TileEntitySign;
+import net.minecraft.tileentity.TileEntitySkull;
 import net.minecraft.world.WorldServer;
+import net.minecraft.world.WorldSettings;
+import net.minecraft.world.storage.WorldInfo;
 import net.visualillusionsent.utils.TaskManager;
 
 import java.util.ArrayList;
@@ -612,7 +629,7 @@ public class CanaryWorld implements World {
 
     @Override
     public TileEntity getOnlyTileEntityAt(int x, int y, int z) {
-        net.minecraft.server.TileEntity tileentity = world.r(x, y, z);
+        net.minecraft.tileentity.TileEntity tileentity = world.r(x, y, z);
 
         if (tileentity != null) {
             if (tileentity instanceof TileEntityBrewingStand) {
@@ -651,8 +668,8 @@ public class CanaryWorld implements World {
             else if (tileentity instanceof TileEntityNote) {
                 return ((TileEntityNote) tileentity).getCanaryNoteBlock();
             }
-            else if (tileentity instanceof TileEntityRecordPlayer) {
-                return ((TileEntityRecordPlayer) tileentity).getCanaryJukebox();
+            else if (tileentity instanceof BlockJukebox.TileEntityJukebox) {
+                return ((BlockJukebox.TileEntityJukebox) tileentity).getCanaryJukebox();
             }
             else if (tileentity instanceof TileEntitySign) {
                 return ((TileEntitySign) tileentity).getCanarySign();
@@ -693,7 +710,7 @@ public class CanaryWorld implements World {
 
     @Override
     public void setGameMode(GameMode mode) {
-        world.x.a(EnumGameType.a(mode.getId()));
+        world.x.a(WorldSettings.GameType.a(mode.getId()));
     }
 
     @Override

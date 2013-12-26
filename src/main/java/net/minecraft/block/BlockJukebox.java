@@ -129,5 +129,10 @@ public class BlockJukebox extends BlockContainer {
             this.a = itemstack;
             this.e();
         }
+
+        // CanaryMod
+        public CanaryJukebox getCanaryJukebox() {
+            return (CanaryJukebox) complexBlock;
+        }
     }
 }

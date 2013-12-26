@@ -45,7 +45,7 @@ public class CanaryConfigurationManager implements ConfigurationManager {
 
     @Override
     public Player getPlayerByName(String name) {
-        EntityPlayerMP player = manager.f(name);
+        EntityPlayerMP player = manager.e(name);
         return player == null ? null : player.getPlayer();
     }
 

@@ -31,7 +31,7 @@ public class TileEntity {
 
     // CanaryMod: Variable Declaration
     public net.canarymod.api.world.blocks.TileEntity complexBlock;
-    private CanaryCompoundTag meta = new CanaryCompoundTag("Canary"); // hold it for extra data
+    private CanaryCompoundTag meta = new CanaryCompoundTag(); // hold it for extra data
 
     // CanaryMod: End
 

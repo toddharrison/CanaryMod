@@ -39,7 +39,7 @@ public class CanaryBrewingStand extends CanaryBlockInventory implements BrewingS
      */
     @Override
     public void clearContents() {
-        Arrays.fill(getTileEntity().c, null);
+        Arrays.fill(getTileEntity().j, null);
     }
 
     /**
@@ -47,7 +47,7 @@ public class CanaryBrewingStand extends CanaryBlockInventory implements BrewingS
      */
     @Override
     public Item[] clearInventory() {
-        ItemStack[] items = Arrays.copyOf(getTileEntity().c, getTileEntity().c.length);
+        ItemStack[] items = Arrays.copyOf(getTileEntity().j, getTileEntity().j.length);
 
         clearContents();
         return CanaryItem.stackArrayToItemArray(items);
@@ -58,7 +58,7 @@ public class CanaryBrewingStand extends CanaryBlockInventory implements BrewingS
      */
     @Override
     public Item[] getContents() {
-        return CanaryItem.stackArrayToItemArray(getTileEntity().c);
+        return CanaryItem.stackArrayToItemArray(getTileEntity().j);
     }
 
     /**

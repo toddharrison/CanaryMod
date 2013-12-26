@@ -95,7 +95,7 @@ public class CanaryHopperBlock extends CanaryBlockInventory implements HopperBlo
      */
     @Override
     public World getWorld() {
-        return this.getTileEntity().az().getCanaryWorld();
+        return this.getTileEntity().w().getCanaryWorld();
     }
 
     /**

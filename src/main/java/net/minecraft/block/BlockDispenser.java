@@ -115,7 +115,7 @@ public class BlockDispenser extends BlockContainer {
         }
     }
 
-    protected IBehaviorDispenseItem a(ItemStack itemstack) {
+    public IBehaviorDispenseItem a(ItemStack itemstack) { // CanaryMod: protected => public
         return (IBehaviorDispenseItem) a.a(itemstack.b());
     }
 

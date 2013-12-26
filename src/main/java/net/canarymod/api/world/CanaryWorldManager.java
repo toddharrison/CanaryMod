@@ -1,14 +1,19 @@
 package net.canarymod.api.world;
 
-import java.io.File;
-import java.util.*;
-
 import net.canarymod.Canary;
 import net.canarymod.api.CanaryServer;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.hook.system.UnloadWorldHook;
 import net.canarymod.logger.Logman;
-import net.minecraft.server.WorldServer;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 /**
  * This is a container for all of the worlds.
@@ -62,7 +67,7 @@ public class CanaryWorldManager implements WorldManager {
 
     @Override
     public World getWorld(String name, boolean autoload) {
-        DimensionType t = DimensionType.fromName(name.substring(Math.max(0, name.lastIndexOf("_")+1)));
+        DimensionType t = DimensionType.fromName(name.substring(Math.max(0, name.lastIndexOf("_") + 1)));
         String nameOnly = name.substring(0, Math.max(0, name.lastIndexOf("_")));
 
         if (t != null) {
@@ -71,9 +76,11 @@ public class CanaryWorldManager implements WorldManager {
 
         if (loadedWorlds.containsKey(name)) {
             return loadedWorlds.get(name);
-        } else if (loadedWorlds.containsKey(name + "_NORMAL")) {
+        }
+        else if (loadedWorlds.containsKey(name + "_NORMAL")) {
             return loadedWorlds.get(name + "_NORMAL");
-        } else {
+        }
+        else {
             if (autoload) {
                 if (existingWorlds.contains(name)) {
                     return loadWorld(name, DimensionType.fromId(0));
@@ -93,16 +100,19 @@ public class CanaryWorldManager implements WorldManager {
     public World getWorld(String world, DimensionType type, boolean autoload) {
         if (worldIsLoaded(world + "_" + type.getName())) {
             return loadedWorlds.get(world + "_" + type.getName());
-        } else {
+        }
+        else {
             if (worldExists(world + "_" + type.getName()) && autoload) {
                 Logman.println("World exists but is not loaded. Loading ...");
                 return loadWorld(world, type);
-            } else {
+            }
+            else {
                 if (autoload) {
                     Logman.println("World does not exist, we can autoload, will load!");
                     createWorld(world, type);
                     return loadedWorlds.get(world + "_" + type.getName());
-                } else {
+                }
+                else {
                     Canary.logSevere("Tried to get a non-existing world: " + world + " - you must create it before you can load it or pass autoload = true");
                     return null;
                 }
@@ -136,7 +146,8 @@ public class CanaryWorldManager implements WorldManager {
         if (!worldIsLoaded(name + "_" + type.getName())) {
             ((CanaryServer) Canary.getServer()).getHandle().loadWorld(name, new Random().nextLong(), type);
             return loadedWorlds.get(name + "_" + type.getName());
-        } else {
+        }
+        else {
             return loadedWorlds.get(name + "_" + type.getName());
         }
     }
