@@ -88,7 +88,7 @@ public class CanaryXPOrb extends CanaryEntity implements XPOrb {
      */
     @Override
     public short getXPValue() {
-        return (short) getHandle().c();
+        return (short) getHandle().e();
     }
 
     /**

@@ -33,7 +33,7 @@ public class EntityArrow extends Entity implements IProjectile {
     private int f = -1;
     private Block g;
     private int h;
-    private boolean i;
+    public boolean i; // CanaryMod: private => public; inGround
     public int a;
     public int b;
     public Entity c;

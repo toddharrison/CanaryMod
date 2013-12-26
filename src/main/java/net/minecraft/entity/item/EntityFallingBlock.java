@@ -249,4 +249,9 @@ public class EntityFallingBlock extends Entity {
     public Block f() {
         return this.e;
     }
+
+    // CanaryMod
+    public void setBlock(Block block) {
+        this.e = block;
+    }
 }

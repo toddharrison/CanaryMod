@@ -116,7 +116,7 @@ public class CanaryLargeFireball extends CanaryFireball implements LargeFireball
     @Override
     public void detonate() {
         this.destroy();
-        getHandle().q.a(getHandle(), getX(), getY(), getZ(), getPower(), true, damageWorld);
+        getHandle().p.a(getHandle(), getX(), getY(), getZ(), getPower(), true, damageWorld);
     }
 
     /**

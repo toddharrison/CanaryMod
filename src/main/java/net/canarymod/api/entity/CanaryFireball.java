@@ -110,7 +110,7 @@ public abstract class CanaryFireball extends CanaryEntity implements Fireball {
      */
     @Override
     public float getMotionFactor() {
-        return getHandle().c();
+        return getHandle().e();
     }
 
     /**

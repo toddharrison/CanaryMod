@@ -55,7 +55,7 @@ public class CanaryArrow extends CanaryProjectile implements Arrow {
      */
     @Override
     public double getDamage() {
-        return getHandle().c();
+        return getHandle().e();
     }
 
     /**
@@ -71,7 +71,7 @@ public class CanaryArrow extends CanaryProjectile implements Arrow {
      */
     @Override
     public boolean isCritical() {
-        return getHandle().d();
+        return getHandle().f();
     }
 
     /**

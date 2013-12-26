@@ -33,7 +33,7 @@ public class CanaryWitherSkull extends CanaryFireball implements WitherSkull {
      */
     @Override
     public boolean isInvulnerable() {
-        return getHandle().d();
+        return getHandle().f();
     }
 
     /**
@@ -126,7 +126,7 @@ public class CanaryWitherSkull extends CanaryFireball implements WitherSkull {
      */
     @Override
     public void detonate() {
-        getHandle().q.a(getHandle(), getX(), getY(), getZ(), getPower(), false, damageWorld);
+        getHandle().p.a(getHandle(), getX(), getY(), getZ(), getPower(), false, damageWorld);
     }
 
     /**

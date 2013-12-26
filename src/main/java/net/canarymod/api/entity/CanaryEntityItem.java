@@ -70,7 +70,7 @@ public class CanaryEntityItem extends CanaryEntity implements EntityItem {
      */
     @Override
     public short getHealth() {
-        return (short) getHandle().d;
+        return (short) getHandle().e;
     }
 
     /**
@@ -78,7 +78,7 @@ public class CanaryEntityItem extends CanaryEntity implements EntityItem {
      */
     @Override
     public void setHealth(short health) {
-        getHandle().d = Math.min(health, 255);
+        getHandle().e = Math.min(health, 255);
     }
 
     /**
@@ -86,7 +86,7 @@ public class CanaryEntityItem extends CanaryEntity implements EntityItem {
      */
     @Override
     public CanaryItem getItem() {
-        return getHandle().d().getCanaryItem();
+        return getHandle().f().getCanaryItem();
     }
 
     /**
