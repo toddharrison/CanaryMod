@@ -16,6 +16,8 @@ import net.canarymod.api.potion.PotionEffectType;
 import net.canarymod.api.world.position.Location;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.network.play.server.S08PacketPlayerPosLook;
+import net.minecraft.network.play.server.S19PacketEntityHeadLook;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -32,7 +34,7 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
      */
     @Override
     public float getHealth() {
-        return getHandle().aN();
+        return getHandle().aS();
     }
 
     /**
@@ -112,7 +114,7 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
      */
     @Override
     public int getAge() {
-        return getHandle().aF();
+        return getHandle().aN();
     }
 
     /**
@@ -128,7 +130,7 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
      */
     @Override
     public void kill() {
-        this.dealDamage(DamageType.GENERIC, 10000.0F); //overkill?
+        this.dealDamage(DamageType.GENERIC, Float.MAX_VALUE); //overkill?
     }
 
     /**
@@ -173,7 +175,7 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
      * {@inheritDoc}
      */
     public void removePotionEffect(PotionEffectType type) {
-        getHandle().k(type.getID());
+        getHandle().m(type.getID());
     }
 
     /**
@@ -212,7 +214,7 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
     @SuppressWarnings("unchecked")
     @Override
     public List<PotionEffect> getAllActivePotionEffects() {
-        Collection<net.minecraft.potion.PotionEffect> effect_collection = ((net.minecraft.entity.EntityLivingBase) entity).aL();
+        Collection<net.minecraft.potion.PotionEffect> effect_collection = ((net.minecraft.entity.EntityLivingBase) entity).aQ();
         List<PotionEffect> list = new ArrayList<PotionEffect>();
 
         for (net.minecraft.potion.PotionEffect nms_effect : effect_collection) {
@@ -226,7 +228,7 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
      */
     @Override
     public LivingBase getRevengeTarget() {
-        net.minecraft.entity.EntityLivingBase target = getHandle().aE();
+        net.minecraft.entity.EntityLivingBase target = getHandle().aJ();
         if (target != null) {
             return (LivingBase) target.getCanaryEntity();
         }
@@ -251,7 +253,7 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
      */
     @Override
     public LivingBase getLastAssailant() {
-        net.minecraft.entity.EntityLivingBase target = ((net.minecraft.server.EntityLivingBase) entity).aE();
+        net.minecraft.entity.EntityLivingBase target = ((net.minecraft.entity.EntityLivingBase) entity).aL();
         if (target != null) {
             return (EntityLiving) target.getCanaryEntity();
         }
@@ -292,20 +294,15 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
         setPitch((float) pitch);
 
         net.minecraft.network.Packet toSend;
-
+        //TODO: Probably just jacked this all sorts of up
         if (isPlayer()) {
-            toSend = new Packet12PlayerLook();
-            Packet12PlayerLook toSend2 = (Packet12PlayerLook) toSend;
-
-            toSend2.e = (float) yaw;
-            toSend2.f = (float) pitch;
-            ((Player) this.entity).sendPacket(new CanaryPacket(toSend));
+            toSend = new S08PacketPlayerPosLook(getX(), getY(), getZ(), getRotation(), getPitch(), entity.E);
+            ((Player) this).sendPacket(new CanaryPacket(toSend));
         }
         else {
-            double rotation2 = Math.floor((yaw * 256F) / 360F);
-            double pitch2 = Math.floor((pitch * 256F) / 360F);
+            byte head = (byte) (((long) Math.floor((pitch * 256F) / 360F)) & 255);
 
-            toSend = new Packet32EntityLook(getID(), (byte) rotation2, (byte) pitch2);
+            toSend = new S19PacketEntityHeadLook(entity, head);
             Canary.getServer().getConfigurationManager().sendPacketToAllInWorld(getWorld().getName(), new CanaryPacket(toSend));
         }
     }
@@ -331,7 +328,7 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
      */
     @Override
     public int getArrowCountInEntity() {
-        return getHandle().aU();
+        return getHandle().aZ();
     }
 
     /**
@@ -339,7 +336,7 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
      */
     @Override
     public void setArrowCountInEntity(int arrows) {
-        getHandle().m(arrows);
+        getHandle().p(arrows);
     }
 
     /**
@@ -347,7 +344,7 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
      */
     @Override
     public void swingArm() {
-        getHandle().aR();
+        getHandle().ba();
     }
 
     @Override

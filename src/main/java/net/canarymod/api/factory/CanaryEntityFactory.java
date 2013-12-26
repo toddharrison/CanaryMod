@@ -18,66 +18,66 @@ import net.canarymod.api.entity.vehicle.Vehicle;
 import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.api.world.World;
 import net.canarymod.api.world.position.Location;
-import net.minecraft.server.EntityArrow;
-import net.minecraft.server.EntityBat;
-import net.minecraft.server.EntityBlaze;
-import net.minecraft.server.EntityBoat;
-import net.minecraft.server.EntityCaveSpider;
-import net.minecraft.server.EntityChicken;
-import net.minecraft.server.EntityCow;
-import net.minecraft.server.EntityCreeper;
-import net.minecraft.server.EntityDragon;
-import net.minecraft.server.EntityEgg;
-import net.minecraft.server.EntityEnderCrystal;
-import net.minecraft.server.EntityEnderEye;
-import net.minecraft.server.EntityEnderPearl;
-import net.minecraft.server.EntityEnderman;
-import net.minecraft.server.EntityExpBottle;
-import net.minecraft.server.EntityFallingSand;
-import net.minecraft.server.EntityFireworkRocket;
-import net.minecraft.server.EntityGhast;
-import net.minecraft.server.EntityGiantZombie;
-import net.minecraft.server.EntityHorse;
-import net.minecraft.server.EntityIronGolem;
-import net.minecraft.server.EntityItem;
-import net.minecraft.server.EntityItemFrame;
-import net.minecraft.server.EntityLargeFireball;
-import net.minecraft.server.EntityLeashKnot;
-import net.minecraft.server.EntityLightningBolt;
-import net.minecraft.server.EntityMagmaCube;
-import net.minecraft.server.EntityMinecartChest;
-import net.minecraft.server.EntityMinecartEmpty;
-import net.minecraft.server.EntityMinecartFurnace;
-import net.minecraft.server.EntityMinecartHopper;
-import net.minecraft.server.EntityMinecartMobSpawner;
-import net.minecraft.server.EntityMinecartTNT;
-import net.minecraft.server.EntityMooshroom;
-import net.minecraft.server.EntityOcelot;
-import net.minecraft.server.EntityPainting;
-import net.minecraft.server.EntityPig;
-import net.minecraft.server.EntityPigZombie;
-import net.minecraft.server.EntityPotion;
-import net.minecraft.server.EntitySheep;
-import net.minecraft.server.EntitySilverfish;
-import net.minecraft.server.EntitySkeleton;
-import net.minecraft.server.EntitySlime;
-import net.minecraft.server.EntitySmallFireball;
-import net.minecraft.server.EntitySnowball;
-import net.minecraft.server.EntitySnowman;
-import net.minecraft.server.EntitySpider;
-import net.minecraft.server.EntitySquid;
-import net.minecraft.server.EntityTNTPrimed;
-import net.minecraft.server.EntityVillager;
-import net.minecraft.server.EntityWitch;
-import net.minecraft.server.EntityWither;
-import net.minecraft.server.EntityWitherSkull;
-import net.minecraft.server.EntityWolf;
-import net.minecraft.server.EntityXPOrb;
-import net.minecraft.server.EntityZombie;
+import net.minecraft.entity.EntityLeashKnot;
+import net.minecraft.entity.boss.EntityDragon;
+import net.minecraft.entity.boss.EntityWither;
+import net.minecraft.entity.effect.EntityLightningBolt;
+import net.minecraft.entity.item.EntityBoat;
+import net.minecraft.entity.item.EntityEnderCrystal;
+import net.minecraft.entity.item.EntityEnderEye;
+import net.minecraft.entity.item.EntityEnderPearl;
+import net.minecraft.entity.item.EntityExpBottle;
+import net.minecraft.entity.item.EntityFallingBlock;
+import net.minecraft.entity.item.EntityFireworkRocket;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.EntityItemFrame;
+import net.minecraft.entity.item.EntityMinecartChest;
+import net.minecraft.entity.item.EntityMinecartEmpty;
+import net.minecraft.entity.item.EntityMinecartFurnace;
+import net.minecraft.entity.item.EntityMinecartHopper;
+import net.minecraft.entity.item.EntityMinecartMobSpawner;
+import net.minecraft.entity.item.EntityMinecartTNT;
+import net.minecraft.entity.item.EntityPainting;
+import net.minecraft.entity.item.EntityTNTPrimed;
+import net.minecraft.entity.item.EntityXPOrb;
+import net.minecraft.entity.monster.EntityBlaze;
+import net.minecraft.entity.monster.EntityCaveSpider;
+import net.minecraft.entity.monster.EntityCreeper;
+import net.minecraft.entity.monster.EntityEnderman;
+import net.minecraft.entity.monster.EntityGhast;
+import net.minecraft.entity.monster.EntityGiantZombie;
+import net.minecraft.entity.monster.EntityIronGolem;
+import net.minecraft.entity.monster.EntityMagmaCube;
+import net.minecraft.entity.monster.EntityPigZombie;
+import net.minecraft.entity.monster.EntitySilverfish;
+import net.minecraft.entity.monster.EntitySkeleton;
+import net.minecraft.entity.monster.EntitySlime;
+import net.minecraft.entity.monster.EntitySnowman;
+import net.minecraft.entity.monster.EntitySpider;
+import net.minecraft.entity.monster.EntityWitch;
+import net.minecraft.entity.monster.EntityZombie;
+import net.minecraft.entity.passive.EntityBat;
+import net.minecraft.entity.passive.EntityChicken;
+import net.minecraft.entity.passive.EntityCow;
+import net.minecraft.entity.passive.EntityHorse;
+import net.minecraft.entity.passive.EntityMooshroom;
+import net.minecraft.entity.passive.EntityOcelot;
+import net.minecraft.entity.passive.EntityPig;
+import net.minecraft.entity.passive.EntitySheep;
+import net.minecraft.entity.passive.EntitySquid;
+import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.entity.passive.EntityWolf;
+import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.entity.projectile.EntityEgg;
+import net.minecraft.entity.projectile.EntityLargeFireball;
+import net.minecraft.entity.projectile.EntityPotion;
+import net.minecraft.entity.projectile.EntitySmallFireball;
+import net.minecraft.entity.projectile.EntitySnowball;
+import net.minecraft.entity.projectile.EntityWitherSkull;
 
 /**
  * Entity Manufacturing Factory implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryEntityFactory implements EntityFactory {
@@ -94,7 +94,8 @@ public class CanaryEntityFactory implements EntityFactory {
 
             try {
                 type = EntityType.valueOf(name.toUpperCase());
-            } catch (IllegalArgumentException iaex) {
+            }
+            catch (IllegalArgumentException iaex) {
                 return null;
             }
             return newEntity(type, world);
@@ -128,7 +129,7 @@ public class CanaryEntityFactory implements EntityFactory {
     @Override
     public Entity newEntity(EntityType type, World world) {
         if (type != null && world != null) {
-            net.minecraft.server.World mcworld = ((CanaryWorld) world).getHandle();
+            net.minecraft.world.World mcworld = ((CanaryWorld) world).getHandle();
 
             switch (type) {
                 case ARROW:
@@ -180,7 +181,7 @@ public class CanaryEntityFactory implements EntityFactory {
                 case ENTITYPOTION:
                     return new EntityPotion(mcworld).getCanaryEntity();
                 case FALLINGBLOCK:
-                    return new EntityFallingSand(mcworld).getCanaryEntity();
+                    return new EntityFallingBlock(mcworld).getCanaryEntity();
                 case FARMER: // Special Case
                     Villager farmer = (Villager) new EntityVillager(mcworld).getCanaryEntity();
                     farmer.setProfession(Profession.FARMER);
@@ -321,7 +322,8 @@ public class CanaryEntityFactory implements EntityFactory {
 
             try {
                 type = EntityType.valueOf(name.toUpperCase());
-            } catch (IllegalArgumentException iaex) {
+            }
+            catch (IllegalArgumentException iaex) {
                 return null;
             }
             return type.isThrowable() ? (EntityThrowable) newEntity(type, world) : null;
@@ -336,7 +338,8 @@ public class CanaryEntityFactory implements EntityFactory {
 
             try {
                 type = EntityType.valueOf(name.toUpperCase());
-            } catch (IllegalArgumentException iaex) {
+            }
+            catch (IllegalArgumentException iaex) {
                 return null;
             }
             return type.isThrowable() ? (EntityThrowable) newEntity(type, location) : null;
@@ -377,7 +380,8 @@ public class CanaryEntityFactory implements EntityFactory {
 
             try {
                 type = EntityType.valueOf(name.toUpperCase());
-            } catch (IllegalArgumentException iaex) {
+            }
+            catch (IllegalArgumentException iaex) {
                 return null;
             }
             return type.isVehicle() ? (Vehicle) newEntity(type, world) : null;
@@ -392,7 +396,8 @@ public class CanaryEntityFactory implements EntityFactory {
 
             try {
                 type = EntityType.valueOf(name.toUpperCase());
-            } catch (IllegalArgumentException iaex) {
+            }
+            catch (IllegalArgumentException iaex) {
                 return null;
             }
             return type.isVehicle() ? (Vehicle) newEntity(type, location) : null;
@@ -433,7 +438,8 @@ public class CanaryEntityFactory implements EntityFactory {
 
             try {
                 type = EntityType.valueOf(name.toUpperCase());
-            } catch (IllegalArgumentException iaex) {
+            }
+            catch (IllegalArgumentException iaex) {
                 return null;
             }
             return type.isLiving() ? (EntityLiving) newEntity(type, world) : null;
@@ -448,7 +454,8 @@ public class CanaryEntityFactory implements EntityFactory {
 
             try {
                 type = EntityType.valueOf(name.toUpperCase());
-            } catch (IllegalArgumentException iaex) {
+            }
+            catch (IllegalArgumentException iaex) {
                 return null;
             }
             return type.isLiving() ? (EntityLiving) newEntity(type, location) : null;
@@ -489,7 +496,8 @@ public class CanaryEntityFactory implements EntityFactory {
 
             try {
                 type = EntityType.valueOf(name.toUpperCase());
-            } catch (IllegalArgumentException iaex) {
+            }
+            catch (IllegalArgumentException iaex) {
                 return null;
             }
             return type.isAnimal() ? (EntityAnimal) newEntity(type, world) : null;
@@ -504,7 +512,8 @@ public class CanaryEntityFactory implements EntityFactory {
 
             try {
                 type = EntityType.valueOf(name.toUpperCase());
-            } catch (IllegalArgumentException iaex) {
+            }
+            catch (IllegalArgumentException iaex) {
                 return null;
             }
             return type.isAnimal() ? (EntityAnimal) newEntity(type, location) : null;
@@ -545,7 +554,8 @@ public class CanaryEntityFactory implements EntityFactory {
 
             try {
                 type = EntityType.valueOf(name.toUpperCase());
-            } catch (IllegalArgumentException iaex) {
+            }
+            catch (IllegalArgumentException iaex) {
                 return null;
             }
             return type.isMob() ? (EntityMob) newEntity(type, world) : null;
@@ -560,7 +570,8 @@ public class CanaryEntityFactory implements EntityFactory {
 
             try {
                 type = EntityType.valueOf(name.toUpperCase());
-            } catch (IllegalArgumentException iaex) {
+            }
+            catch (IllegalArgumentException iaex) {
                 return null;
             }
             return type.isMob() ? (EntityMob) newEntity(type, location) : null;

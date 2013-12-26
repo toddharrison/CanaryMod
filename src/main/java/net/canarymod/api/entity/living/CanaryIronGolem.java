@@ -40,7 +40,7 @@ public class CanaryIronGolem extends CanaryEntityLiving implements IronGolem {
      */
     @Override
     public Village getVillage() {
-        return getHandle().bT().getCanaryVillage();
+        return getHandle().bX().getCanaryVillage();
     }
 
     /**
@@ -56,7 +56,7 @@ public class CanaryIronGolem extends CanaryEntityLiving implements IronGolem {
      */
     @Override
     public boolean isPlayerCreated() {
-        return getHandle().bW();
+        return getHandle().ca();
     }
 
     /**
@@ -72,7 +72,7 @@ public class CanaryIronGolem extends CanaryEntityLiving implements IronGolem {
      */
     @Override
     public boolean isHoldingRose() {
-        return getHandle().bV() > 0;
+        return getHandle().bZ() > 0;
     }
 
     /**
@@ -88,7 +88,7 @@ public class CanaryIronGolem extends CanaryEntityLiving implements IronGolem {
      */
     @Override
     public int getHoldRoseTicks() {
-        return getHandle().bV();
+        return getHandle().bZ();
     }
 
     /**

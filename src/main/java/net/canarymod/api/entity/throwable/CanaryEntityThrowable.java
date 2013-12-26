@@ -25,7 +25,7 @@ public abstract class CanaryEntityThrowable extends CanaryEntity implements Enti
      */
     @Override
     public float getGravity() {
-        return ((net.minecraft.entity.projectile.EntityThrowable) getHandle()).gravity;
+        return getHandle().gravity;
     }
 
     /**
@@ -33,7 +33,7 @@ public abstract class CanaryEntityThrowable extends CanaryEntity implements Enti
      */
     @Override
     public void setGravity(float velocity) {
-        ((net.minecraft.entity.projectile.EntityThrowable) getHandle()).gravity = velocity;
+        getHandle().gravity = velocity;
     }
 
     /**
@@ -41,7 +41,7 @@ public abstract class CanaryEntityThrowable extends CanaryEntity implements Enti
      */
     @Override
     public EntityLiving getThrower() {
-        return (EntityLiving) ((net.minecraft.entity.projectile.EntityThrowable) entity).h().getCanaryEntity();
+        return (EntityLiving) getHandle().j().getCanaryEntity();
     }
 
     /**
@@ -49,6 +49,11 @@ public abstract class CanaryEntityThrowable extends CanaryEntity implements Enti
      */
     @Override
     public void setProjectileHeading(double motionX, double motionY, double motionZ, float rotationYaw, float rotationPitch) {
-        ((net.minecraft.entity.projectile.EntityThrowable) entity).c(motionX, motionY, motionZ, rotationYaw, rotationPitch);
+        getHandle().c(motionX, motionY, motionZ, rotationYaw, rotationPitch);
+    }
+
+    @Override
+    public net.minecraft.entity.projectile.EntityThrowable getHandle() {
+        return (net.minecraft.entity.projectile.EntityThrowable) entity;
     }
 }

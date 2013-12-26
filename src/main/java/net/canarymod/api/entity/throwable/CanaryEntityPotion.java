@@ -35,7 +35,7 @@ public class CanaryEntityPotion extends CanaryEntityThrowable implements EntityP
      */
     @Override
     public short getPotionTypeId() {
-        return (short) getHandle().i();
+        return (short) getHandle().k();
     }
 
     /**
