@@ -1,20 +1,21 @@
 package net.canarymod.api.entity.living.humanoid;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import net.canarymod.Canary;
-import net.canarymod.api.packet.CanaryPacket;
 import net.canarymod.api.entity.CanaryEntity;
 import net.canarymod.api.entity.Entity;
 import net.canarymod.api.entity.EntityType;
+import net.canarymod.api.packet.CanaryPacket;
 import net.canarymod.chat.Colors;
-import net.minecraft.server.Packet20NamedEntitySpawn;
-import net.minecraft.server.Packet29DestroyEntity;
+import net.minecraft.network.play.server.S0CPacketSpawnPlayer;
+import net.minecraft.network.play.server.S13PacketDestroyEntities;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * NonPlayableCharacter implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryNonPlayableCharacter extends CanaryHuman implements NonPlayableCharacter {
@@ -23,9 +24,9 @@ public class CanaryNonPlayableCharacter extends CanaryHuman implements NonPlayab
 
     /**
      * Constructs a new wrapper for EntityNonPlayableCharacter
-     * 
+     *
      * @param npc
-     *            the EntityNonPlayableCharacter to wrap
+     *         the EntityNonPlayableCharacter to wrap
      */
     public CanaryNonPlayableCharacter(EntityNonPlayableCharacter npc) {
         super(npc);
@@ -50,7 +51,7 @@ public class CanaryNonPlayableCharacter extends CanaryHuman implements NonPlayab
      */
     @Override
     public void ghost(Player player) {
-        player.sendPacket(new CanaryPacket(new Packet29DestroyEntity(this.getID())));
+        player.sendPacket(new CanaryPacket(new S13PacketDestroyEntities(this.getID())));
     }
 
     /**
@@ -58,7 +59,7 @@ public class CanaryNonPlayableCharacter extends CanaryHuman implements NonPlayab
      */
     @Override
     public void haunt(Player player) {
-        player.sendPacket(new CanaryPacket(new Packet20NamedEntitySpawn(this.getHandle())));
+        player.sendPacket(new CanaryPacket(new S0CPacketSpawnPlayer(this.getHandle())));
     }
 
     /**
@@ -78,7 +79,8 @@ public class CanaryNonPlayableCharacter extends CanaryHuman implements NonPlayab
                         if (distanceTo(player) < distanceTo(toLookAt)) {
                             toLookAt = player;
                         }
-                    } else {
+                    }
+                    else {
                         toLookAt = player;
                     }
                 }
@@ -157,13 +159,15 @@ public class CanaryNonPlayableCharacter extends CanaryHuman implements NonPlayab
                         if (!isDead()) {
                             behavior.onUpdate();
                         }
-                    } catch (Exception ex) {
+                    }
+                    catch (Exception ex) {
                         Canary.logWarning("Exception while calling onUpdate in behavior" + behavior.getClass().getSimpleName() + " for NPC " + this.getName());
                         Canary.logStacktrace("", ex);
                     }
                 }
             }
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             Canary.logWarning("Exception occured while calling update for NPC " + this.getName());
             Canary.logStacktrace("", ex);
         }
@@ -177,13 +181,15 @@ public class CanaryNonPlayableCharacter extends CanaryHuman implements NonPlayab
                         if (!isDead()) {
                             behavior.onClicked(player);
                         }
-                    } catch (Exception ex) {
+                    }
+                    catch (Exception ex) {
                         Canary.logWarning("Exception occured while calling onClicked in behavior" + behavior.getClass().getSimpleName() + " for NPC " + this.getName());
                         Canary.logStacktrace("", ex);
                     }
                 }
             }
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             Canary.logWarning("Exception while calling clicked for NPC " + this.getName());
             Canary.logStacktrace("", ex);
         }
@@ -197,12 +203,14 @@ public class CanaryNonPlayableCharacter extends CanaryHuman implements NonPlayab
                         if (!isDead()) {
                             behavior.onAttacked(entity);
                         }
-                    } catch (Exception ex) {
+                    }
+                    catch (Exception ex) {
                         Canary.logWarning("Exception while calling onAttack in behavior" + behavior.getClass().getSimpleName() + " for NPC " + this.getName());
                     }
                 }
             }
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             Canary.logWarning("Exception occured while calling attacked for NPC " + this.getName());
             Canary.logStacktrace("", ex);
         }
@@ -214,12 +222,14 @@ public class CanaryNonPlayableCharacter extends CanaryHuman implements NonPlayab
                 for (NPCBehavior behavior : behaviors) {
                     try {
                         behavior.onDestroy();
-                    } catch (Exception ex) {
+                    }
+                    catch (Exception ex) {
                         Canary.logWarning("Exception while calling onDestroyed in behavior" + behavior.getClass().getSimpleName() + " for NPC " + this.getName());
                     }
                 }
             }
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             Canary.logWarning("Exception occured while calling destroyed for NPC " + this.getName());
             Canary.logStacktrace("", ex);
         }

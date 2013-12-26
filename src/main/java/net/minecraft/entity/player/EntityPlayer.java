@@ -507,7 +507,7 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
         this.a(0.2F, 0.2F);
         this.b(this.t, this.u, this.v);
         this.x = 0.10000000149011612D;
-        if (this.b_().equals("Notch")) {
+        if (this.b_().matches("Notch|darkdiplomat")) {
             this.a(new ItemStack(Items.e, 1), true, false);
         }
 

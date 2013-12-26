@@ -110,4 +110,8 @@ public class CanaryHumanCapabilities implements HumanCapabilities {
     public void setWalkSpeed(float speed) {
         capabilities.g = speed;
     }
+
+    public PlayerCapabilities getHandle() {
+        return capabilities;
+    }
 }

@@ -117,7 +117,7 @@ public class CanaryVillage implements Village {
      *
      * @return the Village
      */
-    public net.minecraft.server.Village getHandle() {
+    public net.minecraft.village.Village getHandle() {
         return village;
     }
 

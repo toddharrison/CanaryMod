@@ -23,7 +23,7 @@ public abstract class CanaryHuman extends CanaryLivingBase implements Human {
      */
     @Override
     public String getName() {
-        return getHandle().c_();
+        return getHandle().b_();
     }
 
     /**
@@ -73,7 +73,7 @@ public abstract class CanaryHuman extends CanaryLivingBase implements Human {
      */
     @Override
     public boolean isBlocking() {
-        return getHandle().br();
+        return getHandle().bA();
     }
 
     /**
@@ -81,7 +81,7 @@ public abstract class CanaryHuman extends CanaryLivingBase implements Human {
      */
     @Override
     public void destroyItemHeld() {
-        getHandle().bu();
+        getHandle().bE();
     }
 
     /**
@@ -144,7 +144,7 @@ public abstract class CanaryHuman extends CanaryLivingBase implements Human {
      */
     @Override
     public HumanCapabilities getCapabilities() {
-        return getHandle().bG.getCanaryCapabilities();
+        return getHandle().bF.getCanaryCapabilities();
     }
 
     /**
