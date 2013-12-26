@@ -1182,7 +1182,7 @@ public abstract class Entity {
             this.b(this.t, this.u, this.v);
             this.b(this.z, this.A);
             // CanaryMod: allow the saving of persistent metadata
-            this.metadata = nbttagcompound.c("Canary") ? new CanaryCompoundTag(nbttagcompound.m("Canary")) : new CanaryCompoundTag("Canary");
+            this.metadata = nbttagcompound.c("Canary") ? new CanaryCompoundTag(nbttagcompound.m("Canary")) : new CanaryCompoundTag();
             // CanaryMod: END
             this.a(nbttagcompound);
             if (this.V()) {

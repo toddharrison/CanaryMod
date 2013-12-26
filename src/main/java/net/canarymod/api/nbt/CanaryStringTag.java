@@ -1,10 +1,10 @@
 package net.canarymod.api.nbt;
 
-import net.minecraft.server.NBTTagString;
+import net.minecraft.nbt.NBTTagString;
 
 /**
  * StringTag wrapper implementation
- * 
+ *
  * @author Greg (gregthegeek)
  * @author Jason (darkdiplomat)
  */
@@ -12,9 +12,9 @@ public class CanaryStringTag extends CanaryBaseTag implements StringTag {
 
     /**
      * Constructs a new wrapper for NBTTagString
-     * 
+     *
      * @param tag
-     *            the NBTTagString to wrap
+     *         the NBTTagString to wrap
      */
     public CanaryStringTag(NBTTagString tag) {
         super(tag);
@@ -22,14 +22,12 @@ public class CanaryStringTag extends CanaryBaseTag implements StringTag {
 
     /**
      * Constructs a new CanaryStringTag and associated NBTTagString
-     * 
-     * @param name
-     *            the name of the tag
+     *
      * @param value
-     *            the string to supply the tag
+     *         the string to supply the tag
      */
-    public CanaryStringTag(String name, String value) {
-        super(new NBTTagString(name, value));
+    public CanaryStringTag(String value) {
+        super(new NBTTagString(value));
     }
 
     /**
@@ -37,7 +35,7 @@ public class CanaryStringTag extends CanaryBaseTag implements StringTag {
      */
     @Override
     public String getValue() {
-        return getHandle().a;
+        return getHandle().b;
     }
 
     /**
@@ -45,7 +43,7 @@ public class CanaryStringTag extends CanaryBaseTag implements StringTag {
      */
     @Override
     public void setValue(String value) {
-        getHandle().a = value;
+        getHandle().b = value;
     }
 
     /**

@@ -1,20 +1,20 @@
 package net.canarymod.api.nbt;
 
-import net.minecraft.server.NBTTagFloat;
+import net.minecraft.nbt.NBTTagFloat;
 
 /**
  * FloatTag wrapper implementation
- * 
+ *
  * @author Greg (gregthegeek)
  * @author Jason (darkdiplomat)
  */
-public class CanaryFloatTag extends CanaryBaseTag implements FloatTag {
+public class CanaryFloatTag extends CanaryPrimativeTag implements FloatTag {
 
     /**
      * Constructs a new wrapper for NBTTagFloat
-     * 
+     *
      * @param tag
-     *            the NBTTagFloat to wrap
+     *         the NBTTagFloat to wrap
      */
     public CanaryFloatTag(NBTTagFloat tag) {
         super(tag);
@@ -22,14 +22,12 @@ public class CanaryFloatTag extends CanaryBaseTag implements FloatTag {
 
     /**
      * Constructs a new CanaryFloatTag and associated NBTTagFloat
-     * 
-     * @param name
-     *            the name of the tag
+     *
      * @param value
-     *            the float to supply the tag
+     *         the float to supply the tag
      */
-    public CanaryFloatTag(String name, float value) {
-        super(new NBTTagFloat(name, value));
+    public CanaryFloatTag(float value) {
+        super(new NBTTagFloat(value));
     }
 
     /**
@@ -37,7 +35,7 @@ public class CanaryFloatTag extends CanaryBaseTag implements FloatTag {
      */
     @Override
     public float getValue() {
-        return getHandle().a;
+        return getFloatValue();
     }
 
     /**
@@ -45,7 +43,7 @@ public class CanaryFloatTag extends CanaryBaseTag implements FloatTag {
      */
     @Override
     public void setValue(float value) {
-        getHandle().a = value;
+        getHandle().b = value;
     }
 
     /**

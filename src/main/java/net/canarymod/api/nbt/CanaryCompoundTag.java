@@ -26,11 +26,8 @@ public class CanaryCompoundTag extends CanaryBaseTag implements CompoundTag {
 
     /**
      * Constructs a new CanaryCompoundTag and associated NBTTagCompound
-     *
-     * @param name
-     *         the name of the tag
      */
-    public CanaryCompoundTag(String name) {
+    public CanaryCompoundTag() {
         super(new NBTTagCompound());
     }
 
@@ -156,7 +153,7 @@ public class CanaryCompoundTag extends CanaryBaseTag implements CompoundTag {
      */
     @Override
     public boolean containsKey(String key) {
-        return getHandle().b(key);
+        return getHandle().c(key);
     }
 
     /**

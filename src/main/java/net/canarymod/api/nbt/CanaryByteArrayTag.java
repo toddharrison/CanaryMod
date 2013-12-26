@@ -23,12 +23,10 @@ public class CanaryByteArrayTag extends CanaryBaseTag implements ByteArrayTag {
     /**
      * Constructs a new CanaryByteArrayTag and associated NBTTagByteArray
      *
-     * @param name
-     *         the name of the tag
      * @param value
      *         the byte array to supply the tag
      */
-    public CanaryByteArrayTag(String name, byte[] value) {
+    public CanaryByteArrayTag(byte[] value) {
         super(new NBTTagByteArray(value));
     }
 
@@ -45,7 +43,10 @@ public class CanaryByteArrayTag extends CanaryBaseTag implements ByteArrayTag {
      */
     @Override
     public void setValue(byte[] value) {
-        getHandle().a = value;
+        if (value == null || value.length <= 0) {
+            return;
+        }
+
     }
 
     /**

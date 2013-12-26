@@ -1,20 +1,20 @@
 package net.canarymod.api.nbt;
 
-import net.minecraft.server.NBTTagDouble;
+import net.minecraft.nbt.NBTTagDouble;
 
 /**
  * DoubleTag wrapper implementation
- * 
+ *
  * @author Greg (gregthegeek)
  * @author Jason (darkdiplomat)
  */
-public class CanaryDoubleTag extends CanaryBaseTag implements DoubleTag {
+public class CanaryDoubleTag extends CanaryPrimativeTag implements DoubleTag {
 
     /**
      * Constructs a new wrapper for NBTTagDouble
-     * 
+     *
      * @param tag
-     *            the NBTTagDouble to wrap
+     *         the NBTTagDouble to wrap
      */
     public CanaryDoubleTag(NBTTagDouble tag) {
         super(tag);
@@ -22,14 +22,14 @@ public class CanaryDoubleTag extends CanaryBaseTag implements DoubleTag {
 
     /**
      * Constructs a new CanaryDoubleTag and associated NBTTagDouble
-     * 
+     *
      * @param name
-     *            the name of the tag
+     *         the name of the tag
      * @param value
-     *            the double to supply the tag
+     *         the double to supply the tag
      */
-    public CanaryDoubleTag(String name, double value) {
-        super(new NBTTagDouble(name, value));
+    public CanaryDoubleTag(double value) {
+        super(new NBTTagDouble(value));
     }
 
     /**
@@ -37,7 +37,7 @@ public class CanaryDoubleTag extends CanaryBaseTag implements DoubleTag {
      */
     @Override
     public double getValue() {
-        return getHandle().a;
+        return getDoubleValue();
     }
 
     /**
@@ -45,7 +45,7 @@ public class CanaryDoubleTag extends CanaryBaseTag implements DoubleTag {
      */
     @Override
     public void setValue(double value) {
-        getHandle().a = value;
+        getHandle().b = value;
     }
 
     /**

@@ -1,17 +1,18 @@
 package net.canarymod.api.nbt;
 
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagList;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
-import net.minecraft.server.NBTBase;
-import net.minecraft.server.NBTTagList;
 
 /**
  * ListTag wrapper implementation
- * 
+ *
  * @author Greg (gregthegeek)
  * @author Jason (darkdiplomat)
  */
@@ -19,9 +20,9 @@ public class CanaryListTag<E extends BaseTag> extends CanaryBaseTag implements L
 
     /**
      * Constructs a new wrapper for NBTTagList
-     * 
+     *
      * @param tag
-     *            the NBTTagList to wrap
+     *         the NBTTagList to wrap
      */
     public CanaryListTag(NBTTagList tag) {
         super(tag);
@@ -29,12 +30,9 @@ public class CanaryListTag<E extends BaseTag> extends CanaryBaseTag implements L
 
     /**
      * Constructs a new CanaryListTag and associated NBTTagList
-     * 
-     * @param name
-     *            the name of the tag
      */
-    public CanaryListTag(String name) {
-        super(new NBTTagList(name));
+    public CanaryListTag() {
+        super(new NBTTagList());
     }
 
     /**
@@ -52,7 +50,7 @@ public class CanaryListTag<E extends BaseTag> extends CanaryBaseTag implements L
     @SuppressWarnings("unchecked")
     @Override
     public void add(int index, E element) {
-        getHandle().a.add(index, ((CanaryBaseTag) element).getHandle());
+        getHandle().b.add(index, ((CanaryBaseTag) element).getHandle());
     }
 
     /**
@@ -61,7 +59,7 @@ public class CanaryListTag<E extends BaseTag> extends CanaryBaseTag implements L
     @SuppressWarnings("unchecked")
     @Override
     public boolean addAll(Collection<? extends E> c) {
-        return getHandle().a.addAll(makeRaw(c));
+        return getHandle().b.addAll(makeRaw(c));
     }
 
     private Collection<NBTBase> makeRaw(Collection<?> c) {
@@ -79,7 +77,7 @@ public class CanaryListTag<E extends BaseTag> extends CanaryBaseTag implements L
     @SuppressWarnings("unchecked")
     @Override
     public boolean addAll(int index, Collection<? extends E> c) {
-        return getHandle().a.addAll(index, makeRaw(c));
+        return getHandle().b.addAll(index, makeRaw(c));
     }
 
     /**
@@ -87,7 +85,7 @@ public class CanaryListTag<E extends BaseTag> extends CanaryBaseTag implements L
      */
     @Override
     public void clear() {
-        getHandle().a.clear();
+        getHandle().b.clear();
     }
 
     /**
@@ -96,9 +94,9 @@ public class CanaryListTag<E extends BaseTag> extends CanaryBaseTag implements L
     @Override
     public boolean contains(Object o) {
         if (o instanceof CanaryBaseTag) { // Pass handle, not actual object
-            getHandle().a.contains(((CanaryBaseTag) o).getHandle());
+            getHandle().b.contains(((CanaryBaseTag) o).getHandle());
         }
-        return getHandle().a.contains(o);
+        return getHandle().b.contains(o);
     }
 
     /**
@@ -107,7 +105,7 @@ public class CanaryListTag<E extends BaseTag> extends CanaryBaseTag implements L
     @SuppressWarnings("unchecked")
     @Override
     public boolean containsAll(Collection<?> c) {
-        return getHandle().a.containsAll(makeRaw(c));
+        return getHandle().b.containsAll(makeRaw(c));
     }
 
     /**
@@ -125,9 +123,9 @@ public class CanaryListTag<E extends BaseTag> extends CanaryBaseTag implements L
     @Override
     public int indexOf(Object o) {
         if (o instanceof CanaryBaseTag) { // Pass handle, not actual object
-            return getHandle().a.indexOf(((CanaryBaseTag) o).getHandle());
+            return getHandle().b.indexOf(((CanaryBaseTag) o).getHandle());
         }
-        return getHandle().a.indexOf(o);
+        return getHandle().b.indexOf(o);
     }
 
     /**
@@ -135,7 +133,7 @@ public class CanaryListTag<E extends BaseTag> extends CanaryBaseTag implements L
      */
     @Override
     public boolean isEmpty() {
-        return getHandle().a.isEmpty();
+        return getHandle().b.isEmpty();
     }
 
     /**
@@ -143,7 +141,7 @@ public class CanaryListTag<E extends BaseTag> extends CanaryBaseTag implements L
      */
     @Override
     public Iterator<E> iterator() {
-        return new ListTagIterator<E>(getHandle().a.iterator());
+        return new ListTagIterator<E>(getHandle().b.iterator());
     }
 
     /**
@@ -152,9 +150,9 @@ public class CanaryListTag<E extends BaseTag> extends CanaryBaseTag implements L
     @Override
     public int lastIndexOf(Object o) {
         if (o instanceof CanaryBaseTag) { // Pass handle, not actual object
-            return getHandle().a.lastIndexOf(((CanaryBaseTag) o).getHandle());
+            return getHandle().b.lastIndexOf(((CanaryBaseTag) o).getHandle());
         }
-        return getHandle().a.lastIndexOf(o);
+        return getHandle().b.lastIndexOf(o);
     }
 
     /**
@@ -171,7 +169,7 @@ public class CanaryListTag<E extends BaseTag> extends CanaryBaseTag implements L
     @SuppressWarnings("unchecked")
     @Override
     public ListIterator<E> listIterator(int index) {
-        return new ListTagListIterator<E>((ListIterator<NBTBase>) getHandle().a.listIterator(index));
+        return new ListTagListIterator<E>((ListIterator<NBTBase>) getHandle().b.listIterator(index));
     }
 
     /**
@@ -180,9 +178,9 @@ public class CanaryListTag<E extends BaseTag> extends CanaryBaseTag implements L
     @Override
     public boolean remove(Object o) {
         if (o instanceof CanaryBaseTag) { // Pass handle, not actual object
-            return getHandle().a.remove(((CanaryBaseTag) o).getHandle());
+            return getHandle().b.remove(((CanaryBaseTag) o).getHandle());
         }
-        return getHandle().a.remove(o);
+        return getHandle().b.remove(o);
     }
 
     /**
@@ -191,7 +189,7 @@ public class CanaryListTag<E extends BaseTag> extends CanaryBaseTag implements L
     @SuppressWarnings("unchecked")
     @Override
     public E remove(int index) {
-        return (E) getHandle().a.remove(index);
+        return (E) getHandle().b.remove(index);
     }
 
     /**
@@ -200,7 +198,7 @@ public class CanaryListTag<E extends BaseTag> extends CanaryBaseTag implements L
     @SuppressWarnings("unchecked")
     @Override
     public boolean removeAll(Collection<?> c) {
-        return getHandle().a.removeAll(makeRaw(c));
+        return getHandle().b.removeAll(makeRaw(c));
     }
 
     /**
@@ -209,7 +207,7 @@ public class CanaryListTag<E extends BaseTag> extends CanaryBaseTag implements L
     @SuppressWarnings("unchecked")
     @Override
     public boolean retainAll(Collection<?> c) {
-        return getHandle().a.retainAll(makeRaw(c));
+        return getHandle().b.retainAll(makeRaw(c));
     }
 
     /**
@@ -218,7 +216,7 @@ public class CanaryListTag<E extends BaseTag> extends CanaryBaseTag implements L
     @SuppressWarnings("unchecked")
     @Override
     public E set(int index, E element) {
-        return (E) getHandle().a.set(index, ((CanaryBaseTag) element).getHandle()); // Need to pass handle, not element
+        return (E) getHandle().b.set(index, ((CanaryBaseTag) element).getHandle()); // Need to pass handle, not element
     }
 
     /**
@@ -236,7 +234,7 @@ public class CanaryListTag<E extends BaseTag> extends CanaryBaseTag implements L
     @Override
     public List<E> subList(int fromIndex, int toIndex) {
         ArrayList<E> elements = new ArrayList<E>();
-        for (Object base : getHandle().a) {
+        for (Object base : getHandle().b) {
             elements.add((E) CanaryBaseTag.wrap((NBTBase) base));
         }
         return elements.subList(fromIndex, toIndex);
@@ -266,7 +264,8 @@ public class CanaryListTag<E extends BaseTag> extends CanaryBaseTag implements L
                 a[size] = null; // as specified by the list javadoc
             }
             return a;
-        } else {
+        }
+        else {
             T[] arr = (T[]) Array.newInstance(a.getClass(), size);
 
             for (int i = 0; i < size; i++) {

@@ -1,13 +1,15 @@
 package net.canarymod.api.nbt;
 
+import net.minecraft.nbt.NBTBase;
+
 import java.util.Iterator;
-import net.minecraft.server.NBTBase;
 
 /**
  * Magic
- * 
- * @author Jason (darkdiplomat)
+ *
  * @param <E>
+ *
+ * @author Jason (darkdiplomat)
  */
 class ListTagIterator<E extends BaseTag> implements Iterator<E> {
     protected Iterator<?> nativeIterator;

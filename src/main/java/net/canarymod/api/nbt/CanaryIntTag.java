@@ -1,20 +1,20 @@
 package net.canarymod.api.nbt;
 
-import net.minecraft.server.NBTTagInt;
+import net.minecraft.nbt.NBTTagInt;
 
 /**
  * IntTag wrapper implementation
- * 
+ *
  * @author Greg (gregthegeek)
  * @author Jason (darkdiplomat)
  */
-public class CanaryIntTag extends CanaryBaseTag implements IntTag {
+public class CanaryIntTag extends CanaryPrimativeTag implements IntTag {
 
     /**
      * Constructs a new wrapper for NBTTagInt
-     * 
+     *
      * @param tag
-     *            the NBTTagInt to wrap
+     *         the NBTTagInt to wrap
      */
     public CanaryIntTag(NBTTagInt tag) {
         super(tag);
@@ -22,14 +22,12 @@ public class CanaryIntTag extends CanaryBaseTag implements IntTag {
 
     /**
      * Constructs a new CanaryIntTag and associated NBTTagInt
-     * 
-     * @param name
-     *            the name of the tag
+     *
      * @param value
-     *            the int to supply the tag
+     *         the int to supply the tag
      */
-    public CanaryIntTag(String name, int value) {
-        super(new NBTTagInt(name, value));
+    public CanaryIntTag(int value) {
+        super(new NBTTagInt(value));
     }
 
     /**
@@ -37,7 +35,7 @@ public class CanaryIntTag extends CanaryBaseTag implements IntTag {
      */
     @Override
     public int getValue() {
-        return getHandle().a;
+        return getIntValue();
     }
 
     /**
@@ -45,7 +43,7 @@ public class CanaryIntTag extends CanaryBaseTag implements IntTag {
      */
     @Override
     public void setValue(int value) {
-        getHandle().a = value;
+        getHandle().b = value;
     }
 
     /**

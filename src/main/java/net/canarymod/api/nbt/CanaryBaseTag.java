@@ -21,18 +21,6 @@ public abstract class CanaryBaseTag implements BaseTag {
     }
 
     @Override
-    public String getName() {
-        //return tag.e();
-        return ""; // The new NBTBase doesnt have this anymore
-    }
-
-    @Override
-    public void setName(String name) {
-        //tag.p(name);
-        //The new NBTBase doesnt have this anymore
-    }
-
-    @Override
     public byte getTypeId() {
         return tag.a();
     }
