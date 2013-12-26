@@ -110,7 +110,7 @@ public class EntityPigZombie extends EntityZombie {
         }
     }
 
-    private void c(Entity entity) {
+    public void c(Entity entity) { // CanaryMod: private => public; angryAt
         this.j = entity;
         this.bs = 400 + this.aa.nextInt(400);
         this.bt = this.aa.nextInt(40);

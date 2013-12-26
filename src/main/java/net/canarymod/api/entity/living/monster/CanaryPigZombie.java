@@ -3,6 +3,7 @@ package net.canarymod.api.entity.living.monster;
 import net.canarymod.api.entity.EntityType;
 import net.canarymod.api.entity.living.humanoid.CanaryPlayer;
 import net.canarymod.api.entity.living.humanoid.Player;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityPigZombie;
 
 /**
@@ -67,7 +68,7 @@ public class CanaryPigZombie extends CanaryZombie implements PigZombie {
         if (player == null) {
             return;
         }
-        getHandle().c(((CanaryPlayer) player).getHandle());
+        getHandle().c((Entity) ((CanaryPlayer) player).getHandle());
     }
 
     /**

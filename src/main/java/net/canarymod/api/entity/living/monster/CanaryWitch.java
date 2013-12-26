@@ -38,7 +38,7 @@ public class CanaryWitch extends CanaryEntityMob implements Witch {
      */
     @Override
     public boolean isAgressive() {
-        return getHandle().bT();
+        return getHandle().bX();
     }
 
     /**

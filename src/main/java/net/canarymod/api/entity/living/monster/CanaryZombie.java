@@ -38,7 +38,7 @@ public class CanaryZombie extends CanaryEntityMob implements Zombie {
      */
     @Override
     public boolean isVillager() {
-        return getHandle().bT();
+        return getHandle().bZ();
     }
 
     /**
@@ -54,7 +54,7 @@ public class CanaryZombie extends CanaryEntityMob implements Zombie {
      */
     @Override
     public boolean isChild() {
-        return getHandle().g_();
+        return getHandle().f();
     }
 
     /**
@@ -62,7 +62,7 @@ public class CanaryZombie extends CanaryEntityMob implements Zombie {
      */
     @Override
     public void setChild(boolean child) {
-        getHandle().a(child);
+        getHandle().j(child);
     }
 
     /**
@@ -86,7 +86,7 @@ public class CanaryZombie extends CanaryEntityMob implements Zombie {
      */
     @Override
     public boolean isConverting() {
-        return getHandle().bV();
+        return getHandle().ca();
     }
 
     /**
@@ -102,7 +102,7 @@ public class CanaryZombie extends CanaryEntityMob implements Zombie {
      */
     @Override
     public void convertToVillager() {
-        getHandle().bS();
+        getHandle().cb();
     }
 
     /**

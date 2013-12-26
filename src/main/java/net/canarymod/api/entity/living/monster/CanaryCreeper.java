@@ -73,7 +73,7 @@ public class CanaryCreeper extends CanaryEntityMob implements Creeper {
      */
     @Override
     public boolean isCharged() {
-        return getHandle().bT();
+        return getHandle().bX();
     }
 
     /**
@@ -145,7 +145,7 @@ public class CanaryCreeper extends CanaryEntityMob implements Creeper {
      */
     @Override
     public boolean isAgro() {
-        return getHandle().bV() == 1;
+        return getHandle().bZ() == 1;
     }
 
     /**
