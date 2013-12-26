@@ -153,7 +153,7 @@ public class CanaryPlayerInventory extends CanaryEntityInventory implements Play
      */
     @Override
     public void update() {
-        getHandle().k_();
+        getHandle().l_();
     }
 
     /**

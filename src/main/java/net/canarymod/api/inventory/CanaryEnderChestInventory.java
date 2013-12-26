@@ -79,7 +79,7 @@ public class CanaryEnderChestInventory extends CanaryEntityInventory implements 
      */
     @Override
     public void update() {
-        getHandle().k_();
+        getHandle().l_();
     }
 
     public InventoryEnderChest getHandle() {

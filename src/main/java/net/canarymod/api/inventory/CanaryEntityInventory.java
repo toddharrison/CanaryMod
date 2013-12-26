@@ -250,7 +250,7 @@ public abstract class CanaryEntityInventory implements Inventory {
      */
     @Override
     public int getSize() {
-        return inventory.j_();
+        return inventory.a();
     }
 
     /**
@@ -394,7 +394,7 @@ public abstract class CanaryEntityInventory implements Inventory {
             int eslot = getEmptySlot();
 
             if (eslot != -1) {
-                CanaryCompoundTag nbt = new CanaryCompoundTag("");
+                CanaryCompoundTag nbt = new CanaryCompoundTag();
 
                 ((CanaryItem) item).getHandle().b(nbt.getHandle());
                 CanaryItem tempItem = new CanaryItem(item.getId(), amount, item.getDamage(), -1);

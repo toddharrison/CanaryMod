@@ -71,7 +71,7 @@ public class CanaryAnimalInventory extends CanaryEntityInventory implements Anim
      */
     @Override
     public void update() {
-        getHandle().k_();
+        getHandle().l_();
     }
 
     /**

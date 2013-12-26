@@ -106,7 +106,7 @@ public class CanaryEnchantment implements Enchantment {
      */
     @Override
     public Type getType() {
-        return Enchantment.Type.fromId(getHandle().z);
+        return Enchantment.Type.fromId(getHandle().B);
     }
 
     /**

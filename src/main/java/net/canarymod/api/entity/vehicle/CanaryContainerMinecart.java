@@ -386,7 +386,7 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
             int eslot = this.getEmptySlot();
 
             if (eslot != -1) {
-                CanaryCompoundTag nbt = new CanaryCompoundTag("");
+                CanaryCompoundTag nbt = new CanaryCompoundTag();
 
                 ((CanaryItem) item).getHandle().b(nbt.getHandle());
                 Item tempItem = new CanaryItem(item.getId(), amount, -1, item.getDamage());

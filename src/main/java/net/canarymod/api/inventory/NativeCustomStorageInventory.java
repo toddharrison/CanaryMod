@@ -1,10 +1,10 @@
 package net.canarymod.api.inventory;
 
-import net.minecraft.server.InventoryBasic;
+import net.minecraft.inventory.InventoryBasic;
 
 /**
  * Native Custom Storage Inventory instance
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class NativeCustomStorageInventory extends InventoryBasic {

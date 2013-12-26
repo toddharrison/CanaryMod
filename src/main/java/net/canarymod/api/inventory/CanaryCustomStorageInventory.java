@@ -1,7 +1,8 @@
 package net.canarymod.api.inventory;
 
+import net.minecraft.item.ItemStack;
+
 import java.util.Arrays;
-import net.minecraft.server.ItemStack;
 
 public class CanaryCustomStorageInventory extends CanaryEntityInventory implements CustomStorageInventory {
 
@@ -65,7 +66,7 @@ public class CanaryCustomStorageInventory extends CanaryEntityInventory implemen
      */
     @Override
     public void update() {
-        getHandle().k_();
+        getHandle().l_();
     }
 
     public NativeCustomStorageInventory getHandle() {

@@ -6,7 +6,7 @@ import net.canarymod.api.world.blocks.Block;
 import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.blocks.CanaryBlock;
 import net.canarymod.api.world.position.Position;
-import net.minecraft.server.Packet53BlockChange;
+import net.minecraft.network.play.server.S23PacketBlockChange;
 
 /**
  * BlockChangePacket implementation
@@ -15,12 +15,12 @@ import net.minecraft.server.Packet53BlockChange;
  */
 public class CanaryBlockChangePacket extends CanaryPacket implements BlockChangePacket {
 
-    public CanaryBlockChangePacket(Packet53BlockChange packet) {
+    public CanaryBlockChangePacket(S23PacketBlockChange packet) {
         super(packet);
     }
 
     public CanaryBlockChangePacket(int x, int y, int z, int typeID, int data) {
-        this(new Packet53BlockChange(x, y, z, ((CanaryWorld) Canary.getServer().getDefaultWorld()).getHandle())); // World doesn't mean shit really but required in the constructor
+        this(new S23PacketBlockChange(x, y, z, ((CanaryWorld) Canary.getServer().getDefaultWorld()).getHandle())); // World doesn't mean shit really but required in the constructor
         this.setTypeId(typeID);
         this.setData(data);
     }
@@ -84,12 +84,12 @@ public class CanaryBlockChangePacket extends CanaryPacket implements BlockChange
 
     @Override
     public int getTypeId() {
-        return getPacket().d;
+        return net.minecraft.block.Block.b(getPacket().d);
     }
 
     @Override
     public void setTypeId(int id) {
-        getPacket().d = id;
+        getPacket().d = net.minecraft.block.Block.e(id);
     }
 
     @Override
@@ -117,7 +117,7 @@ public class CanaryBlockChangePacket extends CanaryPacket implements BlockChange
     }
 
     @Override
-    public Packet53BlockChange getPacket() {
-        return (Packet53BlockChange) packet;
+    public S23PacketBlockChange getPacket() {
+        return (S23PacketBlockChange) packet;
     }
 }
