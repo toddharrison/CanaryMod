@@ -35,7 +35,7 @@ public class CanaryBoat extends CanaryVehicle implements Boat {
      */
     @Override
     public int getForwardDirection() {
-        return getHandle().h();
+        return getHandle().i();
     }
 
     /**

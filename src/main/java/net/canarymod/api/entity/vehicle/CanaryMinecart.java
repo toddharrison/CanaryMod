@@ -40,7 +40,7 @@ public abstract class CanaryMinecart extends CanaryVehicle implements Minecart {
      */
     @Override
     public int getRollingAmplitude() {
-        return getHandle().j();
+        return getHandle().k();
     }
 
     /**
@@ -48,7 +48,7 @@ public abstract class CanaryMinecart extends CanaryVehicle implements Minecart {
      */
     @Override
     public void setRollingDirection(int direction) {
-        getHandle().h(direction);
+        getHandle().j(direction);
     }
 
     /**
@@ -56,7 +56,7 @@ public abstract class CanaryMinecart extends CanaryVehicle implements Minecart {
      */
     @Override
     public int getRollingDirection() {
-        return getHandle().k();
+        return getHandle().l();
     }
 
     /**

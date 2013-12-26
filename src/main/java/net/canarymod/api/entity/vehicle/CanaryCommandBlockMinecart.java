@@ -1,30 +1,39 @@
-package net.canarymod.api.world.blocks;
+package net.canarymod.api.entity.vehicle;
 
 import net.canarymod.Canary;
+import net.canarymod.api.entity.EntityType;
 import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.config.Configuration;
 import net.canarymod.hook.system.PermissionCheckHook;
 import net.canarymod.user.Group;
-import net.minecraft.tileentity.TileEntityCommandBlock;
+import net.minecraft.entity.EntityMinecartCommandBlock;
 
 /**
- * CommandBlock wrapper implementation
+ * Command Block Minecart wrapper implementation
  *
  * @author Jason (darkdiplomat)
  */
-public class CanaryCommandBlock extends CanaryTileEntity implements CommandBlock {
-
-    Group group; // The group for permission checking
+public class CanaryCommandBlockMinecart extends CanaryMinecart implements CommandBlockMinecart {
+    Group group = Canary.usersAndGroups().getGroup(Configuration.getServerConfig().getCommandBlockGroupName()); // The group for permission checking
 
     /**
-     * Constructs a wrapper for TileEntityCommandBlock
+     * Constructs a new wrapper for EntityMinecartCommandBlock
      *
-     * @param tileentity
-     *         the TileEntityCommandBlock to wrap
+     * @param entity
+     *         the EntityMinecartCommandBlock to be wrapped
      */
-    public CanaryCommandBlock(TileEntityCommandBlock tileentity) {
-        super(tileentity);
-        group = Canary.usersAndGroups().getGroup(Configuration.getServerConfig().getCommandBlockGroupName());
+    public CanaryCommandBlockMinecart(EntityMinecartCommandBlock entity) {
+        super(entity);
+    }
+
+    @Override
+    public EntityType getEntityType() {
+        return EntityType.COMMANDBLOCKMINECART;
+    }
+
+    @Override
+    public String getFqName() {
+        return "CommandBlock Minecart";
     }
 
     /**
@@ -32,7 +41,7 @@ public class CanaryCommandBlock extends CanaryTileEntity implements CommandBlock
      */
     @Override
     public String getName() {
-        return getTileEntity().getLogic().b_();
+        return getHandle().getLogic().b_();
     }
 
     /**
@@ -74,7 +83,7 @@ public class CanaryCommandBlock extends CanaryTileEntity implements CommandBlock
      */
     @Override
     public void setCommand(String command) {
-        getTileEntity().getLogic().a(command);
+        getHandle().getLogic().a(command);
     }
 
     /**
@@ -82,7 +91,7 @@ public class CanaryCommandBlock extends CanaryTileEntity implements CommandBlock
      */
     @Override
     public String getCommand() {
-        return getTileEntity().getLogic().i();
+        return getHandle().getLogic().i();
     }
 
     /**
@@ -90,31 +99,21 @@ public class CanaryCommandBlock extends CanaryTileEntity implements CommandBlock
      */
     @Override
     public void activate() {
-        getTileEntity().a(((CanaryWorld) getWorld()).getHandle());
+        getHandle().getLogic().a(((CanaryWorld) getWorld()).getHandle());
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public TileEntityCommandBlock getTileEntity() {
-        return (TileEntityCommandBlock) tileentity;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Group getGroup() {
-        return this.group;
+        return group;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void setGroup(Group group) {
         this.group = group;
     }
 
+    @Override
+    public EntityMinecartCommandBlock getHandle() {
+        return (EntityMinecartCommandBlock) entity;
+    }
 }

@@ -5,7 +5,6 @@ import net.canarymod.api.inventory.Item;
 import net.canarymod.api.inventory.ItemType;
 import net.canarymod.api.nbt.CanaryCompoundTag;
 import net.canarymod.config.Configuration;
-import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.item.EntityMinecartContainer;
 import net.minecraft.item.ItemStack;
 
@@ -17,7 +16,7 @@ import java.util.Arrays;
 public abstract class CanaryContainerMinecart extends CanaryMinecart implements ContainerMinecart {
     private boolean openRemote;
 
-    public CanaryContainerMinecart(EntityMinecart minecart) {
+    public CanaryContainerMinecart(EntityMinecartContainer minecart) {
         super(minecart);
     }
 
@@ -253,7 +252,7 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
      */
     @Override
     public int getSize() {
-        return this.getHandle().j_();
+        return this.getHandle().a();
     }
 
     /**
@@ -341,25 +340,6 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
     public boolean hasItemStack(int itemId, int amount, int damage) {
         return hasItemStack(itemId, amount, 64, damage);
     }
-
-    // /**
-    // * {@inheritDoc}
-    // */
-    // @Override
-    // public boolean hasItemStack(int itemId, int minAmount, int maxAmount) {
-    // for (int index = 0; index < getSize(); index++) {
-    // Item toCheck = getSlot(index);
-    //
-    // if (toCheck != null && toCheck.getId() == itemId) {
-    // int am = toCheck.getAmount();
-    //
-    // if (am > minAmount && am < maxAmount) {
-    // return true;
-    // }
-    // }
-    // }
-    // return false;
-    // }
 
     /**
      * {@inheritDoc}
@@ -577,7 +557,7 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
 
     @Override
     public void update() {
-        this.getHandle().k_();
+        this.getHandle().l_();
     }
 
     public boolean canOpenRemote() {
