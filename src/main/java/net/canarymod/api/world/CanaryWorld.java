@@ -31,6 +31,8 @@ import net.canarymod.config.WorldConfiguration;
 import net.minecraft.block.BlockJukebox;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.network.play.server.S2APacketParticles;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntityBeacon;
 import net.minecraft.tileentity.TileEntityBrewingStand;
 import net.minecraft.tileentity.TileEntityChest;
@@ -432,8 +434,7 @@ public class CanaryWorld implements World {
 
     @Override
     public void spawnParticle(Particle particle) {
-        //TODO
-        //MinecraftServer.G().t.sendPacketToDimension(new S2APacketParticles(particle), this.name, this.type.getId());
+        MinecraftServer.G().t.sendPacketToDimension(new S2APacketParticles(particle), this.name, this.type.getId());
     }
 
     @Override
@@ -463,8 +464,7 @@ public class CanaryWorld implements World {
 
     @Override
     public boolean isBlockPowered(int x, int y, int z) {
-        return false; //TODO
-        //return world.w(x, y, z);
+        return world.u(x, y, z) > 0; //TODO: This may not function as intended
     }
 
     @Override
@@ -479,8 +479,7 @@ public class CanaryWorld implements World {
 
     @Override
     public boolean isBlockIndirectlyPowered(int x, int y, int z) {
-        return false; //TODO
-        //return world.x(x, y, z);
+        return world.v(x, y, z);
     }
 
     @Override
