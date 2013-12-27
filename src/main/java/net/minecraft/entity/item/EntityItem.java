@@ -44,6 +44,7 @@ public class EntityItem extends Entity {
         this.w = (double) ((float) (Math.random() * 0.20000000298023224D - 0.10000000149011612D));
         this.x = 0.20000000298023224D;
         this.y = (double) ((float) (Math.random() * 0.20000000298023224D - 0.10000000149011612D));
+        this.entity = new CanaryEntityItem(this); // CanaryMod: Wrap Entity
     }
 
     public EntityItem(World world, double d0, double d1, double d2, ItemStack itemstack) {

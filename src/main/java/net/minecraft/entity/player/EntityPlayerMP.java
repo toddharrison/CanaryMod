@@ -174,7 +174,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
         int i2 = chunkcoordinates.b;
 
         if (!worldserver.t.g && worldserver.M().r() != WorldSettings.GameType.ADVENTURE) {
-            int i3 = Math.max(5, minecraftserver.am() - 6);
+            int i3 = Math.max(5, cfg.getSpawnProtectionSize() - 6);
 
             i0 += this.aa.nextInt(i3 * 2) - i3;
             i1 += this.aa.nextInt(i3 * 2) - i3;

@@ -231,7 +231,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
         }
 
         if (dimType.getId() == 0) {
-            if (this.O()) {
+            if (this.P()) {
                 world = new DemoWorldServer(this, isavehandler, name, dimType.getId(), this.a);
             }
             else {

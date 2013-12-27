@@ -483,7 +483,7 @@ public abstract class ServerConfigurationManager {
             object = new ItemInWorldManager(world);
         }
 
-        return new EntityPlayerMP(this.f, this.f.a(0), gameprofile, (ItemInWorldManager) object);
+        return new EntityPlayerMP(this.f, this.f.getWorld(worldName, 0), gameprofile, (ItemInWorldManager) object);
     }
 
     public EntityPlayerMP a(EntityPlayerMP entityplayermp, int i0, boolean flag) {
@@ -1062,7 +1062,7 @@ public abstract class ServerConfigurationManager {
         StatisticsFile statisticsfile = (StatisticsFile) this.k.get(s0);
 
         if (statisticsfile == null) {
-            statisticsfile = new StatisticsFile(this.f, new File(this.f.a(0).L().b(), "stats/" + s0 + ".json"));
+            statisticsfile = new StatisticsFile(this.f, new File(/*this.f.a(0).L().b()*/new File("worlds"), "stats/" + s0 + ".json"));
             statisticsfile.a();
             this.k.put(s0, statisticsfile);
         }
