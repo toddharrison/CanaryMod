@@ -13,7 +13,6 @@ import net.minecraft.network.rcon.RConThreadMain;
 import net.minecraft.network.rcon.RConThreadQuery;
 import net.minecraft.profiler.PlayerUsageSnooper;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.gui.MinecraftServerGui;
 import net.minecraft.server.management.ServerConfigurationManager;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.CryptManager;
@@ -354,8 +353,9 @@ public class DedicatedServer extends MinecraftServer implements IServer {
         this.o = true;
         MinecraftServer.setHeadless(false);
         */
-        MinecraftServerGui.a(this);
-        this.o = true;
+        // The gui is causing hang ups so just ignore the gui entirely
+        //MinecraftServerGui.a(this);
+        //this.o = true;
     }
 
     public boolean ai() {

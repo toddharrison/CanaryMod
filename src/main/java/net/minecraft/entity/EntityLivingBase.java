@@ -878,6 +878,14 @@ public abstract class EntityLivingBase extends Entity {
         int i0 = MathHelper.f(f0 - 3.0F - f1);
 
         if (i0 > 0) {
+            this.a(this.o(i0), 1.0F, 1.0F);
+            // CanaryMod: call DamageHook (Fall)
+            DamageHook hook = (DamageHook) new DamageHook(null, entity, new CanaryDamageSource(DamageSource.h), i0).call();
+
+            if (!hook.isCanceled()) {
+                this.a((((CanaryDamageSource) hook.getDamageSource()).getHandle()), hook.getDamageDealt());
+            }
+            //
             int i1 = MathHelper.c(this.t);
             int i2 = MathHelper.c(this.u - 0.20000000298023224D - (double) this.M);
             int i3 = MathHelper.c(this.v);
@@ -886,14 +894,6 @@ public abstract class EntityLivingBase extends Entity {
                 Block.SoundType block_soundtype = block.H;
                 this.a(block_soundtype.e(), block_soundtype.c() * 0.5F, block_soundtype.d() * 0.75F);
             }
-
-            // CanaryMod: call DamageHook (Fall)
-            DamageHook hook = (DamageHook) new DamageHook(null, entity, new CanaryDamageSource(DamageSource.h), i0).call();
-
-            if (!hook.isCanceled()) {
-                this.a((((CanaryDamageSource) hook.getDamageSource()).getHandle()), hook.getDamageDealt());
-            }
-            //
         }
     }
 
@@ -1472,37 +1472,37 @@ public abstract class EntityLivingBase extends Entity {
             if (this instanceof EntityNonPlayableCharacter) {
                 this.bn();
             }// END
-            this.p.C.b();
-            this.p.C.a("jump");
-            if (this.bd) {
-                if (!this.M() && !this.P()) {
-                    if (this.E && this.bq == 0) {
-                        this.bj();
-                        this.bq = 10;
-                    }
-                }
-                else {
-                    this.x += 0.03999999910593033D;
+        }
+        this.p.C.b();
+        this.p.C.a("jump");
+        if (this.bd) {
+            if (!this.M() && !this.P()) {
+                if (this.E && this.bq == 0) {
+                    this.bj();
+                    this.bq = 10;
                 }
             }
             else {
-                this.bq = 0;
+                this.x += 0.03999999910593033D;
             }
-
-            this.p.C.b();
-            this.p.C.a("travel");
-            this.be *= 0.98F;
-            this.bf *= 0.98F;
-            this.bg *= 0.9F;
-            this.e(this.be, this.bf);
-            this.p.C.b();
-            this.p.C.a("push");
-            if (!this.p.E) {
-                this.bo();
-            }
-
-            this.p.C.b();
         }
+        else {
+            this.bq = 0;
+        }
+
+        this.p.C.b();
+        this.p.C.a("travel");
+        this.be *= 0.98F;
+        this.bf *= 0.98F;
+        this.bg *= 0.9F;
+        this.e(this.be, this.bf);
+        this.p.C.b();
+        this.p.C.a("push");
+        if (!this.p.E) {
+            this.bo();
+        }
+
+        this.p.C.b();
     }
 
     protected void bn() {

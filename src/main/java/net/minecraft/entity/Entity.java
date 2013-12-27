@@ -1,5 +1,6 @@
 package net.minecraft.entity;
 
+import net.canarymod.ToolBox;
 import net.canarymod.api.CanaryDamageSource;
 import net.canarymod.api.entity.CanaryEntity;
 import net.canarymod.api.entity.EntityType;
@@ -259,11 +260,6 @@ public abstract class Entity {
     }
 
     public void C() {
-        // CanaryMod:
-        float prevPR = this.C, prevPP = this.B;
-        double prevPX = this.q, prevPY = this.r, prevPZ = this.s;
-        //
-
         this.p.C.a("entityBaseTick");
         if (this.n != null && this.n.L) {
             this.n = null;
@@ -356,49 +352,6 @@ public abstract class Entity {
             }
         }
 
-        // CanaryMod: EntityMoveHook
-        Location vecFrom = new Location(getCanaryWorld(), this.q, this.r, this.s, this.C, this.B);
-        Vector3D vecTo = new Vector3D(this.t, this.u, this.v);
-        if (!(this instanceof EntityPlayerMP) && Vector3D.getDistance(vecFrom, vecTo) > 1.0) {
-            boolean pHflag = this instanceof EntityPig || this instanceof EntityHorse;
-            boolean flage = pHflag ? ((EntityCreature) this).bS() : false;
-            if (pHflag && flage && this.m != null && this.m instanceof EntityPlayerMP) {
-                // Its an Animal Vehicle!
-                // CanaryMod: VehcileMoveHook (Pig/Horse) --
-                VehicleMoveHook vmh = (VehicleMoveHook) new VehicleMoveHook((Vehicle) this.entity, vecFrom, vecTo).call();
-                // Remember rotation and pitch are swapped in Location constructor...
-                EntityMoveHook emh = (EntityMoveHook) new EntityMoveHook(entity, vecFrom).call();
-                if (vmh.isCanceled() || emh.isCanceled()) {
-                    this.w = 0.0D;
-                    this.x = 0.0D;
-                    this.y = 0.0D;
-                    this.b(this.q, this.r, this.s, this.B, this.C);
-                    this.q = prevPX;
-                    this.r = prevPY;
-                    this.s = prevPZ;
-                    this.B = prevPR;
-                    this.C = prevPP;
-                    this.ac(); //Update Rider
-                }
-            }
-            else {
-                EntityMoveHook hook = (EntityMoveHook) new EntityMoveHook(entity, vecFrom).call();
-                if (hook.isCanceled()) {
-                    this.w = 0.0D;
-                    this.x = 0.0D;
-                    this.y = 0.0D;
-                    this.b(this.q, this.r, this.s, this.B, this.C);
-                    this.q = prevPX;
-                    this.r = prevPY;
-                    this.s = prevPZ;
-                    this.B = prevPR;
-                    this.C = prevPP;
-                    this.ac(); //Update Rider
-                }
-            }
-        }
-        //
-
         if (this.P()) {
             this.E();
             this.S *= 0.5F;
@@ -464,6 +417,10 @@ public abstract class Entity {
             this.v = (this.D.c + this.D.f) / 2.0D;
         }
         else {
+            // CanaryMod:
+            float prevPR = this.C, prevPP = this.B;
+            double prevPX = this.q, prevPY = this.r, prevPZ = this.s;
+            //
             this.p.C.a("move");
             this.W *= 0.4F;
             double d3 = this.t;
@@ -651,6 +608,47 @@ public abstract class Entity {
                 }
             }
 
+            // CanaryMod: EntityMoveHook
+            Location vecFrom = new Location(getCanaryWorld(), this.q, this.r, this.s, this.C, this.B);
+            Vector3D vecTo = new Vector3D(this.t, this.u, this.v);
+            if (!(this instanceof EntityPlayerMP) && hasMovedOneBlockOrMore()) {
+                boolean pHflag = this instanceof EntityPig || this instanceof EntityHorse;
+                if (pHflag && this.m != null && this.m instanceof EntityPlayerMP) {
+                    // Its an Animal Vehicle!
+                    // CanaryMod: VehcileMoveHook (Pig/Horse) --
+                    VehicleMoveHook vmh = (VehicleMoveHook) new VehicleMoveHook((Vehicle) this.entity, vecFrom, vecTo).call();
+                    // Remember rotation and pitch are swapped in Location constructor...
+                    EntityMoveHook emh = (EntityMoveHook) new EntityMoveHook(entity, vecFrom).call();
+                    if (vmh.isCanceled() || emh.isCanceled()) {
+                        this.w = 0.0D;
+                        this.x = 0.0D;
+                        this.y = 0.0D;
+                        this.b(this.q, this.r, this.s, this.B, this.C);
+                        this.q = prevPX;
+                        this.r = prevPY;
+                        this.s = prevPZ;
+                        this.B = prevPR;
+                        this.C = prevPP;
+                        this.ac(); //Update Rider
+                    }
+                }
+                else {
+                    EntityMoveHook hook = (EntityMoveHook) new EntityMoveHook(entity, vecFrom).call();
+                    if (hook.isCanceled()) {
+                        this.w = 0.0D;
+                        this.x = 0.0D;
+                        this.y = 0.0D;
+                        this.b(this.q, this.r, this.s, this.B, this.C);
+                        this.q = prevPX;
+                        this.r = prevPY;
+                        this.s = prevPZ;
+                        this.B = prevPR;
+                        this.C = prevPP;
+                        this.ac(); //Update Rider
+                    }
+                }
+            }
+            //
             this.p.C.b();
             this.p.C.a("rest");
             this.t = (this.D.a + this.D.d) / 2.0D;
@@ -1934,6 +1932,12 @@ public abstract class Entity {
 
     public CompoundTag getMetaData() {
         return this.metadata;
+    }
+
+    public boolean hasMovedOneBlockOrMore() {
+        return ToolBox.floorToBlock(this.t) != ToolBox.floorToBlock(this.w)
+                || ToolBox.floorToBlock(this.u) != ToolBox.floorToBlock(this.x)
+                || ToolBox.floorToBlock(this.v) != ToolBox.floorToBlock(this.y);
     }
     //
 }

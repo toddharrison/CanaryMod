@@ -1193,9 +1193,9 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
         int i0 = 0;
         int i1;
 
-        if (object instanceof GroupData) {
-            i1 = ((GroupData) object).a;
-            i0 = ((GroupData) object).b & 255 | this.aa.nextInt(5) << 8;
+        if (object instanceof EntityHorse.GroupData) {
+            i1 = ((EntityHorse.GroupData) object).a;
+            i0 = ((EntityHorse.GroupData) object).b & 255 | this.aa.nextInt(5) << 8;
         }
         else {
             if (this.aa.nextInt(10) == 0) {
@@ -1209,7 +1209,7 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
                 i0 = i2 | i3 << 8;
             }
 
-            object = new GroupData(i1, i0);
+            object = new EntityHorse.GroupData(i1, i0);
         }
 
         this.s(i1);
