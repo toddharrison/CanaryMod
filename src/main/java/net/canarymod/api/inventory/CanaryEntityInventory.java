@@ -2,8 +2,8 @@ package net.canarymod.api.inventory;
 
 import net.canarymod.api.nbt.CanaryCompoundTag;
 import net.canarymod.config.Configuration;
-import net.minecraft.server.IInventory;
-import net.minecraft.server.ItemStack;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
 
 /**
  * Inventory implementation
@@ -95,11 +95,13 @@ public abstract class CanaryEntityInventory implements Inventory {
                 if (item.getAmount() == remaining) {
                     removeItem(item.getSlot());
                     return;
-                } else if (item.getAmount() > remaining) {
+                }
+                else if (item.getAmount() > remaining) {
                     item.setAmount(item.getAmount() - remaining);
                     setSlot(item.getSlot(), item);
                     return;
-                } else {
+                }
+                else {
                     removeItem(item.getSlot());
                     remaining -= item.getAmount();
                 }
@@ -128,11 +130,13 @@ public abstract class CanaryEntityInventory implements Inventory {
                 if (it.getAmount() == remaining) {
                     removeItem(it.getSlot());
                     return;
-                } else if (it.getAmount() > remaining) {
+                }
+                else if (it.getAmount() > remaining) {
                     it.setAmount(it.getAmount() - remaining);
                     setSlot(it.getSlot(), it);
                     return;
-                } else {
+                }
+                else {
                     removeItem(it.getSlot());
                     remaining -= it.getAmount();
                 }
@@ -246,7 +250,7 @@ public abstract class CanaryEntityInventory implements Inventory {
      */
     @Override
     public int getSize() {
-        return inventory.j_();
+        return inventory.a();
     }
 
     /**
@@ -373,7 +377,7 @@ public abstract class CanaryEntityInventory implements Inventory {
             // Get an existing item with at least 1 spot free
             for (Item i : getContents()) {
                 if (i != null && item.getId() == i.getId() && item.getDamage() == i.getDamage()
-                        &&  i.getAmount() < i.getMaxAmount()) {
+                        && i.getAmount() < i.getMaxAmount()) {
                     itemExisting = i;
                 }
             }
@@ -390,7 +394,7 @@ public abstract class CanaryEntityInventory implements Inventory {
             int eslot = getEmptySlot();
 
             if (eslot != -1) {
-                CanaryCompoundTag nbt = new CanaryCompoundTag("");
+                CanaryCompoundTag nbt = new CanaryCompoundTag();
 
                 ((CanaryItem) item).getHandle().b(nbt.getHandle());
                 CanaryItem tempItem = new CanaryItem(item.getId(), amount, item.getDamage(), -1);
@@ -459,7 +463,8 @@ public abstract class CanaryEntityInventory implements Inventory {
     public void setSlot(int index, Item value) {
         if (value == null) {
             inventory.a(index, null);
-        } else {
+        }
+        else {
             inventory.a(index, ((CanaryItem) value).getHandle());
         }
     }

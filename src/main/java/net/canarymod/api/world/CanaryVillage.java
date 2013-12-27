@@ -2,23 +2,23 @@ package net.canarymod.api.world;
 
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.world.position.Location;
-import net.minecraft.server.ChunkCoordinates;
+import net.minecraft.util.ChunkCoordinates;
 
 /**
  * Village wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryVillage implements Village {
-    private final net.minecraft.server.Village village;
+    private final net.minecraft.village.Village village;
 
     /**
      * Constructs a new wrapper for Village
-     * 
+     *
      * @param village
-     *            the Village to wrap
+     *         the Village to wrap
      */
-    public CanaryVillage(net.minecraft.server.Village village) {
+    public CanaryVillage(net.minecraft.village.Village village) {
         this.village = village;
     }
 
@@ -114,10 +114,10 @@ public class CanaryVillage implements Village {
 
     /**
      * Gets the Village being wrapped
-     * 
+     *
      * @return the Village
      */
-    public net.minecraft.server.Village getHandle() {
+    public net.minecraft.village.Village getHandle() {
         return village;
     }
 

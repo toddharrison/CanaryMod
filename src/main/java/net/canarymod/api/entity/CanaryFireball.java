@@ -1,20 +1,20 @@
 package net.canarymod.api.entity;
 
 import net.canarymod.api.entity.living.EntityLiving;
-import net.minecraft.server.EntityFireball;
+import net.minecraft.entity.projectile.EntityFireball;
 
 /**
  * Fireball wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public abstract class CanaryFireball extends CanaryEntity implements Fireball {
 
     /**
      * Constructs a new wrapper for EntityFireball
-     * 
+     *
      * @param entity
-     *            the EntityFireball to be wrapped
+     *         the EntityFireball to be wrapped
      */
     public CanaryFireball(EntityFireball entity) {
         super(entity);
@@ -110,7 +110,7 @@ public abstract class CanaryFireball extends CanaryEntity implements Fireball {
      */
     @Override
     public float getMotionFactor() {
-        return getHandle().c();
+        return getHandle().e();
     }
 
     /**

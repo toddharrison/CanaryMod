@@ -32,7 +32,7 @@ public final class CanaryNBTFactory implements NBTFactory {
      */
     @Override
     public CompoundTag newCompoundTag(String name) {
-        return new CanaryCompoundTag(name);
+        return new CanaryCompoundTag();
     }
 
     /**
@@ -40,7 +40,7 @@ public final class CanaryNBTFactory implements NBTFactory {
      */
     @Override
     public ByteTag newByteTag(String name, byte value) {
-        return new CanaryByteTag(name, value);
+        return new CanaryByteTag(value);
     }
 
     /**
@@ -48,7 +48,7 @@ public final class CanaryNBTFactory implements NBTFactory {
      */
     @Override
     public ByteArrayTag newByteArrayTag(String name, byte[] value) {
-        return new CanaryByteArrayTag(name, value);
+        return new CanaryByteArrayTag(value);
     }
 
     /**
@@ -56,7 +56,7 @@ public final class CanaryNBTFactory implements NBTFactory {
      */
     @Override
     public DoubleTag newDoubleTag(String name, double value) {
-        return new CanaryDoubleTag(name, value);
+        return new CanaryDoubleTag(value);
     }
 
     /**
@@ -64,7 +64,7 @@ public final class CanaryNBTFactory implements NBTFactory {
      */
     @Override
     public FloatTag newFloatTag(String name, float value) {
-        return new CanaryFloatTag(name, value);
+        return new CanaryFloatTag(value);
     }
 
     /**
@@ -72,7 +72,7 @@ public final class CanaryNBTFactory implements NBTFactory {
      */
     @Override
     public IntTag newIntTag(String name, int value) {
-        return new CanaryIntTag(name, value);
+        return new CanaryIntTag(value);
     }
 
     /**
@@ -80,7 +80,7 @@ public final class CanaryNBTFactory implements NBTFactory {
      */
     @Override
     public IntArrayTag newIntArrayTag(String name, int[] value) {
-        return new CanaryIntArrayTag(name, value);
+        return new CanaryIntArrayTag(value);
     }
 
     /**
@@ -88,7 +88,7 @@ public final class CanaryNBTFactory implements NBTFactory {
      */
     @Override
     public <E extends BaseTag> ListTag<E> newListTag(String name) {
-        return new CanaryListTag<E>(name);
+        return new CanaryListTag<E>();
     }
 
     /**
@@ -96,7 +96,7 @@ public final class CanaryNBTFactory implements NBTFactory {
      */
     @Override
     public LongTag newLongTag(String name, long value) {
-        return new CanaryLongTag(name, value);
+        return new CanaryLongTag(value);
     }
 
     /**
@@ -104,7 +104,7 @@ public final class CanaryNBTFactory implements NBTFactory {
      */
     @Override
     public ShortTag newShortTag(String name, short value) {
-        return new CanaryShortTag(name, value);
+        return new CanaryShortTag(value);
     }
 
     /**
@@ -112,7 +112,7 @@ public final class CanaryNBTFactory implements NBTFactory {
      */
     @Override
     public StringTag newStringTag(String name, String value) {
-        return new CanaryStringTag(name, value);
+        return new CanaryStringTag(value);
     }
 
     /**
@@ -147,7 +147,8 @@ public final class CanaryNBTFactory implements NBTFactory {
                 default:
                     return null;
             }
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             return null;
         }
     }

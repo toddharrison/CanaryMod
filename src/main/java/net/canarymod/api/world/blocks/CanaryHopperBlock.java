@@ -1,18 +1,17 @@
 package net.canarymod.api.world.blocks;
 
-import java.util.Arrays;
-
 import net.canarymod.api.inventory.CanaryBlockInventory;
 import net.canarymod.api.inventory.CanaryItem;
 import net.canarymod.api.inventory.Inventory;
 import net.canarymod.api.inventory.InventoryType;
 import net.canarymod.api.inventory.Item;
 import net.canarymod.api.world.World;
-import net.minecraft.server.IInventory;
-import net.minecraft.server.InventoryLargeChest;
-import net.minecraft.server.ItemStack;
-import net.minecraft.server.TileEntity;
-import net.minecraft.server.TileEntityHopper;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryLargeChest;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntityHopper;
+
+import java.util.Arrays;
 
 /**
  * @author Somners
@@ -49,17 +48,20 @@ public class CanaryHopperBlock extends CanaryBlockInventory implements HopperBlo
 
     /**
      * Gets the Inventory from the inventory instance.
-     * 
+     *
      * @param oiinventory
-     *            OIInventory instance to get Inventory wrapper for.
+     *         OIInventory instance to get Inventory wrapper for.
+     *
      * @return The inventory or null if none.
      */
     private Inventory getBaseContainerBlock(IInventory iinventory) {
-        if (iinventory instanceof TileEntity) {
-            return (Inventory) ((TileEntity) iinventory).complexBlock;
-        } else if (iinventory instanceof InventoryLargeChest) {
+        if (iinventory instanceof net.minecraft.tileentity.TileEntity) {
+            return (Inventory) ((net.minecraft.tileentity.TileEntity) iinventory).complexBlock;
+        }
+        else if (iinventory instanceof InventoryLargeChest) {
             return new CanaryDoubleChest((InventoryLargeChest) iinventory);
-        } else {
+        }
+        else {
             return null;
         }
     }
@@ -93,7 +95,7 @@ public class CanaryHopperBlock extends CanaryBlockInventory implements HopperBlo
      */
     @Override
     public World getWorld() {
-        return this.getTileEntity().az().getCanaryWorld();
+        return this.getTileEntity().w().getCanaryWorld();
     }
 
     /**

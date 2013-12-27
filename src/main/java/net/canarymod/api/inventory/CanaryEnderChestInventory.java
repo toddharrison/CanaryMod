@@ -1,13 +1,14 @@
 package net.canarymod.api.inventory;
 
-import java.util.Arrays;
 import net.canarymod.api.entity.living.humanoid.Human;
-import net.minecraft.server.InventoryEnderChest;
-import net.minecraft.server.ItemStack;
+import net.minecraft.inventory.InventoryEnderChest;
+import net.minecraft.item.ItemStack;
+
+import java.util.Arrays;
 
 /**
  * EnderChest Inventory implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryEnderChestInventory extends CanaryEntityInventory implements EnderChestInventory {
@@ -78,7 +79,7 @@ public class CanaryEnderChestInventory extends CanaryEntityInventory implements 
      */
     @Override
     public void update() {
-        getHandle().k_();
+        getHandle().l_();
     }
 
     public InventoryEnderChest getHandle() {

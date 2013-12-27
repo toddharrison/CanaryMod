@@ -1,20 +1,22 @@
 package net.canarymod.api.entity.living.animal;
 
 import net.canarymod.api.entity.EntityType;
-import net.minecraft.server.EntityBat;
+import net.minecraft.entity.passive.EntityBat;
+
+import static net.canarymod.api.entity.EntityType.BAT;
 
 /**
  * Bat wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
-public class CanaryBat extends CanaryEntityAnimal implements Bat {
+public class CanaryBat extends CanaryAnimal implements Bat {
 
     /**
      * Constructs a new wrapper for EntityBat
-     * 
+     *
      * @param entity
-     *            the EntityBat to be wrapped
+     *         the EntityBat to be wrapped
      */
     public CanaryBat(EntityBat entity) {
         super(entity);
@@ -25,7 +27,7 @@ public class CanaryBat extends CanaryEntityAnimal implements Bat {
      */
     @Override
     public EntityType getEntityType() {
-        return EntityType.BAT;
+        return BAT;
     }
 
     @Override
@@ -38,7 +40,7 @@ public class CanaryBat extends CanaryEntityAnimal implements Bat {
      */
     @Override
     public boolean isHanging() {
-        return getHandle().bG();
+        return getHandle().bN();
     }
 
     /**

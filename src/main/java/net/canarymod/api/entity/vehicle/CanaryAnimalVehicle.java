@@ -1,16 +1,16 @@
 package net.canarymod.api.entity.vehicle;
 
 import net.canarymod.api.entity.Entity;
-import net.canarymod.api.entity.living.animal.CanaryEntityAnimal;
-import net.minecraft.server.EntityHorse;
-import net.minecraft.server.EntityPig;
+import net.canarymod.api.entity.living.animal.CanaryAnimal;
+import net.minecraft.entity.passive.EntityHorse;
+import net.minecraft.entity.passive.EntityPig;
 
 /**
  * Animal Vehicle implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
-public abstract class CanaryAnimalVehicle extends CanaryEntityAnimal implements Vehicle {
+public abstract class CanaryAnimalVehicle extends CanaryAnimal implements Vehicle {
 
     public CanaryAnimalVehicle(EntityPig entity) {
         super(entity);
@@ -23,7 +23,7 @@ public abstract class CanaryAnimalVehicle extends CanaryEntityAnimal implements 
     @Override
     public Entity getPassenger() {
         if (!isEmpty()) {
-            return entity.n.getCanaryEntity();
+            return entity.m.getCanaryEntity();
         }
         return null;
     }
@@ -40,6 +40,6 @@ public abstract class CanaryAnimalVehicle extends CanaryEntityAnimal implements 
 
     @Override
     public boolean isEmpty() {
-        return entity.n == null;
+        return entity.m == null;
     }
 }

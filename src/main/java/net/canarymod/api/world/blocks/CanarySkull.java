@@ -1,19 +1,19 @@
 package net.canarymod.api.world.blocks;
 
-import net.minecraft.server.TileEntitySkull;
+import net.minecraft.tileentity.TileEntitySkull;
 
 /**
  * Skull wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanarySkull extends CanaryTileEntity implements Skull {
 
     /**
      * Constructs a new wrapper for TileEntitySkull
-     * 
+     *
      * @param tileentity
-     *            the TileEntitySkull to wrap
+     *         the TileEntitySkull to wrap
      */
     public CanarySkull(TileEntitySkull tileentity) {
         super(tileentity);

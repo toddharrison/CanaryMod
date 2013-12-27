@@ -1,15 +1,15 @@
 package net.canarymod.api.world;
 
+import net.minecraft.world.ChunkCoordIntPair;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.server.ChunkCoordIntPair;
-
 public class CanaryChunkProviderServer implements ChunkProvider {
 
-    private net.minecraft.server.ChunkProviderServer handle;
+    private net.minecraft.world.gen.ChunkProviderServer handle;
 
-    public CanaryChunkProviderServer(net.minecraft.server.ChunkProviderServer handle) {
+    public CanaryChunkProviderServer(net.minecraft.world.gen.ChunkProviderServer handle) {
         this.handle = handle;
     }
 
@@ -44,23 +44,23 @@ public class CanaryChunkProviderServer implements ChunkProvider {
     public Chunk regenerateChunk(int x, int z) {
         Long chunkCoordIntPair = ChunkCoordIntPair.a(x, z);
         // Unloading the chunk
-        net.minecraft.server.Chunk unloadedChunk = (net.minecraft.server.Chunk) handle.f.a(chunkCoordIntPair.longValue());
+        net.minecraft.world.chunk.Chunk unloadedChunk = (net.minecraft.world.chunk.Chunk) handle.g.a(chunkCoordIntPair.longValue());
 
         if (unloadedChunk != null) {
             unloadedChunk.e();
             handle.b(unloadedChunk); // save chunk data
             handle.a(unloadedChunk); // save extra chunk data
 
-            handle.b.remove(chunkCoordIntPair);
-            handle.f.d(chunkCoordIntPair.longValue());
-            handle.g.remove(unloadedChunk);
+            handle.c.remove(chunkCoordIntPair);
+            handle.g.d(chunkCoordIntPair.longValue());
+            handle.h.remove(unloadedChunk);
         }
 
         // Generating the new chunk
-        net.minecraft.server.Chunk newChunk = handle.d.d(x, z);
+        net.minecraft.world.chunk.Chunk newChunk = handle.e.d(x, z);
 
-        handle.f.a(chunkCoordIntPair, newChunk);
-        handle.g.add(newChunk);
+        handle.g.a(chunkCoordIntPair, newChunk);
+        handle.h.add(newChunk);
         if (newChunk != null) {
             newChunk.c();
             newChunk.d();
@@ -107,8 +107,8 @@ public class CanaryChunkProviderServer implements ChunkProvider {
     @SuppressWarnings("unchecked")
     @Override
     public List<Chunk> getLoadedChunks() {
-        List<Chunk> loadedChunks = new ArrayList<Chunk>(this.handle.g.size());
-        for (net.minecraft.server.Chunk nmschunk : (List<net.minecraft.server.Chunk>)this.handle.g) {
+        List<Chunk> loadedChunks = new ArrayList<Chunk>(this.handle.h.size());
+        for (net.minecraft.world.chunk.Chunk nmschunk : (List<net.minecraft.world.chunk.Chunk>) this.handle.h) {
             loadedChunks.add(nmschunk.getCanaryChunk());
         }
         return loadedChunks;
@@ -120,7 +120,7 @@ public class CanaryChunkProviderServer implements ChunkProvider {
      *
      * @return net.minecraft.server.ChunkProviderServer
      */
-    public net.minecraft.server.ChunkProviderServer getHandle() {
+    public net.minecraft.world.gen.ChunkProviderServer getHandle() {
         return this.handle;
     }
 

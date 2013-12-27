@@ -4,10 +4,10 @@ import java.util.List;
 
 /**
  * Our implementation of the notchian code for plugin use.
- * 
+ *
  * @author Somners
  */
-public class ScoreCanaryCriteria extends net.minecraft.server.ScoreDummyCriteria {
+public class ScoreCanaryCriteria extends net.minecraft.scoreboard.ScoreDummyCriteria {
 
     private ScoreObjectiveCriteria criteria;
 

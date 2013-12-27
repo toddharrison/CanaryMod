@@ -1,48 +1,26 @@
 package net.canarymod.api.inventory.slot;
 
-import net.canarymod.api.inventory.Inventory;
-import net.minecraft.server.Container;
-import net.minecraft.server.ContainerBeacon;
-import net.minecraft.server.ContainerBrewingStand;
-import net.minecraft.server.ContainerChest;
-import net.minecraft.server.ContainerDispenser;
-import net.minecraft.server.ContainerEnchantment;
-import net.minecraft.server.ContainerFurnace;
-import net.minecraft.server.ContainerHorseInventory;
-import net.minecraft.server.ContainerHorseInventorySlotArmor;
-import net.minecraft.server.ContainerHorseInventorySlotSaddle;
-import net.minecraft.server.ContainerMerchant;
-import net.minecraft.server.ContainerPlayer;
-import net.minecraft.server.ContainerRepair;
-import net.minecraft.server.ContainerRepairINNER2;
-import net.minecraft.server.ContainerWorkbench;
-import net.minecraft.server.Slot;
-import net.minecraft.server.SlotArmor;
-import net.minecraft.server.SlotBeacon;
-import net.minecraft.server.SlotBrewingStandIngredient;
-import net.minecraft.server.SlotBrewingStandPotion;
-import net.minecraft.server.SlotCrafting;
-import net.minecraft.server.SlotEnchantment;
-import net.minecraft.server.SlotFurnace;
-import net.minecraft.server.SlotMerchantResult;
+import net.minecraft.inventory.Container;
 
 /**
  * SlotHelper for SlotClickHook
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public final class SlotHelper {
 
     /**
      * Matches a Container and slot index to a {@link SlotType}
-     * 
+     *
      * @param container
-     *            the Container being used
+     *         the Container being used
      * @param slotIndex
-     *            the slot id
+     *         the slot id
+     *
      * @return the {@link SlotType}
      */
     public static SlotType getSlotType(Container container, int slotIndex) {
+        /* BROKEN
         if (container == null) {
             return SlotType.NULL;
         }
@@ -74,7 +52,7 @@ public final class SlotHelper {
             return SlotType.FURNACE;
         } else if (slot instanceof SlotMerchantResult) {
             return SlotType.MERCHANT;
-        } else if (slot instanceof ContainerRepairINNER2) {
+        } else if (slot instanceof ContainerRepair) {
             return SlotType.REPAIR;
         } else if (slot instanceof ContainerHorseInventorySlotSaddle) {
             return SlotType.SADDLE;
@@ -85,14 +63,17 @@ public final class SlotHelper {
         } else {
             return SlotType.DEFAULT;
         }
+        */
+        return SlotType.DEFAULT;
     }
 
     /**
      * Attempts to define slots. Minecraft updates can break the definitions if slots are added/removed/modified.
-     * 
+     *
      * @return {@link SecondarySlotType}
      */
     public static SecondarySlotType getSpecificSlotType(Container container, int slotIndex) {
+        /* BROKEN
         if (container == null) {
             return SecondarySlotType.NULL;
         }
@@ -190,6 +171,7 @@ public final class SlotHelper {
         if (localSlot >= 27 && localSlot < 36) {
             return SecondarySlotType.QUICKBAR;
         }
+        */
 
         return SecondarySlotType.INVENTORY;
     }

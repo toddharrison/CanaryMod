@@ -3,20 +3,20 @@ package net.canarymod.api.entity.living;
 import net.canarymod.api.entity.EntityType;
 import net.canarymod.api.world.CanaryVillage;
 import net.canarymod.api.world.Village;
-import net.minecraft.server.EntityIronGolem;
+import net.minecraft.entity.monster.EntityIronGolem;
 
 /**
  * IronGolem wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryIronGolem extends CanaryEntityLiving implements IronGolem {
 
     /**
      * Constructs a new wrapper for EntityIronGolem
-     * 
+     *
      * @param entity
-     *            the EntityIronGolem to be wrapped
+     *         the EntityIronGolem to be wrapped
      */
     public CanaryIronGolem(EntityIronGolem entity) {
         super(entity);
@@ -40,7 +40,7 @@ public class CanaryIronGolem extends CanaryEntityLiving implements IronGolem {
      */
     @Override
     public Village getVillage() {
-        return getHandle().bT().getCanaryVillage();
+        return getHandle().bX().getCanaryVillage();
     }
 
     /**
@@ -56,7 +56,7 @@ public class CanaryIronGolem extends CanaryEntityLiving implements IronGolem {
      */
     @Override
     public boolean isPlayerCreated() {
-        return getHandle().bW();
+        return getHandle().ca();
     }
 
     /**
@@ -72,7 +72,7 @@ public class CanaryIronGolem extends CanaryEntityLiving implements IronGolem {
      */
     @Override
     public boolean isHoldingRose() {
-        return getHandle().bV() > 0;
+        return getHandle().bZ() > 0;
     }
 
     /**
@@ -88,7 +88,7 @@ public class CanaryIronGolem extends CanaryEntityLiving implements IronGolem {
      */
     @Override
     public int getHoldRoseTicks() {
-        return getHandle().bV();
+        return getHandle().bZ();
     }
 
     /**

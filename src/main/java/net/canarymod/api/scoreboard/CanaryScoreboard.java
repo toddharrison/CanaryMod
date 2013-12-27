@@ -1,21 +1,21 @@
 package net.canarymod.api.scoreboard;
 
+import net.canarymod.api.entity.living.humanoid.CanaryPlayer;
+import net.canarymod.api.entity.living.humanoid.Player;
+import net.minecraft.network.play.server.S3DPacketDisplayScoreboard;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import net.canarymod.api.entity.living.humanoid.CanaryPlayer;
-import net.canarymod.api.entity.living.humanoid.Player;
-import net.minecraft.server.Packet;
-import net.minecraft.server.Packet208SetDisplayObjective;
 
 /**
  * @author Somners
  */
 public class CanaryScoreboard implements Scoreboard {
 
-    private net.minecraft.server.Scoreboard handle;
+    private net.minecraft.scoreboard.Scoreboard handle;
 
-    public CanaryScoreboard(net.minecraft.server.Scoreboard handle) {
+    public CanaryScoreboard(net.minecraft.scoreboard.Scoreboard handle) {
         this.handle = handle;
     }
 
@@ -23,7 +23,7 @@ public class CanaryScoreboard implements Scoreboard {
     public List<ScoreObjective> getScoreObjectives() {
         List<ScoreObjective> toRet = new ArrayList<ScoreObjective>();
         for (Object o : handle.getAllScoreObjective()) {
-            net.minecraft.server.ScoreObjective objective = (net.minecraft.server.ScoreObjective) o;
+            net.minecraft.scoreboard.ScoreObjective objective = (net.minecraft.scoreboard.ScoreObjective) o;
             toRet.add(objective.getCanaryScoreObjective());
         }
         return toRet;
@@ -31,7 +31,7 @@ public class CanaryScoreboard implements Scoreboard {
 
     @Override
     public void addScoreObjective(String name) {
-        this.handle.a(name, net.minecraft.server.ScoreObjectiveCriteria.b);
+        this.handle.a(name, net.minecraft.scoreboard.ScoreObjectiveCriteria.b);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class CanaryScoreboard implements Scoreboard {
 
     @Override
     public void removeScoreObjective(String name) {
-        net.minecraft.server.ScoreObjective obj = handle.getScoreObjective(name);
+        net.minecraft.scoreboard.ScoreObjective obj = handle.getScoreObjective(name);
         if (obj != null) {
             handle.k(obj);
         }
@@ -62,7 +62,7 @@ public class CanaryScoreboard implements Scoreboard {
     public List<Team> getTeams() {
         List<Team> toRet = new ArrayList<Team>();
         for (Object o : handle.g()) {
-            net.minecraft.server.ScorePlayerTeam team = (net.minecraft.server.ScorePlayerTeam) o;
+            net.minecraft.scoreboard.ScorePlayerTeam team = (net.minecraft.scoreboard.ScorePlayerTeam) o;
             toRet.add(team.getCanaryTeam());
         }
         return toRet;
@@ -81,7 +81,7 @@ public class CanaryScoreboard implements Scoreboard {
     @Override
     public void removeTeam(String name) {
         for (Object o : handle.g()) {
-            net.minecraft.server.ScorePlayerTeam team = (net.minecraft.server.ScorePlayerTeam) o;
+            net.minecraft.scoreboard.ScorePlayerTeam team = (net.minecraft.scoreboard.ScorePlayerTeam) o;
             if (team.b().equalsIgnoreCase(name)) {
                 handle.c(team);
                 return;
@@ -114,12 +114,12 @@ public class CanaryScoreboard implements Scoreboard {
         Collection i = handle.e();
         List<Score> scores = new ArrayList<Score>();
         for (Object o : i) {
-            scores.add(((net.minecraft.server.Score) o).getCanaryScore());
+            scores.add(((net.minecraft.scoreboard.Score) o).getCanaryScore());
         }
         return scores;
     }
 
-    public net.minecraft.server.Scoreboard getHandle() {
+    public net.minecraft.scoreboard.Scoreboard getHandle() {
         return handle;
     }
 
@@ -130,7 +130,7 @@ public class CanaryScoreboard implements Scoreboard {
 
     @Override
     public void setScoreObjectivePostion(ScorePosition type, ScoreObjective objective, Player player) {
-        ((CanaryPlayer) player).getHandle().a.b((Packet) (new Packet208SetDisplayObjective(type.getId(), ((CanaryScoreObjective) objective).getHandle())));
+        ((CanaryPlayer) player).getHandle().a.a(new S3DPacketDisplayScoreboard(type.getId(), ((CanaryScoreObjective) objective).getHandle()));
     }
 
 }

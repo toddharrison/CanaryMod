@@ -1,10 +1,10 @@
 package net.canarymod.api.world;
 
+import net.minecraft.world.biome.BiomeGenBase;
+
 import java.util.Random;
-import net.minecraft.server.BiomeGenBase;
 
 /**
- *
  * @author Somners
  */
 public class CanaryBiome implements Biome {
@@ -20,7 +20,7 @@ public class CanaryBiome implements Biome {
      */
     @Override
     public boolean canSpawnLightning() {
-        return handle.d();
+        return handle.e();
     }
 
     /**
@@ -28,7 +28,7 @@ public class CanaryBiome implements Biome {
      */
     @Override
     public boolean isTropic() {
-        return handle.e();
+        return handle.f();
     }
 
     /**
@@ -52,7 +52,7 @@ public class CanaryBiome implements Biome {
      */
     @Override
     public float getTemperature() {
-        return handle.j();
+        return handle.ao;
     }
 
     /**
@@ -60,7 +60,7 @@ public class CanaryBiome implements Biome {
      */
     @Override
     public void decorate(World world, Random rnd, int x, int z) {
-        handle.a(((CanaryWorld)world).getHandle(), rnd, x, z);
+        handle.a(((CanaryWorld) world).getHandle(), rnd, x, z);
     }
 
     /**
@@ -68,7 +68,7 @@ public class CanaryBiome implements Biome {
      */
     @Override
     public BiomeType getBiomeType() {
-        return BiomeType.fromId((byte)handle.N);
+        return BiomeType.fromId((byte) handle.ay);
     }
 
     /**
@@ -100,7 +100,7 @@ public class CanaryBiome implements Biome {
      */
     @Override
     public boolean canSnow() {
-       return handle.c();
+        return handle.d();
     }
 
     /**

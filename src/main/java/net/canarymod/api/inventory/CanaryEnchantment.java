@@ -4,19 +4,19 @@ import net.canarymod.api.CanaryDamageSource;
 import net.canarymod.api.DamageSource;
 import net.canarymod.api.entity.CanaryEntity;
 import net.canarymod.api.entity.living.EntityLiving;
-import net.minecraft.server.EnchantmentData;
+import net.minecraft.enchantment.EnchantmentData;
 
 /**
  * Enchantment wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryEnchantment implements Enchantment {
-    private net.minecraft.server.Enchantment handle;
+    private net.minecraft.enchantment.Enchantment handle;
     private short level;
 
     public CanaryEnchantment(Type type, short level) {
-        this.handle = net.minecraft.server.Enchantment.b[type.getId()];
+        this.handle = net.minecraft.enchantment.Enchantment.b[type.getId()];
         this.level = level;
     }
 
@@ -25,7 +25,7 @@ public class CanaryEnchantment implements Enchantment {
         this.level = (short) data.c;
     }
 
-    public CanaryEnchantment(net.minecraft.server.Enchantment handle) {
+    public CanaryEnchantment(net.minecraft.enchantment.Enchantment handle) {
         this.handle = handle;
     }
 
@@ -82,7 +82,7 @@ public class CanaryEnchantment implements Enchantment {
      */
     @Override
     public float getDamageModifier(EntityLiving entity) {
-        return getHandle().a(level, (net.minecraft.server.EntityLiving) ((CanaryEntity) entity).getHandle());
+        return getHandle().a(level, (net.minecraft.entity.EntityLiving) ((CanaryEntity) entity).getHandle());
     }
 
     /**
@@ -106,7 +106,7 @@ public class CanaryEnchantment implements Enchantment {
      */
     @Override
     public Type getType() {
-        return Enchantment.Type.fromId(getHandle().z);
+        return Enchantment.Type.fromId(getHandle().B);
     }
 
     /**
@@ -135,10 +135,10 @@ public class CanaryEnchantment implements Enchantment {
 
     /**
      * Get the Enchantment for this wrapper
-     * 
+     *
      * @return
      */
-    public net.minecraft.server.Enchantment getHandle() {
+    public net.minecraft.enchantment.Enchantment getHandle() {
         return handle;
     }
 

@@ -1,6 +1,5 @@
 package net.canarymod.api;
 
-import java.util.ArrayList;
 import net.canarymod.Canary;
 import net.canarymod.api.entity.living.humanoid.CanaryPlayer;
 import net.canarymod.api.entity.living.humanoid.Player;
@@ -8,8 +7,11 @@ import net.canarymod.api.packet.CanaryPacket;
 import net.canarymod.api.packet.Packet;
 import net.canarymod.api.world.DimensionType;
 import net.canarymod.api.world.World;
-import net.minecraft.server.EntityPlayerMP;
-import net.minecraft.server.ServerConfigurationManager;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.server.management.ServerConfigurationManager;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CanaryConfigurationManager implements ConfigurationManager {
 
@@ -43,13 +45,13 @@ public class CanaryConfigurationManager implements ConfigurationManager {
 
     @Override
     public Player getPlayerByName(String name) {
-        EntityPlayerMP player = manager.f(name);
+        EntityPlayerMP player = manager.e(name);
         return player == null ? null : player.getPlayer();
     }
 
     @Override
-    public ArrayList<Player> getAllPlayers() {
-        ArrayList<Player> players = new ArrayList<Player>(manager.a.size());
+    public List<Player> getAllPlayers() {
+        List<Player> players = new ArrayList<Player>(manager.a.size());
 
         for (Object p : manager.a) {
             if (!(p instanceof EntityPlayerMP)) {

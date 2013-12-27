@@ -1,20 +1,20 @@
 package net.canarymod.api.nbt;
 
-import net.minecraft.server.NBTTagByte;
+import net.minecraft.nbt.NBTTagByte;
 
 /**
  * ByteTag wrapper implementation
- * 
+ *
  * @author Greg (gregthegeek)
  * @author Jason (darkdiplomat)
  */
-public class CanaryByteTag extends CanaryBaseTag implements ByteTag {
+public class CanaryByteTag extends CanaryPrimativeTag implements ByteTag {
 
     /**
      * Constructs a new wrapper for NBTTagByte
-     * 
+     *
      * @param tag
-     *            the NBTTagByte to wrap
+     *         the NBTTagByte to wrap
      */
     public CanaryByteTag(NBTTagByte tag) {
         super(tag);
@@ -22,14 +22,12 @@ public class CanaryByteTag extends CanaryBaseTag implements ByteTag {
 
     /**
      * Constructs a new CanaryByteTag and associated NBTTagByte
-     * 
-     * @param name
-     *            the name of the tag
+     *
      * @param value
-     *            the byte to supply to the tag
+     *         the byte to supply to the tag
      */
-    public CanaryByteTag(String name, byte value) {
-        super(new NBTTagByte(name, value));
+    public CanaryByteTag(byte value) {
+        super(new NBTTagByte(value));
     }
 
     /**
@@ -37,7 +35,7 @@ public class CanaryByteTag extends CanaryBaseTag implements ByteTag {
      */
     @Override
     public byte getValue() {
-        return getHandle().a;
+        return getByteValue();
     }
 
     /**
@@ -45,7 +43,7 @@ public class CanaryByteTag extends CanaryBaseTag implements ByteTag {
      */
     @Override
     public void setValue(byte value) {
-        getHandle().a = value;
+        getHandle().b = value;
     }
 
     /**

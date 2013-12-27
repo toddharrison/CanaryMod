@@ -1,17 +1,16 @@
 package net.canarymod.api.entity;
 
-import net.minecraft.server.Entity;
-import net.minecraft.server.IProjectile;
+import net.minecraft.entity.IProjectile;
 
 /**
  * Projectile wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public abstract class CanaryProjectile extends CanaryEntity implements Projectile {
 
     public CanaryProjectile(IProjectile projectile) {
-        super((Entity) projectile);
+        super((net.minecraft.entity.Entity) projectile);
     }
 
     /**

@@ -2,29 +2,29 @@ package net.canarymod.api.entity.living.humanoid;
 
 import net.canarymod.api.CanaryVillagerTrade;
 import net.canarymod.api.VillagerTrade;
-import net.canarymod.api.entity.CanaryEntity;
 import net.canarymod.api.entity.EntityType;
 import net.canarymod.api.entity.living.CanaryEntityLiving;
+import net.canarymod.api.entity.living.CanaryLivingBase;
 import net.canarymod.api.entity.living.LivingBase;
 import net.canarymod.api.world.CanaryVillage;
 import net.canarymod.api.world.Village;
-import net.minecraft.server.EntityPlayer;
-import net.minecraft.server.EntityVillager;
-import net.minecraft.server.MerchantRecipe;
-import net.minecraft.server.MerchantRecipeList;
+import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.village.MerchantRecipe;
+import net.minecraft.village.MerchantRecipeList;
 
 /**
  * Villager wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryVillager extends CanaryEntityLiving implements Villager {
 
     /**
      * Constructs a new wrapper for EntityVillager
-     * 
+     *
      * @param entity
-     *            the EntityVillager to wrap
+     *         the EntityVillager to wrap
      */
     public CanaryVillager(EntityVillager entity) {
         super(entity);
@@ -44,7 +44,7 @@ public class CanaryVillager extends CanaryEntityLiving implements Villager {
      */
     @Override
     public Profession getProfession() {
-        return Profession.fromId(getHandle().bT());
+        return Profession.fromId(getHandle().bX());
     }
 
     /**
@@ -52,7 +52,7 @@ public class CanaryVillager extends CanaryEntityLiving implements Villager {
      */
     @Override
     public void setProfession(Profession profession) {
-        getHandle().p(profession.ordinal());
+        getHandle().s(profession.ordinal());
     }
 
     /**
@@ -60,7 +60,7 @@ public class CanaryVillager extends CanaryEntityLiving implements Villager {
      */
     @Override
     public boolean isMating() {
-        return getHandle().bU();
+        return getHandle().bY();
     }
 
     /**
@@ -68,7 +68,7 @@ public class CanaryVillager extends CanaryEntityLiving implements Villager {
      */
     @Override
     public void setMating(boolean isMating) {
-        getHandle().j(isMating);
+        getHandle().i(isMating);
     }
 
     /**
@@ -76,7 +76,7 @@ public class CanaryVillager extends CanaryEntityLiving implements Villager {
      */
     @Override
     public boolean isPlaying() {
-        return getHandle().bS();
+        return getHandle().bZ();
     }
 
     /**
@@ -84,7 +84,7 @@ public class CanaryVillager extends CanaryEntityLiving implements Villager {
      */
     @Override
     public void setPlaying(boolean playing) {
-        getHandle().i(playing);
+        getHandle().j(playing);
     }
 
     /**
@@ -92,7 +92,7 @@ public class CanaryVillager extends CanaryEntityLiving implements Villager {
      */
     @Override
     public void setRevengeTarget(LivingBase targetEntity) {
-        getHandle().c((net.minecraft.server.EntityLivingBase) ((CanaryEntity) targetEntity).getHandle());
+        getHandle().b(((CanaryLivingBase) targetEntity).getHandle());
     }
 
     /**
@@ -100,7 +100,8 @@ public class CanaryVillager extends CanaryEntityLiving implements Villager {
      */
     @Override
     public Player getCustomer() {
-        return (Player) getHandle().m_().getCanaryEntity();
+        EntityPlayer customerentity = getHandle().b();
+        return customerentity == null ? null : (Player) customerentity.getCanaryEntity();
     }
 
     /**
@@ -108,7 +109,7 @@ public class CanaryVillager extends CanaryEntityLiving implements Villager {
      */
     @Override
     public boolean hasCustomer() {
-        return getHandle().m_() != null;
+        return getHandle().ca();
     }
 
     /**
@@ -116,7 +117,7 @@ public class CanaryVillager extends CanaryEntityLiving implements Villager {
      */
     @Override
     public void setCustomer(Player player) {
-        getHandle().a(((CanaryPlayer) player).getHandle());
+        getHandle().a_(((CanaryPlayer) player).getHandle());
     }
 
     /**
@@ -140,7 +141,7 @@ public class CanaryVillager extends CanaryEntityLiving implements Villager {
      */
     @Override
     public int getGrowingAge() {
-        return getHandle().b();
+        return getHandle().d();
     }
 
     /**
@@ -148,7 +149,7 @@ public class CanaryVillager extends CanaryEntityLiving implements Villager {
      */
     @Override
     public void setGrowingAge(int age) {
-        getHandle().a(age);
+        getHandle().c(age);
     }
 
     /**

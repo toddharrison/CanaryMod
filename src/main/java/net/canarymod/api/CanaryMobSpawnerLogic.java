@@ -1,17 +1,17 @@
 package net.canarymod.api;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import net.canarymod.Canary;
 import net.canarymod.api.entity.CanaryEntity;
 import net.canarymod.api.nbt.BaseTag;
 import net.canarymod.api.nbt.CanaryCompoundTag;
 import net.canarymod.api.nbt.CompoundTag;
 import net.canarymod.api.nbt.ListTag;
-import net.minecraft.server.MobSpawnerBaseLogic;
-import net.minecraft.server.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.MobSpawnerBaseLogic;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Implementation of MobSpawnerLogic
@@ -36,7 +36,7 @@ public class CanaryMobSpawnerLogic implements MobSpawnerLogic {
         ListTag list = tag.getListTag("SpawnPotentials");
 
         if (list.isEmpty()) {
-            return new String[]{logic.e()};
+            return new String[]{ logic.e() };
         }
 
         for (int i = 0; i < list.size(); i++) {
@@ -143,7 +143,7 @@ public class CanaryMobSpawnerLogic implements MobSpawnerLogic {
             CanaryCompoundTag tag;
             for (int i = 0; i < list.size(); i++) {
                 tag = (CanaryCompoundTag) list.get(i);
-                net.minecraft.server.Entity ent = ((CanaryEntity) Canary.factory().getEntityFactory().newEntity(tag.getString("id"))).getHandle();
+                net.minecraft.entity.Entity ent = ((CanaryEntity) Canary.factory().getEntityFactory().newEntity(tag.getString("id"))).getHandle();
                 ent.setNBTProperties(((CanaryCompoundTag) tag.getCompoundTag("Properties")).getHandle());
                 array.add(new CanaryMobSpawnerEntry(ent.getCanaryEntity()));
             }

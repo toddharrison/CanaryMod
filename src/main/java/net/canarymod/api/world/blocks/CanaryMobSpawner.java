@@ -1,8 +1,8 @@
 package net.canarymod.api.world.blocks;
 
 import net.canarymod.api.MobSpawnerLogic;
-import net.minecraft.server.TileEntity;
-import net.minecraft.server.TileEntityMobSpawner;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityMobSpawner;
 
 public class CanaryMobSpawner extends CanaryTileEntity implements MobSpawner {
 

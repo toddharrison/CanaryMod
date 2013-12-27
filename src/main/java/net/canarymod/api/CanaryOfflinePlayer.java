@@ -1,8 +1,5 @@
 package net.canarymod.api;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import net.canarymod.Canary;
 import net.canarymod.api.nbt.CanaryBaseTag;
 import net.canarymod.api.nbt.CanaryCompoundTag;
@@ -16,8 +13,11 @@ import net.canarymod.api.world.World;
 import net.canarymod.api.world.position.Position;
 import net.canarymod.permissionsystem.PermissionProvider;
 import net.canarymod.user.Group;
-import net.minecraft.server.ISaveHandler;
-import net.minecraft.server.SaveHandler;
+import net.minecraft.world.storage.ISaveHandler;
+import net.minecraft.world.storage.SaveHandler;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Offline Player implementation
@@ -113,7 +113,8 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
         String world = data.getString("LevelName");
         try {
             return Canary.getServer().getWorldManager().getWorld(world, DimensionType.fromId(dim), false);
-        } catch (UnknownWorldException e) {
+        }
+        catch (UnknownWorldException e) {
             return Canary.getServer().getDefaultWorld();
         }
     }
@@ -275,11 +276,12 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
             return;
         }
         if (getNBT() != null) {
-            ISaveHandler handler = ((CanaryWorld) getWorld()).getHandle().M();
+            ISaveHandler handler = ((CanaryWorld) getWorld()).getHandle().L();
             if (handler instanceof SaveHandler) {
                 SaveHandler shandler = (SaveHandler) handler;
                 shandler.writePlayerNbt(getName(), (CanaryCompoundTag) getNBT());
-            } else {
+            }
+            else {
                 Canary.logServerMessage(getName() + "'s OfflinePlayer could not be saved! Unsupported SaveHandler!");
             }
         }

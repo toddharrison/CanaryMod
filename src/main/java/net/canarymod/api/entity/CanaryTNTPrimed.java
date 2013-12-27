@@ -1,11 +1,11 @@
 package net.canarymod.api.entity;
 
 import net.canarymod.api.entity.living.LivingBase;
-import net.minecraft.server.EntityTNTPrimed;
+import net.minecraft.entity.item.EntityTNTPrimed;
 
 /**
  * EntityTNTPrimed wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryTNTPrimed extends CanaryEntity implements TNTPrimed {
@@ -14,9 +14,9 @@ public class CanaryTNTPrimed extends CanaryEntity implements TNTPrimed {
 
     /**
      * Constructs a new wrapper for EntityItemFrame
-     * 
+     *
      * @param tntprimed
-     *            the EntityItemFrame to be wrapped
+     *         the EntityItemFrame to be wrapped
      */
     public CanaryTNTPrimed(EntityTNTPrimed tntprimed) {
         super(tntprimed);
@@ -37,7 +37,7 @@ public class CanaryTNTPrimed extends CanaryEntity implements TNTPrimed {
 
     @Override
     public LivingBase getActivatedBy() {
-        return (LivingBase) getHandle().c().getCanaryEntity();
+        return (LivingBase) getHandle().e().getCanaryEntity();
     }
 
     /**

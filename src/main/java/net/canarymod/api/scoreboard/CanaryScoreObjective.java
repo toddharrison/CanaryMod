@@ -5,9 +5,9 @@ package net.canarymod.api.scoreboard;
  */
 public class CanaryScoreObjective implements ScoreObjective {
 
-    private final net.minecraft.server.ScoreObjective handle;
+    private final net.minecraft.scoreboard.ScoreObjective handle;
 
-    public CanaryScoreObjective(net.minecraft.server.ScoreObjective handle) {
+    public CanaryScoreObjective(net.minecraft.scoreboard.ScoreObjective handle) {
         this.handle = handle;
     }
 
@@ -18,7 +18,7 @@ public class CanaryScoreObjective implements ScoreObjective {
 
     @Override
     public ScoreObjectiveCriteria getScoreObjectiveCriteria() {
-        return ((net.minecraft.server.ScoreDummyCriteria) handle.c()).getCanaryScoreObjectiveCriteria();
+        return ((net.minecraft.scoreboard.ScoreDummyCriteria) handle.c()).getCanaryScoreObjectiveCriteria();
     }
 
     @Override
@@ -31,7 +31,7 @@ public class CanaryScoreObjective implements ScoreObjective {
         handle.a(name);
     }
 
-    public net.minecraft.server.ScoreObjective getHandle() {
+    public net.minecraft.scoreboard.ScoreObjective getHandle() {
         return handle;
     }
 }

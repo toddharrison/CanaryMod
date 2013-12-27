@@ -1,20 +1,20 @@
 package net.canarymod.api.entity.living.animal;
 
 import net.canarymod.api.entity.living.LivingBase;
-import net.minecraft.server.EntityTameable;
+import net.minecraft.entity.passive.EntityTameable;
 
 /**
  * Tameable wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
-public abstract class CanaryTameable extends CanaryEntityAnimal implements Tameable {
+public abstract class CanaryTameable extends CanaryAgeableAnimal implements Tameable {
 
     /**
      * Constructs a new wrapper for EntityTameable
-     * 
+     *
      * @param entity
-     *            the EntityTameable to wrap
+     *         the EntityTameable to wrap
      */
     public CanaryTameable(EntityTameable entity) {
         super(entity);
@@ -25,7 +25,7 @@ public abstract class CanaryTameable extends CanaryEntityAnimal implements Tamea
      */
     @Override
     public LivingBase getOwner() {
-        return (LivingBase) getHandle().bV().getCanaryEntity();
+        return (LivingBase) getHandle().bZ().getCanaryEntity();
     }
 
     /**
@@ -33,7 +33,7 @@ public abstract class CanaryTameable extends CanaryEntityAnimal implements Tamea
      */
     @Override
     public String getOwnerName() {
-        return getHandle().h_();
+        return getHandle().b();
     }
 
     /**
@@ -57,7 +57,7 @@ public abstract class CanaryTameable extends CanaryEntityAnimal implements Tamea
      */
     @Override
     public boolean isTamed() {
-        return getHandle().bT();
+        return getHandle().bX();
     }
 
     /**
@@ -73,7 +73,7 @@ public abstract class CanaryTameable extends CanaryEntityAnimal implements Tamea
      */
     @Override
     public boolean isSitting() {
-        return getHandle().bU();
+        return getHandle().bY();
     }
 
     /**
@@ -81,7 +81,7 @@ public abstract class CanaryTameable extends CanaryEntityAnimal implements Tamea
      */
     @Override
     public void setSitting(boolean sitting) {
-        ((EntityTameable) entity).k(sitting);
+        getHandle().k(sitting);
     }
 
     /**

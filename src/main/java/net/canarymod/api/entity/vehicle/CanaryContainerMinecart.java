@@ -1,14 +1,14 @@
 package net.canarymod.api.entity.vehicle;
 
-import java.util.Arrays;
 import net.canarymod.api.inventory.CanaryItem;
 import net.canarymod.api.inventory.Item;
 import net.canarymod.api.inventory.ItemType;
 import net.canarymod.api.nbt.CanaryCompoundTag;
 import net.canarymod.config.Configuration;
-import net.minecraft.server.EntityMinecart;
-import net.minecraft.server.EntityMinecartContainer;
-import net.minecraft.server.ItemStack;
+import net.minecraft.entity.item.EntityMinecartContainer;
+import net.minecraft.item.ItemStack;
+
+import java.util.Arrays;
 
 /**
  * @author Somners
@@ -16,7 +16,7 @@ import net.minecraft.server.ItemStack;
 public abstract class CanaryContainerMinecart extends CanaryMinecart implements ContainerMinecart {
     private boolean openRemote;
 
-    public CanaryContainerMinecart(EntityMinecart minecart) {
+    public CanaryContainerMinecart(EntityMinecartContainer minecart) {
         super(minecart);
     }
 
@@ -97,11 +97,13 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
                 if (item.getAmount() == remaining) {
                     removeItem(item.getSlot());
                     return;
-                } else if (item.getAmount() > remaining) {
+                }
+                else if (item.getAmount() > remaining) {
                     item.setAmount(item.getAmount() - remaining);
                     setSlot(item.getSlot(), item);
                     return;
-                } else {
+                }
+                else {
                     removeItem(item.getSlot());
                     remaining -= item.getAmount();
                 }
@@ -130,11 +132,13 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
                 if (it.getAmount() == remaining) {
                     removeItem(it.getSlot());
                     return;
-                } else if (it.getAmount() > remaining) {
+                }
+                else if (it.getAmount() > remaining) {
                     it.setAmount(it.getAmount() - remaining);
                     setSlot(it.getSlot(), it);
                     return;
-                } else {
+                }
+                else {
                     removeItem(it.getSlot());
                     remaining -= it.getAmount();
                 }
@@ -248,7 +252,7 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
      */
     @Override
     public int getSize() {
-        return this.getHandle().j_();
+        return this.getHandle().a();
     }
 
     /**
@@ -337,25 +341,6 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
         return hasItemStack(itemId, amount, 64, damage);
     }
 
-    // /**
-    // * {@inheritDoc}
-    // */
-    // @Override
-    // public boolean hasItemStack(int itemId, int minAmount, int maxAmount) {
-    // for (int index = 0; index < getSize(); index++) {
-    // Item toCheck = getSlot(index);
-    //
-    // if (toCheck != null && toCheck.getId() == itemId) {
-    // int am = toCheck.getAmount();
-    //
-    // if (am > minAmount && am < maxAmount) {
-    // return true;
-    // }
-    // }
-    // }
-    // return false;
-    // }
-
     /**
      * {@inheritDoc}
      */
@@ -401,7 +386,7 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
             int eslot = this.getEmptySlot();
 
             if (eslot != -1) {
-                CanaryCompoundTag nbt = new CanaryCompoundTag("");
+                CanaryCompoundTag nbt = new CanaryCompoundTag();
 
                 ((CanaryItem) item).getHandle().b(nbt.getHandle());
                 Item tempItem = new CanaryItem(item.getId(), amount, -1, item.getDamage());
@@ -572,7 +557,7 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
 
     @Override
     public void update() {
-        this.getHandle().k_();
+        this.getHandle().l_();
     }
 
     public boolean canOpenRemote() {

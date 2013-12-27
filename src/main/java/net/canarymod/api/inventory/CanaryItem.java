@@ -6,8 +6,8 @@ import net.canarymod.api.nbt.CanaryStringTag;
 import net.canarymod.api.nbt.CompoundTag;
 import net.canarymod.api.nbt.ListTag;
 import net.canarymod.api.nbt.StringTag;
-import net.minecraft.server.ItemStack;
-import net.minecraft.server.NBTTagCompound;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
 /**
  * Item wrapper implementation
@@ -20,31 +20,40 @@ public class CanaryItem implements Item {
     private int slot = -1;
     private ItemStack item;
 
+    private static int getItemId(ItemStack stack) {
+        return net.minecraft.item.Item.b(stack.b());
+    }
+
+    private static net.minecraft.item.Item getItemFromId(int id) {
+        return net.minecraft.item.Item.d(id);
+    }
+
     /**
      * Constructs a new CanaryItem
      *
-     * @param itemStack the native Minecraft item stack to wrap
+     * @param itemStack
+     *         the native Minecraft item stack to wrap
      */
     public CanaryItem(ItemStack itemStack) {
-        this.type = ItemType.fromIdAndData(itemStack.d, itemStack.k());
+        this.type = ItemType.fromIdAndData(getItemId(itemStack), itemStack.k());
         if (this.type == null) {
             // Seems to be an unregistered item type, go ahead an pass an new unnamed itemtype
-            this.type = new ItemType(itemStack.d, itemStack.k());
+            this.type = new ItemType(getItemId(itemStack), itemStack.k());
         }
         this.item = itemStack;
     }
 
-    public CanaryItem(int id, int amount) {
-        this.type = ItemType.fromId(id);
+    public CanaryItem(int itemId, int amount) {
+        this.type = ItemType.fromId(itemId);
         if (this.type == null) {
             // Seems to be an unregistered item type, go ahead an pass an new unnamed itemtype
-            this.type = new ItemType(id);
+            this.type = new ItemType(itemId);
         }
-        this.item = new ItemStack(id, amount, 0);
+        this.item = new ItemStack(getItemFromId(itemId), amount, 0);
     }
 
     public CanaryItem(int itemId, int amount, int damage) {
-        this.item = new ItemStack(itemId, amount, damage);
+        this.item = new ItemStack(getItemFromId(itemId), amount, damage);
         this.type = ItemType.fromIdAndData(itemId, damage);
         if (this.type == null) {
             // Seems to be an unregistered item type, go ahead an pass an new unnamed itemtype
@@ -53,7 +62,7 @@ public class CanaryItem implements Item {
     }
 
     public CanaryItem(int itemId, int amount, int damage, int slot) {
-        this.item = new ItemStack(itemId, amount, damage);
+        this.item = new ItemStack(getItemFromId(itemId), amount, damage);
         this.slot = slot;
         this.type = ItemType.fromIdAndData(itemId, damage);
         if (this.type == null) {
@@ -76,7 +85,7 @@ public class CanaryItem implements Item {
     @Override
     public void setId(int id) {
         type = ItemType.fromIdAndData(id, type.getData());
-        item.d = type.getId();
+        getHandle().a(getItemFromId(id));
     }
 
     /**
@@ -132,7 +141,8 @@ public class CanaryItem implements Item {
      * {@inheritDoc}
      */
     @Override
-    public void setMaxAmount(int amount) {}
+    public void setMaxAmount(int amount) {
+    }
 
     /**
      * {@inheritDoc}
@@ -224,16 +234,16 @@ public class CanaryItem implements Item {
         CompoundTag tag = getDataTag();
 
         if (tag == null) {
-            tag = new CanaryCompoundTag("tag");
+            tag = new CanaryCompoundTag();
             setDataTag(tag);
         }
         if (!tag.containsKey("display")) {
-            tag.put("display", new CanaryCompoundTag("display"));
+            tag.put("display", new CanaryCompoundTag());
         }
-        CanaryListTag<StringTag> list = new CanaryListTag("Lore");
+        CanaryListTag<StringTag> list = new CanaryListTag();
 
         for (String line : lore) {
-            list.add(new CanaryStringTag("line" + list.size(), line));
+            list.add(new CanaryStringTag(line));
         }
         tag.getCompoundTag("display").put("Lore", list);
     }
@@ -383,7 +393,7 @@ public class CanaryItem implements Item {
      */
     @Override
     public void setDataTag(CompoundTag tag) {
-        getHandle().e = tag == null ? null : ((CanaryCompoundTag) tag).getHandle();
+        getHandle().d(tag == null ? null : ((CanaryCompoundTag) tag).getHandle());
     }
 
     /**
@@ -405,11 +415,11 @@ public class CanaryItem implements Item {
         CompoundTag dataTag = getDataTag();
 
         if (dataTag == null) {
-            dataTag = new CanaryCompoundTag("tag");
+            dataTag = new CanaryCompoundTag();
             setDataTag(dataTag);
         }
         if (!dataTag.containsKey("Canary")) {
-            dataTag.put("Canary", new CanaryCompoundTag("Canary"));
+            dataTag.put("Canary", new CanaryCompoundTag());
         }
         return dataTag.getCompoundTag("Canary");
     }
@@ -487,14 +497,16 @@ public class CanaryItem implements Item {
      * Tests the given object to see if it equals this object
      *
      * @param obj
-     *            the object to test
+     *         the object to test
+     *
      * @return true if the two objects match
      */
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof ItemStack) {
             return ItemStack.b(item, (ItemStack) obj);
-        } else if (obj instanceof CanaryItem) {
+        }
+        else if (obj instanceof CanaryItem) {
             return ItemStack.b(item, ((CanaryItem) obj).getHandle());
         }
         return false;

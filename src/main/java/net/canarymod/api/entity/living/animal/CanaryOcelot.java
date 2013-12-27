@@ -1,20 +1,20 @@
 package net.canarymod.api.entity.living.animal;
 
 import net.canarymod.api.entity.EntityType;
-import net.minecraft.server.EntityOcelot;
+import net.minecraft.entity.passive.EntityOcelot;
 
 /**
  * Ocelot wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryOcelot extends CanaryTameable implements Ocelot {
 
     /**
      * Constructs a new wrapper for EntityOcelot
-     * 
+     *
      * @param entity
-     *            the EntityOcelot to wrap
+     *         the EntityOcelot to wrap
      */
     public CanaryOcelot(EntityOcelot entity) {
         super(entity);
@@ -38,7 +38,7 @@ public class CanaryOcelot extends CanaryTameable implements Ocelot {
      */
     @Override
     public SkinType getSkinType() {
-        return SkinType.values()[getHandle().ca()];
+        return SkinType.values()[getHandle().ce()];
     }
 
     /**
@@ -46,23 +46,7 @@ public class CanaryOcelot extends CanaryTameable implements Ocelot {
      */
     @Override
     public void setSkinType(SkinType type) {
-        getHandle().p(type.ordinal());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int getGrowingAge() {
-        return getHandle().b();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setGrowingAge(int age) {
-        getHandle().a(age);
+        getHandle().s(type.ordinal());
     }
 
     /**

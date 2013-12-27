@@ -10,14 +10,14 @@ import net.canarymod.api.nbt.CanaryCompoundTag;
 import net.canarymod.api.nbt.CanaryIntTag;
 import net.canarymod.api.nbt.CanaryStringTag;
 import net.canarymod.api.nbt.CompoundTag;
-import net.minecraft.server.EntityItem;
-import net.minecraft.server.NBTTagCompound;
-import net.minecraft.server.NBTTagInt;
-import net.minecraft.server.NBTTagString;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagInt;
+import net.minecraft.nbt.NBTTagString;
 
 /**
  * MobSpawnerEntry wrapper implementation
- * 
+ *
  * @author Arron (somners)
  */
 public class CanaryMobSpawnerEntry implements MobSpawnerEntry {
@@ -25,7 +25,8 @@ public class CanaryMobSpawnerEntry implements MobSpawnerEntry {
     private Entity entity = null;
     private int weight = 1;
 
-    public CanaryMobSpawnerEntry() {}
+    public CanaryMobSpawnerEntry() {
+    }
 
     public CanaryMobSpawnerEntry(String name) {
         Entity ent = Canary.factory().getEntityFactory().newEntity(name);
@@ -94,7 +95,7 @@ public class CanaryMobSpawnerEntry implements MobSpawnerEntry {
         if (!this.isValid()) {
             return null;
         }
-        net.minecraft.server.Entity ent = ((CanaryEntity) this.entity).getHandle();
+        net.minecraft.entity.Entity ent = ((CanaryEntity) this.entity).getHandle();
         // gets the tag with the id for this entity
         CanaryCompoundTag id = new CanaryCompoundTag(new NBTTagCompound());
 
@@ -103,8 +104,8 @@ public class CanaryMobSpawnerEntry implements MobSpawnerEntry {
         // sets the entity and weight for this spawn
         CanaryCompoundTag entry = new CanaryCompoundTag(new NBTTagCompound());
 
-        entry.put("Type", new CanaryStringTag(new NBTTagString("Type", id.getString("id"))));
-        entry.put("Weight", new CanaryIntTag(new NBTTagInt("Weight", this.getWeight())));
+        entry.put("Type", new CanaryStringTag(new NBTTagString(id.getString("id"))));
+        entry.put("Weight", new CanaryIntTag(new NBTTagInt(this.getWeight())));
 
         // sets the properties of this spawn.
         CanaryCompoundTag properties = new CanaryCompoundTag(new NBTTagCompound());

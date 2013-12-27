@@ -1,35 +1,37 @@
 package net.canarymod.api;
 
-import java.util.ArrayList;
 import net.canarymod.api.entity.living.humanoid.CanaryPlayer;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.api.world.World;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CanaryPlayerManager implements PlayerManager {
-    private net.minecraft.server.PlayerManager pm;
+    private net.minecraft.server.management.PlayerManager pm;
     private CanaryWorld dim;
 
-    public CanaryPlayerManager(net.minecraft.server.PlayerManager pm, CanaryWorld dimension) {
+    public CanaryPlayerManager(net.minecraft.server.management.PlayerManager pm, CanaryWorld dimension) {
         this.pm = pm;
         this.dim = dimension;
     }
 
     @Override
     public void updateMountedMovingPlayer(Player player) {
-        pm.c((net.minecraft.server.EntityPlayerMP) ((CanaryPlayer) player).getHandle());
+        pm.c((net.minecraft.entity.player.EntityPlayerMP) ((CanaryPlayer) player).getHandle());
 
     }
 
     @Override
     public void addPlayer(Player player) {
-        pm.a((net.minecraft.server.EntityPlayerMP) ((CanaryPlayer) player).getHandle());
+        pm.a((net.minecraft.entity.player.EntityPlayerMP) ((CanaryPlayer) player).getHandle());
 
     }
 
     @Override
     public void removePlayer(Player player) {
-        pm.b((net.minecraft.server.EntityPlayerMP) ((CanaryPlayer) player).getHandle());
+        pm.b((net.minecraft.entity.player.EntityPlayerMP) ((CanaryPlayer) player).getHandle());
 
     }
 
@@ -39,10 +41,10 @@ public class CanaryPlayerManager implements PlayerManager {
     }
 
     @Override
-    public ArrayList<Player> getManagedPlayers() {
-        ArrayList<Player> players = new ArrayList<Player>();
+    public List<Player> getManagedPlayers() {
+        List<Player> players = new ArrayList<Player>();
 
-        for (net.minecraft.server.EntityPlayerMP player : pm.getManagedPlayers()) {
+        for (net.minecraft.entity.player.EntityPlayerMP player : pm.getManagedPlayers()) {
             players.add(player.getPlayer());
         }
         return players;
@@ -55,10 +57,10 @@ public class CanaryPlayerManager implements PlayerManager {
 
     @Override
     public int getMaxTrackingDistance() {
-        return net.minecraft.server.PlayerManager.a(pm.getPlayerViewRadius());
+        return net.minecraft.server.management.PlayerManager.a(pm.getPlayerViewRadius());
     }
 
-    public net.minecraft.server.PlayerManager getHandle() {
+    public net.minecraft.server.management.PlayerManager getHandle() {
         return pm;
     }
 

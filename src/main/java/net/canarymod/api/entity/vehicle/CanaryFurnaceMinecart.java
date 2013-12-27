@@ -1,20 +1,20 @@
 package net.canarymod.api.entity.vehicle;
 
 import net.canarymod.api.entity.EntityType;
-import net.minecraft.server.EntityMinecartFurnace;
+import net.minecraft.entity.item.EntityMinecartFurnace;
 
 /**
  * FurnaceMinecart wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryFurnaceMinecart extends CanaryMinecart implements FurnaceMinecart {
 
     /**
      * Constructs a new wrapper for EntityMinecartFurnace
-     * 
+     *
      * @param entity
-     *            the EntityMinecartFurnace to be wrapped
+     *         the EntityMinecartFurnace to be wrapped
      */
     public CanaryFurnaceMinecart(EntityMinecartFurnace entity) {
         super(entity);

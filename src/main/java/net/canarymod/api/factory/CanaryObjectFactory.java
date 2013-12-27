@@ -12,8 +12,6 @@ import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.api.world.Chunk;
 import net.canarymod.api.world.World;
 
-import org.bouncycastle.util.Arrays;
-
 /**
  * Object Factory implementation
  *
@@ -82,8 +80,6 @@ public class CanaryObjectFactory implements ObjectFactory {
      */
     @Override
     public Chunk newChunk(World world, int x, int z) {
-        byte[] data = new byte[32768];
-        Arrays.fill(data, (byte) 1);
-        return new net.minecraft.server.Chunk(((CanaryWorld)world).getHandle(), data, x, z).getCanaryChunk();
+        return new net.minecraft.world.chunk.Chunk(((CanaryWorld) world).getHandle(), x, z).getCanaryChunk();
     }
 }

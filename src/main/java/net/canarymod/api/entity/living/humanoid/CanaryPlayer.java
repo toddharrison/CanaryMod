@@ -41,25 +41,24 @@ import net.canarymod.hook.system.PermissionCheckHook;
 import net.canarymod.permissionsystem.PermissionProvider;
 import net.canarymod.user.Group;
 import net.canarymod.warp.Warp;
-import net.minecraft.server.ChunkCoordinates;
-import net.minecraft.server.ContainerBeacon;
-import net.minecraft.server.ContainerBrewingStand;
-import net.minecraft.server.ContainerChest;
-import net.minecraft.server.ContainerDispenser;
-import net.minecraft.server.ContainerEnchantment;
-import net.minecraft.server.ContainerFurnace;
-import net.minecraft.server.ContainerHopper;
-import net.minecraft.server.ContainerHorseInventory;
-import net.minecraft.server.ContainerRepair;
-import net.minecraft.server.ContainerWorkbench;
-import net.minecraft.server.EntityPlayerMP;
-import net.minecraft.server.EnumGameType;
-import net.minecraft.server.Packet201PlayerInfo;
-import net.minecraft.server.Packet202PlayerAbilities;
-import net.minecraft.server.WorldSettings;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.inventory.ContainerBeacon;
+import net.minecraft.inventory.ContainerBrewingStand;
+import net.minecraft.inventory.ContainerChest;
+import net.minecraft.inventory.ContainerDispenser;
+import net.minecraft.inventory.ContainerEnchantment;
+import net.minecraft.inventory.ContainerFurnace;
+import net.minecraft.inventory.ContainerHopper;
+import net.minecraft.inventory.ContainerHorseInventory;
+import net.minecraft.inventory.ContainerRepair;
+import net.minecraft.inventory.ContainerWorkbench;
+import net.minecraft.network.play.server.S2BPacketChangeGameState;
+import net.minecraft.network.play.server.S38PacketPlayerListItem;
+import net.minecraft.network.play.server.S39PacketPlayerAbilities;
+import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.world.WorldSettings;
 import net.visualillusionsent.utils.StringUtils;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -112,7 +111,6 @@ public class CanaryPlayer extends CanaryHuman implements Player {
             out = out.replaceAll(m.group(), "");
         }
 
-        // TODO: Add configuration for spam protection
         if (out.startsWith("/")) {
             executeCommand(out.split(" "));
         }
@@ -122,7 +120,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
             }
             else {
                 // This is a copy of the real player list already, no need to copy again (re: Collections.copy())
-                ArrayList<Player> receivers = Canary.getServer().getPlayerList();
+                List<Player> receivers = Canary.getServer().getPlayerList();
                 defaultChatpattern.put("%name", getDisplayName()); // Safe to get name now
                 defaultChatpattern.put("%message", out);
                 ChatHook hook = (ChatHook) new ChatHook(this, chatFormat, receivers, defaultChatpattern).call();
@@ -157,7 +155,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
     @Override
     public Location getSpawnPosition() {
         Location spawn = Canary.getServer().getDefaultWorld().getSpawnLocation();
-        ChunkCoordinates loc = ((EntityPlayerMP) entity).bF();
+        ChunkCoordinates loc = getHandle().bL();
 
         if (loc != null) {
             spawn = new Location(Canary.getServer().getDefaultWorld(), loc.a, loc.b, loc.c, 0.0F, 0.0F);
@@ -193,13 +191,13 @@ public class CanaryPlayer extends CanaryHuman implements Player {
     public void setSpawnPosition(Location spawn) {
         ChunkCoordinates loc = new ChunkCoordinates((int) spawn.getX(), (int) spawn.getY(), (int) spawn.getZ());
 
-        ((EntityPlayerMP) entity).a(loc, true);
+        getHandle().a(loc, true);
     }
 
     /** {@inheritDoc} */
     @Override
     public String getIP() {
-        String ip = ((EntityPlayerMP) entity).a.a.c().toString();
+        String ip = getHandle().a.a.b().toString();
 
         return ip.substring(1, ip.lastIndexOf(":"));
     }
@@ -247,7 +245,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
     /** {@inheritDoc} */
     @Override
     public void sendPacket(Packet packet) {
-        getHandle().a.b(((CanaryPacket) packet).getPacket());
+        getHandle().a.a(((CanaryPacket) packet).getPacket());
     }
 
     /** {@inheritDoc} */
@@ -417,17 +415,17 @@ public class CanaryPlayer extends CanaryHuman implements Player {
     /** {@inheritDoc} */
     @Override
     public void kick(String reason) {
-        ((EntityPlayerMP) entity).a.c(reason);
+        getHandle().a.c(reason);
     }
 
     public void kickNoHook(String reason) {
-        ((EntityPlayerMP) entity).a.kickNoHook(reason);
+        getHandle().a.kickNoHook(reason);
     }
 
     /** {@inheritDoc} */
     @Override
     public NetServerHandler getNetServerHandler() {
-        return ((EntityPlayerMP) entity).getServerHandler();
+        return getHandle().getServerHandler();
     }
 
     /** {@inheritDoc} */
@@ -547,7 +545,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
     /** {@inheritDoc} */
     @Override
     public int getPing() {
-        return ((EntityPlayerMP) entity).i;
+        return getHandle().i;
     }
 
     /** {@inheritDoc} */
@@ -560,38 +558,38 @@ public class CanaryPlayer extends CanaryHuman implements Player {
     @Override
     public void sendPlayerListEntry(PlayerListEntry plentry) {
         if (Configuration.getServerConfig().isPlayerListEnabled()) {
-            ((EntityPlayerMP) entity).a.b(new Packet201PlayerInfo(plentry.getName(), plentry.isShown(), plentry.getPing()));
+            getHandle().a.a(new S38PacketPlayerListItem(plentry.getName(), plentry.isShown(), plentry.getPing()));
         }
     }
 
     /** {@inheritDoc} */
     @Override
     public void addExhaustion(float exhaustion) {
-        getHandle().bI().a(exhaustion);
+        getHandle().bO().a(exhaustion);
     }
 
     /** {@inheritDoc} */
     @Override
     public void setExhaustion(float exhaustion) {
-        getHandle().bI().setExhaustionLevel(exhaustion);
+        getHandle().bO().setExhaustionLevel(exhaustion);
     }
 
     /** {@inheritDoc} */
     @Override
     public float getExhaustionLevel() {
-        return getHandle().bI().getExhaustionLevel();
+        return getHandle().bO().getExhaustionLevel();
     }
 
     /** {@inheritDoc} */
     @Override
     public void setHunger(int hunger) {
-        getHandle().bI().setFoodLevel(hunger);
+        getHandle().bO().setFoodLevel(hunger);
     }
 
     /** {@inheritDoc} */
     @Override
     public int getHunger() {
-        return getHandle().bI().a();
+        return getHandle().bO().a();
     }
 
     /** {@inheritDoc} */
@@ -609,7 +607,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
     /** {@inheritDoc} */
     @Override
     public int getExperience() {
-        return getHandle().bI;
+        return getHandle().bH;
     }
 
     /** {@inheritDoc} */
@@ -624,7 +622,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
     /** {@inheritDoc} */
     @Override
     public int getLevel() {
-        return getHandle().bH;
+        return getHandle().bG;
     }
 
     /** {@inheritDoc} */
@@ -648,13 +646,13 @@ public class CanaryPlayer extends CanaryHuman implements Player {
     /** {@inheritDoc} */
     @Override
     public boolean isSleeping() {
-        return getHandle().bh();
+        return getHandle().bm();
     }
 
     /** {@inheritDoc} */
     @Override
     public boolean isDeeplySleeping() {
-        return getHandle().bD();
+        return getHandle().bJ();
     }
 
     /** {@inheritDoc} */
@@ -673,12 +671,12 @@ public class CanaryPlayer extends CanaryHuman implements Player {
     @Override
     public void setModeId(int mode) {
         // Adjust mode, make it null if number is invalid
-        EnumGameType gt = WorldSettings.a(mode);
+        WorldSettings.GameType gt = WorldSettings.a(mode);
         EntityPlayerMP ent = getHandle();
 
         if (ent.c.b() != gt) {
             ent.c.a(gt);
-            ent.getServerHandler().sendPacket(new CanaryPacket(new net.minecraft.server.Packet70GameEvent(3, mode)));
+            ent.a.a(new S2BPacketChangeGameState(3, mode));
         }
     }
 
@@ -721,7 +719,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
     protected void teleportTo(double x, double y, double z, float pitch, float rotation, World world, TeleportHook.TeleportCause cause) {
         // If in a vehicle - eject before teleporting.
         if (isRiding()) {
-            getHandle().h(getHandle().o);
+            getHandle().l(getHandle().m);
         }
         if (!world.equals(this.getWorld())) {
             Canary.getServer().getConfigurationManager().switchDimension(this, world, false);
@@ -755,7 +753,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
     /** {@inheritDoc} */
     @Override
     public void updateCapabilities() {
-        this.sendPacket(new CanaryPacket(new Packet202PlayerAbilities(getHandle().bG)));
+        this.sendPacket(new CanaryPacket(new S39PacketPlayerAbilities(((CanaryHumanCapabilities) getCapabilities()).getHandle())));
     }
 
     /** {@inheritDoc} */
@@ -768,40 +766,40 @@ public class CanaryPlayer extends CanaryHuman implements Player {
             case CHEST:
                 ContainerChest chest = new ContainerChest(getHandle().bn, ((CanaryBlockInventory) inventory).getInventoryHandle());
                 chest.setInventory(inventory);
-                getHandle().openContainer(chest, 0, inventory.getSize(), ((CanaryBlockInventory) inventory).getInventoryHandle().c());
+                getHandle().openContainer(chest, 0, inventory.getSize(), ((CanaryBlockInventory) inventory).getInventoryHandle().k_());
                 return;
             case CUSTOM:
             case MINECART_CHEST:
                 ContainerChest eChest = new ContainerChest(getHandle().bn, ((CanaryEntityInventory) inventory).getHandle());
                 eChest.setInventory(inventory);
-                getHandle().openContainer(eChest, 0, inventory.getSize(), ((CanaryEntityInventory) inventory).getHandle().c());
+                getHandle().openContainer(eChest, 0, inventory.getSize(), ((CanaryEntityInventory) inventory).getHandle().k_());
                 return;
             case ANVIL:
                 getHandle().openContainer(((CanaryAnvil) inventory).getContainer(), 8, 9);
                 return;
             case ANIMAL:
-                getHandle().openContainer(new ContainerHorseInventory(getHandle().bn, ((CanaryAnimalInventory) inventory).getHandle(), ((CanaryHorse) ((CanaryAnimalInventory) inventory).getOwner()).getHandle()), 11, inventory.getSize(), ((CanaryEntityInventory) inventory).getHandle().c());
+                getHandle().openContainer(new ContainerHorseInventory(getHandle().bn, ((CanaryAnimalInventory) inventory).getHandle(), ((CanaryHorse) ((CanaryAnimalInventory) inventory).getOwner()).getHandle()), 11, inventory.getSize(), ((CanaryEntityInventory) inventory).getHandle().k_());
                 return;
             case BEACON:
-                getHandle().openContainer(new ContainerBeacon(getHandle().bn, ((CanaryBeacon) inventory).getTileEntity()), 7, inventory.getSize(), ((CanaryBlockInventory) inventory).getInventoryHandle().c());
+                getHandle().openContainer(new ContainerBeacon(getHandle().bn, ((CanaryBeacon) inventory).getTileEntity()), 7, inventory.getSize(), ((CanaryBlockInventory) inventory).getInventoryHandle().k_());
                 return;
             case BREWING:
-                getHandle().openContainer(new ContainerBrewingStand(getHandle().bn, ((CanaryBrewingStand) inventory).getTileEntity()), 5, inventory.getSize(), ((CanaryBlockInventory) inventory).getInventoryHandle().c());
+                getHandle().openContainer(new ContainerBrewingStand(getHandle().bn, ((CanaryBrewingStand) inventory).getTileEntity()), 5, inventory.getSize(), ((CanaryBlockInventory) inventory).getInventoryHandle().k_());
                 return;
             case DISPENSER:
-                getHandle().openContainer(new ContainerDispenser(getHandle().bn, ((CanaryDispenser) inventory).getTileEntity()), inventory instanceof CanaryDropper ? 10 : 3, inventory.getSize(), ((CanaryBlockInventory) inventory).getInventoryHandle().c());
+                getHandle().openContainer(new ContainerDispenser(getHandle().bn, ((CanaryDispenser) inventory).getTileEntity()), inventory instanceof CanaryDropper ? 10 : 3, inventory.getSize(), ((CanaryBlockInventory) inventory).getInventoryHandle().k_());
                 return;
             case ENCHANTMENT:
                 getHandle().openContainer(((CanaryEnchantmentTable) inventory).getContainer(), 4, inventory.getSize());
                 return;
             case FURNACE:
-                getHandle().openContainer(new ContainerFurnace(getHandle().bn, ((CanaryFurnace) inventory).getTileEntity()), 2, inventory.getSize(), ((CanaryBlockInventory) inventory).getInventoryHandle().c());
+                getHandle().openContainer(new ContainerFurnace(getHandle().bn, ((CanaryFurnace) inventory).getTileEntity()), 2, inventory.getSize(), ((CanaryBlockInventory) inventory).getInventoryHandle().k_());
                 return;
             case HOPPER:
-                getHandle().openContainer(new ContainerHopper(getHandle().bn, ((CanaryHopperBlock) inventory).getTileEntity()), 9, inventory.getSize(), ((CanaryBlockInventory) inventory).getInventoryHandle().c());
+                getHandle().openContainer(new ContainerHopper(getHandle().bn, ((CanaryHopperBlock) inventory).getTileEntity()), 9, inventory.getSize(), ((CanaryBlockInventory) inventory).getInventoryHandle().k_());
                 return;
             case MINECART_HOPPER:
-                getHandle().openContainer(new ContainerHopper(getHandle().bn, ((CanaryEntityInventory) inventory).getHandle()), 9, inventory.getSize(), ((CanaryEntityInventory) inventory).getHandle().c());
+                getHandle().openContainer(new ContainerHopper(getHandle().bn, ((CanaryEntityInventory) inventory).getHandle()), 9, inventory.getSize(), ((CanaryEntityInventory) inventory).getHandle().k_());
                 return;
             case WORKBENCH:
                 getHandle().openContainer(((CanaryWorkbench) inventory).getContainer(), 1, 9);
@@ -840,7 +838,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
     /** {@inheritDoc} */
     @Override
     public void closeWindow() {
-        getHandle().i();
+        getHandle().k();
     }
 
     /** {@inheritDoc} */

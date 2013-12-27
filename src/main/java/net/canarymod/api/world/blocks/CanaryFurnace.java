@@ -1,26 +1,26 @@
 package net.canarymod.api.world.blocks;
 
-import java.util.Arrays;
-
 import net.canarymod.api.inventory.CanaryBlockInventory;
 import net.canarymod.api.inventory.CanaryItem;
 import net.canarymod.api.inventory.InventoryType;
 import net.canarymod.api.inventory.Item;
-import net.minecraft.server.ItemStack;
-import net.minecraft.server.TileEntityFurnace;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntityFurnace;
+
+import java.util.Arrays;
 
 /**
  * Furnace wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryFurnace extends CanaryBlockInventory implements Furnace {
 
     /**
      * Constructs a new wrapper for TileEntityFurnace
-     * 
+     *
      * @param tileentity
-     *            the TileEntityFurnace to be wrapped
+     *         the TileEntityFurnace to be wrapped
      */
     public CanaryFurnace(TileEntityFurnace tileentity) {
         super(tileentity);
@@ -71,7 +71,7 @@ public class CanaryFurnace extends CanaryBlockInventory implements Furnace {
      */
     @Override
     public void clearContents() {
-        Arrays.fill(getTileEntity().g, null);
+        Arrays.fill(getTileEntity().n, null);
     }
 
     /**
@@ -79,7 +79,7 @@ public class CanaryFurnace extends CanaryBlockInventory implements Furnace {
      */
     @Override
     public Item[] clearInventory() {
-        ItemStack[] items = Arrays.copyOf(getTileEntity().g, getSize());
+        ItemStack[] items = Arrays.copyOf(getTileEntity().n, getSize());
 
         clearContents();
         return CanaryItem.stackArrayToItemArray(items);
@@ -90,7 +90,7 @@ public class CanaryFurnace extends CanaryBlockInventory implements Furnace {
      */
     @Override
     public Item[] getContents() {
-        return CanaryItem.stackArrayToItemArray(getTileEntity().g);
+        return CanaryItem.stackArrayToItemArray(getTileEntity().n);
     }
 
     /**
@@ -98,7 +98,7 @@ public class CanaryFurnace extends CanaryBlockInventory implements Furnace {
      */
     @Override
     public void setContents(Item[] items) {
-        System.arraycopy(CanaryItem.itemArrayToStackArray(items), 0, getTileEntity().g, 0, getSize());
+        System.arraycopy(CanaryItem.itemArrayToStackArray(items), 0, getTileEntity().n, 0, getSize());
     }
 
     /**

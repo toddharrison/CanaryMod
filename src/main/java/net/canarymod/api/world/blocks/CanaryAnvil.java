@@ -1,21 +1,21 @@
 package net.canarymod.api.world.blocks;
 
-import java.util.Arrays;
-
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.inventory.CanaryBlockInventory;
 import net.canarymod.api.inventory.CanaryItem;
 import net.canarymod.api.inventory.InventoryType;
 import net.canarymod.api.inventory.Item;
 import net.canarymod.api.world.World;
-import net.minecraft.server.ContainerRepair;
-import net.minecraft.server.InventoryBasic;
-import net.minecraft.server.InventoryCraftResult;
-import net.minecraft.server.ItemStack;
+import net.minecraft.inventory.ContainerRepair;
+import net.minecraft.inventory.InventoryBasic;
+import net.minecraft.inventory.InventoryCraftResult;
+import net.minecraft.item.ItemStack;
+
+import java.util.Arrays;
 
 /**
  * The implementation of Anvil
- * 
+ *
  * @author Somners
  */
 public class CanaryAnvil extends CanaryBlockInventory implements Anvil {
@@ -40,14 +40,6 @@ public class CanaryAnvil extends CanaryBlockInventory implements Anvil {
      */
     @Override
     public int getX() {
-        return container.i;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int getY() {
         return container.j;
     }
 
@@ -55,7 +47,7 @@ public class CanaryAnvil extends CanaryBlockInventory implements Anvil {
      * {@inheritDoc}
      */
     @Override
-    public int getZ() {
+    public int getY() {
         return container.k;
     }
 
@@ -63,8 +55,16 @@ public class CanaryAnvil extends CanaryBlockInventory implements Anvil {
      * {@inheritDoc}
      */
     @Override
+    public int getZ() {
+        return container.l;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public World getWorld() {
-        return container.h.getCanaryWorld();
+        return container.i.getCanaryWorld();
     }
 
     /**
@@ -172,7 +172,7 @@ public class CanaryAnvil extends CanaryBlockInventory implements Anvil {
      * {@inheritDoc}
      */
     @Override
-    public net.minecraft.server.TileEntity getTileEntity() {
+    public net.minecraft.tileentity.TileEntity getTileEntity() {
         throw new UnsupportedOperationException("Method 'getTileEntity' in class 'CanaryAnvil' is not supported. Not a tile Entity.");
     }
 
@@ -181,11 +181,11 @@ public class CanaryAnvil extends CanaryBlockInventory implements Anvil {
     }
 
     private InventoryBasic getInventory() {
-        return (InventoryBasic) container.g;
+        return (InventoryBasic) container.h;
     }
 
     private InventoryCraftResult getCraftResult() {
-        return (InventoryCraftResult) container.f;
+        return (InventoryCraftResult) container.g;
     }
 
 }

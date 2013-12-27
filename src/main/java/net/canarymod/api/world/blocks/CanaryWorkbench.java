@@ -1,20 +1,19 @@
 package net.canarymod.api.world.blocks;
 
-import java.util.Arrays;
-
 import net.canarymod.api.inventory.CanaryBlockInventory;
 import net.canarymod.api.inventory.CanaryItem;
 import net.canarymod.api.inventory.InventoryType;
 import net.canarymod.api.inventory.Item;
 import net.canarymod.api.world.World;
-import net.minecraft.server.ContainerWorkbench;
-import net.minecraft.server.InventoryCrafting;
-import net.minecraft.server.ItemStack;
-import net.minecraft.server.TileEntity;
+import net.minecraft.inventory.ContainerWorkbench;
+import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.item.ItemStack;
+
+import java.util.Arrays;
 
 /**
  * Workbench wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryWorkbench extends CanaryBlockInventory implements Workbench {
@@ -22,9 +21,9 @@ public class CanaryWorkbench extends CanaryBlockInventory implements Workbench {
 
     /**
      * Constructs a new wrapper for ContainerWorkbench
-     * 
+     *
      * @param container
-     *            the ContainerWorkbench to be wrapped
+     *         the ContainerWorkbench to be wrapped
      */
     public CanaryWorkbench(ContainerWorkbench container) {
         super(container.a);
@@ -116,10 +115,10 @@ public class CanaryWorkbench extends CanaryBlockInventory implements Workbench {
 
     /**
      * @throws UnsupportedOperationException
-     *             This Block is not of TileEntity
+     *         This Block is not of TileEntity
      */
     @Override
-    public TileEntity getTileEntity() {
+    public net.minecraft.tileentity.TileEntity getTileEntity() {
         throw new UnsupportedOperationException("Not a TileEntity");
     }
 

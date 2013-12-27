@@ -2,7 +2,7 @@ package net.canarymod.api.inventory.recipes;
 
 import net.canarymod.api.inventory.CanaryItem;
 import net.canarymod.api.inventory.Item;
-import net.minecraft.server.ShapedRecipes;
+import net.minecraft.item.crafting.ShapedRecipes;
 
 public class CanaryShapedRecipe extends CanaryRecipe implements ShapedRecipe {
 

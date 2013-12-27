@@ -1,20 +1,20 @@
 package net.canarymod.api.entity.living.monster;
 
 import net.canarymod.api.entity.EntityType;
-import net.minecraft.server.EntitySkeleton;
+import net.minecraft.entity.monster.EntitySkeleton;
 
 /**
  * Skeleton wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanarySkeleton extends CanaryEntityMob implements Skeleton {
 
     /**
      * Constructs a new wrapper for EntitySkeleton
-     * 
+     *
      * @param entity
-     *            the EntitySkeleton to wrap
+     *         the EntitySkeleton to wrap
      */
     public CanarySkeleton(EntitySkeleton entity) {
         super(entity);
@@ -38,7 +38,7 @@ public class CanarySkeleton extends CanaryEntityMob implements Skeleton {
      */
     @Override
     public boolean isWitherSkeleton() {
-        return getHandle().bV() == 1;
+        return getHandle().bZ() == 1;
     }
 
     /**

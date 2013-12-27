@@ -1,6 +1,5 @@
 package net.canarymod.api.world.blocks;
 
-import java.util.Random;
 import net.canarymod.api.entity.living.humanoid.CanaryPlayer;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.packet.BlockChangePacket;
@@ -9,6 +8,8 @@ import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.api.world.World;
 import net.canarymod.api.world.position.Location;
 import net.canarymod.api.world.position.Position;
+
+import java.util.Random;
 
 public class CanaryBlock implements Block {
     private final static Random rndm = new Random(); // Passed to the idDropped method
@@ -134,10 +135,11 @@ public class CanaryBlock implements Block {
 
     @Override
     public BlockMaterial getBlockMaterial() {
-        if (net.minecraft.server.Block.s[type] != null ) {
-          return net.minecraft.server.Block.s[type].cU.getCanaryBlockMaterial();
-        } else {
-          return null;
+        if (net.minecraft.block.Block.e(type) != null) {
+            return net.minecraft.block.Block.e(type).o().getCanaryBlockMaterial();
+        }
+        else {
+            return null;
         }
     }
 
@@ -188,22 +190,22 @@ public class CanaryBlock implements Block {
 
     @Override
     public int getIdDropped() {
-        return net.minecraft.server.Block.s[getTypeId()].a(0, rndm, 0);
+        return net.minecraft.item.Item.b(net.minecraft.block.Block.e(type).a(0, rndm, 0));
     }
 
     @Override
     public int getDamageDropped() {
-        return net.minecraft.server.Block.s[getTypeId()].a(getData());
+        return net.minecraft.block.Block.e(type).a(getData());
     }
 
     @Override
     public int getQuantityDropped() {
-        return net.minecraft.server.Block.s[getTypeId()].a(rndm);
+        return net.minecraft.block.Block.e(type).a(rndm);
     }
 
     @Override
     public void dropBlockAsItem(boolean remove) {
-        net.minecraft.server.Block.s[getTypeId()].c(((CanaryWorld) getWorld()).getHandle(), getX(), getY(), getZ(), getData(), 1);
+        net.minecraft.block.Block.e(type).c(((CanaryWorld) getWorld()).getHandle(), getX(), getY(), getZ(), getData());
         if (remove) {
             this.setTypeId((short) 0);
             this.update();
@@ -217,11 +219,11 @@ public class CanaryBlock implements Block {
 
     @Override
     public boolean rightClick(Player player) {
-        return net.minecraft.server.Block.s[getTypeId()].a(((CanaryWorld) getWorld()).getHandle(), getX(), getY(), getZ(), player != null ? ((CanaryPlayer) player).getHandle() : null, 0, 0, 0, 0); // last four parameters aren't even used by lever or button
+        return net.minecraft.block.Block.e(type).a(((CanaryWorld) getWorld()).getHandle(), getX(), getY(), getZ(), player != null ? ((CanaryPlayer) player).getHandle() : null, 0, 0, 0, 0); // last four parameters aren't even used by lever or button
     }
 
-    public void sendUpdateToPlayers(Player... players){
-        for(Player player : players){
+    public void sendUpdateToPlayers(Player... players) {
+        for (Player player : players) {
             player.sendPacket(getBlockPacket());
         }
     }
@@ -238,9 +240,10 @@ public class CanaryBlock implements Block {
 
     /**
      * Tests the given object to see if it equals this object
-     * 
+     *
      * @param obj
-     *            the object to test
+     *         the object to test
+     *
      * @return true if the two objects match
      */
     @Override
@@ -270,7 +273,7 @@ public class CanaryBlock implements Block {
 
     /**
      * Returns a semi-unique hashcode for this block
-     * 
+     *
      * @return hashcode
      */
     @Override

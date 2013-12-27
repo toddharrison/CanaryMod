@@ -1,20 +1,20 @@
 package net.canarymod.api.nbt;
 
-import net.minecraft.server.NBTTagLong;
+import net.minecraft.nbt.NBTTagLong;
 
 /**
  * LongTag wrapper implementation
- * 
+ *
  * @author Greg (gregthegeek)
  * @author Jason (darkdiplomat)
  */
-public class CanaryLongTag extends CanaryBaseTag implements LongTag {
+public class CanaryLongTag extends CanaryPrimativeTag implements LongTag {
 
     /**
      * Constructs a new wrapper for NBTTagLong
-     * 
+     *
      * @param tag
-     *            the NBTTagLong to wrap
+     *         the NBTTagLong to wrap
      */
     public CanaryLongTag(NBTTagLong tag) {
         super(tag);
@@ -22,14 +22,12 @@ public class CanaryLongTag extends CanaryBaseTag implements LongTag {
 
     /**
      * Constructs a new CanaryLongTag and associated NBTTagLong
-     * 
-     * @param name
-     *            the name of the tag
+     *
      * @param value
-     *            the long to supply the tag
+     *         the long to supply the tag
      */
-    public CanaryLongTag(String name, long value) {
-        super(new NBTTagLong(name, value));
+    public CanaryLongTag(long value) {
+        super(new NBTTagLong(value));
     }
 
     /**
@@ -37,7 +35,7 @@ public class CanaryLongTag extends CanaryBaseTag implements LongTag {
      */
     @Override
     public long getValue() {
-        return getHandle().a;
+        return getLongValue();
     }
 
     /**
@@ -45,7 +43,7 @@ public class CanaryLongTag extends CanaryBaseTag implements LongTag {
      */
     @Override
     public void setValue(long value) {
-        getHandle().a = value;
+        getHandle().b = value;
     }
 
     /**

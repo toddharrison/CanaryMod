@@ -5,7 +5,7 @@ import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.config.Configuration;
 import net.canarymod.hook.system.PermissionCheckHook;
 import net.canarymod.user.Group;
-import net.minecraft.server.TileEntityCommandBlock;
+import net.minecraft.tileentity.TileEntityCommandBlock;
 
 /**
  * CommandBlock wrapper implementation
@@ -20,7 +20,7 @@ public class CanaryCommandBlock extends CanaryTileEntity implements CommandBlock
      * Constructs a wrapper for TileEntityCommandBlock
      *
      * @param tileentity
-     *            the TileEntityCommandBlock to wrap
+     *         the TileEntityCommandBlock to wrap
      */
     public CanaryCommandBlock(TileEntityCommandBlock tileentity) {
         super(tileentity);
@@ -32,7 +32,7 @@ public class CanaryCommandBlock extends CanaryTileEntity implements CommandBlock
      */
     @Override
     public String getName() {
-        return getTileEntity().c_();
+        return getTileEntity().getLogic().b_();
     }
 
     /**
@@ -40,7 +40,7 @@ public class CanaryCommandBlock extends CanaryTileEntity implements CommandBlock
      */
     @Override
     public void notice(String message) {
-        getTileEntity().a(message);
+        Canary.logDebug("[NOTICE] ".concat(message));
     }
 
     /**
@@ -48,7 +48,7 @@ public class CanaryCommandBlock extends CanaryTileEntity implements CommandBlock
      */
     @Override
     public void message(String message) {
-        getTileEntity().a(message);
+        Canary.logDebug(message);
     }
 
     /**
@@ -74,7 +74,7 @@ public class CanaryCommandBlock extends CanaryTileEntity implements CommandBlock
      */
     @Override
     public void setCommand(String command) {
-        getTileEntity().b(command);
+        getTileEntity().getLogic().a(command);
     }
 
     /**
@@ -82,7 +82,7 @@ public class CanaryCommandBlock extends CanaryTileEntity implements CommandBlock
      */
     @Override
     public String getCommand() {
-        return getTileEntity().getCommand();
+        return getTileEntity().getLogic().i();
     }
 
     /**
@@ -91,22 +91,6 @@ public class CanaryCommandBlock extends CanaryTileEntity implements CommandBlock
     @Override
     public void activate() {
         getTileEntity().a(((CanaryWorld) getWorld()).getHandle());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setPrefix(String prefix) {
-        getTileEntity().b(prefix);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getPrefix() {
-        return getTileEntity().c_();
     }
 
     /**

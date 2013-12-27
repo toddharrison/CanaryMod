@@ -1,11 +1,13 @@
 package net.canarymod.api.entity.hanging;
 
 import net.canarymod.api.entity.EntityType;
-import net.minecraft.server.EntityLeashKnot;
+import net.minecraft.entity.EntityLeashKnot;
+
+import static net.canarymod.api.entity.EntityType.LEASHKNOT;
 
 /**
  * LeashKnot wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryLeashKnot extends CanaryHangingEntity implements LeashKnot {
@@ -19,7 +21,7 @@ public class CanaryLeashKnot extends CanaryHangingEntity implements LeashKnot {
      */
     @Override
     public EntityType getEntityType() {
-        return EntityType.LEASHKNOT;
+        return LEASHKNOT;
     }
 
     @Override

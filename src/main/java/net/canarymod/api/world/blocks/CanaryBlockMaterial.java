@@ -1,10 +1,10 @@
 package net.canarymod.api.world.blocks;
 
-import net.minecraft.server.Material;
+import net.minecraft.block.material.Material;
 
 /**
  * Material wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryBlockMaterial implements BlockMaterial {

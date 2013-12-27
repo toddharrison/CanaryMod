@@ -6,11 +6,11 @@ import net.canarymod.api.entity.living.LivingBase;
 import net.canarymod.api.entity.vehicle.CanaryAnimalVehicle;
 import net.canarymod.api.inventory.CanaryAnimalInventory;
 import net.canarymod.api.inventory.Inventory;
-import net.minecraft.server.EntityHorse;
+import net.minecraft.entity.passive.EntityHorse;
 
 /**
  * Horse wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryHorse extends CanaryAnimalVehicle implements Horse {
@@ -53,7 +53,7 @@ public class CanaryHorse extends CanaryAnimalVehicle implements Horse {
      */
     @Override
     public boolean isEatingHay() {
-        return getHandle().cg();
+        return getHandle().ck();
     }
 
     /**
@@ -61,7 +61,7 @@ public class CanaryHorse extends CanaryAnimalVehicle implements Horse {
      */
     @Override
     public boolean isBred() {
-        return getHandle().ci();
+        return getHandle().cm();
     }
 
     /**
@@ -77,7 +77,7 @@ public class CanaryHorse extends CanaryAnimalVehicle implements Horse {
      */
     @Override
     public boolean isChested() {
-        return getHandle().ce();
+        return getHandle().ci();
     }
 
     /**
@@ -93,7 +93,7 @@ public class CanaryHorse extends CanaryAnimalVehicle implements Horse {
      */
     @Override
     public boolean hasReproduced() {
-        return getHandle().cj();
+        return getHandle().cn();
     }
 
     /**
@@ -117,7 +117,7 @@ public class CanaryHorse extends CanaryAnimalVehicle implements Horse {
      */
     @Override
     public int getRawType() {
-        return getHandle().bT();
+        return getHandle().bX();
     }
 
     /**
@@ -133,7 +133,7 @@ public class CanaryHorse extends CanaryAnimalVehicle implements Horse {
      */
     @Override
     public void setType(int type) {
-        getHandle().p(type);
+        getHandle().s(type);
     }
 
     /**
@@ -141,7 +141,7 @@ public class CanaryHorse extends CanaryAnimalVehicle implements Horse {
      */
     @Override
     public int getVariant() {
-        return getHandle().bU();
+        return getHandle().bY();
     }
 
     /**
@@ -149,7 +149,7 @@ public class CanaryHorse extends CanaryAnimalVehicle implements Horse {
      */
     @Override
     public void setVariant(int variant) {
-        getHandle().q(variant);
+        getHandle().t(variant);
     }
 
     /**
@@ -157,7 +157,7 @@ public class CanaryHorse extends CanaryAnimalVehicle implements Horse {
      */
     @Override
     public int getTemper() {
-        return getHandle().ck();
+        return getHandle().co();
     }
 
     /**
@@ -165,7 +165,7 @@ public class CanaryHorse extends CanaryAnimalVehicle implements Horse {
      */
     @Override
     public void setTemper(int temper) {
-        getHandle().s(temper);
+        getHandle().u(temper);
     }
 
     /**
@@ -173,7 +173,7 @@ public class CanaryHorse extends CanaryAnimalVehicle implements Horse {
      */
     @Override
     public boolean isTamed() {
-        return getHandle().bW();
+        return getHandle().ca();
     }
 
     /**
@@ -197,7 +197,7 @@ public class CanaryHorse extends CanaryAnimalVehicle implements Horse {
      */
     @Override
     public int getGrowingAge() {
-        return getHandle().b();
+        return getHandle().d();
     }
 
     /**
@@ -205,7 +205,7 @@ public class CanaryHorse extends CanaryAnimalVehicle implements Horse {
      */
     @Override
     public void setGrowingAge(int age) {
-        getHandle().a(age);
+        getHandle().c(age);
     }
 
     /**
@@ -221,7 +221,7 @@ public class CanaryHorse extends CanaryAnimalVehicle implements Horse {
      */
     @Override
     public String getOwnerName() {
-        return getHandle().cb();
+        return getHandle().cf();
     }
 
     /**
@@ -252,7 +252,8 @@ public class CanaryHorse extends CanaryAnimalVehicle implements Horse {
      * {@inheritDoc}
      */
     @Override
-    public void setSitting(boolean sitting) {} // Horses can't sit
+    public void setSitting(boolean sitting) {
+    } // Horses can't sit
 
     /**
      * {@inheritDoc}

@@ -5,21 +5,21 @@ import net.canarymod.api.inventory.CanaryItem;
 import net.canarymod.api.inventory.InventoryType;
 import net.canarymod.api.inventory.Item;
 import net.canarymod.api.potion.PotionEffectType;
-import net.minecraft.server.ItemStack;
-import net.minecraft.server.TileEntityBeacon;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntityBeacon;
 
 /**
  * Beacon wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryBeacon extends CanaryBlockInventory implements Beacon {
 
     /**
      * Constructs a new wrapper for TileEntityBeacon
-     * 
+     *
      * @param tileentity
-     *            the TileEntityBeacon to wrap
+     *         the TileEntityBeacon to wrap
      */
     public CanaryBeacon(TileEntityBeacon tileentity) {
         super(tileentity);
@@ -46,7 +46,7 @@ public class CanaryBeacon extends CanaryBlockInventory implements Beacon {
      */
     @Override
     public boolean isValidEffectAtLevels(PotionEffectType effect, int levels) {
-        net.minecraft.server.Potion[][] potions = TileEntityBeacon.a;
+        net.minecraft.potion.Potion[][] potions = TileEntityBeacon.a;
 
         for (int i = 0; i < levels && i < potions.length; i++) {
             for (int j = 0; j < potions[i].length; j++) {

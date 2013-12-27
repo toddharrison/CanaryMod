@@ -2,11 +2,11 @@ package net.canarymod.api.entity.vehicle;
 
 import net.canarymod.api.entity.EntityType;
 import net.canarymod.api.world.CanaryWorld;
-import net.minecraft.server.EntityMinecartTNT;
+import net.minecraft.entity.item.EntityMinecartTNT;
 
 /**
  * TNTMinecart wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryTNTMinecart extends CanaryMinecart implements TNTMinecart {
@@ -15,9 +15,9 @@ public class CanaryTNTMinecart extends CanaryMinecart implements TNTMinecart {
 
     /**
      * Constructs a new wrapper for EntityMinecartTNT
-     * 
+     *
      * @param entity
-     *            the EntityMinecartTNT to be wrapped
+     *         the EntityMinecartTNT to be wrapped
      */
     public CanaryTNTMinecart(EntityMinecartTNT entity) {
         super(entity);

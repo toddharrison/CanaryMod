@@ -1,16 +1,17 @@
 package net.canarymod.api.scoreboard;
 
+import net.minecraft.scoreboard.ServerScoreboard;
+
 import java.util.List;
-import net.minecraft.server.ServerScoreboard;
 
 /**
  * @author Somners
  */
 public class CanaryScore implements Score {
 
-    private net.minecraft.server.Score handle;
+    private net.minecraft.scoreboard.Score handle;
 
-    public CanaryScore(net.minecraft.server.Score handle) {
+    public CanaryScore(net.minecraft.scoreboard.Score handle) {
         this.handle = handle;
     }
 

@@ -6,11 +6,11 @@ import net.canarymod.api.inventory.CraftingMatrix;
 import net.canarymod.api.inventory.Item;
 import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.api.world.blocks.CanaryWorkbench;
-import net.minecraft.server.IRecipe;
+import net.minecraft.item.crafting.IRecipe;
 
 /**
  * Implementation of the IRecipe wrapper
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public abstract class CanaryRecipe implements Recipe {

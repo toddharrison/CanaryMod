@@ -1,21 +1,23 @@
 package net.canarymod.api.entity.living.animal;
 
 import net.canarymod.api.entity.EntityType;
-import net.minecraft.server.EntityChicken;
+import net.minecraft.entity.passive.EntityChicken;
+
+import static net.canarymod.api.entity.EntityType.CHICKEN;
 
 /**
  * Chicken wrapper implementation
- * 
+ *
  * @author Chris (damagefilter)
  * @author Jason (darkdiplomat)
  */
-public class CanaryChicken extends CanaryEntityAnimal implements Chicken {
+public class CanaryChicken extends CanaryAgeableAnimal implements Chicken {
 
     /**
      * Constructs a new wrapper for EntityChicken
-     * 
+     *
      * @param entity
-     *            the EntityChicken to be wrapped
+     *         the EntityChicken to be wrapped
      */
     public CanaryChicken(EntityChicken entity) {
         super(entity);
@@ -26,7 +28,7 @@ public class CanaryChicken extends CanaryEntityAnimal implements Chicken {
      */
     @Override
     public EntityType getEntityType() {
-        return EntityType.CHICKEN;
+        return CHICKEN;
     }
 
     @Override
@@ -44,22 +46,6 @@ public class CanaryChicken extends CanaryEntityAnimal implements Chicken {
     @Override
     public void setTimeUntilNextEgg(int timeTicks) {
         getHandle().bu = timeTicks;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int getGrowingAge() {
-        return getHandle().b();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setGrowingAge(int age) {
-        getHandle().a(age);
     }
 
     /**

@@ -4,7 +4,7 @@ import net.canarymod.Canary;
 import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.api.world.DimensionType;
 import net.canarymod.api.world.World;
-import net.minecraft.server.ServerScoreboard;
+import net.minecraft.scoreboard.ServerScoreboard;
 
 /**
  * @author Somners
@@ -29,19 +29,21 @@ public class CanaryScoreboardManager implements ScoreboardManager {
 
     @Override
     public ScoreObjectiveCriteria getScoreCriteria(String name) {
-        return ((net.minecraft.server.ScoreDummyCriteria) net.minecraft.server.ScoreObjectiveCriteria.a.get(name)).getCanaryScoreObjectiveCriteria();
+        return ((net.minecraft.scoreboard.ScoreDummyCriteria) net.minecraft.scoreboard.ScoreObjectiveCriteria.a.get(name)).getCanaryScoreObjectiveCriteria();
     }
 
     @Override
     public void registerScoreCriteria(String name, Class<? extends ScoreObjectiveCriteria> criteria) {
-        if (net.minecraft.server.ScoreObjectiveCriteria.a.containsKey(name)) {
+        if (net.minecraft.scoreboard.ScoreObjectiveCriteria.a.containsKey(name)) {
             return;
         }
         try {
             new ScoreCanaryCriteria(criteria.newInstance());
-        } catch (InstantiationException ex) {
+        }
+        catch (InstantiationException ex) {
             Canary.logSevere("Exception Registering ScoreObjectiveCritera: " + criteria.getName());
-        } catch (IllegalAccessException ex) {
+        }
+        catch (IllegalAccessException ex) {
             Canary.logSevere("Exception Registering ScoreObjectiveCritera: " + criteria.getName());
         }
     }

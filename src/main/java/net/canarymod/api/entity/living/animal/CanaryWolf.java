@@ -2,20 +2,22 @@ package net.canarymod.api.entity.living.animal;
 
 import net.canarymod.api.DyeColor;
 import net.canarymod.api.entity.EntityType;
-import net.minecraft.server.EntityWolf;
+import net.minecraft.entity.passive.EntityWolf;
+
+import static net.canarymod.api.entity.EntityType.WOLF;
 
 /**
  * Wolf wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryWolf extends CanaryTameable implements Wolf {
 
     /**
      * Constructs a new wrapper for EntityWolf
-     * 
+     *
      * @param entity
-     *            the EntityWolf to wrap
+     *         the EntityWolf to wrap
      */
     public CanaryWolf(EntityWolf entity) {
         super(entity);
@@ -26,7 +28,7 @@ public class CanaryWolf extends CanaryTameable implements Wolf {
      */
     @Override
     public EntityType getEntityType() {
-        return EntityType.WOLF;
+        return WOLF;
     }
 
     @Override
@@ -38,24 +40,8 @@ public class CanaryWolf extends CanaryTameable implements Wolf {
      * {@inheritDoc}
      */
     @Override
-    public int getGrowingAge() {
-        return getHandle().b();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setGrowingAge(int age) {
-        getHandle().a(age);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void setCollarColor(DyeColor color) {
-        getHandle().p(color.getColorCode());
+        getHandle().s(color.getColorCode());
     }
 
     /**
@@ -63,7 +49,7 @@ public class CanaryWolf extends CanaryTameable implements Wolf {
      */
     @Override
     public DyeColor getCollarColor() {
-        return DyeColor.values()[getHandle().cd()];
+        return DyeColor.values()[getHandle().ch()];
     }
 
     /**
@@ -71,7 +57,7 @@ public class CanaryWolf extends CanaryTameable implements Wolf {
      */
     @Override
     public boolean isAngry() {
-        return ((EntityWolf) entity).bY();
+        return getHandle().cg();
     }
 
     /**
@@ -79,7 +65,7 @@ public class CanaryWolf extends CanaryTameable implements Wolf {
      */
     @Override
     public void setAngry(boolean angry) {
-        ((EntityWolf) entity).m(angry);
+        getHandle().l(angry);
     }
 
     /**

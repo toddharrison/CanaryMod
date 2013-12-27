@@ -2,20 +2,22 @@ package net.canarymod.api.entity.living.animal;
 
 import net.canarymod.api.entity.EntityType;
 import net.canarymod.api.entity.vehicle.CanaryAnimalVehicle;
-import net.minecraft.server.EntityPig;
+import net.minecraft.entity.passive.EntityPig;
+
+import static net.canarymod.api.entity.EntityType.PIG;
 
 /**
  * Pig wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryPig extends CanaryAnimalVehicle implements Pig {
 
     /**
      * Constructs a new wrapper for EntityPig
-     * 
+     *
      * @param entity
-     *            the EntityPig to wrap
+     *         the EntityPig to wrap
      */
     public CanaryPig(EntityPig entity) {
         super(entity);
@@ -26,7 +28,7 @@ public class CanaryPig extends CanaryAnimalVehicle implements Pig {
      */
     @Override
     public EntityType getEntityType() {
-        return EntityType.PIG;
+        return PIG;
     }
 
     @Override
@@ -39,7 +41,7 @@ public class CanaryPig extends CanaryAnimalVehicle implements Pig {
      */
     @Override
     public boolean isSaddled() {
-        return ((EntityPig) entity).bT();
+        return getHandle().bX();
     }
 
     /**
@@ -47,7 +49,7 @@ public class CanaryPig extends CanaryAnimalVehicle implements Pig {
      */
     @Override
     public void setSaddled(boolean saddled) {
-        ((EntityPig) entity).i(saddled);
+        getHandle().i(saddled);
     }
 
     /**
@@ -55,7 +57,7 @@ public class CanaryPig extends CanaryAnimalVehicle implements Pig {
      */
     @Override
     public int getGrowingAge() {
-        return getHandle().b();
+        return getHandle().d();
     }
 
     /**
@@ -63,7 +65,7 @@ public class CanaryPig extends CanaryAnimalVehicle implements Pig {
      */
     @Override
     public void setGrowingAge(int age) {
-        getHandle().a(age);
+        getHandle().c(age);
     }
 
     /**

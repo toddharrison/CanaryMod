@@ -4,7 +4,7 @@ import net.canarymod.api.entity.Entity;
 import net.canarymod.api.world.World;
 import net.canarymod.api.world.blocks.Block;
 import net.canarymod.api.world.position.Location;
-import net.minecraft.server.PathNavigate;
+import net.minecraft.pathfinding.PathNavigate;
 
 /**
  * @author Somners

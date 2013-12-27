@@ -1,10 +1,10 @@
 package net.canarymod.api.entity;
 
-import net.minecraft.server.EntityArrow;
+import net.minecraft.entity.projectile.EntityArrow;
 
 /**
  * Arrow Wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryArrow extends CanaryProjectile implements Arrow {
@@ -55,7 +55,7 @@ public class CanaryArrow extends CanaryProjectile implements Arrow {
      */
     @Override
     public double getDamage() {
-        return getHandle().c();
+        return getHandle().e();
     }
 
     /**
@@ -71,7 +71,7 @@ public class CanaryArrow extends CanaryProjectile implements Arrow {
      */
     @Override
     public boolean isCritical() {
-        return getHandle().d();
+        return getHandle().f();
     }
 
     /**

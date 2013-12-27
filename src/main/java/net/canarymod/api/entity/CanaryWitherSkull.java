@@ -1,10 +1,10 @@
 package net.canarymod.api.entity;
 
-import net.minecraft.server.EntityWitherSkull;
+import net.minecraft.entity.projectile.EntityWitherSkull;
 
 /**
  * Wither Skull wrapper implementation
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public class CanaryWitherSkull extends CanaryFireball implements WitherSkull {
@@ -33,7 +33,7 @@ public class CanaryWitherSkull extends CanaryFireball implements WitherSkull {
      */
     @Override
     public boolean isInvulnerable() {
-        return getHandle().d();
+        return getHandle().f();
     }
 
     /**
@@ -104,26 +104,29 @@ public class CanaryWitherSkull extends CanaryFireball implements WitherSkull {
      * There is no fuse
      */
     @Override
-    public void setFuse(int fuse) {}
+    public void setFuse(int fuse) {
+    }
 
     /**
      * There is no fuse
      */
     @Override
-    public void increaseFuse(int increase) {}
+    public void increaseFuse(int increase) {
+    }
 
     /**
      * There is no fuse
      */
     @Override
-    public void decreaseFuse(int decrease) {}
+    public void decreaseFuse(int decrease) {
+    }
 
     /**
      * {@inheritDoc}
      */
     @Override
     public void detonate() {
-        getHandle().q.a(getHandle(), getX(), getY(), getZ(), getPower(), false, damageWorld);
+        getHandle().p.a(getHandle(), getX(), getY(), getZ(), getPower(), false, damageWorld);
     }
 
     /**
