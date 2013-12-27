@@ -29,8 +29,8 @@ import net.canarymod.api.world.position.Position;
 import net.canarymod.config.Configuration;
 import net.canarymod.config.WorldConfiguration;
 import net.minecraft.block.BlockJukebox;
+import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntityBeacon;
 import net.minecraft.tileentity.TileEntityBrewingStand;
 import net.minecraft.tileentity.TileEntityChest;
@@ -45,6 +45,7 @@ import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.tileentity.TileEntityNote;
 import net.minecraft.tileentity.TileEntitySign;
 import net.minecraft.tileentity.TileEntitySkull;
+import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.WorldSettings;
 import net.minecraft.world.storage.WorldInfo;
@@ -242,7 +243,7 @@ public class CanaryWorld implements World {
 
     @Override
     public short getDataAt(int x, int y, int z) {
-        return (short) world.h(x, y, z);
+        return (short) world.e(x, y, z);
     }
 
     @Override
@@ -273,12 +274,12 @@ public class CanaryWorld implements World {
 
     @Override
     public void setBlockAt(int x, int y, int z, short type, short data) {
-        world.f(x, y, z, type, data, (0x1 | 0x2));
+        world.d(x, y, z, net.minecraft.block.Block.e(type), data, (0x1 | 0x2));
     }
 
     @Override
     public void setDataAt(int x, int y, int z, short data) {
-        world.b(x, y, z, data, (0x1 | 0x2));
+        world.a(x, y, z, data, (0x1 | 0x2));
     }
 
     @Override
@@ -334,7 +335,7 @@ public class CanaryWorld implements World {
     @Override
     public int getHighestBlockAt(int x, int z) {
         for (int i = 0; i < this.getHeight(); i++) {
-            if (world.l(x, i, z)) {
+            if (world.i(x, i, z)) {
                 return i;
             }
         }
@@ -343,7 +344,7 @@ public class CanaryWorld implements World {
 
     @Override
     public void playNoteAt(int x, int y, int z, int instrument, byte notePitch) {
-        world.e(x, y, y, instrument, notePitch);
+        world.c(x, y, y, instrument, notePitch);
     }
 
     @Override
@@ -372,26 +373,26 @@ public class CanaryWorld implements World {
 
     @Override
     public long getRawTime() {
-        return world.J();
+        return world.I();
     }
 
     public long getTotalTime() {
-        return world.I();
+        return world.H();
     }
 
     @Override
     public int getLightLevelAt(int x, int y, int z) {
-        return world.b(EnumSkyBlock.a, x, y, z);
+        return world.b(EnumSkyBlock.Sky, x, y, z);
     }
 
     @Override
     public void setLightLevelOnBlockMap(int x, int y, int z, int newLevel) {
-        world.b(EnumSkyBlock.b, x, y, z, newLevel);
+        world.b(EnumSkyBlock.Block, x, y, z, newLevel);
     }
 
     @Override
     public void setLightLevelOnSkyMap(int x, int y, int z, int newLevel) {
-        world.b(EnumSkyBlock.a, x, y, z, newLevel);
+        world.b(EnumSkyBlock.Sky, x, y, z, newLevel);
     }
 
     @Override
@@ -431,7 +432,8 @@ public class CanaryWorld implements World {
 
     @Override
     public void spawnParticle(Particle particle) {
-        MinecraftServer.F().t.sendPacketToDimension(new Packet63WorldParticles(particle), this.name, this.type.getId());
+        //TODO
+        //MinecraftServer.G().t.sendPacketToDimension(new S2APacketParticles(particle), this.name, this.type.getId());
     }
 
     @Override
@@ -441,7 +443,7 @@ public class CanaryWorld implements World {
 
     @Override
     public void playAUXEffect(AuxiliarySoundEffect effect) {
-        world.e(effect.type.getDigits(), effect.x, effect.y, effect.z, effect.extra);
+        world.c(effect.type.getDigits(), effect.x, effect.y, effect.z, effect.extra);
     }
 
     @Override
@@ -461,7 +463,8 @@ public class CanaryWorld implements World {
 
     @Override
     public boolean isBlockPowered(int x, int y, int z) {
-        return world.w(x, y, z);
+        return false; //TODO
+        //return world.w(x, y, z);
     }
 
     @Override
@@ -476,7 +479,8 @@ public class CanaryWorld implements World {
 
     @Override
     public boolean isBlockIndirectlyPowered(int x, int y, int z) {
-        return world.x(x, y, z);
+        return false; //TODO
+        //return world.x(x, y, z);
     }
 
     @Override
@@ -551,7 +555,7 @@ public class CanaryWorld implements World {
     @Override
     public void makeExplosion(Entity exploder, double x, double y, double z, float power, boolean smoke) {
         if (exploder == null) {
-            world.a((net.minecraft.server.Entity) null, x, y, z, power, smoke);
+            world.a((net.minecraft.entity.Entity) null, x, y, z, power, smoke);
         }
         else {
             world.a(((CanaryEntity) exploder).getHandle(), x, y, z, power, smoke);
@@ -629,7 +633,7 @@ public class CanaryWorld implements World {
 
     @Override
     public TileEntity getOnlyTileEntityAt(int x, int y, int z) {
-        net.minecraft.tileentity.TileEntity tileentity = world.r(x, y, z);
+        net.minecraft.tileentity.TileEntity tileentity = world.o(x, y, z);
 
         if (tileentity != null) {
             if (tileentity instanceof TileEntityBrewingStand) {
@@ -689,7 +693,7 @@ public class CanaryWorld implements World {
         }
         int xx = x - ((x >> 4) * 16);
         int zz = z - ((z >> 4) * 16);
-        return BiomeType.fromId((byte) c.getHandle().a(xx, zz, this.getHandle().u()).N);
+        return BiomeType.fromId((byte) c.getHandle().a(xx, zz, this.getHandle().u()).ay);
     }
 
     @Override

@@ -39,7 +39,7 @@ public class CanaryDamageSource implements DamageSource {
 
     @Override
     public boolean isFireDamage() {
-        return handle.m();
+        return handle.o();
     }
 
     @Override

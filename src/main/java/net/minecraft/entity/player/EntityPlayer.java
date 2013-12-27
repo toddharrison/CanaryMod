@@ -1788,7 +1788,7 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
 
     public void initializeNewMeta() {
         if (metadata == null) {
-            metadata = new CanaryCompoundTag("Canary");
+            metadata = new CanaryCompoundTag();
             metadata.put("FirstJoin", DateUtils.longToDateTime(System.currentTimeMillis()));
             metadata.put("TimePlayed", 1L); // Initialize to 1
         }

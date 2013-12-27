@@ -1,7 +1,7 @@
 package net.minecraft.entity.effect;
 
-import net.canarymod.api.entity.LightningBolt;
 import net.canarymod.api.entity.effect.CanaryLightningBolt;
+import net.canarymod.api.entity.effect.LightningBolt;
 import net.canarymod.api.world.blocks.CanaryBlock;
 import net.canarymod.hook.entity.EntityLightningStruckHook;
 import net.canarymod.hook.world.IgnitionHook;
