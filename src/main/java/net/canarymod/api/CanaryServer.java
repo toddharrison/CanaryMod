@@ -136,8 +136,8 @@ public class CanaryServer implements Server {
             return true;
         }
         String[] split = command.split(" ");
-        if (!Canary.commands().parseCommand(this, split[0], split)) {
-            ((DedicatedServer) server).a(command, server); // Vanilla Commands passed
+        if (Canary.commands().parseCommand(this, split[0], split)) {
+            ((DedicatedServer) server).H().a(server, command); // Vanilla Commands passed
         }
         return true;
     }
@@ -155,7 +155,7 @@ public class CanaryServer implements Server {
         }
         String[] split = command.split(" ");
         if (!Canary.commands().parseCommand(player, split[0], split)) {
-            ((DedicatedServer) server).a(command, server); // Vanilla Commands passed
+            ((DedicatedServer) server).H().a(server, command); // Vanilla Commands passed
         }
         return true;
     }
@@ -171,8 +171,9 @@ public class CanaryServer implements Server {
         if (hook.isCanceled()) {
             return true;
         }
-        if (!Canary.commands().parseCommand(cmdBlock, command.split(" ")[0], command.split(" "))) {
-            ((DedicatedServer) server).a(command, server); // Vanilla Commands passed
+        String[] split = command.split(" ");
+        if (!Canary.commands().parseCommand(cmdBlock, split[0], split)) {
+            ((DedicatedServer) server).H().a(server, command); // Vanilla Commands passed
         }
         return true;
     }

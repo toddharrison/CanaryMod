@@ -302,7 +302,8 @@ public class DedicatedServer extends MinecraftServer implements IServer {
         while (!this.i.isEmpty()) {
             ServerCommand servercommand = (ServerCommand) this.i.remove(0);
             // CanaryMod intercept command queue for our own commands
-            if (!Canary.getServer().consoleCommand(servercommand.a)) {
+            String[] split = servercommand.a.split(" ");
+            if (!Canary.commands().parseCommand(getServer(), split[0], split)) {
                 this.H().a(servercommand.b, servercommand.a);
             }
         }
