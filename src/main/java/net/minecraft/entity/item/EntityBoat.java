@@ -339,7 +339,7 @@ public class EntityBoat extends Entity {
             // CanaryMod: VehicleMove
             Vector3D from = new Vector3D(this.q, this.r, this.s);
             Vector3D to = new Vector3D(this.t, this.u, this.v);
-            if (Vector3D.getDistance(from, to) > 1.0F) {
+            if (hasMovedOneBlockOrMore()) {
                 VehicleMoveHook vmh = (VehicleMoveHook) new VehicleMoveHook((Vehicle) this.entity, from, to).call();
                 if (vmh.isCanceled()) {
                     this.w = 0.0D;

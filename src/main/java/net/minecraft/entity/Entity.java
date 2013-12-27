@@ -1934,10 +1934,10 @@ public abstract class Entity {
         return this.metadata;
     }
 
-    public boolean hasMovedOneBlockOrMore() {
-        return ToolBox.floorToBlock(this.t) != ToolBox.floorToBlock(this.w)
-                || ToolBox.floorToBlock(this.u) != ToolBox.floorToBlock(this.x)
-                || ToolBox.floorToBlock(this.v) != ToolBox.floorToBlock(this.y);
+    protected boolean hasMovedOneBlockOrMore() {
+        return ToolBox.floorToBlock(this.q) != ToolBox.floorToBlock(this.t)
+                || ToolBox.floorToBlock(this.r) != ToolBox.floorToBlock(this.u)
+                || ToolBox.floorToBlock(this.s) != ToolBox.floorToBlock(this.v);
     }
     //
 }
