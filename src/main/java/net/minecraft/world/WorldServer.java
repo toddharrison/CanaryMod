@@ -783,10 +783,12 @@ public class WorldServer extends World {
 
         super.o();
         if (this.m != this.n) {
-            this.J.af().a((Packet) (new S2BPacketChangeGameState(7, this.n)), this.t.i);
+            // CanaryMod: method change
+            this.J.af().sendPacketToDimension((Packet) (new S2BPacketChangeGameState(7, this.n)), getCanaryWorld().getName(), this.t.i);
         }
         if (this.o != this.p) {
-            this.J.af().a((Packet) (new S2BPacketChangeGameState(8, this.p)), this.t.i);
+            // CanaryMod: method change
+            this.J.af().sendPacketToDimension((Packet) (new S2BPacketChangeGameState(8, this.p)), getCanaryWorld().getName(), this.t.i);
         }
         if (flag0 != this.P()) {
             if (flag0) {
