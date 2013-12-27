@@ -404,7 +404,7 @@ public class DedicatedServer extends MinecraftServer implements IServer {
         return 4;
     }
 
-    public void d(int i0) { //TODO: cfg.setPlayerIdleTimeout(int);
+    public void d(int i0) {
         super.d(i0);
         ServerConfiguration cfg = Configuration.getServerConfig();
         cfg.setPlayerIdleTimeout(i0);
