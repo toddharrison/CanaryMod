@@ -181,7 +181,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
         // CanaryMod: DisconnectionHook
         DisconnectionHook disconHook = (DisconnectionHook) new DisconnectionHook(this.b.getPlayer(), s0, "\u00A7E" + this.b.getDisplayName() + " left.").call();
         if (!disconHook.isHidden()) {
-            final ChatComponentText chatcomponenttext = new ChatComponentText(disconHook.getLeaveMessage());
+            final ChatComponentText chatcomponenttext = new ChatComponentText(disconHook.getReason());
 
             this.a.a(new S40PacketDisconnect(chatcomponenttext), new GenericFutureListener[]{ new GenericFutureListener() {
 
