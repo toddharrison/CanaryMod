@@ -1,7 +1,10 @@
-package net.minecraft.network;
+package net.minecraft.server.network;
 
 import io.netty.util.concurrent.GenericFutureListener;
 import net.canarymod.hook.system.ServerListPingHook;
+import net.minecraft.network.EnumConnectionState;
+import net.minecraft.network.INetworkManager;
+import net.minecraft.network.ServerStatusResponse;
 import net.minecraft.network.status.INetHandlerStatusServer;
 import net.minecraft.network.status.client.C00PacketServerQuery;
 import net.minecraft.network.status.client.C01PacketPing;
