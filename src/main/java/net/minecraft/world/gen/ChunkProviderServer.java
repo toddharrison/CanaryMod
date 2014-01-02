@@ -53,6 +53,8 @@ public class ChunkProviderServer implements IChunkProvider {
         this.i = worldserver;
         this.f = ichunkloader;
         this.e = ichunkprovider;
+
+        this.canaryChunkProvider = new CanaryChunkProviderServer(this);
     }
 
     // CanaryMod start
