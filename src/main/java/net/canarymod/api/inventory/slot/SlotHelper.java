@@ -63,12 +63,7 @@ public final class SlotHelper {
             return SlotType.BEACON;
         }
         else if (container instanceof ContainerBrewingStand) {
-            if (slotIndex == 3) {
-                return SlotType.INGREDIENT;
-            }
-            else {
-                return SlotType.POTION;
-            }
+            return SlotType.BREWING;
         }
         else if (slot instanceof SlotCrafting || (container instanceof ContainerWorkbench && slotIndex > 9)) {
             return SlotType.CRAFTING;
@@ -131,7 +126,7 @@ public final class SlotHelper {
             } else if (container instanceof ContainerBrewingStand) {
                 switch (slotIndex) {
                     case 3:
-                        return SecondarySlotType.CRAFT;
+                        return SecondarySlotType.INGREDIENT;
                     default:
                         return SecondarySlotType.POTION;
                 }
