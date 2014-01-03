@@ -5,10 +5,12 @@ import net.canarymod.api.CanaryServer;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.hook.system.UnloadWorldHook;
 import net.canarymod.logger.Logman;
+import net.visualillusionsent.utils.StringUtils;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -26,6 +28,7 @@ public class CanaryWorldManager implements WorldManager {
     private Map<String, World> loadedWorlds;
     private List<String> existingWorlds;
     private Map<String, Boolean> markedForUnload;
+    private static final Object worldLock = new Object();
 
     public CanaryWorldManager() {
         DimensionType.registerType("NORMAL", 0);
@@ -36,22 +39,27 @@ public class CanaryWorldManager implements WorldManager {
         if (!worldsFolders.exists()) {
             worldsFolders.mkdirs();
         }
-        int worldNum = worldsFolders.listFiles().length;
+        try {
+            int worldNum = worldsFolders.listFiles().length;
 
-        if (worldNum == 0) {
-            worldNum = 1;
-        }
-        existingWorlds = new ArrayList<String>(worldNum);
-        loadedWorlds = new HashMap<String, World>(worldNum);
-        for (String f : worldsFolders.list()) {
-            File world = new File(worldsFolders, f);
-            for (File fqname : world.listFiles()) {
-                if (fqname.isDirectory() && fqname.getName().contains("_")) {
-                    existingWorlds.add(fqname.getName());
+            if (worldNum == 0) {
+                worldNum = 1;
+            }
+            existingWorlds = new ArrayList<String>(worldNum);
+            loadedWorlds = new HashMap<String, World>(worldNum);
+            for (String f : worldsFolders.list()) {
+                File world = new File(worldsFolders, f);
+                for (File fqname : world.listFiles()) {
+                    if (fqname.isDirectory() && fqname.getName().contains("_")) {
+                        existingWorlds.add(fqname.getName());
+                    }
                 }
             }
+            markedForUnload = new HashMap<String, Boolean>(1);
         }
-        markedForUnload = new HashMap<String, Boolean>(1);
+        catch (NullPointerException e) {
+            Canary.logDerp("Failed to initialise world manager!", e);
+        }
     }
 
     /**
@@ -61,7 +69,8 @@ public class CanaryWorldManager implements WorldManager {
      * @param world
      */
     public void addWorld(CanaryWorld world) {
-        Logman.println("worldname entry in manager: " + world.getName() + "_" + world.getType().getName());
+        Canary.logDebug(String.format("Adding new world to world manager, filed as %s_%s", world.getName(), world.getType()
+                                                                                                                 .getName()));
         loadedWorlds.put(world.getName() + "_" + world.getType().getName(), world);
     }
 
@@ -122,9 +131,14 @@ public class CanaryWorldManager implements WorldManager {
 
     }
 
+    private void updateExistingWorldsList(String name, DimensionType type) {
+        existingWorlds.add(name+"_"+type.getName());
+    }
+
     @Override
     public boolean createWorld(String name, long seed, DimensionType type) {
         ((CanaryServer) Canary.getServer()).getHandle().loadWorld(name, seed, type);
+        updateExistingWorldsList(name, type);
         return true;
     }
 
@@ -132,17 +146,20 @@ public class CanaryWorldManager implements WorldManager {
     public boolean createWorld(String name, DimensionType type) {
         Logman.println("Creating a new world! " + name + "_" + type.getName());
         ((CanaryServer) Canary.getServer()).getHandle().loadWorld(name, new Random().nextLong(), type);
+        updateExistingWorldsList(name, type);
         return true;
     }
 
     @Override
     public boolean createWorld(String name, long seed, DimensionType worldType, WorldType genType) {
         ((CanaryServer) Canary.getServer()).getHandle().loadWorld(name + worldType.getName(), new Random().nextLong(), worldType, genType);
+        updateExistingWorldsList(name, worldType);
         return true;
     }
 
     @Override
     public World loadWorld(String name, DimensionType type) {
+        //TODO: Instead should we throw an exception to avoid loading trash worlds?
         if (!worldIsLoaded(name + "_" + type.getName())) {
             ((CanaryServer) Canary.getServer()).getHandle().loadWorld(name, new Random().nextLong(), type);
             return loadedWorlds.get(name + "_" + type.getName());
@@ -172,7 +189,7 @@ public class CanaryWorldManager implements WorldManager {
             // markedForUnload.clear();
         }
         // Canary.println("getAllWorlds");
-        return this.loadedWorlds.values();
+        return Collections.unmodifiableCollection(this.loadedWorlds.values());
     }
 
     @Override
@@ -180,7 +197,7 @@ public class CanaryWorldManager implements WorldManager {
         // This actually just schedules a world for unloading,
         // to prevent ConcurrentModificationExceptions as the values for world are iterated over constantly.
         // See getAllWorld for details
-        markedForUnload.put(name + "_" + type.getName(), Boolean.valueOf(force));
+        markedForUnload.put(name + "_" + type.getName(), force);
     }
 
     /**
@@ -188,29 +205,29 @@ public class CanaryWorldManager implements WorldManager {
      */
     private void removeWorlds() {
         Iterator<String> iter = markedForUnload.keySet().iterator();
-        while (iter.hasNext()) {
-            String fqName = iter.next();
-            CanaryWorld world = (CanaryWorld) loadedWorlds.get(fqName);
-            boolean force = markedForUnload.get(fqName);
-            if (world.getPlayerList().size() > 0) {
-                if (force) {
-                    for (Player p : world.getPlayerList()) {
-                        p.kick("Server scheduled world shutdown");
+        synchronized (worldLock) {
+            while (iter.hasNext()) {
+                String fqName = iter.next();
+                CanaryWorld world = (CanaryWorld) loadedWorlds.get(fqName);
+                boolean force = markedForUnload.get(fqName);
+                if (world.getPlayerList().size() > 0) {
+                    if (force) {
+                        for (Player p : world.getPlayerList()) {
+                            p.kick("Server scheduled world shutdown");
+                        }
+                    }
+                    else {
+                        Canary.logWarning(world.getFqName() + " was scheduled for unload but there were still players in it. Not unloading world!");
+                        continue;
                     }
                 }
-                else {
-                    Canary.logWarning(world.getFqName() + " was scheduled for unload but there were still players in it. Not unloading world!");
-                    iter.remove();
-                    continue;
-                }
+                world.save();
+                new UnloadWorldHook(world).call();
+                loadedWorlds.remove(world.getFqName());
+                iter.remove();
+
             }
-            world.save();
-            Canary.hooks().callHook(new UnloadWorldHook(world));
-            loadedWorlds.remove(world.getFqName());
-            iter.remove();
-
         }
-
     }
 
     @Override
@@ -230,6 +247,6 @@ public class CanaryWorldManager implements WorldManager {
 
     @Override
     public List<String> getExistingWorlds() {
-        return existingWorlds; // TODO: This only reads base folders not the real dimension folders!
+        return Collections.unmodifiableList(existingWorlds); // TODO: This only reads base folders not the real dimension folders!
     }
 }
