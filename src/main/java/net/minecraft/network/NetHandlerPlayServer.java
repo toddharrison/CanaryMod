@@ -391,9 +391,9 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
                             }
                         }
                     }
-                }
-                else {
-                    this.f = 0;
+                    else {
+                        this.f = 0;
+                    }
                 }
 
                 this.b.E = c03packetplayer.i();
