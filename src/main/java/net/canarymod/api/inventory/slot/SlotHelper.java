@@ -1,6 +1,22 @@
 package net.canarymod.api.inventory.slot;
 
+import net.canarymod.api.inventory.Inventory;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ContainerBeacon;
+import net.minecraft.inventory.ContainerBrewingStand;
+import net.minecraft.inventory.ContainerChest;
+import net.minecraft.inventory.ContainerDispenser;
+import net.minecraft.inventory.ContainerEnchantment;
+import net.minecraft.inventory.ContainerFurnace;
+import net.minecraft.inventory.ContainerHorseInventory;
+import net.minecraft.inventory.ContainerMerchant;
+import net.minecraft.inventory.ContainerPlayer;
+import net.minecraft.inventory.ContainerRepair;
+import net.minecraft.inventory.ContainerWorkbench;
+import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.SlotCrafting;
+import net.minecraft.inventory.SlotFurnace;
+import net.minecraft.inventory.SlotMerchantResult;
 
 /**
  * SlotHelper for SlotClickHook
@@ -20,7 +36,6 @@ public final class SlotHelper {
      * @return the {@link SlotType}
      */
     public static SlotType getSlotType(Container container, int slotIndex) {
-        /* BROKEN
         if (container == null) {
             return SlotType.NULL;
         }
@@ -36,34 +51,52 @@ public final class SlotHelper {
         }
 
         Slot slot = container.a(slotIndex);
-        if (slot instanceof SlotArmor) {
-            return SlotType.ARMOR;
-        } else if (slot instanceof SlotBeacon) {
-            return SlotType.BEACON;
-        } else if (slot instanceof SlotBrewingStandIngredient) {
-            return SlotType.INGREDIENT;
-        } else if (slot instanceof SlotBrewingStandPotion) {
-            return SlotType.POTION;
-        } else if (slot instanceof SlotCrafting) {
-            return SlotType.CRAFTING;
-        } else if (slot instanceof SlotEnchantment) {
-            return SlotType.ENCHANTMENT;
-        } else if (slot instanceof SlotFurnace) {
-            return SlotType.FURNACE;
-        } else if (slot instanceof SlotMerchantResult) {
-            return SlotType.MERCHANT;
-        } else if (slot instanceof ContainerRepair) {
-            return SlotType.REPAIR;
-        } else if (slot instanceof ContainerHorseInventorySlotSaddle) {
-            return SlotType.SADDLE;
-        } else if (slot instanceof ContainerHorseInventorySlotArmor) {
-            return SlotType.ARMOR;
-        } else if (slot.getClass() != Slot.class) {
-            return SlotType.UNKNOWN;
-        } else {
-            return SlotType.DEFAULT;
+        if (container instanceof ContainerPlayer) {
+            if (slotIndex >= 5 && slotIndex <= 8) {
+                return SlotType.ARMOR;
+            }
+            else if (slotIndex <= 4) {
+                return SlotType.CRAFTING;
+            }
         }
-        */
+        else if (container instanceof ContainerBeacon) {
+            return SlotType.BEACON;
+        }
+        else if (container instanceof ContainerBrewingStand) {
+            if (slotIndex == 3) {
+                return SlotType.INGREDIENT;
+            }
+            else {
+                return SlotType.POTION;
+            }
+        }
+        else if (slot instanceof SlotCrafting || (container instanceof ContainerWorkbench && slotIndex > 9)) {
+            return SlotType.CRAFTING;
+        }
+        else if (container instanceof ContainerEnchantment) {
+            return SlotType.ENCHANTMENT;
+        }
+        else if (slot instanceof SlotFurnace) {
+            return SlotType.FURNACE;
+        }
+        else if (slot instanceof SlotMerchantResult) {
+            return SlotType.MERCHANT;
+        }
+        else if (container instanceof ContainerRepair) {
+            return SlotType.REPAIR;
+        }
+        else if (container instanceof ContainerHorseInventory) {
+            if (slotIndex == 0) {
+                return SlotType.SADDLE;
+            }
+            else if (slotIndex == 1) {
+                return SlotType.ARMOR;
+            }
+        }
+        else if (slot.getClass() != Slot.class) {
+            return SlotType.UNKNOWN;
+        }
+
         return SlotType.DEFAULT;
     }
 
@@ -73,7 +106,6 @@ public final class SlotHelper {
      * @return {@link SecondarySlotType}
      */
     public static SecondarySlotType getSpecificSlotType(Container container, int slotIndex) {
-        /* BROKEN
         if (container == null) {
             return SecondarySlotType.NULL;
         }
@@ -162,7 +194,7 @@ public final class SlotHelper {
 
         if (container instanceof ContainerPlayer) {
             if (localSlot < 4) {
-                return SecondarySlotType.ARMOR;
+                return SecondarySlotType.CRAFT;
             }
 
             localSlot -= 4; // remove armor index
@@ -171,7 +203,6 @@ public final class SlotHelper {
         if (localSlot >= 27 && localSlot < 36) {
             return SecondarySlotType.QUICKBAR;
         }
-        */
 
         return SecondarySlotType.INVENTORY;
     }
