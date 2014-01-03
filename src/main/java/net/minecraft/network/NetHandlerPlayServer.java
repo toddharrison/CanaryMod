@@ -380,13 +380,15 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
 
                 // CanaryMod: check on flying capability instead of mode
                 // moved allow-flight to per-world config
-                if (!Configuration.getWorldConfig(b.getCanaryWorld().getFqName()).isFlightAllowed() && !this.d.aa() && !worldserver.c(axisalignedbb)) {
-                    if (d11 >= -0.03125D) {
-                        ++this.f;
-                        if (this.f > 80) {
-                            c.warn(this.b.b_() + " was kicked for floating too long!");
-                            this.c("Flying is not enabled on this server");
-                            return;
+                if (!Configuration.getWorldConfig(worldserver.getCanaryWorld().getFqName()).isFlightAllowed()) { // CanaryMod: Check if flight is allowed
+                    if (!worldserver.c(axisalignedbb) && !this.b.c.d() && !(player.canIgnoreRestrictions() || player.isAdmin())) { // on ground | mode | admin
+                        if (d11 >= -0.03125D) {
+                            ++this.f;
+                            if (this.f > 80) {
+                                c.warn(this.b.b_() + " was kicked for floating too long!");
+                                this.c("Flying is not enabled on this server");
+                                return;
+                            }
                         }
                     }
                 }
