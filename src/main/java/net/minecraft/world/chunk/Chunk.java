@@ -783,31 +783,27 @@ public class Chunk {
         this.d = true;
         this.e.a(this.i.values());
 
-        for (int i0 = 0; i0 < this.j.length; ++i0) {
-            Iterator iterator = this.j[i0].iterator();
-
-            while (iterator.hasNext()) {
-                Entity entity = (Entity) iterator.next();
-
+        for (List aJ : this.j) {
+            for (Object anAJ : aJ) {
+                Entity entity = (Entity) anAJ;
                 entity.X();
             }
 
-            this.e.a(this.j[i0]);
+            this.e.a(aJ);
         }
     }
 
     public void d() {
         this.d = false;
-        Iterator iterator = this.i.values().iterator();
 
-        while (iterator.hasNext()) {
-            TileEntity tileentity = (TileEntity) iterator.next();
+        for (Object o1 : this.i.values()) {
+            TileEntity tileentity = (TileEntity) o1;
 
             this.e.a(tileentity);
         }
 
-        for (int i0 = 0; i0 < this.j.length; ++i0) {
-            this.e.b(this.j[i0]);
+        for (List aJ : this.j) {
+            this.e.b(aJ);
         }
     }
 

@@ -105,7 +105,7 @@ public class ChunkProviderServer implements IChunkProvider {
             if (chunk == null) {
                 // CanaryMod: ChunkCreation
                 ChunkCreationHook hook = (ChunkCreationHook) new ChunkCreationHook(i0, i1, i.getCanaryWorld()).call();
-                byte[] blocks = hook.getBlockData();
+                int[] blocks = hook.getBlockData();
                 if (blocks != null) {
                     chunk = new Chunk(i, NMSToolBox.blockIdsToBlocks(blocks), i0, i1);
                     chunk.k = true; // is populated
@@ -126,6 +126,7 @@ public class ChunkProviderServer implements IChunkProvider {
                         CrashReport crashreport = CrashReport.a(throwable, "Exception generating new chunk");
                         CrashReportCategory crashreportcategory = crashreport.a("Chunk to be generated");
 
+                        //TODO: Remove casts?
                         crashreportcategory.a("Location", (Object) String.format("%d,%d", new Object[]{ Integer.valueOf(i0), Integer.valueOf(i1) }));
                         crashreportcategory.a("Position hash", (Object) Long.valueOf(i2));
                         crashreportcategory.a("Generator", (Object) this.e.e());

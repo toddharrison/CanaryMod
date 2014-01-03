@@ -13,7 +13,7 @@ public class NMSToolBox {
      *
      * @return native Block array
      */
-    public static net.minecraft.block.Block[] blockIdsToBlocks(byte[] ids) {
+    public static net.minecraft.block.Block[] blockIdsToBlocks(int[] ids) {
         net.minecraft.block.Block[] blocks = new net.minecraft.block.Block[ids.length];
         for (int index = 0; index < ids.length; index++) {
             blocks[index] = net.minecraft.block.Block.e(ids[index]);
