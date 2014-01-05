@@ -103,6 +103,38 @@ public class CanaryEntityItem extends CanaryEntity implements EntityItem {
      * {@inheritDoc}
      */
     @Override
+    public String getOwner() {
+        return getHandle().i();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setOwner(String owner) {
+        getHandle().a(owner);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getThrower() {
+        return getHandle().j();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setThrower(String thrower) {
+        getHandle().b(thrower);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public net.minecraft.entity.item.EntityItem getHandle() {
         return (net.minecraft.entity.item.EntityItem) entity;
     }
