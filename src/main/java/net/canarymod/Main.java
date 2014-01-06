@@ -39,6 +39,7 @@ public class Main {
         catch (ClassNotFoundException e) {
         } // Need to initialize the SQLite driver for some reason, initialize here for plugin use as well
         try {
+            // Sets the default state for the gui, true is off, false is on
             MinecraftServer.setHeadless(true);
             boolean runUnControlled = false;
             for (int index = 0; index < args.length; ++index) {
@@ -46,9 +47,6 @@ public class Main {
                 String value = index == args.length - 1 ? null : args[index + 1];
                 if (key.equals("gui") || key.equals("--gui")|| key.equals("-gui")) {
                     MinecraftServer.setHeadless(false);
-                    if (GraphicsEnvironment.isHeadless()) {
-                        MinecraftServer.setHeadless(true);
-                    }
                 }
                 else if (key.equals("--universe") && value != null) {
                     // Initialize Logging to universe argument
