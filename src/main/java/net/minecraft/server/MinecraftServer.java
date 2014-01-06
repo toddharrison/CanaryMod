@@ -84,7 +84,7 @@ import java.util.concurrent.Callable;
 
 public abstract class MinecraftServer implements ICommandSender, Runnable, IPlayerUsage {
 
-    private static boolean notHeadless; // CanaryMod
+    private static boolean notHeadless = !GraphicsEnvironment.isHeadless(); // CanaryMod
     private static final Logger h = LogManager.getLogger();
     private static MinecraftServer i;
     private final ISaveFormat j;
@@ -1295,7 +1295,9 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
     }
 
     public static void setHeadless(boolean state) {
-        MinecraftServer.notHeadless = !state;
+        if (!GraphicsEnvironment.isHeadless()) {
+            MinecraftServer.notHeadless = !state;
+        }
     }
 
 }

@@ -1,9 +1,11 @@
 package net.minecraft.server.dedicated;
 
 import net.canarymod.Canary;
+import net.canarymod.api.CanaryServer;
 import net.canarymod.config.Configuration;
 import net.canarymod.config.ServerConfiguration;
 import net.canarymod.config.WorldConfiguration;
+import net.canarymod.hook.system.ServerGuiStartHook;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.ServerCommand;
 import net.minecraft.crash.CrashReport;
@@ -13,6 +15,7 @@ import net.minecraft.network.rcon.RConThreadMain;
 import net.minecraft.network.rcon.RConThreadQuery;
 import net.minecraft.profiler.PlayerUsageSnooper;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.gui.MinecraftServerGui;
 import net.minecraft.server.management.ServerConfigurationManager;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.CryptManager;
@@ -341,21 +344,21 @@ public class DedicatedServer extends MinecraftServer implements IServer {
     }
 
     public void ay() {
-        /* Pending further corrections
-        ServerGuiStartHook guiHook = (ServerGuiStartHook) new ServerGuiStartHook(MinecraftServerGui.preInit(this)).call(); // CanaryMod: PreInitialize the GUI without starting it
-        if (guiHook.getGui() != null) {
-            ((CanaryServer) Canary.getServer()).setCurrentGUI(guiHook.getGui());
+        try {
+            ServerGuiStartHook guiHook = (ServerGuiStartHook) new ServerGuiStartHook(MinecraftServerGui.preInit(this)).call(); // CanaryMod: PreInitialize the GUI without starting it
+            if (guiHook.getGui() != null) {
+                ((CanaryServer) Canary.getServer()).setCurrentGUI(guiHook.getGui());
+            }
+            else {
+                ((CanaryServer) Canary.getServer()).setCurrentGUI(MinecraftServerGui.a(this));
+            }
+            Canary.getServer().getCurrentGUI().start();
+            this.o = true;
+            MinecraftServer.setHeadless(false);
+        } catch (Exception e) {
+            // The gui is causing hang ups so just ignore the gui entirely
+            Canary.logDerp("GUI failed to start.", e);
         }
-        else {
-            ((CanaryServer) Canary.getServer()).setCurrentGUI(MinecraftServerGui.a(this));
-        }
-        ((CanaryServer) Canary.getServer()).getCurrentGUI().start();
-        this.o = true;
-        MinecraftServer.setHeadless(false);
-        */
-        // The gui is causing hang ups so just ignore the gui entirely
-        //MinecraftServerGui.a(this);
-        //this.o = true;
     }
 
     public boolean ai() {
