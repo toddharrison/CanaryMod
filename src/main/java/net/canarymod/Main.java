@@ -7,7 +7,9 @@ import net.canarymod.api.inventory.Item;
 import net.canarymod.serialize.EnchantmentSerializer;
 import net.canarymod.serialize.ItemSerializer;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.gui.MinecraftServerGui;
 
+import javax.swing.*;
 import java.awt.*;
 
 public class Main {
@@ -37,17 +39,36 @@ public class Main {
         catch (ClassNotFoundException e) {
         } // Need to initialize the SQLite driver for some reason, initialize here for plugin use as well
         try {
-            MinecraftServer.setHeadless(GraphicsEnvironment.isHeadless());
+            MinecraftServer.setHeadless(true);
+            boolean runUnControlled = false;
             for (int index = 0; index < args.length; ++index) {
                 String key = args[index];
                 String value = index == args.length - 1 ? null : args[index + 1];
-                if (key.equals("nogui") || key.equals("--nogui")) {
-                    MinecraftServer.setHeadless(true);
+                if (key.equals("gui") || key.equals("--gui")|| key.equals("-gui")) {
+                    MinecraftServer.setHeadless(false);
+                    if (GraphicsEnvironment.isHeadless()) {
+                        MinecraftServer.setHeadless(true);
+                    }
                 }
                 else if (key.equals("--universe") && value != null) {
                     // Initialize Logging to universe argument
                     //la = new LogAgent("Minecraft-Server", (String) null, (new File(new File(value), "server.log")).getAbsolutePath());
                 }
+                else if (key.equals("noControl") || key.equals("-noControl") || key.equals("--noControl")) {
+                    runUnControlled = true;
+                }
+            }
+            if (System.console() == null && GraphicsEnvironment.isHeadless()) {
+                if (runUnControlled) {
+                    Canary.logWarning("Server is starting with no Console or GUI be warned!");
+                }
+                else {
+                    Canary.logSevere("Server can not start no Console or GUI is available to control the server.");
+                    System.exit(42);
+                }
+            }
+            else if (System.console() == null && !GraphicsEnvironment.isHeadless()) {
+                MinecraftServer.setHeadless(false);
             }
 
             //if (la == null) { // If universe wasn't set we need to initialize to the working directory
@@ -55,9 +76,14 @@ public class Main {
             //}
             //la.a().setLevel(Level.ALL);
 
-            //if (!MinecraftServer.isHeadless()) {
-            //    TextAreaLogHandler.getLogHandler().poke();
-            //}
+            if (!MinecraftServer.isHeadless()) {
+                try {
+                    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+                } catch (Exception interruptedexception) {
+                    ;
+                }
+                MinecraftServerGui.getLog();
+            }
 
             initBird(); // Initialize the Bird
             MinecraftServer.main(args); // Boot up the native server

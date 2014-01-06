@@ -29,6 +29,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.S38PacketPlayerListItem;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.dedicated.DedicatedServer;
+import net.minecraft.server.gui.MinecraftServerGui;
 import net.minecraft.server.management.ServerConfigurationManager;
 import net.visualillusionsent.utils.TaskManager;
 
@@ -419,59 +420,8 @@ public class CanaryServer implements Server {
      * {@inheritDoc}
      */
     @Override
-    public long[] getSentPacketCountArray() {
-        return null;
-        //return server.f;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public long[] getSentPacketSizeArray() {
-        return null;
-        //return server.g;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public long[] getReceivedPacketCountArray() {
-        return null;
-        //return server.h;
-    }
-
-    @Override
-    public long[] getReceivedPacketSizeArray() {
-        return null;
-        //return server.i;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public long[] getTickTimeArray() {
         return server.f;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int getTcpReaderThreadCount() {
-        return 0;
-        //return TcpConnection.a.get();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int getTcpWriterThreadCount() {
-        return 0;
-        //return TcpConnection.b.get();
     }
 
     /**
@@ -503,8 +453,7 @@ public class CanaryServer implements Server {
     @Override
     public String getServerGUILog() {
         if (!isHeadless()) {
-            return null;
-            //return TextAreaLogHandler.getLogHandler().getLog();
+            return MinecraftServerGui.getLog();
         }
         else {
             return null;
