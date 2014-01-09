@@ -66,7 +66,7 @@ public class CanaryBrewingStand extends CanaryBlockInventory implements BrewingS
      */
     @Override
     public void setContents(Item[] items) {
-        System.arraycopy(CanaryItem.itemArrayToStackArray(items), 0, getTileEntity().c, 0, getSize());
+        System.arraycopy(CanaryItem.itemArrayToStackArray(items), 0, getTileEntity().j, 0, getSize());
     }
 
     /**
