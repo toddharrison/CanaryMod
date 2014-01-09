@@ -48,6 +48,14 @@ public class CanaryCommandBlockMinecart extends CanaryMinecart implements Comman
      * {@inheritDoc}
      */
     @Override
+    public void setName(String name) {
+        getHandle().getLogic().b(name);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void notice(String message) {
         Canary.logDebug("[NOTICE] ".concat(message));
     }

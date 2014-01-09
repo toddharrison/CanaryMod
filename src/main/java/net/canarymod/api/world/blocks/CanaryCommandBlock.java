@@ -39,6 +39,14 @@ public class CanaryCommandBlock extends CanaryTileEntity implements CommandBlock
      * {@inheritDoc}
      */
     @Override
+    public void setName(String name) {
+        getTileEntity().getLogic().b(name);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void notice(String message) {
         Canary.logDebug("[NOTICE] ".concat(message));
     }
