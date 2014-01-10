@@ -32,7 +32,7 @@ public class Main {
      * @param args
      */
     public static void main(String[] args) {
-        Canary.logInfo("Starting: " + Canary.getImplementationTitle() + " " + Canary.getImplementationVersion() + " / Minecraft Server " + MinecraftServer.G().A());
+        Canary.logInfo("Starting: " + Canary.getImplementationTitle() + " " + Canary.getImplementationVersion());
         try {
             Class.forName("org.sqlite.JDBC");
         }
