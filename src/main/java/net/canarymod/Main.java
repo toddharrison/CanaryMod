@@ -32,7 +32,7 @@ public class Main {
      * @param args
      */
     public static void main(String[] args) {
-        System.out.println("Starting: " + Canary.getImplementationTitle() + " " + Canary.getImplementationVersion() + " Specified By: " + Canary.getSpecificationTitle() + " " + Canary.getSpecificationVersion());
+        Canary.logInfo("Starting: " + Canary.getImplementationTitle() + " " + Canary.getImplementationVersion() + " / Minecraft Server " + MinecraftServer.G().A());
         try {
             Class.forName("org.sqlite.JDBC");
         }
@@ -41,38 +41,32 @@ public class Main {
         try {
             // Sets the default state for the gui, true is off, false is on
             MinecraftServer.setHeadless(true);
-            boolean runUnControlled = false;
+            boolean runUnControlled = false, headless = GraphicsEnvironment.isHeadless();
             for (int index = 0; index < args.length; ++index) {
                 String key = args[index];
                 String value = index == args.length - 1 ? null : args[index + 1];
+                // Replace the nogui option with gui option so the gui is off by default
                 if (key.equals("gui") || key.equals("--gui")|| key.equals("-gui")) {
                     MinecraftServer.setHeadless(false);
-                }
-                else if (key.equals("--universe") && value != null) {
-                    // Initialize Logging to universe argument
-                    //la = new LogAgent("Minecraft-Server", (String) null, (new File(new File(value), "server.log")).getAbsolutePath());
                 }
                 else if (key.equals("noControl") || key.equals("-noControl") || key.equals("--noControl")) {
                     runUnControlled = true;
                 }
             }
-            if (System.console() == null && GraphicsEnvironment.isHeadless()) {
-                if (runUnControlled) {
+
+            // Check if there is a Console in use and if we should launch a GUI as replacement for no console
+            if (System.console() == null) {
+                if (!headless && !runUnControlled) { //if not headless, no console, and not unControlled, launch the GUI
+                    MinecraftServer.setHeadless(false);
+                }
+                else if (runUnControlled) { // If allowed to be unControlled, just log a warning
                     Canary.logWarning("Server is starting with no Console or GUI be warned!");
                 }
-                else {
+                else { // No graphics environment and not allowed to be uncontrolled? KILL IT!
                     Canary.logSevere("Server can not start no Console or GUI is available to control the server.");
                     System.exit(42);
                 }
             }
-            else if (System.console() == null && !GraphicsEnvironment.isHeadless()) {
-                MinecraftServer.setHeadless(false);
-            }
-
-            //if (la == null) { // If universe wasn't set we need to initialize to the working directory
-            //    la = new LogAgent("Minecraft-Server", (String) null, (new File(new File("."), "server.log")).getAbsolutePath());
-            //}
-            //la.a().setLevel(Level.ALL);
 
             if (!MinecraftServer.isHeadless()) {
                 try {

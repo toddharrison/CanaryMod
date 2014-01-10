@@ -65,7 +65,7 @@ public final class SlotHelper {
         else if (container instanceof ContainerBrewingStand) {
             return SlotType.BREWING;
         }
-        else if (slot instanceof SlotCrafting || (container instanceof ContainerWorkbench && slotIndex > 9)) {
+        else if (slot instanceof SlotCrafting || (container instanceof ContainerWorkbench && slotIndex < 9)) {
             return SlotType.CRAFTING;
         }
         else if (container instanceof ContainerEnchantment) {
@@ -123,20 +123,25 @@ public final class SlotHelper {
         if (slotIndex < inv.getContents().length) {
             if (container instanceof ContainerBeacon) {
                 return SecondarySlotType.PAYMENT;
-            } else if (container instanceof ContainerBrewingStand) {
-                switch (slotIndex) {
-                    case 3:
-                        return SecondarySlotType.INGREDIENT;
-                    default:
-                        return SecondarySlotType.POTION;
+            }
+            else if (container instanceof ContainerBrewingStand) {
+                if (slotIndex == 3) {
+                    return SecondarySlotType.INGREDIENT;
                 }
-            } else if (container instanceof ContainerChest) {
+                else {
+                    return SecondarySlotType.POTION;
+                }
+            }
+            else if (container instanceof ContainerChest) {
                 return SecondarySlotType.CONTAINER;
-            } else if (container instanceof ContainerDispenser) {
+            }
+            else if (container instanceof ContainerDispenser) {
                 return SecondarySlotType.CONTAINER;
-            } else if (container instanceof ContainerEnchantment) {
+            }
+            else if (container instanceof ContainerEnchantment) {
                 return SecondarySlotType.ENCHANT;
-            } else if (container instanceof ContainerFurnace) {
+            }
+            else if (container instanceof ContainerFurnace) {
                 switch (slotIndex) {
                     case 0:
                         return SecondarySlotType.CRAFT;
@@ -145,7 +150,8 @@ public final class SlotHelper {
                     default:
                         return SecondarySlotType.RESULT;
                 }
-            } else if (container instanceof ContainerMerchant) {
+            }
+            else if (container instanceof ContainerMerchant) {
                 switch (slotIndex) {
                     case 0:
                     case 1:
@@ -153,29 +159,32 @@ public final class SlotHelper {
                     default:
                         return SecondarySlotType.RESULT;
                 }
-            } else if (container instanceof ContainerPlayer) {
+            }
+            else if (container instanceof ContainerPlayer) {
                 if (slotIndex == 0) {
                     return SecondarySlotType.RESULT;
                 }
                 if (slotIndex <= 4) {
                     return SecondarySlotType.CRAFT;
                 }
-            } else if (container instanceof ContainerRepair) {
-                switch (slotIndex) {
-                    case 0:
-                    case 1:
-                        return SecondarySlotType.CRAFT;
-                    default:
-                        return SecondarySlotType.RESULT;
+            }
+            else if (container instanceof ContainerRepair) {
+                if (slotIndex < 2) {
+                    return SecondarySlotType.CRAFT;
                 }
-            } else if (container instanceof ContainerWorkbench) {
+                else {
+                    return SecondarySlotType.RESULT;
+                }
+            }
+            else if (container instanceof ContainerWorkbench) {
                 if (slotIndex == 0) {
                     return SecondarySlotType.RESULT;
                 }
                 if (slotIndex <= 9) {
                     return SecondarySlotType.CRAFT;
                 }
-            } else if (container instanceof ContainerHorseInventory) {
+            }
+            else if (container instanceof ContainerHorseInventory) {
                 if (slotIndex == 0) {
                     return SecondarySlotType.SADDLE;
                 }
@@ -185,11 +194,11 @@ public final class SlotHelper {
             }
         }
 
-        int localSlot = slotIndex - inv.getContents().length;
+        int localSlot = slotIndex - inv.getSize();
 
         if (container instanceof ContainerPlayer) {
             if (localSlot < 4) {
-                return SecondarySlotType.CRAFT;
+                return SecondarySlotType.ARMOR;
             }
 
             localSlot -= 4; // remove armor index
