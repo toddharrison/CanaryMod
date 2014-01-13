@@ -43,7 +43,7 @@ import java.util.concurrent.Callable;
 public class DedicatedServer extends MinecraftServer implements IServer {
 
     private static final Logger h = LogManager.getLogger();
-    private final List i = Collections.synchronizedList(new ArrayList());
+    private final List<ServerCommand> i = Collections.synchronizedList(new ArrayList<ServerCommand>());
     private RConThreadQuery j;
     private RConThreadMain k;
     // CanaryMod - Removed private PropertyManager l;
@@ -307,7 +307,7 @@ public class DedicatedServer extends MinecraftServer implements IServer {
 
     public void aw() {
         while (!this.i.isEmpty()) {
-            ServerCommand servercommand = (ServerCommand) this.i.remove(0);
+            ServerCommand servercommand = this.i.remove(0);
             // CanaryMod intercept command queue for our own commands
             String[] split = servercommand.a.split(" ");
             if (!Canary.commands().parseCommand(getServer(), split[0], split)) {

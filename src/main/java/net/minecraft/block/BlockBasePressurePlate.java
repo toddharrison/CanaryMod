@@ -103,7 +103,7 @@ public abstract class BlockBasePressurePlate extends Block {
         if (i3 != i4) {
             RedstoneChangeHook hook = (RedstoneChangeHook) new RedstoneChangeHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), i3, i4).call();
             if (hook.isCanceled()) {
-                i4 = this.d(hook.getOldLevel());
+                i4 = hook.getOldLevel();
             }
         }
         //
