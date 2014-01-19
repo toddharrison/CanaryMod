@@ -24,27 +24,28 @@ import java.io.OutputStream;
 public class SaveHandler implements ISaveHandler, IPlayerFileData {
 
     private static final Logger a = LogManager.getLogger();
-    private final File b;
-    private final File c;
+    private final File worldDir; // CanaryMod renamed from b
+    private final File globalPlayerFilesDir; // CanaryMod renamed from c
     private final File worldbaseDir; // CanaryMod
-    private final File d;
+    private final File worldDataDir; // CanaryMod renamed from d
     private final long e = MinecraftServer.ap();
-    private final String f;
+    private final String worldName; // CanaryMod renamed from f
     protected net.canarymod.api.world.DimensionType type;
 
     public SaveHandler(File file1, String s0, boolean flag0, net.canarymod.api.world.DimensionType type) {
         // CanaryMod refactored for more flexible folder structure
-        this.b = new File(file1, s0 + "/" + s0 + "_" + type.getName());
-        this.b.mkdirs();
+        this.worldDir = new File(file1, s0 + "/" + s0 + "_" + type.getName());
+        this.worldDir.mkdirs();
 
-        // CanaryMod put the players and data files into a global folder valid for all worlds
-        this.c = new File(file1, "players");
-        this.d = new File(this.b, "data");
-        this.d.mkdirs();
-        this.f = s0;
+        // CanaryMod put the players files in a global place valid for all worlds
+        this.globalPlayerFilesDir = new File(file1, "players");
+        // CanaryMod move the data dir into a world-specific folder
+        this.worldDataDir = new File(this.worldDir, "data");
+        this.worldDataDir.mkdirs();
+        this.worldName = s0;
         this.worldbaseDir = file1;
         if (flag0) {
-            this.c.mkdirs();
+            this.globalPlayerFilesDir.mkdirs();
         }
         this.type = type;
         this.h();
@@ -58,7 +59,7 @@ public class SaveHandler implements ISaveHandler, IPlayerFileData {
      * @return
      */
     public String getBaseName() {
-        return this.f;
+        return this.worldName;
     }
 
     // CanaryMod
@@ -74,7 +75,7 @@ public class SaveHandler implements ISaveHandler, IPlayerFileData {
 
     private void h() {
         try {
-            File file1 = new File(this.b, "session.lock");
+            File file1 = new File(this.worldDir, "session.lock");
             DataOutputStream dataoutputstream = new DataOutputStream(new FileOutputStream(file1));
 
             try {
@@ -91,13 +92,13 @@ public class SaveHandler implements ISaveHandler, IPlayerFileData {
     }
 
     public File b() {
-        return this.b;
+        return this.worldDir;
     }
 
     @Override
     public void c() throws MinecraftException {
         try {
-            File file1 = new File(this.b, "session.lock");
+            File file1 = new File(this.worldDir, "session.lock");
             DataInputStream datainputstream = new DataInputStream(new FileInputStream(file1));
 
             try {
@@ -121,7 +122,7 @@ public class SaveHandler implements ISaveHandler, IPlayerFileData {
 
     @Override
     public WorldInfo d() {
-        File file1 = new File(this.b, "level.dat");
+        File file1 = new File(this.worldDir, "level.dat");
         NBTTagCompound nbttagcompound;
         NBTTagCompound nbttagcompound1;
 
@@ -136,7 +137,7 @@ public class SaveHandler implements ISaveHandler, IPlayerFileData {
             }
         }
 
-        file1 = new File(this.b, "level.dat_old");
+        file1 = new File(this.worldDir, "level.dat_old");
         if (file1.exists()) {
             try {
                 nbttagcompound = CompressedStreamTools.a((InputStream) (new FileInputStream(file1)));
@@ -159,9 +160,9 @@ public class SaveHandler implements ISaveHandler, IPlayerFileData {
         nbttagcompound2.a("Data", (NBTBase) nbttagcompound1);
 
         try {
-            File file1 = new File(this.b, "level.dat_new");
-            File file2 = new File(this.b, "level.dat_old");
-            File file3 = new File(this.b, "level.dat");
+            File file1 = new File(this.worldDir, "level.dat_new");
+            File file2 = new File(this.worldDir, "level.dat_old");
+            File file3 = new File(this.worldDir, "level.dat");
 
             CompressedStreamTools.a(nbttagcompound2, (OutputStream) (new FileOutputStream(file1)));
             if (file2.exists()) {
@@ -192,9 +193,9 @@ public class SaveHandler implements ISaveHandler, IPlayerFileData {
         nbttagcompound1.a("Data", (NBTBase) nbttagcompound);
 
         try {
-            File file1 = new File(this.b, "level.dat_new");
-            File file2 = new File(this.b, "level.dat_old");
-            File file3 = new File(this.b, "level.dat");
+            File file1 = new File(this.worldDir, "level.dat_new");
+            File file2 = new File(this.worldDir, "level.dat_old");
+            File file3 = new File(this.worldDir, "level.dat");
 
             CompressedStreamTools.a(nbttagcompound1, (OutputStream) (new FileOutputStream(file1)));
             if (file2.exists()) {
@@ -223,8 +224,8 @@ public class SaveHandler implements ISaveHandler, IPlayerFileData {
             NBTTagCompound nbttagcompound = new NBTTagCompound();
 
             entityplayer.e(nbttagcompound);
-            File file1 = new File(this.c, entityplayer.b_() + ".dat.tmp");
-            File file2 = new File(this.c, entityplayer.b_() + ".dat");
+            File file1 = new File(this.globalPlayerFilesDir, entityplayer.b_() + ".dat.tmp");
+            File file2 = new File(this.globalPlayerFilesDir, entityplayer.b_() + ".dat");
 
             CompressedStreamTools.a(nbttagcompound, (OutputStream) (new FileOutputStream(file1)));
             if (file2.exists()) {
@@ -251,7 +252,7 @@ public class SaveHandler implements ISaveHandler, IPlayerFileData {
 
     public NBTTagCompound a(String s0) {
         try {
-            File file1 = new File(this.c, s0 + ".dat");
+            File file1 = new File(this.globalPlayerFilesDir, s0 + ".dat");
 
             if (file1.exists()) {
                 return CompressedStreamTools.a((InputStream) (new FileInputStream(file1)));
@@ -271,7 +272,7 @@ public class SaveHandler implements ISaveHandler, IPlayerFileData {
 
     @Override
     public String[] f() {
-        String[] astring = this.c.list();
+        String[] astring = this.globalPlayerFilesDir.list();
 
         for (int i0 = 0; i0 < astring.length; ++i0) {
             if (astring[i0].endsWith(".dat")) {
@@ -287,12 +288,12 @@ public class SaveHandler implements ISaveHandler, IPlayerFileData {
 
     @Override
     public File b(String s0) {
-        return new File(this.d, s0 + ".dat");
+        return new File(this.worldDataDir, s0 + ".dat");
     }
 
     @Override
     public String g() {
-        return this.f;
+        return this.worldName;
     }
 
     // CanaryMod enable writing dat files from player name and a given base tag
@@ -301,8 +302,8 @@ public class SaveHandler implements ISaveHandler, IPlayerFileData {
         try {
             NBTTagCompound nbttagcompound = tag.getHandle();
 
-            File file1 = new File(this.b, player + ".dat.tmp");
-            File file2 = new File(this.b, player + ".dat");
+            File file1 = new File(this.worldDir, player + ".dat.tmp");
+            File file2 = new File(this.worldDir, player + ".dat");
 
             CompressedStreamTools.a(nbttagcompound, (OutputStream) (new FileOutputStream(file1)));
             if (file2.exists()) {

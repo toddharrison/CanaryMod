@@ -47,12 +47,11 @@ public class EntityLeashKnot extends EntityHanging {
     //CanaryMod added logic to notify plugins of leash knots being destroyed
     public void b(Entity entity) {
         //CanaryMod start
-        HangingEntityDestroyHook hook = null;
         if (entity instanceof EntityPlayer) {
-            hook = (HangingEntityDestroyHook) new HangingEntityDestroyHook((HangingEntity) this.getCanaryEntity(), (Player) entity.getCanaryEntity(), CanaryDamageSource.getDamageSourceFromType(DamageType.GENERIC)).call();
+            new HangingEntityDestroyHook((HangingEntity) this.getCanaryEntity(), (Player) entity.getCanaryEntity(), CanaryDamageSource.getDamageSourceFromType(DamageType.GENERIC)).call();
         }
         else {
-            hook = (HangingEntityDestroyHook) new HangingEntityDestroyHook((HangingEntity) this.getCanaryEntity(), null, CanaryDamageSource.getDamageSourceFromType(DamageType.GENERIC)).call();
+            new HangingEntityDestroyHook((HangingEntity) this.getCanaryEntity(), null, CanaryDamageSource.getDamageSourceFromType(DamageType.GENERIC)).call();
         }
         //CanaryMod end
     }

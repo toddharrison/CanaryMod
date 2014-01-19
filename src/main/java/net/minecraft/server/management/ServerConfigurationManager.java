@@ -496,7 +496,8 @@ public abstract class ServerConfigurationManager {
         entityplayermp.r().q().b(entityplayermp);
         entityplayermp.r().s().c(entityplayermp);
         this.a.remove(entityplayermp);
-        this.f.getWorld(entityplayermp.getCanaryWorld().getName(), entityplayermp.aq).f(entityplayermp); // CanaryMod: added multiworld support
+//        this.f.getWorld(entityplayermp.getCanaryWorld().getName(), entityplayermp.aq).f(entityplayermp); // CanaryMod: added multiworld support
+        entityplayermp.getCanaryWorld().getHandle().f(entityplayermp);
         // ChunkCoordinates chunkcoordinates = entityplayermp.bL(); //CanaryMod removed in favor of a real location
         Location respawnLocation = entityplayermp.getRespawnLocation();
         boolean flag1 = entityplayermp.bM();
@@ -525,7 +526,6 @@ public abstract class ServerConfigurationManager {
             if (!worldserver.equals(((CanaryWorld) loc.getWorld()).getHandle())) {
                 worldserver = (WorldServer) ((CanaryWorld) loc.getWorld()).getHandle();
             }
-            respawnLocation = loc;
         }
         //
         if (this.f.P()) {
@@ -537,6 +537,7 @@ public abstract class ServerConfigurationManager {
         EntityPlayerMP entityplayermp1 = new EntityPlayerMP(this.f, worldserver, entityplayermp.bH(), (ItemInWorldManager) object);
         // Copy nethandlerplayserver as the connection is still the same
         entityplayermp1.a = entityplayermp.a;
+        entityplayermp1.a.b = entityplayermp1;
         entityplayermp1.a((EntityPlayer) entityplayermp, flag0);
         entityplayermp1.d(entityplayermp.y());
 
@@ -559,25 +560,20 @@ public abstract class ServerConfigurationManager {
                 }
             }
         }
-
-        while (!worldserver.a(entityplayermp1, entityplayermp1.D).isEmpty()) {
-            entityplayermp1.b(entityplayermp1.t, entityplayermp1.u + 1.0D, entityplayermp1.v);
+        while (worldserver.getCanaryWorld().getBlockAt(ToolBox.floorToBlock(entityplayermp1.t), ToolBox.floorToBlock(entityplayermp1.u + 1), ToolBox.floorToBlock(entityplayermp1.v)).getTypeId() != 0) {
+            entityplayermp1.u += 1D;
         }
-        entityplayermp1.a.a((Packet) (new S07PacketRespawn(entityplayermp1.aq, entityplayermp1.p.r, entityplayermp1.p.M().u(), entityplayermp1.c.b())));
+        //sending 2 respawn packets seems to force the client to clear its chunk cache. Removes ghosting blocks
+        entityplayermp1.a.a((new S07PacketRespawn(entityplayermp1.aq, entityplayermp1.p.r, entityplayermp1.p.M().u(), entityplayermp1.c.b())));
+        entityplayermp1.a.a((new S07PacketRespawn(entityplayermp1.aq, entityplayermp1.p.r, entityplayermp1.p.M().u(), entityplayermp1.c.b())));
 
-        // CanaryMod: Adjust the data for the respawn packet by using player coordinates instead!
-        chunkcoordinates1 = worldserver.J();
-        // CanaryMod changed old logic with this one, this suffices and is, for some reason, more reliable
-        while (worldserver.getCanaryWorld().getBlockAt(ToolBox.floorToBlock(entityplayermp1.u), ToolBox.floorToBlock(entityplayermp1.v + 1), ToolBox.floorToBlock(entityplayermp1.w)).getTypeId() != 0) {
-            entityplayermp1.v = entityplayermp1.v + 1D;
-        }
         entityplayermp1.a.a(entityplayermp1.t, entityplayermp1.u, entityplayermp1.v, entityplayermp1.z, entityplayermp1.A, entityplayermp1.aq, worldserver.getCanaryWorld().getName(), TeleportHook.TeleportCause.RESPAWN);
-        // ChanaryMod: Changed to use Player Coordinates instead of the give chunk coords \/        
-        entityplayermp1.a.a((Packet) (new S05PacketSpawnPosition((int) entityplayermp1.t, (int) entityplayermp1.u, (int) entityplayermp1.v)));
-        entityplayermp1.a.a((Packet) (new S1FPacketSetExperience(entityplayermp1.bI, entityplayermp1.bH, entityplayermp1.bG)));
+        // ChanaryMod: Changed to use Player Coordinates instead of the give chunk coords \/
+        entityplayermp1.a.a((new S05PacketSpawnPosition((int) entityplayermp1.t, (int) entityplayermp1.u, (int) entityplayermp1.v)));
+        entityplayermp1.a.a((new S1FPacketSetExperience(entityplayermp1.bI, entityplayermp1.bH, entityplayermp1.bG)));
         this.b(entityplayermp1, worldserver);
         worldserver.s().a(entityplayermp1);
-        worldserver.d(entityplayermp1);
+        worldserver.d(entityplayermp1); //Tracks new entity
         this.a.add(entityplayermp1);
         entityplayermp1.d_();
         entityplayermp1.g(entityplayermp1.aS());
@@ -617,10 +613,9 @@ public abstract class ServerConfigurationManager {
         entityplayermp.c.a(worldserver1);
         this.b(entityplayermp, worldserver1);
         this.f(entityplayermp);
-        Iterator iterator = entityplayermp.aQ().iterator();
 
-        while (iterator.hasNext()) {
-            PotionEffect potioneffect = (PotionEffect) iterator.next();
+        for (Object o1 : entityplayermp.aQ()) {
+            PotionEffect potioneffect = (PotionEffect) o1;
 
             entityplayermp.a.a((Packet) (new S1DPacketEntityEffect(entityplayermp.y(), potioneffect)));
         }
