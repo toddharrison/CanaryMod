@@ -6,6 +6,7 @@ import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.config.Configuration;
 import net.canarymod.hook.system.PermissionCheckHook;
 import net.canarymod.user.Group;
+import net.minecraft.command.server.CommandBlockLogic;
 import net.minecraft.entity.EntityMinecartCommandBlock;
 
 /**
@@ -41,7 +42,7 @@ public class CanaryCommandBlockMinecart extends CanaryMinecart implements Comman
      */
     @Override
     public String getName() {
-        return getHandle().getLogic().b_();
+        return getLogic().b_();
     }
 
     /**
@@ -49,7 +50,7 @@ public class CanaryCommandBlockMinecart extends CanaryMinecart implements Comman
      */
     @Override
     public void setName(String name) {
-        getHandle().getLogic().b(name);
+        getLogic().b(name);
     }
 
     /**
@@ -91,7 +92,7 @@ public class CanaryCommandBlockMinecart extends CanaryMinecart implements Comman
      */
     @Override
     public void setCommand(String command) {
-        getHandle().getLogic().a(command);
+        getLogic().a(command);
     }
 
     /**
@@ -99,7 +100,7 @@ public class CanaryCommandBlockMinecart extends CanaryMinecart implements Comman
      */
     @Override
     public String getCommand() {
-        return getHandle().getLogic().i();
+        return getLogic().i();
     }
 
     /**
@@ -107,7 +108,7 @@ public class CanaryCommandBlockMinecart extends CanaryMinecart implements Comman
      */
     @Override
     public void activate() {
-        getHandle().getLogic().a(((CanaryWorld) getWorld()).getHandle());
+        getLogic().a(((CanaryWorld) getWorld()).getHandle());
     }
 
     @Override
@@ -123,5 +124,9 @@ public class CanaryCommandBlockMinecart extends CanaryMinecart implements Comman
     @Override
     public EntityMinecartCommandBlock getHandle() {
         return (EntityMinecartCommandBlock) entity;
+    }
+
+    public CommandBlockLogic getLogic() {
+        return getHandle().getLogic();
     }
 }

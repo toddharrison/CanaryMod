@@ -2,35 +2,27 @@ package net.minecraft.server.gui;
 
 
 import com.mojang.util.QueueLogAppender;
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.net.URL;
+import net.canarymod.Canary;
+import net.canarymod.api.gui.GUIControl;
+import net.canarymod.config.Configuration;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.dedicated.DedicatedServer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
-
-import net.canarymod.Canary;
-import net.canarymod.api.ConfigurationManager;
-import net.canarymod.api.gui.GUIControl;
-import net.canarymod.config.Configuration;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.dedicated.DedicatedServer;
-import net.minecraft.server.gui.PlayerListComponent;
-import net.minecraft.server.gui.StatsComponent;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 
 public class MinecraftServerGui extends JComponent implements GUIControl {
@@ -38,7 +30,7 @@ public class MinecraftServerGui extends JComponent implements GUIControl {
     private static final Font a = new Font("Monospaced", 0, 12);
     private static final Logger b = LogManager.getLogger();
     private static MinecraftServerGui minecraftservergui; // CanaryMod keeping this in the static so it can work right.
-    private static final JTextArea s0 = new JTextArea(); // CanaryMod This is done so we can log
+    private static final JTextArea jtextarea = new JTextArea(); // CanaryMod This is done so we can log
     private static JComponent logAndChat = c(); // CanaryMod
     private static JFrame jframe; // CanaryMod
     private DedicatedServer c;
@@ -46,7 +38,8 @@ public class MinecraftServerGui extends JComponent implements GUIControl {
     public static GUIControl a(final DedicatedServer dedicatedserver) { // Signature Changed to return GUIControl
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception interruptedexception) {
+        }
+        catch (Exception interruptedexception) {
             ;
         }
 
@@ -64,7 +57,8 @@ public class MinecraftServerGui extends JComponent implements GUIControl {
                 while (!dedicatedserver.ae()) {
                     try {
                         Thread.sleep(100L);
-                    } catch (InterruptedException interruptedexception) {
+                    }
+                    catch (InterruptedException interruptedexception) {
                         // CanaryMod Debug catcher thingy
                         if (Configuration.getServerConfig().isDebugMode()) {
                             interruptedexception.printStackTrace();
@@ -93,7 +87,8 @@ public class MinecraftServerGui extends JComponent implements GUIControl {
         try {
             this.add(logAndChat, "Center"); // Change use of c() to static logAndChat value
             this.add(this.a(), "West");
-        } catch (Exception exception) {
+        }
+        catch (Exception exception) {
             b.error("Couldn\'t build server GUI", exception);
         }
         minecraftservergui = this;
@@ -119,10 +114,10 @@ public class MinecraftServerGui extends JComponent implements GUIControl {
 
     private static JComponent c() { // Signature Changed to static
         JPanel s1 = new JPanel(new BorderLayout());
-        final JScrollPane jscrollpane = new JScrollPane(s0, 22, 30);
+        final JScrollPane jscrollpane = new JScrollPane(jtextarea, 22, 30);
 
-        s0.setEditable(false);
-        s0.setFont(a);
+        jtextarea.setEditable(false);
+        jtextarea.setFont(a);
         final JTextField jtextfield = new JTextField();
 
         jtextfield.addActionListener(new ActionListener() {
@@ -141,9 +136,10 @@ public class MinecraftServerGui extends JComponent implements GUIControl {
                 jtextfield.setText("");
             }
         });
-        s0.addFocusListener(new FocusAdapter() {
+        jtextarea.addFocusListener(new FocusAdapter() {
 
-            public void focusGained(FocusEvent s1) {}
+            public void focusGained(FocusEvent s1) {
+            }
         });
         s1.add(jscrollpane, "Center");
         s1.add(jtextfield, "South");
@@ -154,7 +150,7 @@ public class MinecraftServerGui extends JComponent implements GUIControl {
                 String s1;
 
                 while ((s1 = QueueLogAppender.getNextLogEvent("ServerGuiConsole")) != null) {
-                    a(s0, jscrollpane, s1);
+                    a(jtextarea, jscrollpane, s1);
                 }
 
             }
@@ -173,7 +169,8 @@ public class MinecraftServerGui extends JComponent implements GUIControl {
                     a(jtextarea, jscrollpane, s0);
                 }
             });
-        } else {
+        }
+        else {
             Document document = jtextarea.getDocument();
             JScrollBar jscrollbar = jscrollpane.getVerticalScrollBar();
             boolean flag0 = false;
@@ -184,7 +181,8 @@ public class MinecraftServerGui extends JComponent implements GUIControl {
 
             try {
                 document.insertString(document.getLength(), s0, (AttributeSet) null);
-            } catch (BadLocationException badlocationexception) {
+            }
+            catch (BadLocationException badlocationexception) {
                 ;
             }
 
@@ -205,13 +203,14 @@ public class MinecraftServerGui extends JComponent implements GUIControl {
 
     @Override
     public void start() {
-        a((DedicatedServer)MinecraftServer.G());
+        a((DedicatedServer) MinecraftServer.G());
     }
 
     /**
      * Sets up the GUI with out starting it
      *
      * @param dedicatedserver
+     *
      * @return
      */
     public static final GUIControl preInit(DedicatedServer dedicatedserver) {
@@ -224,7 +223,7 @@ public class MinecraftServerGui extends JComponent implements GUIControl {
      * @return current log
      */
     public static String getLog() {
-        return s0.getText();
+        return jtextarea.getText();
     }
 
 }

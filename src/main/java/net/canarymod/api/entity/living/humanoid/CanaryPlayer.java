@@ -17,17 +17,7 @@ import net.canarymod.api.packet.CanaryPacket;
 import net.canarymod.api.packet.Packet;
 import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.api.world.World;
-import net.canarymod.api.world.blocks.CanaryAnvil;
-import net.canarymod.api.world.blocks.CanaryBeacon;
-import net.canarymod.api.world.blocks.CanaryBrewingStand;
-import net.canarymod.api.world.blocks.CanaryDispenser;
-import net.canarymod.api.world.blocks.CanaryDropper;
-import net.canarymod.api.world.blocks.CanaryEnchantmentTable;
-import net.canarymod.api.world.blocks.CanaryFurnace;
-import net.canarymod.api.world.blocks.CanaryHopperBlock;
-import net.canarymod.api.world.blocks.CanarySign;
-import net.canarymod.api.world.blocks.CanaryWorkbench;
-import net.canarymod.api.world.blocks.Sign;
+import net.canarymod.api.world.blocks.*;
 import net.canarymod.api.world.position.Direction;
 import net.canarymod.api.world.position.Location;
 import net.canarymod.chat.Colors;
@@ -42,16 +32,7 @@ import net.canarymod.permissionsystem.PermissionProvider;
 import net.canarymod.user.Group;
 import net.canarymod.warp.Warp;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.ContainerBeacon;
-import net.minecraft.inventory.ContainerBrewingStand;
-import net.minecraft.inventory.ContainerChest;
-import net.minecraft.inventory.ContainerDispenser;
-import net.minecraft.inventory.ContainerEnchantment;
-import net.minecraft.inventory.ContainerFurnace;
-import net.minecraft.inventory.ContainerHopper;
-import net.minecraft.inventory.ContainerHorseInventory;
-import net.minecraft.inventory.ContainerRepair;
-import net.minecraft.inventory.ContainerWorkbench;
+import net.minecraft.inventory.*;
 import net.minecraft.network.play.server.S2BPacketChangeGameState;
 import net.minecraft.network.play.server.S38PacketPlayerListItem;
 import net.minecraft.network.play.server.S39PacketPlayerAbilities;
@@ -213,7 +194,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
             String commandName = command[0];
 
             // It's a vanilla command, forward it to the server
-            if (commandName.startsWith("/#") && (hasPermission("canary.commands.vanilla." + commandName.replace("/#", "")) || hasPermission("canary.vanilla.op"))) {
+            if (commandName.startsWith("/#") && (hasPermission("canary.commands.vanilla." + commandName.replace("/#", "")) || hasPermission("canary.vanilla.op") || Canary.ops().isOpped(getName()))) {
                 return Canary.getServer().consoleCommand(StringUtils.joinString(command, " ", 0).replace("/#", ""), this);
             }
             commandName = commandName.replace("/", "");

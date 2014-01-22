@@ -1,7 +1,5 @@
 package net.minecraft.command;
 
-import net.canarymod.api.world.CanaryWorld;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.WorldServer;
 
 import java.util.List;
@@ -57,23 +55,21 @@ public class CommandTime extends CommandBase {
 
     protected void a(ICommandSender icommandsender, int i0) {
         // CanaryMod: MultiWorld fix
-        for (net.canarymod.api.world.World w : MinecraftServer.G().worldManager.getAllWorlds()) {
-            WorldServer worldserver = (WorldServer) ((CanaryWorld) w).getHandle();
+        WorldServer worldserver = (WorldServer) icommandsender.d();
+        //
 
-            if (worldserver != null) {
-                worldserver.b((long) i0);
-            }
+        if (worldserver != null) {
+            worldserver.b((long) i0);
         }
     }
 
     protected void b(ICommandSender icommandsender, int i0) {
         // CanaryMod: MultiWorld fix
-        for (net.canarymod.api.world.World w : MinecraftServer.G().worldManager.getAllWorlds()) {
-            WorldServer worldserver = (WorldServer) ((CanaryWorld) w).getHandle();
+        WorldServer worldserver = (WorldServer) icommandsender.d();
+        //
 
-            if (worldserver != null) {
-                worldserver.b(worldserver.I() + (long) i0);
-            }
+        if (worldserver != null) {
+            worldserver.b(worldserver.I() + (long) i0);
         }
     }
 }

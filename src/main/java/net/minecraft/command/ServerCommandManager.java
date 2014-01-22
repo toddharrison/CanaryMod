@@ -1,34 +1,10 @@
 package net.minecraft.command;
 
-import net.canarymod.Canary;
-import net.canarymod.api.world.CanaryWorld;
-import net.minecraft.command.server.CommandAchievement;
-import net.minecraft.command.server.CommandBanIp;
-import net.minecraft.command.server.CommandBanPlayer;
-import net.minecraft.command.server.CommandBlockLogic;
-import net.minecraft.command.server.CommandBroadcast;
-import net.minecraft.command.server.CommandDeOp;
-import net.minecraft.command.server.CommandEmote;
-import net.minecraft.command.server.CommandListBans;
-import net.minecraft.command.server.CommandListPlayers;
-import net.minecraft.command.server.CommandMessage;
-import net.minecraft.command.server.CommandMessageRaw;
-import net.minecraft.command.server.CommandOp;
-import net.minecraft.command.server.CommandPardonIp;
-import net.minecraft.command.server.CommandPardonPlayer;
-import net.minecraft.command.server.CommandPublishLocalServer;
+import net.minecraft.command.server.*;
 import net.minecraft.command.server.CommandSaveAll;
 import net.minecraft.command.server.CommandSaveOff;
 import net.minecraft.command.server.CommandSaveOn;
-import net.minecraft.command.server.CommandScoreboard;
-import net.minecraft.command.server.CommandSetBlock;
-import net.minecraft.command.server.CommandSetDefaultSpawnpoint;
-import net.minecraft.command.server.CommandStop;
-import net.minecraft.command.server.CommandSummon;
 import net.minecraft.command.server.CommandTeleport;
-import net.minecraft.command.server.CommandTestFor;
-import net.minecraft.command.server.CommandTestForBlock;
-import net.minecraft.command.server.CommandWhitelist;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentTranslation;
@@ -40,7 +16,6 @@ import java.util.Iterator;
 public class ServerCommandManager extends CommandHandler implements IAdminCommand {
 
     public ServerCommandManager() {
-        // TODO: Should we disable commands we implemented differently?
         this.a(new CommandTime());
         this.a(new CommandGameMode());
         this.a(new CommandDifficulty());
@@ -100,9 +75,10 @@ public class ServerCommandManager extends CommandHandler implements IAdminComman
         boolean flag0 = true;
 
         // CanaryMod: Fix for MultiWorld
-        if (icommandsender instanceof CommandBlockLogic && !((CanaryWorld) Canary.getServer().getDefaultWorld()).getHandle().N().b("commandBlockOutput")) {
-            flag0 = false;
+        if (icommandsender instanceof CommandBlockLogic) {
+            flag0 = icommandsender.d().N().b("commandBlockOutput");
         }
+        //
 
         ChatComponentTranslation chatcomponenttranslation = new ChatComponentTranslation("chat.type.admin", new Object[]{ icommandsender.b_(), new ChatComponentTranslation(s0, aobject) });
 

@@ -5,7 +5,6 @@ import net.canarymod.api.CanaryServer;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.hook.system.UnloadWorldHook;
 import net.canarymod.logger.Logman;
-import net.visualillusionsent.utils.StringUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -16,6 +15,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 /**
  * This is a container for all of the worlds.
@@ -70,7 +70,7 @@ public class CanaryWorldManager implements WorldManager {
      */
     public void addWorld(CanaryWorld world) {
         Canary.logDebug(String.format("Adding new world to world manager, filed as %s_%s", world.getName(), world.getType()
-                                                                                                                 .getName()));
+                .getName()));
         loadedWorlds.put(world.getName() + "_" + world.getType().getName(), world);
     }
 
@@ -132,7 +132,7 @@ public class CanaryWorldManager implements WorldManager {
     }
 
     private void updateExistingWorldsList(String name, DimensionType type) {
-        existingWorlds.add(name+"_"+type.getName());
+        existingWorlds.add(name + "_" + type.getName());
     }
 
     @Override
@@ -248,5 +248,20 @@ public class CanaryWorldManager implements WorldManager {
     @Override
     public List<String> getExistingWorlds() {
         return Collections.unmodifiableList(existingWorlds); // TODO: This only reads base folders not the real dimension folders!
+    }
+
+    @Override
+    public String[] getExistingWorldsArray() {
+        return existingWorlds.toArray(new String[existingWorlds.size()]);
+    }
+
+    @Override
+    public Set<String> getLoadedWorldsNames() {
+        return Collections.unmodifiableSet(loadedWorlds.keySet());
+    }
+
+    @Override
+    public String[] getLoadedWorldsNamesArray() {
+        return loadedWorlds.keySet().toArray(new String[loadedWorlds.keySet().size()]);
     }
 }

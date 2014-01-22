@@ -1,8 +1,5 @@
 package net.minecraft.command;
 
-import net.canarymod.api.world.CanaryWorld;
-import net.canarymod.api.world.DimensionType;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.storage.WorldInfo;
 
 public class CommandToggleDownfall extends CommandBase {
@@ -20,17 +17,15 @@ public class CommandToggleDownfall extends CommandBase {
     }
 
     public void b(ICommandSender icommandsender, String[] astring) {
-        this.d();
+        this.d(icommandsender);
         a(icommandsender, "commands.downfall.success", new Object[0]);
     }
 
-    protected void d() {
-        for (net.canarymod.api.world.World w : MinecraftServer.G().worldManager.getAllWorlds()) {
-            WorldInfo worldinfo = ((CanaryWorld) w).getHandle().M();
+    protected void d(ICommandSender iCommandSender) { // CanaryMod: Signature Change
+        WorldInfo worldinfo = iCommandSender.d().M(); // CanaryMod: Multiworld fix
 
-            if (((CanaryWorld) w).getHandle() != null && w.getType() == DimensionType.fromId(0)) {
-                worldinfo.b(!worldinfo.p());
-            }
+        if (worldinfo != null && worldinfo.j() == 0) {
+            worldinfo.b(!worldinfo.p());
         }
     }
 }

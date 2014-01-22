@@ -2,7 +2,9 @@ package net.canarymod.api;
 
 import net.canarymod.Canary;
 import net.canarymod.Main;
+import net.canarymod.api.entity.living.humanoid.CanaryPlayer;
 import net.canarymod.api.entity.living.humanoid.Player;
+import net.canarymod.api.entity.vehicle.CanaryCommandBlockMinecart;
 import net.canarymod.api.gui.GUIControl;
 import net.canarymod.api.inventory.CanaryItem;
 import net.canarymod.api.inventory.recipes.CanaryRecipe;
@@ -13,12 +15,13 @@ import net.canarymod.api.inventory.recipes.SmeltRecipe;
 import net.canarymod.api.nbt.CanaryCompoundTag;
 import net.canarymod.api.world.World;
 import net.canarymod.api.world.WorldManager;
-import net.canarymod.api.world.blocks.CommandBlock;
+import net.canarymod.api.world.blocks.CanaryCommandBlock;
 import net.canarymod.config.Configuration;
 import net.canarymod.hook.command.ConsoleCommandHook;
 import net.canarymod.hook.system.PermissionCheckHook;
 import net.canarymod.tasks.ServerTask;
 import net.canarymod.tasks.ServerTaskManager;
+import net.minecraft.command.ICommandSender;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.FurnaceRecipes;
@@ -156,7 +159,7 @@ public class CanaryServer implements Server {
         }
         String[] split = command.split(" ");
         if (!Canary.commands().parseCommand(player, split[0], split)) {
-            return ((DedicatedServer) server).H().a(server, command) > 0; // Vanilla Commands passed
+            return ((DedicatedServer) server).H().a(((CanaryPlayer) player).getHandle(), command) > 0; // Vanilla Commands passed
         }
         return true;
     }
@@ -165,16 +168,22 @@ public class CanaryServer implements Server {
      * {@inheritDoc}
      */
     @Override
-    public boolean consoleCommand(String command, CommandBlock cmdBlock) {
-        ConsoleCommandHook hook = new ConsoleCommandHook(cmdBlock, command);
+    public boolean consoleCommand(String command, CommandBlockLogic cmdBlockLogic) {
+        ConsoleCommandHook hook = new ConsoleCommandHook(cmdBlockLogic, command);
 
         Canary.hooks().callHook(hook);
         if (hook.isCanceled()) {
             return true;
         }
         String[] split = command.split(" ");
-        if (!Canary.commands().parseCommand(cmdBlock, split[0], split)) {
-            return ((DedicatedServer) server).H().a(server, command) > 0; // Vanilla Commands passed
+        if (!Canary.commands().parseCommand(cmdBlockLogic, split[0], split)) {
+            ICommandSender nmsCBL =
+                    cmdBlockLogic instanceof CanaryCommandBlock //
+                            ? ((CanaryCommandBlock) cmdBlockLogic).getLogic() //
+                            : cmdBlockLogic instanceof CanaryCommandBlockMinecart //
+                            ? ((CanaryCommandBlockMinecart) cmdBlockLogic).getLogic() //
+                            : server; // default to server on an unknown implementation of CommandBlockLogic
+            return ((DedicatedServer) server).H().a(nmsCBL, command) > 0; // Vanilla Commands passed
         }
         return true;
     }

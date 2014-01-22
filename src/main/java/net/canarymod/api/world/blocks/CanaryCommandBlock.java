@@ -5,6 +5,7 @@ import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.config.Configuration;
 import net.canarymod.hook.system.PermissionCheckHook;
 import net.canarymod.user.Group;
+import net.minecraft.command.server.CommandBlockLogic;
 import net.minecraft.tileentity.TileEntityCommandBlock;
 
 /**
@@ -32,7 +33,7 @@ public class CanaryCommandBlock extends CanaryTileEntity implements CommandBlock
      */
     @Override
     public String getName() {
-        return getTileEntity().getLogic().b_();
+        return getLogic().b_();
     }
 
     /**
@@ -40,7 +41,7 @@ public class CanaryCommandBlock extends CanaryTileEntity implements CommandBlock
      */
     @Override
     public void setName(String name) {
-        getTileEntity().getLogic().b(name);
+        getLogic().b(name);
     }
 
     /**
@@ -82,7 +83,7 @@ public class CanaryCommandBlock extends CanaryTileEntity implements CommandBlock
      */
     @Override
     public void setCommand(String command) {
-        getTileEntity().getLogic().a(command);
+        getLogic().a(command);
     }
 
     /**
@@ -90,7 +91,7 @@ public class CanaryCommandBlock extends CanaryTileEntity implements CommandBlock
      */
     @Override
     public String getCommand() {
-        return getTileEntity().getLogic().i();
+        return getLogic().i();
     }
 
     /**
@@ -123,6 +124,10 @@ public class CanaryCommandBlock extends CanaryTileEntity implements CommandBlock
     @Override
     public void setGroup(Group group) {
         this.group = group;
+    }
+
+    public CommandBlockLogic getLogic() {
+        return getTileEntity().getLogic();
     }
 
 }

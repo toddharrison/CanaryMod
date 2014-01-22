@@ -1,8 +1,5 @@
 package net.minecraft.command;
 
-import net.canarymod.api.world.CanaryWorld;
-import net.canarymod.api.world.DimensionType;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.WorldInfo;
 
@@ -32,39 +29,37 @@ public class CommandWeather extends CommandBase {
             }
 
             // CanaryMod: MutliWorld fix
-            for (net.canarymod.api.world.World w : MinecraftServer.G().worldManager.getAllWorlds()) {
-                WorldServer worldserver = (WorldServer) ((CanaryWorld) w).getHandle();
-                if (worldserver != null && worldserver.getCanaryWorld().getType() == DimensionType.fromId(0)) {
-                    WorldInfo worldinfo = worldserver.M();
-
-                    if ("clear".equalsIgnoreCase(astring[0])) {
-                        worldinfo.g(0);
-                        worldinfo.f(0);
-                        worldinfo.b(false);
-                        worldinfo.a(false);
-                        a(icommandsender, "commands.weather.clear", new Object[0]);
-                    }
-                    else if ("rain".equalsIgnoreCase(astring[0])) {
-                        worldinfo.g(i0);
-                        worldinfo.b(true);
-                        worldinfo.a(false);
-                        a(icommandsender, "commands.weather.rain", new Object[0]);
-                    }
-                    else {
-                        if (!"thunder".equalsIgnoreCase(astring[0])) {
-                            throw new WrongUsageException("commands.weather.usage", new Object[0]);
-                        }
-
-                        worldinfo.g(i0);
-                        worldinfo.f(i0);
-                        worldinfo.b(true);
-                        worldinfo.a(true);
-                        a(icommandsender, "commands.weather.thunder", new Object[0]);
-                    }
+            WorldServer worldserver = (WorldServer) icommandsender.d();
+            WorldInfo worldinfo = worldserver.M();
+            if (worldserver.M().j() == 0) {
+                //
+                if ("clear".equalsIgnoreCase(astring[0])) {
+                    worldinfo.g(0);
+                    worldinfo.f(0);
+                    worldinfo.b(false);
+                    worldinfo.a(false);
+                    a(icommandsender, "commands.weather.clear", new Object[0]);
+                }
+                else if ("rain".equalsIgnoreCase(astring[0])) {
+                    worldinfo.g(i0);
+                    worldinfo.b(true);
+                    worldinfo.a(false);
+                    a(icommandsender, "commands.weather.rain", new Object[0]);
                 }
                 else {
-                    throw new WrongUsageException("commands.weather.usage", new Object[0]);
+                    if (!"thunder".equalsIgnoreCase(astring[0])) {
+                        throw new WrongUsageException("commands.weather.usage", new Object[0]);
+                    }
+
+                    worldinfo.g(i0);
+                    worldinfo.f(i0);
+                    worldinfo.b(true);
+                    worldinfo.a(true);
+                    a(icommandsender, "commands.weather.thunder", new Object[0]);
                 }
+            }
+            else {
+                throw new WrongUsageException("commands.weather.usage", new Object[0]);
             }
         }
     }

@@ -959,27 +959,24 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
         this.F = keypair;
     }
 
-    public void a(EnumDifficulty enumdifficulty) {
-        // CanaryMod changes for Multiworld
-        for (net.canarymod.api.world.World w : worldManager.getAllWorlds()) {
-            WorldServer worldserver = (WorldServer) ((CanaryWorld) w).getHandle();
-
-            //
-            if (worldserver != null) {
-                // System.out.println(worldserver.getCanaryWorld().getName() + " Difficulty " + i0);
-                if (worldserver.M().t()) {
-                    worldserver.r = EnumDifficulty.HARD;
-                    worldserver.a(true, true);
-                }
-                else if (this.L()) {
-                    worldserver.r = enumdifficulty;
-                    worldserver.a(worldserver.r != EnumDifficulty.PEACEFUL, true);
-                }
-                else {
-                    worldserver.r = enumdifficulty;
-                    // Canarymod moved spawn-monsters to per-world config
-                    worldserver.a(Configuration.getWorldConfig(w.getFqName()).canSpawnMonsters(), this.y);
-                }
+    public void a(EnumDifficulty enumdifficulty, WorldServer worldserver) { // CanaryMod: Signature change to include world
+        // CanaryMod changes for Multiworld, Don't set every world the same.
+        //WorldServer worldserver = (WorldServer) ((CanaryWorld) w).getHandle();
+        if (worldserver != null) {
+            // System.out.println(worldserver.getCanaryWorld().getName() + " Difficulty " + i0);
+            boolean monsters = Configuration.getWorldConfig(worldserver.getCanaryWorld().getFqName()).canSpawnMonsters();
+            boolean animals = Configuration.getWorldConfig(worldserver.getCanaryWorld().getFqName()).canSpawnAnimals();
+            if (worldserver.M().t()) {
+                worldserver.r = EnumDifficulty.HARD;
+                worldserver.a(monsters, animals);
+            }
+            //else if (this.L()) { // NOT SINGLE PLAYER ANYWAYS
+            //    worldserver.r = enumdifficulty;
+            //    worldserver.a(monsters, animals);
+            //}
+            else {
+                worldserver.r = enumdifficulty;
+                worldserver.a(Configuration.getWorldConfig(worldserver.getCanaryWorld().getFqName()).canSpawnMonsters(), animals);
             }
         }
     }
