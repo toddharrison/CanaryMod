@@ -2,6 +2,7 @@ package net.minecraft.command;
 
 import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.api.world.DimensionType;
+import net.canarymod.commandsys.TabCompleteHelper;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.WorldInfo;
@@ -89,7 +90,7 @@ public class CommandWeather extends CommandBase {
 
     public List a(ICommandSender icommandsender, String[] astring) {
         return astring.length == 1 ? a(astring, new String[]{ "clear", "rain", "thunder" })
-                : astring.length == 2 ? a(astring, MinecraftServer.G().worldManager.getLoadedWorldsNamesArrayOfDimension(DimensionType.fromId(0)))
+                : astring.length == 2 ? TabCompleteHelper.matchToLoadedWorldOfDimension(astring, DimensionType.fromId(0))
                 : null;
     }
 }

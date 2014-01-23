@@ -1,6 +1,8 @@
 package net.minecraft.command;
 
 import net.canarymod.api.world.CanaryWorld;
+import net.canarymod.api.world.DimensionType;
+import net.canarymod.commandsys.TabCompleteHelper;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.world.EnumDifficulty;
@@ -49,7 +51,7 @@ public class CommandDifficulty extends CommandBase {
 
     public List a(ICommandSender icommandsender, String[] astring) {
         return astring.length == 1 ? a(astring, new String[]{ "peaceful", "easy", "normal", "hard" })
-                : astring.length == 2 ? a(astring, MinecraftServer.G().worldManager.getLoadedWorldsNamesArray()) // Pass existing worlds to tab complete
+                : astring.length == 2 ? TabCompleteHelper.matchToLoadedWorldOfDimension(astring, DimensionType.fromId(0)) // Pass existing worlds to tab complete
                 : null;
     }
 }

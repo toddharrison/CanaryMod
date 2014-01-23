@@ -2,6 +2,7 @@ package net.minecraft.command;
 
 import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.api.world.DimensionType;
+import net.canarymod.commandsys.TabCompleteHelper;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.WorldServer;
 
@@ -89,7 +90,7 @@ public class CommandTime extends CommandBase {
     public List a(ICommandSender icommandsender, String[] astring) {
         return astring.length == 1 ? a(astring, new String[]{ "set", "add", "check" })//
                 : (astring.length == 2 && astring[0].equals("set") ? a(astring, new String[]{ "day", "midday", "night", "midnight" })  // CanaryMod: Add midday and midnight
-                : astring.length == 3 || (astring.length == 2 && astring[0].equals("check")) ? a(astring, MinecraftServer.G().worldManager.getLoadedWorldsNamesArrayOfDimension(DimensionType.fromId(0)))
+                : astring.length == 3 || (astring.length == 2 && astring[0].equals("check")) ? TabCompleteHelper.matchToLoadedWorldOfDimension(astring, DimensionType.fromId(0))
                 : null);
     }
 

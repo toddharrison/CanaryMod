@@ -248,22 +248,20 @@ public class CanaryWorldManager implements WorldManager {
     }
 
     @Override
-    public Set<String> getLoadedWorldsNames() {
+    public String[] getLoadedWorldsNames() {
         if (markedForUnload.size() > 0) {
             Canary.logDebug("Processing worlds for unload");
             removeWorlds();
         }
-        return Collections.unmodifiableSet(loadedWorlds.keySet());
-    }
-
-    @Override
-    public String[] getLoadedWorldsNamesArray() {
-        Set<String> names = getLoadedWorldsNames();
+        Set<String> names = new HashSet<String>();
+        for (String name : loadedWorlds.keySet()) {
+            names.add(name);
+        }
         return names.toArray(new String[names.size()]);
     }
 
     @Override
-    public Set<String> getLoadedWorldsNamesOfDimension(DimensionType dimensionType) {
+    public String[] getLoadedWorldsNamesOfDimension(DimensionType dimensionType) {
         if (markedForUnload.size() > 0) {
             Canary.logDebug("Processing worlds for unload");
             removeWorlds();
@@ -274,12 +272,6 @@ public class CanaryWorldManager implements WorldManager {
                 worlds.add(world.getFqName());
             }
         }
-        return worlds;
-    }
-
-    @Override
-    public String[] getLoadedWorldsNamesArrayOfDimension(DimensionType dimensionType) {
-        Set<String> worlds = getLoadedWorldsNamesOfDimension(dimensionType);
         return worlds.toArray(new String[worlds.size()]);
     }
 }

@@ -91,7 +91,7 @@ public class CommandGameRule extends CommandBase {
     public List a(ICommandSender icommandsender, String[] astring) {
         // CanaryMod: inject loaded world names into Tab Complete
         return astring.length == 1 ? a(astring, this.d(icommandsender).b()) //
-                : astring.length == 2 ? a(astring, ToolBox.arrayMerge(new String[]{ "true", "false" }, MinecraftServer.G().worldManager.getLoadedWorldsNamesArray())) //
+                : astring.length == 2 ? a(astring, ToolBox.arrayMerge(new String[]{ "true", "false" }, MinecraftServer.G().worldManager.getLoadedWorldsNames())) //
                 : astring.length == 3 && !astring[1].matches("(true|false)") ? a(astring, new String[]{ "true", "false" }) //
                 : null;
     }
