@@ -28,12 +28,12 @@ public class CommandDifficulty extends CommandBase {
 
             WorldServer worldserver = (WorldServer) icommandsender.d();
             if (astring.length > 1) { // Add an argument to allow picking a world
-                CanaryWorld cWorld = (CanaryWorld) MinecraftServer.G().worldManager.getWorld(astring[1], false);
-                if (cWorld == null) {
-                    a(icommandsender, "No world of Name: '%s'", new Object[]{ astring[1] });
+                boolean loaded = MinecraftServer.G().worldManager.worldIsLoaded(astring[1]);
+                if (!loaded) {
+                    a(icommandsender, "No world loaded of Name: '%s'", new Object[]{ astring[1] });
                     return;
                 }
-                worldserver = (WorldServer) cWorld.getHandle();
+                worldserver = (WorldServer) ((CanaryWorld) MinecraftServer.G().worldManager.getWorld(astring[1], false)).getHandle();
             }
             MinecraftServer.G().a(enumdifficulty, worldserver);
             a(icommandsender, "commands.difficulty.success", new Object[]{ new ChatComponentTranslation(enumdifficulty.b(), new Object[0]) });

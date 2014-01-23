@@ -1,9 +1,6 @@
 package net.minecraft.command;
 
 import net.minecraft.command.server.*;
-import net.minecraft.command.server.CommandSaveAll;
-import net.minecraft.command.server.CommandSaveOff;
-import net.minecraft.command.server.CommandSaveOn;
 import net.minecraft.command.server.CommandTeleport;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
@@ -54,14 +51,15 @@ public class ServerCommandManager extends CommandHandler implements IAdminComman
             this.a(new CommandSaveAll());
             this.a(new CommandSaveOff());
             this.a(new CommandSaveOn());
-            this.a(new CommandBanIp());
-            this.a(new CommandPardonIp());
-            this.a(new CommandBanPlayer());
-            this.a(new CommandListBans());
-            this.a(new CommandPardonPlayer());
-            this.a(new CommandServerKick());
+            // CanaryMod: commands disabled due to issues (exceptions thrown) and being implemented differently
+            //this.a(new CommandBanIp());
+            //this.a(new CommandPardonIp());
+            //this.a(new CommandBanPlayer());
+            //this.a(new CommandListBans());
+            //this.a(new CommandPardonPlayer());
+            //this.a(new CommandServerKick());
             this.a(new CommandListPlayers());
-            this.a(new CommandWhitelist());
+            //this.a(new CommandWhitelist());
             this.a(new CommandSetPlayerTimeout());
         }
         else {

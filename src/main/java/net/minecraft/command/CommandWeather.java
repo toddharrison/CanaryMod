@@ -1,5 +1,8 @@
 package net.minecraft.command;
 
+import net.canarymod.api.world.CanaryWorld;
+import net.canarymod.api.world.DimensionType;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.WorldInfo;
 
@@ -21,18 +24,38 @@ public class CommandWeather extends CommandBase {
     }
 
     public void b(ICommandSender icommandsender, String[] astring) {
-        if (astring.length >= 1 && astring.length <= 2) {
+        if (astring.length >= 1 && astring.length <= 3) { // CanaryMod: Max arguments is now 3
             int i0 = (300 + (new Random()).nextInt(600)) * 20;
-
-            if (astring.length >= 2) {
-                i0 = a(icommandsender, astring[1], 1, 1000000) * 20;
-            }
 
             // CanaryMod: MutliWorld fix
             WorldServer worldserver = (WorldServer) icommandsender.d();
+
+            if (astring.length > 1) {
+                // CanaryMod: inject world selection
+                if (astring.length > 2) {
+                    boolean loaded = MinecraftServer.G().worldManager.worldIsLoaded(astring[1]);
+                    if (!loaded) {
+                        a(icommandsender, "No world loaded of Name: '%s'", new Object[]{ astring[1] });
+                        return;
+                    }
+                    worldserver = (WorldServer) ((CanaryWorld) MinecraftServer.G().worldManager.getWorld(astring[1], false)).getHandle();
+                    i0 = a(icommandsender, astring[2], 1, 1000000) * 20;
+                }
+                else if (astring[1].matches("\\d+")) {
+                    i0 = a(icommandsender, astring[1], 1, 1000000) * 20;
+                }
+                else {
+                    boolean loaded = MinecraftServer.G().worldManager.worldIsLoaded(astring[1]);
+                    if (!loaded) {
+                        a(icommandsender, "No world loaded of Name: '%s'", new Object[]{ astring[1] });
+                        return;
+                    }
+                    worldserver = (WorldServer) ((CanaryWorld) MinecraftServer.G().worldManager.getWorld(astring[1], false)).getHandle();
+                }
+            }
+
             WorldInfo worldinfo = worldserver.M();
             if (worldserver.M().j() == 0) {
-                //
                 if ("clear".equalsIgnoreCase(astring[0])) {
                     worldinfo.g(0);
                     worldinfo.f(0);
@@ -65,6 +88,8 @@ public class CommandWeather extends CommandBase {
     }
 
     public List a(ICommandSender icommandsender, String[] astring) {
-        return astring.length == 1 ? a(astring, new String[]{ "clear", "rain", "thunder" }) : null;
+        return astring.length == 1 ? a(astring, new String[]{ "clear", "rain", "thunder" })
+                : astring.length == 2 ? a(astring, MinecraftServer.G().worldManager.getLoadedWorldsNamesArrayOfDimension(DimensionType.fromId(0)))
+                : null;
     }
 }

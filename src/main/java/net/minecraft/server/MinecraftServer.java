@@ -866,6 +866,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
         if (s0.startsWith("/")) {
             s0 = s0.substring(1);
             boolean flag0 = !s0.contains(" ");
+
             List list = this.n.b(icommandsender, s0);
 
             if (list != null) {

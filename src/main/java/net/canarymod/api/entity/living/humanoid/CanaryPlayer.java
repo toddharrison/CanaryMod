@@ -3,6 +3,7 @@ package net.canarymod.api.entity.living.humanoid;
 import net.canarymod.Canary;
 import net.canarymod.MathHelp;
 import net.canarymod.ToolBox;
+import net.canarymod.api.CanaryServer;
 import net.canarymod.api.GameMode;
 import net.canarymod.api.NetServerHandler;
 import net.canarymod.api.PlayerListEntry;
@@ -191,25 +192,19 @@ public class CanaryPlayer extends CanaryHuman implements Player {
                 Canary.logInfo("Command used by " + getName() + ": " + StringUtils.joinString(command, " ", 0));
             }
 
-            String commandName = command[0];
-
-            // It's a vanilla command, forward it to the server
-            if (commandName.startsWith("/#") && (hasPermission("canary.commands.vanilla." + commandName.replace("/#", "")) || hasPermission("canary.vanilla.op") || Canary.ops().isOpped(getName()))) {
-                return Canary.getServer().consoleCommand(StringUtils.joinString(command, " ", 0).replace("/#", ""), this);
-            }
-            commandName = commandName.replace("/", "");
-            PlayerCommandHook hook = new PlayerCommandHook(this, command);
-
-            Canary.hooks().callHook(hook);
+            PlayerCommandHook hook = (PlayerCommandHook) new PlayerCommandHook(this, command).call();
             if (hook.isCanceled()) {
                 return true;
             } // someone wants us not to execute the command. So lets do them the favor
 
-            if (!Canary.commands().parseCommand(this, commandName, command)) {
-                if (Configuration.getServerConfig().getShowUnknownCommand()) {
-                    notice("Unknown command");
+            String cmdName = command[0];
+            if (cmdName.startsWith("/")) {
+                cmdName = cmdName.substring(1);
+            }
+            if (!Canary.commands().parseCommand(this, cmdName, command)) {
+                if (Canary.ops().isOpped(getName())) {
+                    return ((CanaryServer) Canary.getServer()).getHandle().H().a(this.getHandle(), StringUtils.joinString(command, " ", 0)) > 0; // Vanilla Commands passed
                 }
-                return false;
             }
             return true;
 

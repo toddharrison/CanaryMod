@@ -4,24 +4,16 @@ import net.canarymod.Canary;
 import net.canarymod.api.CanaryServer;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.hook.system.UnloadWorldHook;
-import net.canarymod.logger.Logman;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 /**
  * This is a container for all of the worlds.
  *
  * @author Jos Kuijpers
  * @author Chris Ksoll
+ * @author Jason (darkdiplomat)
  */
 public class CanaryWorldManager implements WorldManager {
 
@@ -112,12 +104,12 @@ public class CanaryWorldManager implements WorldManager {
         }
         else {
             if (worldExists(world + "_" + type.getName()) && autoload) {
-                Logman.println("World exists but is not loaded. Loading ...");
+                Canary.logDebug("World exists but is not loaded. Loading ...");
                 return loadWorld(world, type);
             }
             else {
                 if (autoload) {
-                    Logman.println("World does not exist, we can autoload, will load!");
+                    Canary.logDebug("World does not exist, we can autoload, will load!");
                     createWorld(world, type);
                     return loadedWorlds.get(world + "_" + type.getName());
                 }
@@ -144,7 +136,7 @@ public class CanaryWorldManager implements WorldManager {
 
     @Override
     public boolean createWorld(String name, DimensionType type) {
-        Logman.println("Creating a new world! " + name + "_" + type.getName());
+        Canary.logDebug("Creating a new world! " + name + "_" + type.getName());
         ((CanaryServer) Canary.getServer()).getHandle().loadWorld(name, new Random().nextLong(), type);
         updateExistingWorldsList(name, type);
         return true;
@@ -184,7 +176,7 @@ public class CanaryWorldManager implements WorldManager {
     public Collection<World> getAllWorlds() {
         // before we return all the worlds, first check if there are any worlds marked for unload!
         if (markedForUnload.size() > 0) {
-            Logman.println("Processing worlds for unload");
+            Canary.logDebug("Processing worlds for unload");
             removeWorlds();
             // markedForUnload.clear();
         }
@@ -257,11 +249,37 @@ public class CanaryWorldManager implements WorldManager {
 
     @Override
     public Set<String> getLoadedWorldsNames() {
+        if (markedForUnload.size() > 0) {
+            Canary.logDebug("Processing worlds for unload");
+            removeWorlds();
+        }
         return Collections.unmodifiableSet(loadedWorlds.keySet());
     }
 
     @Override
     public String[] getLoadedWorldsNamesArray() {
-        return loadedWorlds.keySet().toArray(new String[loadedWorlds.keySet().size()]);
+        Set<String> names = getLoadedWorldsNames();
+        return names.toArray(new String[names.size()]);
+    }
+
+    @Override
+    public Set<String> getLoadedWorldsNamesOfDimension(DimensionType dimensionType) {
+        if (markedForUnload.size() > 0) {
+            Canary.logDebug("Processing worlds for unload");
+            removeWorlds();
+        }
+        Set<String> worlds = new HashSet<String>();
+        for (World world : loadedWorlds.values()) {
+            if (world.getType() == dimensionType) {
+                worlds.add(world.getFqName());
+            }
+        }
+        return worlds;
+    }
+
+    @Override
+    public String[] getLoadedWorldsNamesArrayOfDimension(DimensionType dimensionType) {
+        Set<String> worlds = getLoadedWorldsNamesOfDimension(dimensionType);
+        return worlds.toArray(new String[worlds.size()]);
     }
 }

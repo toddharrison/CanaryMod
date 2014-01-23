@@ -133,14 +133,16 @@ public class CanaryServer implements Server {
      */
     @Override
     public boolean consoleCommand(String command) {
-        ConsoleCommandHook hook = new ConsoleCommandHook(this, command);
-
-        Canary.hooks().callHook(hook);
+        ConsoleCommandHook hook = (ConsoleCommandHook) new ConsoleCommandHook(this, command).call();
         if (hook.isCanceled()) {
             return true;
         }
-        String[] split = command.split(" ");
-        if (!Canary.commands().parseCommand(this, split[0], split)) {
+        String[] args = command.split(" ");
+        String cmdName = args[0];
+        if (cmdName.startsWith("/")) {
+            cmdName = cmdName.substring(1);
+        }
+        if (!Canary.commands().parseCommand(this, cmdName, args)) {
             return ((DedicatedServer) server).H().a(server, command) > 0; // Vanilla Commands passed
         }
         return true;
@@ -151,15 +153,19 @@ public class CanaryServer implements Server {
      */
     @Override
     public boolean consoleCommand(String command, Player player) {
-        ConsoleCommandHook hook = new ConsoleCommandHook(player, command);
-
-        Canary.hooks().callHook(hook);
+        ConsoleCommandHook hook = (ConsoleCommandHook) new ConsoleCommandHook(player, command).call();
         if (hook.isCanceled()) {
             return true;
         }
-        String[] split = command.split(" ");
-        if (!Canary.commands().parseCommand(player, split[0], split)) {
-            return ((DedicatedServer) server).H().a(((CanaryPlayer) player).getHandle(), command) > 0; // Vanilla Commands passed
+        String[] args = command.split(" ");
+        String cmdName = args[0];
+        if (cmdName.startsWith("/")) {
+            cmdName = cmdName.substring(1);
+        }
+        if (!Canary.commands().parseCommand(player, cmdName, args)) {
+            if (Canary.ops().isOpped(player.getName())) { //TODO: Temporary until I make the Permission system implementation on Vanilla Commands
+                return ((DedicatedServer) server).H().a(((CanaryPlayer) player).getHandle(), command) > 0; // Vanilla Commands passed
+            }
         }
         return true;
     }
@@ -175,8 +181,12 @@ public class CanaryServer implements Server {
         if (hook.isCanceled()) {
             return true;
         }
-        String[] split = command.split(" ");
-        if (!Canary.commands().parseCommand(cmdBlockLogic, split[0], split)) {
+        String[] args = command.split(" ");
+        String cmdName = args[0];
+        if (cmdName.startsWith("/")) {
+            cmdName = cmdName.substring(1);
+        }
+        if (!Canary.commands().parseCommand(cmdBlockLogic, cmdName, args)) {
             ICommandSender nmsCBL =
                     cmdBlockLogic instanceof CanaryCommandBlock //
                             ? ((CanaryCommandBlock) cmdBlockLogic).getLogic() //

@@ -1,6 +1,11 @@
 package net.minecraft.command;
 
+import net.canarymod.api.world.CanaryWorld;
+import net.canarymod.api.world.DimensionType;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.storage.WorldInfo;
+
+import java.util.List;
 
 public class CommandToggleDownfall extends CommandBase {
 
@@ -17,15 +22,29 @@ public class CommandToggleDownfall extends CommandBase {
     }
 
     public void b(ICommandSender icommandsender, String[] astring) {
-        this.d(icommandsender);
+        //this.d(); // CanaryMod: logic reimplemented below
+        WorldInfo worldinfo = icommandsender.d().M();
+        if (astring.length == 1) { // CanaryMod: inject world selection
+            boolean loaded = MinecraftServer.G().worldManager.worldIsLoaded(astring[1]);
+            if (!loaded) {
+                a(icommandsender, "No world loaded of Name: '%s'", new Object[]{ astring[1] });
+                return;
+            }
+            worldinfo = ((CanaryWorld) MinecraftServer.G().worldManager.getWorld(astring[1], false)).getHandle().M();
+        }
+
         a(icommandsender, "commands.downfall.success", new Object[0]);
     }
 
-    protected void d(ICommandSender iCommandSender) { // CanaryMod: Signature Change
-        WorldInfo worldinfo = iCommandSender.d().M(); // CanaryMod: Multiworld fix
+    /* CanaryMod: Logic disabled and moved above
+    protected void d() {
+        WorldInfo worldinfo = MinecraftServer.G().b[0].M();
 
-        if (worldinfo != null && worldinfo.j() == 0) {
-            worldinfo.b(!worldinfo.p());
-        }
+        worldinfo.b(!worldinfo.p());
+    }
+    */
+
+    public List a(ICommandSender icommandsender, String[] astring) {
+        return astring.length == 1 ? a(astring, MinecraftServer.G().worldManager.getLoadedWorldsNamesArrayOfDimension(DimensionType.fromId(0))) : null;
     }
 }

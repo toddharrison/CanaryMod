@@ -34,12 +34,12 @@ public class CommandGameRule extends CommandBase {
             if (astring.length == 3 || s1.matches("(true|false)")) {
                 String setting = s1;
                 if (astring.length == 3) {
-                    CanaryWorld cWorld = ((CanaryWorld) MinecraftServer.G().worldManager.getWorld(s1, false));
-                    if (cWorld == null) {
-                        a(icommandsender, "No world of Name: '%s'", new Object[]{ s1 });
+                    boolean loaded = MinecraftServer.G().worldManager.worldIsLoaded(astring[1]);
+                    if (!loaded) {
+                        a(icommandsender, "No world loaded of Name: '%s'", new Object[]{ astring[1] });
                         return;
                     }
-                    gamerules = cWorld.getHandle().N();
+                    gamerules = ((CanaryWorld) MinecraftServer.G().worldManager.getWorld(astring[1], false)).getHandle().N();
                     setting = s2;
                 }
 
@@ -52,6 +52,11 @@ public class CommandGameRule extends CommandBase {
                 }
             }
             else if (astring.length == 2) {
+                boolean loaded = MinecraftServer.G().worldManager.worldIsLoaded(astring[1]);
+                if (!loaded) {
+                    a(icommandsender, "No world loaded of Name: '%s'", new Object[]{ astring[1] });
+                    return;
+                }
                 gamerules = ((CanaryWorld) MinecraftServer.G().worldManager.getWorld(s1, false)).getHandle().N();
                 if (gamerules.e(s0)) {
                     String s3 = gamerules.a(s0);

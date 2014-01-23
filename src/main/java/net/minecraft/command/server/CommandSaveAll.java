@@ -1,6 +1,8 @@
-package net.minecraft.command;
+package net.minecraft.command.server;
 
 import net.canarymod.api.world.CanaryWorld;
+import net.minecraft.command.CommandBase;
+import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.IProgressUpdate;
