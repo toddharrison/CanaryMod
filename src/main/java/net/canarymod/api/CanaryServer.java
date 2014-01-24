@@ -36,6 +36,7 @@ import net.minecraft.server.gui.MinecraftServerGui;
 import net.minecraft.server.management.ServerConfigurationManager;
 import net.visualillusionsent.utils.TaskManager;
 
+import java.io.File;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -110,6 +111,21 @@ public class CanaryServer implements Server {
             names[i] = players.get(i).getName();
         }
         return names;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String[] getKnownPlayerNames() {
+        ArrayList<String> names = new ArrayList<String>();
+        File playerDats = new File("worlds/players/");
+        for (String name : playerDats.list()) {
+            if (name.endsWith(".dat")) {
+                names.add(name.substring(0, name.length() - ".dat".length()));
+            }
+        }
+        return names.toArray(new String[names.size()]);
     }
 
     /**

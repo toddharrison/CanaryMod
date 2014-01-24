@@ -718,6 +718,11 @@ public class CanaryPlayer extends CanaryHuman implements Player {
         }
     }
 
+    @Override
+    public boolean isOnline() {
+        return Canary.getServer().getPlayer(getName()) != null;
+    }
+
     /** {@inheritDoc} */
     @Override
     public void setPrefix(String prefix) {

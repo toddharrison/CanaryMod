@@ -10,9 +10,11 @@ import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.api.world.DimensionType;
 import net.canarymod.api.world.UnknownWorldException;
 import net.canarymod.api.world.World;
+import net.canarymod.api.world.position.Location;
 import net.canarymod.api.world.position.Position;
 import net.canarymod.permissionsystem.PermissionProvider;
 import net.canarymod.user.Group;
+import net.canarymod.warp.Warp;
 import net.minecraft.world.storage.ISaveHandler;
 import net.minecraft.world.storage.SaveHandler;
 
@@ -501,5 +503,57 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
             return getNBT().getInt("XpLevel");
         }
         return 0;
+    }
+
+    @Override
+    public void setLevel(int lvl) {
+        if (getNBT() != null) {
+            getNBT().put("XpLevel", lvl);
+            save();
+        }
+    }
+
+    @Override
+    public void addLevel(int lvl) {
+        if (getNBT() != null) {
+            setLevel(getLevel() + lvl);
+        }
+    }
+
+    @Override
+    public void removeLevel(int lvl) {
+        if (getNBT() != null) {
+            setLevel(getLevel() - lvl);
+        }
+    }
+
+    @Override
+    public void setHome(Location location) {
+
+    }
+
+    @Override
+    public Location getHome() {
+        Warp home = Canary.warps().getHome(getName());
+
+        if (home != null) {
+            return home.getLocation();
+        }
+        return Canary.getServer().getDefaultWorld().getSpawnLocation(); //TODO: Read NBT to get real position
+    }
+
+    @Override
+    public boolean hasHome() {
+        return Canary.warps().getHome(getName()) != null;
+    }
+
+    @Override
+    public String[] getAllowedIPs() { //TODO: find out why this isn't implemented
+        return new String[0];
+    }
+
+    @Override
+    public String getIP() {
+        return "xxx.xxx.xxx.xxx"; //TODO: Store last known IP
     }
 }
