@@ -1,29 +1,8 @@
 package net.canarymod.api.factory;
 
-import net.canarymod.api.nbt.BaseTag;
-import net.canarymod.api.nbt.ByteArrayTag;
-import net.canarymod.api.nbt.ByteTag;
-import net.canarymod.api.nbt.CanaryByteArrayTag;
-import net.canarymod.api.nbt.CanaryByteTag;
-import net.canarymod.api.nbt.CanaryCompoundTag;
-import net.canarymod.api.nbt.CanaryDoubleTag;
-import net.canarymod.api.nbt.CanaryFloatTag;
-import net.canarymod.api.nbt.CanaryIntArrayTag;
-import net.canarymod.api.nbt.CanaryIntTag;
-import net.canarymod.api.nbt.CanaryListTag;
-import net.canarymod.api.nbt.CanaryLongTag;
-import net.canarymod.api.nbt.CanaryShortTag;
-import net.canarymod.api.nbt.CanaryStringTag;
-import net.canarymod.api.nbt.CompoundTag;
-import net.canarymod.api.nbt.DoubleTag;
-import net.canarymod.api.nbt.FloatTag;
-import net.canarymod.api.nbt.IntArrayTag;
-import net.canarymod.api.nbt.IntTag;
-import net.canarymod.api.nbt.ListTag;
-import net.canarymod.api.nbt.LongTag;
-import net.canarymod.api.nbt.NBTTagType;
-import net.canarymod.api.nbt.ShortTag;
-import net.canarymod.api.nbt.StringTag;
+import net.canarymod.api.nbt.*;
+import net.minecraft.nbt.JsonToNBT;
+import net.minecraft.nbt.NBTException;
 
 public final class CanaryNBTFactory implements NBTFactory {
 
@@ -151,5 +130,18 @@ public final class CanaryNBTFactory implements NBTFactory {
         catch (Exception ex) {
             return null;
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public BaseTag newTagFromJSON(String json) {
+        try {
+            return CanaryBaseTag.wrap(JsonToNBT.a(json));
+        }
+        catch (NBTException nbtex) {
+        }
+        return null;
     }
 }

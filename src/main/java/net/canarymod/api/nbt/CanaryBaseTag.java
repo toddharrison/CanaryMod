@@ -1,17 +1,6 @@
 package net.canarymod.api.nbt;
 
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagByte;
-import net.minecraft.nbt.NBTTagByteArray;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagDouble;
-import net.minecraft.nbt.NBTTagFloat;
-import net.minecraft.nbt.NBTTagInt;
-import net.minecraft.nbt.NBTTagIntArray;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.nbt.NBTTagLong;
-import net.minecraft.nbt.NBTTagShort;
-import net.minecraft.nbt.NBTTagString;
+import net.minecraft.nbt.*;
 
 public abstract class CanaryBaseTag implements BaseTag {
     protected final NBTBase tag;
@@ -51,7 +40,7 @@ public abstract class CanaryBaseTag implements BaseTag {
      *
      * @return The wrapped tag. Null if the tag is of an unsupported type.
      */
-    protected static CanaryBaseTag wrap(NBTBase tag) {
+    public static CanaryBaseTag wrap(NBTBase tag) {
         switch (tag.a()) { // switch the id of the tag
             default:
                 return null;
