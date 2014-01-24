@@ -32,6 +32,7 @@ import net.canarymod.hook.player.PortalUseHook;
 import net.canarymod.hook.player.SignShowHook;
 import net.canarymod.hook.player.StatGainedHook;
 import net.canarymod.hook.player.TeleportHook;
+import net.minecraft.command.ICommand;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.entity.Entity;
@@ -956,12 +957,16 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
         if (s0.startsWith("/")) {
             s0 = s0.substring(1);
         }
-        String[] split = s0.split(" ");
-        if (Canary.commands().hasCommand(split[0])) {
-            return Canary.commands().canUseCommand(getPlayer(), split[0]);
+        String[] args = s0.split(" ");
+        if (Canary.commands().hasCommand(args[0])) {
+            return Canary.commands().canUseCommand(getPlayer(), args[0]);
         }
         // Might be vanilla, so just assume
-        return getPlayer().hasPermission("canary.commands.vanilla.".concat(s0.contains(" ") ? s0.split(" ")[0] : s0));
+        ICommand icommand = (ICommand) MinecraftServer.G().H().a().get(args[0]);
+        if (icommand == null) {
+            return false;
+        }
+        return Canary.ops().isOpped(getPlayer().getName()) || getPlayer().hasPermission("canary.commands.vanilla.".concat(icommand.c()));
         //
     }
 

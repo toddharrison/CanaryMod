@@ -272,6 +272,15 @@ public class CanaryServer implements Server {
     }
 
     @Override
+    public PlayerReference matchKnownPlayer(String player) {
+        PlayerReference reference = matchPlayer(player);
+        if (reference == null) {
+            reference = getOfflinePlayer(player);
+        }
+        return reference;
+    }
+
+    @Override
     public Player getPlayer(String name) {
         return server.getConfigurationManager().getPlayerByName(name);
     }
