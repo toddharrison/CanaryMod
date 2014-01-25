@@ -1623,13 +1623,14 @@ public abstract class Entity {
             this.p.C.a("changeDimension");
             MinecraftServer minecraftserver = MinecraftServer.G();
             int i1 = this.aq;
-            WorldServer worldserver = minecraftserver.getWorld(getCanaryWorld().getName(), i0);
-            WorldServer worldserver1 = minecraftserver.getWorld(getCanaryWorld().getName(), i1);
+            WorldServer worldserver = minecraftserver.getWorld(getCanaryWorld().getName(), i1); //Coming From
+            WorldServer worldserver1 = minecraftserver.getWorld(getCanaryWorld().getName(), i0); //Going To
 
             // CanaryMod: Dimension switch hook.
-            Location goingTo = this.simulatePortalUse(i0, minecraftserver.getWorld(this.getCanaryWorld().getName(), i0));
+            Location goingTo = this.simulatePortalUse(i0, worldserver1);
             CancelableHook hook = (CancelableHook) new DimensionSwitchHook(this.getCanaryEntity(), this.getCanaryEntity().getLocation(), goingTo).call();
             if (hook.isCanceled()) {
+                this.p.C.b(); //Profiler
                 return;
             }//
 
