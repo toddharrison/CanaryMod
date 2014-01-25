@@ -38,16 +38,7 @@ import net.minecraft.nbt.NBTTagDouble;
 import net.minecraft.nbt.NBTTagFloat;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Direction;
-import net.minecraft.util.IChatComponent;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.ReportedException;
-import net.minecraft.util.StatCollector;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.*;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -1644,7 +1635,8 @@ public abstract class Entity {
 
             this.aq = i0;
             if (i1 == 1 && i0 == 1) {
-                worldserver1 = minecraftserver.a(0);
+                //worldserver1 = minecraftserver.a(0);
+                worldserver1 = minecraftserver.getWorld(getCanaryWorld().getName(), 0); // CanaryMod: world name required
                 this.aq = 0;
             }
 
