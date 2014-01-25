@@ -22,6 +22,10 @@ import net.canarymod.user.ReservelistProvider;
 import net.canarymod.user.UserAndGroupsProvider;
 import net.canarymod.user.WhitelistProvider;
 import net.canarymod.warp.WarpProvider;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.LoggerContext;
+import org.apache.logging.log4j.core.config.LoggerConfig;
 
 /**
  * The implementation of Canary, the new catch-all etc replacement, only much better :P
@@ -43,6 +47,7 @@ public class CanaryMod extends Canary {
         DatabaseLoader.load();
 
         this.config = new Configuration();
+        this.setLoggerLevelDynamic();
         this.motd = new MessageOfTheDay();
         // Initialize the subsystems that do not rely on others
         this.commandManager = new CommandManager();
@@ -82,7 +87,8 @@ public class CanaryMod extends Canary {
     public void initCommands() {
         try {
             this.commandManager.registerCommands(new CommandList(), Canary.getServer(), false);
-        } catch (CommandDependencyException e) {
+        }
+        catch (CommandDependencyException e) {
             // Silently ignore this. If that happens someone intended to override system commands,
             // which is perfectly fine.
         }
@@ -99,10 +105,23 @@ public class CanaryMod extends Canary {
     @Override
     public void reload() {
         super.reload();
-
+        setLoggerLevelDynamic();
         // Reload minecraft variables
         // ((CanaryConfigurationManager) instance.server.getConfigurationManager()).reload();
         // TODO RCON + QUERY?
         ((CanaryServer) instance.server).getHandle().reload();
+    }
+
+    static void setLoggerLevelDynamic() {
+        LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
+        LoggerConfig logger = ctx.getConfiguration().getLoggers().get(LogManager.ROOT_LOGGER_NAME);
+        if (Configuration.getServerConfig().isDebugMode()) {
+            logger.setLevel(Level.DEBUG);
+            ctx.updateLoggers();
+        }
+        else {
+            logger.setLevel(Level.INFO);
+            ctx.updateLoggers();
+        }
     }
 }

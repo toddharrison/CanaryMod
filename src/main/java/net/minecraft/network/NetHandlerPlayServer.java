@@ -55,27 +55,7 @@ import net.minecraft.item.ItemWritableBook;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.network.play.INetHandlerPlayServer;
-import net.minecraft.network.play.client.C00PacketKeepAlive;
-import net.minecraft.network.play.client.C01PacketChatMessage;
-import net.minecraft.network.play.client.C02PacketUseEntity;
-import net.minecraft.network.play.client.C03PacketPlayer;
-import net.minecraft.network.play.client.C07PacketPlayerDigging;
-import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
-import net.minecraft.network.play.client.C09PacketHeldItemChange;
-import net.minecraft.network.play.client.C0APacketAnimation;
-import net.minecraft.network.play.client.C0BPacketEntityAction;
-import net.minecraft.network.play.client.C0CPacketInput;
-import net.minecraft.network.play.client.C0DPacketCloseWindow;
-import net.minecraft.network.play.client.C0EPacketClickWindow;
-import net.minecraft.network.play.client.C0FPacketConfirmTransaction;
-import net.minecraft.network.play.client.C10PacketCreativeInventoryAction;
-import net.minecraft.network.play.client.C11PacketEnchantItem;
-import net.minecraft.network.play.client.C12PacketUpdateSign;
-import net.minecraft.network.play.client.C13PacketPlayerAbilities;
-import net.minecraft.network.play.client.C14PacketTabComplete;
-import net.minecraft.network.play.client.C15PacketClientSettings;
-import net.minecraft.network.play.client.C16PacketClientStatus;
-import net.minecraft.network.play.client.C17PacketCustomPayload;
+import net.minecraft.network.play.client.*;
 import net.minecraft.network.play.server.S00PacketKeepAlive;
 import net.minecraft.network.play.server.S02PacketChat;
 import net.minecraft.network.play.server.S08PacketPlayerPosLook;
@@ -185,25 +165,18 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
 
     public void kickNoHook(String s0) {
         // CanaryMod: DisconnectionHook
-        DisconnectionHook disconHook = (DisconnectionHook) new DisconnectionHook(this.b.getPlayer(), s0, "\u00A7E" + this.b.getDisplayName() + " left.").call();
-        if (!disconHook.isHidden()) {
-            final ChatComponentText chatcomponenttext = new ChatComponentText(disconHook.getReason());
-
-            this.a.a(new S40PacketDisconnect(chatcomponenttext), new GenericFutureListener[]{ new GenericFutureListener() {
-
-                public void operationComplete(Future future) {
-                    NetHandlerPlayServer.this.a.a((IChatComponent) chatcomponenttext);
-                }
-            }
-            });
-        }
+        final DisconnectionHook disconHook = (DisconnectionHook) new DisconnectionHook(this.b.getPlayer(), s0, "\u00A7E" + this.b.getDisplayName() + " left.").call();
         //
-
-        this.a.g();
-
+        final ChatComponentText chatcomponenttext = new ChatComponentText(disconHook.getReason());
+        this.a.a(new S40PacketDisconnect(chatcomponenttext), new GenericFutureListener[]{ new GenericFutureListener() {
+            public void operationComplete(Future future) {
+                NetHandlerPlayServer.this.a.a((IChatComponent) chatcomponenttext);
+            }
+        } });
         // CanaryMod unregester Custom Payload registrations
         Canary.channels().unregisterClientAll(serverHandler);
-        // End
+        //
+        this.a.g();
     }
 
     public void a(C0CPacketInput c0cpacketinput) {
@@ -859,7 +832,8 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
                     if (c0epacketclickwindow.h() == 0) {
                         this.b.bp.updateSlot(c0epacketclickwindow.d());
                         this.b.updateSlot(-1, -1, this.b.bn.o());
-                    } else {
+                    }
+                    else {
                         ArrayList arraylist = new ArrayList();
 
                         for (int i = 0; i < this.b.bp.c.size(); ++i) {
@@ -1033,12 +1007,6 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
         }
 
         this.b.a.a((Packet) (new S3APacketTabComplete((String[]) arraylist.toArray(new String[arraylist.size()]))));
-
-        /* Canary Logic Broken...
-        StringBuilder result = AutocompleteUtils.autoComplete(packet203autocomplete.d(), c.getPlayer());
-        // CanaryMod end
-        this.c.a.b(new Packet203AutoComplete(result.toString()));
-        */
     }
 
     public void a(C15PacketClientSettings c15packetclientsettings) {
