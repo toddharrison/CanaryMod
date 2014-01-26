@@ -199,9 +199,7 @@ public class DedicatedServer extends MinecraftServer implements IServer {
         }
 
         // CanaryMod changed call to initWorld
-        net.canarymod.api.world.DimensionType wt = net.canarymod.api.world.DimensionType.NORMAL;
-
-        this.initWorld(this.M(), i2, worldtype, wt, s2);
+        this.initWorld(this.M(), i2, worldtype, net.canarymod.api.world.DimensionType.NORMAL, s2);
         //
         long i4 = System.nanoTime() - i1;
         String s4 = String.format("%.3fs", new Object[]{ Double.valueOf((double) i4 / 1.0E9D) });
