@@ -47,6 +47,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static net.canarymod.Canary.log;
+
 /**
  * Canary Player wrapper.
  *
@@ -114,7 +116,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
                 for (Player player : receivers) {
                     player.message(formattedMessage);
                 }
-                Canary.logChat(TextFormat.consoleFormat(formattedMessage));
+                log.info(TextFormat.consoleFormat(formattedMessage));
             }
         }
 
@@ -188,10 +190,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
     @Override
     public boolean executeCommand(String[] command) {
         try {
-            if (Configuration.getServerConfig().isLogging()) {
-                Canary.logInfo("Command used by " + getName() + ": " + StringUtils.joinString(command, " ", 0));
-            }
-
+            boolean toRet = true;
             PlayerCommandHook hook = (PlayerCommandHook) new PlayerCommandHook(this, command).call();
             if (hook.isCanceled()) {
                 return true;
@@ -203,14 +202,16 @@ public class CanaryPlayer extends CanaryHuman implements Player {
             }
             if (!Canary.commands().parseCommand(this, cmdName, command)) {
                 if (Canary.ops().isOpped(getName())) {
-                    return ((CanaryServer) Canary.getServer()).getHandle().H().a(this.getHandle(), StringUtils.joinString(command, " ", 0)) > 0; // Vanilla Commands passed
+                    toRet = ((CanaryServer) Canary.getServer()).getHandle().H().a(this.getHandle(), StringUtils.joinString(command, " ", 0)) > 0; // Vanilla Commands passed
                 }
             }
-            return true;
-
+            if (toRet) {
+                log.info("Command used by " + getName() + ": " + StringUtils.joinString(command, " ", 0));
+            }
+            return toRet;
         }
         catch (Throwable ex) {
-            Canary.logStacktrace("Exception in command handler: ", ex);
+            log.error("Exception in command handler: ", ex);
             if (isAdmin()) {
                 message(Colors.LIGHT_RED + "Exception occured. " + ex.getMessage());
             }

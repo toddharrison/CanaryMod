@@ -1,6 +1,5 @@
 package net.canarymod.api.factory;
 
-import net.canarymod.Canary;
 import net.canarymod.api.DataWatcher;
 import net.canarymod.api.entity.Entity;
 import net.canarymod.api.entity.XPOrb;
@@ -19,6 +18,8 @@ import net.canarymod.api.world.position.Position;
 import net.canarymod.api.world.position.Vector3D;
 
 import java.util.List;
+
+import static net.canarymod.Canary.log;
 
 /**
  * Packet Factory implementation
@@ -46,7 +47,7 @@ public class CanaryPacketFactory implements PacketFactory {
             return createPacket(3, world_age, time);
         }
         catch (Exception ex) {
-            Canary.logDebug("Failed to construct a UpdateTime packet", ex);
+            log.error("Failed to construct a UpdateTime packet", ex);
             return null;
         }
     }
@@ -57,7 +58,7 @@ public class CanaryPacketFactory implements PacketFactory {
             return createPacket(5, entityID, slot, item);
         }
         catch (Exception ex) {
-            Canary.logDebug("Failed to construct a PlayerEquipment packet", ex);
+            log.error("Failed to construct a PlayerEquipment packet", ex);
             return null;
         }
     }
@@ -68,7 +69,7 @@ public class CanaryPacketFactory implements PacketFactory {
             return createPacket(6, x, y, z);
         }
         catch (Exception ex) {
-            Canary.logDebug("Failed to construct a SpawnPosition packet", ex);
+            log.error("Failed to construct a SpawnPosition packet", ex);
             return null;
         }
     }
@@ -79,7 +80,7 @@ public class CanaryPacketFactory implements PacketFactory {
             return createPacket(8, health, foodLevel, saturation);
         }
         catch (Exception ex) {
-            Canary.logDebug("Failed to construct a UpdateHealth packet", ex);
+            log.error("Failed to construct a UpdateHealth packet", ex);
             return null;
         }
     }
@@ -90,7 +91,7 @@ public class CanaryPacketFactory implements PacketFactory {
             return createPacket(13, x, stance, y, z, yaw, pitch, onGround);
         }
         catch (Exception ex) {
-            Canary.logDebug("Failed to construct a PlayerPositionLook packet", ex);
+            log.error("Failed to construct a PlayerPositionLook packet", ex);
             return null;
         }
     }
@@ -101,7 +102,7 @@ public class CanaryPacketFactory implements PacketFactory {
             return createPacket(16, slot);
         }
         catch (Exception ex) {
-            Canary.logDebug("Failed to construct a HeldItemChange packet", ex);
+            log.error("Failed to construct a HeldItemChange packet", ex);
             return null;
         }
     }
@@ -112,7 +113,7 @@ public class CanaryPacketFactory implements PacketFactory {
             return createPacket(17, player, x, y, z);
         }
         catch (Exception ex) {
-            Canary.logDebug("Failed to construct a UseBed packet", ex);
+            log.error("Failed to construct a UseBed packet", ex);
             return null;
         }
     }
@@ -123,7 +124,7 @@ public class CanaryPacketFactory implements PacketFactory {
             return createPacket(18, player, animation);
         }
         catch (Exception ex) {
-            Canary.logDebug("Failed to construct a Animation packet", ex);
+            log.error("Failed to construct a Animation packet", ex);
             return null;
         }
     }
@@ -134,7 +135,7 @@ public class CanaryPacketFactory implements PacketFactory {
             return createPacket(20, human);
         }
         catch (Exception ex) {
-            Canary.logDebug("Failed to construct a SpawnNamedEntity packet", ex);
+            log.error("Failed to construct a SpawnNamedEntity packet", ex);
             return null;
         }
     }
@@ -145,7 +146,7 @@ public class CanaryPacketFactory implements PacketFactory {
             return createPacket(22, entityItemID, collectorID);
         }
         catch (Exception ex) {
-            Canary.logDebug("Failed to construct a CollectItem packet", ex);
+            log.error("Failed to construct a CollectItem packet", ex);
             return null;
         }
     }
@@ -156,7 +157,7 @@ public class CanaryPacketFactory implements PacketFactory {
             return createPacket(23, entity, objectID, throwerID);
         }
         catch (Exception ex) {
-            Canary.logDebug("Failed to construct a SpawnObjectVehicle packet", ex);
+            log.error("Failed to construct a SpawnObjectVehicle packet", ex);
             return null;
         }
     }
@@ -167,7 +168,7 @@ public class CanaryPacketFactory implements PacketFactory {
             return createPacket(24, livingbase);
         }
         catch (Exception ex) {
-            Canary.logDebug("Failed to construct a SpawnMob packet", ex);
+            log.error("Failed to construct a SpawnMob packet", ex);
             return null;
         }
     }
@@ -178,7 +179,7 @@ public class CanaryPacketFactory implements PacketFactory {
             return createPacket(25, painting);
         }
         catch (Exception ex) {
-            Canary.logDebug("Failed to construct a SpawnPainting packet", ex);
+            log.error("Failed to construct a SpawnPainting packet", ex);
             return null;
         }
     }
@@ -189,7 +190,7 @@ public class CanaryPacketFactory implements PacketFactory {
             return createPacket(26, xporb);
         }
         catch (Exception ex) {
-            Canary.logDebug("Failed to construct a SpawnXPOrb packet", ex);
+            log.error("Failed to construct a SpawnXPOrb packet", ex);
             return null;
         }
     }
@@ -200,7 +201,7 @@ public class CanaryPacketFactory implements PacketFactory {
             return createPacket(28, entityID, motX, motY, motZ);
         }
         catch (Exception ex) {
-            Canary.logDebug("Failed to construct a EntityVelocity packet", ex);
+            log.error("Failed to construct a EntityVelocity packet", ex);
             return null;
         }
     }
@@ -211,7 +212,7 @@ public class CanaryPacketFactory implements PacketFactory {
             return createPacket(29, new Object[]{ ids });
         }
         catch (Exception ex) {
-            Canary.logDebug("Failed to construct a DestroyEntity packet", ex);
+            log.error("Failed to construct a DestroyEntity packet", ex);
             return null;
         }
     }
@@ -222,7 +223,7 @@ public class CanaryPacketFactory implements PacketFactory {
             return createPacket(31, entityID, x, y, z);
         }
         catch (Exception ex) {
-            Canary.logDebug("Failed to construct a EntityRelativeMove packet", ex);
+            log.error("Failed to construct a EntityRelativeMove packet", ex);
             return null;
         }
     }
@@ -233,7 +234,7 @@ public class CanaryPacketFactory implements PacketFactory {
             return createPacket(32, entityID, yaw, pitch);
         }
         catch (Exception ex) {
-            Canary.logDebug("Failed to construct a EntityLook packet", ex);
+            log.error("Failed to construct a EntityLook packet", ex);
             return null;
         }
     }
@@ -244,7 +245,7 @@ public class CanaryPacketFactory implements PacketFactory {
             return createPacket(33, entityID, x, y, z, yaw, pitch);
         }
         catch (Exception ex) {
-            Canary.logDebug("Failed to construct a EntityLookRelativeMove packet", ex);
+            log.error("Failed to construct a EntityLookRelativeMove packet", ex);
             return null;
         }
     }
@@ -255,7 +256,7 @@ public class CanaryPacketFactory implements PacketFactory {
             return createPacket(34, entityID, x, y, z, yaw, pitch);
         }
         catch (Exception ex) {
-            Canary.logDebug("Failed to construct a EntityTeleport packet", ex);
+            log.error("Failed to construct a EntityTeleport packet", ex);
             return null;
         }
     }
@@ -266,7 +267,7 @@ public class CanaryPacketFactory implements PacketFactory {
             return createPacket(35, entityID, yaw);
         }
         catch (Exception ex) {
-            Canary.logDebug("Failed to construct a EntityHeadLook packet", ex);
+            log.error("Failed to construct a EntityHeadLook packet", ex);
             return null;
         }
     }
@@ -277,7 +278,7 @@ public class CanaryPacketFactory implements PacketFactory {
             return createPacket(38, entityID, status);
         }
         catch (Exception ex) {
-            Canary.logDebug("Failed to construct a EntityStatus packet", ex);
+            log.error("Failed to construct a EntityStatus packet", ex);
             return null;
         }
     }
@@ -288,7 +289,7 @@ public class CanaryPacketFactory implements PacketFactory {
             return createPacket(39, leashId, attaching, vehicle);
         }
         catch (Exception ex) {
-            Canary.logDebug("Failed to construct a AttachEntity packet", ex);
+            log.error("Failed to construct a AttachEntity packet", ex);
             return null;
         }
     }
@@ -299,7 +300,7 @@ public class CanaryPacketFactory implements PacketFactory {
             return createPacket(40, entityID, watcher);
         }
         catch (Exception ex) {
-            Canary.logDebug("Failed to construct a EntityMetaData packet", ex);
+            log.error("Failed to construct a EntityMetaData packet", ex);
             return null;
         }
     }
@@ -310,7 +311,7 @@ public class CanaryPacketFactory implements PacketFactory {
             return createPacket(41, entityID, effect);
         }
         catch (Exception ex) {
-            Canary.logDebug("Failed to construct a EntityEffect packet", ex);
+            log.error("Failed to construct a EntityEffect packet", ex);
             return null;
         }
     }
@@ -321,7 +322,7 @@ public class CanaryPacketFactory implements PacketFactory {
             return createPacket(42, entityID, effect);
         }
         catch (Exception ex) {
-            Canary.logDebug("Failed to construct a RemoveEntityEffect packet", ex);
+            log.error("Failed to construct a RemoveEntityEffect packet", ex);
             return null;
         }
     }
@@ -332,7 +333,7 @@ public class CanaryPacketFactory implements PacketFactory {
             return createPacket(43, bar, level, totalXp);
         }
         catch (Exception ex) {
-            Canary.logDebug("Failed to construct a SetExperience packet", ex);
+            log.error("Failed to construct a SetExperience packet", ex);
             return null;
         }
     }
@@ -343,7 +344,7 @@ public class CanaryPacketFactory implements PacketFactory {
             return createPacket(51, chunk, initialize, bitflag);
         }
         catch (Exception ex) {
-            Canary.logDebug("Failed to construct a ChunkData packet", ex);
+            log.error("Failed to construct a ChunkData packet", ex);
             return null;
         }
     }
@@ -354,7 +355,7 @@ public class CanaryPacketFactory implements PacketFactory {
             return createPacket(52, chunkX, chunkZ, chunkBlocks, size, world);
         }
         catch (Exception ex) {
-            Canary.logDebug("Failed to construct a MultiBlockChange packet", ex);
+            log.error("Failed to construct a MultiBlockChange packet", ex);
             return null;
         }
     }
@@ -365,7 +366,7 @@ public class CanaryPacketFactory implements PacketFactory {
             return createPacket(53, x, y, z, typeId, data);
         }
         catch (Exception ex) {
-            Canary.logDebug("Failed to construct a BlockChange packet", ex);
+            log.error("Failed to construct a BlockChange packet", ex);
             return null;
         }
     }
@@ -376,7 +377,7 @@ public class CanaryPacketFactory implements PacketFactory {
             return createPacket(54, x, y, z, stat1, stat2, targetId);
         }
         catch (Exception ex) {
-            Canary.logDebug("Failed to construct a BlockAction packet", ex);
+            log.error("Failed to construct a BlockAction packet", ex);
             return null;
         }
     }
@@ -387,7 +388,7 @@ public class CanaryPacketFactory implements PacketFactory {
             return createPacket(55, entityId, x, y, z, state);
         }
         catch (Exception ex) {
-            Canary.logDebug("Failed to construct a BlockBreakAnimation packet", ex);
+            log.error("Failed to construct a BlockBreakAnimation packet", ex);
             return null;
         }
     }
@@ -398,7 +399,7 @@ public class CanaryPacketFactory implements PacketFactory {
             return createPacket(56, chunks);
         }
         catch (Exception ex) {
-            Canary.logDebug("Failed to construct a MapChunkBulk packet", ex);
+            log.error("Failed to construct a MapChunkBulk packet", ex);
             return null;
         }
     }
@@ -409,7 +410,7 @@ public class CanaryPacketFactory implements PacketFactory {
             return createPacket(60, explodeX, explodeY, explodeZ, power, affectedPositions, playerVelocity);
         }
         catch (Exception ex) {
-            Canary.logDebug("Failed to construct a Explosion packet", ex);
+            log.error("Failed to construct a Explosion packet", ex);
             return null;
         }
     }
@@ -420,7 +421,7 @@ public class CanaryPacketFactory implements PacketFactory {
             return createPacket(61, sfxID, x, y, z, aux, disableRelVol);
         }
         catch (Exception ex) {
-            Canary.logDebug("Failed to construct a SoundParticleEffect packet", ex);
+            log.error("Failed to construct a SoundParticleEffect packet", ex);
             return null;
         }
     }
@@ -431,7 +432,7 @@ public class CanaryPacketFactory implements PacketFactory {
             return createPacket(62, name, x, y, z, volume, pitch);
         }
         catch (Exception ex) {
-            Canary.logDebug("Failed to construct a NamedSoundEffect packet", ex);
+            log.error("Failed to construct a NamedSoundEffect packet", ex);
             return null;
         }
     }
@@ -442,7 +443,7 @@ public class CanaryPacketFactory implements PacketFactory {
             return createPacket(70, state, mode);
         }
         catch (Exception ex) {
-            Canary.logDebug("Failed to construct a ChangeGameState packet", ex);
+            log.error("Failed to construct a ChangeGameState packet", ex);
             return null;
         }
     }
@@ -453,7 +454,7 @@ public class CanaryPacketFactory implements PacketFactory {
             return createPacket(71, entity);
         }
         catch (Exception ex) {
-            Canary.logDebug("Failed to construct a UpdateTime packet", ex);
+            log.error("Failed to construct a UpdateTime packet", ex);
             return null;
         }
     }
@@ -464,7 +465,7 @@ public class CanaryPacketFactory implements PacketFactory {
             return createPacket(100, windowId, type, title, slots, useTitle);
         }
         catch (Exception ex) {
-            Canary.logDebug("Failed to construct a OpenWindow packet", ex);
+            log.error("Failed to construct a OpenWindow packet", ex);
             return null;
         }
     }
@@ -475,7 +476,7 @@ public class CanaryPacketFactory implements PacketFactory {
             return createPacket(101, windowId);
         }
         catch (Exception ex) {
-            Canary.logDebug("Failed to construct a CloseWindow packet", ex);
+            log.error("Failed to construct a CloseWindow packet", ex);
             return null;
         }
     }
@@ -486,7 +487,7 @@ public class CanaryPacketFactory implements PacketFactory {
             return createPacket(103, windowId, slotId, item);
         }
         catch (Exception ex) {
-            Canary.logDebug("Failed to construct a SetSlot packet", ex);
+            log.error("Failed to construct a SetSlot packet", ex);
             return null;
         }
     }
@@ -497,7 +498,7 @@ public class CanaryPacketFactory implements PacketFactory {
             return createPacket(104, windowId, items);
         }
         catch (Exception ex) {
-            Canary.logDebug("Failed to construct a SetWindowItems packet", ex);
+            log.error("Failed to construct a SetWindowItems packet", ex);
             return null;
         }
     }
@@ -508,7 +509,7 @@ public class CanaryPacketFactory implements PacketFactory {
             return createPacket(105, windowId, bar, value);
         }
         catch (Exception ex) {
-            Canary.logDebug("Failed to construct a UpdateWindowProperty packet", ex);
+            log.error("Failed to construct a UpdateWindowProperty packet", ex);
             return null;
         }
     }
@@ -519,7 +520,7 @@ public class CanaryPacketFactory implements PacketFactory {
             return createPacket(130, x, y, z, text);
         }
         catch (Exception ex) {
-            Canary.logDebug("Failed to construct a UpdateSign packet", ex);
+            log.error("Failed to construct a UpdateSign packet", ex);
             return null;
         }
     }
@@ -530,7 +531,7 @@ public class CanaryPacketFactory implements PacketFactory {
             return createPacket(131, itemId, uniqueId, data);
         }
         catch (Exception ex) {
-            Canary.logDebug("Failed to construct a ItemData packet", ex);
+            log.error("Failed to construct a ItemData packet", ex);
             return null;
         }
     }
@@ -541,7 +542,7 @@ public class CanaryPacketFactory implements PacketFactory {
             return createPacket(132, x, y, z, action, compoundTag);
         }
         catch (Exception ex) {
-            Canary.logDebug("Failed to construct a UpdateTileEntity packet", ex);
+            log.error("Failed to construct a UpdateTileEntity packet", ex);
             return null;
         }
     }
@@ -552,7 +553,7 @@ public class CanaryPacketFactory implements PacketFactory {
             return createPacket(133, id, x, y, z);
         }
         catch (Exception ex) {
-            Canary.logDebug("Failed to construct a TileEditorOpen packet", ex);
+            log.error("Failed to construct a TileEditorOpen packet", ex);
             return null;
         }
     }
@@ -563,7 +564,7 @@ public class CanaryPacketFactory implements PacketFactory {
             return createPacket(200, statId, amount);
         }
         catch (Exception ex) {
-            Canary.logDebug("Failed to construct a IncrementStatistic packet", ex);
+            log.error("Failed to construct a IncrementStatistic packet", ex);
             return null;
         }
     }
@@ -574,7 +575,7 @@ public class CanaryPacketFactory implements PacketFactory {
             return createPacket(201, name, connected, ping);
         }
         catch (Exception ex) {
-            Canary.logDebug("Failed to construct a PlayerInfo packet", ex);
+            log.error("Failed to construct a PlayerInfo packet", ex);
             return null;
         }
     }

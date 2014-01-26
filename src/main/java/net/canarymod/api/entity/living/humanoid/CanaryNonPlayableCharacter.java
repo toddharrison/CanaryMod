@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static net.canarymod.Canary.log;
+
 /**
  * NonPlayableCharacter implementation
  *
@@ -161,15 +163,13 @@ public class CanaryNonPlayableCharacter extends CanaryHuman implements NonPlayab
                         }
                     }
                     catch (Exception ex) {
-                        Canary.logWarning("Exception while calling onUpdate in behavior" + behavior.getClass().getSimpleName() + " for NPC " + this.getName());
-                        Canary.logStacktrace("", ex);
+                        log.error("Exception while calling onUpdate in behavior" + behavior.getClass().getSimpleName() + " for NPC " + this.getName(), ex);
                     }
                 }
             }
         }
         catch (Exception ex) {
-            Canary.logWarning("Exception occured while calling update for NPC " + this.getName());
-            Canary.logStacktrace("", ex);
+            log.error("Exception while calling update for NPC " + this.getName(), ex);
         }
     }
 
@@ -183,15 +183,13 @@ public class CanaryNonPlayableCharacter extends CanaryHuman implements NonPlayab
                         }
                     }
                     catch (Exception ex) {
-                        Canary.logWarning("Exception occured while calling onClicked in behavior" + behavior.getClass().getSimpleName() + " for NPC " + this.getName());
-                        Canary.logStacktrace("", ex);
+                        log.error("Exception while calling onClicked in behavior" + behavior.getClass().getSimpleName() + " for NPC " + this.getName(), ex);
                     }
                 }
             }
         }
         catch (Exception ex) {
-            Canary.logWarning("Exception while calling clicked for NPC " + this.getName());
-            Canary.logStacktrace("", ex);
+            log.error("Exception while calling clicked for NPC " + this.getName(), ex);
         }
     }
 
@@ -205,14 +203,13 @@ public class CanaryNonPlayableCharacter extends CanaryHuman implements NonPlayab
                         }
                     }
                     catch (Exception ex) {
-                        Canary.logWarning("Exception while calling onAttack in behavior" + behavior.getClass().getSimpleName() + " for NPC " + this.getName());
+                        log.error("Exception while calling onAttack in behavior" + behavior.getClass().getSimpleName() + " for NPC " + this.getName(), ex);
                     }
                 }
             }
         }
         catch (Exception ex) {
-            Canary.logWarning("Exception occured while calling attacked for NPC " + this.getName());
-            Canary.logStacktrace("", ex);
+            log.error("Exception occured while calling attacked for NPC " + this.getName(), ex);
         }
     }
 
@@ -224,14 +221,13 @@ public class CanaryNonPlayableCharacter extends CanaryHuman implements NonPlayab
                         behavior.onDestroy();
                     }
                     catch (Exception ex) {
-                        Canary.logWarning("Exception while calling onDestroyed in behavior" + behavior.getClass().getSimpleName() + " for NPC " + this.getName());
+                        log.error("Exception while calling onDestroyed in behavior" + behavior.getClass().getSimpleName() + " for NPC " + this.getName(), ex);
                     }
                 }
             }
         }
         catch (Exception ex) {
-            Canary.logWarning("Exception occured while calling destroyed for NPC " + this.getName());
-            Canary.logStacktrace("", ex);
+            log.error("Exception occured while calling destroyed for NPC " + this.getName(), ex);
         }
     }
 

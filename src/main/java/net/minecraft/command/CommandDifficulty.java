@@ -51,7 +51,7 @@ public class CommandDifficulty extends CommandBase {
 
     public List a(ICommandSender icommandsender, String[] astring) {
         return astring.length == 1 ? a(astring, new String[]{ "peaceful", "easy", "normal", "hard" })
-                : astring.length == 2 ? TabCompleteHelper.matchToLoadedWorldOfDimension(astring, DimensionType.fromId(0)) // Pass existing worlds to tab complete
+                : astring.length == 2 ? TabCompleteHelper.matchToLoadedWorldOfDimension(astring, DimensionType.NORMAL) // Pass existing worlds to tab complete
                 : null;
     }
 }

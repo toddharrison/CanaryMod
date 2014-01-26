@@ -21,6 +21,8 @@ import net.minecraft.world.storage.SaveHandler;
 import java.util.LinkedList;
 import java.util.List;
 
+import static net.canarymod.Canary.log;
+
 /**
  * Offline Player implementation
  *
@@ -274,7 +276,7 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
     @Override
     public void save() {
         if (isOnline()) {
-            Canary.logDebug("Attempted to save an online player! (" + getName() + ")");
+            log.warn("Attempted to save an online player! (" + getName() + ")");
             return;
         }
         if (getNBT() != null) {
@@ -284,7 +286,7 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
                 shandler.writePlayerNbt(getName(), (CanaryCompoundTag) getNBT());
             }
             else {
-                Canary.logServerMessage(getName() + "'s OfflinePlayer could not be saved! Unsupported SaveHandler!");
+                log.error(getName() + "'s OfflinePlayer could not be saved! Unsupported SaveHandler!");
             }
         }
     }

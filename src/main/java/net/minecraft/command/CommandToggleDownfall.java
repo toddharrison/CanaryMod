@@ -46,6 +46,6 @@ public class CommandToggleDownfall extends CommandBase {
     */
 
     public List a(ICommandSender icommandsender, String[] astring) {
-        return astring.length == 1 ? TabCompleteHelper.matchToLoadedWorldOfDimension(astring, DimensionType.fromId(0)) : null;
+        return astring.length == 1 ? TabCompleteHelper.matchToLoadedWorldOfDimension(astring, DimensionType.NORMAL) : null;
     }
 }

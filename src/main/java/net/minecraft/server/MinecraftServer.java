@@ -146,7 +146,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
         this.l = file1;
         this.o = new NetworkSystem(this);
         this.n = new ServerCommandManager();
-        this.j = new AnvilSaveConverter(file1, net.canarymod.api.world.DimensionType.fromName("NORMAL"));
+        this.j = new AnvilSaveConverter(file1, DimensionType.NORMAL);
         this.S = (new YggdrasilAuthenticationService(proxy, UUID.randomUUID().toString())).createMinecraftSessionService();
         this.as();
         // CanaryMod
@@ -195,7 +195,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
         CanarySaveConverter converter = new CanarySaveConverter(worldFolder);
 
         if (converter.isVanillaFormat()) {
-            Canary.logInfo("World " + name + " is Vanilla. Will now attempt to convert.");
+            Canary.log.info("World " + name + " is Vanilla. Will now attempt to convert.");
             converter.convert();
         }
         AnvilSaveHandler isavehandler = new AnvilSaveHandler(new File("worlds/"), name, true, dimType);
@@ -239,7 +239,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
             }
         }
         else {
-            world = new WorldServerMulti(this, isavehandler, name, dimType.getId(), worldsettings, (WorldServer) ((CanaryWorld) worldManager.getWorld(name, net.canarymod.api.world.DimensionType.fromName("NORMAL"), true)).getHandle(), this.a);
+            world = new WorldServerMulti(this, isavehandler, name, dimType.getId(), worldsettings, (WorldServer) ((CanaryWorld) worldManager.getWorld(name, net.canarymod.api.world.DimensionType.NORMAL, true)).getHandle(), this.a);
         }
 
         world.a((IWorldAccess) (new WorldManager(this, world)));
@@ -360,7 +360,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
                 this.k.e();
             }
             // CanaryMod disable plugins:
-            Canary.logInfo("Disabling Plugins ...");
+            Canary.log.info("Disabling Plugins ...");
             Canary.loader().disableAllPlugins();
         }
     }
@@ -630,6 +630,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
         //
     }
 
+    @Deprecated //CanaryMod: deprecate method
     public boolean v() {
         throw new UnsupportedOperationException("allow-nether has been moved to a per-world configuration!");
     }
@@ -724,7 +725,8 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
             });
         }
         catch (Exception exception) {
-            h.fatal("Failed to start the minecraft server", exception);
+            //h.fatal("Failed to start the minecraft server", exception);
+            throw new RuntimeException(exception); //We need to know something happen so we can terminate
         }
     }
 
@@ -751,7 +753,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
         h.warn(s0);
     }
 
-    @Deprecated
+    @Deprecated //CanaryMod: deprecate method
     public WorldServer a(int i0) {
         throw new UnsupportedOperationException("MinecraftServer.a(int) has" + " been replaced by MinecraftServer.getWorld(String, int).");
     }
@@ -830,7 +832,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
         });
         //if (this.b != null && this.b.length > 0 && this.b[0] != null) {
         for (net.canarymod.api.world.World cWorld : this.getWorldManager().getAllWorlds()) {
-            if (cWorld.getType() != DimensionType.fromId(0))
+            if (cWorld.getType() != DimensionType.NORMAL)
                 continue; // CanaryMod: Skip non-default dimentional worlds
             final WorldServer worldServer = (WorldServer) ((CanaryWorld) cWorld).getHandle();
             i0.g().a("Vec3 Pool Size", new Callable() {
@@ -1277,7 +1279,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
      * @param seed
      */
     public void loadWorld(String name, long seed) {
-        loadWorld(name, seed, net.canarymod.api.world.DimensionType.fromName("NORMAL"));
+        loadWorld(name, seed, net.canarymod.api.world.DimensionType.NORMAL);
     }
 
     public void loadWorld(String name, long seed, net.canarymod.api.world.DimensionType type) {

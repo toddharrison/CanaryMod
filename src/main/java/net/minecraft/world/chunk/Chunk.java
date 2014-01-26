@@ -1,6 +1,5 @@
 package net.minecraft.world.chunk;
 
-import net.canarymod.Canary;
 import net.canarymod.PortalReconstructJob;
 import net.canarymod.api.world.CanaryChunk;
 import net.canarymod.api.world.blocks.BlockType;
@@ -32,7 +31,6 @@ import org.apache.logging.log4j.Logger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -331,9 +329,9 @@ public class Chunk {
                     for (i7 = i3; i7 < i4; ++i7) {
                         // CanaryMod start: Catch corrupt index info
                         if (i7 >> 4 < 0 || i7 >> 4 >= 16) {
-                            Canary.logWarning("Invalid chunk info array index: " + (i7 >> 4));
-                            Canary.logWarning("x: " + i3 + ", z: " + i4);
-                            Canary.logWarning("Chunk location: " + i5 + ", " + i6);
+                            t.warn("Invalid chunk info array index: " + (i7 >> 4));
+                            t.warn("x: " + i3 + ", z: " + i4);
+                            t.warn("Chunk location: " + i5 + ", " + i6);
                             i7 = 0;
                         }
                         // CanaryMod end

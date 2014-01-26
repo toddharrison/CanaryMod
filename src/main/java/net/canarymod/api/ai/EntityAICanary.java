@@ -1,7 +1,8 @@
 package net.canarymod.api.ai;
 
-import net.canarymod.Canary;
 import net.minecraft.entity.ai.EntityAIBase;
+
+import static net.canarymod.Canary.log;
 
 /**
  * @author Somners
@@ -20,7 +21,7 @@ public class EntityAICanary extends EntityAIBase {
             return ai.shouldExecute();
         }
         catch (Exception ex) {
-            this.log(String.format("Excpetion in AI class '%s' while executing method '%s'",
+            log.error(String.format("Excpetion in AI class '%s' while executing method '%s'",
                     ai.getClass().getName(), ai.getClass().getName() + ".shouldExecute()"), ex);
         }
         return false;
@@ -32,7 +33,7 @@ public class EntityAICanary extends EntityAIBase {
             return ai.continueExecuting();
         }
         catch (Exception ex) {
-            this.log(String.format("Excpetion in AI class '%s' while executing method '%s'",
+            log.error(String.format("Excpetion in AI class '%s' while executing method '%s'",
                     ai.getClass().getName(), ai.getClass().getName() + ".continueExecuting()"), ex);
         }
         return false;
@@ -44,7 +45,7 @@ public class EntityAICanary extends EntityAIBase {
             return ai.isContinuous();
         }
         catch (Exception ex) {
-            this.log(String.format("Excpetion in AI class '%s' while executing method '%s'",
+            log.error(String.format("Excpetion in AI class '%s' while executing method '%s'",
                     ai.getClass().getName(), ai.getClass().getName() + ".isContinuous()"), ex);
         }
         return false;
@@ -56,7 +57,7 @@ public class EntityAICanary extends EntityAIBase {
             ai.startExecuting();
         }
         catch (Exception ex) {
-            this.log(String.format("Excpetion in AI class '%s' while executing method '%s'",
+            log.error(String.format("Excpetion in AI class '%s' while executing method '%s'",
                     ai.getClass().getName(), ai.getClass().getName() + ".startExecuting()"), ex);
         }
     }
@@ -67,7 +68,7 @@ public class EntityAICanary extends EntityAIBase {
             ai.resetTask();
         }
         catch (Exception ex) {
-            this.log(String.format("Excpetion in AI class '%s' while executing method '%s'",
+            log.error(String.format("Excpetion in AI class '%s' while executing method '%s'",
                     ai.getClass().getName(), ai.getClass().getName() + ".resetTask()"), ex);
         }
     }
@@ -78,17 +79,13 @@ public class EntityAICanary extends EntityAIBase {
             ai.updateTask();
         }
         catch (Exception ex) {
-            this.log(String.format("Excpetion in AI class '%s' while executing method '%s'",
+            log.error(String.format("Excpetion in AI class '%s' while executing method '%s'",
                     ai.getClass().getName(), ai.getClass().getName() + ".updateTask()"), ex);
         }
     }
 
     public AIBase getAIBase() {
         return this.ai;
-    }
-
-    private void log(String msg, Throwable t) {
-        Canary.logStacktrace(msg, t);
     }
 
 }

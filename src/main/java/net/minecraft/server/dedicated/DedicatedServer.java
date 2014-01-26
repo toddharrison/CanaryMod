@@ -1,6 +1,7 @@
 package net.minecraft.server.dedicated;
 
 import net.canarymod.Canary;
+import net.canarymod.Main;
 import net.canarymod.api.CanaryServer;
 import net.canarymod.config.Configuration;
 import net.canarymod.config.ServerConfiguration;
@@ -185,7 +186,7 @@ public class DedicatedServer extends MinecraftServer implements IServer {
         this.l();
         this.U();
         this.c(worldcfg.getMaxBuildHeight());
-        this.c((this.ad() + 8) / 16 * 16);
+        this.c((this.ad() + 8) / 16 << 4);
         this.c(MathHelper.a(this.ad(), 64, 256));
         worldcfg.getFile().setInt("max-build-height", this.ad());
         // CanaryMod enable plugins here, before the first world is loaded.
@@ -198,7 +199,7 @@ public class DedicatedServer extends MinecraftServer implements IServer {
         }
 
         // CanaryMod changed call to initWorld
-        net.canarymod.api.world.DimensionType wt = net.canarymod.api.world.DimensionType.fromName("NORMAL");
+        net.canarymod.api.world.DimensionType wt = net.canarymod.api.world.DimensionType.NORMAL;
 
         this.initWorld(this.M(), i2, worldtype, wt, s2);
         //
@@ -220,18 +221,22 @@ public class DedicatedServer extends MinecraftServer implements IServer {
         return true;
     }
 
+    @Deprecated //CanaryMod: deprecate method
     public boolean h() {
         throw new UnsupportedOperationException("Generate-structures setting has been moved to a per-world configuration!");
     }
 
+    @Deprecated //CanaryMod: deprecate method
     public WorldSettings.GameType i() {
         throw new UnsupportedOperationException("GameType setting has been moved to a per-world configuration!");
     }
 
+    @Deprecated //CanaryMod: deprecate method
     public EnumDifficulty j() {
         throw new UnsupportedOperationException("Difficulty setting has been moved to a per-world configuration!");
     }
 
+    @Deprecated //CanaryMod: deprecate method
     public boolean k() {
         throw new UnsupportedOperationException("Hardcoremode setting has been moved to a per-world configuration!");
     }
@@ -277,10 +282,12 @@ public class DedicatedServer extends MinecraftServer implements IServer {
         this.aw();
     }
 
+    @Deprecated //CanaryMod: deprecate method
     public boolean v() {
         throw new UnsupportedOperationException("allow-nether has been moved to a per-world config");
     }
 
+    @Deprecated //CanaryMod: deprecate method
     public boolean O() {
         throw new UnsupportedOperationException("spawn-monsters has been moved to a per-world config");
     }
@@ -319,26 +326,32 @@ public class DedicatedServer extends MinecraftServer implements IServer {
         return (DedicatedPlayerList) super.af();
     }
 
+    @Deprecated //CanaryMod: deprecate method
     public int a(String s0, int i0) {
         throw new UnsupportedOperationException("Setting int values to server.properties is disabled!");
     }
 
+    @Deprecated //CanaryMod: deprecate method
     public String a(String s0, String s1) {
         throw new UnsupportedOperationException("Setting String values to server.properties is disabled!");
     }
 
+    @Deprecated //CanaryMod: deprecate method
     public boolean a(String s0, boolean flag0) {
         throw new UnsupportedOperationException("Setting boolean values to server.properties is disabled!");
     }
 
+    @Deprecated //CanaryMod: deprecate method
     public void a(String s0, Object object) {
         throw new UnsupportedOperationException("Setting Object values to server.properties is disabled!");
     }
 
+    @Deprecated //CanaryMod: deprecate method
     public void a() {
         throw new UnsupportedOperationException("Cannot finish this request. DedicatedServer.a() is deprecated");
     }
 
+    @Deprecated //CanaryMod: deprecate method
     public String b() {
         throw new UnsupportedOperationException("Cannot finish this request. DedicatedServer.b_() is deprecated");
     }
@@ -355,9 +368,16 @@ public class DedicatedServer extends MinecraftServer implements IServer {
             Canary.getServer().getCurrentGUI().start();
             this.o = true;
             MinecraftServer.setHeadless(false);
-        } catch (Exception e) {
-            // The gui is causing hang ups so just ignore the gui entirely
-            Canary.logDerp("GUI failed to start.", e);
+        }
+        catch (Exception ex) {
+            // Gui Failure detected
+            if (Main.canRunUncontrolled() || System.console() != null) { //If we can run uncontrolled, then just send a warning
+                Canary.log.warn("GUI failed to start.", ex);
+            }
+            else { //Can't run uncontrolled, error out and kill ourselves for being failures...
+                Canary.log.fatal("GUI failed to start and no console availible to control the server... Exiting...", ex);
+                System.exit(42);
+            }
         }
     }
 
@@ -374,6 +394,7 @@ public class DedicatedServer extends MinecraftServer implements IServer {
         return Configuration.getServerConfig().isCommandBlockEnabled();
     }
 
+    @Deprecated //CanaryMod: deprecate method
     public int am() {
         throw new UnsupportedOperationException("spawn-protection has been moved to a per-world config!");
     }
@@ -402,13 +423,13 @@ public class DedicatedServer extends MinecraftServer implements IServer {
     }
 
     public int l() {
-        // MERGE: This must be in server.cfg instead! XXX
         // return this.p.a("op-permission-level", 4);
-        return 4;
+        return 4; //CanaryMod: Always return Op Level 4, per-player permissions handles the rest
     }
 
     public void d(int i0) {
         super.d(i0);
+        // CanaryMod: Override config
         ServerConfiguration cfg = Configuration.getServerConfig();
         cfg.setPlayerIdleTimeout(i0);
         //this.p.a("player-idle-timeout", Integer.valueOf(i0));
@@ -416,6 +437,7 @@ public class DedicatedServer extends MinecraftServer implements IServer {
     }
 
     public boolean ar() {
+        // CanaryMod: Config override
         //return this.l.a("announce-player-achievements", true);
         return Configuration.getServerConfig().getAnnounceAchievements();
     }

@@ -47,7 +47,7 @@ public class CanaryMod extends Canary {
         DatabaseLoader.load();
 
         this.config = new Configuration();
-        this.setLoggerLevelDynamic();
+        this.setLoggerLevelDynamic(); //Once we know if debug is enabled, you can change the level accordingly
         this.motd = new MessageOfTheDay();
         // Initialize the subsystems that do not rely on others
         this.commandManager = new CommandManager();
@@ -115,13 +115,7 @@ public class CanaryMod extends Canary {
     static void setLoggerLevelDynamic() {
         LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
         LoggerConfig logger = ctx.getConfiguration().getLoggers().get(LogManager.ROOT_LOGGER_NAME);
-        if (Configuration.getServerConfig().isDebugMode()) {
-            logger.setLevel(Level.DEBUG);
-            ctx.updateLoggers();
-        }
-        else {
-            logger.setLevel(Level.INFO);
-            ctx.updateLoggers();
-        }
+        logger.setLevel(Configuration.getServerConfig().isDebugMode() ? Level.ALL : Level.INFO);
+        ctx.updateLoggers();
     }
 }

@@ -8,6 +8,8 @@ import net.canarymod.hook.system.UnloadWorldHook;
 import java.io.File;
 import java.util.*;
 
+import static net.canarymod.Canary.log;
+
 /**
  * This is a container for all of the worlds.
  *
@@ -23,9 +25,6 @@ public class CanaryWorldManager implements WorldManager {
     private static final Object worldLock = new Object();
 
     public CanaryWorldManager() {
-        DimensionType.registerType("NORMAL", 0);
-        DimensionType.registerType("NETHER", -1);
-        DimensionType.registerType("END", 1);
         File worldsFolders = new File("worlds");
 
         if (!worldsFolders.exists()) {
@@ -50,7 +49,7 @@ public class CanaryWorldManager implements WorldManager {
             markedForUnload = new HashMap<String, Boolean>(1);
         }
         catch (NullPointerException e) {
-            Canary.logDerp("Failed to initialise world manager!", e);
+            log.error("Failed to initialize world manager!", e);
         }
     }
 
@@ -61,7 +60,7 @@ public class CanaryWorldManager implements WorldManager {
      * @param world
      */
     public void addWorld(CanaryWorld world) {
-        Canary.logDebug(String.format("Adding new world to world manager, filed as %s_%s", world.getName(), world.getType()
+        log.debug(String.format("Adding new world to world manager, filed as %s_%s", world.getName(), world.getType()
                 .getName()));
         loadedWorlds.put(world.getName() + "_" + world.getType().getName(), world);
     }
@@ -84,10 +83,10 @@ public class CanaryWorldManager implements WorldManager {
         else {
             if (autoload) {
                 if (existingWorlds.contains(name)) {
-                    return loadWorld(name, DimensionType.fromId(0));
+                    return loadWorld(name, DimensionType.NORMAL);
                 }
                 else if (existingWorlds.contains(name + "_NORMAL")) {
-                    return loadWorld(name, DimensionType.fromId(0));
+                    return loadWorld(name, DimensionType.NORMAL);
                 }
                 else {
                     throw new UnknownWorldException("World " + name + " is unknown. Autoload was enabled for this call.");
@@ -104,17 +103,17 @@ public class CanaryWorldManager implements WorldManager {
         }
         else {
             if (worldExists(world + "_" + type.getName()) && autoload) {
-                Canary.logDebug("World exists but is not loaded. Loading ...");
+                log.debug("World exists but is not loaded. Loading ...");
                 return loadWorld(world, type);
             }
             else {
                 if (autoload) {
-                    Canary.logDebug("World does not exist, we can autoload, will load!");
+                    log.debug("World does not exist, we can autoload, will load!");
                     createWorld(world, type);
                     return loadedWorlds.get(world + "_" + type.getName());
                 }
                 else {
-                    Canary.logSevere("Tried to get a non-existing world: " + world + " - you must create it before you can load it or pass autoload = true");
+                    log.error("Tried to get a non-existing world: " + world + " - you must create it before you can load it or pass autoload = true");
                     return null;
                 }
 
@@ -136,7 +135,7 @@ public class CanaryWorldManager implements WorldManager {
 
     @Override
     public boolean createWorld(String name, DimensionType type) {
-        Canary.logDebug("Creating a new world! " + name + "_" + type.getName());
+        log.debug("Creating a new world! " + name + "_" + type.getName());
         ((CanaryServer) Canary.getServer()).getHandle().loadWorld(name, new Random().nextLong(), type);
         updateExistingWorldsList(name, type);
         return true;
@@ -168,7 +167,7 @@ public class CanaryWorldManager implements WorldManager {
         boolean success = file.renameTo(new File(dir, file.getName()));
 
         if (!success) {
-            Canary.logSevere("Attempted to move world " + name + " but it appeared to be still in use! Worlds should get unloaded before they are removed!");
+            log.error("Attempted to move world " + name + " but it appeared to be still in use! Worlds should get unloaded before they are removed!");
         }
     }
 
@@ -176,7 +175,7 @@ public class CanaryWorldManager implements WorldManager {
     public Collection<World> getAllWorlds() {
         // before we return all the worlds, first check if there are any worlds marked for unload!
         if (markedForUnload.size() > 0) {
-            Canary.logDebug("Processing worlds for unload");
+            log.debug("Processing worlds for unload");
             removeWorlds();
             // markedForUnload.clear();
         }
@@ -209,7 +208,7 @@ public class CanaryWorldManager implements WorldManager {
                         }
                     }
                     else {
-                        Canary.logWarning(world.getFqName() + " was scheduled for unload but there were still players in it. Not unloading world!");
+                        log.warn(world.getFqName() + " was scheduled for unload but there were still players in it. Not unloading world!");
                         continue;
                     }
                 }
@@ -250,7 +249,7 @@ public class CanaryWorldManager implements WorldManager {
     @Override
     public String[] getLoadedWorldsNames() {
         if (markedForUnload.size() > 0) {
-            Canary.logDebug("Processing worlds for unload");
+            log.debug("Processing worlds for unload");
             removeWorlds();
         }
         Set<String> names = new HashSet<String>();
@@ -263,7 +262,7 @@ public class CanaryWorldManager implements WorldManager {
     @Override
     public String[] getLoadedWorldsNamesOfDimension(DimensionType dimensionType) {
         if (markedForUnload.size() > 0) {
-            Canary.logDebug("Processing worlds for unload");
+            log.debug("Processing worlds for unload");
             removeWorlds();
         }
         Set<String> worlds = new HashSet<String>();

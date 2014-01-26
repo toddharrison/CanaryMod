@@ -19,6 +19,7 @@ import net.canarymod.api.world.blocks.CanaryCommandBlock;
 import net.canarymod.config.Configuration;
 import net.canarymod.hook.command.ConsoleCommandHook;
 import net.canarymod.hook.system.PermissionCheckHook;
+import net.canarymod.logger.Logman;
 import net.canarymod.tasks.ServerTask;
 import net.canarymod.tasks.ServerTaskManager;
 import net.minecraft.command.ICommandSender;
@@ -43,6 +44,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static net.canarymod.Canary.log;
 
 /**
  * Main entry point of the software
@@ -220,7 +223,7 @@ public class CanaryServer implements Server {
     @Override
     public void setTimer(String uniqueName, int time) {
         if (timers.containsKey(uniqueName)) {
-            Canary.logWarning("Unique key timer " + uniqueName + " is already running, skipping.");
+            log.warn("Unique key timer " + uniqueName + " is already running, skipping.");
             return;
         }
         ServerTimer newTimer = new ServerTimer(uniqueName);
@@ -367,12 +370,12 @@ public class CanaryServer implements Server {
 
     @Override
     public void message(String message) {
-        Canary.logServerMessage(message);
+        log.info(Logman.MESSAGE, message);
     }
 
     @Override
     public void notice(String message) {
-        Canary.logNotice(message);
+        log.info(Logman.NOTICE, message);
     }
 
     /**

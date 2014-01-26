@@ -6,6 +6,9 @@ import net.canarymod.api.world.DimensionType;
 import net.canarymod.api.world.World;
 import net.minecraft.scoreboard.ServerScoreboard;
 
+import static net.canarymod.Canary.log;
+
+
 /**
  * @author Somners
  */
@@ -13,7 +16,7 @@ public class CanaryScoreboardManager implements ScoreboardManager {
 
     @Override
     public Scoreboard getScoreboard(String worldName) {
-        return this.getScoreboard(Canary.getServer().getWorldManager().getWorld(worldName, DimensionType.fromId(0), true));
+        return this.getScoreboard(Canary.getServer().getWorldManager().getWorld(worldName, DimensionType.NORMAL, true));
     }
 
     @Override
@@ -22,7 +25,7 @@ public class CanaryScoreboardManager implements ScoreboardManager {
             return null;
         }
         if (world.getType() != DimensionType.fromId(0)) {
-            world = Canary.getServer().getWorldManager().getWorld(world.getName(), DimensionType.fromId(0), true);
+            world = Canary.getServer().getWorldManager().getWorld(world.getName(), DimensionType.NORMAL, true);
         }
         return ((ServerScoreboard) ((CanaryWorld) world).getHandle().D).getCanaryScoreboard();
     }
@@ -41,10 +44,10 @@ public class CanaryScoreboardManager implements ScoreboardManager {
             new ScoreCanaryCriteria(criteria.newInstance());
         }
         catch (InstantiationException ex) {
-            Canary.logSevere("Exception Registering ScoreObjectiveCritera: " + criteria.getName());
+            log.error("Exception Registering ScoreObjectiveCritera: " + criteria.getName());
         }
         catch (IllegalAccessException ex) {
-            Canary.logSevere("Exception Registering ScoreObjectiveCritera: " + criteria.getName());
+            log.error("Exception Registering ScoreObjectiveCritera: " + criteria.getName());
         }
     }
 

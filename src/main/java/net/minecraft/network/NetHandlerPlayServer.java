@@ -1157,7 +1157,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
                 for (String chan : channel.split("\0")) {
                     Canary.channels().registerClient(chan, this.serverHandler);
                 }
-                Canary.logInfo(String.format("Player '%s' registered Custom Payload on channel(s) '%s'", this.b.getPlayer().getName(), Arrays.toString(channel.split("\0"))));
+                Canary.log.info(String.format("Player '%s' registered Custom Payload on channel(s) '%s'", this.b.getPlayer().getName(), Arrays.toString(channel.split("\0"))));
             }
             catch (Exception ex) {
                 c.error("Error receiving 'C17PacketCustomPayload': " + ex.getMessage(), ex);
@@ -1167,7 +1167,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
             try {
                 String channel = c17packetcustompayload.c();
                 Canary.channels().unregisterClient(channel, this.serverHandler);
-                Canary.logInfo(String.format("Player '%s' unregistered Custom Payload on channel '%s'", this.b.getPlayer().getName(), channel));
+                Canary.log.info(String.format("Player '%s' unregistered Custom Payload on channel '%s'", this.b.getPlayer().getName(), channel));
             }
             catch (Exception ex) {
                 c.error("Error receiving 'C17PacketCustomPayload': " + ex.getMessage(), ex);

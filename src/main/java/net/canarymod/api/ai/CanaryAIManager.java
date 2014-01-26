@@ -1,9 +1,10 @@
 package net.canarymod.api.ai;
 
-import net.canarymod.Canary;
 import net.minecraft.entity.ai.EntityAITasks;
 
 import java.util.Iterator;
+
+import static net.canarymod.Canary.log;
 
 /**
  * @author Somners
@@ -27,10 +28,10 @@ public class CanaryAIManager implements AIManager {
                 return true;
             }
             catch (InstantiationException ex) {
-                Canary.logStacktrace("Exception adding new AI taks in Canary's AIManager: ", ex);
+                log.error("Exception adding new AI taks in Canary's AIManager: ", ex);
             }
             catch (IllegalAccessException ex) {
-                Canary.logStacktrace("Exception adding new AI taks in Canary's AIManager: ", ex);
+                log.error("Exception adding new AI taks in Canary's AIManager: ", ex);
             }
         }
         return false;

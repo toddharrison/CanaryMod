@@ -90,7 +90,7 @@ public class CommandWeather extends CommandBase {
 
     public List a(ICommandSender icommandsender, String[] astring) {
         return astring.length == 1 ? a(astring, new String[]{ "clear", "rain", "thunder" })
-                : astring.length == 2 ? TabCompleteHelper.matchToLoadedWorldOfDimension(astring, DimensionType.fromId(0))
+                : astring.length == 2 ? TabCompleteHelper.matchToLoadedWorldOfDimension(astring, DimensionType.NORMAL)
                 : null;
     }
 }

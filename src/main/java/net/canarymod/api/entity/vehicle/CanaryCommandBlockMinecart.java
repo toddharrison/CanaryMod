@@ -5,9 +5,12 @@ import net.canarymod.api.entity.EntityType;
 import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.config.Configuration;
 import net.canarymod.hook.system.PermissionCheckHook;
+import net.canarymod.logger.Logman;
 import net.canarymod.user.Group;
 import net.minecraft.command.server.CommandBlockLogic;
 import net.minecraft.entity.EntityMinecartCommandBlock;
+
+import static net.canarymod.Canary.log;
 
 /**
  * Command Block Minecart wrapper implementation
@@ -15,6 +18,7 @@ import net.minecraft.entity.EntityMinecartCommandBlock;
  * @author Jason (darkdiplomat)
  */
 public class CanaryCommandBlockMinecart extends CanaryMinecart implements CommandBlockMinecart {
+    private static final String cmdPrefix = "[CommandBlockMinecart:%s] %s";
     Group group = Canary.usersAndGroups().getGroup(Configuration.getServerConfig().getCommandBlockGroupName()); // The group for permission checking
 
     /**
@@ -58,7 +62,7 @@ public class CanaryCommandBlockMinecart extends CanaryMinecart implements Comman
      */
     @Override
     public void notice(String message) {
-        Canary.logDebug("[NOTICE] ".concat(message));
+        log.info(Logman.NOTICE, String.format(cmdPrefix, getName(), message));
     }
 
     /**
@@ -66,7 +70,7 @@ public class CanaryCommandBlockMinecart extends CanaryMinecart implements Comman
      */
     @Override
     public void message(String message) {
-        Canary.logDebug(message);
+        log.info(Logman.MESSAGE, String.format(cmdPrefix, getName(), message));
     }
 
     /**

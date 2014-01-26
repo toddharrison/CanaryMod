@@ -12,8 +12,11 @@ import net.minecraft.server.gui.MinecraftServerGui;
 import javax.swing.*;
 import java.awt.*;
 
+import static net.canarymod.Canary.log;
+
 public class Main {
     private static CanaryMod mod;
+    private static boolean nocontrol;
 
     private static void initBird() {
         // Initialize the bird
@@ -32,7 +35,7 @@ public class Main {
      * @param args
      */
     public static void main(String[] args) {
-        Canary.logInfo("Starting: " + Canary.getImplementationTitle() + " " + Canary.getImplementationVersion());
+        log.info("Starting: " + Canary.getImplementationTitle() + " " + Canary.getImplementationVersion());
         try {
             Class.forName("org.sqlite.JDBC");
         }
@@ -41,29 +44,29 @@ public class Main {
         try {
             // Sets the default state for the gui, true is off, false is on
             MinecraftServer.setHeadless(true);
-            boolean runUnControlled = false, headless = GraphicsEnvironment.isHeadless();
+            boolean headless = GraphicsEnvironment.isHeadless();
             for (int index = 0; index < args.length; ++index) {
                 String key = args[index];
                 String value = index == args.length - 1 ? null : args[index + 1];
                 // Replace the nogui option with gui option so the gui is off by default
-                if (key.equals("gui") || key.equals("--gui")|| key.equals("-gui")) {
+                if (key.equals("gui") || key.equals("--gui") || key.equals("-gui")) {
                     MinecraftServer.setHeadless(false);
                 }
                 else if (key.equals("noControl") || key.equals("-noControl") || key.equals("--noControl")) {
-                    runUnControlled = true;
+                    nocontrol = true;
                 }
             }
 
             // Check if there is a Console in use and if we should launch a GUI as replacement for no console
             if (System.console() == null) {
-                if (!headless && !runUnControlled) { //if not headless, no console, and not unControlled, launch the GUI
+                if (!headless && !nocontrol) { //if not headless, no console, and not unControlled, launch the GUI
                     MinecraftServer.setHeadless(false);
                 }
-                else if (runUnControlled) { // If allowed to be unControlled, just log a warning
-                    Canary.logWarning("Server is starting with no Console or GUI be warned!");
+                else if (nocontrol) { // If allowed to be unControlled, just log a warning
+                    log.warn("Server is starting with no Console or GUI be warned!");
                 }
                 else { // No graphics environment and not allowed to be uncontrolled? KILL IT!
-                    Canary.logSevere("Server can not start no Console or GUI is available to control the server.");
+                    log.fatal("Server can not start. No Console or GUI is available to control the server.");
                     System.exit(42);
                 }
             }
@@ -71,7 +74,8 @@ public class Main {
             if (!MinecraftServer.isHeadless()) {
                 try {
                     UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-                } catch (Exception interruptedexception) {
+                }
+                catch (Exception interruptedexception) {
                     ;
                 }
                 MinecraftServerGui.getLog();
@@ -94,7 +98,8 @@ public class Main {
             mod.initMOTDListener();
         }
         catch (Throwable t) {
-            Canary.logStacktrace("Exception while starting the server: ", t);
+            log.fatal("Error occurred durring start up, unable to continue... ", t);
+            System.exit(42); //Just in case something did manage to start going
         }
     }
 
@@ -105,5 +110,9 @@ public class Main {
      */
     public static void restart(boolean reloadCanary) {
         throw new UnsupportedOperationException("Restart is not implemented yet!");
+    }
+
+    public static boolean canRunUncontrolled() {
+        return nocontrol;
     }
 }

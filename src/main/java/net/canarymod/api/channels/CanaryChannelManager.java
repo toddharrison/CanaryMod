@@ -1,12 +1,13 @@
 package net.canarymod.api.channels;
 
-import net.canarymod.Canary;
 import net.canarymod.api.CanaryNetServerHandler;
 import net.canarymod.api.NetServerHandler;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.channels.ChannelManager;
 import net.canarymod.channels.CustomPayloadChannelException;
 import net.minecraft.network.play.server.S3FPacketCustomPayload;
+
+import static net.canarymod.Canary.log;
 
 /**
  * @author Somners
@@ -41,7 +42,7 @@ public class CanaryChannelManager extends ChannelManager {
             }
         }
         catch (CustomPayloadChannelException ex) {
-            Canary.logStacktrace(ex.getMessage(), ex);
+            log.error(ex.getMessage(), ex);
         }
         return false;
     }
@@ -67,7 +68,7 @@ public class CanaryChannelManager extends ChannelManager {
             }
         }
         catch (CustomPayloadChannelException ex) {
-            Canary.logStacktrace(ex.getMessage(), ex);
+            log.error(ex.getMessage(), ex);
         }
         return toRet;
     }

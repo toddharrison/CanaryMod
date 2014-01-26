@@ -4,9 +4,12 @@ import net.canarymod.Canary;
 import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.config.Configuration;
 import net.canarymod.hook.system.PermissionCheckHook;
+import net.canarymod.logger.Logman;
 import net.canarymod.user.Group;
 import net.minecraft.command.server.CommandBlockLogic;
 import net.minecraft.tileentity.TileEntityCommandBlock;
+
+import static net.canarymod.Canary.log;
 
 /**
  * CommandBlock wrapper implementation
@@ -14,7 +17,7 @@ import net.minecraft.tileentity.TileEntityCommandBlock;
  * @author Jason (darkdiplomat)
  */
 public class CanaryCommandBlock extends CanaryTileEntity implements CommandBlock {
-
+    private static final String cmdPrefix = "[CommandBlock:%s] %s";
     Group group; // The group for permission checking
 
     /**
@@ -49,7 +52,7 @@ public class CanaryCommandBlock extends CanaryTileEntity implements CommandBlock
      */
     @Override
     public void notice(String message) {
-        Canary.logDebug("[NOTICE] ".concat(message));
+        log.info(Logman.NOTICE, String.format(cmdPrefix, getName(), message));
     }
 
     /**
@@ -57,7 +60,7 @@ public class CanaryCommandBlock extends CanaryTileEntity implements CommandBlock
      */
     @Override
     public void message(String message) {
-        Canary.logDebug(message);
+        log.info(Logman.MESSAGE, String.format(cmdPrefix, getName(), message));
     }
 
     /**

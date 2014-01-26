@@ -1,6 +1,5 @@
 package net.canarymod.api;
 
-import net.canarymod.Canary;
 import net.canarymod.api.entity.CanaryEntity;
 import net.canarymod.api.entity.Entity;
 import net.canarymod.api.entity.living.humanoid.CanaryPlayer;
@@ -12,6 +11,8 @@ import net.canarymod.api.world.World;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static net.canarymod.Canary.log;
 
 public class CanaryEntityTracker implements EntityTracker {
     private net.minecraft.entity.EntityTracker tracker;
@@ -32,8 +33,8 @@ public class CanaryEntityTracker implements EntityTracker {
         try {
             tracker.a((net.minecraft.entity.Entity) ((CanaryEntity) entity).getHandle());
         }
-        catch(Exception e) {
-            Canary.logWarning("Entitytracker error.", e);
+        catch (Exception e) {
+            log.error("Entitytracker error.", e);
         }
 
     }

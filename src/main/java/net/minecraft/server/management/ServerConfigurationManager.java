@@ -12,6 +12,7 @@ import net.canarymod.api.entity.living.humanoid.CanaryPlayer;
 import net.canarymod.api.nbt.CanaryCompoundTag;
 import net.canarymod.api.packet.CanaryPacket;
 import net.canarymod.api.world.CanaryWorld;
+import net.canarymod.api.world.DimensionType;
 import net.canarymod.api.world.position.Location;
 import net.canarymod.bansystem.Ban;
 import net.canarymod.config.Configuration;
@@ -31,19 +32,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S01PacketJoinGame;
-import net.minecraft.network.play.server.S02PacketChat;
-import net.minecraft.network.play.server.S03PacketTimeUpdate;
-import net.minecraft.network.play.server.S05PacketSpawnPosition;
-import net.minecraft.network.play.server.S07PacketRespawn;
-import net.minecraft.network.play.server.S09PacketHeldItemChange;
-import net.minecraft.network.play.server.S1DPacketEntityEffect;
-import net.minecraft.network.play.server.S1FPacketSetExperience;
-import net.minecraft.network.play.server.S2BPacketChangeGameState;
-import net.minecraft.network.play.server.S38PacketPlayerListItem;
-import net.minecraft.network.play.server.S39PacketPlayerAbilities;
-import net.minecraft.network.play.server.S3EPacketTeams;
-import net.minecraft.network.play.server.S3FPacketCustomPayload;
+import net.minecraft.network.play.server.*;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.scoreboard.Score;
 import net.minecraft.scoreboard.ScoreObjective;
@@ -406,7 +395,7 @@ public abstract class ServerConfigurationManager {
         s2 = s2.substring(s2.indexOf("/") + 1);
         s2 = s2.substring(0, s2.indexOf(":"));
 
-        PreConnectionHook hook = (PreConnectionHook) new PreConnectionHook(s2, s0, net.canarymod.api.world.DimensionType.fromId(0), Canary.getServer().getDefaultWorldName()).call();
+        PreConnectionHook hook = (PreConnectionHook) new PreConnectionHook(s2, s0, net.canarymod.api.world.DimensionType.NORMAL, Canary.getServer().getDefaultWorldName()).call();
 
         if (hook.getKickReason() != null) {
             return hook.getKickReason();
@@ -460,7 +449,7 @@ public abstract class ServerConfigurationManager {
 
         // CanaryMod read the players dat file to find out the world it was last in
         String worldName = Canary.getServer().getDefaultWorldName();
-        net.canarymod.api.world.DimensionType worldtype = net.canarymod.api.world.DimensionType.fromId(0);
+        net.canarymod.api.world.DimensionType worldtype = DimensionType.NORMAL;
         NBTTagCompound playertag = getPlayerDatByName(gameprofile.getName());
 
         if (playertag != null) {
