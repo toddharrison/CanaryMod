@@ -1,6 +1,8 @@
 package net.canarymod.api.factory;
 
 import net.canarymod.api.DataWatcher;
+import net.canarymod.api.chat.CanaryChatComponent;
+import net.canarymod.api.chat.ChatComponent;
 import net.canarymod.api.entity.CanaryEntity;
 import net.canarymod.api.entity.CanaryXPOrb;
 import net.canarymod.api.entity.Entity;
@@ -53,11 +55,6 @@ import static net.canarymod.Canary.log;
 public class CanaryPacketFactory implements PacketFactory {
     private final static String toofewargs = "Not enough arguments (Expected: %d Got: %d)",
             invalidArg = "Argument at Index: '%d' does not match a valid type. (Expected: '%s' Got: '%s')";
-    // Lists used as a way to verify a given list is of the proper type entirely
-    private List<Chunk> dummyChunkList;
-    private List<Position> dummyPositionList;
-    private List<Item> dummyItemList;
-    private Map<Stat, Integer> dummyStatMap;
 
     public Packet createPacket(int id, Object... args) throws InvalidPacketConstructionException {
         if (args == null || args.length < 1) {
@@ -69,7 +66,8 @@ public class CanaryPacketFactory implements PacketFactory {
             case 0x01: // 1
                 throw new InvalidPacketConstructionException(id, "JoinGame", "Join Game packets should only be handled by the Server");
             case 0x02: // 2
-                throw new InvalidPacketConstructionException(id, "Chat", "Unable to create Chat packets in this way");
+                verify(id, "Chat", 1, args, test(CanaryChatComponent.class, 1));
+                return new CanaryPacket(new S02PacketChat(((CanaryChatComponent) args[0]).getNative()));
             case 0x03: // 3
                 verify(id, "UpdateTime", 2, args, test(Long.class, 2));
                 return new CanaryPacket(new S03PacketTimeUpdate((Long) args[0], (Long) args[1], false));
@@ -279,6 +277,17 @@ public class CanaryPacketFactory implements PacketFactory {
             default:
                 throw new InvalidPacketConstructionException(id, "UNKNOWN", "Unknown Packet ID");
         }
+    }
+
+    @Override
+    public Packet chat(ChatComponent chatComponent) {
+        try {
+            return createPacket(2, chatComponent);
+        }
+        catch (InvalidPacketConstructionException ipcex) {
+            log.trace(ipcex);
+        }
+        return null;
     }
 
     @Override
