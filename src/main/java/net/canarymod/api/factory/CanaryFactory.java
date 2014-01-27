@@ -1,6 +1,6 @@
 package net.canarymod.api.factory;
 
-public class CanaryFactory implements Factory {
+public final class CanaryFactory implements Factory {
 
     private final ItemFactory itemFactory = new CanaryItemFactory();
     private final PotionFactory potionFactory = new CanaryPotionFactory();
@@ -8,6 +8,7 @@ public class CanaryFactory implements Factory {
     private final ObjectFactory objFactory = new CanaryObjectFactory();
     private final NBTFactory nbtFactory = new CanaryNBTFactory();
     private final PacketFactory pcktFactory = new CanaryPacketFactory();
+    private final ChatComponentFactory chatCompFactory = new CanaryChatComponentFactory();
 
     @Override
     public ItemFactory getItemFactory() {
@@ -37,6 +38,11 @@ public class CanaryFactory implements Factory {
     @Override
     public PacketFactory getPacketFactory() {
         return pcktFactory;
+    }
+
+    @Override
+    public ChatComponentFactory getChatComponentFactory() {
+        return chatCompFactory;
     }
 
 }
