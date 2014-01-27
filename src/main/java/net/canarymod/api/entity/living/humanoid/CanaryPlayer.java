@@ -7,6 +7,8 @@ import net.canarymod.api.CanaryServer;
 import net.canarymod.api.GameMode;
 import net.canarymod.api.NetServerHandler;
 import net.canarymod.api.PlayerListEntry;
+import net.canarymod.api.chat.CanaryChatComponent;
+import net.canarymod.api.chat.ChatComponent;
 import net.canarymod.api.entity.EntityType;
 import net.canarymod.api.entity.living.animal.CanaryHorse;
 import net.canarymod.api.inventory.CanaryAnimalInventory;
@@ -34,6 +36,7 @@ import net.canarymod.user.Group;
 import net.canarymod.warp.Warp;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.*;
+import net.minecraft.network.play.server.S02PacketChat;
 import net.minecraft.network.play.server.S2BPacketChangeGameState;
 import net.minecraft.network.play.server.S38PacketPlayerListItem;
 import net.minecraft.network.play.server.S39PacketPlayerAbilities;
@@ -845,6 +848,12 @@ public class CanaryPlayer extends CanaryHuman implements Player {
     @Override
     public String getLocale() {
         return getHandle().bN;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void sendChatComponent(ChatComponent chatComponent) {
+        this.sendPacket(new CanaryPacket(new S02PacketChat(((CanaryChatComponent) chatComponent).getNative())));
     }
 
     /** {@inheritDoc} */
