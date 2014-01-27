@@ -158,24 +158,18 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
     public void c(String s0) {
         // CanaryMod: KickHook
         new KickHook(serverHandler.getUser(), Canary.getServer(), s0).call();
-
         // CanaryMod: Forward to kickNoHook
         this.kickNoHook(s0);
     }
 
     public void kickNoHook(String s0) {
-        // CanaryMod: DisconnectionHook
-        final DisconnectionHook disconHook = (DisconnectionHook) new DisconnectionHook(this.b.getPlayer(), s0, "\u00A7E" + this.b.getDisplayName() + " left.").call();
-        //
-        final ChatComponentText chatcomponenttext = new ChatComponentText(disconHook.getReason());
+        final ChatComponentText chatcomponenttext = new ChatComponentText(s0);
         this.a.a(new S40PacketDisconnect(chatcomponenttext), new GenericFutureListener[]{ new GenericFutureListener() {
             public void operationComplete(Future future) {
                 NetHandlerPlayServer.this.a.a((IChatComponent) chatcomponenttext);
             }
-        } });
-        // CanaryMod unregester Custom Payload registrations
-        Canary.channels().unregisterClientAll(serverHandler);
-        //
+        }
+        });
         this.a.g();
     }
 
@@ -581,7 +575,8 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
 
     @Override
     public void a(IChatComponent ichatcomponent) {
-        c.info(this.b.b_() + " lost connection: " + ichatcomponent);
+        c.info(this.b.b_() + " lost connection: " + ichatcomponent.e());
+        this.d.au();
         ChatComponentTranslation chatcomponenttranslation = new ChatComponentTranslation("multiplayer.player.left", new Object[]{ this.b.c_() });
         chatcomponenttranslation.b().a(EnumChatFormatting.YELLOW);
 
