@@ -45,6 +45,7 @@ public class CanaryMod extends Canary {
 
         // This must be the first thing to call!
         DatabaseLoader.load();
+        NativeTranslate.initialize(); // Intialize native translation bridge
 
         this.config = new Configuration();
         this.setLoggerLevelDynamic(); //Once we know if debug is enabled, you can change the level accordingly
