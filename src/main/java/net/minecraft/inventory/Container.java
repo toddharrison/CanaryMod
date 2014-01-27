@@ -389,9 +389,11 @@ public abstract class Container {
     }
 
     public void b(EntityPlayer entityplayer) {
-        // CanaryMod: Inventory closing
-        new InventoryHook(((EntityPlayerMP) entityplayer).getPlayer(), inventory, true).call();
-        //
+        if (entityplayer instanceof EntityPlayerMP) { // CanaryMod: NPC somehow called this causing a crash
+            // CanaryMod: Inventory closing
+            new InventoryHook(((EntityPlayerMP) entityplayer).getPlayer(), inventory, true).call();
+            //
+        }
         InventoryPlayer inventoryplayer = entityplayer.bn;
 
         if (inventoryplayer.o() != null) {
