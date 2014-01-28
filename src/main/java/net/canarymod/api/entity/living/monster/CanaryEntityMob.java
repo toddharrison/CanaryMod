@@ -22,4 +22,9 @@ public abstract class CanaryEntityMob extends CanaryEntityLiving implements Enti
     public CanaryEntityMob(EntityFlying entity) {
         super(entity);
     }
+
+    @Override
+    public boolean isMob() {
+        return true;
+    }
 }

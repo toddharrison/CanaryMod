@@ -35,6 +35,11 @@ public class CanaryNonPlayableCharacter extends CanaryHuman implements NonPlayab
         this.behaviors = Collections.synchronizedList(new ArrayList<NPCBehavior>());
     }
 
+    @Override
+    public boolean isNPC() {
+        return true;
+    }
+
     /**
      * {@inheritDoc}
      */

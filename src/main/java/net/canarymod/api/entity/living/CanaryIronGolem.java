@@ -22,6 +22,11 @@ public class CanaryIronGolem extends CanaryEntityLiving implements IronGolem {
         super(entity);
     }
 
+    @Override
+    public boolean isGolem() {
+        return true;
+    }
+
     /**
      * {@inheritDoc}
      */

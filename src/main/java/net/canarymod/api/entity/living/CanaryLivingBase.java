@@ -1,13 +1,10 @@
 package net.canarymod.api.entity.living;
 
-import net.canarymod.Canary;
 import net.canarymod.api.CanaryDamageSource;
 import net.canarymod.api.DamageSource;
 import net.canarymod.api.DamageType;
 import net.canarymod.api.entity.CanaryEntity;
 import net.canarymod.api.entity.Entity;
-import net.canarymod.api.entity.living.humanoid.Player;
-import net.canarymod.api.packet.CanaryPacket;
 import net.canarymod.api.potion.CanaryPotion;
 import net.canarymod.api.potion.CanaryPotionEffect;
 import net.canarymod.api.potion.Potion;
@@ -16,8 +13,6 @@ import net.canarymod.api.potion.PotionEffectType;
 import net.canarymod.api.world.position.Location;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.network.play.server.S08PacketPlayerPosLook;
-import net.minecraft.network.play.server.S19PacketEntityHeadLook;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -27,6 +22,11 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
 
     public CanaryLivingBase(EntityLivingBase entity) {
         super(entity);
+    }
+
+    @Override
+    public boolean isLiving() {
+        return true;
     }
 
     /**
@@ -281,30 +281,27 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
         double xDiff = x - getX();
         double yDiff = y - getY();
         double zDiff = z - getZ();
-        double DistanceXZ = Math.sqrt(xDiff * xDiff + zDiff * zDiff);
-        double DistanceY = Math.sqrt(DistanceXZ * DistanceXZ + yDiff * yDiff);
-        double yaw = (Math.acos(xDiff / DistanceXZ) * 180 / Math.PI);
-        double pitch = (Math.acos(yDiff / DistanceY) * 180 - 90 / Math.PI);
 
-        if (zDiff < 0.0) {
-            yaw += (Math.abs(180 - yaw) * 2);
+        double distanceXZ = Math.sqrt(xDiff * xDiff + zDiff * zDiff);
+        double distanceY = Math.sqrt(distanceXZ * distanceXZ + yDiff * yDiff);
+
+        float rot = (float) Math.toDegrees(Math.acos(xDiff / distanceXZ));
+        float pitch = (float) (Math.toDegrees(Math.acos(yDiff / distanceY)) - 90.0D);
+        if (zDiff < 0.0D) {
+            rot += Math.abs(180.0D - rot) * 2.0D;
+        }
+        while (rot < -180.0F) {
+            rot += 360.0F;
         }
 
-        setRotation((float) yaw);
-        setPitch((float) pitch);
-
-        net.minecraft.network.Packet toSend;
-        //TODO: Probably just jacked this all sorts of up
-        if (isPlayer()) {
-            toSend = new S08PacketPlayerPosLook(getX(), getY(), getZ(), getRotation(), getPitch(), entity.E);
-            ((Player) this).sendPacket(new CanaryPacket(toSend));
+        while (rot >= 180.0F) {
+            rot -= 360.0F;
         }
-        else {
-            byte head = (byte) (((long) Math.floor((pitch * 256F) / 360F)) & 255);
+        rot -= 90.0F;
 
-            toSend = new S19PacketEntityHeadLook(entity, head);
-            Canary.getServer().getConfigurationManager().sendPacketToAllInWorld(getWorld().getName(), new CanaryPacket(toSend));
-        }
+        setRotation(rot);
+        setPitch(pitch);
+        setHeadRotation(rot);
     }
 
     /**
@@ -354,6 +351,16 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
         }
         swingArm();
         ((net.canarymod.api.entity.living.CanaryLivingBase) entity).getHandle().a(new net.minecraft.util.EntityDamageSource(getName(), getHandle()), damage);
+    }
+
+    @Override
+    public float getHeadRotation() {
+        return getHandle().aP;
+    }
+
+    @Override
+    public void setHeadRotation(float rot) {
+        getHandle().aP = rot;
     }
 
     /**

@@ -20,6 +20,11 @@ public class CanarySnowman extends CanaryEntityLiving implements Snowman {
         super(entity);
     }
 
+    @Override
+    public boolean isGolem() {
+        return true;
+    }
+
     /**
      * {@inheritDoc}
      */

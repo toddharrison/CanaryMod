@@ -3,7 +3,9 @@ package net.canarymod.api.entity.living.humanoid;
 import com.mojang.authlib.GameProfile;
 import net.canarymod.api.entity.CanaryEntity;
 import net.canarymod.api.entity.living.humanoid.npchelpers.EntityNPCJumpHelper;
+import net.canarymod.api.entity.living.humanoid.npchelpers.EntityNPCLookHelper;
 import net.canarymod.api.entity.living.humanoid.npchelpers.EntityNPCMoveHelper;
+import net.canarymod.api.entity.living.humanoid.npchelpers.PathNavigateNPC;
 import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.api.world.position.Location;
 import net.minecraft.entity.player.EntityPlayer;
@@ -25,6 +27,8 @@ import java.util.UUID;
 public final class EntityNonPlayableCharacter extends EntityPlayer {
     private EntityNPCMoveHelper move_helper;
     private EntityNPCJumpHelper jump_helper;
+    private EntityNPCLookHelper look_helper;
+    private PathNavigateNPC path_navigate;
 
     private static GameProfile genFakeProfile(String name) {
         UUID five$SaysthisisntUniqueAtAll = UUID.randomUUID();
@@ -36,6 +40,8 @@ public final class EntityNonPlayableCharacter extends EntityPlayer {
         World world = ((CanaryWorld) location.getWorld()).getHandle();
         this.move_helper = new EntityNPCMoveHelper(this);
         this.jump_helper = new EntityNPCJumpHelper(this);
+        this.look_helper = new EntityNPCLookHelper(this);
+        this.path_navigate = new PathNavigateNPC(this, ((CanaryWorld) location.getWorld()).getHandle());
         this.X = 0.0F;
         this.M = 0.0F;
         this.b((double) location.getX(), location.getY(), location.getZ(), location.getRotation(), location.getPitch());
@@ -121,6 +127,18 @@ public final class EntityNonPlayableCharacter extends EntityPlayer {
 
     public EntityNPCJumpHelper getJumpHelper() {
         return jump_helper;
+    }
+
+    public EntityNPCMoveHelper getMoveHelper() {
+        return move_helper;
+    }
+
+    public EntityNPCLookHelper getLook_helper() {
+        return look_helper;
+    }
+
+    public PathNavigateNPC getPathNavigate() {
+        return this.path_navigate;
     }
 
     public void a(float f0) {

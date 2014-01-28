@@ -1,10 +1,5 @@
 package net.canarymod.api.entity;
 
-import net.canarymod.api.entity.living.Golem;
-import net.canarymod.api.entity.living.LivingBase;
-import net.canarymod.api.entity.living.animal.EntityAnimal;
-import net.canarymod.api.entity.living.humanoid.Player;
-import net.canarymod.api.entity.living.monster.EntityMob;
 import net.canarymod.api.inventory.CanaryItem;
 import net.canarymod.api.inventory.Item;
 import net.canarymod.api.nbt.BaseTag;
@@ -199,32 +194,37 @@ public abstract class CanaryEntity implements Entity {
 
     @Override
     public boolean isItem() {
-        return this instanceof EntityItem;
+        return false;
     }
 
     @Override
     public boolean isLiving() {
-        return this instanceof LivingBase;
+        return false;
     }
 
     @Override
     public boolean isAnimal() {
-        return this instanceof EntityAnimal;
+        return false;
     }
 
     @Override
     public boolean isMob() {
-        return this instanceof EntityMob;
+        return false;
     }
 
     @Override
     public boolean isPlayer() {
-        return this instanceof Player;
+        return false;
     }
 
     @Override
     public boolean isGolem() {
-        return this instanceof Golem;
+        return false;
+    }
+
+    @Override
+    public boolean isNPC() {
+        return false;
     }
 
     @Override

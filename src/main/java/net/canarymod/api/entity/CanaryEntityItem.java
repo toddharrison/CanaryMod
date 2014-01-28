@@ -20,6 +20,11 @@ public class CanaryEntityItem extends CanaryEntity implements EntityItem {
         super(entity);
     }
 
+    @Override
+    public boolean isItem() {
+        return true;
+    }
+
     /**
      * {@inheritDoc}
      */

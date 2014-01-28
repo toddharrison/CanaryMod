@@ -73,6 +73,11 @@ public class CanaryPlayer extends CanaryHuman implements Player {
         initPlayerData();
     }
 
+    @Override
+    public boolean isPlayer() {
+        return true;
+    }
+
     /** {@inheritDoc} */
     @Override
     public EntityType getEntityType() {

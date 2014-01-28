@@ -26,6 +26,11 @@ public abstract class CanaryAnimal extends CanaryEntityLiving implements EntityA
         super(entity);
     }
 
+    @Override
+    public boolean isAnimal() {
+        return true;
+    }
+
     /**
      * {@inheritDoc}
      */
