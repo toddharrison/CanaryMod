@@ -1,5 +1,6 @@
 package net.minecraft.block;
 
+import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.blocks.CanaryBlock;
 import net.canarymod.hook.world.FlowHook;
 import net.canarymod.hook.world.LiquidDestroyHook;
@@ -311,7 +312,8 @@ public class BlockDynamicLiquid extends BlockLiquid {
     private boolean q(World world, int i0, int i1, int i2) {
         // CanaryMod: LiquidDestroy
         CanaryBlock dest = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
-        LiquidDestroyHook hook = (LiquidDestroyHook) new LiquidDestroyHook(dest).call();
+        BlockType liquid = this.J == Material.i ? BlockType.LavaFlowing : BlockType.WaterFlowing;
+        LiquidDestroyHook hook = (LiquidDestroyHook) new LiquidDestroyHook(liquid, dest).call();
         if (hook.isForceDestroy()) {
             return true;
         }
