@@ -3,6 +3,7 @@ package net.canarymod.api.entity.living;
 import net.canarymod.api.CanaryDamageSource;
 import net.canarymod.api.DamageSource;
 import net.canarymod.api.DamageType;
+import net.canarymod.api.attributes.AttributeMap;
 import net.canarymod.api.entity.CanaryEntity;
 import net.canarymod.api.entity.Entity;
 import net.canarymod.api.potion.CanaryPotion;
@@ -361,6 +362,11 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
     @Override
     public void setHeadRotation(float rot) {
         getHandle().aP = rot;
+    }
+
+    @Override
+    public AttributeMap getAttributeMap() {
+        return getHandle().bc().getWrapper();
     }
 
     /**
