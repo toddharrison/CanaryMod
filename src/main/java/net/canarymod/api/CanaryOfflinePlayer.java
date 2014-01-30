@@ -572,4 +572,39 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
         }
         return "UNKNOWN";
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public float getHealth() {
+        if (getNBT() != null) {
+            return getNBT().getFloat("HealF");
+        }
+        return 0.0F;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setHealth(float health) {
+        if (getNBT() != null) {
+            float newHealth = Math.max(0, health);
+            getNBT().put("HealF", newHealth);
+            getNBT().put("Health", (short) ((int) Math.ceil((double) newHealth)));
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void increaseHealth(float health) {
+        if (getNBT() != null) {
+            float newHealth = Math.max(0, getHealth() + health);
+            getNBT().put("HealF", health);
+            getNBT().put("Health", (short) ((int) Math.ceil((double) health)));
+        }
+    }
 }
