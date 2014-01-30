@@ -239,10 +239,9 @@ public class CanaryCompoundTag extends CanaryBaseTag implements CompoundTag {
     /**
      * {@inheritDoc}
      */
-    @SuppressWarnings("unchecked")
     @Override
-    public ListTag<? extends CanaryBaseTag> getListTag(String key) {
-        return new CanaryListTag<CanaryBaseTag>(getHandle().c(key, 0));
+    public <E extends BaseTag> ListTag<E> getListTag(String key) {
+        return new CanaryListTag<E>(getHandle().getListUnsafe(key));
     }
 
     /**

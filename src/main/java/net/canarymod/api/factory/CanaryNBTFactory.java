@@ -18,7 +18,7 @@ public final class CanaryNBTFactory implements NBTFactory {
      * {@inheritDoc}
      */
     @Override
-    public ByteTag newByteTag(String name, byte value) {
+    public ByteTag newByteTag(byte value) {
         return new CanaryByteTag(value);
     }
 
@@ -26,7 +26,7 @@ public final class CanaryNBTFactory implements NBTFactory {
      * {@inheritDoc}
      */
     @Override
-    public ByteArrayTag newByteArrayTag(String name, byte[] value) {
+    public ByteArrayTag newByteArrayTag(byte[] value) {
         return new CanaryByteArrayTag(value);
     }
 
@@ -34,7 +34,7 @@ public final class CanaryNBTFactory implements NBTFactory {
      * {@inheritDoc}
      */
     @Override
-    public DoubleTag newDoubleTag(String name, double value) {
+    public DoubleTag newDoubleTag(double value) {
         return new CanaryDoubleTag(value);
     }
 
@@ -42,7 +42,7 @@ public final class CanaryNBTFactory implements NBTFactory {
      * {@inheritDoc}
      */
     @Override
-    public FloatTag newFloatTag(String name, float value) {
+    public FloatTag newFloatTag(float value) {
         return new CanaryFloatTag(value);
     }
 
@@ -50,7 +50,7 @@ public final class CanaryNBTFactory implements NBTFactory {
      * {@inheritDoc}
      */
     @Override
-    public IntTag newIntTag(String name, int value) {
+    public IntTag newIntTag(int value) {
         return new CanaryIntTag(value);
     }
 
@@ -58,7 +58,7 @@ public final class CanaryNBTFactory implements NBTFactory {
      * {@inheritDoc}
      */
     @Override
-    public IntArrayTag newIntArrayTag(String name, int[] value) {
+    public IntArrayTag newIntArrayTag(int[] value) {
         return new CanaryIntArrayTag(value);
     }
 
@@ -66,7 +66,7 @@ public final class CanaryNBTFactory implements NBTFactory {
      * {@inheritDoc}
      */
     @Override
-    public <E extends BaseTag> ListTag<E> newListTag(String name) {
+    public <E extends BaseTag> ListTag<E> newListTag() {
         return new CanaryListTag<E>();
     }
 
@@ -74,7 +74,7 @@ public final class CanaryNBTFactory implements NBTFactory {
      * {@inheritDoc}
      */
     @Override
-    public LongTag newLongTag(String name, long value) {
+    public LongTag newLongTag(long value) {
         return new CanaryLongTag(value);
     }
 
@@ -82,7 +82,7 @@ public final class CanaryNBTFactory implements NBTFactory {
      * {@inheritDoc}
      */
     @Override
-    public ShortTag newShortTag(String name, short value) {
+    public ShortTag newShortTag(short value) {
         return new CanaryShortTag(value);
     }
 
@@ -90,7 +90,7 @@ public final class CanaryNBTFactory implements NBTFactory {
      * {@inheritDoc}
      */
     @Override
-    public StringTag newStringTag(String name, String value) {
+    public StringTag newStringTag(String value) {
         return new CanaryStringTag(value);
     }
 
@@ -98,31 +98,31 @@ public final class CanaryNBTFactory implements NBTFactory {
      * {@inheritDoc}
      */
     @Override
-    public BaseTag newTagFromType(NBTTagType type, String name, Object value) {
+    public BaseTag newTagFromType(NBTTagType type, Object value) {
         try {
             switch (type) {
                 case BYTE:
-                    return newByteTag(name, (Byte) value);
+                    return newByteTag((Byte) value);
                 case BYTE_ARRAY:
-                    return newByteArrayTag(name, (byte[]) value);
+                    return newByteArrayTag((byte[]) value);
                 case COMPOUND:
-                    return newCompoundTag(name);
+                    return newCompoundTag((String) value);
                 case DOUBLE:
-                    return newDoubleTag(name, (Double) value);
+                    return newDoubleTag((Double) value);
                 case FLOAT:
-                    return newFloatTag(name, (Float) value);
+                    return newFloatTag((Float) value);
                 case INT:
-                    return newIntTag(name, (Integer) value);
+                    return newIntTag((Integer) value);
                 case INT_ARRAY:
-                    return newIntArrayTag(name, (int[]) value);
+                    return newIntArrayTag((int[]) value);
                 case LIST:
-                    return newListTag(name);
+                    return newListTag();
                 case LONG:
-                    return newLongTag(name, (Long) value);
+                    return newLongTag((Long) value);
                 case SHORT:
-                    return newShortTag(name, (Short) value);
+                    return newShortTag((Short) value);
                 case STRING:
-                    return newStringTag(name, value == null ? "null" : (String) value);
+                    return newStringTag(value == null ? "null" : (String) value);
                 default:
                     return null;
             }

@@ -114,7 +114,7 @@ public class CanaryMobSpawnerLogic implements MobSpawnerLogic {
     public void setSpawnedEntities(MobSpawnerEntry... entries) {
         CanaryCompoundTag toSet = new CanaryCompoundTag(new NBTTagCompound());
         logic.b(toSet.getHandle());
-        ListTag<BaseTag> list = Canary.factory().getNBTFactory().newListTag("SpawnPotentials");
+        ListTag<BaseTag> list = Canary.factory().getNBTFactory().newListTag();
         for (MobSpawnerEntry entry : entries) {
             list.add(entry.getSpawnPotentialsTag());
         }
