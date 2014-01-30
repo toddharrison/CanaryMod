@@ -1,8 +1,10 @@
 package net.minecraft.server.management;
 
+import net.canarymod.api.GameMode;
 import net.canarymod.api.entity.living.humanoid.CanaryPlayer;
 import net.canarymod.api.world.blocks.CanaryBlock;
 import net.canarymod.hook.player.BlockDestroyHook;
+import net.canarymod.hook.player.GameModeChangeHook;
 import net.canarymod.hook.player.ItemUseHook;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -41,6 +43,14 @@ public class ItemInWorldManager {
     }
 
     public void a(WorldSettings.GameType worldsettings_gametype) {
+        // CanaryMod: GameModeChangeHook
+        if (this.c != worldsettings_gametype) {
+            GameModeChangeHook gmch = (GameModeChangeHook) new GameModeChangeHook(this.b.getPlayer(), GameMode.fromId(worldsettings_gametype.a())).call();
+            if (gmch.isCanceled()) {
+                return; //Blocked mode change
+            }
+        }
+        //
         this.c = worldsettings_gametype;
         worldsettings_gametype.a(this.b.bF);
         this.b.q();

@@ -535,7 +535,7 @@ public abstract class ServerConfigurationManager {
         entityplayermp1.setMetaData(entityplayermp.getMetaData());
         //
 
-        this.a(entityplayermp1, entityplayermp, worldserver); // XXX
+        this.a(entityplayermp1, entityplayermp, worldserver); // GameMode changing
         ChunkCoordinates chunkcoordinates1;
         if (chunkcoordinates != null) {
             chunkcoordinates1 = EntityPlayer.a(worldserver, chunkcoordinates, flag1);
@@ -552,6 +552,7 @@ public abstract class ServerConfigurationManager {
         while (worldserver.getCanaryWorld().getBlockAt(ToolBox.floorToBlock(entityplayermp1.t), ToolBox.floorToBlock(entityplayermp1.u + 1), ToolBox.floorToBlock(entityplayermp1.v)).getTypeId() != 0) {
             entityplayermp1.u += 1D;
         }
+
         //sending 2 respawn packets seems to force the client to clear its chunk cache. Removes ghosting blocks
         entityplayermp1.a.a((new S07PacketRespawn(entityplayermp1.aq, entityplayermp1.p.r, entityplayermp1.p.M().u(), entityplayermp1.c.b())));
         entityplayermp1.a.a((new S07PacketRespawn(entityplayermp1.aq, entityplayermp1.p.r, entityplayermp1.p.M().u(), entityplayermp1.c.b())));
@@ -607,6 +608,10 @@ public abstract class ServerConfigurationManager {
             PotionEffect potioneffect = (PotionEffect) o1;
 
             entityplayermp.a.a((Packet) (new S1DPacketEntityEffect(entityplayermp.y(), potioneffect)));
+        }
+
+        if (Configuration.getWorldConfig(worldName).forceDefaultGamemodeDimensional()) { // Force a Dimension's Default GameMode
+            entityplayermp.c.a(worldserver1.M().r());
         }
     }
 
@@ -1015,13 +1020,26 @@ public abstract class ServerConfigurationManager {
 
     private void a(EntityPlayerMP entityplayermp, EntityPlayerMP entityplayermp1, World world) {
         // CanaryMod always use world!
+
         // if (entityplayermp1 != null) {
         // entityplayermp.c.a(entityplayermp1.c.b());
         // } else if (this.l != null) {
         // entityplayermp.c.a(this.l);
         // }
 
-        entityplayermp.c.b(world.M().r());
+        //Check GameMode persistance
+        if (entityplayermp1 != null) {
+            boolean dimensional = entityplayermp.getCanaryWorld().getName().equals(entityplayermp1.getCanaryWorld().getName());
+            if (!dimensional && Configuration.getWorldConfig(world.getCanaryWorld().getFqName()).forceDefaultGamemode()) {
+                entityplayermp.c.a(world.M().r()); // Force Default GameMode
+            }
+            else {
+                entityplayermp.c.a(entityplayermp1.c.b()); // Persist
+            }
+        }
+        else {
+            entityplayermp.c.b(world.M().r()); // Set if not set
+        }
     }
 
     public void r() {
