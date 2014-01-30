@@ -81,6 +81,7 @@ import net.minecraft.util.IntHashMap;
 import net.minecraft.util.ReportedException;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.visualillusionsent.utils.DateUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -117,6 +118,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
 
     // CanaryMod
     protected CanaryNetServerHandler serverHandler;
+    private final String lastJoin = DateUtils.longToDateTime(System.currentTimeMillis());
     //
 
     public NetHandlerPlayServer(MinecraftServer minecraftserver, INetworkManager inetworkmanager, EntityPlayerMP entityplayermp) {
@@ -576,6 +578,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
     @Override
     public void a(IChatComponent ichatcomponent) {
         c.info(this.b.b_() + " lost connection: " + ichatcomponent.e());
+        this.b.storeLastJoin(lastJoin); // Respawning could push this around, so save at a true disconnect
         this.d.au();
         ChatComponentTranslation chatcomponenttranslation = new ChatComponentTranslation("multiplayer.player.left", new Object[]{ this.b.c_() });
         chatcomponenttranslation.b().a(EnumChatFormatting.YELLOW);

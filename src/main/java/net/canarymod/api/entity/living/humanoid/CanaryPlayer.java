@@ -194,6 +194,13 @@ public class CanaryPlayer extends CanaryHuman implements Player {
         return ip.substring(1, ip.lastIndexOf(":"));
     }
 
+    public String getPreviousIP() {
+        if (getMetaData() != null && getMetaData().containsKey("PreviousIP")) {
+            return getMetaData().getString("PreviousIP");
+        }
+        return "UNKNOWN";
+    }
+
     /** {@inheritDoc} */
     @Override
     public boolean executeCommand(String[] command) {
@@ -841,6 +848,11 @@ public class CanaryPlayer extends CanaryHuman implements Player {
     @Override
     public String getFirstJoined() {
         return getHandle().getFirstJoined();
+    }
+
+    @Override
+    public String getLastJoined() {
+        return getHandle().getLastJoined();
     }
 
     /** {@inheritDoc} */

@@ -1777,6 +1777,10 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
         return metadata.getLong("TimePlayed") + (ToolBox.getUnixTimestamp() - currentSessionStart);
     }
 
+    public String getPreviousIP() {
+        return metadata.getString("PreviousIP");
+    }
+
     public void saveMeta() {
         metadata.put("TimePlayed", metadata.getLong("TimePlayed") + (ToolBox.getUnixTimestamp() - currentSessionStart));
         currentSessionStart = ToolBox.getUnixTimestamp(); // When saving, reset the start time so there isnt a duplicate addition of time stored
@@ -1790,6 +1794,7 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
         if (metadata == null) {
             metadata = new CanaryCompoundTag();
             metadata.put("FirstJoin", DateUtils.longToDateTime(System.currentTimeMillis()));
+            metadata.put("LastJoin", DateUtils.longToDateTime(System.currentTimeMillis()));
             metadata.put("TimePlayed", 1L); // Initialize to 1
         }
     }

@@ -1105,5 +1105,26 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
     public void setMetaData(CompoundTag meta) {
         this.metadata = meta;
     }
+
+    public void saveMeta() {
+        super.saveMeta();
+        metadata.put("PreviousIP", getPlayer().getIP());
+    }
+
+    public String getLastJoined() {
+        return metadata.getString("LastJoin");
+    }
+
+    public void storeLastJoin(String lastJoin) {
+        metadata.put("LastJoin", lastJoin);
+    }
+
+    @Override
+    public void initializeNewMeta() {
+        if (metadata == null) {
+            super.initializeNewMeta();
+            metadata.put("PreviousIP", getPlayer().getIP());
+        }
+    }
     //
 }

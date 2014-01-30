@@ -306,6 +306,17 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
      * {@inheritDoc}
      */
     @Override
+    public String getLastJoined() {
+        if (getMetaData() != null && getMetaData().containsKey("LastJoin")) {
+            return getMetaData().getString("LastJoin");
+        }
+        return "NEVER";
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public long getTimePlayed() {
         if (getMetaData() != null && getMetaData().containsKey("TimePlayed")) {
             return getMetaData().getLong("TimePlayed");
@@ -556,6 +567,9 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
 
     @Override
     public String getIP() {
-        return "xxx.xxx.xxx.xxx"; //TODO: Store last known IP
+        if (getMetaData() != null && getMetaData().containsKey("PreviousIP")) {
+            return getMetaData().getString("PreviousIP");
+        }
+        return "UNKNOWN";
     }
 }
