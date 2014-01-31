@@ -136,15 +136,15 @@ public class CanaryWorldManager implements WorldManager {
     @Override
     public boolean createWorld(String name, DimensionType type) {
         log.debug("Creating a new world! " + name + "_" + type.getName());
-        ((CanaryServer) Canary.getServer()).getHandle().loadWorld(name, new Random().nextLong(), type);
+        ((CanaryServer) Canary.getServer()).getHandle().loadWorld(name, System.currentTimeMillis(), type);
         updateExistingWorldsList(name, type);
         return true;
     }
 
     @Override
-    public boolean createWorld(String name, long seed, DimensionType worldType, WorldType genType) {
-        ((CanaryServer) Canary.getServer()).getHandle().loadWorld(name + worldType.getName(), new Random().nextLong(), worldType, genType);
-        updateExistingWorldsList(name, worldType);
+    public boolean createWorld(String name, long seed, DimensionType dimType, WorldType genType) {
+        ((CanaryServer) Canary.getServer()).getHandle().loadWorld(name, seed, dimType, genType);
+        updateExistingWorldsList(name, dimType);
         return true;
     }
 
@@ -233,7 +233,7 @@ public class CanaryWorldManager implements WorldManager {
 
     @Override
     public boolean worldExists(String name) {
-        return new File("worlds/" + name.split("_")[0] + "/" + name).isDirectory();
+        return existingWorlds.contains(name);
     }
 
     @Override
