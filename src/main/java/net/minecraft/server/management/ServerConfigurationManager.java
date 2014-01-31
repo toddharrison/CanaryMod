@@ -593,6 +593,10 @@ public abstract class ServerConfigurationManager {
         // Pre-load a chunk in the new world, makes spawning there a little faster
         worldserver1.b.c((int) entityplayermp.t >> 4, (int) entityplayermp.v >> 4);
 
+        /* Force a Dimension's Default GameMode */
+        if (Configuration.getWorldConfig(worldserver1.getCanaryWorld().getFqName()).forceDefaultGamemodeDimensional()) {
+            entityplayermp.c.a(worldserver1.M().r());
+        }
         entityplayermp.a.a((Packet) (new S07PacketRespawn(entityplayermp.aq, entityplayermp.p.r, entityplayermp.p.M().u(), entityplayermp.c.b())));
         worldserver.f(entityplayermp);
         entityplayermp.L = false;
@@ -608,10 +612,6 @@ public abstract class ServerConfigurationManager {
             PotionEffect potioneffect = (PotionEffect) o1;
 
             entityplayermp.a.a((Packet) (new S1DPacketEntityEffect(entityplayermp.y(), potioneffect)));
-        }
-
-        if (Configuration.getWorldConfig(worldName).forceDefaultGamemodeDimensional()) { // Force a Dimension's Default GameMode
-            entityplayermp.c.a(worldserver1.M().r());
         }
     }
 
