@@ -492,7 +492,6 @@ public abstract class ServerConfigurationManager {
         boolean flag1 = entityplayermp.bM();
         boolean isBedSpawn = respawnLocation != null;
         entityplayermp.aq = i0;
-        Object object;
         String name = entityplayermp.getCanaryWorld().getName();
         net.canarymod.api.world.DimensionType type = net.canarymod.api.world.DimensionType.fromId(i0);
         // CanaryMod: PlayerRespawn
@@ -517,13 +516,15 @@ public abstract class ServerConfigurationManager {
             }
         }
         //
+        ItemInWorldManager itemInWorldManager;
         if (this.f.P()) {
-            object = new DemoWorldManager(worldserver);
+            itemInWorldManager = new DemoWorldManager(worldserver);
         }
         else {
-            object = new ItemInWorldManager(worldserver);
+            itemInWorldManager = new ItemInWorldManager(worldserver);
         }
-        EntityPlayerMP entityplayermp1 = new EntityPlayerMP(this.f, worldserver, entityplayermp.bH(), (ItemInWorldManager) object);
+        // Use the wrapper keeper constructor
+        EntityPlayerMP entityplayermp1 = new EntityPlayerMP(this.f, worldserver, entityplayermp.bH(), itemInWorldManager, entityplayermp.getPlayer());
         // Copy nethandlerplayserver as the connection is still the same
         entityplayermp1.a = entityplayermp.a;
         entityplayermp1.a.b = entityplayermp1;

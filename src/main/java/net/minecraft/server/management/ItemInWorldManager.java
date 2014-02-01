@@ -121,14 +121,14 @@ public class ItemInWorldManager {
     }
 
     public void a(int i0, int i1, int i2, int i3) {
+        // CanaryMod: BlockLeftClick
+        net.canarymod.api.world.blocks.Block cblock = this.b.getCanaryWorld().getBlockAt(i0, i1, i2);
+        BlockLeftClickHook blcHook = (BlockLeftClickHook) new BlockLeftClickHook(this.b.getPlayer(), cblock).call();
+        if (blcHook.isCanceled()) {
+            return;
+        }
+        //
         if (!this.c.c() || this.b.d(i0, i1, i2)) {
-            // CanaryMod: BlockLeftClick
-            net.canarymod.api.world.blocks.Block cblock = this.b.getCanaryWorld().getBlockAt(i0, i1, i2);
-            BlockLeftClickHook blcHook = (BlockLeftClickHook) new BlockLeftClickHook(this.b.getPlayer(), cblock).call();
-            if (blcHook.isCanceled()) {
-                return;
-            }
-            //
             if (this.d()) {
                 if (!this.a.a((EntityPlayer) null, i0, i1, i2, i3)) {
                     this.b(i0, i1, i2);

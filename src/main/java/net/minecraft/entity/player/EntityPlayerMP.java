@@ -157,6 +157,42 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
         this.entity = new CanaryPlayer(this); // CanaryMod: wrap entity
     }
 
+    /* Special Constructor to keep a wrapper reference intact */
+    public EntityPlayerMP(MinecraftServer minecraftserver, WorldServer worldserver, GameProfile gameprofile, ItemInWorldManager iteminworldmanager, CanaryPlayer canaryPlayer) {
+        super(worldserver, gameprofile);
+        WorldConfiguration cfg = Configuration.getWorldConfig(worldserver.getCanaryWorld().getFqName());
+        iteminworldmanager.b = this;
+        this.c = iteminworldmanager;
+        this.bV = minecraftserver.af().o();
+        ChunkCoordinates chunkcoordinates = worldserver.J();
+        int i0 = chunkcoordinates.a;
+        int i1 = chunkcoordinates.c;
+        int i2 = chunkcoordinates.b;
+
+        if (!worldserver.t.g && worldserver.M().r() != WorldSettings.GameType.ADVENTURE) {
+            int i3 = Math.max(5, cfg.getSpawnProtectionSize() - 6);
+
+            i0 += this.aa.nextInt(i3 * 2) - i3;
+            i1 += this.aa.nextInt(i3 * 2) - i3;
+            i2 = worldserver.i(i0, i1);
+        }
+
+        this.b = minecraftserver;
+        this.bO = minecraftserver.af().i(this.b_());
+        this.X = 0.0F;
+        this.M = 0.0F;
+        this.b((double) i0 + 0.5D, (double) i2, (double) i1 + 0.5D, 0.0F, 0.0F);
+
+        while (!worldserver.a(this, this.D).isEmpty()) {
+            this.b(this.t, this.u + 1.0D, this.v);
+        }
+        // Why? To reduce load on data access initializing a new Player wrapper,
+        // to reduce possible memory leaking on old EntityPlayerMP references
+        Canary.log.debug("Keeping CanaryPlayer wrapper intact");
+        this.entity = canaryPlayer;
+        canaryPlayer.resetNativeEntityReference(this);
+    }
+
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
         if (nbttagcompound.b("playerGameType", 99)) {

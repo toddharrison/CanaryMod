@@ -873,6 +873,10 @@ public class CanaryPlayer extends CanaryHuman implements Player {
         this.sendPacket(new CanaryPacket(new S02PacketChat(((CanaryChatComponent) chatComponent).getNative())));
     }
 
+    public void resetNativeEntityReference(EntityPlayerMP entityPlayerMP) {
+        this.entity = entityPlayerMP;
+    }
+
     /** {@inheritDoc} */
     @Override
     public String toString() {
