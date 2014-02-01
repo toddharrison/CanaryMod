@@ -15,12 +15,10 @@ import net.canarymod.api.inventory.slot.GrabMode;
 import net.canarymod.api.inventory.slot.SecondarySlotType;
 import net.canarymod.api.inventory.slot.SlotHelper;
 import net.canarymod.api.inventory.slot.SlotType;
-import net.canarymod.api.world.blocks.Block;
 import net.canarymod.api.world.blocks.BlockFace;
 import net.canarymod.api.world.blocks.CanaryBlock;
 import net.canarymod.api.world.position.Location;
 import net.canarymod.config.Configuration;
-import net.canarymod.hook.player.BlockLeftClickHook;
 import net.canarymod.hook.player.BlockRightClickHook;
 import net.canarymod.hook.player.DisconnectionHook;
 import net.canarymod.hook.player.KickHook;
@@ -195,13 +193,15 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
 
             // CanaryMod: PlayerMoveHook
             Player player = this.b.getPlayer();
-            if (Math.floor(o) != Math.floor(player.getX()) || Math.floor(p) != Math.floor(player.getY()) || Math.floor(q) != Math.floor(player.getZ())) {
+            // Need to use floorToBlock or the flooring doesnt come out right...
+            if (ToolBox.floorToBlock(o) != ToolBox.floorToBlock(player.getX()) || ToolBox.floorToBlock(p) != ToolBox.floorToBlock(player.getY()) || ToolBox.floorToBlock(q) != ToolBox.floorToBlock(player.getZ())) {
                 Location from = new Location(player.getWorld(), o, p, q, player.getPitch(), player.getRotation());// Remember rotation and pitch are swapped in Location constructor...
                 PlayerMoveHook hook = (PlayerMoveHook) new PlayerMoveHook(player, from, player.getLocation()).call();
                 if (hook.isCanceled()) {
                     // Return the player to their previous position gracefully, hopefully bypassing the TeleportHook and not going derp.
-                    this.b.a.a(new S08PacketPlayerPosLook(from.getX(), from.getY(), from.getZ(), from.getRotation(), from.getPitch(), this.b.E));
+                    this.b.a.a(new S08PacketPlayerPosLook(from.getX(), from.getY() + 1.6200000047683716D, from.getZ(), from.getRotation(), from.getPitch(), this.b.E));
                     this.b.b(from.getX(), from.getY(), from.getZ()); // correct position server side to, or get BoUnCy
+                    this.b.w();
                     return;
                 }
             }
@@ -442,33 +442,22 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
                 }
             }
 
-            // CanaryMod: BlockLeftClickHook
-            Block block = worldserver.getCanaryWorld().getBlockAt(i0, i1, i2);
-            BlockLeftClickHook hook = new BlockLeftClickHook(b.getPlayer(), block);
-
+            // CanaryMod: NOTE - Hook calls moved into the ItemInWorldManager
             if (c07packetplayerdigging.g() == 0) {
-                if ((!this.d.a(worldserver, i0, i1, i2, this.b) || b.getPlayer().hasPermission("canary.world.spawnbuild")) && b.getPlayer().canBuild()) {
-                    block.setStatus((byte) 0); // Set Status
-                    hook.call(); // Call Hook
-                    if (!hook.isCanceled()) {
-                        this.b.c.a(i0, i1, i2, c07packetplayerdigging.f());
-                    }
-                    else {
-                        this.b.a.a((Packet) (new S23PacketBlockChange(i0, i1, i2, worldserver)));
-                    }
+                if ((!this.d.a(worldserver, i0, i1, i2, this.b) || this.b.getPlayer().hasPermission("canary.world.spawnbuild")) && this.b.getPlayer().canBuild()) {
+                    this.b.c.a(i0, i1, i2, c07packetplayerdigging.f());
+                }
+                else {
+                    this.b.a.a((Packet) (new S23PacketBlockChange(i0, i1, i2, worldserver)));
                 }
             }
             else if (c07packetplayerdigging.g() == 2) {
-                block.setStatus((byte) 2); // Set Status
-                hook.call(); // Call Hook
                 this.b.c.a(i0, i1, i2);
                 if (worldserver.a(i0, i1, i2).o() != Material.a) {
                     this.b.a.a((Packet) (new S23PacketBlockChange(i0, i1, i2, worldserver)));
                 }
             }
             else if (c07packetplayerdigging.g() == 1) {
-                block.setStatus((byte) 1); // Set Status
-                hook.call(); // And, Call Hook
                 this.b.c.c(i0, i1, i2);
                 if (worldserver.a(i0, i1, i2).o() != Material.a) {
                     this.b.a.a((Packet) (new S23PacketBlockChange(i0, i1, i2, worldserver)));

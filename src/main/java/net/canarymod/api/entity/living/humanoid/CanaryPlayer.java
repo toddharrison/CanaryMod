@@ -711,7 +711,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
     protected void teleportTo(double x, double y, double z, float pitch, float rotation, World world, TeleportHook.TeleportCause cause) {
         // If in a vehicle - eject before teleporting.
         if (isRiding()) {
-            getHandle().l(getHandle().m);
+            dismount();
         }
         if (!world.equals(this.getWorld())) {
             Canary.getServer().getConfigurationManager().switchDimension(this, world, false);

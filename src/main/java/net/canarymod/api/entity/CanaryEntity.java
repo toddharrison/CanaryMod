@@ -163,7 +163,7 @@ public abstract class CanaryEntity implements Entity {
         if (dim != this.getWorld()) {
             this.entity.a(((CanaryWorld) dim).getHandle());
         }
-        this.entity.b(x, y, z, rotation, pitch);
+        this.entity.a(x, y, z, rotation, pitch);
     }
 
     @Override
@@ -335,6 +335,28 @@ public abstract class CanaryEntity implements Entity {
             return entity.n.getCanaryEntity();
         }
         return null;
+    }
+
+    /**
+     * Mounts a specified {@code Entity}
+     *
+     * @param entity
+     *         the {@code Entity} to mount
+     */
+    public void mount(Entity entity) {
+        if (entity != null) {
+            this.entity.a(((CanaryEntity) entity).getHandle());
+        }
+        else {
+            this.entity.a((net.minecraft.entity.Entity) null);
+        }
+    }
+
+    /**
+     * Dismount ridden {@code Entity}
+     */
+    public void dismount() {
+        mount(null);
     }
 
     /** Destroys this entity */

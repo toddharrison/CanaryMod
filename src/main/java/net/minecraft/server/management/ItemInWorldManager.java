@@ -4,6 +4,7 @@ import net.canarymod.api.GameMode;
 import net.canarymod.api.entity.living.humanoid.CanaryPlayer;
 import net.canarymod.api.world.blocks.CanaryBlock;
 import net.canarymod.hook.player.BlockDestroyHook;
+import net.canarymod.hook.player.BlockLeftClickHook;
 import net.canarymod.hook.player.GameModeChangeHook;
 import net.canarymod.hook.player.ItemUseHook;
 import net.minecraft.block.Block;
@@ -121,6 +122,13 @@ public class ItemInWorldManager {
 
     public void a(int i0, int i1, int i2, int i3) {
         if (!this.c.c() || this.b.d(i0, i1, i2)) {
+            // CanaryMod: BlockLeftClick
+            net.canarymod.api.world.blocks.Block cblock = this.b.getCanaryWorld().getBlockAt(i0, i1, i2);
+            BlockLeftClickHook blcHook = (BlockLeftClickHook) new BlockLeftClickHook(this.b.getPlayer(), cblock).call();
+            if (blcHook.isCanceled()) {
+                return;
+            }
+            //
             if (this.d()) {
                 if (!this.a.a((EntityPlayer) null, i0, i1, i2, i3)) {
                     this.b(i0, i1, i2);
@@ -179,12 +187,20 @@ public class ItemInWorldManager {
         }
     }
 
-    public void c(int i0, int i1, int i2) {
+    public void c(int i0, int i1, int i2) { // Cancel
         this.d = false;
         this.a.d(this.b.y(), this.f, this.g, this.h, -1);
     }
 
     private boolean d(int i0, int i1, int i2) {
+        // CanaryMod: BlockDestroyHook
+        net.canarymod.api.world.blocks.Block cblock = this.b.getCanaryWorld().getBlockAt(i0, i1, i2);
+        BlockDestroyHook hook = (BlockDestroyHook) new BlockDestroyHook(this.b.getPlayer(), cblock).call();
+        if (hook.isCanceled()) {
+            this.c(i0, i1, i2);
+            return false;
+        }
+        //
         Block block = this.a.a(i0, i1, i2);
         int i3 = this.a.e(i0, i1, i2);
 
@@ -210,14 +226,6 @@ public class ItemInWorldManager {
             int i3 = this.a.e(i0, i1, i2);
             this.a.a(this.b, 2001, i0, i1, i2, Block.b(block) + (this.a.e(i0, i1, i2) << 12));
             boolean flag0 = this.d(i0, i1, i2);
-            // CanaryMod: BlockDestroyHook
-            net.canarymod.api.world.blocks.Block cblock = ((EntityPlayerMP) b).getCanaryWorld().getBlockAt(i0, i1, i2);
-            cblock.setStatus((byte) 1); // Block break status.
-            BlockDestroyHook hook = (BlockDestroyHook) new BlockDestroyHook(((EntityPlayerMP) b).getPlayer(), cblock).call();
-            if (hook.isCanceled()) {
-                return false;
-            }
-            //
 
             if (this.d()) {
                 this.b.a.a((Packet) (new S23PacketBlockChange(i0, i1, i2, this.a)));
@@ -250,7 +258,6 @@ public class ItemInWorldManager {
         }
         return this.a(player.getHandle(), world, itemstack);
     }
-
     //
 
     public boolean a(EntityPlayer entityplayer, World world, ItemStack itemstack) {
