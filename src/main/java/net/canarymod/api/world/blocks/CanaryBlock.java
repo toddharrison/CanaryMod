@@ -205,7 +205,7 @@ public class CanaryBlock implements Block {
 
     @Override
     public void dropBlockAsItem(boolean remove) {
-        net.minecraft.block.Block.e(type).c(((CanaryWorld) getWorld()).getHandle(), getX(), getY(), getZ(), getData());
+        net.minecraft.block.Block.e(type).a(((CanaryWorld) getWorld()).getHandle(), getX(), getY(), getZ(), getData(), 1.0F, 0);
         if (remove) {
             this.setTypeId((short) 0);
             this.update();
