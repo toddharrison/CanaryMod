@@ -125,6 +125,9 @@ public class ItemInWorldManager {
         net.canarymod.api.world.blocks.Block cblock = this.b.getCanaryWorld().getBlockAt(i0, i1, i2);
         BlockLeftClickHook blcHook = (BlockLeftClickHook) new BlockLeftClickHook(this.b.getPlayer(), cblock).call();
         if (blcHook.isCanceled()) {
+            if (this.c.d()) { // Fix ghosting for creative players
+                this.b.a.a((Packet) (new S23PacketBlockChange(i0, i1, i2, this.a)));
+            }
             return;
         }
         //

@@ -39,8 +39,8 @@ public class CanaryNetServerHandler implements NetServerHandler {
 
     @Override
     public void handleChat(Packet chatPacket) {
-        if (chatPacket.getPacketId() != 3) {
-            return; // Not a chat packet :O
+        if (!(((CanaryPacket) chatPacket).getPacket() instanceof S02PacketChat)) {
+            return;
         }
         handler.a((S02PacketChat) ((CanaryPacket) chatPacket).getPacket());
 
@@ -61,8 +61,8 @@ public class CanaryNetServerHandler implements NetServerHandler {
 
     @Override
     public void handleRespawn(Packet respawnPacket) {
-        if (respawnPacket.getPacketId() != 9) {
-            return; // Not a respawning packet :O
+        if (!(((CanaryPacket) respawnPacket).getPacket() instanceof S07PacketRespawn)) {
+            return;
         }
         handler.a((S07PacketRespawn) ((CanaryPacket) respawnPacket).getPacket());
     }
@@ -77,40 +77,51 @@ public class CanaryNetServerHandler implements NetServerHandler {
      */
     private CanaryChatComponent compileChat(String msg) {
         CanaryChatComponent toSend = new ChatComponentText("").getWrapper();
-        StringTokenizer tokenizer = new StringTokenizer(msg, "\u00A7");
+        StringTokenizer tokenizer = new StringTokenizer(msg, "\u00A7", true); // Need to know if it actually starts with a style char
         CanaryChatComponent working = new ChatComponentText("").getWrapper();
         while (tokenizer.hasMoreTokens()) {
             String workingMsg = tokenizer.nextToken();
-            if (((CanaryChatStyle) working.getChatStyle()).getNative().equals(ChatStyle.j)) {
-                working.setChatStyle(new ChatStyle().getWrapper());
-            }
-            CanaryChatStyle style = (CanaryChatStyle) working.getChatStyle();
-            EnumChatFormatting ecf = enumChatFormattingFromChar(workingMsg.toLowerCase().charAt(0));
-            if (ecf != null) {
-                style.setColor(ecf.getWrapper());
-            }
-            else {
-                switch (workingMsg.toLowerCase().charAt(0)) {
-                    case 'k':
-                        style.setObfuscated(true);
-                        break;
-                    case 'l':
-                        style.setBold(true);
-                        break;
-                    case 'm':
-                        style.setStrikethrough(true);
-                        break;
-                    case 'n':
-                        style.setUnderlined(true);
-                        break;
-                    case 'o':
-                        style.setItalic(true);
-                        break;
+            boolean doStyle = workingMsg.equals("\u00A7");
+            if (doStyle) {
+                if (!tokenizer.hasMoreTokens()) {
+                    break; // dangling style; just drop it
+                }
+                workingMsg = tokenizer.nextToken();
+                if (((CanaryChatStyle) working.getChatStyle()).getNative().equals(ChatStyle.j)) {
+                    working.setChatStyle(new ChatStyle().getWrapper());
+                }
+                CanaryChatStyle style = (CanaryChatStyle) working.getChatStyle();
+                EnumChatFormatting ecf = enumChatFormattingFromChar(workingMsg.toLowerCase().charAt(0));
+                if (ecf != null) {
+                    style.setColor(ecf.getWrapper());
+                }
+                else {
+                    switch (workingMsg.toLowerCase().charAt(0)) {
+                        case 'k':
+                            style.setObfuscated(true);
+                            break;
+                        case 'l':
+                            style.setBold(true);
+                            break;
+                        case 'm':
+                            style.setStrikethrough(true);
+                            break;
+                        case 'n':
+                            style.setUnderlined(true);
+                            break;
+                        case 'o':
+                            style.setItalic(true);
+                            break;
+                    }
+                }
+                if (workingMsg.length() > 1) { // Only reset things if there was something beyond the style
+                    toSend.appendSibling(working.appendText(workingMsg.substring(1)));
+                    working = new ChatComponentText("").getWrapper();
                 }
             }
-            if (workingMsg.length() > 1) { // Only reset things if there was something beyond the style
-                working.appendText(workingMsg.substring(1));
-                toSend.appendSibling(working);
+            else {
+                //No style in this part
+                toSend.appendSibling(working.appendText(workingMsg));
                 working = new ChatComponentText("").getWrapper();
             }
         }
