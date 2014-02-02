@@ -170,7 +170,7 @@ public class CanaryChatStyle implements ChatStyle {
      */
     @Override
     public ChatStyle getParentStyle() {
-        return null;
+        return getNative().n().getWrapper();
     }
 
     public net.minecraft.util.ChatStyle getNative() {

@@ -26,7 +26,7 @@ public class ChatStyle {
     private ClickEvent h;
     private HoverEvent i;
     private CanaryChatStyle canaryChatStyle = new CanaryChatStyle(this); // CanaryMod
-    private static final ChatStyle j = new ChatStyle() {
+    public static final ChatStyle j = new ChatStyle() { // CanaryMod: private => public
 
         public EnumChatFormatting a() {
             return null;
@@ -190,7 +190,7 @@ public class ChatStyle {
         return this;
     }
 
-    private ChatStyle n() {
+    public ChatStyle n() { // CanaryMod: private => public
         return this.a == null ? j : this.a;
     }
 
