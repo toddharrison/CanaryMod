@@ -3,10 +3,20 @@ package net.canarymod.api.world;
 import net.canarymod.Canary;
 import net.canarymod.api.CanaryServer;
 import net.canarymod.api.entity.living.humanoid.Player;
+import net.canarymod.config.Configuration;
 import net.canarymod.hook.system.UnloadWorldHook;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
 
 import static net.canarymod.Canary.log;
 
@@ -67,6 +77,9 @@ public class CanaryWorldManager implements WorldManager {
 
     @Override
     public World getWorld(String name, boolean autoload) {
+        if (name.isEmpty()) {
+            return getWorld(Configuration.getServerConfig().getDefaultWorldName() + DimensionType.fromId(0).getName(), autoload);
+        }
         DimensionType t = DimensionType.fromName(name.substring(Math.max(0, name.lastIndexOf("_") + 1)));
         String nameOnly = name.substring(0, Math.max(0, name.lastIndexOf("_")));
 
@@ -98,6 +111,9 @@ public class CanaryWorldManager implements WorldManager {
 
     @Override
     public World getWorld(String world, DimensionType type, boolean autoload) {
+        if (world.isEmpty()) {
+            return getWorld(Configuration.getServerConfig().getDefaultWorldName() + DimensionType.fromId(0).getName(), autoload);
+        }
         if (worldIsLoaded(world + "_" + type.getName())) {
             return loadedWorlds.get(world + "_" + type.getName());
         }
