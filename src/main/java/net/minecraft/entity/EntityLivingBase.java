@@ -665,25 +665,21 @@ public abstract class EntityLivingBase extends Entity {
                 // CanaryMod: call DamageHook (Entity)
                 CanaryEntityLiving attacker = null;
 
-                if (damagesource instanceof EntityDamageSource && (damagesource).i() instanceof EntityLiving) {
-                    attacker = (CanaryEntityLiving) (damagesource).i().getCanaryEntity();
+                if (damagesource instanceof EntityDamageSource && (damagesource).j() instanceof EntityLiving) {
+                    attacker = (CanaryEntityLiving) (damagesource).j().getCanaryEntity();
                 }
-                DamageHook hook = new DamageHook(attacker, entity, new CanaryDamageSource(damagesource), (int) f0);
+                DamageHook hook = new DamageHook(attacker, entity, new CanaryDamageSource(damagesource), f0);
 
                 if ((float) this.ae > (float) this.aI / 2.0F) {
                     if (f0 <= this.bc) {
                         return false;
                     }
 
-                    hook.setDamageDealt((int) (f0 - this.bc));
+                    hook.setDamageDealt((f0 - this.bc));
                     if (attacker != null) {
                         hook.call();
                     }
                     if (hook.isCanceled()) {
-                        if (this instanceof EntityCreature) {
-                            // MERGE: Can't find substitute to what it was before (c) - Chris
-                            ((EntityCreature) this).aA = 0;
-                        }
                         return false;
                     }
 
@@ -692,6 +688,12 @@ public abstract class EntityLivingBase extends Entity {
                     flag0 = false;
                 }
                 else {
+                    if (attacker != null) {
+                        hook.call();
+                    }
+                    if (hook.isCanceled()) {
+                        return false;
+                    }
                     this.bc = f0;
                     this.ax = this.aS();
                     this.ae = this.aI;
