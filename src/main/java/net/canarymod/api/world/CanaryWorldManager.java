@@ -129,8 +129,7 @@ public class CanaryWorldManager implements WorldManager {
                     return loadedWorlds.get(world + "_" + type.getName());
                 }
                 else {
-                    log.error("Tried to get a non-existing world: " + world + " - you must create it before you can load it or pass autoload = true");
-                    return null;
+                    throw new UnknownWorldException("Tried to get a non-existing world: " + world + "_" + type.getName() + " - you must create it before you can load it or pass autoload = true");
                 }
 
             }

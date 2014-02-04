@@ -141,7 +141,7 @@ public class CanaryAnvil extends CanaryBlockInventory implements Anvil {
      */
     @Override
     public void setResult(Item item) {
-        getCraftResult().a(0xCAFEBABE, ((CanaryItem) item).getHandle());
+        getCraftResult().a(0xCAFEBABE, item == null ? null : ((CanaryItem) item).getHandle());
     }
 
     /**
