@@ -182,6 +182,8 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
 
         this.g = true;
         if (!this.b.j) {
+            //CanaryMod: Don't idle-kick when only moving (this was missing here)
+            this.b.w();
             double d0;
 
             if (!this.r) {
@@ -201,7 +203,6 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
                     // Return the player to their previous position gracefully, hopefully bypassing the TeleportHook and not going derp.
                     this.b.a.a(new S08PacketPlayerPosLook(from.getX(), from.getY() + 1.6200000047683716D, from.getZ(), from.getRotation(), from.getPitch(), this.b.E));
                     this.b.b(from.getX(), from.getY(), from.getZ()); // correct position server side to, or get BoUnCy
-                    this.b.w();
                     return;
                 }
             }
@@ -372,8 +373,6 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
             else if (this.e % 20 == 0) {
                 this.a(this.o, this.p, this.q, this.b.z, this.b.A, this.b.p.getCanaryWorld().getType().getId(), this.b.p.getCanaryWorld().getName(), TeleportHook.TeleportCause.MOVEMENT);
             }
-            //CanaryMod: Don't idle-kick when only moving (this was missing here)
-            this.b.w();
         }
     }
 

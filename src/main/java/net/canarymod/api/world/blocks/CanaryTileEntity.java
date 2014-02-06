@@ -73,7 +73,7 @@ public abstract class CanaryTileEntity implements TileEntity {
     /** {@inheritDoc} */
     @Override
     public void update() {
-        tileentity.w().j(getX(), getY(), getZ());
+        getWorld().markBlockNeedsUpdate(getX(), getY(), getZ());
     }
 
     /** {@inheritDoc} */

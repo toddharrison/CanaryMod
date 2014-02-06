@@ -297,7 +297,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
             }
         }
 
-        if (this.bY > 0L && this.b.aq() > 0 && MinecraftServer.ap() - this.bY > (long) (this.b.aq() * 1000 * 60)) {
+        if (this.bY > 0L && this.b.aq() > 0 && MinecraftServer.ap() - this.bY > (long) (this.b.aq() * 1000 * 60) && !getPlayer().canIgnoreRestrictions()) { // CanaryMod: If IgnoreRestrictions/no idle kick
             this.a.c("You have been idle for too long!");
         }
     }
