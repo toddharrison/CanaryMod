@@ -9,8 +9,9 @@ import net.canarymod.serialize.ItemSerializer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.gui.MinecraftServerGui;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.GraphicsEnvironment;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import static net.canarymod.Canary.log;
 
@@ -52,7 +53,7 @@ public class Main {
                 if (key.equals("gui") || key.equals("--gui") || key.equals("-gui")) {
                     MinecraftServer.setHeadless(false);
                 }
-                else if (key.equals("noControl") || key.equals("-noControl") || key.equals("--noControl")) {
+                else if (key.equalsIgnoreCase("noControl") || key.equalsIgnoreCase("-noControl") || key.equalsIgnoreCase("--noControl")) {
                     nocontrol = true;
                 }
             }
@@ -75,9 +76,7 @@ public class Main {
                 try {
                     UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
                 }
-                catch (Exception interruptedexception) {
-                    ;
-                }
+                catch (UnsupportedLookAndFeelException ignored) {}
                 MinecraftServerGui.getLog();
             }
 

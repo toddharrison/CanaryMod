@@ -347,8 +347,8 @@ public class CanaryServer implements Server {
     }
 
     @Override
-    public void initiateShutdown() {
-        server.initShutdown();
+    public void initiateShutdown(String message) {
+        server.initShutdown(message);
     }
 
     @Override

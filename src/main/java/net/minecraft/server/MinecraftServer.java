@@ -356,7 +356,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
             if (this.t != null) {
                 log.info("Saving players");
                 this.t.g();
-                this.t.r();
+                this.t.r(this.stopMsg);
             }
 
             log.info("Saving worlds");
@@ -1279,7 +1279,8 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
         return t.getConfigurationManager();
     }
 
-    public void initShutdown() {
+    public void initShutdown(String message) {
+        this.stopMsg = message;
         this.q();
     }
 

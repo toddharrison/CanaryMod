@@ -1043,9 +1043,9 @@ public abstract class ServerConfigurationManager {
         }
     }
 
-    public void r() {
+    public void r(String msg) {
         // CanaryMod shutdown hook
-        ServerShutdownHook hook = (ServerShutdownHook) new ServerShutdownHook("Server closed").call();
+        ServerShutdownHook hook = (ServerShutdownHook) new ServerShutdownHook(msg != null ? msg : "Server closed").call();
         //
         for (int i0 = 0; i0 < this.a.size(); ++i0) {
             ((EntityPlayerMP) this.a.get(i0)).a.c(hook.getReason());
