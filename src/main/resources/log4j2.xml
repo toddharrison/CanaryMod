@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="INFO" packages="net.minecraft,com.mojang,net.canarymod">
     <Appenders>
-        <Console name="SysOut" target="SYSTEM_OUT">
+        <Console name="WINDOWS_COMPAT" target="SYSTEM_OUT"/>
+        <Queue name="SysOut">
             <PatternLayout pattern="[%d{HH:mm:ss}] [%c] [%level]%replace{ [%marker]}{\s\[]}{}: %msg%n"/>
-        </Console>
+        </Queue>
         <Queue name="ServerGuiConsole">
             <PatternLayout pattern="[%d{HH:mm:ss}] [%c] [%level]%replace{ [%marker]}{\s\[]}{}: %msg%n"/>
         </Queue>
@@ -20,6 +21,7 @@
             <filters>
                 <MarkerFilter marker="NETWORK_PACKETS" onMatch="DENY" onMismatch="NEUTRAL"/>
             </filters>
+            <AppenderRef ref="WINDOWS_COMPAT"/>
             <AppenderRef ref="SysOut"/>
             <AppenderRef ref="File"/>
             <AppenderRef ref="ServerGuiConsole"/>

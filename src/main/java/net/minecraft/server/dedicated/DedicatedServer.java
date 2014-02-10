@@ -7,6 +7,8 @@ import net.canarymod.config.Configuration;
 import net.canarymod.config.ServerConfiguration;
 import net.canarymod.config.WorldConfiguration;
 import net.canarymod.hook.system.ServerGuiStartHook;
+import net.canarymod.util.ForwardLogHandler;
+import net.canarymod.util.SysOutWriterThread;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.ServerCommand;
 import net.minecraft.crash.CrashReport;
@@ -25,13 +27,15 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSettings;
 import net.minecraft.world.WorldType;
+
+import jline.UnsupportedTerminal;
+import jline.console.ConsoleReader;
+import jline.console.completer.Completer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.Proxy;
 import java.util.ArrayList;
@@ -39,6 +43,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Callable;
+import jline.console.UserInterruptException;
 
 public class DedicatedServer extends MinecraftServer implements IServer {
 
@@ -50,6 +55,20 @@ public class DedicatedServer extends MinecraftServer implements IServer {
     // CanaryMod - Removed private boolean m;
     // CanaryMod - Removed private WorldSettings.GameType n;
     private boolean o;
+
+    private ConsoleReader reader;
+
+    {
+        try {
+            reader = new ConsoleReader("Minecraft", System.in, System.out, null);
+        } catch (IOException e) {
+            try {
+                reader = new ConsoleReader("Minecraft", System.in, System.out, new UnsupportedTerminal());
+            } catch (IOException ex) {
+                h.fatal("Could not initialize ConsoleReader", ex);
+            }
+        }
+    }
 
     public DedicatedServer(File file1) {
         super(file1, Proxy.NO_PROXY);
@@ -79,13 +98,35 @@ public class DedicatedServer extends MinecraftServer implements IServer {
         Thread bufferedreader = new Thread("Server console handler") {
 
             public void run() {
-                BufferedReader bufferedreader = new BufferedReader(new InputStreamReader(System.in));
 
                 String i0;
 
                 try {
-                    while (!DedicatedServer.this.ae() && DedicatedServer.this.p() && (i0 = bufferedreader.readLine()) != null) {
-                        DedicatedServer.this.a(i0, (ICommandSender) DedicatedServer.this);
+                    reader.setPrompt("> ");
+                    reader.setHandleUserInterrupt(true);
+                    reader.addCompleter(new Completer() {
+                        @Override
+                        public int complete(String buffer, int cursor, List<CharSequence> candidates) {
+                            String toComplete = buffer.substring(0, cursor);
+                            String[] args = toComplete.split("\\s+");
+
+                            List<String> completions = Canary.commands().tabComplete(Canary.getServer(), args[0], args);
+                            if (completions == null) {
+                                return -1;
+                            }
+
+                            candidates.addAll(completions);
+                            return candidates.size() > 0 ? toComplete.lastIndexOf(' ') + 1 : -1;
+                        }
+                    });
+
+                    try {
+                        while (!DedicatedServer.this.ae() && DedicatedServer.this.p() && (i0 = reader.readLine()) != null) {
+                            DedicatedServer.this.a(i0, (ICommandSender) DedicatedServer.this);
+                        }
+                    } catch (UserInterruptException e) {
+                        reader.shutdown();
+                        Canary.commands().parseCommand(Canary.getServer(), "stop", new String[]{"stop", "Ctrl-C", "at", "console"});
                     }
                 }
                 catch (IOException i1) {
@@ -97,6 +138,25 @@ public class DedicatedServer extends MinecraftServer implements IServer {
 
         bufferedreader.setDaemon(true);
         bufferedreader.start();
+
+        // CanaryMod start: logging stuff. Much useful. Hello CraftBukkit!
+        java.util.logging.Logger global = java.util.logging.Logger.getLogger("");
+        global.setUseParentHandlers(false);
+        for (java.util.logging.Handler handler : global.getHandlers()) {
+            global.removeHandler(handler);
+        }
+        global.addHandler(new ForwardLogHandler());
+
+        final org.apache.logging.log4j.core.Logger logger = (org.apache.logging.log4j.core.Logger) LogManager.getRootLogger();
+        for (org.apache.logging.log4j.core.Appender appender : logger.getAppenders().values()) {
+            if (appender instanceof org.apache.logging.log4j.core.appender.ConsoleAppender) {
+                logger.removeAppender(appender);
+            }
+        }
+
+        new SysOutWriterThread(System.out, this.reader).start();
+        // CanaryMod end
+
         h.info("Starting minecraft server version 1.7.2");
         if (Runtime.getRuntime().maxMemory() / 1024L / 1024L < 512L) {
             h.warn("To start the server with more ram, launch it as \"java -Xmx1024M -Xms1024M -jar minecraft_server.jar\"");
