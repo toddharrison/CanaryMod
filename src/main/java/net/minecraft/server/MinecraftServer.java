@@ -20,6 +20,7 @@ import net.canarymod.config.WorldConfiguration;
 import net.canarymod.hook.system.LoadWorldHook;
 import net.canarymod.hook.system.ServerTickHook;
 import net.canarymod.tasks.ServerTaskManager;
+import net.canarymod.util.ShutdownLogger;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandManager;
 import net.minecraft.command.ICommandSender;
@@ -309,6 +310,10 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
     }
 
     protected void a(boolean flag0) {
+        a(flag0, h);
+    }
+
+    private void a(boolean flag0, Logger h) {
         if (!this.L) {
             // CanaryMod changed to use worldManager
             for (net.canarymod.api.world.World w : worldManager.getAllWorlds()) {
@@ -335,19 +340,27 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 
     public void n() {
         if (!this.L) {
-            h.info("Stopping server");
+            // CanaryMod start: If we're in the shutdown hook, we can't rely on log4j for logging.
+            Logger log;
+            if (Thread.currentThread().getName().equals("Server Shutdown Thread")) {
+                log = new ShutdownLogger(MinecraftServer.class);
+            } else {
+                log = MinecraftServer.h;
+            }
+
+            log.info("Stopping server");
             if (this.ag() != null) {
                 this.ag().b();
             }
 
             if (this.t != null) {
-                h.info("Saving players");
+                log.info("Saving players");
                 this.t.g();
                 this.t.r();
             }
 
-            h.info("Saving worlds");
-            this.a(false);
+            log.info("Saving worlds");
+            this.a(false, log);
 
             // CanaryMod Multiworld
             for (net.canarymod.api.world.World w : worldManager.getAllWorlds()) {
@@ -360,8 +373,9 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
                 this.k.e();
             }
             // CanaryMod disable plugins:
-            Canary.log.info("Disabling Plugins ...");
-            Canary.loader().disableAllPlugins();
+            Logger canaryLogger = log == h ? Canary.log : new ShutdownLogger("CanaryMod");
+            canaryLogger.info("Disabling Plugins ...");
+            Canary.loader().disableAllPlugins(canaryLogger);
         }
     }
 
@@ -720,7 +734,9 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
             Runtime.getRuntime().addShutdownHook(new Thread("Server Shutdown Thread") {
 
                 public void run() {
-                    dedicatedserver.n();
+                    if (!dedicatedserver.ae()) {
+                        dedicatedserver.n();
+                    }
                 }
             });
         }

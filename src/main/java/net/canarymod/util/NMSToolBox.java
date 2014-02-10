@@ -1,4 +1,4 @@
-package net.canarymod;
+package net.canarymod.util;
 
 /**
  * @author Jason (darkdiplomat)
