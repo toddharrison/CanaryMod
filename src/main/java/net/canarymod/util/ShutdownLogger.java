@@ -462,7 +462,7 @@ public class ShutdownLogger implements Logger {
 
     @Override
     public void log(Level level, Message msg, Throwable t) {
-        log(legel, null, msg, t);
+        log(level, null, msg, t);
     }
 
     @Override
