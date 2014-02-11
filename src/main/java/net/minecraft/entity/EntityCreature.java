@@ -56,6 +56,9 @@ public abstract class EntityCreature extends EntityLiving {
                     this.j = entity;
                 }
             }
+            else {
+                this.j = entity;
+            }
             //
 
             if (this.j != null) {

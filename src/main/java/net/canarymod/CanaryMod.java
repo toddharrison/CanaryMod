@@ -48,7 +48,7 @@ public class CanaryMod extends Canary {
         NativeTranslate.initialize(); // Intialize native translation bridge
 
         this.config = new Configuration();
-        this.setLoggerLevelDynamic(); //Once we know if debug is enabled, you can change the level accordingly
+        setLoggerLevelDynamic(); //Once we know if debug is enabled, you can change the level accordingly
         this.motd = new MessageOfTheDay();
         // Initialize the subsystems that do not rely on others
         this.commandManager = new CommandManager();

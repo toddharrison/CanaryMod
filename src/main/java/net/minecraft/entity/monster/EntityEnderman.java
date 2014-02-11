@@ -23,7 +23,6 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
-import java.util.Arrays;
 import java.util.UUID;
 
 public class EntityEnderman extends EntityMob {
@@ -140,7 +139,8 @@ public class EntityEnderman extends EntityMob {
                     i2 = MathHelper.c(this.v - 2.0D + this.aa.nextDouble() * 4.0D);
                     block = this.p.a(i0, i1, i2);
                     // CanaryMod: Replace checking static array with checking the world config list for Ender Blocks
-                    if (Arrays.asList(Configuration.getWorldConfig(getCanaryWorld().getFqName()).getEnderBlocks()).contains(Block.b(block))) {
+                    // NOTE: Using Arrays.asList returns a List<int[]> instead of List<Integer>
+                    if (com.google.common.primitives.Ints.asList(Configuration.getWorldConfig(getCanaryWorld().getFqName()).getEnderBlocks()).contains(Block.b(block))) {
                         // CanaryMod: call EndermanPickupBlockHook
                         EndermanPickupBlockHook hook = (EndermanPickupBlockHook) new EndermanPickupBlockHook((CanaryEnderman) entity, entity.getWorld().getBlockAt(i0, i1, i2)).call();
                         if (!hook.isCanceled()) {

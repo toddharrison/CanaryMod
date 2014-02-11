@@ -233,143 +233,141 @@ public class EntityArrow extends Entity implements IProjectile {
             if (movingobjectposition != null) {
                 // CanaryMod: ProjectileHit
                 ProjectileHitHook hook = (ProjectileHitHook) new ProjectileHitHook(this.getCanaryEntity(), movingobjectposition.g == null ? null : movingobjectposition.g.getCanaryEntity()).call();
-                if (!hook.isCanceled()) { //
-                    if (movingobjectposition.g != null) {
-                        f2 = MathHelper.a(this.w * this.w + this.x * this.x + this.y * this.y);
-                        int i2 = MathHelper.f((double) f2 * this.av);
+                if (!hook.isCanceled() && movingobjectposition.g != null) { //
+                    f2 = MathHelper.a(this.w * this.w + this.x * this.x + this.y * this.y);
+                    int i2 = MathHelper.f((double) f2 * this.av);
 
-                        if (this.f()) {
-                            i2 += this.aa.nextInt(i2 / 2 + 2);
-                        }
+                    if (this.f()) {
+                        i2 += this.aa.nextInt(i2 / 2 + 2);
+                    }
 
-                        DamageSource damagesource = null;
+                    DamageSource damagesource = null;
 
-                        if (this.c == null) {
-                            damagesource = DamageSource.a(this, this);
-                        }
-                        else {
-                            damagesource = DamageSource.a(this, this.c);
-                        }
+                    if (this.c == null) {
+                        damagesource = DamageSource.a(this, this);
+                    }
+                    else {
+                        damagesource = DamageSource.a(this, this.c);
+                    }
 
-                        if (this.al() && !(movingobjectposition.g instanceof EntityEnderman)) {
-                            movingobjectposition.g.e(5);
-                        }
+                    if (this.al() && !(movingobjectposition.g instanceof EntityEnderman)) {
+                        movingobjectposition.g.e(5);
+                    }
 
-                        if (movingobjectposition.g.a(damagesource, (float) i2)) {
-                            if (movingobjectposition.g instanceof EntityLivingBase) {
-                                EntityLivingBase entitylivingbase = (EntityLivingBase) movingobjectposition.g;
+                    if (movingobjectposition.g.a(damagesource, (float) i2)) {
+                        if (movingobjectposition.g instanceof EntityLivingBase) {
+                            EntityLivingBase entitylivingbase = (EntityLivingBase) movingobjectposition.g;
 
-                                if (!this.p.E) {
-                                    entitylivingbase.p(entitylivingbase.aZ() + 1);
-                                }
+                            if (!this.p.E) {
+                                entitylivingbase.p(entitylivingbase.aZ() + 1);
+                            }
 
-                                if (this.aw > 0) {
-                                    f3 = MathHelper.a(this.w * this.w + this.y * this.y);
-                                    if (f3 > 0.0F) {
-                                        movingobjectposition.g.g(this.w * (double) this.aw * 0.6000000238418579D / (double) f3, 0.1D, this.y * (double) this.aw * 0.6000000238418579D / (double) f3);
-                                    }
-                                }
-
-                                if (this.c != null && this.c instanceof EntityLivingBase) {
-                                    EnchantmentHelper.a(entitylivingbase, this.c);
-                                    EnchantmentHelper.b((EntityLivingBase) this.c, (Entity) entitylivingbase);
-                                }
-
-                                if (this.c != null && movingobjectposition.g != this.c && movingobjectposition.g instanceof EntityPlayer && this.c instanceof EntityPlayerMP) {
-                                    ((EntityPlayerMP) this.c).a.a((Packet) (new S2BPacketChangeGameState(6, 0.0F)));
+                            if (this.aw > 0) {
+                                f3 = MathHelper.a(this.w * this.w + this.y * this.y);
+                                if (f3 > 0.0F) {
+                                    movingobjectposition.g.g(this.w * (double) this.aw * 0.6000000238418579D / (double) f3, 0.1D, this.y * (double) this.aw * 0.6000000238418579D / (double) f3);
                                 }
                             }
 
-                            this.a("random.bowhit", 1.0F, 1.2F / (this.aa.nextFloat() * 0.2F + 0.9F));
-                            if (!(movingobjectposition.g instanceof EntityEnderman)) {
-                                this.B();
+                            if (this.c != null && this.c instanceof EntityLivingBase) {
+                                EnchantmentHelper.a(entitylivingbase, this.c);
+                                EnchantmentHelper.b((EntityLivingBase) this.c, (Entity) entitylivingbase);
+                            }
+
+                            if (this.c != null && movingobjectposition.g != this.c && movingobjectposition.g instanceof EntityPlayer && this.c instanceof EntityPlayerMP) {
+                                ((EntityPlayerMP) this.c).a.a((Packet) (new S2BPacketChangeGameState(6, 0.0F)));
                             }
                         }
-                        else {
-                            this.w *= -0.10000000149011612D;
-                            this.x *= -0.10000000149011612D;
-                            this.y *= -0.10000000149011612D;
-                            this.z += 180.0F;
-                            this.B += 180.0F;
-                            this.au = 0;
+
+                        this.a("random.bowhit", 1.0F, 1.2F / (this.aa.nextFloat() * 0.2F + 0.9F));
+                        if (!(movingobjectposition.g instanceof EntityEnderman)) {
+                            this.B();
                         }
                     }
                     else {
-                        this.d = movingobjectposition.b;
-                        this.e = movingobjectposition.c;
-                        this.f = movingobjectposition.d;
-                        this.g = block;
-                        this.h = this.p.e(this.d, this.e, this.f);
-                        this.w = (double) ((float) (movingobjectposition.f.c - this.t));
-                        this.x = (double) ((float) (movingobjectposition.f.d - this.u));
-                        this.y = (double) ((float) (movingobjectposition.f.e - this.v));
-                        f2 = MathHelper.a(this.w * this.w + this.x * this.x + this.y * this.y);
-                        this.t -= this.w / (double) f2 * 0.05000000074505806D;
-                        this.u -= this.x / (double) f2 * 0.05000000074505806D;
-                        this.v -= this.y / (double) f2 * 0.05000000074505806D;
-                        this.a("random.bowhit", 1.0F, 1.2F / (this.aa.nextFloat() * 0.2F + 0.9F));
-                        this.i = true;
-                        this.b = 7;
-                        this.a(false);
-                        if (this.g.o() != Material.a) {
-                            this.g.a(this.p, this.d, this.e, this.f, (Entity) this);
-                        }
+                        this.w *= -0.10000000149011612D;
+                        this.x *= -0.10000000149011612D;
+                        this.y *= -0.10000000149011612D;
+                        this.z += 180.0F;
+                        this.B += 180.0F;
+                        this.au = 0;
                     }
                 }
-
-                if (this.f()) {
-                    for (i1 = 0; i1 < 4; ++i1) {
-                        this.p.a("crit", this.t + this.w * (double) i1 / 4.0D, this.u + this.x * (double) i1 / 4.0D, this.v + this.y * (double) i1 / 4.0D, -this.w, -this.x + 0.2D, -this.y);
+                else {
+                    this.d = movingobjectposition.b;
+                    this.e = movingobjectposition.c;
+                    this.f = movingobjectposition.d;
+                    this.g = block;
+                    this.h = this.p.e(this.d, this.e, this.f);
+                    this.w = (double) ((float) (movingobjectposition.f.c - this.t));
+                    this.x = (double) ((float) (movingobjectposition.f.d - this.u));
+                    this.y = (double) ((float) (movingobjectposition.f.e - this.v));
+                    f2 = MathHelper.a(this.w * this.w + this.x * this.x + this.y * this.y);
+                    this.t -= this.w / (double) f2 * 0.05000000074505806D;
+                    this.u -= this.x / (double) f2 * 0.05000000074505806D;
+                    this.v -= this.y / (double) f2 * 0.05000000074505806D;
+                    this.a("random.bowhit", 1.0F, 1.2F / (this.aa.nextFloat() * 0.2F + 0.9F));
+                    this.i = true;
+                    this.b = 7;
+                    this.a(false);
+                    if (this.g.o() != Material.a) {
+                        this.g.a(this.p, this.d, this.e, this.f, (Entity) this);
                     }
                 }
-
-                this.t += this.w;
-                this.u += this.x;
-                this.v += this.y;
-                f2 = MathHelper.a(this.w * this.w + this.y * this.y);
-                this.z = (float) (Math.atan2(this.w, this.y) * 180.0D / 3.1415927410125732D);
-
-                for (this.A = (float) (Math.atan2(this.x, (double) f2) * 180.0D / 3.1415927410125732D); this.A - this.C < -180.0F; this.C -= 360.0F) {
-                    ;
-                }
-
-                while (this.A - this.C >= 180.0F) {
-                    this.C += 360.0F;
-                }
-
-                while (this.z - this.B < -180.0F) {
-                    this.B -= 360.0F;
-                }
-
-                while (this.z - this.B >= 180.0F) {
-                    this.B += 360.0F;
-                }
-
-                this.A = this.C + (this.A - this.C) * 0.2F;
-                this.z = this.B + (this.z - this.B) * 0.2F;
-                float f4 = 0.99F;
-
-                f1 = 0.05F;
-                if (this.M()) {
-                    for (int i3 = 0; i3 < 4; ++i3) {
-                        f3 = 0.25F;
-                        this.p.a("bubble", this.t - this.w * (double) f3, this.u - this.x * (double) f3, this.v - this.y * (double) f3, this.w, this.x, this.y);
-                    }
-
-                    f4 = 0.8F;
-                }
-
-                if (this.L()) {
-                    this.F();
-                }
-
-                this.w *= (double) f4;
-                this.x *= (double) f4;
-                this.y *= (double) f4;
-                this.x -= (double) f1;
-                this.b(this.t, this.u, this.v);
-                this.I();
             }
+
+            if (this.f()) {
+                for (i1 = 0; i1 < 4; ++i1) {
+                    this.p.a("crit", this.t + this.w * (double) i1 / 4.0D, this.u + this.x * (double) i1 / 4.0D, this.v + this.y * (double) i1 / 4.0D, -this.w, -this.x + 0.2D, -this.y);
+                }
+            }
+
+            this.t += this.w;
+            this.u += this.x;
+            this.v += this.y;
+            f2 = MathHelper.a(this.w * this.w + this.y * this.y);
+            this.z = (float) (Math.atan2(this.w, this.y) * 180.0D / 3.1415927410125732D);
+
+            for (this.A = (float) (Math.atan2(this.x, (double) f2) * 180.0D / 3.1415927410125732D); this.A - this.C < -180.0F; this.C -= 360.0F) {
+                ;
+            }
+
+            while (this.A - this.C >= 180.0F) {
+                this.C += 360.0F;
+            }
+
+            while (this.z - this.B < -180.0F) {
+                this.B -= 360.0F;
+            }
+
+            while (this.z - this.B >= 180.0F) {
+                this.B += 360.0F;
+            }
+
+            this.A = this.C + (this.A - this.C) * 0.2F;
+            this.z = this.B + (this.z - this.B) * 0.2F;
+            float f4 = 0.99F;
+
+            f1 = 0.05F;
+            if (this.M()) {
+                for (int i3 = 0; i3 < 4; ++i3) {
+                    f3 = 0.25F;
+                    this.p.a("bubble", this.t - this.w * (double) f3, this.u - this.x * (double) f3, this.v - this.y * (double) f3, this.w, this.x, this.y);
+                }
+
+                f4 = 0.8F;
+            }
+
+            if (this.L()) {
+                this.F();
+            }
+
+            this.w *= (double) f4;
+            this.x *= (double) f4;
+            this.y *= (double) f4;
+            this.x -= (double) f1;
+            this.b(this.t, this.u, this.v);
+            this.I();
         }
     }
 
