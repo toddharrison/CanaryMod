@@ -6,10 +6,15 @@ import net.canarymod.api.inventory.Enchantment;
 import net.canarymod.api.inventory.Item;
 import net.canarymod.serialize.EnchantmentSerializer;
 import net.canarymod.serialize.ItemSerializer;
+import net.canarymod.util.ConsoleHandlerThread;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.gui.MinecraftServerGui;
+import net.minecraft.world.storage.ThreadedFileIOBase;
+import net.visualillusionsent.utils.TaskManager;
 
 import java.awt.GraphicsEnvironment;
+import java.lang.reflect.Field;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -18,6 +23,8 @@ import static net.canarymod.Canary.log;
 public class Main {
     private static CanaryMod mod;
     private static boolean nocontrol;
+    private static boolean restart = false;
+    private static boolean reload = true;
 
     private static void initBird() {
         // Initialize the bird
@@ -80,21 +87,62 @@ public class Main {
                 MinecraftServerGui.getLog();
             }
 
-            initBird(); // Initialize the Bird
-            MinecraftServer.main(args); // Boot up the native server
+            Field threadPool = TaskManager.class.getDeclaredField("threadPool");
+            threadPool.setAccessible(true);
+            ScheduledThreadPoolExecutor taskExecutor = (ScheduledThreadPoolExecutor) threadPool.get(null);
 
-            // They need the server to be set
-            mod.initPermissions();
-            // Initialize providers that require Canary to be set already
-            mod.initUserAndGroupsManager();
-            mod.initKits();
-            // Warps need the DimensionType data which is created upon servre start
-            mod.initWarps();
-            // commands require a valid commandOwner which is the server.
-            // That means for commands to work, we gotta load Minecraft first
-            mod.initCommands();
-            // and finally throw in the MOTDListner
-            mod.initMOTDListener();
+            do {
+                restart = false;
+                if (reload) {
+                    initBird(); // Initialize the Bird
+                }
+
+                MinecraftServer.main(args); // Boot up the native server
+
+                if (reload) {
+                    // They need the server to be set
+                    mod.initPermissions();
+                    // Initialize providers that require Canary to be set already
+                    mod.initUserAndGroupsManager();
+                    mod.initKits();
+                    // Warps need the DimensionType data which is created upon servre start
+                    mod.initWarps();
+                    // commands require a valid commandOwner which is the server.
+                    // That means for commands to work, we gotta load Minecraft first
+                    mod.initCommands();
+                    // and finally throw in the MOTDListner
+                    mod.initMOTDListener();
+                }
+
+                MinecraftServer server = MinecraftServer.G();
+
+                synchronized (server) {
+                    while (!server.ae()) {
+                        server.wait();
+                    }
+                }
+
+                // Interrupt the infinisleeper
+                for (Thread thread : Thread.getAllStackTraces().keySet()) {
+                    if (thread.getName().equals("Server Infinisleeper")) {
+                        thread.interrupt();
+                    } else if (thread instanceof ConsoleHandlerThread) {
+                        thread.interrupt();
+                        //((ConsoleHandlerThread) thread).shutdown();
+                    }
+                }
+
+                taskExecutor.getQueue().clear(); // Clear existing tasks.
+
+                if (restart) {
+                    // Use some agressive cleanup, we're in the perfect state to do that right now
+                    System.gc();
+                    System.runFinalization();
+                }
+            } while (restart);
+
+            ThreadedFileIOBase.a.keepRunning = false;
+            taskExecutor.shutdown();
         }
         catch (Throwable t) {
             log.fatal("Error occurred durring start up, unable to continue... ", t);
@@ -108,7 +156,9 @@ public class Main {
      * @param reloadCanary
      */
     public static void restart(boolean reloadCanary) {
-        throw new UnsupportedOperationException("Restart is not implemented yet!");
+        restart = true;
+        reload = reloadCanary;
+        Canary.getServer().initiateShutdown("Restarting server");
     }
 
     public static boolean canRunUncontrolled() {

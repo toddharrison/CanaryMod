@@ -30,6 +30,7 @@ import net.minecraft.world.WorldType;
 
 import jline.UnsupportedTerminal;
 import jline.console.ConsoleReader;
+import jline.console.UserInterruptException;
 import jline.console.completer.Completer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -43,7 +44,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Callable;
-import jline.console.UserInterruptException;
+import net.canarymod.util.ConsoleHandlerThread;
+import org.fusesource.jansi.Ansi;
 
 public class DedicatedServer extends MinecraftServer implements IServer {
 
@@ -80,7 +82,7 @@ public class DedicatedServer extends MinecraftServer implements IServer {
             }
 
             public void run() {
-                while (true) {
+                while (!ae()) {
                     try {
                         while (true) {
                             Thread.sleep(2147483647L);
@@ -95,46 +97,7 @@ public class DedicatedServer extends MinecraftServer implements IServer {
     }
 
     protected boolean e() throws IOException {
-        Thread bufferedreader = new Thread("Server console handler") {
-
-            public void run() {
-
-                String i0;
-
-                try {
-                    reader.setPrompt("> ");
-                    reader.setHandleUserInterrupt(true);
-                    reader.addCompleter(new Completer() {
-                        @Override
-                        public int complete(String buffer, int cursor, List<CharSequence> candidates) {
-                            String toComplete = buffer.substring(0, cursor);
-                            String[] args = toComplete.split("\\s+");
-
-                            List<String> completions = Canary.commands().tabComplete(Canary.getServer(), args[0], args);
-                            if (completions == null) {
-                                return -1;
-                            }
-
-                            candidates.addAll(completions);
-                            return candidates.size() > 0 ? toComplete.lastIndexOf(' ') + 1 : -1;
-                        }
-                    });
-
-                    try {
-                        while (!DedicatedServer.this.ae() && DedicatedServer.this.p() && (i0 = reader.readLine()) != null) {
-                            DedicatedServer.this.a(i0, (ICommandSender) DedicatedServer.this);
-                        }
-                    } catch (UserInterruptException e) {
-                        reader.shutdown();
-                        Canary.commands().parseCommand(Canary.getServer(), "stop", new String[]{"stop", "Ctrl-C", "at", "console"});
-                    }
-                }
-                catch (IOException i1) {
-                    DedicatedServer.h.error("Exception handling console input", i1);
-                }
-
-            }
-        };
+        Thread bufferedreader = new ConsoleHandlerThread(this, this.reader);
 
         bufferedreader.setDaemon(true);
         bufferedreader.start();
@@ -332,7 +295,9 @@ public class DedicatedServer extends MinecraftServer implements IServer {
     }
 
     protected void s() {
-        System.exit(0);
+        synchronized (this) {
+            this.notifyAll();
+        }
     }
 
     public void u() { // CanaryMod: protected => public

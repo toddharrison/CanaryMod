@@ -60,6 +60,8 @@ public class SysOutWriterThread extends Thread {
     public SysOutWriterThread(OutputStream out, ConsoleReader reader) {
         this.out = out;
         this.reader = reader;
+        setName("SysOut writer");
+        setDaemon(true);
     }    
 
     @Override
