@@ -2832,20 +2832,21 @@ public abstract class World implements IBlockAccess {
      * @param entity
      *         the entity to check
      *
-     * @return true if can spawn; flase if not
+     * @return true if can spawn; false if not
      */
     protected final boolean canSpawn(Entity entity) {
         WorldConfiguration world_cfg = Configuration.getWorldConfig(this.canaryDimension.getFqName());
+        String fqEntityName = entity.getCanaryEntity().getFqName();
         if (entity instanceof EntityAnimal || entity instanceof EntityWaterMob || entity instanceof EntityAmbientCreature) {
             if (!world_cfg.canSpawnAnimals()) {
                 return false;
             }
             else if (entity instanceof EntityWaterMob) {
-                if (!Arrays.asList(world_cfg.getSpawnableWaterAnimals()).contains(entity.getCanaryEntity().getFqName())) {
+                if (!world_cfg.getSpawnableWaterAnimals().contains(fqEntityName)) {
                     return false;
                 }
             }
-            else if (!Arrays.asList(world_cfg.getSpawnableAnimals()).contains(entity.getCanaryEntity().getFqName())) {
+            else if (world_cfg.getSpawnableAnimals().contains(fqEntityName)) {
                 return false;
             }
         }
@@ -2853,7 +2854,7 @@ public abstract class World implements IBlockAccess {
             if (!world_cfg.canSpawnMonsters()) {
                 return false;
             }
-            else if (!Arrays.asList(world_cfg.getSpawnableMobs()).contains(entity.getCanaryEntity().getFqName())) {
+            else if (!world_cfg.getSpawnableMobs().contains(fqEntityName)) {
                 return false;
             }
         }
@@ -2864,7 +2865,7 @@ public abstract class World implements IBlockAccess {
             if (!world_cfg.canSpawnGolems()) {
                 return false;
             }
-            else if (!Arrays.asList(world_cfg.getSpawnableGolems()).contains(entity.getCanaryEntity().getFqName())) {
+            else if (!world_cfg.getSpawnableGolems().contains(fqEntityName)) {
                 return false;
             }
         }
