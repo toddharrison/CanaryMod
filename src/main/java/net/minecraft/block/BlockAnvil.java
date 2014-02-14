@@ -7,6 +7,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -90,5 +91,12 @@ public class BlockAnvil extends BlockFalling {
     public void a(World world, int i0, int i1, int i2, int i3) {
         world.c(1022, i0, i1, i2, 0);
     }
+
+    // CanaryMod start: fix hitbox
+    @Override
+    public AxisAlignedBB a(World world, int i0, int i1, int i2) {
+        this.a((IBlockAccess) world, i0, i1, i2);
+        return super.a(world, i0, i1, i2);
+    } // CanaryMod end
 
 }
