@@ -539,15 +539,18 @@ public abstract class ServerConfigurationManager {
         this.a(entityplayermp1, entityplayermp, worldserver); // GameMode changing
         ChunkCoordinates chunkcoordinates1;
         if (chunkcoordinates != null) {
-            chunkcoordinates1 = EntityPlayer.a(worldserver, chunkcoordinates, flag1);
+            chunkcoordinates1 = loc != null ? chunkcoordinates : EntityPlayer.a(worldserver, chunkcoordinates, flag1); // Is it overridden?
             if (chunkcoordinates1 != null) {
-                entityplayermp1.b((double) ((float) chunkcoordinates1.a + 0.5F), (double) ((float) chunkcoordinates1.b + 0.1F), (double) ((float) chunkcoordinates1.c + 0.5F), 0.0F, 0.0F);
+                float rot = 0.0F, yaw = 0.0F;
+                if (loc != null) {
+                    rot = loc.getRotation();
+                    yaw = loc.getPitch();
+                }
+                entityplayermp1.b(chunkcoordinates1.a + 0.5D, chunkcoordinates1.b + 0.1D, chunkcoordinates1.c + 0.5D, rot, yaw);
                 entityplayermp1.a(chunkcoordinates, flag1);
             }
-            else {
-                if (isBedSpawn) {
-                    entityplayermp1.a.a(new S2BPacketChangeGameState(0, 0.0F));
-                }
+            else if (isBedSpawn) {
+                entityplayermp1.a.a(new S2BPacketChangeGameState(0, 0.0F));
             }
         }
         while (worldserver.getCanaryWorld().getBlockAt(ToolBox.floorToBlock(entityplayermp1.t), ToolBox.floorToBlock(entityplayermp1.u + 1), ToolBox.floorToBlock(entityplayermp1.v)).getTypeId() != 0) {
@@ -572,7 +575,9 @@ public abstract class ServerConfigurationManager {
                 entityplayermp1.getPlayer().getWorld(),
                 entityplayermp1.t,
                 entityplayermp1.u,
-                entityplayermp1.v, 0, 0)).call();
+                entityplayermp1.v,
+                entityplayermp1.A,
+                entityplayermp1.z)).call();
         //
         return entityplayermp1;
     }
