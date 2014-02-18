@@ -1139,7 +1139,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
         // CanaryMod: Custom Payload implementation!
         if ("REGISTER".equals(c17packetcustompayload.c())) {
             try {
-                String channel = c17packetcustompayload.c();
+                String channel = new String(c17packetcustompayload.e(), Charsets.UTF_8);
                 for (String chan : channel.split("\0")) {
                     Canary.channels().registerClient(chan, this.serverHandler);
                 }
@@ -1151,7 +1151,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
         }
         else if ("UNREGISTER".equals(c17packetcustompayload.c())) {
             try {
-                String channel = c17packetcustompayload.c();
+                String channel = new String(c17packetcustompayload.e(), Charsets.UTF_8);
                 Canary.channels().unregisterClient(channel, this.serverHandler);
                 Canary.log.info(String.format("Player '%s' unregistered Custom Payload on channel '%s'", this.b.getPlayer().getName(), channel));
             }
