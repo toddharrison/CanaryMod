@@ -1,7 +1,7 @@
 package net.minecraft.entity;
 
 import net.canarymod.api.CanaryDamageSource;
-import net.canarymod.api.entity.living.CanaryEntityLiving;
+import net.canarymod.api.entity.living.CanaryLivingBase;
 import net.canarymod.api.entity.living.humanoid.EntityNonPlayableCharacter;
 import net.canarymod.api.potion.CanaryPotionEffect;
 import net.canarymod.hook.entity.DamageHook;
@@ -663,10 +663,10 @@ public abstract class EntityLivingBase extends Entity {
                 boolean flag0 = true;
 
                 // CanaryMod: call DamageHook (Entity)
-                CanaryEntityLiving attacker = null;
+                CanaryLivingBase attacker = null;
 
-                if (damagesource instanceof EntityDamageSource && (damagesource).j() instanceof EntityLiving) {
-                    attacker = (CanaryEntityLiving) (damagesource).j().getCanaryEntity();
+                if (damagesource instanceof EntityDamageSource && (damagesource).j() instanceof EntityLivingBase) {
+                    attacker = (CanaryLivingBase) (damagesource).j().getCanaryEntity();
                 }
                 DamageHook hook = new DamageHook(attacker, entity, new CanaryDamageSource(damagesource), f0);
 
