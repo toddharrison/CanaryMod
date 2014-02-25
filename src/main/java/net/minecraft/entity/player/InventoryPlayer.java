@@ -234,8 +234,10 @@ public class InventoryPlayer implements IInventory {
             while (left > 0 && slot < 36);
             if (itemstack.b - left > 0) {
                 // CanaryMod: ItemPickUp
-                ItemPickupHook hook = (ItemPickupHook) new ItemPickupHook(((EntityPlayerMP) this.d).getPlayer(), (net.canarymod.api.entity.EntityItem) entityitem.getCanaryEntity()).call();
-                return !hook.isCanceled();
+                if (this.d instanceof EntityPlayerMP) { // Cause NPC may be picking something up...
+                    return !((ItemPickupHook) new ItemPickupHook(((EntityPlayerMP) this.d).getPlayer(), (net.canarymod.api.entity.EntityItem) entityitem.getCanaryEntity()).call()).isCanceled();
+                }
+                return true; // TODO: NPC Behavior?
                 //
             }
             else {
