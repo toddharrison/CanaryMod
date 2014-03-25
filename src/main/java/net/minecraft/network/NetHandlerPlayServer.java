@@ -466,6 +466,8 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
         }
     }
 
+    private CanaryBlock lastRightClicked;
+
     @Override
     public void a(C08PacketPlayerBlockPlacement c08packetplayerblockplacement) {
         WorldServer worldserver = (WorldServer) this.b.getCanaryWorld().getHandle(); // this.d.a(this.c.ar);
@@ -482,14 +484,19 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
         CanaryBlock blockClicked = (CanaryBlock) worldserver.getCanaryWorld().getBlockAt(i0, i1, i2);
         blockClicked.setFaceClicked(BlockFace.fromByte((byte) i3));
 
+        if (i3 == 255) {
+            // item use: use last right clicked block
+            blockClicked = lastRightClicked;
+            lastRightClicked = null;
+        } else {
+            lastRightClicked = blockClicked;
+        }
+
         if (c08packetplayerblockplacement.f() == 255) {
             if (itemstack == null) {
                 return;
             }
-            // Correct coordinates on block
-            LineTracer trace = new LineTracer(this.b.getPlayer(), 6, 0.2);
 
-            blockClicked = (CanaryBlock) trace.getTargetBlock();
             blockClicked = blockClicked != null ? blockClicked : new CanaryBlock((short) 0, (short) 0, ToolBox.floorToBlock(this.o), ToolBox.floorToBlock(this.p), ToolBox.floorToBlock(this.q), this.b.getCanaryWorld());
             //
             this.b.c.itemUsed(this.b.getPlayer(), worldserver, itemstack, blockClicked); // CanaryMod: Redirect through ItemInWorldManager.itemUsed
