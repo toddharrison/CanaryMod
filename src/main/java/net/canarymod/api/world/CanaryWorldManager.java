@@ -77,8 +77,8 @@ public class CanaryWorldManager implements WorldManager {
 
     @Override
     public World getWorld(String name, boolean autoload) {
-        if (name.isEmpty()) {
-            return getWorld(Configuration.getServerConfig().getDefaultWorldName() + DimensionType.fromId(0).getName(), autoload);
+        if (name == null || name.isEmpty()) {
+            name = Configuration.getServerConfig().getDefaultWorldName() + "_" + DimensionType.fromId(0).getName();
         }
         DimensionType t = DimensionType.fromName(name.substring(Math.max(0, name.lastIndexOf("_") + 1)));
         String nameOnly = name.substring(0, Math.max(0, name.lastIndexOf("_")));
@@ -111,8 +111,8 @@ public class CanaryWorldManager implements WorldManager {
 
     @Override
     public World getWorld(String world, DimensionType type, boolean autoload) {
-        if (world.isEmpty()) {
-            return getWorld(Configuration.getServerConfig().getDefaultWorldName() + DimensionType.fromId(0).getName(), autoload);
+        if (world == null || world.isEmpty()) {
+            world = Configuration.getServerConfig().getDefaultWorldName();
         }
         if (worldIsLoaded(world + "_" + type.getName())) {
             return loadedWorlds.get(world + "_" + type.getName());
