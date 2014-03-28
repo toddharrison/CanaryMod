@@ -34,8 +34,10 @@ import jline.console.completer.Completer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.Proxy;
 import java.util.ArrayList;
@@ -59,13 +61,15 @@ public class DedicatedServer extends MinecraftServer implements IServer {
     private ConsoleReader reader;
 
     {
-        try {
-            reader = new ConsoleReader("Minecraft", System.in, System.out, null);
-        } catch (IOException e) {
+        if (!"jline.UnsupportedTerminal".equals(System.getProperty("jline.terminal"))) {
             try {
-                reader = new ConsoleReader("Minecraft", System.in, System.out, new UnsupportedTerminal());
-            } catch (IOException ex) {
-                h.fatal("Could not initialize ConsoleReader", ex);
+                reader = new ConsoleReader("Minecraft", System.in, System.out, null);
+            } catch (IOException e) {
+                try {
+                    reader = new ConsoleReader("Minecraft", System.in, System.out, new UnsupportedTerminal());
+                } catch (IOException ex) {
+                    h.fatal("Could not initialize ConsoleReader", ex);
+                }
             }
         }
     }
@@ -102,31 +106,39 @@ public class DedicatedServer extends MinecraftServer implements IServer {
                 String i0;
 
                 try {
-                    reader.setPrompt("> ");
-                    reader.setHandleUserInterrupt(true);
-                    reader.addCompleter(new Completer() {
-                        @Override
-                        public int complete(String buffer, int cursor, List<CharSequence> candidates) {
-                            String toComplete = buffer.substring(0, cursor);
-                            String[] args = toComplete.split("\\s+");
+                    if (DedicatedServer.this.reader != null) {
+                        reader.setPrompt("> ");
+                        reader.setHandleUserInterrupt(true);
+                        reader.addCompleter(new Completer() {
+                            @Override
+                            public int complete(String buffer, int cursor, List<CharSequence> candidates) {
+                                String toComplete = buffer.substring(0, cursor);
+                                String[] args = toComplete.split("\\s+");
 
-                            List<String> completions = Canary.commands().tabComplete(Canary.getServer(), args[0], args);
-                            if (completions == null) {
-                                return -1;
+                                List<String> completions = Canary.commands().tabComplete(Canary.getServer(), args[0], args);
+                                if (completions == null) {
+                                    return -1;
+                                }
+
+                                candidates.addAll(completions);
+                                return candidates.size() > 0 ? toComplete.lastIndexOf(' ') + 1 : -1;
                             }
+                        });
 
-                            candidates.addAll(completions);
-                            return candidates.size() > 0 ? toComplete.lastIndexOf(' ') + 1 : -1;
+                        try {
+                            while (!DedicatedServer.this.ae() && DedicatedServer.this.p() && (i0 = reader.readLine()) != null) {
+                                DedicatedServer.this.a(i0, (ICommandSender) DedicatedServer.this);
+                            }
+                        } catch (UserInterruptException e) {
+                            reader.shutdown();
+                            Canary.commands().parseCommand(Canary.getServer(), "stop", new String[]{"stop", "Ctrl-C", "at", "console"});
                         }
-                    });
+                    } else {
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
-                    try {
                         while (!DedicatedServer.this.ae() && DedicatedServer.this.p() && (i0 = reader.readLine()) != null) {
                             DedicatedServer.this.a(i0, (ICommandSender) DedicatedServer.this);
                         }
-                    } catch (UserInterruptException e) {
-                        reader.shutdown();
-                        Canary.commands().parseCommand(Canary.getServer(), "stop", new String[]{"stop", "Ctrl-C", "at", "console"});
                     }
                 }
                 catch (IOException i1) {
