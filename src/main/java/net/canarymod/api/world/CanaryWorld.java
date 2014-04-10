@@ -715,6 +715,17 @@ public class CanaryWorld implements World {
         }
     }
 
+    @Override
+    public Biome getBiome(int x, int z) {
+        CanaryChunk c = (CanaryChunk) getChunk(x, z);
+        if (c == null) {
+            return null;
+        }
+        int xx = x - ((x >> 4) * 16);
+        int zz = z - ((z >> 4) * 16);
+        return c.getHandle().a(xx, zz, this.getHandle().u()).getCanaryBiome();
+    }
+
     public net.minecraft.world.World getHandle() {
         return world;
     }
@@ -729,13 +740,14 @@ public class CanaryWorld implements World {
     }
 
     @Override
-    public Biome getBiome(int x, int z) {
-        CanaryChunk c = (CanaryChunk) getChunk(x, z);
-        if (c == null) {
-            return null;
-        }
-        int xx = x - ((x >> 4) * 16);
-        int zz = z - ((z >> 4) * 16);
-        return c.getHandle().a(xx, zz, this.getHandle().u()).getCanaryBiome();
+    public int hashCode() {
+        int hash = 7;
+        hash = 53 * hash + (this.fqName != null ? this.fqName.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public String toString() {
+        return "CanaryWorld{" + "world=" + world + ", type=" + type + ", name=" + name + ", fqName=" + fqName + '}';
     }
 }
