@@ -127,7 +127,7 @@ public class DedicatedServer extends MinecraftServer implements IServer {
 
                         try {
                             while (!DedicatedServer.this.ae() && DedicatedServer.this.p() && (i0 = reader.readLine()) != null) {
-                                DedicatedServer.this.a(i0, (ICommandSender) DedicatedServer.this);
+                                Canary.getServer().consoleCommand(i0);
                             }
                         } catch (UserInterruptException e) {
                             reader.shutdown();
@@ -137,7 +137,7 @@ public class DedicatedServer extends MinecraftServer implements IServer {
                         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
                         while (!DedicatedServer.this.ae() && DedicatedServer.this.p() && (i0 = reader.readLine()) != null) {
-                            DedicatedServer.this.a(i0, (ICommandSender) DedicatedServer.this);
+                            Canary.getServer().consoleCommand(i0);
                         }
                     }
                 }
