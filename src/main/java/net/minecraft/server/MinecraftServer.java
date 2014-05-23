@@ -149,7 +149,6 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
         this.n = new ServerCommandManager();
         this.j = new AnvilSaveConverter(file1, DimensionType.NORMAL);
         this.S = (new YggdrasilAuthenticationService(proxy, UUID.randomUUID().toString())).createMinecraftSessionService();
-        this.as();
         // CanaryMod
         this.server = new CanaryServer(this);
         Canary.setServer(server);

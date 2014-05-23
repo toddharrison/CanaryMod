@@ -1052,8 +1052,9 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
     }
 
     // CanaryMod: Override
+    @Override
     public GameProfile bH() {
-        if (this.getDisplayName() != this.b_()) {
+        if (!this.getDisplayName().equals(this.b_())) {
             // We need a new GameProfile to change the display name
             return new GameProfile(this.as.toString().replaceAll("-", ""), this.getDisplayName());
         }

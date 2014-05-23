@@ -59,6 +59,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
+import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -390,10 +391,7 @@ public abstract class ServerConfigurationManager {
 */
 //      CanaryMod, redo the whole thing
         String s0 = gameprofile.getName();
-        String s2 = socketaddress.toString();
-
-        s2 = s2.substring(s2.indexOf("/") + 1);
-        s2 = s2.substring(0, s2.indexOf(":"));
+        String s2 = ((InetSocketAddress) socketaddress).getAddress().getHostAddress(); // Proper IPv6 handling
 
         PreConnectionHook hook = (PreConnectionHook) new PreConnectionHook(s2, s0, net.canarymod.api.world.DimensionType.NORMAL, Canary.getServer().getDefaultWorldName()).call();
 
