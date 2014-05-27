@@ -578,8 +578,8 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
         this.a.a("levels");
         int i0;
 
-        // CanaryMod use worldManager instead
-        for (net.canarymod.api.world.World w : worldManager.getAllWorlds()) {
+        // CanaryMod use worldManager instead, and copy into a new list (underlaying list may get modified)
+        for (net.canarymod.api.world.World w : new ArrayList<net.canarymod.api.world.World>(worldManager.getAllWorlds())) {
             WorldServer worldserver = (WorldServer) ((CanaryWorld) w).getHandle();
             //
             long i1 = System.nanoTime();
