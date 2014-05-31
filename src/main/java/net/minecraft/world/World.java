@@ -2845,8 +2845,7 @@ public abstract class World implements IBlockAccess {
                 if (!world_cfg.getSpawnableWaterAnimals().contains(fqEntityName)) {
                     return false;
                 }
-            }
-            else if (world_cfg.getSpawnableAnimals().contains(fqEntityName)) {
+            } else if (!world_cfg.getSpawnableAnimals().contains(fqEntityName)) {
                 return false;
             }
         }
