@@ -453,7 +453,7 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
      */
     @Override
     public void setSlot(int index, Item value) {
-        this.getHandle().a(index, ((CanaryItem) value).getHandle());
+        this.getHandle().a(index, value == null ? null : ((CanaryItem) value).getHandle());
     }
 
     /**

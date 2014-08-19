@@ -27,6 +27,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -35,7 +36,7 @@ import java.util.Set;
 public class ChunkProviderServer implements IChunkProvider {
 
     private static Logger b = LogManager.getLogger();
-    public Set c = new HashSet(); // CanaryMod private->public
+    public Set c = Collections.synchronizedSet(new HashSet<Long>()); // CanaryMod private->public
     private Chunk d;
     public IChunkProvider e; // CanaryMod private->public
     public IChunkLoader f; // //CanaryMod private->public
@@ -258,24 +259,26 @@ public class ChunkProviderServer implements IChunkProvider {
     public boolean c() {
         if (!this.i.c) {
             for (int i0 = 0; i0 < 100; ++i0) {
-                if (!this.c.isEmpty()) {
-                    Long olong = (Long) this.c.iterator().next();
-                    Chunk chunk = (Chunk) this.g.a(olong.longValue());
+                synchronized (this.c) {
+                    if (!this.c.isEmpty()) {
+                        Long olong = (Long) this.c.iterator().next();
+                        Chunk chunk = (Chunk) this.g.a(olong.longValue());
 
-                    if (chunk != null) {
-                        // CanaryMod: ChunkUnload
-                        ChunkUnloadHook hook = (ChunkUnloadHook) new ChunkUnloadHook(chunk.getCanaryChunk(), i.getCanaryWorld()).call();
-                        if (hook.isCanceled()) {
-                            // TODO: Might need to return false instead ... unsure
-                            return true;
+                        if (chunk != null) {
+                            // CanaryMod: ChunkUnload
+                            ChunkUnloadHook hook = (ChunkUnloadHook) new ChunkUnloadHook(chunk.getCanaryChunk(), i.getCanaryWorld()).call();
+                            if (hook.isCanceled()) {
+                                // TODO: Might need to return false instead ... unsure
+                                return true;
+                            }
+                            //
+                            chunk.d();
+                            this.b(chunk);
+                            this.a(chunk);
+                            this.c.remove(olong);
+                            this.g.d(olong.longValue());
+                            this.h.remove(chunk);
                         }
-                        //
-                        chunk.d();
-                        this.b(chunk);
-                        this.a(chunk);
-                        this.c.remove(olong);
-                        this.g.d(olong.longValue());
-                        this.h.remove(chunk);
                     }
                 }
             }

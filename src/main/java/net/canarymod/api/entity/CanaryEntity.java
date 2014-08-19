@@ -331,8 +331,8 @@ public abstract class CanaryEntity implements Entity {
 
     @Override
     public Entity getRider() {
-        if (entity.n != null) {
-            return entity.n.getCanaryEntity();
+        if (entity.m != null) {
+            return entity.m.getCanaryEntity();
         }
         return null;
     }
