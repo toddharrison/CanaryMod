@@ -76,10 +76,10 @@ public abstract class Entity {
     public boolean F;
     public boolean G;
     public boolean H;
-    public boolean I;
-    protected boolean J;
-    public boolean K; // Motion Changed ?
-    public boolean L;
+    public boolean I; // Velocity Changed
+    protected boolean J; // In Web
+    public boolean K;
+    public boolean L; //DEAD
     public float M;
     public float N;
     public float O;
