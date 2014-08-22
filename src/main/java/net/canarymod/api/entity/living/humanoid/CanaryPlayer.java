@@ -26,6 +26,7 @@ import net.canarymod.api.world.position.Location;
 import net.canarymod.chat.Colors;
 import net.canarymod.chat.TextFormat;
 import net.canarymod.config.Configuration;
+import net.canarymod.config.WorldConfiguration;
 import net.canarymod.hook.command.PlayerCommandHook;
 import net.canarymod.hook.player.ChatHook;
 import net.canarymod.hook.player.TeleportHook;
@@ -714,7 +715,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
             dismount();
         }
         if (!world.equals(this.getWorld())) {
-            Canary.getServer().getConfigurationManager().switchDimension(this, world, false);
+            Canary.getServer().getConfigurationManager().switchDimension(this, world, cause == TeleportCause.WARP && Configuration.getWorldConfig(world.getFqName()).allowWarpAutoLoad());
         }
 
         getHandle().a.a(x, y, z, rotation, pitch, getWorld().getType().getId(), getWorld().getName(), cause);
@@ -765,7 +766,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
                 chest.setInventory(inventory);
                 getHandle().openContainer(chest, 0, inventory.getSize(), ((CanaryBlockInventory) inventory).getInventoryHandle().k_());
                 return;
-            case CUSTOM:
+            case CUSTOM: // Same action as MINECART_CHEST
             case MINECART_CHEST:
                 ContainerChest eChest = new ContainerChest(getHandle().bn, ((CanaryEntityInventory) inventory).getHandle());
                 eChest.setInventory(inventory);
@@ -801,8 +802,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
             case WORKBENCH:
                 getHandle().openContainer(((CanaryWorkbench) inventory).getContainer(), 1, 9);
                 return;
-            default:
-                return;
+            default: // do nothing
         }
     }
 

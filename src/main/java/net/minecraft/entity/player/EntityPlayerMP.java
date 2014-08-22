@@ -5,6 +5,7 @@ import com.mojang.authlib.GameProfile;
 import io.netty.buffer.Unpooled;
 import net.canarymod.Canary;
 import net.canarymod.api.CanaryNetServerHandler;
+import net.canarymod.api.chat.CanaryChatComponent;
 import net.canarymod.api.entity.living.animal.EntityAnimal;
 import net.canarymod.api.entity.living.humanoid.CanaryPlayer;
 import net.canarymod.api.entity.living.humanoid.Player;
@@ -25,13 +26,7 @@ import net.canarymod.config.Configuration;
 import net.canarymod.config.WorldConfiguration;
 import net.canarymod.hook.CancelableHook;
 import net.canarymod.hook.entity.DimensionSwitchHook;
-import net.canarymod.hook.player.ExperienceHook;
-import net.canarymod.hook.player.HealthChangeHook;
-import net.canarymod.hook.player.InventoryHook;
-import net.canarymod.hook.player.PortalUseHook;
-import net.canarymod.hook.player.SignShowHook;
-import net.canarymod.hook.player.StatGainedHook;
-import net.canarymod.hook.player.TeleportHook;
+import net.canarymod.hook.player.*;
 import net.minecraft.command.ICommand;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
@@ -422,11 +417,18 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
     }
 
     public void a(DamageSource damagesource) {
-        this.b.af().a(this.aW().b());
+        // CanaryMod: Start: PlayerDeathHook
+        PlayerDeathHook hook = (PlayerDeathHook) new PlayerDeathHook(getPlayer(), damagesource.getCanaryDamageSource(), this.aW().b().getWrapper()).call();
+        // Check Death Message enabled
+        if (Configuration.getServerConfig().isDeathMessageEnabled()) {
+            this.b.af().a(((CanaryChatComponent) hook.getDeathMessage1()).getNative());
+        }
+        //this.b.af().a(this.aW().b()); // Replaced Above
+        // CanaryMod: End: PlayerDeathHook
+
         if (!this.p.N().b("keepInventory")) {
             this.bn.m();
         }
-        //
 
         Collection collection = this.p.W().a(ScoreObjectiveCriteria.c);
         Iterator iterator = collection.iterator();
