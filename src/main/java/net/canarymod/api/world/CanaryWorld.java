@@ -17,9 +17,7 @@ import net.canarymod.api.entity.vehicle.Minecart;
 import net.canarymod.api.entity.vehicle.Vehicle;
 import net.canarymod.api.inventory.CanaryItem;
 import net.canarymod.api.inventory.Item;
-import net.canarymod.api.world.blocks.Block;
-import net.canarymod.api.world.blocks.CanaryBlock;
-import net.canarymod.api.world.blocks.Chest;
+import net.canarymod.api.world.blocks.*;
 import net.canarymod.api.world.blocks.TileEntity;
 import net.canarymod.api.world.effects.AuxiliarySoundEffect;
 import net.canarymod.api.world.effects.Particle;
@@ -214,10 +212,7 @@ public class CanaryWorld implements World {
 
     @Override
     public Block getBlockAt(int x, int y, int z) {
-        short id = (short) net.minecraft.block.Block.b(world.a(x, y, z));
-        short data = getDataAt(x, y, z);
-
-        return new CanaryBlock(id, data, x, y, z, this);
+        return new CanaryBlock(world.a(x, y, z), getDataAt(x, y, z), x, y, z, this);
     }
 
     @Override
@@ -262,8 +257,18 @@ public class CanaryWorld implements World {
     }
 
     @Override
+    public void setBlockAt(Position position, BlockType blockType) {
+        setBlockAt(position.getBlockX(), position.getBlockY(), position.getBlockZ(), blockType);
+    }
+
+    @Override
     public void setBlockAt(int x, int y, int z, short type, short data) {
         world.d(x, y, z, net.minecraft.block.Block.e(type), data, (0x1 | 0x2));
+    }
+
+    @Override
+    public void setBlockAt(int x, int y, int z, BlockType blockType) {
+        world.d(x, y, z, net.minecraft.block.Block.b(blockType.getMachineName()), blockType.getData(), (0x1 | 0x2));
     }
 
     @Override

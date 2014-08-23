@@ -13,43 +13,58 @@ import java.util.Random;
 
 public class CanaryBlock implements Block {
     private final static Random rndm = new Random(); // Passed to the idDropped method
-    protected short type, data;
-    protected byte status;
+    protected short data;
+    protected BlockType type;
+    protected World world;
     protected int x, y, z;
-    protected World dimension;
     protected BlockFace faceClicked;
+    protected byte status = 0;
 
-    public CanaryBlock(short type, short data, int x, int y, int z, World world) {
+    private static String machineNameOfBlock(net.minecraft.block.Block nmsBlock) {
+        return net.minecraft.block.Block.c.c(nmsBlock);
+    }
+
+    public CanaryBlock(short typeId, short data, int x, int y, int z, World world) {
+        this(BlockType.fromIdAndData(typeId, data), x, y, z, world);
+    }
+
+    public CanaryBlock(net.minecraft.block.Block nmsBlock, short data, int x, int y, int z, World world) {
         this.x = x;
         this.y = y;
         this.z = z;
-        this.type = type;
+        this.world = world;
+        this.type = BlockType.fromStringAndData(machineNameOfBlock(nmsBlock), data);
         this.data = data;
-        status = 0;
-        this.dimension = world;
+    }
+
+    public CanaryBlock(BlockType type, int x, int y, int z, World world) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.world = world;
+        this.type = type;
+        this.data = type.getData();
     }
 
     @Override
     public short getTypeId() {
-        return type;
+        return type.getId();
     }
 
     @Override
-    public void setTypeId(short type) {
-        this.type = type;
-
+    public void setTypeId(short typeId) {
+        this.type = BlockType.fromIdAndData(typeId, data);
     }
 
     @Override
     public BlockType getType() {
-        return BlockType.fromIdAndData(type, data);
+        return type;
     }
 
     @Override
     public void setType(BlockType type) {
-        this.type = type.getId();
+        this.type = type;
         this.data = type.getData();
-
     }
 
     @Override
@@ -60,16 +75,17 @@ public class CanaryBlock implements Block {
     @Override
     public void setData(short data) {
         this.data = data;
+        this.type = BlockType.fromStringAndData(type.getMachineName(), data);
     }
 
     @Override
     public World getWorld() {
-        return this.dimension;
+        return this.world;
     }
 
     @Override
-    public void setWorld(World dimension) {
-        this.dimension = dimension;
+    public void setWorld(World world) {
+        this.world = world;
     }
 
     @Override
@@ -84,8 +100,8 @@ public class CanaryBlock implements Block {
 
     @Override
     public void update() {
-        dimension.setBlock(this);
-        dimension.markBlockNeedsUpdate(x, y, z);
+        world.setBlock(this);
+        world.markBlockNeedsUpdate(x, y, z);
     }
 
     @Override
@@ -130,22 +146,20 @@ public class CanaryBlock implements Block {
 
     @Override
     public boolean isAir() {
-        return type == 0;
+        return BlockType.Air.equals(type);
     }
 
     @Override
     public BlockMaterial getBlockMaterial() {
-        if (net.minecraft.block.Block.e(type) != null) {
-            return net.minecraft.block.Block.e(type).o().getCanaryBlockMaterial();
+        if (net.minecraft.block.Block.b(getType().getMachineName()) != null) {
+            return net.minecraft.block.Block.b(getType().getMachineName()).o().getCanaryBlockMaterial();
         }
-        else {
-            return null;
-        }
+        return null;
     }
 
     @Override
     public Location getLocation() {
-        return new Location(dimension, x, y, z, 0, 0);
+        return (Location) getPosition();
     }
 
     @Override
@@ -185,27 +199,27 @@ public class CanaryBlock implements Block {
 
     @Override
     public Block getRelative(int x, int y, int z) {
-        return this.dimension.getBlockAt(getX() + x, getY() + y, getZ() + z);
+        return this.world.getBlockAt(getX() + x, getY() + y, getZ() + z);
     }
 
     @Override
     public int getIdDropped() {
-        return net.minecraft.item.Item.b(net.minecraft.block.Block.e(type).a(0, rndm, 0));
+        return net.minecraft.item.Item.b(net.minecraft.block.Block.b(getType().getMachineName()).a(0, rndm, 0));
     }
 
     @Override
     public int getDamageDropped() {
-        return net.minecraft.block.Block.e(type).a(getData());
+        return net.minecraft.block.Block.b(getType().getMachineName()).a(getData());
     }
 
     @Override
     public int getQuantityDropped() {
-        return net.minecraft.block.Block.e(type).a(rndm);
+        return net.minecraft.block.Block.b(getType().getMachineName()).a(rndm);
     }
 
     @Override
     public void dropBlockAsItem(boolean remove) {
-        net.minecraft.block.Block.e(type).a(((CanaryWorld) getWorld()).getHandle(), getX(), getY(), getZ(), getData(), 1.0F, 0);
+        net.minecraft.block.Block.b(getType().getMachineName()).a(((CanaryWorld) getWorld()).getHandle(), getX(), getY(), getZ(), getData(), 1.0F, 0);
         if (remove) {
             this.setTypeId((short) 0);
             this.update();
@@ -219,7 +233,7 @@ public class CanaryBlock implements Block {
 
     @Override
     public boolean rightClick(Player player) {
-        return net.minecraft.block.Block.e(type).a(((CanaryWorld) getWorld()).getHandle(), getX(), getY(), getZ(), player != null ? ((CanaryPlayer) player).getHandle() : null, 0, 0, 0, 0); // last four parameters aren't even used by lever or button
+        return net.minecraft.block.Block.b(getType().getMachineName()).a(((CanaryWorld) getWorld()).getHandle(), getX(), getY(), getZ(), player != null ? ((CanaryPlayer) player).getHandle() : null, 0, 0, 0, 0); // last four parameters aren't even used by lever or button
     }
 
     public void sendUpdateToPlayers(Player... players) {
@@ -235,7 +249,7 @@ public class CanaryBlock implements Block {
 
     @Override
     public String toString() {
-        return String.format("Block[Type=%s TypeId=%d, data=%d, x=%d, y=%d, z=%d, world=%s, dim=%d]", BlockType.fromIdAndData(type, data).getMachineName(), this.type, this.data, this.x, this.y, this.z, this.dimension.getName(), this.dimension.getType().getId());
+        return String.format("Block[Type=%s, data=%d, x=%d, y=%d, z=%d, world=%s, dim=%s]", getType().getMachineName(), this.data, this.x, this.y, this.z, this.world.getName(), this.world.getType().getName());
     }
 
     /**
@@ -256,19 +270,10 @@ public class CanaryBlock implements Block {
         }
         final CanaryBlock other = (CanaryBlock) obj;
 
-        if (this.x != other.getX()) {
-            return false;
-        }
-        if (this.y != other.getY()) {
-            return false;
-        }
-        if (this.z != other.getZ()) {
-            return false;
-        }
         if (!this.getWorld().equals(other.getWorld())) {
             return false;
         }
-        return true;
+        return this.x == other.getX() && this.y == other.getY() && this.z == other.getZ();
     }
 
     /**
@@ -280,11 +285,11 @@ public class CanaryBlock implements Block {
     public int hashCode() {
         int hash = 7;
 
+        hash = 97 * hash + getType().getMachineName().hashCode();
         hash = 97 * hash + this.data;
         hash = 97 * hash + this.x;
         hash = 97 * hash + this.y;
         hash = 97 * hash + this.z;
-        hash = 97 * hash + this.type;
         return hash;
     }
 }
