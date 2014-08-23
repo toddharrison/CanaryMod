@@ -1,11 +1,7 @@
 package net.canarymod.api;
 
 import net.canarymod.Canary;
-import net.canarymod.api.nbt.CanaryBaseTag;
-import net.canarymod.api.nbt.CanaryCompoundTag;
-import net.canarymod.api.nbt.CanaryDoubleTag;
-import net.canarymod.api.nbt.CompoundTag;
-import net.canarymod.api.nbt.ListTag;
+import net.canarymod.api.nbt.*;
 import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.api.world.DimensionType;
 import net.canarymod.api.world.UnknownWorldException;
@@ -603,8 +599,8 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
     public void increaseHealth(float health) {
         if (getNBT() != null) {
             float newHealth = Math.max(0, getHealth() + health);
-            getNBT().put("HealF", health);
-            getNBT().put("Health", (short) ((int) Math.ceil((double) health)));
+            getNBT().put("HealF", newHealth);
+            getNBT().put("Health", (short) ((int) Math.ceil((double) newHealth)));
         }
     }
 }
