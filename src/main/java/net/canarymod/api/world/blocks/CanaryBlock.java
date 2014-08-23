@@ -161,7 +161,7 @@ public class CanaryBlock implements Block {
 
     @Override
     public Location getLocation() {
-        return (Location) getPosition();
+        return new Location(world, x, y, z, 0.0F, 0.0F);
     }
 
     @Override
