@@ -48,7 +48,9 @@ public class CanaryBlock implements Block {
 
     @Override
     public short getTypeId() {
-        return type.getId();
+        if(type != null)
+            return type.getId();
+        return 0;
     }
 
     @Override
