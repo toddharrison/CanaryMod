@@ -6,11 +6,7 @@ import net.canarymod.api.DamageType;
 import net.canarymod.api.attributes.AttributeMap;
 import net.canarymod.api.entity.CanaryEntity;
 import net.canarymod.api.entity.Entity;
-import net.canarymod.api.potion.CanaryPotion;
-import net.canarymod.api.potion.CanaryPotionEffect;
-import net.canarymod.api.potion.Potion;
-import net.canarymod.api.potion.PotionEffect;
-import net.canarymod.api.potion.PotionEffectType;
+import net.canarymod.api.potion.*;
 import net.canarymod.api.world.position.Location;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -59,7 +55,7 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
      */
     @Override
     public double getMaxHealth() {
-        return getHandle().aX().a(SharedMonsterAttributes.a).b();
+        return getHandle().a(SharedMonsterAttributes.a).e();
     }
 
     /**
