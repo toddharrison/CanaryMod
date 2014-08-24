@@ -2,6 +2,7 @@ package net.minecraft.item;
 
 import net.canarymod.api.inventory.ItemType;
 import net.canarymod.api.world.blocks.BlockFace;
+import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.blocks.CanaryBlock;
 import net.canarymod.hook.player.BlockPlaceHook;
 import net.minecraft.block.BlockBed;
@@ -56,7 +57,7 @@ public class ItemBed extends Item {
 
             if (entityplayer.a(i0, i1, i2, i3, itemstack) && entityplayer.a(i0 + b0, i1, i2 + b1, i3, itemstack)) {
                 if (world.c(i0, i1, i2) && world.c(i0 + b0, i1, i2 + b1) && World.a((IBlockAccess) world, i0, i1 - 1, i2) && World.a((IBlockAccess) world, i0 + b0, i1 - 1, i2 + b1)) {
-                    CanaryBlock placed = new CanaryBlock((short) ItemType.Bed.getId(), (short) 0, i0, i1, i2, world.getCanaryWorld());
+                    CanaryBlock placed = new CanaryBlock((short) BlockType.BedBlock.getId(), (short) 0, i0, i1, i2, world.getCanaryWorld());
                     // Create Hook and call it
                     BlockPlaceHook hook = (BlockPlaceHook) new BlockPlaceHook(((EntityPlayerMP) entityplayer).getPlayer(), clicked, placed).call();
                     if (hook.isCanceled()) {
