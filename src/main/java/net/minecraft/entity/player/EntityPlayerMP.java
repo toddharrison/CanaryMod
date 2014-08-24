@@ -2,6 +2,7 @@ package net.minecraft.entity.player;
 
 import com.google.common.collect.Sets;
 import com.mojang.authlib.GameProfile;
+
 import io.netty.buffer.Unpooled;
 import net.canarymod.Canary;
 import net.canarymod.api.CanaryNetServerHandler;
@@ -17,6 +18,7 @@ import net.canarymod.api.inventory.NativeCustomStorageInventory;
 import net.canarymod.api.nbt.CompoundTag;
 import net.canarymod.api.statistics.CanaryStat;
 import net.canarymod.api.world.CanaryWorld;
+import net.canarymod.api.world.WorldType;
 import net.canarymod.api.world.blocks.CanaryAnvil;
 import net.canarymod.api.world.blocks.CanaryDoubleChest;
 import net.canarymod.api.world.blocks.CanaryEnchantmentTable;
@@ -76,10 +78,12 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.ReportedException;
 import net.minecraft.village.MerchantRecipeList;
 import net.minecraft.world.ChunkCoordIntPair;
+import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.WorldSettings;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.Chunk;
+
 import org.apache.commons.io.Charsets;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -1068,8 +1072,8 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
         super.setDisplayName(name);
         S0CPacketSpawnPlayer pkt = new S0CPacketSpawnPlayer(this);
         for (Player p : Canary.getServer().getPlayerList()) {
-            if (!p.getName().equals(this.c_())) {
-                ((CanaryPlayer) p).getHandle().a.a(pkt);
+            if (!p.getName().equals(this.b_())) {
+        	((CanaryPlayer) p).getHandle().a.a(pkt);
             }
         }
     }
