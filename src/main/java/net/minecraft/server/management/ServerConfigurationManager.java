@@ -17,37 +17,23 @@ import net.canarymod.api.world.position.Location;
 import net.canarymod.bansystem.Ban;
 import net.canarymod.config.Configuration;
 import net.canarymod.config.ServerConfiguration;
-import net.canarymod.hook.player.ConnectionHook;
-import net.canarymod.hook.player.PlayerListEntryHook;
-import net.canarymod.hook.player.PlayerRespawnedHook;
-import net.canarymod.hook.player.PlayerRespawningHook;
-import net.canarymod.hook.player.PreConnectionHook;
-import net.canarymod.hook.player.TeleportHook;
+import net.canarymod.hook.player.*;
 import net.canarymod.hook.system.ServerShutdownHook;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.INetworkManager;
 import net.minecraft.network.NetHandlerPlayServer;
+import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.*;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.scoreboard.Score;
-import net.minecraft.scoreboard.ScoreObjective;
-import net.minecraft.scoreboard.ScorePlayerTeam;
-import net.minecraft.scoreboard.Scoreboard;
-import net.minecraft.scoreboard.ServerScoreboard;
-import net.minecraft.scoreboard.Team;
+import net.minecraft.scoreboard.*;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.stats.StatList;
 import net.minecraft.stats.StatisticsFile;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IChatComponent;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.WorldSettings;
@@ -62,15 +48,8 @@ import java.io.File;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
 
 public abstract class ServerConfigurationManager {
 
@@ -105,7 +84,7 @@ public abstract class ServerConfigurationManager {
     }
 
     // XXX LOGIN
-    public void a(INetworkManager inetworkmanager, EntityPlayerMP entityplayermp) {
+    public void a(NetworkManager inetworkmanager, EntityPlayerMP entityplayermp) {
         NBTTagCompound nbttagcompound = this.a(entityplayermp);
         CanaryWorld w;
         boolean firstTime = true;
@@ -141,7 +120,7 @@ public abstract class ServerConfigurationManager {
         entityplayermp.x().b(entityplayermp);
         this.a((ServerScoreboard) worldserver.W(), entityplayermp);
         this.f.au();
-        ChatComponentTranslation chatcomponenttranslation = new ChatComponentTranslation("multiplayer.player.joined", new Object[]{ entityplayermp.c_() });
+        ChatComponentTranslation chatcomponenttranslation = new ChatComponentTranslation("multiplayer.player.joined", new Object[]{entityplayermp.c_()});
         chatcomponenttranslation.b().a(EnumChatFormatting.YELLOW);
         // CanaryMod Connection hook
         ConnectionHook hook = (ConnectionHook) new ConnectionHook(entityplayermp.getPlayer(), chatcomponenttranslation.e(), firstTime).call();

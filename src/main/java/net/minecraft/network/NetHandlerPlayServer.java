@@ -6,27 +6,15 @@ import io.netty.buffer.Unpooled;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import net.canarymod.Canary;
-import net.canarymod.LineTracer;
 import net.canarymod.ToolBox;
 import net.canarymod.api.CanaryNetServerHandler;
 import net.canarymod.api.entity.living.humanoid.Player;
-import net.canarymod.api.inventory.slot.ButtonPress;
-import net.canarymod.api.inventory.slot.GrabMode;
-import net.canarymod.api.inventory.slot.SecondarySlotType;
-import net.canarymod.api.inventory.slot.SlotHelper;
-import net.canarymod.api.inventory.slot.SlotType;
+import net.canarymod.api.inventory.slot.*;
 import net.canarymod.api.world.blocks.BlockFace;
 import net.canarymod.api.world.blocks.CanaryBlock;
 import net.canarymod.api.world.position.Location;
 import net.canarymod.config.Configuration;
-import net.canarymod.hook.player.BlockRightClickHook;
-import net.canarymod.hook.player.DisconnectionHook;
-import net.canarymod.hook.player.KickHook;
-import net.canarymod.hook.player.PlayerArmSwingHook;
-import net.canarymod.hook.player.PlayerMoveHook;
-import net.canarymod.hook.player.SignChangeHook;
-import net.canarymod.hook.player.SlotClickHook;
-import net.canarymod.hook.player.TeleportHook;
+import net.canarymod.hook.player.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.command.server.CommandBlockLogic;
 import net.minecraft.crash.CrashReport;
@@ -41,12 +29,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Items;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ContainerBeacon;
-import net.minecraft.inventory.ContainerMerchant;
-import net.minecraft.inventory.ContainerRepair;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.*;
 import net.minecraft.item.ItemEditableBook;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemWritableBook;
@@ -54,14 +37,7 @@ import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.network.play.INetHandlerPlayServer;
 import net.minecraft.network.play.client.*;
-import net.minecraft.network.play.server.S00PacketKeepAlive;
-import net.minecraft.network.play.server.S02PacketChat;
-import net.minecraft.network.play.server.S08PacketPlayerPosLook;
-import net.minecraft.network.play.server.S23PacketBlockChange;
-import net.minecraft.network.play.server.S2FPacketSetSlot;
-import net.minecraft.network.play.server.S32PacketConfirmTransaction;
-import net.minecraft.network.play.server.S3APacketTabComplete;
-import net.minecraft.network.play.server.S40PacketDisconnect;
+import net.minecraft.network.play.server.*;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.stats.AchievementList;
 import net.minecraft.stats.StatBase;
@@ -69,14 +45,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityBeacon;
 import net.minecraft.tileentity.TileEntityCommandBlock;
 import net.minecraft.tileentity.TileEntitySign;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.ChatAllowedCharacters;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IChatComponent;
-import net.minecraft.util.IntHashMap;
-import net.minecraft.util.ReportedException;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.visualillusionsent.utils.DateUtils;
@@ -86,17 +55,13 @@ import org.apache.logging.log4j.Logger;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.Callable;
 
 public class NetHandlerPlayServer implements INetHandlerPlayServer {
 
     private static final Logger c = LogManager.getLogger();
-    public final INetworkManager a;
+    public final NetworkManager a;
     public final MinecraftServer d;// private to public
     public EntityPlayerMP b;
     private int e;
@@ -119,7 +84,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
     private final String lastJoin = DateUtils.longToDateTime(System.currentTimeMillis());
     //
 
-    public NetHandlerPlayServer(MinecraftServer minecraftserver, INetworkManager inetworkmanager, EntityPlayerMP entityplayermp) {
+    public NetHandlerPlayServer(MinecraftServer minecraftserver, NetworkManager inetworkmanager, EntityPlayerMP entityplayermp) {
         this.d = minecraftserver;
         this.a = inetworkmanager;
         inetworkmanager.a((INetHandler) this);
@@ -151,7 +116,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
         this.d.a.b();
     }
 
-    public INetworkManager b() {
+    public NetworkManager b() {
         return this.a;
     }
 
@@ -164,7 +129,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
 
     public void kickNoHook(String s0) {
         final ChatComponentText chatcomponenttext = new ChatComponentText(s0);
-        this.a.a(new S40PacketDisconnect(chatcomponenttext), new GenericFutureListener[]{ new GenericFutureListener() {
+        this.a.a(new S40PacketDisconnect(chatcomponenttext), new GenericFutureListener[]{new GenericFutureListener() {
             public void operationComplete(Future future) {
                 NetHandlerPlayServer.this.a.a((IChatComponent) chatcomponenttext);
             }
@@ -488,7 +453,8 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
             // item use: use last right clicked block
             blockClicked = lastRightClicked;
             lastRightClicked = null;
-        } else {
+        }
+        else {
             lastRightClicked = blockClicked;
         }
 
@@ -502,7 +468,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
             this.b.c.itemUsed(this.b.getPlayer(), worldserver, itemstack, blockClicked); // CanaryMod: Redirect through ItemInWorldManager.itemUsed
         }
         else if (c08packetplayerblockplacement.d() >= this.d.ad() - 1 && (c08packetplayerblockplacement.f() == 1 || c08packetplayerblockplacement.d() >= this.d.ad())) {
-            ChatComponentTranslation chatcomponenttranslation = new ChatComponentTranslation("build.tooHigh", new Object[]{ Integer.valueOf(this.d.ad()) });
+            ChatComponentTranslation chatcomponenttranslation = new ChatComponentTranslation("build.tooHigh", new Object[]{Integer.valueOf(this.d.ad())});
 
             chatcomponenttranslation.b().a(EnumChatFormatting.RED);
             this.b.a.a((Packet) (new S02PacketChat(chatcomponenttranslation)));
@@ -575,7 +541,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
         c.info(this.b.b_() + " lost connection: " + ichatcomponent.e());
         this.b.storeLastJoin(lastJoin); // Respawning could push this around, so save at a true disconnect
         this.d.au();
-        ChatComponentTranslation chatcomponenttranslation = new ChatComponentTranslation("multiplayer.player.left", new Object[]{ this.b.c_() });
+        ChatComponentTranslation chatcomponenttranslation = new ChatComponentTranslation("multiplayer.player.left", new Object[]{this.b.c_()});
         chatcomponenttranslation.b().a(EnumChatFormatting.YELLOW);
 
         // CanaryMod: DisconnectionHook
@@ -1093,7 +1059,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
                         if (commandblocklogic != null) {
                             commandblocklogic.a(s0);
                             commandblocklogic.e();
-                            this.b.a((IChatComponent) (new ChatComponentTranslation("advMode.setCommand.success", new Object[]{ s0 })));
+                            this.b.a((IChatComponent) (new ChatComponentTranslation("advMode.setCommand.success", new Object[]{s0})));
                         }
                     }
                     catch (Exception exception3) {

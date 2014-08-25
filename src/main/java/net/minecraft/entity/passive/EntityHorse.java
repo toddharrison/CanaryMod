@@ -8,21 +8,10 @@ import net.canarymod.hook.entity.VehicleExitHook;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.command.IEntitySelector;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityAgeable;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EntityLivingData;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIFollowParent;
-import net.minecraft.entity.ai.EntityAILookIdle;
-import net.minecraft.entity.ai.EntityAIMate;
-import net.minecraft.entity.ai.EntityAIPanic;
-import net.minecraft.entity.ai.EntityAIRunAroundLikeCrazy;
-import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.ai.EntityAIWander;
-import net.minecraft.entity.ai.EntityAIWatchClosest;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeInstance;
+import net.minecraft.entity.*;
+import net.minecraft.entity.ai.*;
+import net.minecraft.entity.ai.attributes.IAttribute;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -54,14 +43,14 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
             return var1 instanceof EntityHorse && ((EntityHorse) var1).cm();
         }
     };
-    private static final Attribute bv = (new RangedAttribute("horse.jumpStrength", 0.7D, 0.0D, 2.0D)).a("Jump Strength").a(true);
-    private static final String[] bw = new String[]{ null, "textures/entity/horse/armor/horse_armor_iron.png", "textures/entity/horse/armor/horse_armor_gold.png", "textures/entity/horse/armor/horse_armor_diamond.png" };
-    private static final String[] bx = new String[]{ "", "meo", "goo", "dio" };
-    private static final int[] by = new int[]{ 0, 5, 7, 11 };
-    private static final String[] bz = new String[]{ "textures/entity/horse/horse_white.png", "textures/entity/horse/horse_creamy.png", "textures/entity/horse/horse_chestnut.png", "textures/entity/horse/horse_brown.png", "textures/entity/horse/horse_black.png", "textures/entity/horse/horse_gray.png", "textures/entity/horse/horse_darkbrown.png" };
-    private static final String[] bA = new String[]{ "hwh", "hcr", "hch", "hbr", "hbl", "hgr", "hdb" };
-    private static final String[] bB = new String[]{ null, "textures/entity/horse/horse_markings_white.png", "textures/entity/horse/horse_markings_whitefield.png", "textures/entity/horse/horse_markings_whitedots.png", "textures/entity/horse/horse_markings_blackdots.png" };
-    private static final String[] bC = new String[]{ "", "wo_", "wmo", "wdo", "bdo" };
+    private static final IAttribute bv = (new RangedAttribute("horse.jumpStrength", 0.7D, 0.0D, 2.0D)).a("Jump Strength").a(true);
+    private static final String[] bw = new String[]{null, "textures/entity/horse/armor/horse_armor_iron.png", "textures/entity/horse/armor/horse_armor_gold.png", "textures/entity/horse/armor/horse_armor_diamond.png"};
+    private static final String[] bx = new String[]{"", "meo", "goo", "dio"};
+    private static final int[] by = new int[]{0, 5, 7, 11};
+    private static final String[] bz = new String[]{"textures/entity/horse/horse_white.png", "textures/entity/horse/horse_creamy.png", "textures/entity/horse/horse_chestnut.png", "textures/entity/horse/horse_brown.png", "textures/entity/horse/horse_black.png", "textures/entity/horse/horse_gray.png", "textures/entity/horse/horse_darkbrown.png"};
+    private static final String[] bA = new String[]{"hwh", "hcr", "hch", "hbr", "hbl", "hgr", "hdb"};
+    private static final String[] bB = new String[]{null, "textures/entity/horse/horse_markings_white.png", "textures/entity/horse/horse_markings_whitefield.png", "textures/entity/horse/horse_markings_whitedots.png", "textures/entity/horse/horse_markings_blackdots.png"};
+    private static final String[] bC = new String[]{"", "wo_", "wmo", "wdo", "bdo"};
     private int bD;
     private int bE;
     private int bF;
@@ -1066,7 +1055,7 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
             this.b(nbttagcompound.j("OwnerName"));
         }
 
-        AttributeInstance attributeinstance = this.bc().a("Speed");
+        IAttributeInstance attributeinstance = this.bc().a("Speed");
 
         if (attributeinstance != null) {
             this.a(SharedMonsterAttributes.d).a(attributeinstance.b() * 0.25D);
@@ -1187,7 +1176,7 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
         return entityhorse1;
     }
 
-    public EntityLivingData a(EntityLivingData entitylivingdata) {
+    public IEntityLivingData a(IEntityLivingData entitylivingdata) {
         Object object = super.a(entitylivingdata);
         boolean flag0 = false;
         int i0 = 0;
@@ -1240,7 +1229,7 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
         }
 
         this.g(this.aY());
-        return (EntityLivingData) object;
+        return (IEntityLivingData) object;
     }
 
     protected boolean bk() {
@@ -1301,7 +1290,7 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
         return false;
     }
 
-    public static class GroupData implements EntityLivingData {
+    public static class GroupData implements IEntityLivingData {
 
         public int a;
         public int b;

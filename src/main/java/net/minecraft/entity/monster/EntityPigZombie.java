@@ -3,10 +3,10 @@ package net.minecraft.entity.monster;
 import net.canarymod.api.entity.living.monster.CanaryPigZombie;
 import net.canarymod.hook.entity.MobTargetHook;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingData;
+import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.attributes.AttributeInstance;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -45,7 +45,7 @@ public class EntityPigZombie extends EntityZombie {
 
     public void h() {
         if (this.bu != this.j && !this.p.E) {
-            AttributeInstance attributeinstance = this.a(SharedMonsterAttributes.d);
+            IAttributeInstance attributeinstance = this.a(SharedMonsterAttributes.d);
 
             attributeinstance.b(br);
             if (this.j != null) {
@@ -156,7 +156,7 @@ public class EntityPigZombie extends EntityZombie {
         this.c(0, new ItemStack(Items.B));
     }
 
-    public EntityLivingData a(EntityLivingData entitylivingdata) {
+    public IEntityLivingData a(IEntityLivingData entitylivingdata) {
         super.a(entitylivingdata);
         this.j(false);
         return entitylivingdata;

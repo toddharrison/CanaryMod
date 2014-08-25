@@ -3,26 +3,18 @@ package net.minecraft.block;
 import net.canarymod.hook.world.TreeGrowHook;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.WorldGenBigTree;
-import net.minecraft.world.gen.feature.WorldGenCanopyTree;
-import net.minecraft.world.gen.feature.WorldGenForest;
-import net.minecraft.world.gen.feature.WorldGenMegaJungle;
-import net.minecraft.world.gen.feature.WorldGenMegaPineTree;
-import net.minecraft.world.gen.feature.WorldGenSavannaTree;
-import net.minecraft.world.gen.feature.WorldGenTaiga2;
-import net.minecraft.world.gen.feature.WorldGenTrees;
-import net.minecraft.world.gen.feature.WorldGenerator;
+import net.minecraft.world.gen.feature.*;
 
 import java.util.Random;
 
 
 public class BlockSapling extends BlockBush implements IGrowable {
 
-    public static final String[] a = new String[]{ "oak", "spruce", "birch", "jungle", "acacia", "roofed_oak" };
-    private static final Icon[] b = new Icon[a.length];
+    public static final String[] a = new String[]{"oak", "spruce", "birch", "jungle", "acacia", "roofed_oak"};
+    private static final IIcon[] b = new IIcon[a.length];
 
     protected BlockSapling() {
         float f0 = 0.4F;

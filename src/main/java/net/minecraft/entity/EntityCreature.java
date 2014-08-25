@@ -3,8 +3,8 @@ package net.minecraft.entity;
 import net.canarymod.hook.entity.MobTargetHook;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
-import net.minecraft.entity.ai.attributes.AttributeInstance;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.pathfinding.PathEntity;
@@ -39,7 +39,7 @@ public abstract class EntityCreature extends EntityLiving {
     protected void bq() {
         this.p.C.a("ai");
         if (this.bo > 0 && --this.bo == 0) {
-            AttributeInstance attributeinstance = this.a(SharedMonsterAttributes.d);
+            IAttributeInstance attributeinstance = this.a(SharedMonsterAttributes.d);
 
             attributeinstance.b(i);
         }

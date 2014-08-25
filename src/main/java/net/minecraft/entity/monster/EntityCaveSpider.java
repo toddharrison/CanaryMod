@@ -3,7 +3,7 @@ package net.minecraft.entity.monster;
 import net.canarymod.api.entity.living.monster.CanaryCaveSpider;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EntityLivingData;
+import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -47,7 +47,7 @@ public class EntityCaveSpider extends EntitySpider {
         }
     }
 
-    public EntityLivingData a(EntityLivingData entitylivingdata) {
+    public IEntityLivingData a(IEntityLivingData entitylivingdata) {
         return entitylivingdata;
     }
 }

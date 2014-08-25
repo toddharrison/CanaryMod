@@ -6,10 +6,10 @@ import net.canarymod.api.potion.CanaryPotion;
 import net.canarymod.hook.entity.PotionEffectAppliedHook;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeInstance;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.BaseAttributeMap;
+import net.minecraft.entity.ai.attributes.IAttribute;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 
@@ -197,10 +197,10 @@ public class Potion {
         return this.K;
     }
 
-    public Potion a(Attribute attribute, String s0, double d0, int i0) {
+    public Potion a(IAttribute IAttribute, String s0, double d0, int i0) {
         AttributeModifier attributemodifier = new AttributeModifier(UUID.fromString(s0), this.a(), d0, i0);
 
-        this.I.put(attribute, attributemodifier);
+        this.I.put(IAttribute, attributemodifier);
         return this;
     }
 
@@ -209,7 +209,7 @@ public class Potion {
 
         while (iterator.hasNext()) {
             Entry entry = (Entry) iterator.next();
-            AttributeInstance attributeinstance = baseattributemap.a((Attribute) entry.getKey());
+            IAttributeInstance attributeinstance = baseattributemap.a((IAttribute) entry.getKey());
 
             if (attributeinstance != null) {
                 attributeinstance.b((AttributeModifier) entry.getValue());
@@ -222,7 +222,7 @@ public class Potion {
 
         while (iterator.hasNext()) {
             Entry entry = (Entry) iterator.next();
-            AttributeInstance attributeinstance = baseattributemap.a((Attribute) entry.getKey());
+            IAttributeInstance attributeinstance = baseattributemap.a((IAttribute) entry.getKey());
 
             if (attributeinstance != null) {
                 AttributeModifier attributemodifier = (AttributeModifier) entry.getValue();

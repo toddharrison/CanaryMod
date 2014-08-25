@@ -5,7 +5,7 @@ import net.canarymod.api.entity.living.animal.CanaryAnimal;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.attributes.AttributeInstance;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -180,7 +180,7 @@ public abstract class EntityAnimal extends EntityAgeable implements IAnimals {
         else {
             this.bo = 60;
             if (!this.bk()) {
-                AttributeInstance attributeinstance = this.a(SharedMonsterAttributes.d);
+                IAttributeInstance attributeinstance = this.a(SharedMonsterAttributes.d);
 
                 if (attributeinstance.a(h) == null) {
                     attributeinstance.a(i);

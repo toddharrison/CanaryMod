@@ -2,7 +2,7 @@ package net.minecraft.entity.ai.attributes;
 
 import net.canarymod.api.attributes.CanaryAttribute;
 
-public interface Attribute {
+public interface IAttribute {
 
     String a();
 

@@ -2,13 +2,7 @@ package net.minecraft.scoreboard;
 
 import net.canarymod.api.scoreboard.CanaryScoreboard;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Scoreboard {
 
@@ -25,7 +19,7 @@ public class Scoreboard {
         return (ScoreObjective) this.a.get(s0);
     }
 
-    public ScoreObjective a(String s0, ScoreObjectiveCriteria scoreobjectivecriteria) {
+    public ScoreObjective a(String s0, IScoreObjectiveCriteria scoreobjectivecriteria) {
         ScoreObjective scoreobjective = this.b(s0);
 
         if (scoreobjective != null) {
@@ -47,7 +41,7 @@ public class Scoreboard {
         }
     }
 
-    public Collection a(ScoreObjectiveCriteria scoreobjectivecriteria) {
+    public Collection a(IScoreObjectiveCriteria scoreobjectivecriteria) {
         Collection collection = (Collection) this.b.get(scoreobjectivecriteria);
 
         return collection == null ? new ArrayList() : new ArrayList(collection);

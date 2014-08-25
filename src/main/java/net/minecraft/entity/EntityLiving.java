@@ -1,11 +1,7 @@
 package net.minecraft.entity;
 
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.ai.EntityAITasks;
-import net.minecraft.entity.ai.EntityJumpHelper;
-import net.minecraft.entity.ai.EntityLookHelper;
-import net.minecraft.entity.ai.EntityMoveHelper;
-import net.minecraft.entity.ai.EntitySenses;
+import net.minecraft.entity.ai.*;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityCreeper;
@@ -758,7 +754,7 @@ public abstract class EntityLiving extends EntityLivingBase {
         }
     }
 
-    public EntityLivingData a(EntityLivingData entitylivingdata) {
+    public IEntityLivingData a(IEntityLivingData entitylivingdata) {
         this.a(SharedMonsterAttributes.b).a(new AttributeModifier("Random spawn bonus", this.aa.nextGaussian() * 0.05D, 1));
         return entitylivingdata;
     }

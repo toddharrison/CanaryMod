@@ -31,7 +31,7 @@ public class CanaryScoreboard implements Scoreboard {
 
     @Override
     public void addScoreObjective(String name) {
-        this.handle.a(name, net.minecraft.scoreboard.ScoreObjectiveCriteria.b);
+        this.handle.a(name, net.minecraft.scoreboard.IScoreObjectiveCriteria.b);
     }
 
     @Override

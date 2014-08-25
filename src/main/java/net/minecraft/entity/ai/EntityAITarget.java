@@ -4,10 +4,9 @@ package net.minecraft.entity.ai;
 import net.canarymod.hook.entity.MobTargetHook;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EntityOwnable;
+import net.minecraft.entity.IEntityOwnable;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.ai.attributes.AttributeInstance;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.pathfinding.PathEntity;
@@ -40,18 +39,22 @@ public abstract class EntityAITarget extends EntityAIBase {
 
         if (entitylivingbase == null) {
             return false;
-        } else if (!entitylivingbase.Z()) {
+        }
+        else if (!entitylivingbase.Z()) {
             return false;
-        } else {
+        }
+        else {
             double d0 = this.f();
 
             if (this.c.e(entitylivingbase) > d0 * d0) {
                 return false;
-            } else {
+            }
+            else {
                 if (this.d) {
                     if (this.c.n().a(entitylivingbase)) {
                         this.f = 0;
-                    } else if (++this.f > 60) {
+                    }
+                    else if (++this.f > 60) {
                         return false;
                     }
                 }
@@ -62,7 +65,7 @@ public abstract class EntityAITarget extends EntityAIBase {
     }
 
     protected double f() {
-        AttributeInstance attributeinstance = this.c.a(SharedMonsterAttributes.b);
+        IAttributeInstance attributeinstance = this.c.a(SharedMonsterAttributes.b);
 
         return attributeinstance == null ? 16.0D : attributeinstance.e();
     }
@@ -80,30 +83,37 @@ public abstract class EntityAITarget extends EntityAIBase {
     protected boolean a(EntityLivingBase entitylivingbase, boolean flag0) {
         if (entitylivingbase == null) {
             return false;
-        } else if (entitylivingbase == this.c) {
+        }
+        else if (entitylivingbase == this.c) {
             return false;
-        } else if (!entitylivingbase.Z()) {
+        }
+        else if (!entitylivingbase.Z()) {
             return false;
-        } else if (!this.c.a(entitylivingbase.getClass())) {
+        }
+        else if (!this.c.a(entitylivingbase.getClass())) {
             return false;
-        } else {
-            if (this.c instanceof EntityOwnable && StringUtils.isNotEmpty(((EntityOwnable) this.c).b())) {
-                if (entitylivingbase instanceof EntityOwnable && ((EntityOwnable) this.c).b().equals(((EntityOwnable) entitylivingbase).b())) {
+        }
+        else {
+            if (this.c instanceof IEntityOwnable && StringUtils.isNotEmpty(((IEntityOwnable) this.c).b())) {
+                if (entitylivingbase instanceof IEntityOwnable && ((IEntityOwnable) this.c).b().equals(((IEntityOwnable) entitylivingbase).b())) {
                     return false;
                 }
 
-                if (entitylivingbase == ((EntityOwnable) this.c).i_()) {
+                if (entitylivingbase == ((IEntityOwnable) this.c).i_()) {
                     return false;
                 }
-            } else if (entitylivingbase instanceof EntityPlayer && !flag0 && ((EntityPlayer) entitylivingbase).bF.a) {
+            }
+            else if (entitylivingbase instanceof EntityPlayer && !flag0 && ((EntityPlayer) entitylivingbase).bF.a) {
                 return false;
             }
 
             if (!this.c.b(MathHelper.c(entitylivingbase.t), MathHelper.c(entitylivingbase.u), MathHelper.c(entitylivingbase.v))) {
                 return false;
-            } else if (this.d && !this.c.n().a(entitylivingbase)) {
+            }
+            else if (this.d && !this.c.n().a(entitylivingbase)) {
                 return false;
-            } else {
+            }
+            else {
                 if (this.a) {
                     if (--this.e <= 0) {
                         this.b = 0;
@@ -132,12 +142,14 @@ public abstract class EntityAITarget extends EntityAIBase {
 
         if (pathentity == null) {
             return false;
-        } else {
+        }
+        else {
             PathPoint pathpoint = pathentity.c();
 
             if (pathpoint == null) {
                 return false;
-            } else {
+            }
+            else {
                 int i0 = pathpoint.a - MathHelper.c(entitylivingbase.t);
                 int i1 = pathpoint.c - MathHelper.c(entitylivingbase.v);
 

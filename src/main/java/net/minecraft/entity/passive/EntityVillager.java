@@ -7,28 +7,8 @@ import net.canarymod.hook.entity.VillagerTradeUnlockHook;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentData;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityAgeable;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EntityLivingData;
-import net.minecraft.entity.IMerchant;
-import net.minecraft.entity.INpc;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIAvoidEntity;
-import net.minecraft.entity.ai.EntityAIFollowGolem;
-import net.minecraft.entity.ai.EntityAILookAtTradePlayer;
-import net.minecraft.entity.ai.EntityAIMoveIndoors;
-import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
-import net.minecraft.entity.ai.EntityAIOpenDoor;
-import net.minecraft.entity.ai.EntityAIPlay;
-import net.minecraft.entity.ai.EntityAIRestrictOpenDoor;
-import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.ai.EntityAITradePlayer;
-import net.minecraft.entity.ai.EntityAIVillagerMate;
-import net.minecraft.entity.ai.EntityAIWander;
-import net.minecraft.entity.ai.EntityAIWatchClosest;
-import net.minecraft.entity.ai.EntityAIWatchClosest2;
+import net.minecraft.entity.*;
+import net.minecraft.entity.ai.*;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
@@ -49,11 +29,7 @@ import net.minecraft.village.MerchantRecipeList;
 import net.minecraft.village.Village;
 import net.minecraft.world.World;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 public class EntityVillager extends EntityAgeable implements IMerchant, INpc {
 
@@ -398,7 +374,7 @@ public class EntityVillager extends EntityAgeable implements IMerchant, INpc {
                 b(merchantrecipelist, Items.by, this.aa, this.p(0.2F));
                 b(merchantrecipelist, Items.ax, this.aa, this.p(0.4F));
                 b(merchantrecipelist, Item.a(Blocks.aN), this.aa, this.p(0.3F));
-                Item[] aitem = new Item[]{ Items.l, Items.u, Items.Z, Items.ad, Items.c, Items.x, Items.b, Items.w };
+                Item[] aitem = new Item[]{Items.l, Items.u, Items.Z, Items.ad, Items.c, Items.x, Items.b, Items.w};
                 Item[] aitem1 = aitem;
                 int i3 = aitem.length;
 
@@ -521,7 +497,7 @@ public class EntityVillager extends EntityAgeable implements IMerchant, INpc {
         return tuple == null ? 1 : (((Integer) tuple.a()).intValue() >= ((Integer) tuple.b()).intValue() ? ((Integer) tuple.a()).intValue() : ((Integer) tuple.a()).intValue() + random.nextInt(((Integer) tuple.b()).intValue() - ((Integer) tuple.a()).intValue()));
     }
 
-    public EntityLivingData a(EntityLivingData entitylivingdata) {
+    public IEntityLivingData a(IEntityLivingData entitylivingdata) {
         entitylivingdata = super.a(entitylivingdata);
         this.s(this.p.s.nextInt(5));
         return entitylivingdata;
@@ -534,7 +510,7 @@ public class EntityVillager extends EntityAgeable implements IMerchant, INpc {
     public EntityVillager b(EntityAgeable entityageable) {
         EntityVillager entityvillager = new EntityVillager(this.p);
 
-        entityvillager.a((EntityLivingData) null);
+        entityvillager.a((IEntityLivingData) null);
         return entityvillager;
     }
 

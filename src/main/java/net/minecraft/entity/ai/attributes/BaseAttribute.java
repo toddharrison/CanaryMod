@@ -2,7 +2,7 @@ package net.minecraft.entity.ai.attributes;
 
 import net.canarymod.api.attributes.CanaryAttribute;
 
-public abstract class BaseAttribute implements Attribute {
+public abstract class BaseAttribute implements IAttribute {
 
     private final String a;
     private final double b;

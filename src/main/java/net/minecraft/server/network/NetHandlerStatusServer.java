@@ -4,7 +4,7 @@ import com.mojang.authlib.GameProfile;
 import io.netty.util.concurrent.GenericFutureListener;
 import net.canarymod.hook.system.ServerListPingHook;
 import net.minecraft.network.EnumConnectionState;
-import net.minecraft.network.INetworkManager;
+import net.minecraft.network.NetworkManager;
 import net.minecraft.network.ServerStatusResponse;
 import net.minecraft.network.status.INetHandlerStatusServer;
 import net.minecraft.network.status.client.C00PacketServerQuery;
@@ -20,9 +20,9 @@ import java.util.Arrays;
 public class NetHandlerStatusServer implements INetHandlerStatusServer {
 
     private final MinecraftServer a;
-    private final INetworkManager b;
+    private final NetworkManager b;
 
-    public NetHandlerStatusServer(MinecraftServer minecraftserver, INetworkManager inetworkmanager) {
+    public NetHandlerStatusServer(MinecraftServer minecraftserver, NetworkManager inetworkmanager) {
         this.a = minecraftserver;
         this.b = inetworkmanager;
     }

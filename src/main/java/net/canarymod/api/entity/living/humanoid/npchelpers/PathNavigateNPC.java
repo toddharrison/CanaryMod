@@ -5,7 +5,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.attributes.AttributeInstance;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.init.Blocks;
 import net.minecraft.pathfinding.PathEntity;
 import net.minecraft.pathfinding.PathPoint;
@@ -23,7 +23,7 @@ public class PathNavigateNPC {
     private World b;
     private PathEntity c;
     private double d;
-    private AttributeInstance e;
+    private IAttributeInstance e;
     private boolean f;
     private int g;
     private int h;

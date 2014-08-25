@@ -2,11 +2,7 @@ package net.minecraft.tileentity;
 
 import net.canarymod.api.CanaryMobSpawnerLogic;
 import net.canarymod.api.MobSpawnerLogic;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EntityLivingData;
+import net.minecraft.entity.*;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -180,7 +176,7 @@ public abstract class MobSpawnerBaseLogic {
             }
         }
         else if (entity instanceof EntityLivingBase && entity.p != null) {
-            ((EntityLiving) entity).a((EntityLivingData) null);
+            ((EntityLiving) entity).a((IEntityLivingData) null);
             this.a().d(entity);
         }
 

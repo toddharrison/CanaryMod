@@ -10,7 +10,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
 import java.util.Random;
@@ -19,7 +19,7 @@ public abstract class BlockLeaves extends BlockLeavesBase {
 
 
     int[] a;
-    protected Icon[][] M = new Icon[2][];
+    protected IIcon[][] M = new IIcon[2][];
 
     public BlockLeaves() {
         super(Material.j, false);

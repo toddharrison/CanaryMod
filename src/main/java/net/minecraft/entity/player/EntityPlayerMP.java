@@ -49,31 +49,17 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.client.C15PacketClientSettings;
 import net.minecraft.network.play.server.*;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.scoreboard.IScoreObjectiveCriteria;
 import net.minecraft.scoreboard.Score;
 import net.minecraft.scoreboard.ScoreObjective;
-import net.minecraft.scoreboard.ScoreObjectiveCriteria;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.ItemInWorldManager;
 import net.minecraft.stats.AchievementList;
 import net.minecraft.stats.StatBase;
 import net.minecraft.stats.StatList;
 import net.minecraft.stats.StatisticsFile;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityBeacon;
-import net.minecraft.tileentity.TileEntityBrewingStand;
-import net.minecraft.tileentity.TileEntityChest;
-import net.minecraft.tileentity.TileEntityDispenser;
-import net.minecraft.tileentity.TileEntityDropper;
-import net.minecraft.tileentity.TileEntityFurnace;
-import net.minecraft.tileentity.TileEntityHopper;
-import net.minecraft.tileentity.TileEntitySign;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntityDamageSource;
-import net.minecraft.util.IChatComponent;
-import net.minecraft.util.JsonSerializableSet;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.ReportedException;
+import net.minecraft.tileentity.*;
+import net.minecraft.util.*;
 import net.minecraft.village.MerchantRecipeList;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.WorldServer;
@@ -85,13 +71,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class EntityPlayerMP extends EntityPlayer implements ICrafting {
 
@@ -338,13 +318,13 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
 
             if (this.aS() + this.bs() != this.bP) {
                 this.bP = this.aS() + this.bs();
-                Collection collection = this.bS().a(ScoreObjectiveCriteria.f);
+                Collection collection = this.bS().a(IScoreObjectiveCriteria.f);
                 Iterator iterator = collection.iterator();
 
                 while (iterator.hasNext()) {
                     ScoreObjective scoreobjective = (ScoreObjective) iterator.next();
 
-                    this.bS().a(this.b_(), scoreobjective).a(Arrays.asList(new EntityPlayer[]{ this }));
+                    this.bS().a(this.b_(), scoreobjective).a(Arrays.asList(new EntityPlayer[]{this}));
                 }
             }
 
@@ -430,7 +410,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
             this.bn.m();
         }
 
-        Collection collection = this.p.W().a(ScoreObjectiveCriteria.c);
+        Collection collection = this.p.W().a(IScoreObjectiveCriteria.c);
         Iterator iterator = collection.iterator();
 
         while (iterator.hasNext()) {
@@ -1069,7 +1049,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
         S0CPacketSpawnPlayer pkt = new S0CPacketSpawnPlayer(this);
         for (Player p : Canary.getServer().getPlayerList()) {
             if (!p.getName().equals(this.b_())) {
-        	((CanaryPlayer) p).getHandle().a.a(pkt);
+                ((CanaryPlayer) p).getHandle().a.a(pkt);
             }
         }
     }

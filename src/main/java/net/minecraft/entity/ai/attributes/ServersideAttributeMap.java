@@ -5,11 +5,7 @@ import com.google.common.collect.Sets;
 import net.canarymod.api.attributes.CanaryAttributeMap;
 import net.minecraft.server.management.LowerStringMap;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 
 public class ServersideAttributeMap extends BaseAttributeMap {
@@ -18,33 +14,33 @@ public class ServersideAttributeMap extends BaseAttributeMap {
     protected final Map c = new LowerStringMap();
     private final CanaryAttributeMap canaryAttributeMap = new CanaryAttributeMap(this);
 
-    public ModifiableAttributeInstance c(Attribute attribute) {
-        return (ModifiableAttributeInstance) super.a(attribute);
+    public ModifiableAttributeInstance c(IAttribute IAttribute) {
+        return (ModifiableAttributeInstance) super.a(IAttribute);
     }
 
     public ModifiableAttributeInstance b(String s0) {
-        AttributeInstance attributeinstance = super.a(s0);
+        IAttributeInstance attributeinstance = super.a(s0);
 
         if (attributeinstance == null) {
-            attributeinstance = (AttributeInstance) this.c.get(s0);
+            attributeinstance = (IAttributeInstance) this.c.get(s0);
         }
 
         return (ModifiableAttributeInstance) attributeinstance;
     }
 
-    public AttributeInstance b(Attribute attribute) {
-        if (this.b.containsKey(attribute.a())) {
+    public IAttributeInstance b(IAttribute IAttribute) {
+        if (this.b.containsKey(IAttribute.a())) {
             throw new IllegalArgumentException("Attribute is already registered!");
         }
         else {
-            ModifiableAttributeInstance modifiableattributeinstance = new ModifiableAttributeInstance(this, attribute);
+            ModifiableAttributeInstance modifiableattributeinstance = new ModifiableAttributeInstance(this, IAttribute);
 
-            this.b.put(attribute.a(), modifiableattributeinstance);
-            if (attribute instanceof RangedAttribute && ((RangedAttribute) attribute).f() != null) {
-                this.c.put(((RangedAttribute) attribute).f(), modifiableattributeinstance);
+            this.b.put(IAttribute.a(), modifiableattributeinstance);
+            if (IAttribute instanceof RangedAttribute && ((RangedAttribute) IAttribute).f() != null) {
+                this.c.put(((RangedAttribute) IAttribute).f(), modifiableattributeinstance);
             }
 
-            this.a.put(attribute, modifiableattributeinstance);
+            this.a.put(IAttribute, modifiableattributeinstance);
             return modifiableattributeinstance;
         }
     }
@@ -70,7 +66,7 @@ public class ServersideAttributeMap extends BaseAttributeMap {
         Iterator iterator = this.a().iterator();
 
         while (iterator.hasNext()) {
-            AttributeInstance attributeinstance = (AttributeInstance) iterator.next();
+            IAttributeInstance attributeinstance = (IAttributeInstance) iterator.next();
 
             if (attributeinstance.a().c()) {
                 hashset.add(attributeinstance);
@@ -80,11 +76,11 @@ public class ServersideAttributeMap extends BaseAttributeMap {
         return hashset;
     }
 
-    public AttributeInstance a(String s0) {
+    public IAttributeInstance a(String s0) {
         return this.b(s0);
     }
 
-    public AttributeInstance a(Attribute attribute) {
-        return this.c(attribute);
+    public IAttributeInstance a(IAttribute IAttribute) {
+        return this.c(IAttribute);
     }
 }

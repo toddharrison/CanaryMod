@@ -4,18 +4,13 @@ package net.minecraft.entity.ai.attributes;
 import com.google.common.collect.Maps;
 import net.canarymod.api.attributes.CanaryModifiedAttribute;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 
-public class ModifiableAttributeInstance implements AttributeInstance {
+public class ModifiableAttributeInstance implements IAttributeInstance {
 
     private final BaseAttributeMap a;
-    private final Attribute b;
+    private final IAttribute b;
     private final Map c = Maps.newHashMap();
     private final Map d = Maps.newHashMap();
     private final Map e = Maps.newHashMap();
@@ -24,10 +19,10 @@ public class ModifiableAttributeInstance implements AttributeInstance {
     private double h;
     private CanaryModifiedAttribute canaryModifiableAttribute;
 
-    public ModifiableAttributeInstance(BaseAttributeMap baseattributemap, Attribute attribute) {
+    public ModifiableAttributeInstance(BaseAttributeMap baseattributemap, IAttribute IAttribute) {
         this.a = baseattributemap;
-        this.b = attribute;
-        this.f = attribute.b();
+        this.b = IAttribute;
+        this.f = IAttribute.b();
 
         for (int i0 = 0; i0 < 3; ++i0) {
             this.c.put(Integer.valueOf(i0), new HashSet());
@@ -35,7 +30,7 @@ public class ModifiableAttributeInstance implements AttributeInstance {
         this.canaryModifiableAttribute = new CanaryModifiedAttribute(this);
     }
 
-    public Attribute a() {
+    public IAttribute a() {
         return this.b;
     }
 

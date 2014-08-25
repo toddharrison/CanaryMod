@@ -6,15 +6,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIArrowAttack;
-import net.minecraft.entity.ai.EntityAIHurtByTarget;
-import net.minecraft.entity.ai.EntityAILookIdle;
-import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
-import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.ai.EntityAIWander;
-import net.minecraft.entity.ai.EntityAIWatchClosest;
-import net.minecraft.entity.ai.attributes.AttributeInstance;
+import net.minecraft.entity.ai.*;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityPotion;
 import net.minecraft.init.Items;
@@ -34,7 +28,7 @@ public class EntityWitch extends EntityMob implements IRangedAttackMob {
 
     private static final UUID bp = UUID.fromString("5CD17E52-A79A-43D3-A529-90FDE04B181E");
     private static final AttributeModifier bq = (new AttributeModifier(bp, "Drinking speed penalty", -0.25D, 0)).a(false);
-    private static final Item[] br = new Item[]{ Items.aO, Items.aT, Items.ax, Items.bp, Items.bo, Items.H, Items.y, Items.y };
+    private static final Item[] br = new Item[]{Items.aO, Items.aT, Items.ax, Items.bp, Items.bo, Items.H, Items.y, Items.y};
     private int bs;
 
     public EntityWitch(World world) {
@@ -132,7 +126,7 @@ public class EntityWitch extends EntityMob implements IRangedAttackMob {
                     this.c(0, new ItemStack(Items.bn, 1, short1));
                     this.bs = this.be().n();
                     this.a(true);
-                    AttributeInstance attributeinstance = this.a(SharedMonsterAttributes.d);
+                    IAttributeInstance attributeinstance = this.a(SharedMonsterAttributes.d);
 
                     attributeinstance.b(bq);
                     attributeinstance.a(bq);

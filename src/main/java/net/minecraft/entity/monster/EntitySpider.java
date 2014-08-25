@@ -3,8 +3,8 @@ package net.minecraft.entity.monster;
 import net.canarymod.api.entity.living.monster.CanarySpider;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingData;
 import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -138,14 +138,14 @@ public class EntitySpider extends EntityMob {
         this.ag.b(16, Byte.valueOf(b0));
     }
 
-    public EntityLivingData a(EntityLivingData entitylivingdata) {
+    public IEntityLivingData a(IEntityLivingData entitylivingdata) {
         Object object = super.a(entitylivingdata);
 
         if (this.p.s.nextInt(100) == 0) {
             EntitySkeleton entityskeleton = new EntitySkeleton(this.p);
 
             entityskeleton.b(this.t, this.u, this.v, this.z, 0.0F);
-            entityskeleton.a((EntityLivingData) null);
+            entityskeleton.a((IEntityLivingData) null);
             this.p.d((Entity) entityskeleton);
             entityskeleton.a((Entity) this);
         }
@@ -165,10 +165,10 @@ public class EntitySpider extends EntityMob {
             }
         }
 
-        return (EntityLivingData) object;
+        return (IEntityLivingData) object;
     }
 
-    public static class GroupData implements EntityLivingData {
+    public static class GroupData implements IEntityLivingData {
 
         public int a;
 

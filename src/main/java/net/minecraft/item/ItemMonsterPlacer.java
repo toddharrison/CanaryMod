@@ -6,11 +6,7 @@ import net.canarymod.hook.player.ItemUseHook;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EntityLivingData;
+import net.minecraft.entity.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.Facing;
@@ -142,7 +138,7 @@ public class ItemMonsterPlacer extends Item {
                     entity.b(d0, d1, d2, MathHelper.g(world.s.nextFloat() * 360.0F), 0.0F);
                     entityliving.aP = entityliving.z;
                     entityliving.aN = entityliving.z;
-                    entityliving.a((EntityLivingData) null);
+                    entityliving.a((IEntityLivingData) null);
                     if (spawn) { // CanaryMod check if spawn is allowed
                         world.d(entity);
                     }

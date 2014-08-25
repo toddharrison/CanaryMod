@@ -2,25 +2,11 @@ package net.minecraft.entity.monster;
 
 import net.canarymod.api.entity.living.monster.CanaryZombie;
 import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EntityLivingData;
-import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIAttackOnCollide;
-import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.ai.EntityAIBreakDoor;
-import net.minecraft.entity.ai.EntityAIHurtByTarget;
-import net.minecraft.entity.ai.EntityAILookIdle;
-import net.minecraft.entity.ai.EntityAIMoveThroughVillage;
-import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
-import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
-import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.ai.EntityAIWander;
-import net.minecraft.entity.ai.EntityAIWatchClosest;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeInstance;
+import net.minecraft.entity.*;
+import net.minecraft.entity.ai.*;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.IAttribute;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
@@ -42,7 +28,7 @@ import java.util.UUID;
 
 public class EntityZombie extends EntityMob {
 
-    protected static final Attribute bp = (new RangedAttribute("zombie.spawnReinforcements", 0.0D, 0.0D, 1.0D)).a("Spawn Reinforcements Chance");
+    protected static final IAttribute bp = (new RangedAttribute("zombie.spawnReinforcements", 0.0D, 0.0D, 1.0D)).a("Spawn Reinforcements Chance");
     private static final UUID bq = UUID.fromString("B9766B59-9566-4402-BC1F-2EE2A276D836");
     private static final AttributeModifier br = new AttributeModifier(bq, "Baby speed boost", 0.5D, 1);
     private final EntityAIBreakDoor bs = new EntityAIBreakDoor(this);
@@ -130,7 +116,7 @@ public class EntityZombie extends EntityMob {
     public void i(boolean flag0) {
         this.z().b(12, Byte.valueOf((byte) (flag0 ? 1 : 0)));
         if (this.p != null && !this.p.E) {
-            AttributeInstance attributeinstance = this.a(SharedMonsterAttributes.d);
+            IAttributeInstance attributeinstance = this.a(SharedMonsterAttributes.d);
 
             attributeinstance.b(br);
             if (flag0) {
@@ -208,7 +194,7 @@ public class EntityZombie extends EntityMob {
                         if (this.p.b(entityzombie.D) && this.p.a((Entity) entityzombie, entityzombie.D).isEmpty() && !this.p.d(entityzombie.D)) {
                             this.p.d((Entity) entityzombie);
                             entityzombie.d(entitylivingbase);
-                            entityzombie.a((EntityLivingData) null);
+                            entityzombie.a((IEntityLivingData) null);
                             this.a(bp).a(new AttributeModifier("Zombie reinforcement caller charge", -0.05000000074505806D, 0));
                             entityzombie.a(bp).a(new AttributeModifier("Zombie reinforcement callee charge", -0.05000000074505806D, 0));
                             break;
@@ -342,7 +328,7 @@ public class EntityZombie extends EntityMob {
 
             entityzombie.j(entitylivingbase);
             this.p.e((Entity) entitylivingbase);
-            entityzombie.a((EntityLivingData) null);
+            entityzombie.a((IEntityLivingData) null);
             entityzombie.j(true);
             if (entitylivingbase.f()) {
                 entityzombie.i(true);
@@ -353,7 +339,7 @@ public class EntityZombie extends EntityMob {
         }
     }
 
-    public EntityLivingData a(EntityLivingData entitylivingdata) {
+    public IEntityLivingData a(IEntityLivingData entitylivingdata) {
         Object object = super.a(entitylivingdata);
         float f0 = this.p.b(this.t, this.u, this.v);
 
@@ -399,7 +385,7 @@ public class EntityZombie extends EntityMob {
             this.a(true);
         }
 
-        return (EntityLivingData) object;
+        return (IEntityLivingData) object;
     }
 
     public boolean a(EntityPlayer entityplayer) {
@@ -445,7 +431,7 @@ public class EntityZombie extends EntityMob {
         EntityVillager entityvillager = new EntityVillager(this.p);
 
         entityvillager.j(this);
-        entityvillager.a((EntityLivingData) null);
+        entityvillager.a((IEntityLivingData) null);
         entityvillager.cb();
         if (this.f()) {
             entityvillager.c(-24000);
@@ -502,7 +488,7 @@ public class EntityZombie extends EntityMob {
         super.a(this.bv * f0, this.bw * f0);
     }
 
-    class GroupData implements EntityLivingData {
+    class GroupData implements IEntityLivingData {
 
         public boolean a;
         public boolean b;

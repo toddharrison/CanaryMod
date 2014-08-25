@@ -7,11 +7,7 @@ import net.canarymod.ToolBox;
 import net.canarymod.api.entity.EntityType;
 import net.canarymod.api.entity.living.humanoid.CanaryHuman;
 import net.canarymod.api.entity.living.humanoid.CanaryPlayer;
-import net.canarymod.api.inventory.CanaryEnderChestInventory;
-import net.canarymod.api.inventory.CanaryItem;
-import net.canarymod.api.inventory.CanaryPlayerInventory;
-import net.canarymod.api.inventory.EnderChestInventory;
-import net.canarymod.api.inventory.PlayerInventory;
+import net.canarymod.api.inventory.*;
 import net.canarymod.api.nbt.CanaryCompoundTag;
 import net.canarymod.api.packet.CanaryPacket;
 import net.canarymod.api.world.position.Location;
@@ -24,13 +20,8 @@ import net.minecraft.block.material.Material;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.server.CommandBlockLogic;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.IEntityMultiPart;
-import net.minecraft.entity.IMerchant;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.attributes.AttributeInstance;
+import net.minecraft.entity.*;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.boss.EntityDragonPart;
 import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.entity.item.EntityItem;
@@ -58,30 +49,12 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.play.server.S06PacketUpdateHealth;
 import net.minecraft.network.play.server.S1FPacketSetExperience;
 import net.minecraft.potion.Potion;
-import net.minecraft.scoreboard.Score;
-import net.minecraft.scoreboard.ScoreObjective;
-import net.minecraft.scoreboard.ScoreObjectiveCriteria;
-import net.minecraft.scoreboard.ScorePlayerTeam;
-import net.minecraft.scoreboard.Scoreboard;
-import net.minecraft.scoreboard.Team;
+import net.minecraft.scoreboard.*;
 import net.minecraft.stats.AchievementList;
 import net.minecraft.stats.StatBase;
 import net.minecraft.stats.StatList;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityBeacon;
-import net.minecraft.tileentity.TileEntityBrewingStand;
-import net.minecraft.tileentity.TileEntityDispenser;
-import net.minecraft.tileentity.TileEntityFurnace;
-import net.minecraft.tileentity.TileEntityHopper;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.FoodStats;
-import net.minecraft.util.IChatComponent;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.Util;
-import net.minecraft.util.Vec3;
+import net.minecraft.tileentity.*;
+import net.minecraft.util.*;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSettings;
@@ -431,7 +404,7 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
         this.bn.k();
         this.bs = this.bt;
         super.e();
-        AttributeInstance attributeinstance = this.a(SharedMonsterAttributes.d);
+        IAttributeInstance attributeinstance = this.a(SharedMonsterAttributes.d);
 
         if (!this.p.E) {
             attributeinstance.a((double) this.bF.b());
@@ -536,11 +509,11 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
 
     public void b(Entity entity, int i0) {
         this.s(i0);
-        Collection collection = this.bS().a(ScoreObjectiveCriteria.e);
+        Collection collection = this.bS().a(IScoreObjectiveCriteria.e);
 
         if (entity instanceof EntityPlayer) {
             this.a(StatList.y, 1);
-            collection.addAll(this.bS().a(ScoreObjectiveCriteria.d));
+            collection.addAll(this.bS().a(IScoreObjectiveCriteria.d));
         }
         else {
             this.a(StatList.w, 1);
@@ -1610,7 +1583,7 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
 
         OK("OK", 0), NOT_POSSIBLE_HERE("NOT_POSSIBLE_HERE", 1), NOT_POSSIBLE_NOW("NOT_POSSIBLE_NOW", 2), TOO_FAR_AWAY("TOO_FAR_AWAY", 3), OTHER_PROBLEM("OTHER_PROBLEM", 4), NOT_SAFE("NOT_SAFE", 5);
 
-        private static final EnumStatus[] $VALUES = new EnumStatus[]{ OK, NOT_POSSIBLE_HERE, NOT_POSSIBLE_NOW, TOO_FAR_AWAY, OTHER_PROBLEM, NOT_SAFE };
+        private static final EnumStatus[] $VALUES = new EnumStatus[]{OK, NOT_POSSIBLE_HERE, NOT_POSSIBLE_NOW, TOO_FAR_AWAY, OTHER_PROBLEM, NOT_SAFE};
 
         private EnumStatus(String s0, int i0) {
         }
@@ -1625,7 +1598,7 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
         private final int e;
         private final String f;
 
-        private static final EnumChatVisibility[] g = new EnumChatVisibility[]{ FULL, SYSTEM, HIDDEN };
+        private static final EnumChatVisibility[] g = new EnumChatVisibility[]{FULL, SYSTEM, HIDDEN};
 
         private EnumChatVisibility(String i3, int i4, int entityplayer_enumchatvisibility, String s1) {
             this.e = entityplayer_enumchatvisibility;

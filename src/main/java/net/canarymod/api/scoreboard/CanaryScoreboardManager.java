@@ -32,12 +32,12 @@ public class CanaryScoreboardManager implements ScoreboardManager {
 
     @Override
     public ScoreObjectiveCriteria getScoreCriteria(String name) {
-        return ((net.minecraft.scoreboard.ScoreDummyCriteria) net.minecraft.scoreboard.ScoreObjectiveCriteria.a.get(name)).getCanaryScoreObjectiveCriteria();
+        return ((net.minecraft.scoreboard.ScoreDummyCriteria) net.minecraft.scoreboard.IScoreObjectiveCriteria.a.get(name)).getCanaryScoreObjectiveCriteria();
     }
 
     @Override
     public void registerScoreCriteria(String name, Class<? extends ScoreObjectiveCriteria> criteria) {
-        if (net.minecraft.scoreboard.ScoreObjectiveCriteria.a.containsKey(name)) {
+        if (net.minecraft.scoreboard.IScoreObjectiveCriteria.a.containsKey(name)) {
             return;
         }
         try {

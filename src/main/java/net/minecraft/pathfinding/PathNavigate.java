@@ -6,7 +6,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.attributes.AttributeInstance;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
@@ -19,7 +19,7 @@ public class PathNavigate {
     private World b;
     private PathEntity c;
     public double d; // CanaryMod: private => public
-    private AttributeInstance e;
+    private IAttributeInstance e;
     private boolean f;
     private int g;
     private int h;

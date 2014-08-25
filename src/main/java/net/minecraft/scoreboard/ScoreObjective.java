@@ -6,13 +6,13 @@ public class ScoreObjective {
 
     private final Scoreboard a;
     private final String b;
-    private final ScoreObjectiveCriteria c;
+    private final IScoreObjectiveCriteria c;
     private String d;
 
     // CanaryMod: our variables
     private final CanaryScoreObjective scoreObjective = new CanaryScoreObjective(this);
 
-    public ScoreObjective(Scoreboard scoreboard, String s0, ScoreObjectiveCriteria scoreobjectivecriteria) {
+    public ScoreObjective(Scoreboard scoreboard, String s0, IScoreObjectiveCriteria scoreobjectivecriteria) {
         this.a = scoreboard;
         this.b = s0;
         this.c = scoreobjectivecriteria;
@@ -23,7 +23,7 @@ public class ScoreObjective {
         return this.b;
     }
 
-    public ScoreObjectiveCriteria c() {
+    public IScoreObjectiveCriteria c() {
         return this.c;
     }
 
