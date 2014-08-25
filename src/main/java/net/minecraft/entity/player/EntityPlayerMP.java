@@ -1068,8 +1068,8 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
         super.setDisplayName(name);
         S0CPacketSpawnPlayer pkt = new S0CPacketSpawnPlayer(this);
         for (Player p : Canary.getServer().getPlayerList()) {
-            if (!p.getName().equals(this.c_())) {
-                ((CanaryPlayer) p).getHandle().a.a(pkt);
+            if (!p.getName().equals(this.b_())) {
+        	((CanaryPlayer) p).getHandle().a.a(pkt);
             }
         }
     }
