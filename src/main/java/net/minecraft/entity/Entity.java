@@ -599,7 +599,17 @@ public abstract class Entity {
                 }
             }
 
-            // CanaryMod: EntityMoveHook
+            this.p.C.b();
+            this.p.C.a("rest");
+            this.t = (this.D.a + this.D.d) / 2.0D;
+            this.u = this.D.b + (double) this.M - (double) this.W;
+            this.v = (this.D.c + this.D.f) / 2.0D;
+            this.F = d6 != d0 || d8 != d2;
+            this.G = d7 != d1;
+            this.E = d7 != d1 && d7 < 0.0D;
+            this.H = this.F || this.G;
+            this.a(d1, this.E);
+         // CanaryMod: EntityMoveHook
             Location vecFrom = new Location(getCanaryWorld(), this.q, this.r, this.s, this.C, this.B);
             Vector3D vecTo = new Vector3D(this.t, this.u, this.v);
             if (!(this instanceof EntityPlayerMP) && hasMovedOneBlockOrMore()) {
@@ -640,16 +650,6 @@ public abstract class Entity {
                 }
             }
             //
-            this.p.C.b();
-            this.p.C.a("rest");
-            this.t = (this.D.a + this.D.d) / 2.0D;
-            this.u = this.D.b + (double) this.M - (double) this.W;
-            this.v = (this.D.c + this.D.f) / 2.0D;
-            this.F = d6 != d0 || d8 != d2;
-            this.G = d7 != d1;
-            this.E = d7 != d1 && d7 < 0.0D;
-            this.H = this.F || this.G;
-            this.a(d1, this.E);
             if (d6 != d0) {
                 this.w = 0.0D;
             }
