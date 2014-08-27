@@ -1106,7 +1106,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
 
     // CanaryMod: Special methods for remote inventory opening
     public void openContainer(Container container, int containerId, int size) {
-        this.bN();
+        this.bT();
         this.a.a(new S2DPacketOpenWindow(this.bZ, containerId, container.getInventory().getInventoryName(), size, true));
         this.bp = container;
         this.bp.d = this.bZ;
@@ -1114,7 +1114,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
     }
 
     public void openContainer(Container container, int containerId, int size, boolean flag) {
-        this.bN();
+        this.bT();
         this.a.a(new S2DPacketOpenWindow(this.bZ, containerId, container.getInventory().getInventoryName(), size, flag));
         this.bp = container;
         this.bp.d = this.bZ;
