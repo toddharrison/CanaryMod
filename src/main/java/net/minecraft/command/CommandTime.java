@@ -31,7 +31,7 @@ public class CommandTime extends CommandBase {
             if (astring.length == 3) {
                 boolean loaded = MinecraftServer.G().worldManager.worldIsLoaded(astring[2]);
                 if (!loaded) {
-                    a(icommandsender, "No world loaded of Name: '%s'", new Object[]{ astring[2] });
+                    a(icommandsender, "No world loaded of Name: '%s'", new Object[]{astring[2]});
                     return;
                 }
                 worldserver = (WorldServer) ((CanaryWorld) MinecraftServer.G().worldManager.getWorld(astring[2], false)).getHandle();
@@ -55,20 +55,21 @@ public class CommandTime extends CommandBase {
                 }
 
                 this.a(icommandsender, i0, worldserver);
-                a(icommandsender, "commands.time.set", new Object[]{ Integer.valueOf(i0) });
+                a(icommandsender, "commands.time.set", new Object[]{Integer.valueOf(i0)});
                 return;
             }
 
             if (astring[0].equals("add")) {
                 i0 = a(icommandsender, astring[1], 0);
                 this.b(icommandsender, i0, worldserver);
-                a(icommandsender, "commands.time.added", new Object[]{ Integer.valueOf(i0) });
+                a(icommandsender, "commands.time.added", new Object[]{Integer.valueOf(i0)});
                 return;
             }
+
         }
 
         // CanaryMod: add check argument
-        if (astring[0].equals("check")) {
+        if (astring.length > 0 && astring[0].equals("check")) {
             WorldServer worldserver = (WorldServer) icommandsender.d();
             if (astring.length == 2) {
                 boolean loaded = MinecraftServer.G().worldManager.worldIsLoaded(astring[1]);
