@@ -11,11 +11,7 @@ import net.canarymod.api.chat.CanaryChatComponent;
 import net.canarymod.api.chat.ChatComponent;
 import net.canarymod.api.entity.EntityType;
 import net.canarymod.api.entity.living.animal.CanaryHorse;
-import net.canarymod.api.inventory.CanaryAnimalInventory;
-import net.canarymod.api.inventory.CanaryBlockInventory;
-import net.canarymod.api.inventory.CanaryEntityInventory;
-import net.canarymod.api.inventory.EnderChestInventory;
-import net.canarymod.api.inventory.Inventory;
+import net.canarymod.api.inventory.*;
 import net.canarymod.api.packet.CanaryPacket;
 import net.canarymod.api.packet.Packet;
 import net.canarymod.api.world.CanaryWorld;
@@ -26,7 +22,6 @@ import net.canarymod.api.world.position.Location;
 import net.canarymod.chat.Colors;
 import net.canarymod.chat.TextFormat;
 import net.canarymod.config.Configuration;
-import net.canarymod.config.WorldConfiguration;
 import net.canarymod.hook.command.PlayerCommandHook;
 import net.canarymod.hook.player.ChatHook;
 import net.canarymod.hook.player.TeleportHook;
@@ -92,6 +87,14 @@ public class CanaryPlayer extends CanaryHuman implements Player {
     }
 
     /** {@inheritDoc} */
+    @Override
+    public String getUUIDString() {
+        return getUUID().toString();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void chat(final String message) {
         if (message.length() > 100) {

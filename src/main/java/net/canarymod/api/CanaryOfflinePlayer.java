@@ -16,6 +16,7 @@ import net.minecraft.world.storage.SaveHandler;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 
 import static net.canarymod.Canary.log;
 
@@ -141,6 +142,19 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
     @Override
     public String getName() {
         return name;
+    }
+
+    /**
+     * @{inheritDoc}
+     */
+    @Override
+    public UUID getUUID() {
+        return null;
+    }
+
+    @Override
+    public String getUUIDString() {
+        return null;
     }
 
     /**
