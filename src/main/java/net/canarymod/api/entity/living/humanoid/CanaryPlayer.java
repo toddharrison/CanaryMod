@@ -911,4 +911,34 @@ public class CanaryPlayer extends CanaryHuman implements Player {
     public EntityPlayerMP getHandle() {
         return (EntityPlayerMP) entity;
     }
+
+    /** {@inheritDoc} */
+    @Override
+    public void hidePlayer(Player player) {
+        this.getWorld().getEntityTracker().hidePlayer(player, this);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void hidePlayerGlobal() {
+        this.getWorld().getEntityTracker().hidePlayerGlobal(this);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void showPlayer(Player player) {
+        this.getWorld().getEntityTracker().showPlayer(player, this);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void showPlayerGlobal() {
+        this.getWorld().getEntityTracker().showPlayerGlobal(this);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public boolean isPlayerHidden(Player player, Player isHidden) {
+        return this.getWorld().getEntityTracker().isPlayerHidden(player, this);
+    }
 }

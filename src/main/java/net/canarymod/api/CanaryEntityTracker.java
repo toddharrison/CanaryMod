@@ -129,9 +129,11 @@ public class CanaryEntityTracker implements EntityTracker {
     
     @Override
     public boolean isPlayerHidden(Player player, Player isHidden) {
-        if (hiddenPlayersMap.containsKey(player)) {
-            if (hiddenPlayersMap.get(player).contains(isHidden)) {
-                return true;
+        if (player != null && isHidden != null) {
+            if (hiddenPlayersMap.containsKey(player)) {
+                if (hiddenPlayersMap.get(player).contains(isHidden)) {
+                    return true;
+                }
             }
         }
         return false;
