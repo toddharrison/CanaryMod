@@ -1,19 +1,28 @@
 package net.canarymod.api.entity.living;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import net.canarymod.Canary;
 import net.canarymod.api.CanaryDamageSource;
 import net.canarymod.api.DamageSource;
 import net.canarymod.api.DamageType;
 import net.canarymod.api.attributes.AttributeMap;
 import net.canarymod.api.entity.CanaryEntity;
 import net.canarymod.api.entity.Entity;
+import net.canarymod.api.entity.living.humanoid.CanaryPlayer;
+import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.potion.*;
+import net.canarymod.api.world.CanaryWorld;
+import net.canarymod.api.world.Chunk;
 import net.canarymod.api.world.position.Location;
+import net.canarymod.api.world.position.Position;
+import net.canarymod.api.world.position.Vector3D;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.Vec3;
+import net.minecraft.world.World;
 
 public abstract class CanaryLivingBase extends CanaryEntity implements LivingBase {
 
@@ -363,6 +372,70 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
     @Override
     public AttributeMap getAttributeMap() {
         return getHandle().bc().getWrapper();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Entity getTargetLookingAt() {
+        return this.getTargetLookingAt(64);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Entity getTargetLookingAt(int searchRadius) {
+        Entity toRet = null;
+        
+        // Get the vector that this entity is looking; Get our start position
+        Vec3 vec = ((CanaryLivingBase)this).getHandle().ag();
+        Position startPos = this.getPosition();
+        Position nextPos = new Position((startPos.getX() + vec.c), (startPos.getY() + vec.d) + 1.63,(startPos.getZ() + vec.e));
+
+        while (distanceTo(startPos, nextPos) < searchRadius * searchRadius) {
+            // Get the nearest entity and check that its not null
+            Entity near = this.getNearestEnttiy(this, nextPos.getBlockX(), nextPos.getBlockY(), nextPos.getBlockZ());
+            if (near != null) {
+                AxisAlignedBB bb = ((CanaryEntity)near).getHandle().D;
+                if ((nextPos.getX() > bb.a && nextPos.getX() < bb.d) && (nextPos.getY() > bb.b && nextPos.getY() < bb.e) && (nextPos.getZ() > bb.c && nextPos.getZ() < bb.f)) {
+                    toRet = near;
+                    break;
+                }
+            }
+            // Calculate the next position to check
+            nextPos = new Position((nextPos.getX() + (vec.c*.01)), (nextPos.getY() + (vec.d*.01)),(nextPos.getZ() + (vec.e*.01)));
+        }
+        return toRet;
+    }
+        
+    /**
+     * Returns the distance between the two positions
+     * @param pos1
+     * @param pos2
+     * @return 
+     */
+    private double distanceTo(Position pos1, Position pos2) {
+        double xDiff = pos1.getX() - pos2.getX();
+        double yDiff = pos1.getY() - pos2.getY();
+        double zDiff = pos1.getZ() - pos2.getZ();
+
+        return xDiff * xDiff + yDiff * yDiff + zDiff * zDiff;
+    }
+
+    /**
+    * Gets the entity nearest to the searching entity within a 5 meter radius of the given position
+    */
+    private Entity getNearestEnttiy(CanaryLivingBase entity, int x, int y, int z) {
+        // Get the entities world
+        net.canarymod.api.world.World w = entity.getWorld();
+        // create a bounding box around the point with the given coordinates
+        AxisAlignedBB aabb = AxisAlignedBB.a(x - 5, y - 5, z - 5, x + 5, y + 5, z + 5);
+        // get the entity in the Bounding box closest to the entity searching
+        net.minecraft.entity.Entity target = ((CanaryWorld)w).getHandle().a(net.minecraft.entity.EntityLiving.class, aabb, ((CanaryLivingBase)entity).getHandle());
+
+        return (target == null) ? null : target.getCanaryEntity();
     }
 
     /**
