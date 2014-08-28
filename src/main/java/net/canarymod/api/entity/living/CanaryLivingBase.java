@@ -396,7 +396,7 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
 
         while (distanceTo(startPos, nextPos) < searchRadius * searchRadius) {
             // Get the nearest entity and check that its not null
-            Entity near = this.getNearestEnttiy(this, nextPos.getBlockX(), nextPos.getBlockY(), nextPos.getBlockZ());
+            Entity near = this.getNearestEntity(this, nextPos.getBlockX(), nextPos.getBlockY(), nextPos.getBlockZ());
             if (near != null) {
                 AxisAlignedBB bb = ((CanaryEntity)near).getHandle().D;
                 if ((nextPos.getX() > bb.a && nextPos.getX() < bb.d) && (nextPos.getY() > bb.b && nextPos.getY() < bb.e) && (nextPos.getZ() > bb.c && nextPos.getZ() < bb.f)) {
@@ -427,7 +427,7 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
     /**
     * Gets the entity nearest to the searching entity within a 5 meter radius of the given position
     */
-    private Entity getNearestEnttiy(CanaryLivingBase entity, int x, int y, int z) {
+    private Entity getNearestEntity(CanaryLivingBase entity, int x, int y, int z) {
         // Get the entities world
         net.canarymod.api.world.World w = entity.getWorld();
         // create a bounding box around the point with the given coordinates
