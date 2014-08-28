@@ -389,7 +389,7 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
         Position nextPos = new Position((startPos.getX() + vec.c), (startPos.getY() + vec.d) + 1.63,(startPos.getZ() + vec.e));
 
         while (distanceTo(startPos, nextPos) < searchRadius * searchRadius) {
-            // Get the nearest entity and check that its not null
+            // Get the nearest entity and check that its not null (i.e. isn't an entity in the BB)
             Entity near = this.getNearestEntity(this, nextPos.getX(), nextPos.getY(), nextPos.getZ());
             if (near != null) {
                 AxisAlignedBB bb = ((CanaryEntity)near).getHandle().D;
