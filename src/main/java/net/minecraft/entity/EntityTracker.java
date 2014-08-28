@@ -57,7 +57,7 @@ public class EntityTracker {
                 EntityTrackerEntry entitytrackerentry = (EntityTrackerEntry) aC;
 
                 if (entitytrackerentry.a != entityplayermp) {
-                    entitytrackerentry.b(entityplayermp);
+                        entitytrackerentry.b(entityplayermp);
                 }
             }
         }
@@ -156,6 +156,13 @@ public class EntityTracker {
 
             this.c.add(entitytrackerentry);
             this.d.a(s0.y(), entitytrackerentry);
+            
+            // CanaryMod: update hidden player tracking state
+            if (s0 instanceof EntityPlayerMP) {
+                EntityPlayerMP entityplayermp = (EntityPlayerMP) s0;
+                canaryTracker.forceHiddenPlayerUpdate(entityplayermp.getPlayer());
+            }
+            // CanaryMod: end
             entitytrackerentry.b(this.b.h);
         }
         catch (Throwable s01) {
@@ -193,6 +200,8 @@ public class EntityTracker {
         if (entity instanceof EntityPlayerMP) {
             EntityPlayerMP entityplayermp = (EntityPlayerMP) entity;
             Iterator iterator = this.c.iterator();
+            // CanaryMod: update hidden player tracking state
+            canaryTracker.clearHiddenPlayerData(entityplayermp.getPlayer());
 
             while (iterator.hasNext()) {
                 EntityTrackerEntry entitytrackerentry = (EntityTrackerEntry) iterator.next();
@@ -290,5 +299,15 @@ public class EntityTracker {
      */
     public Set<EntityTrackerEntry> getTrackedEntities() {
         return c;
+    }
+    
+    /**
+     * Gets teh EntityTrackerEntry for the entity with the given uuid
+     * 
+     * @param uuid
+     * @return 
+     */
+    public EntityTrackerEntry getTrackerEntry(int uuid) {
+        return (EntityTrackerEntry)d.a(uuid);
     }
 }

@@ -1,5 +1,10 @@
 package net.minecraft.entity;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 import net.canarymod.api.CanaryEntityTrackerEntry;
 import net.canarymod.api.entity.living.humanoid.EntityNonPlayableCharacter;
 import net.minecraft.block.Block;
@@ -27,12 +32,6 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.storage.MapData;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
 
 public class EntityTrackerEntry {
 
@@ -282,6 +281,14 @@ public class EntityTrackerEntry {
     }
 
     public void b(EntityPlayerMP entityplayermp) {
+        // CanaryMod: Our check to block updates if entityis player and hidden to target
+        if (this.a instanceof EntityPlayerMP) {
+            if (this.a.getCanaryWorld().getEntityTracker().isPlayerHidden(entityplayermp.getPlayer(), ((EntityPlayerMP)this.a).getPlayer())) {
+                // CanaryMod: return because this entity is hidden to the other, don't update!
+                return;
+            }
+        }
+        // CanaryMod: End
         if (entityplayermp != this.a) {
             double d0 = entityplayermp.t - (double) (this.d / 32);
             double d1 = entityplayermp.v - (double) (this.f / 32);
