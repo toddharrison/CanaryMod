@@ -3,26 +3,20 @@ package net.canarymod.api.entity.living;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import net.canarymod.Canary;
 import net.canarymod.api.CanaryDamageSource;
 import net.canarymod.api.DamageSource;
 import net.canarymod.api.DamageType;
 import net.canarymod.api.attributes.AttributeMap;
 import net.canarymod.api.entity.CanaryEntity;
 import net.canarymod.api.entity.Entity;
-import net.canarymod.api.entity.living.humanoid.CanaryPlayer;
-import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.potion.*;
 import net.canarymod.api.world.CanaryWorld;
-import net.canarymod.api.world.Chunk;
 import net.canarymod.api.world.position.Location;
 import net.canarymod.api.world.position.Position;
-import net.canarymod.api.world.position.Vector3D;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Vec3;
-import net.minecraft.world.World;
 
 public abstract class CanaryLivingBase extends CanaryEntity implements LivingBase {
 
@@ -396,16 +390,19 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
 
         while (distanceTo(startPos, nextPos) < searchRadius * searchRadius) {
             // Get the nearest entity and check that its not null
-            Entity near = this.getNearestEnttiy(this, nextPos.getBlockX(), nextPos.getBlockY(), nextPos.getBlockZ());
+            Entity near = this.getNearestEntity(this, nextPos.getX(), nextPos.getY(), nextPos.getZ());
             if (near != null) {
                 AxisAlignedBB bb = ((CanaryEntity)near).getHandle().D;
                 if ((nextPos.getX() > bb.a && nextPos.getX() < bb.d) && (nextPos.getY() > bb.b && nextPos.getY() < bb.e) && (nextPos.getZ() > bb.c && nextPos.getZ() < bb.f)) {
                     toRet = near;
                     break;
                 }
+                // Calculate the next position to check, small step because we have entities here
+                nextPos = new Position((nextPos.getX() + (vec.c*.01)), (nextPos.getY() + (vec.d*.01)),(nextPos.getZ() + (vec.e*.01)));
+            } else {
+                // Calculate the next position to check, large step because the immediate area is empty
+                nextPos = new Position((nextPos.getX() + (vec.c)), (nextPos.getY() + (vec.d)),(nextPos.getZ() + (vec.e)));
             }
-            // Calculate the next position to check
-            nextPos = new Position((nextPos.getX() + (vec.c*.01)), (nextPos.getY() + (vec.d*.01)),(nextPos.getZ() + (vec.e*.01)));
         }
         return toRet;
     }
@@ -427,11 +424,11 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
     /**
     * Gets the entity nearest to the searching entity within a 5 meter radius of the given position
     */
-    private Entity getNearestEnttiy(CanaryLivingBase entity, int x, int y, int z) {
+    private Entity getNearestEntity(CanaryLivingBase entity, double x, double y, double z) {
         // Get the entities world
         net.canarymod.api.world.World w = entity.getWorld();
         // create a bounding box around the point with the given coordinates
-        AxisAlignedBB aabb = AxisAlignedBB.a(x - 5, y - 5, z - 5, x + 5, y + 5, z + 5);
+        AxisAlignedBB aabb = AxisAlignedBB.a(x - .5, y - .5, z - .5, x + .5, y + .5, z + .5);
         // get the entity in the Bounding box closest to the entity searching
         net.minecraft.entity.Entity target = ((CanaryWorld)w).getHandle().a(net.minecraft.entity.EntityLiving.class, aabb, ((CanaryLivingBase)entity).getHandle());
 
