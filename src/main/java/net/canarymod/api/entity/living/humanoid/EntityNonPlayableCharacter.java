@@ -1,11 +1,13 @@
 package net.canarymod.api.entity.living.humanoid;
 
 import com.mojang.authlib.GameProfile;
+import java.util.UUID;
 import net.canarymod.api.entity.CanaryEntity;
 import net.canarymod.api.entity.living.LivingBase;
 import net.canarymod.api.entity.living.humanoid.npc.ai.Attacked;
 import net.canarymod.api.entity.living.humanoid.npc.ai.Clicked;
 import net.canarymod.api.entity.living.humanoid.npc.ai.Destroyed;
+import net.canarymod.api.entity.living.humanoid.npc.ai.PickupItem;
 import net.canarymod.api.entity.living.humanoid.npc.ai.Update;
 import net.canarymod.api.entity.living.humanoid.npchelpers.EntityNPCJumpHelper;
 import net.canarymod.api.entity.living.humanoid.npchelpers.EntityNPCLookHelper;
@@ -13,6 +15,8 @@ import net.canarymod.api.entity.living.humanoid.npchelpers.EntityNPCMoveHelper;
 import net.canarymod.api.entity.living.humanoid.npchelpers.PathNavigateNPC;
 import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.api.world.position.Location;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -21,8 +25,6 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-
-import java.util.UUID;
 
 /**
  * NonPlayableCharacter (NPC) Entity class
@@ -175,6 +177,20 @@ public final class EntityNonPlayableCharacter extends EntityPlayer {
     }
     //World d();
     //
+
+    /*
+    * onPickUp Method, used to call NPCAI implementation PickupItem
+    */
+    @Override
+    public void a(Entity entity, int i0) {
+        if (!entity.L && !this.p.E) {
+            super.a(entity, i0);
+            if (entity instanceof EntityItem) {
+                new PickupItem(((EntityItem)entity).getEntityItem().getItem()).call(this.getNPC());
+            }
+            
+        }
+    }
 
     public CanaryNonPlayableCharacter getNPC() {
         return (CanaryNonPlayableCharacter) entity;
