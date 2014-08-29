@@ -44,6 +44,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import static net.canarymod.Canary.log;
 
@@ -239,6 +240,9 @@ public class CanaryServer implements Server {
         return !timers.containsKey(uniqueName);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Player matchPlayer(String name) {
         Player lastPlayer = null;
@@ -264,6 +268,9 @@ public class CanaryServer implements Server {
         return lastPlayer;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public OfflinePlayer getOfflinePlayer(String player) {
         NBTTagCompound nbttagcompound = ServerConfigurationManager.getPlayerDatByName(player);
@@ -274,6 +281,9 @@ public class CanaryServer implements Server {
         return new CanaryOfflinePlayer(player, comp);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public PlayerReference matchKnownPlayer(String player) {
         PlayerReference reference = matchPlayer(player);
@@ -283,11 +293,51 @@ public class CanaryServer implements Server {
         return reference;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Player getPlayer(String name) {
         return server.getConfigurationManager().getPlayerByName(name);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Player getPlayerFromUUID(String uuid) {
+        Player player = null;
+
+        for (Player p : server.getConfigurationManager().getAllPlayers()) {
+            if (p.getUUIDString().equals(uuid)) {
+                player = p;
+                break;
+            }
+        }
+
+        return player;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Player getPlayerFromUUID(UUID uuid) {
+        Player player = null;
+
+        for (Player p : server.getConfigurationManager().getAllPlayers()) {
+            if (p.getUUID().equals(uuid)) {
+                player = p;
+                break;
+            }
+        }
+
+        return player;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Player> getPlayerList() {
         return server.getConfigurationManager().getAllPlayers();
