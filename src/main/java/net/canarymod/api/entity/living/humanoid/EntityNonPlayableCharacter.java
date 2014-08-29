@@ -2,6 +2,11 @@ package net.canarymod.api.entity.living.humanoid;
 
 import com.mojang.authlib.GameProfile;
 import net.canarymod.api.entity.CanaryEntity;
+import net.canarymod.api.entity.living.LivingBase;
+import net.canarymod.api.entity.living.humanoid.npc.ai.Attacked;
+import net.canarymod.api.entity.living.humanoid.npc.ai.Clicked;
+import net.canarymod.api.entity.living.humanoid.npc.ai.Destroyed;
+import net.canarymod.api.entity.living.humanoid.npc.ai.Update;
 import net.canarymod.api.entity.living.humanoid.npchelpers.EntityNPCJumpHelper;
 import net.canarymod.api.entity.living.humanoid.npchelpers.EntityNPCLookHelper;
 import net.canarymod.api.entity.living.humanoid.npchelpers.EntityNPCMoveHelper;
@@ -85,7 +90,9 @@ public final class EntityNonPlayableCharacter extends EntityPlayer {
     public void h() {
         super.h();
         if (!this.L) {
+            new Update().call(getNPC());
             getNPC().update();
+            getLook_helper().a(); //Update Looking
         }
     }
 
@@ -93,6 +100,7 @@ public final class EntityNonPlayableCharacter extends EntityPlayer {
     public boolean c(EntityPlayer entityplayer) { // RightClicked
         super.c(entityplayer);
         if (this.entity != null) {
+            new Clicked(((EntityPlayerMP) entityplayer).getPlayer()).call(getNPC());
             getNPC().clicked(((EntityPlayerMP) entityplayer).getPlayer());
             return true;
         }
@@ -105,6 +113,9 @@ public final class EntityNonPlayableCharacter extends EntityPlayer {
 
         if (toRet && damagesource.j() != null) {
             CanaryEntity atk = damagesource.j().getCanaryEntity();
+            if (atk instanceof LivingBase) {
+                new Attacked(LivingBase.class.cast(atk)).call(getNPC());
+            }
             getNPC().attacked(atk);
         }
         return toRet;
@@ -113,6 +124,7 @@ public final class EntityNonPlayableCharacter extends EntityPlayer {
     @Override
     public void B() {
         super.B();
+        new Destroyed().call(getNPC());
         getNPC().destroyed();
     }
 
@@ -143,6 +155,10 @@ public final class EntityNonPlayableCharacter extends EntityPlayer {
 
     public void a(float f0) {
     } // Food Exhaustion stuff
+
+    public float g() { // Eye Height (in EntityPlayer its set to 0.12F so we need to override that
+        return 1.62F;
+    }
 
     // ICommandSender things
     //String b_();

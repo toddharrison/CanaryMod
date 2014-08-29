@@ -134,13 +134,15 @@ public abstract class CanaryEntity implements Entity {
     @Override
     public void setPitch(float pitch) {
         entity.A = pitch;
-
     }
 
     @Override
     public void setRotation(float rotation) {
         entity.z = rotation;
+    }
 
+    public float getEyeHeight() {
+        return entity.g();
     }
 
     @Override
@@ -184,7 +186,6 @@ public abstract class CanaryEntity implements Entity {
     @Override
     public void setFireTicks(int ticks) {
         this.entity.e = ticks;
-
     }
 
     @Override
