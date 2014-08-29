@@ -5,6 +5,7 @@ import com.mojang.authlib.GameProfile;
 import io.netty.buffer.Unpooled;
 import net.canarymod.Canary;
 import net.canarymod.api.CanaryNetServerHandler;
+import net.canarymod.api.PlayerListEntry;
 import net.canarymod.api.chat.CanaryChatComponent;
 import net.canarymod.api.entity.living.animal.EntityAnimal;
 import net.canarymod.api.entity.living.humanoid.CanaryPlayer;
@@ -1045,11 +1046,14 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
 
     @Override
     public void setDisplayName(String name) {
+        // Get old Playerlist Entry so it can be removed
+        PlayerListEntry entry = ((Player) this.getCanaryHuman()).getPlayerListEntry(false);
         super.setDisplayName(name);
         S0CPacketSpawnPlayer pkt = new S0CPacketSpawnPlayer(this);
         for (Player p : Canary.getServer().getPlayerList()) {
             if (!p.getName().equals(this.b_())) {
-                ((CanaryPlayer) p).getHandle().a.a(pkt);
+                ((CanaryPlayer) p).sendPlayerListEntry(entry); // Send entry removal
+                ((CanaryPlayer) p).getHandle().a.a(pkt); // Respawn player
             }
         }
     }
