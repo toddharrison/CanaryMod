@@ -386,7 +386,7 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
         // Get the vector that this entity is looking; Get our start position
         Vec3 vec = ((CanaryLivingBase)this).getHandle().ag();
         Position startPos = this.getPosition();
-        Position nextPos = new Position((startPos.getX() + vec.c), (startPos.getY() + vec.d) + 1.63,(startPos.getZ() + vec.e));
+        Position nextPos = new Position((startPos.getX() + vec.c), (startPos.getY() + vec.d) + this.getEyeHeight(),(startPos.getZ() + vec.e));
 
         while (distanceTo(startPos, nextPos) < searchRadius * searchRadius) {
             // Get the nearest entity and check that its not null (i.e. isn't an entity in the BB)
