@@ -16,6 +16,7 @@ import net.canarymod.api.entity.living.humanoid.npchelpers.PathNavigateNPC;
 import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.api.world.position.Location;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -49,6 +50,10 @@ public final class EntityNonPlayableCharacter extends EntityPlayer {
         this.jump_helper = new EntityNPCJumpHelper(this);
         this.look_helper = new EntityNPCLookHelper(this);
         this.path_navigate = new PathNavigateNPC(this, ((CanaryWorld) location.getWorld()).getHandle());
+        this.path_navigate.a(false);
+        this.path_navigate.b(false);
+        this.path_navigate.d(false);
+        this.path_navigate.e(true);
         this.X = 0.0F;
         this.M = 0.0F;
         this.b((double) location.getX(), location.getY(), location.getZ(), location.getRotation(), location.getPitch());
@@ -94,8 +99,17 @@ public final class EntityNonPlayableCharacter extends EntityPlayer {
         if (!this.L) {
             new Update().call(getNPC());
             getNPC().update();
-            getLook_helper().a(); //Update Looking
+            //getLook_helper().a(); //Update Looking
         }
+    }
+    
+    @Override
+    protected void bn() {
+        this.getPathNavigate().f();
+        this.bp();
+        this.getMoveHelper().c();
+        this.getLook_helper().a();
+        this.getJumpHelper().b();
     }
 
     @Override
@@ -194,5 +208,69 @@ public final class EntityNonPlayableCharacter extends EntityPlayer {
 
     public CanaryNonPlayableCharacter getNPC() {
         return (CanaryNonPlayableCharacter) entity;
+    }
+    
+    /* 
+    *  Entity Living Methods 
+    *  These are the few extra methods needed for path finding and Vanilla AI 
+    *  system to work.
+    */
+    
+
+    public void n(float f0) {
+        this.bf = f0;
+    }
+
+    public void i(float f0) {
+        super.i(f0);
+        this.n(f0);
+    }
+
+    protected boolean bk() {
+        return true;
+    }
+
+    protected void bq() {
+        super.bq();
+    }
+
+    public int x() {
+        return 40;
+    }
+
+    public void a(Entity entity, float f0, float f1) {
+        double d0 = entity.t - this.t;
+        double d1 = entity.v - this.v;
+        double d2;
+
+        if (entity instanceof EntityLivingBase) {
+            EntityLivingBase entitylivingbase = (EntityLivingBase) entity;
+
+            d2 = entitylivingbase.u + (double) entitylivingbase.g() - (this.u + (double) this.g());
+        }
+        else {
+            d2 = (entity.D.b + entity.D.e) / 2.0D - (this.u + (double) this.g());
+        }
+
+        double d3 = (double) MathHelper.a(d0 * d0 + d1 * d1);
+        float f2 = (float) (Math.atan2(d1, d0) * 180.0D / 3.1415927410125732D) - 90.0F;
+        float f3 = (float) (-(Math.atan2(d2, d3) * 180.0D / 3.1415927410125732D));
+
+        this.A = this.b(this.A, f3, f1);
+        this.z = this.b(this.z, f2, f0);
+    }
+
+    private float b(float f0, float f1, float f2) {
+        float f3 = MathHelper.g(f1 - f0);
+
+        if (f3 > f2) {
+            f3 = f2;
+        }
+
+        if (f3 < -f2) {
+            f3 = -f2;
+        }
+
+        return f0 + f3;
     }
 }

@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static net.canarymod.Canary.log;
+import net.canarymod.api.PathFinder;
 
 /**
  * NonPlayableCharacter implementation
@@ -252,6 +253,14 @@ public class CanaryNonPlayableCharacter extends CanaryHuman implements NonPlayab
         hash = 89 * hash + this.getID();
         hash = 89 * hash + (this.getName() != null ? this.getName().hashCode() : 0);
         return hash;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public PathFinder getPathFinder() {
+        return this.getHandle().getPathNavigate().getCanaryPathFinderNPC();
     }
 
     /**

@@ -1,5 +1,6 @@
 package net.canarymod.api.entity.living.humanoid.npchelpers;
 
+import net.canarymod.api.CanaryPathFinderNPC;
 import net.canarymod.api.entity.living.humanoid.EntityNonPlayableCharacter;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -19,10 +20,10 @@ import net.minecraft.world.World;
  */
 public class PathNavigateNPC {
 
-    private EntityNonPlayableCharacter a;
+    private final EntityNonPlayableCharacter a;
     private World b;
     private PathEntity c;
-    private double d;
+    public double d; // CanaryMod: private => public
     private IAttributeInstance e;
     private boolean f;
     private int g;
@@ -32,6 +33,10 @@ public class PathNavigateNPC {
     private boolean k;
     private boolean l;
     private boolean m;
+    
+    // CanaryMod: variables
+    public float searchRange = 100.0F;
+    private CanaryPathFinderNPC nav = new CanaryPathFinderNPC(this); // CanaryMod: our var
 
     public PathNavigateNPC(EntityNonPlayableCharacter entityNPC, World world) {
         this.a = entityNPC;
@@ -72,7 +77,7 @@ public class PathNavigateNPC {
     }
 
     public float d() {
-        return (float) this.e.e();
+        return (float) searchRange; // CanaryMod: manually set the search radius
     }
 
     public PathEntity a(double d0, double d1, double d2) {
@@ -370,5 +375,10 @@ public class PathNavigateNPC {
         }
 
         return true;
+    }
+
+    // CanaryMod
+    public CanaryPathFinderNPC getCanaryPathFinderNPC() {
+        return this.nav;
     }
 }
