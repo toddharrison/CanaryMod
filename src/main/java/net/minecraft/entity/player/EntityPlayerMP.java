@@ -1047,12 +1047,13 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
     @Override
     public void setDisplayName(String name) {
         // Get old Playerlist Entry so it can be removed
-        PlayerListEntry entry = ((Player) this.getCanaryHuman()).getPlayerListEntry(false);
+        PlayerListEntry entry = getPlayer().getPlayerListEntry(false);
+        getPlayer().sendPlayerListEntry(entry); // Send self entry packet
         super.setDisplayName(name);
         S0CPacketSpawnPlayer pkt = new S0CPacketSpawnPlayer(this);
         for (Player p : Canary.getServer().getPlayerList()) {
             if (!p.getName().equals(this.b_())) {
-                ((CanaryPlayer) p).sendPlayerListEntry(entry); // Send entry removal
+                p.sendPlayerListEntry(entry); // Send entry removal
                 ((CanaryPlayer) p).getHandle().a.a(pkt); // Respawn player
             }
         }
