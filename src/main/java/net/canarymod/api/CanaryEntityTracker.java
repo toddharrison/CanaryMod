@@ -1,10 +1,6 @@
 package net.canarymod.api;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import net.canarymod.Canary;
-import static net.canarymod.Canary.log;
 import net.canarymod.api.entity.CanaryEntity;
 import net.canarymod.api.entity.Entity;
 import net.canarymod.api.entity.living.humanoid.CanaryPlayer;
@@ -15,6 +11,12 @@ import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.api.world.World;
 import net.minecraft.network.play.server.S0CPacketSpawnPlayer;
 import net.minecraft.network.play.server.S13PacketDestroyEntities;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import static net.canarymod.Canary.log;
 
 public class CanaryEntityTracker implements EntityTracker {
     private net.minecraft.entity.EntityTracker tracker;
@@ -83,7 +85,7 @@ public class CanaryEntityTracker implements EntityTracker {
 
     @Override
     public void hidePlayer(Player player, Player toHide) {
-        if (player != null && toHide != null) {
+        if (player != null && toHide != null && !player.equals(toHide)) {
             if (hiddenPlayersMap.containsKey(player) && !hiddenPlayersMap.get(player).contains(toHide)) {
                 hiddenPlayersMap.get(player).add(toHide);
                 player.sendPacket(new CanaryPacket(new S13PacketDestroyEntities(new int[] {toHide.getID()})));
@@ -98,14 +100,16 @@ public class CanaryEntityTracker implements EntityTracker {
         if (toHide != null && !hiddenGlobal.contains(toHide)) {
             hiddenGlobal.add(toHide);
             for (Player p : Canary.getServer().getPlayerList()) {
-                this.hidePlayer(p, toHide);
+                if (!p.equals(toHide)) {
+                    this.hidePlayer(p, toHide);
+                }
             }
         }
     }
 
     @Override
     public void showPlayer(Player player, Player toShow) {
-        if (player != null && toShow != null) {
+        if (player != null && toShow != null && !player.equals(toShow)) {
             if (hiddenPlayersMap.containsKey(player) && hiddenPlayersMap.get(player).contains(toShow)) {
                 hiddenPlayersMap.get(player).remove(toShow);
                 net.minecraft.entity.EntityTrackerEntry t = tracker.getTrackerEntry(toShow.getID());
@@ -122,7 +126,9 @@ public class CanaryEntityTracker implements EntityTracker {
         if (toShow != null && hiddenGlobal.contains(toShow)) {
             hiddenGlobal.remove(toShow);
             for (Player p : Canary.getServer().getPlayerList()) {
-                this.showPlayer(p, toShow);
+                if (!toShow.equals(p)) {
+                    this.showPlayer(p, toShow);
+                }
             }
         }
     }

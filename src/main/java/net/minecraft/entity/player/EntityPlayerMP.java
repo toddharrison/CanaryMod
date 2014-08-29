@@ -16,6 +16,7 @@ import net.canarymod.api.inventory.CanaryEnderChestInventory;
 import net.canarymod.api.inventory.Inventory;
 import net.canarymod.api.inventory.NativeCustomStorageInventory;
 import net.canarymod.api.nbt.CompoundTag;
+import net.canarymod.api.packet.CanaryPacket;
 import net.canarymod.api.statistics.CanaryStat;
 import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.api.world.blocks.CanaryAnvil;
@@ -131,6 +132,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
         }
 
         this.entity = new CanaryPlayer(this); // CanaryMod: wrap entity
+
     }
 
     /* Special Constructor to keep a wrapper reference intact */
@@ -1046,17 +1048,18 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
 
     @Override
     public void setDisplayName(String name) {
-        // Get old Playerlist Entry so it can be removed
-        PlayerListEntry entry = getPlayer().getPlayerListEntry(false);
-        getPlayer().sendPlayerListEntry(entry); // Send self entry packet
-        super.setDisplayName(name);
-        S0CPacketSpawnPlayer pkt = new S0CPacketSpawnPlayer(this);
-        for (Player p : Canary.getServer().getPlayerList()) {
-            if (!p.getName().equals(this.b_())) {
-                p.sendPlayerListEntry(entry); // Send entry removal
-                ((CanaryPlayer) p).getHandle().a.a(pkt); // Respawn player
+        PlayerListEntry entryOld = getPlayer().getPlayerListEntry(false);
+        PlayerListEntry entryNew = entryOld.clone();
+        entryNew.setName(name);
+        entryNew.setShown(true);
+        super.setDisplayName(name); // Change name
+        for (Player player : Canary.getServer().getPlayerList()) {
+            if (!player.equals(getPlayer())) {
+                player.sendPacket(new CanaryPacket(new S0CPacketSpawnPlayer(this)));
             }
         }
+        Canary.getServer().sendPlayerListEntry(entryNew);
+        Canary.getServer().sendPlayerListEntry(entryOld);
     }
 
     public void updateSlot(int windowId, int slotIndex, ItemStack item) {
@@ -1128,6 +1131,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
 
     public void setMetaData(CompoundTag meta) {
         this.metadata = meta;
+        this.b_();
     }
 
     public void saveMeta() {
