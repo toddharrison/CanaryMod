@@ -97,7 +97,6 @@ public final class EntityNonPlayableCharacter extends EntityPlayer {
     public void h() {
         if (!this.L) {
             new Update().call(getNPC());
-            getNPC().update();
         }
         super.h();
     }
@@ -116,7 +115,6 @@ public final class EntityNonPlayableCharacter extends EntityPlayer {
         super.c(entityplayer);
         if (this.entity != null) {
             new Clicked(((EntityPlayerMP) entityplayer).getPlayer()).call(getNPC());
-            getNPC().clicked(((EntityPlayerMP) entityplayer).getPlayer());
             return true;
         }
         return false;
@@ -131,7 +129,6 @@ public final class EntityNonPlayableCharacter extends EntityPlayer {
             if (atk instanceof LivingBase) {
                 new Attacked(LivingBase.class.cast(atk)).call(getNPC());
             }
-            getNPC().attacked(atk);
         }
         return toRet;
     }
@@ -140,7 +137,6 @@ public final class EntityNonPlayableCharacter extends EntityPlayer {
     public void B() {
         super.B();
         new Destroyed().call(getNPC());
-        getNPC().destroyed();
     }
 
     protected void bi() {
