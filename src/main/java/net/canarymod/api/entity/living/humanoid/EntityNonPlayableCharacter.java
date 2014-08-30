@@ -95,12 +95,11 @@ public final class EntityNonPlayableCharacter extends EntityPlayer {
 
     @Override
     public void h() {
-        super.h();
         if (!this.L) {
             new Update().call(getNPC());
             getNPC().update();
-            //getLook_helper().a(); //Update Looking
         }
+        super.h();
     }
     
     @Override
