@@ -1,14 +1,9 @@
 package net.canarymod.api.entity.living.humanoid;
 
 import com.mojang.authlib.GameProfile;
-import java.util.UUID;
 import net.canarymod.api.entity.CanaryEntity;
 import net.canarymod.api.entity.living.LivingBase;
-import net.canarymod.api.entity.living.humanoid.npc.ai.Attacked;
-import net.canarymod.api.entity.living.humanoid.npc.ai.Clicked;
-import net.canarymod.api.entity.living.humanoid.npc.ai.Destroyed;
-import net.canarymod.api.entity.living.humanoid.npc.ai.PickupItem;
-import net.canarymod.api.entity.living.humanoid.npc.ai.Update;
+import net.canarymod.api.entity.living.humanoid.npc.ai.*;
 import net.canarymod.api.entity.living.humanoid.npchelpers.EntityNPCJumpHelper;
 import net.canarymod.api.entity.living.humanoid.npchelpers.EntityNPCLookHelper;
 import net.canarymod.api.entity.living.humanoid.npchelpers.EntityNPCMoveHelper;
@@ -26,6 +21,8 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+
+import java.util.UUID;
 
 /**
  * NonPlayableCharacter (NPC) Entity class
@@ -126,9 +123,7 @@ public final class EntityNonPlayableCharacter extends EntityPlayer {
 
         if (toRet && damagesource.j() != null) {
             CanaryEntity atk = damagesource.j().getCanaryEntity();
-            if (atk instanceof LivingBase) {
-                new Attacked(LivingBase.class.cast(atk)).call(getNPC());
-            }
+            new Attacked(LivingBase.class.cast(atk)).call(getNPC());
         }
         return toRet;
     }
