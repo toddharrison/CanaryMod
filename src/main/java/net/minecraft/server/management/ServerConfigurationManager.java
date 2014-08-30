@@ -370,7 +370,7 @@ public abstract class ServerConfigurationManager {
         UUID id0 = Util.b(gameprofile.getId());
         String s2 = ((InetSocketAddress) socketaddress).getAddress().getHostAddress(); // Proper IPv6 handling
 
-        PreConnectionHook hook = (PreConnectionHook) new PreConnectionHook(s2, s0, net.canarymod.api.world.DimensionType.NORMAL, Canary.getServer().getDefaultWorldName()).call();
+        PreConnectionHook hook = (PreConnectionHook) new PreConnectionHook(s2, s0, id0, net.canarymod.api.world.DimensionType.NORMAL, Canary.getServer().getDefaultWorldName()).call();
 
         if (hook.getKickReason() != null) {
             return hook.getKickReason();
