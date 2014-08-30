@@ -103,7 +103,8 @@ public abstract class ServerConfigurationManager {
             s0 = inetworkmanager.b().toString();
         }
 
-        d.info(entityplayermp.b_() + "[" + s0 + "] logged in with entity id " + entityplayermp.y() + " at (" + entityplayermp.t + ", " + entityplayermp.u + ", " + entityplayermp.v + ")");
+        // CanaryMod: Show displayname and official name
+        d.info(entityplayermp.getDisplayName() + "{" + entityplayermp.b_() + "}[" + s0 + "] logged in with entity id " + entityplayermp.y() + " at (" + entityplayermp.t + ", " + entityplayermp.u + ", " + entityplayermp.v + ")");
         // CanaryMod: Use world we got from players NBT data
         WorldServer worldserver = (WorldServer) w.getHandle();
         ChunkCoordinates chunkcoordinates = worldserver.J();
@@ -120,7 +121,8 @@ public abstract class ServerConfigurationManager {
         entityplayermp.x().b(entityplayermp);
         this.a((ServerScoreboard) worldserver.W(), entityplayermp);
         this.f.au();
-        ChatComponentTranslation chatcomponenttranslation = new ChatComponentTranslation("multiplayer.player.joined", new Object[]{entityplayermp.c_()});
+        // CanaryMod: Use display name
+        ChatComponentTranslation chatcomponenttranslation = new ChatComponentTranslation("multiplayer.player.joined", new Object[]{entityplayermp.getDisplayName()});
         chatcomponenttranslation.b().a(EnumChatFormatting.YELLOW);
         // CanaryMod Connection hook
         ConnectionHook hook = (ConnectionHook) new ConnectionHook(entityplayermp.getPlayer(), chatcomponenttranslation.e(), firstTime).call();
@@ -156,15 +158,10 @@ public abstract class ServerConfigurationManager {
             }
         }
 
-        // Making sure some stuff is there before attempting to read it (if the player has no nbt, then the usual route is skipped)
-        if (nbttagcompound != null && nbttagcompound.c("Canary")) {
-            entityplayermp.setMetaData(new CanaryCompoundTag((NBTTagCompound) nbttagcompound.m("Canary")));
-        }
-        else {
-            entityplayermp.initializeNewMeta();
-        }
+
         // CanaryMod: Send Message of the Day
         Canary.motd().sendMOTD(entityplayermp.getPlayer());
+        entityplayermp.getPlayer().setDisplayName(entityplayermp.getDisplayName()); // Login DisplayName work around
         //
     }
 
@@ -370,6 +367,7 @@ public abstract class ServerConfigurationManager {
 */
 //      CanaryMod, redo the whole thing
         String s0 = gameprofile.getName();
+        UUID id0 = Util.b(gameprofile.getId());
         String s2 = ((InetSocketAddress) socketaddress).getAddress().getHostAddress(); // Proper IPv6 handling
 
         PreConnectionHook hook = (PreConnectionHook) new PreConnectionHook(s2, s0, net.canarymod.api.world.DimensionType.NORMAL, Canary.getServer().getDefaultWorldName()).call();
@@ -428,7 +426,6 @@ public abstract class ServerConfigurationManager {
         String worldName = Canary.getServer().getDefaultWorldName();
         net.canarymod.api.world.DimensionType worldtype = DimensionType.NORMAL;
         NBTTagCompound playertag = getPlayerDatByName(gameprofile.getName());
-
         if (playertag != null) {
             CanaryCompoundTag canarycompound = new CanaryCompoundTag(playertag);
 
@@ -449,7 +446,16 @@ public abstract class ServerConfigurationManager {
             object = new ItemInWorldManager(world);
         }
 
-        return new EntityPlayerMP(this.f, this.f.getWorld(worldName, 0), gameprofile, (ItemInWorldManager) object);
+        // CanaryMod: Start: Meta Initialize
+        EntityPlayerMP toRet = new EntityPlayerMP(this.f, this.f.getWorld(worldName, 0), gameprofile, (ItemInWorldManager) object);
+        // Making sure some stuff is there before attempting to read it (if the player has no nbt, then the usual route is skipped)
+        if (playertag != null && playertag.c("Canary")) {
+            toRet.setMetaData(new CanaryCompoundTag(playertag.m("Canary")));
+        } else {
+            toRet.initializeNewMeta();
+        }
+        return toRet;
+        //
     }
 
     public EntityPlayerMP a(EntityPlayerMP entityplayermp, int i0, boolean flag) {
