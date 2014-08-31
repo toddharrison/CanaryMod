@@ -1,6 +1,7 @@
 package net.minecraft.entity.monster;
 
 import net.canarymod.api.entity.living.monster.CanarySlime;
+import net.canarymod.hook.entity.MobTargetHook;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -116,7 +117,15 @@ public class EntitySlime extends EntityLiving implements IMob {
         EntityPlayer entityplayer = this.p.b(this, 16.0D);
 
         if (entityplayer != null) {
-            this.a(entityplayer, 10.0F, 20.0F);
+            // CanaryMod: MobTarget
+            MobTargetHook hook = (MobTargetHook) new MobTargetHook((net.canarymod.api.entity.living.LivingBase) this.getCanaryEntity(), (net.canarymod.api.entity.living.LivingBase) entityplayer.getCanaryEntity()).call();
+            if (!hook.isCanceled()) {
+                this.a(entityplayer, 10.0F, 20.0F);
+            }
+            else {
+                entityplayer = null;
+            }
+            //
         }
 
         if (this.E && this.bn-- <= 0) {

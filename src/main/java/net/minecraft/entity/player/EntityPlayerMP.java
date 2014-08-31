@@ -1151,7 +1151,6 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
     public void initializeNewMeta() {
         if (metadata == null) {
             super.initializeNewMeta();
-            metadata.put("PreviousIP", getPlayer().getIP());
         }
     }
     //
