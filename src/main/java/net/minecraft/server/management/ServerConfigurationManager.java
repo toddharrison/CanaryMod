@@ -377,8 +377,8 @@ public abstract class ServerConfigurationManager {
         }
         ServerConfiguration srv = Configuration.getServerConfig();
 
-        if (Canary.bans().isBanned(s0)) {
-            Ban ban = Canary.bans().getBan(s0);
+        if (Canary.bans().isBanned(id0.toString())) {
+            Ban ban = Canary.bans().getBan(id0.toString());
 
             if (ban.getTimestamp() != -1) {
                 return ban.getReason() + ", " +
