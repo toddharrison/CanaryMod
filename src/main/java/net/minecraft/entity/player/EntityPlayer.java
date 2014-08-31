@@ -855,6 +855,12 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
     }
 
     public boolean p(Entity entity) {
+        // CanaryMod: EntityRightClickHook
+        EntityRightClickHook hook = (EntityRightClickHook) new EntityRightClickHook(entity.getCanaryEntity(), ((EntityPlayerMP) this).getPlayer()).call();
+        if (hook.isCanceled()) {
+            return false;
+        }
+        //
         ItemStack itemstack = this.bD();
         ItemStack itemstack1 = itemstack != null ? itemstack.m() : null;
         if (entity.c(this)) {
@@ -868,12 +874,6 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
             }
         }
         else {
-            // CanaryMod: EntityRightClickHook
-            EntityRightClickHook hook = (EntityRightClickHook) new EntityRightClickHook(entity.getCanaryEntity(), ((EntityPlayerMP) this).getPlayer()).call();
-            if (hook.isCanceled()) {
-                return false;
-            }
-            //
             if (itemstack != null && entity instanceof EntityLivingBase) {
                 if (this.bF.d) {
                     itemstack = itemstack1;

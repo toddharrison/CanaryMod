@@ -141,6 +141,7 @@ public abstract class CanaryEntity implements Entity {
         entity.z = rotation;
     }
 
+    @Override
     public float getEyeHeight() {
         return entity.g();
     }
