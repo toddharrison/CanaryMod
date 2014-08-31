@@ -1,5 +1,9 @@
 package net.minecraft.server.dedicated;
 
+import jline.UnsupportedTerminal;
+import jline.console.ConsoleReader;
+import jline.console.UserInterruptException;
+import jline.console.completer.Completer;
 import net.canarymod.Canary;
 import net.canarymod.Main;
 import net.canarymod.api.CanaryServer;
@@ -27,10 +31,6 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSettings;
 import net.minecraft.world.WorldType;
-
-import jline.UnsupportedTerminal;
-import jline.console.ConsoleReader;
-import jline.console.completer.Completer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -45,7 +45,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Callable;
-import jline.console.UserInterruptException;
 
 public class DedicatedServer extends MinecraftServer implements IServer {
 
@@ -271,7 +270,7 @@ public class DedicatedServer extends MinecraftServer implements IServer {
         }
 
         // CanaryMod changed call to initWorld
-        this.initWorld(this.M(), i2, worldtype, net.canarymod.api.world.DimensionType.NORMAL, s2);
+        this.initWorld(this.M(), i2, worldtype, net.canarymod.api.world.DimensionType.NORMAL, s3);
         //
         long i4 = System.nanoTime() - i1;
         String s4 = String.format("%.3fs", new Object[]{ Double.valueOf((double) i4 / 1.0E9D) });
