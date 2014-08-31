@@ -91,6 +91,7 @@ public abstract class CanaryEntityInventory implements Inventory {
         int remaining = amount;
 
         for (Item item : items) {
+            if (item == null) continue;
             if (item.getId() == itemId) {
                 if (item.getAmount() == remaining) {
                     removeItem(item.getSlot());
@@ -126,6 +127,7 @@ public abstract class CanaryEntityInventory implements Inventory {
         int remaining = item.getAmount();
 
         for (Item it : items) {
+            if (it == null) continue;
             if (it.getId() == item.getId() && it.getDamage() == item.getDamage()) {
                 if (it.getAmount() == remaining) {
                     removeItem(it.getSlot());
