@@ -1702,6 +1702,7 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
 
     // Start: Custom Display Name
     public String getDisplayName() {
+        if (metadata == null) return this.b_(); // For when metadata isn't initialized yet
         return metadata.getString("CustomName").isEmpty() ? this.b_() : metadata.getString("CustomName");
     }
 
