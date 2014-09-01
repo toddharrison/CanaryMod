@@ -93,7 +93,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
     }
 
     public UUID getUUID() {
-        EntityPlayer.a(getHandle().bH());
+        return EntityPlayer.a(getHandle().bH());
     }
 
     /**
