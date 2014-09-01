@@ -30,6 +30,7 @@ import net.canarymod.hook.system.PermissionCheckHook;
 import net.canarymod.permissionsystem.PermissionProvider;
 import net.canarymod.user.Group;
 import net.canarymod.warp.Warp;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.*;
 import net.minecraft.network.play.server.S02PacketChat;
@@ -43,6 +44,7 @@ import net.visualillusionsent.utils.StringUtils;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -88,6 +90,10 @@ public class CanaryPlayer extends CanaryHuman implements Player {
     @Override
     public String getFqName() {
         return "Player";
+    }
+
+    public UUID getUUID() {
+        EntityPlayer.a(getHandle().bH());
     }
 
     /**

@@ -1,6 +1,7 @@
 package net.canarymod.api;
 
 import net.canarymod.Canary;
+import net.canarymod.ToolBox;
 import net.canarymod.api.nbt.*;
 import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.api.world.DimensionType;
@@ -149,12 +150,13 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
      */
     @Override
     public UUID getUUID() {
-        return null;
+        String uuid = ToolBox.usernameToUUID(getName());
+        return uuid == null ? null : UUID.fromString(uuid);
     }
 
     @Override
     public String getUUIDString() {
-        return null;
+        return ToolBox.usernameToUUID(getName());
     }
 
     /**
