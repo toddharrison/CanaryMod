@@ -1,11 +1,6 @@
 package net.canarymod.api.inventory;
 
-import net.canarymod.api.nbt.CanaryCompoundTag;
-import net.canarymod.api.nbt.CanaryListTag;
-import net.canarymod.api.nbt.CanaryStringTag;
-import net.canarymod.api.nbt.CompoundTag;
-import net.canarymod.api.nbt.ListTag;
-import net.canarymod.api.nbt.StringTag;
+import net.canarymod.api.nbt.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -69,6 +64,12 @@ public class CanaryItem implements Item {
             // Seems to be an unregistered item type, go ahead an pass an new unnamed itemtype
             this.type = new ItemType(itemId, damage);
         }
+    }
+
+    public CanaryItem(ItemType type, int amount, int slot) {
+        this.item = new ItemStack(getItemFromId(type.getId()), amount, type.getData());
+        this.slot = slot;
+        this.type = type;
     }
 
     /**

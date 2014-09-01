@@ -414,6 +414,11 @@ public abstract class CanaryEntity implements Entity {
         return entity.getMetaData();
     }
 
+    @Override
+    public String toString() {
+        return String.format("%s[Native: %s]", this.getClass().getSimpleName(), getHandle());
+    }
+
     /**
      * Gets the Minecraft entity being wrapped
      *

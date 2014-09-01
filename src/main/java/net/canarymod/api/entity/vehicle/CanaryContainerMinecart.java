@@ -68,12 +68,15 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
         this.addItem(new CanaryItem(itemId, amount, damage));
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
-    public void addItem(ItemType type, int amount, short damage) {
-        this.addItem(type.getId(), amount, damage);
+    public void addItem(String machineName) {
+        //TODO
+    }
+
+    @Override
+    public void addItem(String machineName, int amount) {
+        //TODO
     }
 
     /**
@@ -243,14 +246,6 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
      * {@inheritDoc}
      */
     @Override
-    public Item getItem(ItemType type, int amount, short damage) {
-        return this.getItem(type.getId(), amount, damage);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public int getSize() {
         return this.getHandle().a();
     }
@@ -284,14 +279,6 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
     @Override
     public boolean hasItem(ItemType type) {
         return this.hasItem(type.getId());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean hasItem(ItemType type, short damage) {
-        return this.hasItem(type.getId(), damage);
     }
 
     /**
@@ -436,14 +423,6 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
      * {@inheritDoc}
      */
     @Override
-    public void setSlot(ItemType type, int amount, int damage, int slot) {
-        this.setSlot(type.getId(), amount, damage, slot);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void setSlot(Item item) {
         this.setSlot(item.getSlot(), item);
     }
@@ -502,14 +481,6 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
     @Override
     public Item removeItem(ItemType type) {
         return this.removeItem(type.getId());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Item removeItem(ItemType type, short damage) {
-        return this.removeItem(type.getId(), damage);
     }
 
     /**
