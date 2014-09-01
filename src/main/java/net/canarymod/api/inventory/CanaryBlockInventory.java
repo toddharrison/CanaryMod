@@ -471,12 +471,7 @@ public abstract class CanaryBlockInventory extends CanaryTileEntity implements I
      */
     @Override
     public void setSlot(int index, Item value) {
-        if (value == null) {
-            inventory.a(index, null);
-        }
-        else {
-            inventory.a(index, ((CanaryItem) value).getHandle());
-        }
+        this.getInventoryHandle().a(index, value == null ? null : ((CanaryItem) value).getHandle());
     }
     /**
      * {@inheritDoc}

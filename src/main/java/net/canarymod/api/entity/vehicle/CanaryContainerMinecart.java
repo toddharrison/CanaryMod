@@ -25,7 +25,7 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
      */
     @Override
     public void addItem(ItemType type) {
-        this.addItem(type.getId(), 1, (short) 0);
+        this.addItem(new CanaryItem(type, 1, -1));
     }
 
     /**
@@ -33,7 +33,7 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
      */
     @Override
     public void addItem(int itemId) {
-        this.addItem(itemId, 1, (short) 0);
+        this.addItem(new CanaryItem(itemId, 1));
     }
 
     /**
@@ -41,7 +41,7 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
      */
     @Override
     public void addItem(int itemId, short damage) {
-        this.addItem(itemId, 1, damage);
+        this.addItem(new CanaryItem(itemId, 1));
     }
 
     /**
@@ -49,7 +49,7 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
      */
     @Override
     public void addItem(int itemId, int amount) {
-        this.addItem(itemId, amount, (short) 0);
+        this.addItem(new CanaryItem(itemId, amount));
     }
 
     /**
@@ -57,7 +57,7 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
      */
     @Override
     public void addItem(ItemType type, int amount) {
-        this.addItem(type.getId(), amount, (short) 0);
+        this.addItem(new CanaryItem(type, amount, -1));
     }
 
     /**
@@ -68,15 +68,20 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
         this.addItem(new CanaryItem(itemId, amount, damage));
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void addItem(String machineName) {
-        //TODO
+        this.addItem(new CanaryItem(ItemType.fromString(machineName), 1, -1));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void addItem(String machineName, int amount) {
-        //TODO
+        this.addItem(new CanaryItem(ItemType.fromString(machineName), amount, -1));
     }
 
     /**
@@ -183,7 +188,7 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
      */
     @Override
     public Item getItem(ItemType type) {
-        return this.getItem(type.getId());
+        return getItem(type, -1, true);
     }
 
     /**
@@ -191,15 +196,14 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
      */
     @Override
     public Item getItem(int id) {
-        for (int index = 0; index < getSize(); index++) {
-            Item toCheck = getSlot(index);
+        return getItem(ItemType.fromId(id), -1, false);
+    }
 
-            if (toCheck != null && toCheck.getId() == id) {
-                toCheck.setSlot(index);
-                return toCheck;
-            }
-        }
-        return null;
+    /**
+     * {@inheritDoc}
+     */
+    public Item getItem(String machineName) {
+        return getItem(ItemType.fromString(machineName), -1, true);
     }
 
     /**
@@ -207,7 +211,7 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
      */
     @Override
     public Item getItem(ItemType type, int amount) {
-        return this.getItem(type.getId(), amount);
+        return getItem(type, amount, true);
     }
 
     /**
@@ -215,15 +219,12 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
      */
     @Override
     public Item getItem(int id, int amount) {
-        for (int index = 0; index < getSize(); index++) {
-            Item toCheck = getSlot(index);
+        return this.getItem(ItemType.fromId(id), amount, false);
+    }
 
-            if (toCheck != null && toCheck.getId() == id && toCheck.getAmount() == amount) {
-                toCheck.setSlot(index);
-                return toCheck;
-            }
-        }
-        return null;
+    @Override
+    public Item getItem(String machineName, int amount) {
+        return getItem(ItemType.fromString(machineName), amount, true);
     }
 
     /**
@@ -231,10 +232,19 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
      */
     @Override
     public Item getItem(int id, int amount, short damage) {
+        return getItem(ItemType.fromIdAndData(id, damage), amount, true);
+    }
+
+    /**
+     * Internal method to handle getItem doing damage checks and amount checks
+     */
+    private Item getItem(ItemType type, int amount, boolean doDamage) {
         for (int index = 0; index < getSize(); index++) {
             Item toCheck = getSlot(index);
 
-            if (toCheck != null && toCheck.getId() == id && toCheck.getAmount() == amount && toCheck.getDamage() == damage) {
+            if (toCheck != null &&
+                    (doDamage ? toCheck.getType().equals(type) : toCheck.getType().getId() == type.getId()) &&
+                    (amount == -1 ? true : toCheck.getAmount() == amount)) {
                 toCheck.setSlot(index);
                 return toCheck;
             }
@@ -265,12 +275,7 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
      */
     @Override
     public boolean hasItem(int itemId) {
-        for (int index = 0; index < getSize(); index++) {
-            if (getSlot(index) != null && getSlot(index).getId() == itemId) {
-                return true;
-            }
-        }
-        return false;
+        return hasItem(ItemType.fromId(itemId), false);
     }
 
     /**
@@ -278,7 +283,12 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
      */
     @Override
     public boolean hasItem(ItemType type) {
-        return this.hasItem(type.getId());
+        return this.hasItem(type, true);
+    }
+
+    @Override
+    public boolean hasItem(String machineName) {
+        return this.hasItem(ItemType.fromString(machineName), true);
     }
 
     /**
@@ -286,10 +296,13 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
      */
     @Override
     public boolean hasItem(int itemId, short damage) {
-        for (int index = 0; index < getSize(); index++) {
-            Item item = getSlot(index);
+        return hasItem(ItemType.fromIdAndData(itemId, damage), true);
+    }
 
-            if (item != null && item.getId() == itemId && item.getDamage() == damage) {
+    private boolean hasItem(ItemType type, boolean doDamage) {
+        for (int index = 0; index < getSize(); index++) {
+            Item test = getSlot(index);
+            if (test != null && doDamage ? test.getType().equals(type) : test.getType().getId() == type.getId()) {
                 return true;
             }
         }
@@ -301,7 +314,7 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
      */
     @Override
     public boolean hasItemStack(ItemType type, int amount) {
-        return this.hasItemStack(type.getId(), amount, 64);
+        return this.hasItemStack(type, amount, Integer.MAX_VALUE, true);
     }
 
     /**
@@ -309,15 +322,15 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
      */
     @Override
     public boolean hasItemStack(int itemId, int amount) {
-        return this.hasItemStack(itemId, amount, 64);
+        return this.hasItemStack(ItemType.fromId(itemId), amount, Integer.MAX_VALUE, false);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public boolean hasItemStack(ItemType type, int amount, int damage) {
-        return this.hasItemStack(type.getId(), amount, 64, damage);
+    public boolean hasItemStack(String machineName, int amount) {
+        return this.hasItemStack(ItemType.fromString(machineName), amount, Integer.MAX_VALUE, true);
     }
 
     /**
@@ -325,7 +338,7 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
      */
     @Override
     public boolean hasItemStack(int itemId, int amount, int damage) {
-        return hasItemStack(itemId, amount, 64, damage);
+        return hasItemStack(ItemType.fromIdAndData(itemId, damage), amount, Integer.MAX_VALUE, true);
     }
 
     /**
@@ -333,10 +346,27 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
      */
     @Override
     public boolean hasItemStack(int itemId, int minAmount, int maxAmount, int damage) {
+        return this.hasItemStack(ItemType.fromIdAndData(itemId, damage), minAmount, maxAmount, true);
+    }
+
+    @Override
+    public boolean hasItemStack(String machineName, int minAmount, int maxAmount) {
+        return this.hasItemStack(ItemType.fromString(machineName), minAmount, maxAmount, true);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean hasItemStack(ItemType type, int minAmount, int maxAmount) {
+        return this.hasItemStack(type, minAmount, maxAmount, true);
+    }
+
+    private boolean hasItemStack(ItemType type, int minAmount, int maxAmount, boolean doDamage) {
         for (int index = 0; index < getSize(); index++) {
             Item toCheck = getSlot(index);
 
-            if (toCheck != null && toCheck.getId() == itemId && toCheck.getDamage() == damage) {
+            if (toCheck != null && doDamage ? toCheck.getType().equals(type) : toCheck.getType().getId() == type.getId()) {
                 int am = toCheck.getAmount();
 
                 if (am > minAmount && am < maxAmount) {
@@ -397,7 +427,7 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
      */
     @Override
     public void setSlot(int itemId, int amount, int slot) {
-        this.setSlot(itemId, amount, (short) 0, slot);
+        this.setSlot(new CanaryItem(itemId, 0, 0, slot));
     }
 
     /**
@@ -405,10 +435,12 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
      */
     @Override
     public void setSlot(int itemId, int amount, int damage, int slot) {
-        CanaryItem item = new CanaryItem(itemId, 1, damage);
+        this.setSlot(new CanaryItem(itemId, amount, damage, slot));
+    }
 
-        item.setSlot(slot);
-        this.setSlot(item);
+    @Override
+    public void setSlot(String machineName, int amount, int slot) {
+        this.setSlot(new CanaryItem(ItemType.fromString(machineName), amount, slot));
     }
 
     /**
@@ -416,7 +448,7 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
      */
     @Override
     public void setSlot(ItemType type, int amount, int slot) {
-        this.setSlot(type.getId(), amount, (short) 0, slot);
+        this.setSlot(new CanaryItem(type, amount, slot));
     }
 
     /**
@@ -440,7 +472,15 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
      */
     @Override
     public Item removeItem(Item item) {
-        return this.removeItem(item.getId(), (short) item.getDamage());
+        for (int index = 0; index < getSize(); index++) {
+            Item toCheck = getSlot(index);
+
+            if (toCheck != null && toCheck.getType().equals(item.getType())) {
+                setSlot(index, null);
+                return toCheck;
+            }
+        }
+        return null;
     }
 
     /**
@@ -448,15 +488,13 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
      */
     @Override
     public Item removeItem(int id) {
-        for (int index = 0; index < getSize(); index++) {
-            Item toCheck = getSlot(index);
+        return removeItem(ItemType.fromId(id), false);
+    }
 
-            if (toCheck != null && toCheck.getId() == id) {
-                setSlot(index, null);
-                return toCheck;
-            }
-        }
-        return null;
+
+    @Override
+    public Item removeItem(String machineName) {
+        return removeItem(ItemType.fromString(machineName), true);
     }
 
     /**
@@ -464,15 +502,7 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
      */
     @Override
     public Item removeItem(int id, int damage) {
-        for (int index = 0; index < getSize(); index++) {
-            Item toCheck = getSlot(index);
-
-            if (toCheck != null && toCheck.getId() == id && toCheck.getDamage() == damage) {
-                setSlot(index, null);
-                return toCheck;
-            }
-        }
-        return null;
+        return removeItem(ItemType.fromIdAndData(id, damage), true);
     }
 
     /**
@@ -480,7 +510,19 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
      */
     @Override
     public Item removeItem(ItemType type) {
-        return this.removeItem(type.getId());
+        return this.removeItem(type, true);
+    }
+
+    private Item removeItem(ItemType type, boolean doDamage) {
+        for (int index = 0; index < getSize(); index++) {
+            Item toCheck = getSlot(index);
+
+            if (toCheck != null && doDamage ? toCheck.getType().equals(type) : toCheck.getId() == type.getId()) {
+                setSlot(index, null);
+                return toCheck;
+            }
+        }
+        return null;
     }
 
     /**
