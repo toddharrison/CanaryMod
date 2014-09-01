@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static net.canarymod.Canary.log;
+import net.canarymod.ToolBox;
 
 /**
  * Offline Player implementation
@@ -34,13 +35,15 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
     private String prefix = null;
     private String name;
     private boolean isMuted;
+    private UUID uuid;
 
     public CanaryOfflinePlayer(String name, CanaryCompoundTag tag) {
         this.data = tag;
         this.name = name;
+        this.uuid = UUID.fromString(ToolBox.usernameToUUID(name));
         provider = Canary.permissionManager().getPlayerProvider(name, getWorld().getFqName());
-        String[] data = Canary.usersAndGroups().getPlayerData(name);
-        Group[] subs = Canary.usersAndGroups().getModuleGroupsForPlayer(name);
+        String[] data = Canary.usersAndGroups().getPlayerData(getUUIDString());
+        Group[] subs = Canary.usersAndGroups().getModuleGroupsForPlayer(getUUIDString());
         groups = new LinkedList<Group>();
         groups.add(Canary.usersAndGroups().getGroup(data[1]));
         for (Group g : subs) {
@@ -149,12 +152,12 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
      */
     @Override
     public UUID getUUID() {
-        return null;
+        return uuid;
     }
 
     @Override
     public String getUUIDString() {
-        return null;
+        return uuid.toString();
     }
 
     /**

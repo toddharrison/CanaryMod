@@ -551,8 +551,8 @@ public class CanaryPlayer extends CanaryHuman implements Player {
      */
     @Override
     public void initPlayerData() {
-        String[] data = Canary.usersAndGroups().getPlayerData(getName());
-        Group[] subs = Canary.usersAndGroups().getModuleGroupsForPlayer(getName());
+        String[] data = Canary.usersAndGroups().getPlayerData(getUUIDString());
+        Group[] subs = Canary.usersAndGroups().getModuleGroupsForPlayer(getUUIDString());
         groups = new LinkedList<Group>();
         groups.add(Canary.usersAndGroups().getGroup(data[1]));
         for (Group g : subs) {
