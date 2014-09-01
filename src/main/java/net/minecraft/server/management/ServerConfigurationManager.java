@@ -386,16 +386,6 @@ public abstract class ServerConfigurationManager {
             }
             return ban.getReason();
         }
-        
-        if (Canary.bans().isBanned(s0)) {
-            Ban ban = Canary.bans().getBan(s0);
-
-            if (ban.getTimestamp() != -1) {
-                return ban.getReason() + ", " +
-                        srv.getBanExpireDateMessage() + ToolBox.formatTimestamp(ban.getTimestamp());
-            }
-            return ban.getReason();
-        }
 
         if (Canary.bans().isIpBanned(s2)) {
             return Translator.translate(srv.getDefaultBannedMessage());
