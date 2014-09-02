@@ -1,6 +1,6 @@
 package net.minecraft.entity;
 
-
+import net.canarymod.api.entity.vehicle.CanaryCommandBlockMinecart;
 import net.minecraft.block.Block;
 import net.minecraft.command.server.CommandBlockLogic;
 import net.minecraft.entity.item.EntityMinecart;
@@ -29,15 +29,21 @@ public class EntityMinecartCommandBlock extends EntityMinecart {
         public World d() {
             return EntityMinecartCommandBlock.this.p;
         }
+
+        public net.canarymod.api.CommandBlockLogic getReference() {
+            return (net.canarymod.api.CommandBlockLogic) EntityMinecartCommandBlock.this.getCanaryEntity();
+        }
     };
     private int b = 0;
 
     public EntityMinecartCommandBlock(World world) {
         super(world);
+        this.entity = new CanaryCommandBlockMinecart(this); // CanaryMod: Wrap Entity
     }
 
     public EntityMinecartCommandBlock(World world, double d0, double d1, double d2) {
         super(world, d0, d1, d2);
+        this.entity = new CanaryCommandBlockMinecart(this); // CanaryMod: Wrap Entity
     }
 
     protected void c() {
@@ -91,12 +97,10 @@ public class EntityMinecartCommandBlock extends EntityMinecart {
         if (i0 == 24) {
             try {
                 this.a.b(IChatComponent.Serializer.a(this.z().e(24)));
-            }
-            catch (Throwable throwable) {
+            } catch (Throwable throwable) {
                 ;
             }
-        }
-        else if (i0 == 23) {
+        } else if (i0 == 23) {
             this.a.a(this.z().e(23));
         }
 

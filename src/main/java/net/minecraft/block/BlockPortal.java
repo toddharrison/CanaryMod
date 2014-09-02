@@ -1,5 +1,7 @@
 package net.minecraft.block;
 
+import net.canarymod.api.world.blocks.CanaryBlock;
+import net.canarymod.hook.world.PortalCreateHook;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
@@ -14,7 +16,7 @@ import java.util.Random;
 
 public class BlockPortal extends BlockBreakable {
 
-    public static final int[][] a = new int[][]{ new int[0], { 3, 1 }, { 2, 0 } };
+    public static final int[][] a = new int[][]{new int[0], {3, 1}, {2, 0}};
 
     public BlockPortal() {
         super("portal", Material.E, false);
@@ -50,8 +52,7 @@ public class BlockPortal extends BlockBreakable {
         if (i3 == 0) {
             if (iblockaccess.a(i0 - 1, i1, i2) != this && iblockaccess.a(i0 + 1, i1, i2) != this) {
                 i3 = 2;
-            }
-            else {
+            } else {
                 i3 = 1;
             }
 
@@ -82,17 +83,26 @@ public class BlockPortal extends BlockBreakable {
         Size blockportal_size = new Size(world, i0, i1, i2, 1);
         Size blockportal_size1 = new Size(world, i0, i1, i2, 2);
 
+        // CanaryMod: PortalCreate
+        PortalCreateHook hook;
         if (blockportal_size.b() && blockportal_size.e == 0) {
-            blockportal_size.c();
-            return true;
+            hook = (PortalCreateHook) new PortalCreateHook(blockportal_size.getPortalBlocks()).call();
+            if (!hook.isCanceled()) {
+                blockportal_size.c();
+                return true;
+            }
+        } else if (blockportal_size1.b() && blockportal_size1.e == 0) {
+            hook = (PortalCreateHook) new PortalCreateHook(blockportal_size1.getPortalBlocks()).call();
+            if (!hook.isCanceled()) {
+                blockportal_size1.c();
+                return true;
+            }
         }
-        else if (blockportal_size1.b() && blockportal_size1.e == 0) {
-            blockportal_size1.c();
-            return true;
-        }
-        else {
-            return false;
-        }
+
+        // else {
+        return false;
+        // }
+        // CanaryMod: End
     }
 
     public void a(World world, int i0, int i1, int i2, Block block) {
@@ -102,11 +112,9 @@ public class BlockPortal extends BlockBreakable {
 
         if (i3 == 1 && (!blockportal_size.b() || blockportal_size.e < blockportal_size.h * blockportal_size.g)) {
             world.b(i0, i1, i2, Blocks.a);
-        }
-        else if (i3 == 2 && (!blockportal_size1.b() || blockportal_size1.e < blockportal_size1.h * blockportal_size1.g)) {
+        } else if (i3 == 2 && (!blockportal_size1.b() || blockportal_size1.e < blockportal_size1.h * blockportal_size1.g)) {
             world.b(i0, i1, i2, Blocks.a);
-        }
-        else if (i3 == 0 && !blockportal_size.b() && !blockportal_size1.b()) {
+        } else if (i3 == 0 && !blockportal_size.b() && !blockportal_size1.b()) {
             world.b(i0, i1, i2, Blocks.a);
         }
 
@@ -127,7 +135,6 @@ public class BlockPortal extends BlockBreakable {
     }
 
     public static class Size {
-        //TODO: Restore Portal Reconstruct Job/onPortalCreate
 
         private final World a;
         private final int b;
@@ -217,8 +224,7 @@ public class BlockPortal extends BlockBreakable {
                         if (i21 != Blocks.Z) {
                             break label56;
                         }
-                    }
-                    else if (i18 == this.h - 1) {
+                    } else if (i18 == this.h - 1) {
                         i21 = this.a.a(i19 + Direction.a[BlockPortal.a[this.b][1]], i17, i20 + Direction.b[BlockPortal.a[this.b][1]]);
                         if (i21 != Blocks.Z) {
                             break label56;
@@ -239,8 +245,7 @@ public class BlockPortal extends BlockBreakable {
 
             if (this.g <= 21 && this.g >= 3) {
                 return this.g;
-            }
-            else {
+            } else {
                 this.f = null;
                 this.h = 0;
                 this.g = 0;
@@ -269,5 +274,23 @@ public class BlockPortal extends BlockBreakable {
             }
 
         }
+
+        // CanaryMod: cloning the method above to determine the shape/size of the portal
+        public CanaryBlock[][] getPortalBlocks() {
+            CanaryBlock[][] portalBlockArray = new CanaryBlock[this.h][this.g];
+            for (int i17 = 0; i17 < this.h; ++i17) {
+                int i18 = this.f.a + Direction.a[this.c] * i17;
+                int i19 = this.f.c + Direction.b[this.c] * i17;
+
+                for (int i20 = 0; i20 < this.g; ++i20) {
+                    int i21 = this.f.b + i20;
+
+                    //this.a.d(i18, i21, i19, Blocks.aO, this.b, 2);
+                    portalBlockArray[i17][i20] = (CanaryBlock) this.a.getCanaryWorld().getBlockAt(i18, i21, i19);
+                }
+            }
+            return portalBlockArray;
+        }
+        // CanaryMod: end
     }
 }
