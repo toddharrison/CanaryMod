@@ -33,6 +33,7 @@ public class CommandToggleDownfall extends CommandBase {
             }
             worldinfo = ((CanaryWorld) MinecraftServer.G().worldManager.getWorld(astring[0], false)).getHandle().M();
         }
+        worldinfo.b(!worldinfo.p());
 
         a(icommandsender, "commands.downfall.success", new Object[0]);
     }
