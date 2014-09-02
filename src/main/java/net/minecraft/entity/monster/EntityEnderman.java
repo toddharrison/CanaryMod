@@ -1,6 +1,8 @@
 package net.minecraft.entity.monster;
 
 import net.canarymod.api.entity.living.monster.CanaryEnderman;
+import net.canarymod.api.world.blocks.BlockType;
+import net.canarymod.api.world.blocks.CanaryBlock;
 import net.canarymod.config.Configuration;
 import net.canarymod.hook.entity.EndermanDropBlockHook;
 import net.canarymod.hook.entity.EndermanPickupBlockHook;
@@ -147,22 +149,23 @@ public class EntityEnderman extends EntityMob {
                         //
                     }
                 }
-                else if (this.aa.nextInt(2000) == 0) {
-                    i0 = MathHelper.c(this.t - 1.0D + this.aa.nextDouble() * 2.0D);
-                    i1 = MathHelper.c(this.u + this.aa.nextDouble() * 2.0D);
-                    i2 = MathHelper.c(this.v - 1.0D + this.aa.nextDouble() * 2.0D);
-                    block = this.p.a(i0, i1, i2);
-                    Block block1 = this.p.a(i0, i1 - 1, i2);
+            } else if (this.aa.nextInt(2000) == 0) {
+                i0 = MathHelper.c(this.t - 1.0D + this.aa.nextDouble() * 2.0D);
+                i1 = MathHelper.c(this.u + this.aa.nextDouble() * 2.0D);
+                i2 = MathHelper.c(this.v - 1.0D + this.aa.nextDouble() * 2.0D);
+                block = this.p.a(i0, i1, i2);
+                Block block1 = this.p.a(i0, i1 - 1, i2);
 
-                    if (block.o() == Material.a && block1.o() != Material.a && block1.d()) {
-                        // CanaryMod: call EndermanDropBlockHook
-                        EndermanDropBlockHook hook = (EndermanDropBlockHook) new EndermanDropBlockHook((CanaryEnderman) entity, entity.getWorld().getBlockAt(i0, i1, i2)).call();
-                        if (!hook.isCanceled()) {
-                            this.p.d(i0, i1, i2, this.bZ(), this.ca(), 3);
-                            this.a(Blocks.a);
-                        }
-                        //
+                if (block.o() == Material.a && block1.o() != Material.a && block1.d()) {
+                    // CanaryMod: call EndermanDropBlockHook
+                    CanaryBlock canaryBlock = (CanaryBlock) entity.getWorld().getBlockAt(i0, i1, i2);
+                    canaryBlock.setType(BlockType.fromIdAndData(this.ag.a(16), this.ag.a(17)));
+                    EndermanDropBlockHook hook = (EndermanDropBlockHook) new EndermanDropBlockHook((CanaryEnderman) entity, canaryBlock).call();
+                    if (!hook.isCanceled()) {
+                        this.p.d(i0, i1, i2, this.bZ(), this.ca(), 3);
+                        this.a(Blocks.a);
                     }
+                    //
                 }
             }
 
