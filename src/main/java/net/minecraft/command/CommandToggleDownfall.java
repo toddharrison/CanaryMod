@@ -26,13 +26,14 @@ public class CommandToggleDownfall extends CommandBase {
         //this.d(); // CanaryMod: logic reimplemented below
         WorldInfo worldinfo = icommandsender.d().M();
         if (astring.length == 1) { // CanaryMod: inject world selection
-            boolean loaded = MinecraftServer.G().worldManager.worldIsLoaded(astring[1]);
+            boolean loaded = MinecraftServer.G().worldManager.worldIsLoaded(astring[0]);
             if (!loaded) {
-                a(icommandsender, "No world loaded of Name: '%s'", new Object[]{ astring[1] });
+                a(icommandsender, "No world loaded of Name: '%s'", new Object[]{ astring[0] });
                 return;
             }
-            worldinfo = ((CanaryWorld) MinecraftServer.G().worldManager.getWorld(astring[1], false)).getHandle().M();
+            worldinfo = ((CanaryWorld) MinecraftServer.G().worldManager.getWorld(astring[0], false)).getHandle().M();
         }
+        worldinfo.b(!worldinfo.p());
 
         a(icommandsender, "commands.downfall.success", new Object[0]);
     }
