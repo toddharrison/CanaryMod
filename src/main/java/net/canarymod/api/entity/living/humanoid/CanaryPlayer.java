@@ -567,7 +567,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
             }
         }
 
-        permissions = Canary.permissionManager().getPlayerProvider(getName(), getWorld().getFqName());
+        permissions = Canary.permissionManager().getPlayerProvider(getUUIDString(), getWorld().getFqName());
         if (data[0] != null && (!data[0].isEmpty() && !data[0].equals(" "))) {
             prefix = ToolBox.stringToNull(data[0]);
         }

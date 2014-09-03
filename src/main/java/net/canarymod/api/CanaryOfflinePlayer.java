@@ -42,7 +42,7 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
         this.data = tag;
         this.name = name;
         this.uuid = UUID.fromString(ToolBox.usernameToUUID(name));
-        provider = Canary.permissionManager().getPlayerProvider(name, getWorld().getFqName());
+        provider = Canary.permissionManager().getPlayerProvider(getUUIDString(), getWorld().getFqName());
         String[] data = Canary.usersAndGroups().getPlayerData(getUUIDString());
         Group[] subs = Canary.usersAndGroups().getModuleGroupsForPlayer(getUUIDString());
         groups = new LinkedList<Group>();
