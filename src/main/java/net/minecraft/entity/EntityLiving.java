@@ -1,5 +1,6 @@
 package net.minecraft.entity;
 
+import net.canarymod.hook.entity.EntityDespawnHook;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -154,8 +155,7 @@ public abstract class EntityLiving extends EntityLivingBase {
             }
 
             return i0;
-        }
-        else {
+        } else {
             return this.b;
         }
     }
@@ -182,8 +182,7 @@ public abstract class EntityLiving extends EntityLivingBase {
         if (this.bk()) {
             this.bn.a();
             return f1;
-        }
-        else {
+        } else {
             return super.f(f0, f1);
         }
     }
@@ -245,8 +244,7 @@ public abstract class EntityLiving extends EntityLivingBase {
             if (this.bw instanceof EntityLivingBase) {
                 nbttagcompound1.a("UUIDMost", this.bw.aB().getMostSignificantBits());
                 nbttagcompound1.a("UUIDLeast", this.bw.aB().getLeastSignificantBits());
-            }
-            else if (this.bw instanceof EntityHanging) {
+            } else if (this.bw instanceof EntityHanging) {
                 EntityHanging entityhanging = (EntityHanging) this.bw;
 
                 nbttagcompound1.a("X", entityhanging.b);
@@ -323,37 +321,30 @@ public abstract class EntityLiving extends EntityLivingBase {
                             if (i0 == 0) {
                                 if (itemstack.b() instanceof ItemSword && !(itemstack1.b() instanceof ItemSword)) {
                                     flag0 = true;
-                                }
-                                else if (itemstack.b() instanceof ItemSword && itemstack1.b() instanceof ItemSword) {
+                                } else if (itemstack.b() instanceof ItemSword && itemstack1.b() instanceof ItemSword) {
                                     ItemSword itemsword = (ItemSword) itemstack.b();
                                     ItemSword itemsword1 = (ItemSword) itemstack1.b();
 
                                     if (itemsword.i() == itemsword1.i()) {
                                         flag0 = itemstack.k() > itemstack1.k() || itemstack.p() && !itemstack1.p();
-                                    }
-                                    else {
+                                    } else {
                                         flag0 = itemsword.i() > itemsword1.i();
                                     }
-                                }
-                                else {
+                                } else {
                                     flag0 = false;
                                 }
-                            }
-                            else if (itemstack.b() instanceof ItemArmor && !(itemstack1.b() instanceof ItemArmor)) {
+                            } else if (itemstack.b() instanceof ItemArmor && !(itemstack1.b() instanceof ItemArmor)) {
                                 flag0 = true;
-                            }
-                            else if (itemstack.b() instanceof ItemArmor && itemstack1.b() instanceof ItemArmor) {
+                            } else if (itemstack.b() instanceof ItemArmor && itemstack1.b() instanceof ItemArmor) {
                                 ItemArmor itemarmor = (ItemArmor) itemstack.b();
                                 ItemArmor itemarmor1 = (ItemArmor) itemstack1.b();
 
                                 if (itemarmor.c == itemarmor1.c) {
                                     flag0 = itemstack.k() > itemstack1.k() || itemstack.p() && !itemstack1.p();
-                                }
-                                else {
+                                } else {
                                     flag0 = itemarmor.c > itemarmor1.c;
                                 }
-                            }
-                            else {
+                            } else {
                                 flag0 = false;
                             }
                         }
@@ -390,14 +381,15 @@ public abstract class EntityLiving extends EntityLivingBase {
     }
 
     protected boolean v() {
-        return true;
+        // CanaryMod: EntityDespawn
+        return !((EntityDespawnHook) new EntityDespawnHook(entity).call()).isCanceled();
+        //
     }
 
     protected void w() {
         if (this.bt) {
             this.aV = 0;
-        }
-        else {
+        } else {
             EntityPlayer entityplayer = this.p.a(this, -1.0D);
 
             if (entityplayer != null) {
@@ -412,8 +404,7 @@ public abstract class EntityLiving extends EntityLivingBase {
 
                 if (this.aV > 600 && this.aa.nextInt(800) == 0 && d3 > 1024.0D && this.v()) {
                     this.B();
-                }
-                else if (d3 < 1024.0D) {
+                } else if (d3 < 1024.0D) {
                     this.aV = 0;
                 }
             }
@@ -464,8 +455,7 @@ public abstract class EntityLiving extends EntityLivingBase {
             if (entityplayer != null) {
                 this.bu = entityplayer;
                 this.g = 10 + this.aa.nextInt(20);
-            }
-            else {
+            } else {
                 this.bg = (this.aa.nextFloat() - 0.5F) * 20.0F;
             }
         }
@@ -475,8 +465,7 @@ public abstract class EntityLiving extends EntityLivingBase {
             if (this.g-- <= 0 || this.bu.L || this.bu.e((Entity) this) > (double) (f0 * f0)) {
                 this.bu = null;
             }
-        }
-        else {
+        } else {
             if (this.aa.nextFloat() < 0.05F) {
                 this.bg = (this.aa.nextFloat() - 0.5F) * 20.0F;
             }
@@ -506,8 +495,7 @@ public abstract class EntityLiving extends EntityLivingBase {
             EntityLivingBase entitylivingbase = (EntityLivingBase) entity;
 
             d2 = entitylivingbase.u + (double) entitylivingbase.g() - (this.u + (double) this.g());
-        }
-        else {
+        } else {
             d2 = (entity.D.b + entity.D.e) / 2.0D - (this.u + (double) this.g());
         }
 
@@ -544,8 +532,7 @@ public abstract class EntityLiving extends EntityLivingBase {
     public int ax() {
         if (this.o() == null) {
             return 3;
-        }
-        else {
+        } else {
             int i0 = (int) (this.aS() - this.aY() * 0.33F);
 
             i0 -= (3 - this.p.r.a()) * 4;
@@ -657,8 +644,7 @@ public abstract class EntityLiving extends EntityLivingBase {
             }
 
             return 0;
-        }
-        else {
+        } else {
             return 4;
         }
     }
@@ -668,68 +654,52 @@ public abstract class EntityLiving extends EntityLivingBase {
             case 4:
                 if (i1 == 0) {
                     return Items.Q;
-                }
-                else if (i1 == 1) {
+                } else if (i1 == 1) {
                     return Items.ag;
-                }
-                else if (i1 == 2) {
+                } else if (i1 == 2) {
                     return Items.U;
-                }
-                else if (i1 == 3) {
+                } else if (i1 == 3) {
                     return Items.Y;
-                }
-                else if (i1 == 4) {
+                } else if (i1 == 4) {
                     return Items.ac;
                 }
 
             case 3:
                 if (i1 == 0) {
                     return Items.R;
-                }
-                else if (i1 == 1) {
+                } else if (i1 == 1) {
                     return Items.ah;
-                }
-                else if (i1 == 2) {
+                } else if (i1 == 2) {
                     return Items.V;
-                }
-                else if (i1 == 3) {
+                } else if (i1 == 3) {
                     return Items.Z;
-                }
-                else if (i1 == 4) {
+                } else if (i1 == 4) {
                     return Items.ad;
                 }
 
             case 2:
                 if (i1 == 0) {
                     return Items.S;
-                }
-                else if (i1 == 1) {
+                } else if (i1 == 1) {
                     return Items.ai;
-                }
-                else if (i1 == 2) {
+                } else if (i1 == 2) {
                     return Items.W;
-                }
-                else if (i1 == 3) {
+                } else if (i1 == 3) {
                     return Items.aa;
-                }
-                else if (i1 == 4) {
+                } else if (i1 == 4) {
                     return Items.ae;
                 }
 
             case 1:
                 if (i1 == 0) {
                     return Items.T;
-                }
-                else if (i1 == 1) {
+                } else if (i1 == 1) {
                     return Items.aj;
-                }
-                else if (i1 == 2) {
+                } else if (i1 == 2) {
                     return Items.X;
-                }
-                else if (i1 == 3) {
+                } else if (i1 == 3) {
                     return Items.ab;
-                }
-                else if (i1 == 4) {
+                } else if (i1 == 4) {
                     return Items.af;
                 }
 
@@ -811,8 +781,7 @@ public abstract class EntityLiving extends EntityLivingBase {
         if (this.bL() && this.bM() == entityplayer) {
             this.a(true, !entityplayer.bF.d);
             return true;
-        }
-        else {
+        } else {
             ItemStack itemstack = entityplayer.bn.h();
 
             if (itemstack != null && itemstack.b() == Items.ca && this.bK()) {
@@ -898,8 +867,7 @@ public abstract class EntityLiving extends EntityLivingBase {
                         break;
                     }
                 }
-            }
-            else if (this.bx.b("X", 99) && this.bx.b("Y", 99) && this.bx.b("Z", 99)) {
+            } else if (this.bx.b("X", 99) && this.bx.b("Y", 99) && this.bx.b("Z", 99)) {
                 int i0 = this.bx.f("X");
                 int i1 = this.bx.f("Y");
                 int i2 = this.bx.f("Z");
@@ -910,8 +878,7 @@ public abstract class EntityLiving extends EntityLivingBase {
                 }
 
                 this.bw = entityleashknot;
-            }
-            else {
+            } else {
                 this.a(false, true);
             }
         }
