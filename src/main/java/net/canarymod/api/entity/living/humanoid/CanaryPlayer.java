@@ -237,7 +237,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
     @Override
     public boolean executeCommand(String[] command) {
         try {
-            boolean toRet = true;
+            boolean toRet = false;
             PlayerCommandHook hook = (PlayerCommandHook) new PlayerCommandHook(this, command).call();
             if (hook.isCanceled()) {
                 return true;
@@ -247,8 +247,10 @@ public class CanaryPlayer extends CanaryHuman implements Player {
             if (cmdName.startsWith("/")) {
                 cmdName = cmdName.substring(1);
             }
-            if (!Canary.commands().parseCommand(this, cmdName, command)) {
-                if (Canary.ops().isOpped(getName())) {
+            toRet = Canary.commands().parseCommand(this, cmdName, command);
+            if (!toRet) {
+                Canary.log.debug("Vanilla Command Execution...");
+                if (Canary.ops().isOpped(this)) {
                     toRet = ((CanaryServer) Canary.getServer()).getHandle().H().a(this.getHandle(), StringUtils.joinString(command, " ", 0)) > 0; // Vanilla Commands passed
                 }
             }
@@ -319,8 +321,10 @@ public class CanaryPlayer extends CanaryHuman implements Player {
             return true;
         }
         PermissionCheckHook hook = new PermissionCheckHook(permission, this, false);
+        Canary.log.debug("Checking path: " + permission);
         // If player has the permission set, use its personal permissions
         if (permissions.pathExists(permission)) {
+            Canary.log.debug("path exists");
             hook.setResult(permissions.queryPermission(permission));
             Canary.hooks().callHook(hook);
             return hook.getResult();

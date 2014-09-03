@@ -140,8 +140,7 @@ public class EntityOcelot extends EntityTameable {
             if (entityplayer.b_().equalsIgnoreCase(this.b()) && !this.p.E && !this.c(itemstack)) {
                 this.bp.a(!this.bY());
             }
-        }
-        else if (this.bq.f() && itemstack != null && itemstack.b() == Items.aP && entityplayer.e(this) < 9.0D) {
+        } else if (!this.bq.f() && itemstack != null && itemstack.b() == Items.aP && entityplayer.e(this) < 9.0D) {
             if (!entityplayer.bF.d) {
                 --itemstack.b;
             }
@@ -152,7 +151,7 @@ public class EntityOcelot extends EntityTameable {
 
             if (!this.p.E) {
                 // CanaryMod: EntityTame
-                EntityTameHook hook = new EntityTameHook((net.canarymod.api.entity.living.animal.EntityAnimal) this.getCanaryEntity(), ((EntityPlayerMP) entityplayer).getPlayer(), this.aa.nextInt(3) == 0);
+                EntityTameHook hook = (EntityTameHook) new EntityTameHook((net.canarymod.api.entity.living.animal.EntityAnimal) this.getCanaryEntity(), ((EntityPlayerMP) entityplayer).getPlayer(), this.aa.nextInt(3) == 0).call();
 
                 if (hook.isTamed() && !hook.isCanceled()) {
                     //
