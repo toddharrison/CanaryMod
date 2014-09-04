@@ -71,7 +71,7 @@ public class CanaryVillagerTrade implements VillagerTrade {
      */
     @Override
     public Item getBuyingTwo() {
-        return getRecipe().b().getCanaryItem();
+        return requiresTwoItems() ? getRecipe().b().getCanaryItem() : null;
     }
 
     /**

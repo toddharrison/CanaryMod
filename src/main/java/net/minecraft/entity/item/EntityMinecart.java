@@ -7,12 +7,7 @@ import net.canarymod.api.entity.vehicle.Minecart;
 import net.canarymod.api.entity.vehicle.Vehicle;
 import net.canarymod.api.world.position.Vector3D;
 import net.canarymod.config.Configuration;
-import net.canarymod.hook.entity.MinecartActivateHook;
-import net.canarymod.hook.entity.VehicleCollisionHook;
-import net.canarymod.hook.entity.VehicleDamageHook;
-import net.canarymod.hook.entity.VehicleDestroyHook;
-import net.canarymod.hook.entity.VehicleEnterHook;
-import net.canarymod.hook.entity.VehicleMoveHook;
+import net.canarymod.hook.entity.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.material.Material;
@@ -39,7 +34,7 @@ public abstract class EntityMinecart extends Entity {
 
     public boolean a; // CanaryMod: private -> public
     private String b;
-    private static final int[][][] c = new int[][][]{ { { 0, 0, -1 }, { 0, 0, 1 } }, { { -1, 0, 0 }, { 1, 0, 0 } }, { { -1, -1, 0 }, { 1, 0, 0 } }, { { -1, 0, 0 }, { 1, -1, 0 } }, { { 0, 0, -1 }, { 0, -1, 1 } }, { { 0, -1, -1 }, { 0, 0, 1 } }, { { 0, 0, 1 }, { 1, 0, 0 } }, { { 0, 0, 1 }, { -1, 0, 0 } }, { { 0, 0, -1 }, { -1, 0, 0 } }, { { 0, 0, -1 }, { 1, 0, 0 } } };
+    private static final int[][][] c = new int[][][]{{{0, 0, -1}, {0, 0, 1}}, {{-1, 0, 0}, {1, 0, 0}}, {{-1, -1, 0}, {1, 0, 0}}, {{-1, 0, 0}, {1, -1, 0}}, {{0, 0, -1}, {0, -1, 1}}, {{0, -1, -1}, {0, 0, 1}}, {{0, 0, 1}, {1, 0, 0}}, {{0, 0, 1}, {-1, 0, 0}}, {{0, 0, -1}, {-1, 0, 0}}, {{0, 0, -1}, {1, 0, 0}}};
     private int d;
     private double e;
     private double f;
@@ -165,9 +160,6 @@ public abstract class EntityMinecart extends Entity {
     }
 
     public void a(DamageSource damagesource) {
-        // CanaryMod: VehicleDestroy
-        new VehicleDestroyHook((Vehicle) this.entity).call();
-        //
         this.B();
         ItemStack itemstack = new ItemStack(Items.au, 1);
 
@@ -183,6 +175,9 @@ public abstract class EntityMinecart extends Entity {
     }
 
     public void B() {
+        // CanaryMod: VehicleDestroy
+        new VehicleDestroyHook((Vehicle) this.entity).call();
+        //
         super.B();
     }
 
