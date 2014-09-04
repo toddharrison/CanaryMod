@@ -16,8 +16,8 @@ import net.minecraft.world.World;
 
 public class ItemSkull extends Item {
 
-    private static final String[] b = new String[]{ "skeleton", "wither", "zombie", "char", "creeper" };
-    public static final String[] a = new String[]{ "skeleton", "wither", "zombie", "steve", "creeper" };
+    private static final String[] b = new String[]{"skeleton", "wither", "zombie", "char", "creeper"};
+    public static final String[] a = new String[]{"skeleton", "wither", "zombie", "steve", "creeper"};
 
     public ItemSkull() {
         this.a(CreativeTabs.c);
@@ -28,15 +28,13 @@ public class ItemSkull extends Item {
     public boolean a(ItemStack itemstack, EntityPlayer entityplayer, World world, int i0, int i1, int i2, int i3, float f0, float f1, float f2) {
         if (i3 == 0) {
             return false;
-        }
-        else if (!world.a(i0, i1, i2).o().a()) {
+        } else if (!world.a(i0, i1, i2).o().a()) {
             return false;
-        }
-        else {
+        } else {
             // CanaryMod: BlockPlaceHook
             CanaryBlock clicked = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
-
             clicked.setFaceClicked(BlockFace.fromByte((byte) i3));
+            //
 
             if (i3 == 1) {
                 ++i1;
@@ -60,11 +58,9 @@ public class ItemSkull extends Item {
 
             if (!entityplayer.a(i0, i1, i2, i3, itemstack)) {
                 return false;
-            }
-            else if (!Blocks.bP.c(world, i0, i1, i2)) {
+            } else if (!Blocks.bP.c(world, i0, i1, i2)) {
                 return false;
-            }
-            else {
+            } else {
                 // Create and call
                 CanaryBlock placed = new CanaryBlock((short) 144, (short) itemstack.getCanaryItem().getDamage(), i0, i1, i2, world.getCanaryWorld());
                 BlockPlaceHook hook = (BlockPlaceHook) new BlockPlaceHook(((EntityPlayerMP) entityplayer).getPlayer(), clicked, placed).call();
@@ -115,6 +111,6 @@ public class ItemSkull extends Item {
     }
 
     public String n(ItemStack itemstack) {
-        return itemstack.k() == 3 && itemstack.p() && itemstack.q().b("SkullOwner", 8) ? StatCollector.a("item.skull.player.name", new Object[]{ itemstack.q().j("SkullOwner") }) : super.n(itemstack);
+        return itemstack.k() == 3 && itemstack.p() && itemstack.q().b("SkullOwner", 8) ? StatCollector.a("item.skull.player.name", new Object[]{itemstack.q().j("SkullOwner")}) : super.n(itemstack);
     }
 }

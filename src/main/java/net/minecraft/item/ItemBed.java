@@ -1,6 +1,5 @@
 package net.minecraft.item;
 
-import net.canarymod.api.inventory.ItemType;
 import net.canarymod.api.world.blocks.BlockFace;
 import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.blocks.CanaryBlock;
@@ -23,14 +22,11 @@ public class ItemBed extends Item {
     public boolean a(ItemStack itemstack, EntityPlayer entityplayer, World world, int i0, int i1, int i2, int i3, float f0, float f1, float f2) {
         if (world.E) {
             return true;
-        }
-        else if (i3 != 1) {
+        } else if (i3 != 1) {
             return false;
-        }
-        else {
+        } else {
             // CanaryMod: ItemUseHook
             CanaryBlock clicked = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2); // Store Clicked
-
             clicked.setFaceClicked(BlockFace.fromByte((byte) i3)); // Set face clicked
 
             ++i1;
@@ -57,7 +53,7 @@ public class ItemBed extends Item {
 
             if (entityplayer.a(i0, i1, i2, i3, itemstack) && entityplayer.a(i0 + b0, i1, i2 + b1, i3, itemstack)) {
                 if (world.c(i0, i1, i2) && world.c(i0 + b0, i1, i2 + b1) && World.a((IBlockAccess) world, i0, i1 - 1, i2) && World.a((IBlockAccess) world, i0 + b0, i1 - 1, i2 + b1)) {
-                    CanaryBlock placed = new CanaryBlock((short) BlockType.BedBlock.getId(), (short) 0, i0, i1, i2, world.getCanaryWorld());
+                    CanaryBlock placed = new CanaryBlock(BlockType.BedBlock, i0, i1, i2, world.getCanaryWorld());
                     // Create Hook and call it
                     BlockPlaceHook hook = (BlockPlaceHook) new BlockPlaceHook(((EntityPlayerMP) entityplayer).getPlayer(), clicked, placed).call();
                     if (hook.isCanceled()) {
@@ -71,12 +67,10 @@ public class ItemBed extends Item {
 
                     --itemstack.b;
                     return true;
-                }
-                else {
+                } else {
                     return false;
                 }
-            }
-            else {
+            } else {
                 return false;
             }
         }

@@ -1,6 +1,7 @@
 package net.minecraft.item;
 
 import net.canarymod.api.world.blocks.BlockFace;
+import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.blocks.CanaryBlock;
 import net.canarymod.hook.player.BlockPlaceHook;
 import net.minecraft.creativetab.CreativeTabs;
@@ -22,15 +23,13 @@ public class ItemSign extends Item {
     public boolean a(ItemStack itemstack, EntityPlayer entityplayer, World world, int i0, int i1, int i2, int i3, float f0, float f1, float f2) {
         if (i3 == 0) {
             return false;
-        }
-        else if (!world.a(i0, i1, i2).o().a()) {
+        } else if (!world.a(i0, i1, i2).o().a()) {
             return false;
-        }
-        else {
+        } else {
             // CanaryMod: BlockPlaceHook
             CanaryBlock clicked = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
-
             clicked.setFaceClicked(BlockFace.fromByte((byte) i3));
+            //
 
             if (i3 == 1) {
                 ++i1;
@@ -54,16 +53,13 @@ public class ItemSign extends Item {
 
             if (!entityplayer.a(i0, i1, i2, i3, itemstack)) {
                 return false;
-            }
-            else if (!Blocks.an.c(world, i0, i1, i2)) {
+            } else if (!Blocks.an.c(world, i0, i1, i2)) {
                 return false;
-            }
-            else if (world.E) {
+            } else if (world.E) {
                 return true;
-            }
-            else {
+            } else {
                 // Create and call
-                CanaryBlock placed = new CanaryBlock((short) (i3 == 1 ? 63 : 68), (short) 0, i0, i1, i2, world.getCanaryWorld());
+                CanaryBlock placed = new CanaryBlock(i3 == 1 ? BlockType.SignPost : BlockType.WallSign, i0, i1, i2, world.getCanaryWorld());
                 BlockPlaceHook hook = (BlockPlaceHook) new BlockPlaceHook(((EntityPlayerMP) entityplayer).getPlayer(), clicked, placed).call();
                 if (hook.isCanceled()) {
                     return false;
@@ -74,8 +70,7 @@ public class ItemSign extends Item {
                     int i4 = MathHelper.c((double) ((entityplayer.z + 180.0F) * 16.0F / 360.0F) + 0.5D) & 15;
 
                     world.d(i0, i1, i2, Blocks.an, i4, 3);
-                }
-                else {
+                } else {
                     world.d(i0, i1, i2, Blocks.as, i3, 3);
                 }
 
