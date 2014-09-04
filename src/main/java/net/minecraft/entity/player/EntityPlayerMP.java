@@ -176,8 +176,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
         if (nbttagcompound.b("playerGameType", 99)) {
             if (MinecraftServer.G().an()) {
                 this.c.a(MinecraftServer.G().i());
-            }
-            else {
+            } else {
                 this.c.a(WorldSettings.GameType.a(nbttagcompound.f("playerGameType")));
             }
         }
@@ -250,8 +249,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
                             iterator1.remove();
                         }
                     }
-                }
-                else {
+                } else {
                     iterator1.remove();
                 }
             }
@@ -302,8 +300,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
                 if (!Configuration.getWorldConfig(getCanaryWorld().getFqName()).isHealthEnabled()) {
                     super.b(this.aZ());
                     this.L = false;
-                }
-                else {
+                } else {
                     HealthChangeHook hook = (HealthChangeHook) new HealthChangeHook(getPlayer(), bP, this.aN()).call();
                     if (hook.isCanceled()) {
                         super.b(this.bP);
@@ -335,9 +332,8 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
             if (!Configuration.getWorldConfig(getCanaryWorld().getFqName()).isExperienceEnabled()) {
                 this.bT = 0;
                 this.bH = 0;
-            }
-            else if (this.bH != this.bT) {
-                ExperienceHook hook = new ExperienceHook(getPlayer(), this.bT, this.bH);
+            } else if (this.bH != this.bT) {
+                ExperienceHook hook = (ExperienceHook) new ExperienceHook(getPlayer(), this.bT, this.bH).call();
 
                 if (!hook.isCanceled()) {
                     this.bT = this.bH;
@@ -349,8 +345,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
             if (this.ab % 20 * 5 == 0 && !this.x().a(AchievementList.L)) {
                 this.j();
             }
-        }
-        catch (Throwable throwable) {
+        } catch (Throwable throwable) {
             CrashReport crashreport = CrashReport.a(throwable, "Ticking player");
             CrashReportCategory crashreportcategory = crashreport.a("Player being ticked");
 
@@ -441,16 +436,14 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
     public boolean a(DamageSource damagesource, float f0) {
         if (this.aw()) {
             return false;
-        }
-        else {
+        } else {
             // CanaryMod moved pvp to per-world config
             boolean haspvp = Configuration.getWorldConfig(getCanaryWorld().getFqName()).isPvpEnabled();
             boolean flag0 = this.b.V() && haspvp && "fall".equals(damagesource.o);
 
             if (!flag0 && this.bU > 0 && damagesource != DamageSource.i) {
                 return false;
-            }
-            else {
+            } else {
                 if (damagesource instanceof EntityDamageSource) {
                     Entity entity = damagesource.j();
 
@@ -475,7 +468,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
     public boolean a(EntityPlayer entityplayer) {
         // CanaryMod moved pvp to per-world config
         boolean haspvp = Configuration.getWorldConfig(getCanaryWorld().getFqName()).isPvpEnabled();
-        return !haspvp ? false : super.a(entityplayer);
+        return haspvp && super.a(entityplayer);
     }
 
     public void b(int i0) {
@@ -484,8 +477,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
             this.p.e((Entity) this);
             this.j = true;
             this.a.a((Packet) (new S2BPacketChangeGameState(4, 0.0F)));
-        }
-        else {
+        } else {
             if (this.aq == 0 && i0 == 1) {
                 this.a((StatBase) AchievementList.C);
                 ChunkCoordinates chunkcoordinates = this.b.getWorld(this.getCanaryWorld().getName(), i0).l();
@@ -496,8 +488,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
                 }
 
                 i0 = 1;
-            }
-            else {
+            } else {
                 this.a((StatBase) AchievementList.y);
             }
 
@@ -650,20 +641,16 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
         if (iinventory instanceof TileEntityChest) {
             inventory = ((TileEntityChest) iinventory).getCanaryChest();
             container.setInventory(inventory);
-        }
-        else if (iinventory instanceof InventoryLargeChest) {
+        } else if (iinventory instanceof InventoryLargeChest) {
             inventory = new CanaryDoubleChest((InventoryLargeChest) iinventory);
             container.setInventory(inventory);
-        }
-        else if (iinventory instanceof InventoryEnderChest) {
+        } else if (iinventory instanceof InventoryEnderChest) {
             inventory = new CanaryEnderChestInventory((InventoryEnderChest) iinventory, getPlayer());
             container.setInventory(inventory);
-        }
-        else if (iinventory instanceof EntityMinecartChest) {
+        } else if (iinventory instanceof EntityMinecartChest) {
             inventory = (CanaryChestMinecart) ((EntityMinecartChest) iinventory).getCanaryEntity();
             container.setInventory(inventory);
-        }
-        else if (iinventory instanceof NativeCustomStorageInventory) {
+        } else if (iinventory instanceof NativeCustomStorageInventory) {
             inventory = ((NativeCustomStorageInventory) iinventory).getCanaryCustomInventory();
             container.setInventory(inventory);
         }
@@ -783,8 +770,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
                 packetbuffer.writeInt(this.bZ);
                 merchantrecipelist.a(packetbuffer);
                 this.a.a((Packet) (new S3FPacketCustomPayload("MC|TrList", packetbuffer)));
-            }
-            catch (IOException ioexception) {
+            } catch (IOException ioexception) {
                 bM.error("Couldn\'t send trade list", ioexception);
             }
         }

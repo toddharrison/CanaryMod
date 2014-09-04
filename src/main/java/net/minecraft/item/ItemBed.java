@@ -25,7 +25,7 @@ public class ItemBed extends Item {
         } else if (i3 != 1) {
             return false;
         } else {
-            // CanaryMod: ItemUseHook
+            // CanaryMod: BlockPlaceHook
             CanaryBlock clicked = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2); // Store Clicked
             clicked.setFaceClicked(BlockFace.fromByte((byte) i3)); // Set face clicked
 
