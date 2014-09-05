@@ -88,8 +88,7 @@ public class DedicatedServer extends MinecraftServer implements IServer {
                         while (true) {
                             Thread.sleep(2147483647L);
                         }
-                    }
-                    catch (InterruptedException interruptedexception) {
+                    } catch (InterruptedException interruptedexception) {
                         ;
                     }
                 }
@@ -139,8 +138,7 @@ public class DedicatedServer extends MinecraftServer implements IServer {
                             Canary.getServer().consoleCommand(i0);
                         }
                     }
-                }
-                catch (IOException i1) {
+                } catch (IOException i1) {
                     DedicatedServer.h.error("Exception handling console input", i1);
                 }
 
@@ -179,8 +177,7 @@ public class DedicatedServer extends MinecraftServer implements IServer {
         ServerConfiguration cfg = Configuration.getServerConfig();
         if (this.L()) {
             this.c("127.0.0.1");
-        }
-        else {
+        } else {
             this.d(cfg.isOnlineMode());
             this.c(cfg.getBindIp());
         }
@@ -204,10 +201,9 @@ public class DedicatedServer extends MinecraftServer implements IServer {
 
         try {
             this.ag().a(inetaddress, this.J());
-        }
-        catch (IOException ioexception1) {
+        } catch (IOException ioexception1) {
             h.warn("**** FAILED TO BIND TO PORT!");
-            h.warn("The exception was: {}", new Object[]{ ioexception1.toString() });
+            h.warn("The exception was: {}", new Object[]{ioexception1.toString()});
             h.warn("Perhaps a server is already running on that port?");
             return false;
         }
@@ -240,8 +236,7 @@ public class DedicatedServer extends MinecraftServer implements IServer {
                 if (i3 != 0L) {
                     i2 = i3;
                 }
-            }
-            catch (NumberFormatException numberformatexception) {
+            } catch (NumberFormatException numberformatexception) {
                 i2 = (long) s1.hashCode();
             }
         }
@@ -271,9 +266,16 @@ public class DedicatedServer extends MinecraftServer implements IServer {
 
         // CanaryMod changed call to initWorld
         this.initWorld(this.M(), i2, worldtype, net.canarymod.api.world.DimensionType.NORMAL, s3);
+        //Load up start-up auto-load enabled worlds
+        for (String name : Canary.getServer().getWorldManager().getExistingWorlds()) {
+            WorldConfiguration wCfg = Configuration.getWorldConfig(name);
+            if (wCfg.startupAutoLoadEnabled()) {
+                this.initWorld(name.replaceAll("_(NORMAL|NETHER|END)", ""), wCfg.getWorldSeed().matches("\\d+") ? Long.valueOf(wCfg.getWorldSeed()) : wCfg.getWorldSeed().hashCode(), WorldType.a(wCfg.getWorldType().toString()), net.canarymod.api.world.DimensionType.fromName(name.replaceAll("^.+_(.+)$", "$1")), wCfg.getGeneratorSettings());
+            }
+        }
         //
         long i4 = System.nanoTime() - i1;
-        String s4 = String.format("%.3fs", new Object[]{ Double.valueOf((double) i4 / 1.0E9D) });
+        String s4 = String.format("%.3fs", new Object[]{Double.valueOf((double) i4 / 1.0E9D)});
 
         h.info("Done (" + s4 + ")! For help, type \"help\" or \"?\"");
         if (cfg.isQueryEnabled()) {
@@ -316,8 +318,7 @@ public class DedicatedServer extends MinecraftServer implements IServer {
 
             try {
                 Thread.sleep(10L);
-            }
-            catch (InterruptedException interruptedexception) {
+            } catch (InterruptedException interruptedexception) {
                 ;
             }
         }
@@ -430,20 +431,17 @@ public class DedicatedServer extends MinecraftServer implements IServer {
             ServerGuiStartHook guiHook = (ServerGuiStartHook) new ServerGuiStartHook(MinecraftServerGui.preInit(this)).call(); // CanaryMod: PreInitialize the GUI without starting it
             if (guiHook.getGui() != null) {
                 ((CanaryServer) Canary.getServer()).setCurrentGUI(guiHook.getGui());
-            }
-            else {
+            } else {
                 ((CanaryServer) Canary.getServer()).setCurrentGUI(MinecraftServerGui.a(this));
             }
             Canary.getServer().getCurrentGUI().start();
             this.o = true;
             MinecraftServer.setHeadless(false);
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             // Gui Failure detected
             if (Main.canRunUncontrolled() || System.console() != null) { //If we can run uncontrolled, then just send a warning
                 Canary.log.warn("GUI failed to start.", ex);
-            }
-            else { //Can't run uncontrolled, error out and kill ourselves for being failures...
+            } else { //Can't run uncontrolled, error out and kill ourselves for being failures...
                 Canary.log.fatal("GUI failed to start and no console availible to control the server... Exiting...", ex);
                 System.exit(42);
             }
@@ -474,14 +472,11 @@ public class DedicatedServer extends MinecraftServer implements IServer {
             return false;
             // } else if (this.ax().i().isEmpty()) { // CanaryMod: Empty Ops list shouldn't break spawn protections...
             // return false;
-        }
-        else if (this.ax().d(entityplayer.b_())) {
+        } else if (this.ax().d(entityplayer.b_())) {
             return false;
-        }
-        else if (cfg.getSpawnProtectionSize() <= 0) {
+        } else if (cfg.getSpawnProtectionSize() <= 0) {
             return false;
-        }
-        else {
+        } else {
             ChunkCoordinates chunkcoordinates = world.J();
             int i3 = MathHelper.a(i0 - chunkcoordinates.a);
             int i4 = MathHelper.a(i2 - chunkcoordinates.c);

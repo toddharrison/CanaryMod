@@ -2,6 +2,7 @@ package net.minecraft.block;
 
 import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.blocks.CanaryBlock;
+import net.canarymod.hook.world.BlockPhysicsHook;
 import net.canarymod.hook.world.RedstoneChangeHook;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
@@ -84,16 +85,13 @@ public class BlockLever extends Block {
         if (i4 == b(1)) {
             if ((MathHelper.c((double) (entitylivingbase.z * 4.0F / 360.0F) + 0.5D) & 1) == 0) {
                 world.a(i0, i1, i2, 5 | i5, 2);
-            }
-            else {
+            } else {
                 world.a(i0, i1, i2, 6 | i5, 2);
             }
-        }
-        else if (i4 == b(0)) {
+        } else if (i4 == b(0)) {
             if ((MathHelper.c((double) (entitylivingbase.z * 4.0F / 360.0F) + 0.5D) & 1) == 0) {
                 world.a(i0, i1, i2, 7 | i5, 2);
-            }
-            else {
+            } else {
                 world.a(i0, i1, i2, 0 | i5, 2);
             }
         }
@@ -173,8 +171,7 @@ public class BlockLever extends Block {
             this.b(world, i0, i1, i2, world.e(i0, i1, i2), 0);
             world.f(i0, i1, i2);
             return false;
-        }
-        else {
+        } else {
             return true;
         }
     }
@@ -185,23 +182,18 @@ public class BlockLever extends Block {
 
         if (i3 == 1) {
             this.a(0.0F, 0.2F, 0.5F - f0, f0 * 2.0F, 0.8F, 0.5F + f0);
-        }
-        else if (i3 == 2) {
+        } else if (i3 == 2) {
             this.a(1.0F - f0 * 2.0F, 0.2F, 0.5F - f0, 1.0F, 0.8F, 0.5F + f0);
-        }
-        else if (i3 == 3) {
+        } else if (i3 == 3) {
             this.a(0.5F - f0, 0.2F, 0.0F, 0.5F + f0, 0.8F, f0 * 2.0F);
-        }
-        else if (i3 == 4) {
+        } else if (i3 == 4) {
             this.a(0.5F - f0, 0.2F, 1.0F - f0 * 2.0F, 0.5F + f0, 0.8F, 1.0F);
-        }
-        else if (i3 != 5 && i3 != 6) {
+        } else if (i3 != 5 && i3 != 6) {
             if (i3 == 0 || i3 == 7) {
                 f0 = 0.25F;
                 this.a(0.5F - f0, 0.4F, 0.5F - f0, 0.5F + f0, 1.0F, 0.5F + f0);
             }
-        }
-        else {
+        } else {
             f0 = 0.25F;
             this.a(0.5F - f0, 0.0F, 0.5F - f0, 0.5F + f0, 0.6F, 0.5F + f0);
         }
@@ -210,8 +202,13 @@ public class BlockLever extends Block {
     public boolean a(World world, int i0, int i1, int i2, EntityPlayer entityplayer, int i3, float f0, float f1, float f2) {
         if (world.E) {
             return true;
-        }
-        else {
+        } else {
+            // CanaryMod: Block Physics
+            BlockPhysicsHook blockPhysics = (BlockPhysicsHook) new BlockPhysicsHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), false).call();
+            if (blockPhysics.isCanceled()) {
+                return false;
+            }
+            //
             int i4 = world.e(i0, i1, i2);
             int i5 = i4 & 7;
             int i6 = 8 - (i4 & 8);
@@ -220,7 +217,7 @@ public class BlockLever extends Block {
             int newLvl = i6 == 0 ? 0 : 15; //
             RedstoneChangeHook hook = (RedstoneChangeHook) new RedstoneChangeHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), ~newLvl & 15, newLvl).call();
             if (hook.isCanceled()) {
-                return true;
+                return false;
             } // CanaryMod: end
 
             world.a(i0, i1, i2, i5 + i6, 3);
@@ -228,22 +225,17 @@ public class BlockLever extends Block {
             world.d(i0, i1, i2, this);
             if (i5 == 1) {
                 world.d(i0 - 1, i1, i2, this);
-            }
-            else if (i5 == 2) {
+            } else if (i5 == 2) {
                 world.d(i0 + 1, i1, i2, this);
-            }
-            else if (i5 == 3) {
+            } else if (i5 == 3) {
                 world.d(i0, i1, i2 - 1, this);
-            }
-            else if (i5 == 4) {
+            } else if (i5 == 4) {
                 world.d(i0, i1, i2 + 1, this);
-            }
-            else if (i5 != 5 && i5 != 6) {
+            } else if (i5 != 5 && i5 != 6) {
                 if (i5 == 0 || i5 == 7) {
                     world.d(i0, i1 + 1, i2, this);
                 }
-            }
-            else {
+            } else {
                 world.d(i0, i1 - 1, i2, this);
             }
 
@@ -262,22 +254,17 @@ public class BlockLever extends Block {
 
             if (i4 == 1) {
                 world.d(i0 - 1, i1, i2, this);
-            }
-            else if (i4 == 2) {
+            } else if (i4 == 2) {
                 world.d(i0 + 1, i1, i2, this);
-            }
-            else if (i4 == 3) {
+            } else if (i4 == 3) {
                 world.d(i0, i1, i2 - 1, this);
-            }
-            else if (i4 == 4) {
+            } else if (i4 == 4) {
                 world.d(i0, i1, i2 + 1, this);
-            }
-            else if (i4 != 5 && i4 != 6) {
+            } else if (i4 != 5 && i4 != 6) {
                 if (i4 == 0 || i4 == 7) {
                     world.d(i0, i1 + 1, i2, this);
                 }
-            }
-            else {
+            } else {
                 world.d(i0, i1 - 1, i2, this);
             }
         }
@@ -294,8 +281,7 @@ public class BlockLever extends Block {
 
         if ((i4 & 8) == 0) {
             return 0;
-        }
-        else {
+        } else {
             int i5 = i4 & 7;
 
             return i5 == 0 && i3 == 0 ? 15 : (i5 == 7 && i3 == 0 ? 15 : (i5 == 6 && i3 == 1 ? 15 : (i5 == 5 && i3 == 1 ? 15 : (i5 == 4 && i3 == 2 ? 15 : (i5 == 3 && i3 == 3 ? 15 : (i5 == 2 && i3 == 4 ? 15 : (i5 == 1 && i3 == 5 ? 15 : 0)))))));

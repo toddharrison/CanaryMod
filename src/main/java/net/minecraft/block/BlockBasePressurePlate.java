@@ -1,6 +1,7 @@
 package net.minecraft.block;
 
 import net.canarymod.api.world.blocks.CanaryBlock;
+import net.canarymod.hook.world.BlockPhysicsHook;
 import net.canarymod.hook.world.RedstoneChangeHook;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
@@ -33,8 +34,7 @@ public abstract class BlockBasePressurePlate extends Block {
 
         if (flag0) {
             this.a(f0, 0.0F, f0, 1.0F - f0, 0.03125F, 1.0F - f0);
-        }
-        else {
+        } else {
             this.a(f0, 0.0F, f0, 1.0F - f0, 0.0625F, 1.0F - f0);
         }
     }
@@ -101,6 +101,14 @@ public abstract class BlockBasePressurePlate extends Block {
 
         // CanaryMod: RedstoneChange
         if (i3 != i4) {
+            // CanaryMod: Block Physics
+            BlockPhysicsHook blockPhysics = (BlockPhysicsHook) new BlockPhysicsHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), false).call();
+            if (blockPhysics.isCanceled()) {
+                world.a(i0, i1, i2, this, this.a(world));  // Reschedule
+                return;
+            }
+            //
+
             RedstoneChangeHook hook = (RedstoneChangeHook) new RedstoneChangeHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), i3, i4).call();
             if (hook.isCanceled()) {
                 i4 = hook.getOldLevel();
@@ -119,8 +127,7 @@ public abstract class BlockBasePressurePlate extends Block {
 
         if (!flag1 && flag0) {
             world.a((double) i0 + 0.5D, (double) i1 + 0.1D, (double) i2 + 0.5D, "random.click", 0.3F, 0.5F);
-        }
-        else if (flag1 && !flag0) {
+        } else if (flag1 && !flag0) {
             world.a((double) i0 + 0.5D, (double) i1 + 0.1D, (double) i2 + 0.5D, "random.click", 0.3F, 0.6F);
         }
 
@@ -136,11 +143,20 @@ public abstract class BlockBasePressurePlate extends Block {
     }
 
     public void a(World world, int i0, int i1, int i2, Block block, int i3) {
+        // CanaryMod: Block Physics
+        BlockPhysicsHook blockPhysics = (BlockPhysicsHook) new BlockPhysicsHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), false).call();
+        if (blockPhysics.isCanceled()) {
+            return;
+        }
+        //
+
+        // CanaryMod: RedstoneChange
         int oldLvl = this.c(i3);
         if (oldLvl > 0) {
             new RedstoneChangeHook(new CanaryBlock((short) Block.b(this), (short) i3, i0, i1, i2, world.getCanaryWorld()), oldLvl, 0).call();
             this.a_(world, i0, i1, i2);
         }
+        //
 
         super.a(world, i0, i1, i2, block, i3);
     }
