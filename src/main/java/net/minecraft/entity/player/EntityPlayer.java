@@ -2,15 +2,19 @@ package net.minecraft.entity.player;
 
 import com.google.common.base.Charsets;
 import com.mojang.authlib.GameProfile;
+
 import net.canarymod.Canary;
 import net.canarymod.ToolBox;
 import net.canarymod.api.entity.EntityType;
 import net.canarymod.api.entity.living.humanoid.CanaryHuman;
 import net.canarymod.api.entity.living.humanoid.CanaryPlayer;
+import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.inventory.*;
 import net.canarymod.api.nbt.CanaryCompoundTag;
 import net.canarymod.api.packet.CanaryPacket;
 import net.canarymod.api.world.position.Location;
+import net.canarymod.hook.player.BedEnterHook;
+import net.canarymod.hook.player.BedExitHook;
 import net.canarymod.hook.player.EntityRightClickHook;
 import net.canarymod.hook.player.ItemDropHook;
 import net.canarymod.hook.player.LevelUpHook;
@@ -1049,6 +1053,16 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
             this.a((Entity) null);
         }
 
+        // CanaryMod: BedEnterHook
+        if (this.getCanaryEntity() instanceof CanaryPlayer) {
+            System.out.println("In here.");
+            BedEnterHook beh = (BedEnterHook) new BedEnterHook(((EntityPlayerMP)this).getPlayer(),this.p.getCanaryWorld().getBlockAt(i0, i1, i2)).call();
+            if (beh.isCanceled()) {
+        	return EnumStatus.OTHER_PROBLEM;
+            }
+        }
+        //
+
         this.a(0.2F, 0.2F);
         this.M = 0.2F;
         if (this.p.d(i0, i1, i2)) {
@@ -1133,6 +1147,15 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
         if (!this.p.E && flag1) {
             this.p.c();
         }
+
+        // CanaryMod: BedLeaveHook
+        if (this.getCanaryEntity() instanceof CanaryPlayer) {
+            Player p = ((EntityPlayerMP)this).getPlayer();
+            net.canarymod.api.world.blocks.Block bed = this.p.getCanaryWorld().getBlockAt(chunkcoordinates.a, chunkcoordinates.b, chunkcoordinates.c);
+
+            new BedExitHook(p, bed).call();;
+        }
+        //
 
         if (flag0) {
             this.b = 0;
