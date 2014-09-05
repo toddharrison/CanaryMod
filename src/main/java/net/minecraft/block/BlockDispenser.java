@@ -1,5 +1,6 @@
 package net.minecraft.block;
 
+import net.canarymod.Canary;
 import net.canarymod.hook.world.DispenseHook;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
@@ -116,6 +117,7 @@ public class BlockDispenser extends BlockContainer {
     }
 
     public void a(World world, int i0, int i1, int i2, Block block) {
+        Canary.log.debug("Unholy Fux");
         boolean flag0 = world.v(i0, i1, i2) || world.v(i0, i1 + 1, i2);
         int i3 = world.e(i0, i1, i2);
         boolean flag1 = (i3 & 8) != 0;
