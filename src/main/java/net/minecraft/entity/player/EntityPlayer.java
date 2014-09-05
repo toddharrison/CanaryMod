@@ -1055,7 +1055,6 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
 
         // CanaryMod: BedEnterHook
         if (this.getCanaryEntity() instanceof CanaryPlayer) {
-            System.out.println("In here.");
             BedEnterHook beh = (BedEnterHook) new BedEnterHook(((EntityPlayerMP)this).getPlayer(),this.p.getCanaryWorld().getBlockAt(i0, i1, i2)).call();
             if (beh.isCanceled()) {
         	return EnumStatus.OTHER_PROBLEM;
