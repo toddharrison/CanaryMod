@@ -94,7 +94,15 @@ public class Bootstrap {
                 double d0 = iblocksource.a() + (double) enumfacing.c();
                 double d1 = (double) ((float) iblocksource.e() + 0.2F);
                 double d2 = iblocksource.c() + (double) enumfacing.e();
-                Entity entity = ItemMonsterPlacer.a(iblocksource.k(), itemstack.k(), d0, d1, d2);
+                // CanaryMod: Dispense
+                Entity entity = ItemMonsterPlacer.a(iblocksource.k(), itemstack.k(), d0, d1, d2, false); // First test the entity before spawning...
+                DispenseHook hook = (DispenseHook) new DispenseHook(((TileEntityDispenser) iblocksource.j()).getCanaryDispenser(), entity.getCanaryEntity()).call();
+                if (hook.isCanceled()) {
+                    entity.B(); // Clean up unspawned entity
+                    return itemstack;
+                }
+                entity = ItemMonsterPlacer.a(iblocksource.k(), itemstack.k(), d0, d1, d2); // Ok, now let it spawn
+                //
 
                 if (entity instanceof EntityLivingBase && itemstack.u()) {
                     ((EntityLiving) entity).a(itemstack.s());
@@ -113,8 +121,13 @@ public class Bootstrap {
                 double d2 = iblocksource.c() + (double) enumfacing.e();
                 EntityFireworkRocket entityfireworkrocket = new EntityFireworkRocket(iblocksource.k(), d0, d1, d2, itemstack);
 
-                iblocksource.k().d(entityfireworkrocket);
-                itemstack.a(1);
+                // CanaryMod: Dispense
+                DispenseHook hook = (DispenseHook) new DispenseHook(((TileEntityDispenser) iblocksource.j()).getCanaryDispenser(), entityfireworkrocket.getCanaryEntity()).call();
+                if (!hook.isCanceled()) {
+                    iblocksource.k().d(entityfireworkrocket);
+                    itemstack.a(1);
+                }
+                //
                 return itemstack;
             }
 
@@ -136,8 +149,14 @@ public class Bootstrap {
                 double d4 = random.nextGaussian() * 0.05D + (double) enumfacing.d();
                 double d5 = random.nextGaussian() * 0.05D + (double) enumfacing.e();
 
-                world.d((Entity) (new EntitySmallFireball(world, d0, d1, d2, d3, d4, d5)));
-                itemstack.a(1);
+                // CanaryMod: Dispense
+                EntitySmallFireball entitysmallfireball = new EntitySmallFireball(world, d0, d1, d2, d3, d4, d5);
+                DispenseHook hook = (DispenseHook) new DispenseHook(((TileEntityDispenser) iblocksource.j()).getCanaryDispenser(), entitysmallfireball.getCanaryEntity()).call();
+                if (!hook.isCanceled()) {
+                    iblocksource.k().d(entitysmallfireball);
+                    itemstack.a(1);
+                }
+                //
                 return itemstack;
             }
 
@@ -326,8 +345,13 @@ public class Bootstrap {
                 int i2 = iblocksource.f() + enumfacing.e();
                 EntityTNTPrimed entitytntprimed = new EntityTNTPrimed(world, (double) ((float) i0 + 0.5F), (double) ((float) i1 + 0.5F), (double) ((float) i2 + 0.5F), (EntityLivingBase) null);
 
-                world.d(entitytntprimed);
-                --itemstack.b;
+                // CanaryMod: Dispense
+                DispenseHook hook = (DispenseHook) new DispenseHook(((TileEntityDispenser) iblocksource.j()).getCanaryDispenser(), entitytntprimed.getCanaryEntity()).call();
+                if (!hook.isCanceled()) {
+                    world.d(entitytntprimed);
+                    itemstack.a(1);
+                }
+                //
                 return itemstack;
             }
         });
