@@ -1149,10 +1149,9 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
 
         // CanaryMod: BedLeaveHook
         if (this.getCanaryEntity() instanceof CanaryPlayer) {
-            Player p = ((EntityPlayerMP)this).getPlayer();
             net.canarymod.api.world.blocks.Block bed = this.p.getCanaryWorld().getBlockAt(chunkcoordinates.a, chunkcoordinates.b, chunkcoordinates.c);
 
-            new BedExitHook(p, bed).call();;
+            new BedExitHook(((EntityPlayerMP)this).getPlayer(), bed).call();;
         }
         //
 

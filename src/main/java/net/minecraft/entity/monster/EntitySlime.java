@@ -1,7 +1,13 @@
 package net.minecraft.entity.monster;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.canarymod.api.entity.CanaryEntity;
 import net.canarymod.api.entity.living.monster.CanarySlime;
+import net.canarymod.api.entity.living.monster.Slime;
 import net.canarymod.hook.entity.MobTargetHook;
+import net.canarymod.hook.entity.SlimeSplitHook;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -168,6 +174,7 @@ public class EntitySlime extends EntityLiving implements IMob {
         if (!this.p.E && i0 > 1 && this.aS() <= 0.0F) {
             int i1 = 2 + this.aa.nextInt(3);
 
+            List<Slime> slimes = new ArrayList<Slime>();
             for (int i2 = 0; i2 < i1; ++i2) {
                 float f0 = ((float) (i2 % 2) - 0.5F) * (float) i0 / 4.0F;
                 float f1 = ((float) (i2 / 2) - 0.5F) * (float) i0 / 4.0F;
@@ -175,8 +182,17 @@ public class EntitySlime extends EntityLiving implements IMob {
 
                 entityslime.a(i0 / 2);
                 entityslime.b(this.t + (double) f0, this.u + 0.5D, this.v + (double) f1, this.aa.nextFloat() * 360.0F, 0.0F);
-                this.p.d((Entity) entityslime);
+
+                slimes.add((Slime)entityslime.getCanaryEntity()); // CanaryMod: get the slimes that should spawn
             }
+
+            new SlimeSplitHook((Slime)this.getCanaryEntity(), slimes).call(); // CanaryMod: SlimeSplitHook, call to change the slimes
+
+            // Spawn Slimes after calling the event and allowing to change them
+            for(Slime slime : slimes){
+        	slime.spawn();
+            }
+            //
         }
 
         super.B();
