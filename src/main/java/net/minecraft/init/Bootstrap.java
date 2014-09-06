@@ -212,19 +212,26 @@ public class Bootstrap {
             private final BehaviorDefaultDispenseItem b = new BehaviorDefaultDispenseItem();
 
             public ItemStack b(IBlockSource iblocksource, ItemStack itemstack) {
-                ItemBucket enumfacing = (ItemBucket) itemstack.b();
+                ItemBucket itembucket = (ItemBucket) itemstack.b();
                 int world = iblocksource.d();
                 int i0 = iblocksource.e();
                 int i1 = iblocksource.f();
-                EnumFacing enumfacing1 = BlockDispenser.b(iblocksource.h());
+                EnumFacing enumfacing = BlockDispenser.b(iblocksource.h());
 
-                if (enumfacing.a(iblocksource.k(), world + enumfacing1.c(), i0 + enumfacing1.d(), i1 + enumfacing1.e())) {
-                    itemstack.a(Items.ar);
-                    itemstack.b = 1;
+                // CanaryMod: Dispense
+                if (itembucket.a(iblocksource.k(), world + enumfacing.c(), i0 + enumfacing.d(), i1 + enumfacing.e(), null, true)) { // Simulate first
+                    DispenseHook hook = (DispenseHook) new DispenseHook(((TileEntityDispenser) iblocksource.j()).getCanaryDispenser(), null).call();
+                    if (!hook.isCanceled()) {
+                        itembucket.a(iblocksource.k(), world + enumfacing.c(), i0 + enumfacing.d(), i1 + enumfacing.e()); // now do it
+                        itemstack.a(Items.ar);
+                        itemstack.b = 1;
+                    }
                     return itemstack;
-                } else {
+                }
+                else {
                     return this.b.a(iblocksource, itemstack);
                 }
+                //
             }
         };
 
@@ -240,14 +247,14 @@ public class Bootstrap {
                 int i0 = iblocksource.d() + enumfacing.c();
                 int i1 = iblocksource.e() + enumfacing.d();
                 int i2 = iblocksource.f() + enumfacing.e();
-                Material entitytntprimed = world.a(i0, i1, i2).o();
+                Material material = world.a(i0, i1, i2).o();
                 int i3 = world.e(i0, i1, i2);
                 Item item;
 
-                if (Material.h.equals(entitytntprimed) && i3 == 0) {
+                if (Material.h.equals(material) && i3 == 0) {
                     item = Items.as;
                 } else {
-                    if (!Material.i.equals(entitytntprimed) || i3 != 0) {
+                    if (!Material.i.equals(material) || i3 != 0) {
                         return super.b(iblocksource, itemstack);
                     }
 

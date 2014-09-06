@@ -1,6 +1,5 @@
 package net.minecraft.item;
 
-import net.canarymod.Canary;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.world.blocks.CanaryBlock;
 import net.canarymod.hook.player.BlockDestroyHook;
@@ -112,7 +111,7 @@ public class ItemBucket extends Item {
                     }
 
                     // CanaryMod: Pass player to tryPlace
-                    if (this.a(world, i0, i1, i2, entityplayer) && !entityplayer.bF.d) {
+                    if (this.a(world, i0, i1, i2, entityplayer, false) && !entityplayer.bF.d) {
                         return new ItemStack(Items.ar);
                     }
                 }
@@ -137,12 +136,11 @@ public class ItemBucket extends Item {
     }
 
     public boolean a(World world, int i0, int i1, int i2) {
-        Canary.log.debug("OHNOES! ItemBucket BlockPlaceHook bug (call to old method)", new Exception() /* For debug tracking Purposes */);
-        return a(world, i0, i1, i2, null); // CanaryMod: redirection
+        return a(world, i0, i1, i2, null, false); // CanaryMod: redirection
     }
 
-    // CanaryMod: We need a Player for hooks
-    public boolean a(World world, int i0, int i1, int i2, EntityPlayer entityplayer) {
+    // CanaryMod: We need a Player for hooks, testOnly is to simulate a Dispenser letting stuff happen
+    public boolean a(World world, int i0, int i1, int i2, EntityPlayer entityplayer, boolean testOnly) {
         if (this.a == Blocks.a) {
             return false;
         } else {
@@ -175,7 +173,11 @@ public class ItemBucket extends Item {
                     }
                     //
 
-                    world.d(i0, i1, i2, this.a, 0, 3);
+                    // CanaryMod: Dispense helper
+                    if (!testOnly) {
+                        world.d(i0, i1, i2, this.a, 0, 3);
+                    }
+                    //
                 }
 
                 return true;
