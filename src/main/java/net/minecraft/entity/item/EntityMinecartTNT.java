@@ -1,6 +1,11 @@
 package net.minecraft.entity.item;
 
+import net.canarymod.Canary;
 import net.canarymod.api.entity.vehicle.CanaryTNTMinecart;
+import net.canarymod.api.entity.vehicle.Minecart;
+import net.canarymod.api.entity.vehicle.TNTMinecart;
+import net.canarymod.hook.entity.MinecartActivateHook;
+import net.canarymod.hook.world.TNTActivateHook;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.entity.Entity;
@@ -90,7 +95,14 @@ public class EntityMinecartTNT extends EntityMinecart {
 
     public void a(int i0, int i1, int i2, boolean flag0) {
         if (flag0 && this.a < 0) {
-            this.e();
+            // CanaryMod: MinecartActivate
+            MinecartActivateHook mah = (MinecartActivateHook) new MinecartActivateHook((Minecart) this.getCanaryEntity(), (i1 & 8) != 0).call();
+            TNTActivateHook tah = (TNTActivateHook) new TNTActivateHook((TNTMinecart) this.getCanaryEntity()).call();
+            Canary.hooks().callHook(mah);
+            if (!mah.isCanceled() && !tah.isCanceled()) {
+                this.e();
+            }
+            //
         }
     }
 
