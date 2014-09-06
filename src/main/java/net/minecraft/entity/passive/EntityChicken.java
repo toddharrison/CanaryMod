@@ -1,6 +1,8 @@
 package net.minecraft.entity.passive;
 
 import net.canarymod.api.entity.living.animal.CanaryChicken;
+import net.canarymod.api.entity.living.animal.Chicken;
+import net.canarymod.hook.entity.ChickenLayEggHook;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -12,6 +14,7 @@ import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAITempt;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -78,8 +81,16 @@ public class EntityChicken extends EntityAnimal {
         this.bp += this.bt * 2.0F;
         if (!this.f() && !this.p.E && --this.bu <= 0) {
             this.a("mob.chicken.plop", 1.0F, (this.aa.nextFloat() - this.aa.nextFloat()) * 0.2F + 1.0F);
-            this.a(Items.aK, 1);
+            EntityItem item = this.a(Items.aK, 1);
             this.bu = this.aa.nextInt(6000) + 6000;
+            // CanaryMod: ChickenLayEggHook
+            ChickenLayEggHook cleh = (ChickenLayEggHook) new ChickenLayEggHook((Chicken) this.getCanaryEntity(), item.getEntityItem().getItem(), bu).call();
+            item.getCanaryEntity().destroy();
+            if (!cleh.isCanceled()) {
+                this.bu = cleh.getNextEggIn();
+                this.p.getCanaryWorld().dropItem(cleh.getChicken().getPosition(), cleh.getEgg());
+            }
+            //
         }
     }
 
