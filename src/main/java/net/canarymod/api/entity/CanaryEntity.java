@@ -425,4 +425,13 @@ public abstract class CanaryEntity implements Entity {
      * @return entity
      */
     public abstract net.minecraft.entity.Entity getHandle();
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isAmbient() {
+        return false;
+    }
+
 }
