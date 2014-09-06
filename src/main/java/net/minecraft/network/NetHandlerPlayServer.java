@@ -985,7 +985,10 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
 
                 itemstack1 = this.b.bn.h();
                 if (itemstack.b() == Items.bA && itemstack.b() == itemstack1.b()) {
-                    itemstack1.a("pages", (NBTBase) itemstack.q().c("pages", 8));
+                    BookEditHook beh = (BookEditHook) new BookEditHook(itemstack.getCanaryItem(), this.b.getPlayer()).call();
+                    if (!beh.isCanceled()) {
+                        itemstack1.a("pages", (NBTBase) itemstack.q().c("pages", 8));
+                    }
                 }
             }
             catch (Exception exception) {

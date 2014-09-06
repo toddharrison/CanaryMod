@@ -9,14 +9,8 @@ import net.canarymod.config.WorldConfiguration;
 import net.canarymod.hook.entity.EntitySpawnHook;
 import net.canarymod.hook.entity.VehicleCollisionHook;
 import net.canarymod.hook.world.BlockUpdateHook;
-import net.canarymod.hook.world.TimeChangeHook;
 import net.canarymod.hook.world.WeatherChangeHook;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockHopper;
-import net.minecraft.block.BlockLiquid;
-import net.minecraft.block.BlockSlab;
-import net.minecraft.block.BlockSnow;
-import net.minecraft.block.BlockStairs;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.command.IEntitySelector;
 import net.minecraft.crash.CrashReport;
@@ -41,15 +35,7 @@ import net.minecraft.profiler.Profiler;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Facing;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.ReportedException;
-import net.minecraft.util.Vec3;
-import net.minecraft.util.Vec3Pool;
+import net.minecraft.util.*;
 import net.minecraft.village.VillageCollection;
 import net.minecraft.village.VillageSiege;
 import net.minecraft.world.biome.BiomeGenBase;
@@ -60,15 +46,7 @@ import net.minecraft.world.storage.ISaveHandler;
 import net.minecraft.world.storage.MapStorage;
 import net.minecraft.world.storage.WorldInfo;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.Callable;
 
 public abstract class World implements IBlockAccess {
@@ -2559,12 +2537,7 @@ public abstract class World implements IBlockAccess {
     }
 
     public void b(long i0) {
-        // CanaryMod: TimeChange
-        TimeChangeHook hook = (TimeChangeHook) new TimeChangeHook(canaryDimension, i0).call();
-        if (!hook.isCanceled()) {
-            this.x.c(i0);
-        }
-        //
+        this.x.c(i0);
     }
 
     public ChunkCoordinates J() {
