@@ -75,7 +75,7 @@ public class BlockPistonBase extends Block {
             boolean flag0 = this.a(world, i0, i1, i2, i4);
 
             // CanaryMod: Get Blocks
-            CanaryBlock piston = new CanaryBlock((this.a ? BlockType.Piston.getId() : BlockType.StickyPiston.getId()), (byte) 0, i0, i1, i2, world.getCanaryWorld());
+            CanaryBlock piston = new CanaryBlock((this.a ? BlockType.StickyPiston.getId() : BlockType.Piston.getId()), (byte) 0, i0, i1, i2, world.getCanaryWorld());
             CanaryBlock moving = new CanaryBlock((short) Block.b(world.a(i0 + Facing.b[i4], i1 + Facing.c[i4], i2 + Facing.d[i4])), (byte) 0, (i0 + Facing.b[i4]), (i1 + Facing.c[i4]), (i2 + Facing.d[i4]), world.getCanaryWorld());
 
             //

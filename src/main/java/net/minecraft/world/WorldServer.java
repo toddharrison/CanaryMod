@@ -3,7 +3,6 @@ package net.minecraft.world;
 import net.canarymod.api.CanaryEntityTracker;
 import net.canarymod.api.CanaryPlayerManager;
 import net.canarymod.config.Configuration;
-import net.canarymod.hook.world.TimeChangeHook;
 import net.canarymod.hook.world.WeatherChangeHook;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEventData;
@@ -20,25 +19,14 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S19PacketEntityStatus;
-import net.minecraft.network.play.server.S24PacketBlockAction;
-import net.minecraft.network.play.server.S27PacketExplosion;
-import net.minecraft.network.play.server.S2APacketParticles;
-import net.minecraft.network.play.server.S2BPacketChangeGameState;
-import net.minecraft.network.play.server.S2CPacketSpawnGlobalEntity;
+import net.minecraft.network.play.server.*;
 import net.minecraft.profiler.Profiler;
 import net.minecraft.scoreboard.ScoreboardSaveData;
 import net.minecraft.scoreboard.ServerScoreboard;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.PlayerManager;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.util.IProgressUpdate;
-import net.minecraft.util.IntHashMap;
-import net.minecraft.util.ReportedException;
-import net.minecraft.util.Vec3;
-import net.minecraft.util.WeightedRandom;
-import net.minecraft.util.WeightedRandomChestContent;
+import net.minecraft.util.*;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.biome.WorldChunkManager;
 import net.minecraft.world.chunk.Chunk;
@@ -51,14 +39,7 @@ import net.minecraft.world.storage.ISaveHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 public class WorldServer extends World {
 
@@ -123,13 +104,7 @@ public class WorldServer extends World {
         if (this.e()) {
             if (this.N().b("doDaylightCycle")) {
                 long i0 = this.x.g() + 24000L;
-
-                // CanaryMod: TimeChangeHook
-                TimeChangeHook hook = (TimeChangeHook) new TimeChangeHook(getCanaryWorld(), i0 - i0 % 24000L).call();
-                if (!hook.isCanceled()) {
-                    this.x.c(i0 - i0 % 24000L);
-                }
-                //
+                this.x.c(i0 - i0 % 24000L);
                 this.d();
             }
         }
@@ -149,12 +124,7 @@ public class WorldServer extends World {
 
         this.x.b(this.x.f() + 1L);
         if (this.N().b("doDaylightCycle")) {
-            // CanaryMod: TimeChangeHook
-            TimeChangeHook hook = (TimeChangeHook) new TimeChangeHook(getCanaryWorld(), this.x.g() + 1L).call();
-            if (!hook.isCanceled()) {
-                this.x.c(this.x.g() + 1L);
-            }
-            //
+            this.x.c(this.x.g() + 1L);
         }
         this.C.c("tickPending");
         this.a(false);

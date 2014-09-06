@@ -209,7 +209,8 @@ public class TileEntityHopper extends TileEntity implements IHopper {
                     HopperTransferHook hook = (HopperTransferHook) new HopperTransferHook(getCanaryHopper(), new net.canarymod.api.inventory.CanaryItem(itemstack), false).call();
                     if (hook.isCanceled()) {
                         return false;
-                    }// CanaryMod: End
+                    }
+                    // CanaryMod: End
 
                     ItemStack itemstack1 = a(iinventory, this.a(i0, 1), Facing.a[BlockHopper.b(this.p())]);
 
