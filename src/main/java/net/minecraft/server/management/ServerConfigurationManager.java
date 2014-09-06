@@ -390,12 +390,12 @@ public abstract class ServerConfigurationManager {
         if (Canary.bans().isIpBanned(s2)) {
             return Translator.translate(srv.getDefaultBannedMessage());
         }
-        if (!Canary.whitelist().isWhitelisted(s0) && Configuration.getServerConfig().isWhitelistEnabled()) {
+        if (!Canary.whitelist().isWhitelisted(id0.toString()) && Configuration.getServerConfig().isWhitelistEnabled()) {
             return srv.getWhitelistMessage();
         }
 
         if (this.a.size() >= this.b) {
-            if (Canary.reservelist().isSlotReserved(s0) && Configuration.getServerConfig().isReservelistEnabled()) {
+            if (Canary.reservelist().isSlotReserved(id0.toString()) && Configuration.getServerConfig().isReservelistEnabled()) {
                 return null;
             }
             return srv.getServerFullMessage();
