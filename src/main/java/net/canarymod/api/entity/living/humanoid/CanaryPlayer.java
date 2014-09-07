@@ -3,7 +3,6 @@ package net.canarymod.api.entity.living.humanoid;
 import net.canarymod.Canary;
 import net.canarymod.MathHelp;
 import net.canarymod.ToolBox;
-import net.canarymod.api.CanaryServer;
 import net.canarymod.api.GameMode;
 import net.canarymod.api.NetServerHandler;
 import net.canarymod.api.PlayerListEntry;
@@ -250,9 +249,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
             toRet = Canary.commands().parseCommand(this, cmdName, command);
             if (!toRet) {
                 Canary.log.debug("Vanilla Command Execution...");
-                if (Canary.ops().isOpped(this)) {
-                    toRet = ((CanaryServer) Canary.getServer()).getHandle().H().a(this.getHandle(), StringUtils.joinString(command, " ", 0)) > 0; // Vanilla Commands passed
-                }
+                toRet = Canary.getServer().consoleCommand(StringUtils.joinString(command, " ", 0), this); // Vanilla Commands passed
             }
             if (toRet) {
                 log.info("Command used by " + getName() + ": " + StringUtils.joinString(command, " ", 0));

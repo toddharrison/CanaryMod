@@ -167,7 +167,7 @@ public class CanaryServer implements Server {
             cmdName = cmdName.substring(1);
         }
         if (!Canary.commands().parseCommand(player, cmdName, args)) {
-            if (Canary.ops().isOpped(player.getName())) {
+            if (Canary.ops().isOpped(player.getName()) || player.hasPermission("canary.vanilla.".concat(cmdName))) {
                 return server.H().a(((CanaryPlayer) player).getHandle(), command) > 0; // Vanilla Commands passed
             }
             return false;
