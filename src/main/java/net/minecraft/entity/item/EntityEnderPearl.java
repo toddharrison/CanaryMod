@@ -27,20 +27,20 @@ public class EntityEnderPearl extends EntityThrowable {
         }
 
         for (int i0 = 0; i0 < 32; ++i0) {
-            this.p.a("portal", this.t, this.u + this.aa.nextDouble() * 2.0D, this.v, this.aa.nextGaussian(), 0.0D, this.aa.nextGaussian());
+            this.o.a("portal", this.s, this.t + this.Z.nextDouble() * 2.0D, this.u, this.Z.nextGaussian(), 0.0D, this.Z.nextGaussian());
         }
 
-        if (!this.p.E) {
+        if (!this.o.E) {
             if (this.j() != null && this.j() instanceof EntityPlayerMP) {
                 EntityPlayerMP entityplayermp = (EntityPlayerMP) this.j();
 
-                if (entityplayermp.a.b().d() && entityplayermp.p == this.p) {
+                if (entityplayermp.a.b().d() && entityplayermp.o == this.o) {
                     if (this.j().am()) {
                         this.j().a((Entity) null);
                     }
 
-                    this.j().a(this.t, this.u, this.v);
-                    this.j().S = 0.0F;
+                    this.j().a(this.s, this.t, this.u);
+                    this.j().R = 0.0F;
                     this.j().a(DamageSource.h, 5.0F);
                 }
             }

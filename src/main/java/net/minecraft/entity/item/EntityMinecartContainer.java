@@ -32,25 +32,25 @@ public abstract class EntityMinecartContainer extends EntityMinecart implements 
             ItemStack itemstack = this.a(i0);
 
             if (itemstack != null) {
-                float f0 = this.aa.nextFloat() * 0.8F + 0.1F;
-                float f1 = this.aa.nextFloat() * 0.8F + 0.1F;
-                float f2 = this.aa.nextFloat() * 0.8F + 0.1F;
+                float f0 = this.Z.nextFloat() * 0.8F + 0.1F;
+                float f1 = this.Z.nextFloat() * 0.8F + 0.1F;
+                float f2 = this.Z.nextFloat() * 0.8F + 0.1F;
 
                 while (itemstack.b > 0) {
-                    int i1 = this.aa.nextInt(21) + 10;
+                    int i1 = this.Z.nextInt(21) + 10;
 
                     if (i1 > itemstack.b) {
                         i1 = itemstack.b;
                     }
 
                     itemstack.b -= i1;
-                    EntityItem entityitem = new EntityItem(this.p, this.t + (double) f0, this.u + (double) f1, this.v + (double) f2, new ItemStack(itemstack.b(), i1, itemstack.k()));
+                    EntityItem entityitem = new EntityItem(this.o, this.s + (double) f0, this.t + (double) f1, this.u + (double) f2, new ItemStack(itemstack.b(), i1, itemstack.k()));
                     float f3 = 0.05F;
 
-                    entityitem.w = (double) ((float) this.aa.nextGaussian() * f3);
-                    entityitem.x = (double) ((float) this.aa.nextGaussian() * f3 + 0.2F);
-                    entityitem.y = (double) ((float) this.aa.nextGaussian() * f3);
-                    this.p.d((Entity) entityitem);
+                    entityitem.v = (double) ((float) this.Z.nextGaussian() * f3);
+                    entityitem.w = (double) ((float) this.Z.nextGaussian() * f3 + 0.2F);
+                    entityitem.x = (double) ((float) this.Z.nextGaussian() * f3);
+                    this.o.d((Entity) entityitem);
                 }
             }
         }
@@ -106,7 +106,7 @@ public abstract class EntityMinecartContainer extends EntityMinecart implements 
     }
 
     public boolean a(EntityPlayer entityplayer) {
-        return this.L ? false : entityplayer.e(this) <= 64.0D;
+        return this.K ? false : entityplayer.f(this) <= 64.0D;
     }
 
     public void f() {
@@ -138,19 +138,19 @@ public abstract class EntityMinecartContainer extends EntityMinecart implements 
                 ItemStack itemstack = this.a(i0);
 
                 if (itemstack != null) {
-                    float f0 = this.aa.nextFloat() * 0.8F + 0.1F;
-                    float f1 = this.aa.nextFloat() * 0.8F + 0.1F;
-                    float f2 = this.aa.nextFloat() * 0.8F + 0.1F;
+                    float f0 = this.Z.nextFloat() * 0.8F + 0.1F;
+                    float f1 = this.Z.nextFloat() * 0.8F + 0.1F;
+                    float f2 = this.Z.nextFloat() * 0.8F + 0.1F;
 
                     while (itemstack.b > 0) {
-                        int i1 = this.aa.nextInt(21) + 10;
+                        int i1 = this.Z.nextInt(21) + 10;
 
                         if (i1 > itemstack.b) {
                             i1 = itemstack.b;
                         }
 
                         itemstack.b -= i1;
-                        EntityItem entityitem = new EntityItem(this.p, this.t + (double) f0, this.u + (double) f1, this.v + (double) f2, new ItemStack(itemstack.b(), i1, itemstack.k()));
+                        EntityItem entityitem = new EntityItem(this.o, this.s + (double) f0, this.t + (double) f1, this.u + (double) f2, new ItemStack(itemstack.b(), i1, itemstack.k()));
 
                         if (itemstack.p()) {
                             entityitem.f().d((NBTTagCompound) itemstack.q().b());
@@ -158,10 +158,10 @@ public abstract class EntityMinecartContainer extends EntityMinecart implements 
 
                         float f3 = 0.05F;
 
-                        entityitem.w = (double) ((float) this.aa.nextGaussian() * f3);
-                        entityitem.x = (double) ((float) this.aa.nextGaussian() * f3 + 0.2F);
-                        entityitem.y = (double) ((float) this.aa.nextGaussian() * f3);
-                        this.p.d((Entity) entityitem);
+                        entityitem.v = (double) ((float) this.Z.nextGaussian() * f3);
+                        entityitem.w = (double) ((float) this.Z.nextGaussian() * f3 + 0.2F);
+                        entityitem.x = (double) ((float) this.Z.nextGaussian() * f3);
+                        this.o.d((Entity) entityitem);
                     }
                 }
             }
@@ -204,7 +204,7 @@ public abstract class EntityMinecartContainer extends EntityMinecart implements 
     }
 
     public boolean c(EntityPlayer entityplayer) {
-        if (!this.p.E) {
+        if (!this.o.E) {
             entityplayer.a((IInventory) this);
         }
 
@@ -215,8 +215,8 @@ public abstract class EntityMinecartContainer extends EntityMinecart implements 
         int i0 = 15 - Container.b((IInventory) this);
         float f0 = 0.98F + (float) i0 * 0.001F;
 
-        this.w *= (double) f0;
-        this.x *= 0.0D;
-        this.y *= (double) f0;
+        this.v *= (double) f0;
+        this.w *= 0.0D;
+        this.x *= (double) f0;
     }
 }

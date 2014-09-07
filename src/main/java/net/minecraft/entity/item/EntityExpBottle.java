@@ -46,15 +46,15 @@ public class EntityExpBottle extends EntityThrowable {
     }
 
     protected void a(MovingObjectPosition movingobjectposition) {
-        if (!this.p.E) {
-            this.p.c(2002, (int) Math.round(this.t), (int) Math.round(this.u), (int) Math.round(this.v), 0);
-            int i0 = 3 + this.p.s.nextInt(5) + this.p.s.nextInt(5);
+        if (!this.o.E) {
+            this.o.c(2002, (int) Math.round(this.s), (int) Math.round(this.t), (int) Math.round(this.u), 0);
+            int i0 = 3 + this.o.s.nextInt(5) + this.o.s.nextInt(5);
 
             while (i0 > 0) {
                 int i1 = EntityXPOrb.a(i0);
 
                 i0 -= i1;
-                this.p.d((Entity) (new EntityXPOrb(this.p, this.t, this.u, this.v, i1)));
+                this.o.d((Entity) (new EntityXPOrb(this.o, this.s, this.t, this.u, i1)));
             }
 
             this.B();

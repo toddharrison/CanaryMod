@@ -43,12 +43,12 @@ public class BehaviorDefaultDispenseItem implements IBehaviorDispenseItem {
         EntityItem entityitem = new EntityItem(world, d0, d1 - 0.3D, d2, itemstack);
         double d3 = world.s.nextDouble() * 0.1D + 0.2D;
 
-        entityitem.w = (double) enumfacing.c() * d3;
-        entityitem.x = 0.20000000298023224D;
-        entityitem.y = (double) enumfacing.e() * d3;
+        entityitem.v = (double) enumfacing.c() * d3;
+        entityitem.w = 0.20000000298023224D;
+        entityitem.x = (double) enumfacing.e() * d3;
+        entityitem.v += world.s.nextGaussian() * 0.007499999832361937D * (double) i0;
         entityitem.w += world.s.nextGaussian() * 0.007499999832361937D * (double) i0;
         entityitem.x += world.s.nextGaussian() * 0.007499999832361937D * (double) i0;
-        entityitem.y += world.s.nextGaussian() * 0.007499999832361937D * (double) i0;
         world.d((Entity) entityitem);
     }
 

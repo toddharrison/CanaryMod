@@ -43,7 +43,7 @@ public class EntityItemFrame extends EntityHanging {
             return false;
         }
         else if (this.j() != null) {
-            if (!this.p.E) {
+            if (!this.o.E) {
                 this.b(damagesource.j(), false);
                 this.a((ItemStack) null);
             }
@@ -86,7 +86,7 @@ public class EntityItemFrame extends EntityHanging {
         if (entity instanceof EntityPlayer) {
             EntityPlayer entityplayer = (EntityPlayer) entity;
 
-            if (entityplayer.bF.d) {
+            if (entityplayer.bE.d) {
                 this.b(itemstack);
                 return;
             }
@@ -96,7 +96,7 @@ public class EntityItemFrame extends EntityHanging {
             this.a(new ItemStack(Items.bD), 0.0F);
         }
 
-        if (itemstack != null && this.aa.nextFloat() < this.e) {
+        if (itemstack != null && this.Z.nextFloat() < this.e) {
             itemstack = itemstack.m();
             this.b(itemstack);
             this.a(itemstack, 0.0F);
@@ -106,7 +106,7 @@ public class EntityItemFrame extends EntityHanging {
     private void b(ItemStack itemstack) {
         if (itemstack != null) {
             if (itemstack.b() == Items.aY) {
-                MapData mapdata = ((ItemMap) itemstack.b()).a(itemstack, this.p);
+                MapData mapdata = ((ItemMap) itemstack.b()).a(itemstack, this.o);
 
                 mapdata.g.remove("frame-" + this.y());
             }
@@ -166,14 +166,14 @@ public class EntityItemFrame extends EntityHanging {
         if (this.j() == null) {
             ItemStack itemstack = entityplayer.be();
 
-            if (itemstack != null && !this.p.E) {
+            if (itemstack != null && !this.o.E) {
                 this.a(itemstack);
-                if (!entityplayer.bF.d && --itemstack.b <= 0) {
-                    entityplayer.bn.a(entityplayer.bn.c, (ItemStack) null);
+                if (!entityplayer.bE.d && --itemstack.b <= 0) {
+                    entityplayer.bm.a(entityplayer.bm.c, (ItemStack) null);
                 }
             }
         }
-        else if (!this.p.E) {
+        else if (!this.o.E) {
             this.c(this.k() + 1);
         }
 

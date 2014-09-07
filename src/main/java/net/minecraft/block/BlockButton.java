@@ -264,7 +264,7 @@ public abstract class BlockButton extends Block {
         boolean flag0 = (i3 & 8) != 0;
 
         this.b(i3);
-        List list = world.a(EntityArrow.class, AxisAlignedBB.a().a((double) i0 + this.B, (double) i1 + this.C, (double) i2 + this.D, (double) i0 + this.E, (double) i1 + this.F, (double) i2 + this.G));
+        List list = world.a(EntityArrow.class, AxisAlignedBB.a((double) i0 + this.B, (double) i1 + this.C, (double) i2 + this.D, (double) i0 + this.E, (double) i1 + this.F, (double) i2 + this.G));
         boolean flag1 = !list.isEmpty();
 
         if (flag1 && !flag0) {

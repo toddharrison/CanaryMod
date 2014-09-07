@@ -19,7 +19,7 @@ public class EntityBlaze extends EntityMob {
 
     public EntityBlaze(World world) {
         super(world);
-        this.af = true;
+        this.ae = true;
         this.b = 10;
         this.entity = new CanaryBlaze(this); // CanaryMod: Wrap Entity
     }
@@ -31,7 +31,7 @@ public class EntityBlaze extends EntityMob {
 
     protected void c() {
         super.c();
-        this.ag.a(16, new Byte((byte) 0));
+        this.af.a(16, new Byte((byte) 0));
     }
 
     protected String t() {
@@ -51,7 +51,7 @@ public class EntityBlaze extends EntityMob {
     }
 
     public void e() {
-        if (!this.p.E) {
+        if (!this.o.E) {
             if (this.L()) {
                 this.a(DamageSource.e, 1.0F);
             }
@@ -59,50 +59,50 @@ public class EntityBlaze extends EntityMob {
             --this.bq;
             if (this.bq <= 0) {
                 this.bq = 100;
-                this.bp = 0.5F + (float) this.aa.nextGaussian() * 3.0F;
+                this.bp = 0.5F + (float) this.Z.nextGaussian() * 3.0F;
             }
 
-            if (this.bR() != null && this.bR().u + (double) this.bR().g() > this.u + (double) this.g() + (double) this.bp) {
-                this.x += (0.30000001192092896D - this.x) * 0.30000001192092896D;
+            if (this.bT() != null && this.bT().t + (double) this.bT().g() > this.t + (double) this.g() + (double) this.bp) {
+                this.w += (0.30000001192092896D - this.w) * 0.30000001192092896D;
             }
         }
 
-        if (this.aa.nextInt(24) == 0) {
-            this.p.a(this.t + 0.5D, this.u + 0.5D, this.v + 0.5D, "fire.fire", 1.0F + this.aa.nextFloat(), this.aa.nextFloat() * 0.7F + 0.3F);
+        if (this.Z.nextInt(24) == 0) {
+            this.o.a(this.s + 0.5D, this.t + 0.5D, this.u + 0.5D, "fire.fire", 1.0F + this.Z.nextFloat(), this.Z.nextFloat() * 0.7F + 0.3F);
         }
 
-        if (!this.E && this.x < 0.0D) {
-            this.x *= 0.6D;
+        if (!this.D && this.w < 0.0D) {
+            this.w *= 0.6D;
         }
 
         for (int i0 = 0; i0 < 2; ++i0) {
-            this.p.a("largesmoke", this.t + (this.aa.nextDouble() - 0.5D) * (double) this.N, this.u + this.aa.nextDouble() * (double) this.O, this.v + (this.aa.nextDouble() - 0.5D) * (double) this.N, 0.0D, 0.0D, 0.0D);
+            this.o.a("largesmoke", this.s + (this.Z.nextDouble() - 0.5D) * (double) this.M, this.t + this.Z.nextDouble() * (double) this.N, this.u + (this.Z.nextDouble() - 0.5D) * (double) this.M, 0.0D, 0.0D, 0.0D);
         }
 
         super.e();
     }
 
     protected void a(Entity entity, float f0) {
-        if (this.aC <= 0 && f0 < 2.0F && entity.D.e > this.D.b && entity.D.b < this.D.e) {
-            this.aC = 20;
-            this.m(entity);
+        if (this.aB <= 0 && f0 < 2.0F && entity.C.e > this.C.b && entity.C.b < this.C.e) {
+            this.aB = 20;
+            this.n(entity);
         }
         else if (f0 < 30.0F) {
-            double d0 = entity.t - this.t;
-            double d1 = entity.D.b + (double) (entity.O / 2.0F) - (this.u + (double) (this.O / 2.0F));
-            double d2 = entity.v - this.v;
+            double d0 = entity.s - this.s;
+            double d1 = entity.C.b + (double) (entity.N / 2.0F) - (this.t + (double) (this.N / 2.0F));
+            double d2 = entity.u - this.u;
 
-            if (this.aC == 0) {
+            if (this.aB == 0) {
                 ++this.br;
                 if (this.br == 1) {
-                    this.aC = 60;
+                    this.aB = 60;
                     this.a(true);
                 }
                 else if (this.br <= 4) {
-                    this.aC = 6;
+                    this.aB = 6;
                 }
                 else {
-                    this.aC = 100;
+                    this.aB = 100;
                     this.br = 0;
                     this.a(false);
                 }
@@ -110,18 +110,18 @@ public class EntityBlaze extends EntityMob {
                 if (this.br > 1) {
                     float f1 = MathHelper.c(f0) * 0.5F;
 
-                    this.p.a((EntityPlayer) null, 1009, (int) this.t, (int) this.u, (int) this.v, 0);
+                    this.o.a((EntityPlayer) null, 1009, (int) this.s, (int) this.t, (int) this.u, 0);
 
                     for (int i0 = 0; i0 < 1; ++i0) {
-                        EntitySmallFireball entitysmallfireball = new EntitySmallFireball(this.p, this, d0 + this.aa.nextGaussian() * (double) f1, d1, d2 + this.aa.nextGaussian() * (double) f1);
+                        EntitySmallFireball entitysmallfireball = new EntitySmallFireball(this.o, this, d0 + this.Z.nextGaussian() * (double) f1, d1, d2 + this.Z.nextGaussian() * (double) f1);
 
-                        entitysmallfireball.u = this.u + (double) (this.O / 2.0F) + 0.5D;
-                        this.p.d((Entity) entitysmallfireball);
+                        entitysmallfireball.t = this.t + (double) (this.N / 2.0F) + 0.5D;
+                        this.o.d((Entity) entitysmallfireball);
                     }
                 }
             }
 
-            this.z = (float) (Math.atan2(d2, d0) * 180.0D / 3.1415927410125732D) - 90.0F;
+            this.y = (float) (Math.atan2(d2, d0) * 180.0D / 3.1415927410125732D) - 90.0F;
             this.bn = true;
         }
     }
@@ -134,12 +134,12 @@ public class EntityBlaze extends EntityMob {
     }
 
     public boolean al() {
-        return this.bX();
+        return this.bZ();
     }
 
     protected void b(boolean flag0, int i0) {
         if (flag0) {
-            int i1 = this.aa.nextInt(2 + i0);
+            int i1 = this.Z.nextInt(2 + i0);
 
             for (int i2 = 0; i2 < i1; ++i2) {
                 this.a(Items.bj, 1);
@@ -147,12 +147,12 @@ public class EntityBlaze extends EntityMob {
         }
     }
 
-    public boolean bX() {
-        return (this.ag.a(16) & 1) != 0;
+    public boolean bZ() {
+        return (this.af.a(16) & 1) != 0;
     }
 
     public void a(boolean flag0) {
-        byte b0 = this.ag.a(16);
+        byte b0 = this.af.a(16);
 
         if (flag0) {
             b0 = (byte) (b0 | 1);
@@ -161,7 +161,7 @@ public class EntityBlaze extends EntityMob {
             b0 &= -2;
         }
 
-        this.ag.b(16, Byte.valueOf(b0));
+        this.af.b(16, Byte.valueOf(b0));
     }
 
     protected boolean j_() {

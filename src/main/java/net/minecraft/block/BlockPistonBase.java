@@ -77,7 +77,6 @@ public class BlockPistonBase extends Block {
             // CanaryMod: Get Blocks
             CanaryBlock piston = new CanaryBlock((this.a ? BlockType.StickyPiston.getId() : BlockType.Piston.getId()), (byte) 0, i0, i1, i2, world.getCanaryWorld());
             CanaryBlock moving = new CanaryBlock((short) Block.b(world.a(i0 + Facing.b[i4], i1 + Facing.c[i4], i2 + Facing.d[i4])), (byte) 0, (i0 + Facing.b[i4]), (i1 + Facing.c[i4]), (i2 + Facing.d[i4]), world.getCanaryWorld());
-
             //
 
             if (flag0 && !c(i3)) {
@@ -246,8 +245,8 @@ public class BlockPistonBase extends Block {
     }
 
     public static int a(World world, int i0, int i1, int i2, EntityLivingBase entitylivingbase) {
-        if (MathHelper.e((float) entitylivingbase.t - (float) i0) < 2.0F && MathHelper.e((float) entitylivingbase.v - (float) i2) < 2.0F) {
-            double d0 = entitylivingbase.u + 1.82D - (double) entitylivingbase.M;
+        if (MathHelper.e((float) entitylivingbase.s - (float) i0) < 2.0F && MathHelper.e((float) entitylivingbase.u - (float) i2) < 2.0F) {
+            double d0 = entitylivingbase.t + 1.82D - (double) entitylivingbase.L;
 
             if (d0 - (double) i1 > 2.0D) {
                 return 1;
@@ -258,7 +257,7 @@ public class BlockPistonBase extends Block {
             }
         }
 
-        int i3 = MathHelper.c((double) (entitylivingbase.z * 4.0F / 360.0F) + 0.5D) & 3;
+        int i3 = MathHelper.c((double) (entitylivingbase.y * 4.0F / 360.0F) + 0.5D) & 3;
 
         return i3 == 0 ? 2 : (i3 == 1 ? 5 : (i3 == 2 ? 3 : (i3 == 3 ? 4 : 0)));
     }
@@ -374,7 +373,7 @@ public class BlockPistonBase extends Block {
             Block[] ablock;
             int i11;
             int i12;
-            int i13 = 0;
+            int i13;
 
             for (ablock = new Block[13]; i4 != i0 || i5 != i1 || i6 != i2; i6 = i13) {
                 i11 = i4 - Facing.b[i3];

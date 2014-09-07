@@ -20,19 +20,20 @@ public class CommandSaveAll extends CommandBase {
     }
 
     public void b(ICommandSender icommandsender, String[] astring) {
-        MinecraftServer minecraftserver = MinecraftServer.G();
+        MinecraftServer minecraftserver = MinecraftServer.I();
 
         icommandsender.a(new ChatComponentTranslation("commands.save.start", new Object[0]));
-        if (minecraftserver.af() != null) {
-            minecraftserver.af().g();
+        if (minecraftserver.ah() != null) {
+            minecraftserver.ah().j();
         }
 
         try {
             int i0;
+            WorldServer worldserver;
             boolean flag0;
             // CanaryMod: Fix for MultiWorld
             for (net.canarymod.api.world.World w : minecraftserver.worldManager.getAllWorlds()) {
-                WorldServer worldserver = (WorldServer) ((CanaryWorld) w).getHandle();
+                worldserver = (WorldServer) ((CanaryWorld) w).getHandle();
 
                 if (worldserver != null) {
                     flag0 = worldserver.c;
@@ -60,10 +61,10 @@ public class CommandSaveAll extends CommandBase {
             }
         }
         catch (MinecraftException minecraftexception) {
-            a(icommandsender, "commands.save.failed", new Object[]{ minecraftexception.getMessage() });
+            a(icommandsender, this, "commands.save.failed", new Object[]{minecraftexception.getMessage()});
             return;
         }
 
-        a(icommandsender, "commands.save.success", new Object[0]);
+        a(icommandsender, this, "commands.save.success", new Object[0]);
     }
 }

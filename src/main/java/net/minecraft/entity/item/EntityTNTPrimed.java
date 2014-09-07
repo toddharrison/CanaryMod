@@ -13,9 +13,9 @@ public class EntityTNTPrimed extends Entity {
 
     public EntityTNTPrimed(World world) {
         super(world);
-        this.l = true;
+        this.k = true;
         this.a(0.98F, 0.98F);
-        this.M = this.O / 2.0F;
+        this.L = this.N / 2.0F;
         this.entity = new CanaryTNTPrimed(this); // CanaryMod: Wrap Entity
     }
 
@@ -24,13 +24,13 @@ public class EntityTNTPrimed extends Entity {
         this.b(d0, d1, d2);
         float f0 = (float) (Math.random() * 3.1415927410125732D * 2.0D);
 
-        this.w = (double) (-((float) Math.sin((double) f0)) * 0.02F);
-        this.x = 0.20000000298023224D;
-        this.y = (double) (-((float) Math.cos((double) f0)) * 0.02F);
+        this.v = (double) (-((float) Math.sin((double) f0)) * 0.02F);
+        this.w = 0.20000000298023224D;
+        this.x = (double) (-((float) Math.cos((double) f0)) * 0.02F);
         this.a = 80;
-        this.q = d0;
-        this.r = d1;
-        this.s = d2;
+        this.p = d0;
+        this.q = d1;
+        this.r = d2;
         this.b = entitylivingbase;
     }
 
@@ -42,39 +42,39 @@ public class EntityTNTPrimed extends Entity {
     }
 
     public boolean R() {
-        return !this.L;
+        return !this.K;
     }
 
     public void h() {
+        this.p = this.s;
         this.q = this.t;
         this.r = this.u;
-        this.s = this.v;
-        this.x -= 0.03999999910593033D;
-        this.d(this.w, this.x, this.y);
+        this.w -= 0.03999999910593033D;
+        this.d(this.v, this.w, this.x);
+        this.v *= 0.9800000190734863D;
         this.w *= 0.9800000190734863D;
         this.x *= 0.9800000190734863D;
-        this.y *= 0.9800000190734863D;
-        if (this.E) {
-            this.w *= 0.699999988079071D;
-            this.y *= 0.699999988079071D;
-            this.x *= -0.5D;
+        if (this.D) {
+            this.v *= 0.699999988079071D;
+            this.x *= 0.699999988079071D;
+            this.w *= -0.5D;
         }
 
         if (this.a-- <= 0) {
             this.B();
-            if (!this.p.E) {
+            if (!this.o.E) {
                 this.f();
             }
         }
         else {
-            this.p.a("smoke", this.t, this.u + 0.5D, this.v, 0.0D, 0.0D, 0.0D);
+            this.o.a("smoke", this.s, this.t + 0.5D, this.u, 0.0D, 0.0D, 0.0D);
         }
     }
 
     private void f() {
         // float f0 = 4.0F;
 
-        this.p.a(this, this.t, this.u, this.v, ((CanaryTNTPrimed) entity).getPower(), true); // CanaryMod: get power level
+        this.o.a(this, this.s, this.t, this.u, ((CanaryTNTPrimed) entity).getPower(), true); // CanaryMod: get power level
     }
 
     protected void b(NBTTagCompound nbttagcompound) {

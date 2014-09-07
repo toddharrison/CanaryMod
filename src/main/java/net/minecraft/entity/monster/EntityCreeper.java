@@ -4,15 +4,7 @@ import net.canarymod.api.entity.living.monster.CanaryCreeper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIAttackOnCollide;
-import net.minecraft.entity.ai.EntityAIAvoidEntity;
-import net.minecraft.entity.ai.EntityAICreeperSwell;
-import net.minecraft.entity.ai.EntityAIHurtByTarget;
-import net.minecraft.entity.ai.EntityAILookIdle;
-import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
-import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.ai.EntityAIWander;
-import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.ai.*;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.player.EntityPlayer;
@@ -67,25 +59,25 @@ public class EntityCreeper extends EntityMob {
 
     protected void c() {
         super.c();
-        this.ag.a(16, Byte.valueOf((byte) -1));
-        this.ag.a(17, Byte.valueOf((byte) 0));
-        this.ag.a(18, Byte.valueOf((byte) 0));
+        this.af.a(16, Byte.valueOf((byte) -1));
+        this.af.a(17, Byte.valueOf((byte) 0));
+        this.af.a(18, Byte.valueOf((byte) 0));
     }
 
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        if (this.ag.a(17) == 1) {
+        if (this.af.a(17) == 1) {
             nbttagcompound.a("powered", true);
         }
 
         nbttagcompound.a("Fuse", (short) this.br);
         nbttagcompound.a("ExplosionRadius", (byte) this.bs);
-        nbttagcompound.a("ignited", this.ca());
+        nbttagcompound.a("ignited", this.cc());
     }
 
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
-        this.ag.b(17, Byte.valueOf((byte) (nbttagcompound.n("powered") ? 1 : 0)));
+        this.af.b(17, Byte.valueOf((byte) (nbttagcompound.n("powered") ? 1 : 0)));
         if (nbttagcompound.b("Fuse", 99)) {
             this.br = nbttagcompound.e("Fuse");
         }
@@ -94,7 +86,7 @@ public class EntityCreeper extends EntityMob {
             this.bs = nbttagcompound.d("ExplosionRadius");
         }
         if (nbttagcompound.n("ignited")) {
-            this.cb();
+            this.cd();
         }
 
     }
@@ -102,11 +94,11 @@ public class EntityCreeper extends EntityMob {
     public void h() {
         if (this.Z()) {
             this.bp = this.bq;
-            if (this.ca()) {
+            if (this.cc()) {
                 this.a(1);
             }
 
-            int i0 = this.bZ();
+            int i0 = this.cb();
 
             if (i0 > 0 && this.bq == 0) {
                 this.a("creeper.primed", 1.0F, 0.5F);
@@ -120,7 +112,7 @@ public class EntityCreeper extends EntityMob {
             if (this.bq >= this.br) {
                 this.bq = this.br;
 
-                this.cc();
+                this.ce();
             }
         }
 
@@ -140,45 +132,45 @@ public class EntityCreeper extends EntityMob {
         if (damagesource.j() instanceof EntitySkeleton) {
             int i0 = Item.b(Items.cd);
             int i1 = Item.b(Items.co);
-            int i2 = i0 + this.aa.nextInt(i1 - i0 + 1);
+            int i2 = i0 + this.Z.nextInt(i1 - i0 + 1);
 
             this.a(Item.d(i2), 1);
         }
     }
 
-    public boolean m(Entity entity) {
+    public boolean n(Entity entity) {
         return true;
     }
 
-    public boolean bX() {
-        return this.ag.a(17) == 1;
+    public boolean bZ() {
+        return this.af.a(17) == 1;
     }
 
     protected Item u() {
         return Items.H;
     }
 
-    public int bZ() {
-        return this.ag.a(16);
+    public int cb() {
+        return this.af.a(16);
     }
 
     public void a(int i0) {
-        this.ag.b(16, Byte.valueOf((byte) i0));
+        this.af.b(16, Byte.valueOf((byte) i0));
     }
 
     public void a(EntityLightningBolt entitylightningbolt) {
         super.a(entitylightningbolt);
-        this.ag.b(17, Byte.valueOf((byte) 1));
+        this.af.b(17, Byte.valueOf((byte) 1));
     }
 
     protected boolean a(EntityPlayer entityplayer) {
-        ItemStack itemstack = entityplayer.bn.h();
+        ItemStack itemstack = entityplayer.bm.h();
 
         if (itemstack != null && itemstack.b() == Items.d) {
-            this.p.a(this.t + 0.5D, this.u + 0.5D, this.v + 0.5D, "fire.ignite", 1.0F, this.aa.nextFloat() * 0.4F + 0.8F);
+            this.o.a(this.s + 0.5D, this.t + 0.5D, this.u + 0.5D, "fire.ignite", 1.0F, this.Z.nextFloat() * 0.4F + 0.8F);
             entityplayer.ba();
-            if (!this.p.E) {
-                this.cb();
+            if (!this.o.E) {
+                this.cd();
                 itemstack.a(1, (EntityLivingBase) entityplayer);
                 return true;
             }
@@ -187,15 +179,15 @@ public class EntityCreeper extends EntityMob {
         return super.a(entityplayer);
     }
 
-    private void cc() {
-        if (!this.p.E) {
-            boolean flag0 = this.p.N().b("mobGriefing");
+    private void ce() {
+        if (!this.o.E) {
+            boolean flag0 = this.o.O().b("mobGriefing");
 
-            if (this.bX()) {
-                this.p.a(this, this.t, this.u, this.v, (float) (this.bs * 2), flag0);
+            if (this.bZ()) {
+                this.o.a(this, this.s, this.t, this.u, (float) (this.bs * 2), flag0);
             }
             else {
-                this.p.a(this, this.t, this.u, this.v, (float) this.bs, flag0);
+                this.o.a(this, this.s, this.t, this.u, (float) this.bs, flag0);
             }
 
             this.B();
@@ -203,12 +195,12 @@ public class EntityCreeper extends EntityMob {
 
     }
 
-    public boolean ca() {
-        return this.ag.a(18) != 0;
+    public boolean cc() {
+        return this.af.a(18) != 0;
     }
 
-    public void cb() {
-        this.ag.b(18, Byte.valueOf((byte) 1));
+    public void cd() {
+        this.af.b(18, Byte.valueOf((byte) 1));
     }
 
     // CanaryMod: Set Charge to Creeper

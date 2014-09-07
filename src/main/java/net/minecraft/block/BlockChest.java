@@ -98,7 +98,7 @@ public class BlockChest extends BlockContainer {
         Block block2 = world.a(i0 - 1, i1, i2);
         Block block3 = world.a(i0 + 1, i1, i2);
         byte b0 = 0;
-        int i3 = MathHelper.c((double) (entitylivingbase.z * 4.0F / 360.0F) + 0.5D) & 3;
+        int i3 = MathHelper.c((double) (entitylivingbase.y * 4.0F / 360.0F) + 0.5D) & 3;
 
         if (i3 == 0) {
             b0 = 2;
@@ -299,9 +299,9 @@ public class BlockChest extends BlockContainer {
                         entityitem = new EntityItem(world, (double) ((float) i0 + f0), (double) ((float) i1 + f1), (double) ((float) i2 + f2), new ItemStack(itemstack.b(), i5, itemstack.k()));
                         float f3 = 0.05F;
 
-                        entityitem.w = (double) ((float) this.b.nextGaussian() * f3);
-                        entityitem.x = (double) ((float) this.b.nextGaussian() * f3 + 0.2F);
-                        entityitem.y = (double) ((float) this.b.nextGaussian() * f3);
+                        entityitem.v = (double) ((float) this.b.nextGaussian() * f3);
+                        entityitem.w = (double) ((float) this.b.nextGaussian() * f3 + 0.2F);
+                        entityitem.x = (double) ((float) this.b.nextGaussian() * f3);
                         if (itemstack.p()) {
                             entityitem.f().d((NBTTagCompound) itemstack.q().b());
                         }
@@ -409,7 +409,7 @@ public class BlockChest extends BlockContainer {
     }
 
     private static boolean o(World world, int i0, int i1, int i2) {
-        Iterator iterator = world.a(EntityOcelot.class, AxisAlignedBB.a().a((double) i0, (double) (i1 + 1), (double) i2, (double) (i0 + 1), (double) (i1 + 2), (double) (i2 + 1))).iterator();
+        Iterator iterator = world.a(EntityOcelot.class, AxisAlignedBB.a((double) i0, (double) (i1 + 1), (double) i2, (double) (i0 + 1), (double) (i1 + 2), (double) (i2 + 1))).iterator();
 
         EntityOcelot entityocelot;
 
@@ -418,10 +418,10 @@ public class BlockChest extends BlockContainer {
                 return false;
             }
 
-            EntityOcelot entityocelot1 = (EntityOcelot) iterator.next();
+            Entity entity = (Entity) iterator.next();
 
-            entityocelot = (EntityOcelot) entityocelot1;
-        } while (!entityocelot.bY());
+            entityocelot = (EntityOcelot) entity;
+        } while (!entityocelot.ca());
 
         return true;
     }

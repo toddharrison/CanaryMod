@@ -38,12 +38,12 @@ public class EntityItem extends Entity {
         this.e = 5;
         this.c = (float) (Math.random() * 3.141592653589793D * 2.0D);
         this.a(0.25F, 0.25F);
-        this.M = this.O / 2.0F;
+        this.L = this.N / 2.0F;
         this.b(d0, d1, d2);
-        this.z = (float) (Math.random() * 360.0D);
-        this.w = (double) ((float) (Math.random() * 0.20000000298023224D - 0.10000000149011612D));
-        this.x = 0.20000000298023224D;
-        this.y = (double) ((float) (Math.random() * 0.20000000298023224D - 0.10000000149011612D));
+        this.y = (float) (Math.random() * 360.0D);
+        this.v = (double) ((float) (Math.random() * 0.20000000298023224D - 0.10000000149011612D));
+        this.w = 0.20000000298023224D;
+        this.x = (double) ((float) (Math.random() * 0.20000000298023224D - 0.10000000149011612D));
         this.entity = new CanaryEntityItem(this); // CanaryMod: Wrap Entity
     }
 
@@ -61,7 +61,7 @@ public class EntityItem extends Entity {
         this.e = 5;
         this.c = (float) (Math.random() * 3.141592653589793D * 2.0D);
         this.a(0.25F, 0.25F);
-        this.M = this.O / 2.0F;
+        this.L = this.N / 2.0F;
         this.entity = new CanaryEntityItem(this); // CanaryMod: Wrap Entity
     }
 
@@ -79,55 +79,54 @@ public class EntityItem extends Entity {
                 --this.b;
             }
 
-            boolean tmpTouch = this.E; // CanaryMod
+            boolean tmpTouch = this.I; // CanaryMod
 
+            this.p = this.s;
             this.q = this.t;
             this.r = this.u;
-            this.s = this.v;
-            this.x -= 0.03999999910593033D;
-            this.Y = this.j(this.t, (this.D.b + this.D.e) / 2.0D, this.v);
-            this.d(this.w, this.x, this.y);
-            boolean flag0 = (int) this.q != (int) this.t || (int) this.r != (int) this.u || (int) this.s != (int) this.v;
+            this.w -= 0.03999999910593033D;
+            this.X = this.j(this.s, (this.C.b + this.C.e) / 2.0D, this.u);
+            this.d(this.v, this.w, this.x);
+            boolean flag0 = (int) this.p != (int) this.s || (int) this.q != (int) this.t || (int) this.r != (int) this.u;
 
-            if (flag0 || this.ab % 25 == 0) {
-                if (this.p.a(MathHelper.c(this.t), MathHelper.c(this.u), MathHelper.c(this.v)).o() == Material.i) {
-                    this.x = 0.20000000298023224D;
-                    this.w = (double) ((this.aa.nextFloat() - this.aa.nextFloat()) * 0.2F);
-                    this.y = (double) ((this.aa.nextFloat() - this.aa.nextFloat()) * 0.2F);
-                    this.a("random.fizz", 0.4F, 2.0F + this.aa.nextFloat() * 0.4F);
+            if (flag0 || this.aa % 25 == 0) {
+                if (this.o.a(MathHelper.c(this.s), MathHelper.c(this.t), MathHelper.c(this.u)).o() == Material.i) {
+                    this.w = 0.20000000298023224D;
+                    this.v = (double) ((this.Z.nextFloat() - this.Z.nextFloat()) * 0.2F);
+                    this.x = (double) ((this.Z.nextFloat() - this.Z.nextFloat()) * 0.2F);
+                    this.a("random.fizz", 0.4F, 2.0F + this.Z.nextFloat() * 0.4F);
                 }
 
-                if (!this.p.E) {
+                if (!this.o.E) {
                     this.k();
                 }
             }
 
             float f0 = 0.98F;
 
-            if (this.E) {
-                f0 = this.p.a(MathHelper.c(this.t), MathHelper.c(this.D.b) - 1, MathHelper.c(this.v)).K * 0.98F;
-
-                // CanaryMod: ItemTouchGround
-                // It does touch the ground now, but didn't in last tick
-                if (!tmpTouch) {
-                    ItemTouchGroundHook hook = (ItemTouchGroundHook) new ItemTouchGroundHook((net.canarymod.api.entity.EntityItem) getCanaryEntity()).call();
-                    if (hook.isCanceled()) {
-                        this.B(); // kill the item
-                    }
-                }
-                //
+            if (this.D) {
+                f0 = this.o.a(MathHelper.c(this.s), MathHelper.c(this.C.b) - 1, MathHelper.c(this.u)).K * 0.98F;
             }
 
+            // CanaryMod: ItemTouchGround
+            // It does touch the ground now, but didn't in last tick
+            if (!tmpTouch) {
+                ItemTouchGroundHook hook = (ItemTouchGroundHook) new ItemTouchGroundHook((net.canarymod.api.entity.EntityItem) getCanaryEntity()).call();
+                if (hook.isCanceled()) {
+                    this.B(); // kill the item
+                }
+            }
+            //
 
-            this.w *= (double) f0;
-            this.x *= 0.9800000190734863D;
-            this.y *= (double) f0;
-            if (this.E) {
-                this.x *= -0.5D;
+            this.v *= (double) f0;
+            this.w *= 0.9800000190734863D;
+            this.x *= (double) f0;
+            if (this.D) {
+                this.w *= -0.5D;
             }
 
             ++this.a;
-            if (!this.p.E && this.a >= 6000) {
+            if (!this.o.E && this.a >= 6000) {
                 // CanaryMod: EntityDespawn
                 EntityDespawnHook hook = (EntityDespawnHook) new EntityDespawnHook(getCanaryEntity()).call();
                 if (!hook.isCanceled()) {
@@ -142,7 +141,7 @@ public class EntityItem extends Entity {
     }
 
     private void k() {
-        Iterator iterator = this.p.a(EntityItem.class, this.D.b(0.5D, 0.0D, 0.5D)).iterator();
+        Iterator iterator = this.o.a(EntityItem.class, this.C.b(0.5D, 0.0D, 0.5D)).iterator();
 
         while (iterator.hasNext()) {
             EntityItem entityitem = (EntityItem) iterator.next();
@@ -199,7 +198,7 @@ public class EntityItem extends Entity {
     }
 
     public boolean N() {
-        return this.p.a(this.D, Material.h, (Entity) this);
+        return this.o.a(this.C, Material.h, (Entity) this);
     }
 
     protected void f(int i0) {
@@ -259,13 +258,14 @@ public class EntityItem extends Entity {
     }
 
     public void b_(EntityPlayer entityplayer) {
-        if (!this.p.E) {
+        if (!this.o.E) {
             ItemStack itemstack = this.f();
             int i0 = itemstack.b;
 
             if (this.b == 0 &&
-                    (this.g == null || 6000 - this.a <= 200 || this.g.equals(entityplayer.b_())) && entityplayer.bn.canPickup(this)) { // CanaryMod: simulate pickup first
-                if (entityplayer.bn.a(itemstack)) {
+                    (this.g == null || 6000 - this.a <= 200 || this.g.equals(entityplayer.b_()))
+                    && entityplayer.bm.canPickup(this)) { // CanaryMod: simulate pickup first
+                if (entityplayer.bm.a(itemstack)) {
                     if (itemstack.b() == Item.a(Blocks.r)) {
                         entityplayer.a((StatBase) AchievementList.g);
                     }
@@ -287,14 +287,14 @@ public class EntityItem extends Entity {
                     }
 
                     if (itemstack.b() == Items.i && this.j() != null) {
-                        EntityPlayer entityplayer1 = this.p.a(this.j());
+                        EntityPlayer entityplayer1 = this.o.a(this.j());
 
                         if (entityplayer1 != null && entityplayer1 != entityplayer) {
                             entityplayer1.a((StatBase) AchievementList.x);
                         }
                     }
 
-                    this.p.a((Entity) entityplayer, "random.pop", 0.2F, ((this.aa.nextFloat() - this.aa.nextFloat()) * 0.7F + 1.0F) * 2.0F);
+                    this.o.a((Entity) entityplayer, "random.pop", 0.2F, ((this.Z.nextFloat() - this.Z.nextFloat()) * 0.7F + 1.0F) * 2.0F);
                     entityplayer.a((Entity) this, i0);
                     if (itemstack.b <= 0) {
                         this.B();
@@ -314,7 +314,7 @@ public class EntityItem extends Entity {
 
     public void b(int i0) {
         super.b(i0);
-        if (!this.p.E) {
+        if (!this.o.E) {
             this.k();
         }
     }
@@ -322,16 +322,7 @@ public class EntityItem extends Entity {
     public ItemStack f() {
         ItemStack itemstack = this.z().f(10);
 
-        if (itemstack == null) {
-            if (this.p != null) {
-                d.error("Item entity " + this.y() + " has no item?!");
-            }
-
-            return new ItemStack(Blocks.b);
-        }
-        else {
-            return itemstack;
-        }
+        return itemstack == null ? new ItemStack(Blocks.b) : itemstack;
     }
 
     public void a(ItemStack itemstack) {
@@ -355,7 +346,9 @@ public class EntityItem extends Entity {
         this.f = s0;
     }
 
+    // CanaryMod
     public CanaryEntityItem getEntityItem() {
         return (CanaryEntityItem) entity;
     }
+//
 }

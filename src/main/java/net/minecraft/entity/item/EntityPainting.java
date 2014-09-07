@@ -42,7 +42,7 @@ public class EntityPainting extends EntityHanging {
         }
 
         if (!arraylist.isEmpty()) {
-            this.e = (EnumArt) arraylist.get(this.aa.nextInt(arraylist.size()));
+            this.e = (EnumArt) arraylist.get(this.Z.nextInt(arraylist.size()));
         }
 
         this.a(i3);
@@ -102,7 +102,7 @@ public class EntityPainting extends EntityHanging {
         if (isPlayer) {
             EntityPlayer entityplayer = (EntityPlayer) entity;
 
-            if (entityplayer.bF.d) {
+            if (entityplayer.bE.d) {
                 return;
             }
         }
@@ -120,7 +120,7 @@ public class EntityPainting extends EntityHanging {
         public final int E;
         public final int F;
 
-        private static final EnumArt[] $VALUES = new EnumArt[]{ Kebab, Aztec, Alban, Aztec2, Bomb, Plant, Wasteland, Pool, Courbet, Sea, Sunset, Creebet, Wanderer, Graham, Match, Bust, Stage, Void, SkullAndRoses, Wither, Fighters, Pointer, Pigscene, BurningSkull, Skeleton, DonkeyKong };
+        private static final EnumArt[] $VALUES = new EnumArt[]{Kebab, Aztec, Alban, Aztec2, Bomb, Plant, Wasteland, Pool, Courbet, Sea, Sunset, Creebet, Wanderer, Graham, Match, Bust, Stage, Void, SkullAndRoses, Wither, Fighters, Pointer, Pigscene, BurningSkull, Skeleton, DonkeyKong};
 
         private EnumArt(String s0, int i0, String s1, int i1, int i2, int i3, int i4) {
             this.B = s1;

@@ -47,7 +47,7 @@ public class EntityMinecartHopper extends EntityMinecartContainer implements IHo
     }
 
     public boolean c(EntityPlayer entityplayer) {
-        if (!this.p.E) {
+        if (!this.o.E) {
             entityplayer.a(this);
         }
 
@@ -71,24 +71,24 @@ public class EntityMinecartHopper extends EntityMinecartContainer implements IHo
     }
 
     public World w() {
-        return this.p;
+        return this.o;
     }
 
     public double x() {
-        return this.t;
+        return this.s;
     }
 
     public double aD() {
-        return this.u;
+        return this.t;
     }
 
     public double aE() {
-        return this.v;
+        return this.u;
     }
 
     public void h() {
         super.h();
-        if (!this.p.E && this.Z() && this.v()) {
+        if (!this.o.E && this.Z() && this.v()) {
             --this.b;
             if (!this.aG()) {
                 this.n(0);
@@ -105,7 +105,7 @@ public class EntityMinecartHopper extends EntityMinecartContainer implements IHo
             return true;
         }
         else {
-            List list = this.p.a(EntityItem.class, this.D.b(0.25D, 0.0D, 0.25D), IEntitySelector.a);
+            List list = this.o.a(EntityItem.class, this.C.b(0.25D, 0.0D, 0.25D), IEntitySelector.a);
 
             if (list.size() > 0) {
                 TileEntityHopper.a((IInventory) this, (EntityItem) list.get(0));

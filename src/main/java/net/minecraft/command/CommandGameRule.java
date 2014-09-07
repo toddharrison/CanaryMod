@@ -1,8 +1,10 @@
 package net.minecraft.command;
 
-import net.canarymod.ToolBox;
+import net.canarymod.Canary;
 import net.canarymod.api.world.CanaryWorld;
-import net.minecraft.server.MinecraftServer;
+import net.minecraft.entity.EntityMinecartCommandBlock;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.tileentity.TileEntityCommandBlock;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.GameRules;
 
@@ -24,64 +26,49 @@ public class CommandGameRule extends CommandBase {
 
     public void b(ICommandSender icommandsender, String[] astring) {
         String s0;
-        GameRules gamerules = this.d(icommandsender);
-        if (astring.length >= 2) { // CanaryMod: Logic redux to support world argument
+
+        if (astring.length == 2) {
             s0 = astring[0];
             String s1 = astring[1];
-            String s2 = astring.length == 3 ? astring[2] : null;
+            // CanaryMod: Fixes for MultiWorld
+            GameRules gamerules =
+                    icommandsender instanceof EntityPlayerMP ? ((EntityPlayerMP) icommandsender).p.N()
+                            : icommandsender instanceof TileEntityCommandBlock ? ((TileEntityCommandBlock) icommandsender).w().N()
+                            : icommandsender instanceof EntityMinecartCommandBlock ? this.d() //NOT YET IMPLEMENTED
+                            : this.d();
+            //
 
-
-            if (astring.length == 3 || s1.matches("(true|false)")) {
-                String setting = s1;
-                if (astring.length == 3) {
-                    boolean loaded = MinecraftServer.G().worldManager.worldIsLoaded(astring[1]);
-                    if (!loaded) {
-                        a(icommandsender, "No world loaded of Name: '%s'", new Object[]{ astring[1] });
-                        return;
-                    }
-                    gamerules = ((CanaryWorld) MinecraftServer.G().worldManager.getWorld(astring[1], false)).getHandle().N();
-                    setting = s2;
-                }
-
-                if (gamerules.e(s0)) {
-                    gamerules.b(s0, setting);
-                    a(icommandsender, "commands.gamerule.success", new Object[0]);
-                }
-                else {
-                    a(icommandsender, "commands.gamerule.norule", new Object[]{ s0 });
-                }
+            if (gamerules.e(s0)) {
+                gamerules.b(s0, s1);
+                a(icommandsender, this, "commands.gamerule.success", new Object[0]);
             }
-            else if (astring.length == 2) {
-                boolean loaded = MinecraftServer.G().worldManager.worldIsLoaded(astring[1]);
-                if (!loaded) {
-                    a(icommandsender, "No world loaded of Name: '%s'", new Object[]{ astring[1] });
-                    return;
-                }
-                gamerules = ((CanaryWorld) MinecraftServer.G().worldManager.getWorld(s1, false)).getHandle().N();
-                if (gamerules.e(s0)) {
-                    String s3 = gamerules.a(s0);
-
-                    icommandsender.a((new ChatComponentText(s0)).a(" = ").a(s3));
-                }
-                else {
-                    a(icommandsender, "commands.gamerule.norule", new Object[]{ s0 });
-                }
+            else {
+                a(icommandsender, this, "commands.gamerule.norule", new Object[]{s0});
             }
         }
         else if (astring.length == 1) {
             s0 = astring[0];
+            // CanaryMod: Fixes for MultiWorld
+            GameRules gamerules1 =
+                    icommandsender instanceof EntityPlayerMP ? ((EntityPlayerMP) icommandsender).p.N() //
+                            : icommandsender instanceof TileEntityCommandBlock ? ((TileEntityCommandBlock) icommandsender).w().N() //
+                            : icommandsender instanceof EntityMinecartCommandBlock ? this.d() //NOT YET IMPLEMENTED
+                            : this.d(); //
+            //
 
-            if (gamerules.e(s0)) {
-                String s2 = gamerules.a(s0);
+            if (gamerules1.e(s0)) {
+                String s2 = gamerules1.a(s0);
 
                 icommandsender.a((new ChatComponentText(s0)).a(" = ").a(s2));
             }
             else {
-                a(icommandsender, "commands.gamerule.norule", new Object[]{ s0 });
+                a(icommandsender, this, "commands.gamerule.norule", new Object[]{s0});
             }
         }
         else if (astring.length == 0) {
-            icommandsender.a(new ChatComponentText(a(gamerules.b())));
+            GameRules gamerules2 = this.d();
+
+            icommandsender.a(new ChatComponentText(a(gamerules2.b())));
         }
         else {
             throw new WrongUsageException("commands.gamerule.usage", new Object[0]);
@@ -89,17 +76,20 @@ public class CommandGameRule extends CommandBase {
     }
 
     public List a(ICommandSender icommandsender, String[] astring) {
-        // CanaryMod: inject loaded world names into Tab Complete
-        return astring.length == 1 ? a(astring, this.d(icommandsender).b()) //
-                : astring.length == 2 ? a(astring, ToolBox.arrayMerge(new String[]{ "true", "false" }, MinecraftServer.G().worldManager.getLoadedWorldsNames())) //
-                : astring.length == 3 && !astring[1].matches("(true|false)") ? a(astring, new String[]{ "true", "false" }) //
-                : null;
+        // CanaryMod: Fixes for MultiWorld
+        String[] rules =
+                icommandsender instanceof EntityPlayerMP ? ((EntityPlayerMP) icommandsender).p.N().b() //
+                        : icommandsender instanceof TileEntityCommandBlock ? ((TileEntityCommandBlock) icommandsender).w().N().b() //
+                        : icommandsender instanceof EntityMinecartCommandBlock ? this.d().b() //NOT YET IMPLEMENTED
+                        : this.d().b(); //
+        //
+        return astring.length == 1 ? a(astring, rules) : (astring.length == 2 ? a(astring, new String[]{"true", "false"}) : null);
     }
 
-    private GameRules d(ICommandSender iCommandSender) { // CanaryMod: Signature change to pass the sender reference
+    private GameRules d() {
         // CanaryMod: Fixes for MultiWorld
         // return MinecraftServer.G().a(0).N();
-        return iCommandSender.d().N();
+        return ((CanaryWorld) Canary.getServer().getDefaultWorld()).getHandle().O();
         //
     }
 }

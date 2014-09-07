@@ -101,22 +101,22 @@ public class BlockJukebox extends BlockContainer {
             this.complexBlock = new CanaryJukebox(this); // CanaryMod: wrap tile entity
         }
 
-        public void a(NBTTagCompound itemstack) {
-            super.a(itemstack);
-            if (itemstack.b("RecordItem", 10)) {
-                this.a(ItemStack.a(itemstack.m("RecordItem")));
+        public void a(NBTTagCompound nbttagcompound) {
+            super.a(nbttagcompound);
+            if (nbttagcompound.b("RecordItem", 10)) {
+                this.a(ItemStack.a(nbttagcompound.m("RecordItem")));
             }
-            else if (itemstack.f("Record") > 0) {
-                this.a(new ItemStack(Item.d(itemstack.f("Record")), 1, 0));
+            else if (nbttagcompound.f("Record") > 0) {
+                this.a(new ItemStack(Item.d(nbttagcompound.f("Record")), 1, 0));
             }
 
         }
 
-        public void b(NBTTagCompound itemstack) {
-            super.b(itemstack);
+        public void b(NBTTagCompound nbttagcompound) {
+            super.b(nbttagcompound);
             if (this.a() != null) {
-                itemstack.a("RecordItem", (NBTBase) this.a().b(new NBTTagCompound()));
-                itemstack.a("Record", Item.b(this.a().b()));
+                nbttagcompound.a("RecordItem", (NBTBase) this.a().b(new NBTTagCompound()));
+                nbttagcompound.a("Record", Item.b(this.a().b()));
             }
 
         }
@@ -125,8 +125,8 @@ public class BlockJukebox extends BlockContainer {
             return this.a;
         }
 
-        public void a(ItemStack itemstack) {
-            this.a = itemstack;
+        public void a(ItemStack nbttagcompound) {
+            this.a = nbttagcompound;
             this.e();
         }
 

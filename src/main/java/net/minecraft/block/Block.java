@@ -454,7 +454,7 @@ public class Block {
     }
 
     public AxisAlignedBB a(World world, int i0, int i1, int i2) {
-        return AxisAlignedBB.a().a((double) i0 + this.B, (double) i1 + this.C, (double) i2 + this.D, (double) i0 + this.E, (double) i1 + this.F, (double) i2 + this.G);
+        return AxisAlignedBB.a((double) i0 + this.B, (double) i1 + this.C, (double) i2 + this.D, (double) i0 + this.E, (double) i1 + this.F, (double) i2 + this.G);
     }
 
     public boolean c() {
@@ -523,7 +523,7 @@ public class Block {
     }
 
     protected void a(World world, int i0, int i1, int i2, ItemStack itemstack) {
-        if (!world.E && world.N().b("doTileDrops")) {
+        if (!world.E && world.O().b("doTileDrops")) {
             float f0 = 0.7F;
             double d0 = (double) (world.s.nextFloat() * f0) + (double) (1.0F - f0) * 0.5D;
             double d1 = (double) (world.s.nextFloat() * f0) + (double) (1.0F - f0) * 0.5D;
@@ -659,15 +659,15 @@ public class Block {
     }
 
     private boolean a(Vec3 vec3) {
-        return vec3 == null ? false : vec3.d >= this.C && vec3.d <= this.F && vec3.e >= this.D && vec3.e <= this.G;
+        return vec3 == null ? false : vec3.b >= this.C && vec3.b <= this.F && vec3.c >= this.D && vec3.c <= this.G;
     }
 
     private boolean b(Vec3 vec3) {
-        return vec3 == null ? false : vec3.c >= this.B && vec3.c <= this.E && vec3.e >= this.D && vec3.e <= this.G;
+        return vec3 == null ? false : vec3.a >= this.B && vec3.a <= this.E && vec3.c >= this.D && vec3.c <= this.G;
     }
 
     private boolean c(Vec3 vec3) {
-        return vec3 == null ? false : vec3.c >= this.B && vec3.c <= this.E && vec3.d >= this.C && vec3.d <= this.F;
+        return vec3 == null ? false : vec3.a >= this.B && vec3.a <= this.E && vec3.b >= this.C && vec3.b <= this.F;
     }
 
     public void a(World world, int i0, int i1, int i2, Explosion explosion) {
