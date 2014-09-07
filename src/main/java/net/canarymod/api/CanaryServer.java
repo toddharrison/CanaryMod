@@ -31,6 +31,7 @@ import java.net.UnknownHostException;
 import java.util.*;
 
 import static net.canarymod.Canary.log;
+import net.canarymod.ToolBox;
 
 /**
  * Main entry point of the software
@@ -253,10 +254,12 @@ public class CanaryServer implements Server {
     public OfflinePlayer getOfflinePlayer(String player) {
         NBTTagCompound nbttagcompound = ServerConfigurationManager.getPlayerDatByName(player);
         CanaryCompoundTag comp = null;
-        if (nbttagcompound != null) {
+        String uuid = ToolBox.usernameToUUID(player);
+        if (nbttagcompound != null && uuid != null) {
             comp = new CanaryCompoundTag(nbttagcompound);
+            return new CanaryOfflinePlayer(player, uuid, comp);
         }
-        return new CanaryOfflinePlayer(player, comp);
+        return null;
     }
 
     /**

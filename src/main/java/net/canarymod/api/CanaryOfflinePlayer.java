@@ -38,10 +38,10 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
     private boolean isMuted;
     private UUID uuid;
 
-    public CanaryOfflinePlayer(String name, CanaryCompoundTag tag) {
+    public CanaryOfflinePlayer(String name, String uuid, CanaryCompoundTag tag) {
         this.data = tag;
         this.name = name;
-        this.uuid = UUID.fromString(ToolBox.usernameToUUID(name));
+        this.uuid = UUID.fromString(uuid);
         provider = Canary.permissionManager().getPlayerProvider(getUUIDString(), getWorld().getFqName());
         String[] data = Canary.usersAndGroups().getPlayerData(getUUIDString());
         Group[] subs = Canary.usersAndGroups().getModuleGroupsForPlayer(getUUIDString());
