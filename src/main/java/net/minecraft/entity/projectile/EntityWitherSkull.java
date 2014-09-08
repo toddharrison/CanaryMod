@@ -46,7 +46,7 @@ public class EntityWitherSkull extends EntityFireball {
     }
 
     protected void a(MovingObjectPosition movingobjectposition) {
-        if (!this.p.E) {
+        if (!this.o.E) {
             // CanaryMod: ProjectileHit
             ProjectileHitHook hook = (ProjectileHitHook) new ProjectileHitHook(this.getCanaryEntity(), movingobjectposition == null || movingobjectposition.g == null ? null : movingobjectposition.g.getCanaryEntity()).call();
             if (!hook.isCanceled()) { //
@@ -63,10 +63,10 @@ public class EntityWitherSkull extends EntityFireball {
                     if (movingobjectposition.g instanceof EntityLivingBase) {
                         byte b0 = 0;
 
-                        if (this.p.r == EnumDifficulty.NORMAL) {
+                        if (this.o.r == EnumDifficulty.NORMAL) {
                             b0 = 10;
                         }
-                        else if (this.p.r == EnumDifficulty.HARD) {
+                        else if (this.o.r == EnumDifficulty.HARD) {
                             b0 = 40;
                         }
 
@@ -76,7 +76,7 @@ public class EntityWitherSkull extends EntityFireball {
                     }
                 }
 
-                this.p.a(this, this.t, this.u, this.v, 1.0F, false, this.p.N().b("mobGriefing"));
+                this.o.a(this, this.s, this.t, this.u, 1.0F, false, this.o.O().b("mobGriefing"));
                 this.B();
             }
         }
@@ -91,14 +91,14 @@ public class EntityWitherSkull extends EntityFireball {
     }
 
     protected void c() {
-        this.ag.a(10, Byte.valueOf((byte) 0));
+        this.af.a(10, Byte.valueOf((byte) 0));
     }
 
     public boolean f() {
-        return this.ag.a(10) == 1;
+        return this.af.a(10) == 1;
     }
 
     public void a(boolean flag0) {
-        this.ag.b(10, Byte.valueOf((byte) (flag0 ? 1 : 0)));
+        this.af.b(10, Byte.valueOf((byte) (flag0 ? 1 : 0)));
     }
 }

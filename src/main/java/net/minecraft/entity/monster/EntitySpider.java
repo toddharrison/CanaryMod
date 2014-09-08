@@ -26,13 +26,13 @@ public class EntitySpider extends EntityMob {
 
     protected void c() {
         super.c();
-        this.ag.a(16, new Byte((byte) 0));
+        this.af.a(16, new Byte((byte) 0));
     }
 
     public void h() {
         super.h();
-        if (!this.p.E) {
-            this.a(this.F);
+        if (!this.o.E) {
+            this.a(this.E);
         }
     }
 
@@ -42,13 +42,13 @@ public class EntitySpider extends EntityMob {
         this.a(SharedMonsterAttributes.d).a(0.800000011920929D);
     }
 
-    protected Entity bP() {
+    protected Entity bR() {
         float f0 = this.d(1.0F);
 
         if (f0 < 0.5F) {
             double d0 = 16.0D;
 
-            return this.p.b(this, d0);
+            return this.o.b(this, d0);
         }
         else {
             return null;
@@ -74,19 +74,19 @@ public class EntitySpider extends EntityMob {
     protected void a(Entity entity, float f0) {
         float f1 = this.d(1.0F);
 
-        if (f1 > 0.5F && this.aa.nextInt(100) == 0) {
-            this.j = null;
+        if (f1 > 0.5F && this.Z.nextInt(100) == 0) {
+            this.bm = null;
         }
         else {
-            if (f0 > 2.0F && f0 < 6.0F && this.aa.nextInt(10) == 0) {
-                if (this.E) {
-                    double d0 = entity.t - this.t;
-                    double d1 = entity.v - this.v;
+            if (f0 > 2.0F && f0 < 6.0F && this.Z.nextInt(10) == 0) {
+                if (this.D) {
+                    double d0 = entity.s - this.s;
+                    double d1 = entity.u - this.u;
                     float f2 = MathHelper.a(d0 * d0 + d1 * d1);
 
-                    this.w = d0 / (double) f2 * 0.5D * 0.800000011920929D + this.w * 0.20000000298023224D;
-                    this.y = d1 / (double) f2 * 0.5D * 0.800000011920929D + this.y * 0.20000000298023224D;
-                    this.x = 0.4000000059604645D;
+                    this.v = d0 / (double) f2 * 0.5D * 0.800000011920929D + this.v * 0.20000000298023224D;
+                    this.x = d1 / (double) f2 * 0.5D * 0.800000011920929D + this.x * 0.20000000298023224D;
+                    this.w = 0.4000000059604645D;
                 }
             }
             else {
@@ -101,13 +101,13 @@ public class EntitySpider extends EntityMob {
 
     protected void b(boolean flag0, int i0) {
         super.b(flag0, i0);
-        if (flag0 && (this.aa.nextInt(3) == 0 || this.aa.nextInt(1 + i0) > 0)) {
+        if (flag0 && (this.Z.nextInt(3) == 0 || this.Z.nextInt(1 + i0) > 0)) {
             this.a(Items.bp, 1);
         }
     }
 
     public boolean h_() {
-        return this.bX();
+        return this.bZ();
     }
 
     public void as() {
@@ -121,12 +121,12 @@ public class EntitySpider extends EntityMob {
         return potioneffect.a() == Potion.u.H ? false : super.d(potioneffect);
     }
 
-    public boolean bX() {
-        return (this.ag.a(16) & 1) != 0;
+    public boolean bZ() {
+        return (this.af.a(16) & 1) != 0;
     }
 
     public void a(boolean flag0) {
-        byte b0 = this.ag.a(16);
+        byte b0 = this.af.a(16);
 
         if (flag0) {
             b0 = (byte) (b0 | 1);
@@ -135,30 +135,30 @@ public class EntitySpider extends EntityMob {
             b0 &= -2;
         }
 
-        this.ag.b(16, Byte.valueOf(b0));
+        this.af.b(16, Byte.valueOf(b0));
     }
 
-    public IEntityLivingData a(IEntityLivingData entitylivingdata) {
-        Object object = super.a(entitylivingdata);
+    public IEntityLivingData a(IEntityLivingData ientitylivingdata) {
+        Object object = super.a(ientitylivingdata);
 
-        if (this.p.s.nextInt(100) == 0) {
-            EntitySkeleton entityskeleton = new EntitySkeleton(this.p);
+        if (this.o.s.nextInt(100) == 0) {
+            EntitySkeleton entityskeleton = new EntitySkeleton(this.o);
 
-            entityskeleton.b(this.t, this.u, this.v, this.z, 0.0F);
+            entityskeleton.b(this.s, this.t, this.u, this.y, 0.0F);
             entityskeleton.a((IEntityLivingData) null);
-            this.p.d((Entity) entityskeleton);
+            this.o.d((Entity) entityskeleton);
             entityskeleton.a((Entity) this);
         }
 
         if (object == null) {
-            object = new GroupData();
-            if (this.p.r == EnumDifficulty.HARD && this.p.s.nextFloat() < 0.1F * this.p.b(this.t, this.u, this.v)) {
-                ((GroupData) object).a(this.p.s);
+            object = new EntitySpider.GroupData();
+            if (this.o.r == EnumDifficulty.HARD && this.o.s.nextFloat() < 0.1F * this.o.b(this.s, this.t, this.u)) {
+                ((EntitySpider.GroupData) object).a(this.o.s);
             }
         }
 
-        if (object instanceof GroupData) {
-            int i0 = ((GroupData) object).a;
+        if (ientitylivingdata1 instanceof EntitySpider.GroupData) {
+            int i0 = ((EntitySpider.GroupData) object).a;
 
             if (i0 > 0 && Potion.a[i0] != null) {
                 this.c(new PotionEffect(i0, Integer.MAX_VALUE));

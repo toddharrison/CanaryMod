@@ -8,8 +8,8 @@ public class EntityGiantZombie extends EntityMob {
 
     public EntityGiantZombie(World world) {
         super(world);
-        this.M *= 6.0F;
-        this.a(this.N * 6.0F, this.O * 6.0F);
+        this.L *= 6.0F;
+        this.a(this.M * 6.0F, this.N * 6.0F);
         this.entity = new CanaryGiantZombie(this); // CanaryMod: Wrap Entity
     }
 
@@ -21,6 +21,6 @@ public class EntityGiantZombie extends EntityMob {
     }
 
     public float a(int i0, int i1, int i2) {
-        return this.p.n(i0, i1, i2) - 0.5F;
+        return this.o.n(i0, i1, i2) - 0.5F;
     }
 }

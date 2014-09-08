@@ -74,15 +74,15 @@ public class EntityLeashKnot extends EntityHanging {
         Iterator iterator;
         EntityLiving entityliving;
 
-        if (itemstack != null && itemstack.b() == Items.ca && !this.p.E) {
+        if (itemstack != null && itemstack.b() == Items.ca && !this.o.E) {
             d0 = 7.0D;
-            list = this.p.a(EntityLiving.class, AxisAlignedBB.a().a(this.t - d0, this.u - d0, this.v - d0, this.t + d0, this.u + d0, this.v + d0));
+            list = this.o.a(EntityLiving.class, AxisAlignedBB.a(this.s - d0, this.t - d0, this.u - d0, this.s + d0, this.t + d0, this.u + d0));
             if (list != null) {
                 iterator = list.iterator();
 
                 while (iterator.hasNext()) {
                     entityliving = (EntityLiving) iterator.next();
-                    if (entityliving.bL() && entityliving.bM() == entityplayer) {
+                    if (entityliving.bN() && entityliving.bO() == entityplayer) {
                         entityliving.b(this, true);
                         flag0 = true;
                     }
@@ -90,17 +90,17 @@ public class EntityLeashKnot extends EntityHanging {
             }
         }
 
-        if (!this.p.E && !flag0) {
+        if (!this.o.E && !flag0) {
             this.B();
-            if (entityplayer.bF.d) {
+            if (entityplayer.bE.d) {
                 d0 = 7.0D;
-                list = this.p.a(EntityLiving.class, AxisAlignedBB.a().a(this.t - d0, this.u - d0, this.v - d0, this.t + d0, this.u + d0, this.v + d0));
+                list = this.o.a(EntityLiving.class, AxisAlignedBB.a(this.s - d0, this.t - d0, this.u - d0, this.s + d0, this.t + d0, this.u + d0));
                 if (list != null) {
                     iterator = list.iterator();
 
                     while (iterator.hasNext()) {
                         entityliving = (EntityLiving) iterator.next();
-                        if (entityliving.bL() && entityliving.bM() == this) {
+                        if (entityliving.bN() && entityliving.bO() == this) {
                             entityliving.a(true, false);
                         }
                     }
@@ -112,19 +112,19 @@ public class EntityLeashKnot extends EntityHanging {
     }
 
     public boolean e() {
-        return this.p.a(this.b, this.c, this.d).b() == 11;
+        return this.o.a(this.b, this.c, this.d).b() == 11;
     }
 
     public static EntityLeashKnot a(World world, int i0, int i1, int i2) {
         EntityLeashKnot entityleashknot = new EntityLeashKnot(world, i0, i1, i2);
 
-        entityleashknot.o = true;
+        entityleashknot.n = true;
         world.d((Entity) entityleashknot);
         return entityleashknot;
     }
 
     public static EntityLeashKnot b(World world, int i0, int i1, int i2) {
-        List list = world.a(EntityLeashKnot.class, AxisAlignedBB.a().a((double) i0 - 1.0D, (double) i1 - 1.0D, (double) i2 - 1.0D, (double) i0 + 1.0D, (double) i1 + 1.0D, (double) i2 + 1.0D));
+        List list = world.a(EntityLeashKnot.class, AxisAlignedBB.a((double) i0 - 1.0D, (double) i1 - 1.0D, (double) i2 - 1.0D, (double) i0 + 1.0D, (double) i1 + 1.0D, (double) i2 + 1.0D));
 
         if (list != null) {
             Iterator iterator = list.iterator();

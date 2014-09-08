@@ -37,10 +37,10 @@ public class EntitySilverfish extends EntityMob {
         return false;
     }
 
-    protected Entity bP() {
+    protected Entity bR() {
         double d0 = 8.0D;
 
-        return this.p.b(this, d0);
+        return this.o.b(this, d0);
     }
 
     protected String t() {
@@ -69,9 +69,9 @@ public class EntitySilverfish extends EntityMob {
     }
 
     protected void a(Entity entity, float f0) {
-        if (this.aC <= 0 && f0 < 1.2F && entity.D.e > this.D.b && entity.D.b < this.D.e) {
-            this.aC = 20;
-            this.m(entity);
+        if (this.aB <= 0 && f0 < 1.2F && entity.C.e > this.C.b && entity.C.b < this.C.e) {
+            this.aB = 20;
+            this.n(entity);
         }
     }
 
@@ -84,13 +84,13 @@ public class EntitySilverfish extends EntityMob {
     }
 
     public void h() {
-        this.aN = this.z;
+        this.aM = this.y;
         super.h();
     }
 
     protected void bq() {
         super.bq();
-        if (!this.p.E) {
+        if (!this.o.E) {
             int i0;
             int i1;
             int i2;
@@ -99,27 +99,27 @@ public class EntitySilverfish extends EntityMob {
             if (this.bp > 0) {
                 --this.bp;
                 if (this.bp == 0) {
-                    i0 = MathHelper.c(this.t);
-                    i1 = MathHelper.c(this.u);
-                    i2 = MathHelper.c(this.v);
+                    i0 = MathHelper.c(this.s);
+                    i1 = MathHelper.c(this.t);
+                    i2 = MathHelper.c(this.u);
                     boolean flag0 = false;
 
                     for (int i4 = 0; !flag0 && i4 <= 5 && i4 >= -5; i4 = i4 <= 0 ? 1 - i4 : 0 - i4) {
                         for (i3 = 0; !flag0 && i3 <= 10 && i3 >= -10; i3 = i3 <= 0 ? 1 - i3 : 0 - i3) {
                             for (int i5 = 0; !flag0 && i5 <= 10 && i5 >= -10; i5 = i5 <= 0 ? 1 - i5 : 0 - i5) {
-                                if (this.p.a(i0 + i3, i1 + i4, i2 + i5) == Blocks.aU) {
-                                    if (!this.p.N().b("mobGriefing")) {
-                                        int i6 = this.p.e(i0 + i3, i1 + i4, i2 + i5);
+                                if (this.o.a(i0 + i3, i1 + i4, i2 + i5) == Blocks.aU) {
+                                    if (!this.o.O().b("mobGriefing")) {
+                                        int i6 = this.o.e(i0 + i3, i1 + i4, i2 + i5);
                                         ImmutablePair immutablepair = BlockSilverfish.b(i6);
 
-                                        this.p.d(i0 + i3, i1 + i4, i2 + i5, (Block) immutablepair.getLeft(), ((Integer) immutablepair.getRight()).intValue(), 3);
+                                        this.o.d(i0 + i3, i1 + i4, i2 + i5, (Block) immutablepair.getLeft(), ((Integer) immutablepair.getRight()).intValue(), 3);
                                     }
                                     else {
-                                        this.p.a(i0 + i3, i1 + i4, i2 + i5, false);
+                                        this.o.a(i0 + i3, i1 + i4, i2 + i5, false);
                                     }
 
-                                    Blocks.aU.b(this.p, i0 + i3, i1 + i4, i2 + i5, 0);
-                                    if (this.aa.nextBoolean()) {
+                                    Blocks.aU.b(this.o, i0 + i3, i1 + i4, i2 + i5, 0);
+                                    if (this.Z.nextBoolean()) {
                                         flag0 = true;
                                         break;
                                     }
@@ -130,40 +130,40 @@ public class EntitySilverfish extends EntityMob {
                 }
             }
 
-            if (this.j == null && !this.bQ()) {
-                i0 = MathHelper.c(this.t);
-                i1 = MathHelper.c(this.u + 0.5D);
-                i2 = MathHelper.c(this.v);
-                int i7 = this.aa.nextInt(6);
-                Block block = this.p.a(i0 + Facing.b[i7], i1 + Facing.c[i7], i2 + Facing.d[i7]);
+            if (this.bm == null && !this.bS()) {
+                i0 = MathHelper.c(this.s);
+                i1 = MathHelper.c(this.t + 0.5D);
+                i2 = MathHelper.c(this.u);
+                int i7 = this.Z.nextInt(6);
+                Block block = this.o.a(i0 + Facing.b[i7], i1 + Facing.c[i7], i2 + Facing.d[i7]);
 
-                i3 = this.p.e(i0 + Facing.b[i7], i1 + Facing.c[i7], i2 + Facing.d[i7]);
+                i3 = this.o.e(i0 + Facing.b[i7], i1 + Facing.c[i7], i2 + Facing.d[i7]);
                 if (BlockSilverfish.a(block)) {
-                    this.p.d(i0 + Facing.b[i7], i1 + Facing.c[i7], i2 + Facing.d[i7], Blocks.aU, BlockSilverfish.a(block, i3), 3);
+                    this.o.d(i0 + Facing.b[i7], i1 + Facing.c[i7], i2 + Facing.d[i7], Blocks.aU, BlockSilverfish.a(block, i3), 3);
                     this.s();
                     this.B();
                 }
                 else {
-                    this.bO();
+                    this.bQ();
                 }
             }
-            else if (this.j != null && !this.bQ()) {
-                this.j = null;
+            else if (this.bm != null && !this.bS()) {
+                this.bm = null;
             }
         }
     }
 
     public float a(int i0, int i1, int i2) {
-        return this.p.a(i0, i1 - 1, i2) == Blocks.b ? 10.0F : super.a(i0, i1, i2);
+        return this.o.a(i0, i1 - 1, i2) == Blocks.b ? 10.0F : super.a(i0, i1, i2);
     }
 
     protected boolean j_() {
         return true;
     }
 
-    public boolean bw() {
-        if (super.bw()) {
-            EntityPlayer entityplayer = this.p.a(this, 5.0D);
+    public boolean by() {
+        if (super.by()) {
+            EntityPlayer entityplayer = this.o.a(this, 5.0D);
 
             return entityplayer == null;
         }

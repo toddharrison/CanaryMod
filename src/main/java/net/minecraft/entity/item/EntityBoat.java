@@ -346,7 +346,7 @@ public class EntityBoat extends Entity {
                     this.r = ppZ;
                     this.y = prevRot;
                     this.z = prevPit;
-                    // this.ac(); // Update rider
+                    this.ac(); // Update rider
                 }
             }
             //
@@ -397,10 +397,10 @@ public class EntityBoat extends Entity {
                 // CanaryMod: VehicleEnter/VehicleExit
                 CancelableHook hook = null;
 
-                if (this.n == null) {
+                if (this.l == null) {
                     hook = new VehicleEnterHook((Vehicle) this.entity, (LivingBase) entityplayer.getCanaryEntity());
                 }
-                else if (this.n == entityplayer) {
+                else if (this.l == entityplayer) {
                     hook = new VehicleExitHook((Vehicle) this.entity, (LivingBase) entityplayer.getCanaryEntity());
                 }
                 if (hook != null) {

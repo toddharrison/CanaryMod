@@ -26,7 +26,7 @@ public abstract class EntityThrowable extends Entity implements IProjectile {
     private EntityLivingBase g;
     private String h;
     private int i;
-    private int j;
+    private int at;
     public float gravity = 0.03F; // CanaryMod
 
     public EntityThrowable(World world) {
@@ -41,18 +41,18 @@ public abstract class EntityThrowable extends Entity implements IProjectile {
         super(world);
         this.g = entitylivingbase;
         this.a(0.25F, 0.25F);
-        this.b(entitylivingbase.t, entitylivingbase.u + (double) entitylivingbase.g(), entitylivingbase.v, entitylivingbase.z, entitylivingbase.A);
-        this.t -= (double) (MathHelper.b(this.z / 180.0F * 3.1415927F) * 0.16F);
-        this.u -= 0.10000000149011612D;
-        this.v -= (double) (MathHelper.a(this.z / 180.0F * 3.1415927F) * 0.16F);
-        this.b(this.t, this.u, this.v);
-        this.M = 0.0F;
+        this.b(entitylivingbase.s, entitylivingbase.t + (double) entitylivingbase.g(), entitylivingbase.u, entitylivingbase.y, entitylivingbase.z);
+        this.s -= (double) (MathHelper.b(this.y / 180.0F * 3.1415927F) * 0.16F);
+        this.t -= 0.10000000149011612D;
+        this.u -= (double) (MathHelper.a(this.y / 180.0F * 3.1415927F) * 0.16F);
+        this.b(this.s, this.t, this.u);
+        this.L = 0.0F;
         float f0 = 0.4F;
 
-        this.w = (double) (-MathHelper.a(this.z / 180.0F * 3.1415927F) * MathHelper.b(this.A / 180.0F * 3.1415927F) * f0);
-        this.y = (double) (MathHelper.b(this.z / 180.0F * 3.1415927F) * MathHelper.b(this.A / 180.0F * 3.1415927F) * f0);
-        this.x = (double) (-MathHelper.a((this.A + this.f()) / 180.0F * 3.1415927F) * f0);
-        this.c(this.w, this.x, this.y, this.e(), 1.0F);
+        this.v = (double) (-MathHelper.a(this.y / 180.0F * 3.1415927F) * MathHelper.b(this.z / 180.0F * 3.1415927F) * f0);
+        this.x = (double) (MathHelper.b(this.y / 180.0F * 3.1415927F) * MathHelper.b(this.z / 180.0F * 3.1415927F) * f0);
+        this.w = (double) (-MathHelper.a((this.z + this.f()) / 180.0F * 3.1415927F) * f0);
+        this.c(this.v, this.w, this.x, this.e(), 1.0F);
     }
 
     public EntityThrowable(World world, double d0, double d1, double d2) {
@@ -60,7 +60,7 @@ public abstract class EntityThrowable extends Entity implements IProjectile {
         this.i = 0;
         this.a(0.25F, 0.25F);
         this.b(d0, d1, d2);
-        this.M = 0.0F;
+        this.L = 0.0F;
     }
 
     protected float e() {
@@ -77,33 +77,33 @@ public abstract class EntityThrowable extends Entity implements IProjectile {
         d0 /= (double) f2;
         d1 /= (double) f2;
         d2 /= (double) f2;
-        d0 += this.aa.nextGaussian() * 0.007499999832361937D * (double) f1;
-        d1 += this.aa.nextGaussian() * 0.007499999832361937D * (double) f1;
-        d2 += this.aa.nextGaussian() * 0.007499999832361937D * (double) f1;
+        d0 += this.Z.nextGaussian() * 0.007499999832361937D * (double) f1;
+        d1 += this.Z.nextGaussian() * 0.007499999832361937D * (double) f1;
+        d2 += this.Z.nextGaussian() * 0.007499999832361937D * (double) f1;
         d0 *= (double) f0;
         d1 *= (double) f0;
         d2 *= (double) f0;
-        this.w = d0;
-        this.x = d1;
-        this.y = d2;
+        this.v = d0;
+        this.w = d1;
+        this.x = d2;
         float f3 = MathHelper.a(d0 * d0 + d2 * d2);
 
-        this.B = this.z = (float) (Math.atan2(d0, d2) * 180.0D / 3.1415927410125732D);
-        this.C = this.A = (float) (Math.atan2(d1, (double) f3) * 180.0D / 3.1415927410125732D);
+        this.A = this.y = (float) (Math.atan2(d0, d2) * 180.0D / 3.1415927410125732D);
+        this.B = this.z = (float) (Math.atan2(d1, (double) f3) * 180.0D / 3.1415927410125732D);
         this.i = 0;
     }
 
     public void h() {
+        this.S = this.s;
         this.T = this.t;
         this.U = this.u;
-        this.V = this.v;
         super.h();
         if (this.b > 0) {
             --this.b;
         }
 
         if (this.a) {
-            if (this.p.a(this.c, this.d, this.e) == this.f) {
+            if (this.o.a(this.c, this.d, this.e) == this.f) {
                 ++this.i;
                 if (this.i == 1200) {
                     this.B();
@@ -113,38 +113,38 @@ public abstract class EntityThrowable extends Entity implements IProjectile {
             }
 
             this.a = false;
-            this.w *= (double) (this.aa.nextFloat() * 0.2F);
-            this.x *= (double) (this.aa.nextFloat() * 0.2F);
-            this.y *= (double) (this.aa.nextFloat() * 0.2F);
+            this.v *= (double) (this.Z.nextFloat() * 0.2F);
+            this.w *= (double) (this.Z.nextFloat() * 0.2F);
+            this.x *= (double) (this.Z.nextFloat() * 0.2F);
             this.i = 0;
-            this.j = 0;
+            this.at = 0;
         }
         else {
-            ++this.j;
+            ++this.at;
         }
 
-        Vec3 vec3 = this.p.U().a(this.t, this.u, this.v);
-        Vec3 vec31 = this.p.U().a(this.t + this.w, this.u + this.x, this.v + this.y);
-        MovingObjectPosition movingobjectposition = this.p.a(vec3, vec31);
+        Vec3 vec3 = Vec3.a(this.s, this.t, this.u);
+        Vec3 vec31 = Vec3.a(this.s + this.v, this.t + this.w, this.u + this.x);
+        MovingObjectPosition movingobjectposition = this.o.a(vec3, vec31);
 
-        vec3 = this.p.U().a(this.t, this.u, this.v);
-        vec31 = this.p.U().a(this.t + this.w, this.u + this.x, this.v + this.y);
+        vec3 = Vec3.a(this.s, this.t, this.u);
+        vec31 = Vec3.a(this.s + this.v, this.t + this.w, this.u + this.x);
         if (movingobjectposition != null) {
-            vec31 = this.p.U().a(movingobjectposition.f.c, movingobjectposition.f.d, movingobjectposition.f.e);
+            vec31 = Vec3.a(movingobjectposition.f.a, movingobjectposition.f.b, movingobjectposition.f.c);
         }
 
-        if (!this.p.E) {
+        if (!this.o.E) {
             Entity entity = null;
-            List list = this.p.b((Entity) this, this.D.a(this.w, this.x, this.y).b(1.0D, 1.0D, 1.0D));
+            List list = this.o.b((Entity) this, this.C.a(this.v, this.w, this.x).b(1.0D, 1.0D, 1.0D));
             double d0 = 0.0D;
             EntityLivingBase entitylivingbase = this.j();
 
             for (int i0 = 0; i0 < list.size(); ++i0) {
                 Entity entity1 = (Entity) list.get(i0);
 
-                if (entity1.R() && (entity1 != entitylivingbase || this.j >= 5)) {
+                if (entity1.R() && (entity1 != entitylivingbase || this.at >= 5)) {
                     float f0 = 0.3F;
-                    AxisAlignedBB axisalignedbb = entity1.D.b((double) f0, (double) f0, (double) f0);
+                    AxisAlignedBB axisalignedbb = entity1.C.b((double) f0, (double) f0, (double) f0);
                     MovingObjectPosition movingobjectposition1 = axisalignedbb.a(vec3, vec31);
 
                     if (movingobjectposition1 != null) {
@@ -164,7 +164,7 @@ public abstract class EntityThrowable extends Entity implements IProjectile {
         }
 
         if (movingobjectposition != null) {
-            if (movingobjectposition.a == MovingObjectPosition.MovingObjectType.BLOCK && this.p.a(movingobjectposition.b, movingobjectposition.c, movingobjectposition.d) == Blocks.aO) {
+            if (movingobjectposition.a == MovingObjectPosition.MovingObjectType.BLOCK && this.o.a(movingobjectposition.b, movingobjectposition.c, movingobjectposition.d) == Blocks.aO) {
                 this.ah();
             }
             else {
@@ -172,31 +172,31 @@ public abstract class EntityThrowable extends Entity implements IProjectile {
             }
         }
 
+        this.s += this.v;
         this.t += this.w;
         this.u += this.x;
-        this.v += this.y;
-        float f1 = MathHelper.a(this.w * this.w + this.y * this.y);
+        float f1 = MathHelper.a(this.v * this.v + this.x * this.x);
 
-        this.z = (float) (Math.atan2(this.w, this.y) * 180.0D / 3.1415927410125732D);
+        this.y = (float) (Math.atan2(this.v, this.x) * 180.0D / 3.1415927410125732D);
 
-        for (this.A = (float) (Math.atan2(this.x, (double) f1) * 180.0D / 3.1415927410125732D); this.A - this.C < -180.0F; this.C -= 360.0F) {
+        for (this.z = (float) (Math.atan2(this.w, (double) f1) * 180.0D / 3.1415927410125732D); this.z - this.B < -180.0F; this.B -= 360.0F) {
             ;
-        }
-
-        while (this.A - this.C >= 180.0F) {
-            this.C += 360.0F;
-        }
-
-        while (this.z - this.B < -180.0F) {
-            this.B -= 360.0F;
         }
 
         while (this.z - this.B >= 180.0F) {
             this.B += 360.0F;
         }
 
-        this.A = this.C + (this.A - this.C) * 0.2F;
+        while (this.y - this.A < -180.0F) {
+            this.A -= 360.0F;
+        }
+
+        while (this.y - this.A >= 180.0F) {
+            this.A += 360.0F;
+        }
+
         this.z = this.B + (this.z - this.B) * 0.2F;
+        this.y = this.A + (this.y - this.A) * 0.2F;
         float f2 = 0.99F;
         float f3 = this.i();
 
@@ -204,17 +204,17 @@ public abstract class EntityThrowable extends Entity implements IProjectile {
             for (int i1 = 0; i1 < 4; ++i1) {
                 float f4 = 0.25F;
 
-                this.p.a("bubble", this.t - this.w * (double) f4, this.u - this.x * (double) f4, this.v - this.y * (double) f4, this.w, this.x, this.y);
+                this.o.a("bubble", this.s - this.v * (double) f4, this.t - this.w * (double) f4, this.u - this.x * (double) f4, this.v, this.w, this.x);
             }
 
             f2 = 0.8F;
         }
 
+        this.v *= (double) f2;
         this.w *= (double) f2;
         this.x *= (double) f2;
-        this.y *= (double) f2;
-        this.x -= (double) f3;
-        this.b(this.t, this.u, this.v);
+        this.w -= (double) f3;
+        this.b(this.s, this.t, this.u);
     }
 
     protected float i() {
@@ -252,7 +252,7 @@ public abstract class EntityThrowable extends Entity implements IProjectile {
 
     public EntityLivingBase j() {
         if (this.g == null && this.h != null && this.h.length() > 0) {
-            this.g = this.p.a(this.h);
+            this.g = this.o.a(this.h);
         }
 
         return this.g;

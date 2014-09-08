@@ -33,7 +33,7 @@ public class EntitySmallFireball extends EntityFireball {
     }
 
     protected void a(MovingObjectPosition movingobjectposition) {
-        if (!this.p.E) {
+        if (!this.o.E) {
             // CanaryMod: ProjectileHit
             ProjectileHitHook hook = (ProjectileHitHook) new ProjectileHitHook(this.getCanaryEntity(), movingobjectposition == null || movingobjectposition.g == null ? null : movingobjectposition.g.getCanaryEntity()).call();
             if (!hook.isCanceled()) { //
@@ -72,13 +72,13 @@ public class EntitySmallFireball extends EntityFireball {
                             ++i0;
                     }
 
-                    if (this.p.c(i0, i1, i2)) {
+                    if (this.o.c(i0, i1, i2)) {
                         // CanaryMod: IgnitionHook
-                        CanaryBlock block = (CanaryBlock) this.p.getCanaryWorld().getBlockAt(i0, i1 - 1, i2);
+                        CanaryBlock block = (CanaryBlock) this.o.getCanaryWorld().getBlockAt(i0, i1 - 1, i2);
                         block.setStatus((byte) 7); // 7 fireball hit
                         IgnitionHook ignitionHook = (IgnitionHook) new IgnitionHook(block, null, null, IgnitionCause.FIREBALL_HIT).call();
                         if (!ignitionHook.isCanceled()) {
-                            this.p.b(i0, i1, i2, (Block) Blocks.ab);
+                            this.o.b(i0, i1, i2, (Block) Blocks.ab);
                         }
                         //
                     }

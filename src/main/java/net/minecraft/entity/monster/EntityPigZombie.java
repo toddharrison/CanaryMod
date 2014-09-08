@@ -28,7 +28,7 @@ public class EntityPigZombie extends EntityZombie {
 
     public EntityPigZombie(World world) {
         super(world);
-        this.af = true;
+        this.ae = true;
         this.entity = new CanaryPigZombie(this); // CanaryMod: Wrap Entity
     }
 
@@ -44,25 +44,25 @@ public class EntityPigZombie extends EntityZombie {
     }
 
     public void h() {
-        if (this.bu != this.j && !this.p.E) {
-            IAttributeInstance attributeinstance = this.a(SharedMonsterAttributes.d);
+        if (this.bu != this.bm && !this.o.E) {
+            IAttributeInstance iattributeinstance = this.a(SharedMonsterAttributes.d);
 
-            attributeinstance.b(br);
-            if (this.j != null) {
-                attributeinstance.a(br);
+            iattributeinstance.b(br);
+            if (this.bm != null) {
+                iattributeinstance.a(br);
             }
         }
 
-        this.bu = this.j;
+        this.bu = this.bm;
         if (this.bt > 0 && --this.bt == 0) {
-            this.a("mob.zombiepig.zpigangry", this.bf() * 2.0F, ((this.aa.nextFloat() - this.aa.nextFloat()) * 0.2F + 1.0F) * 1.8F);
+            this.a("mob.zombiepig.zpigangry", this.bf() * 2.0F, ((this.Z.nextFloat() - this.Z.nextFloat()) * 0.2F + 1.0F) * 1.8F);
         }
 
         super.h();
     }
 
-    public boolean bw() {
-        return this.p.r != EnumDifficulty.PEACEFUL && this.p.b(this.D) && this.p.a((Entity) this, this.D).isEmpty() && !this.p.d(this.D);
+    public boolean by() {
+        return this.o.r != EnumDifficulty.PEACEFUL && this.o.b(this.C) && this.o.a((Entity) this, this.C).isEmpty() && !this.o.d(this.C);
     }
 
     public void b(NBTTagCompound nbttagcompound) {
@@ -75,8 +75,8 @@ public class EntityPigZombie extends EntityZombie {
         this.bs = nbttagcompound.e("Anger");
     }
 
-    protected Entity bP() {
-        return this.bs == 0 ? null : super.bP();
+    protected Entity bR() {
+        return this.bs == 0 ? null : super.bR();
     }
 
     public boolean a(DamageSource damagesource, float f0) {
@@ -91,7 +91,7 @@ public class EntityPigZombie extends EntityZombie {
                 MobTargetHook hook = (MobTargetHook) new MobTargetHook((net.canarymod.api.entity.living.LivingBase) this.getCanaryEntity(), (net.canarymod.api.entity.living.LivingBase) entity.getCanaryEntity()).call();
                 if (!hook.isCanceled()) {
 
-                    List list = this.p.b((Entity) this, this.D.b(32.0D, 32.0D, 32.0D));
+                    List list = this.o.b((Entity) this, this.C.b(32.0D, 32.0D, 32.0D));
 
                     for (int i0 = 0; i0 < list.size(); ++i0) {
                         Entity entity1 = (Entity) list.get(i0);
@@ -111,9 +111,9 @@ public class EntityPigZombie extends EntityZombie {
     }
 
     public void c(Entity entity) { // CanaryMod: private => public; angryAt
-        this.j = entity;
-        this.bs = 400 + this.aa.nextInt(400);
-        this.bt = this.aa.nextInt(40);
+        this.bm = entity;
+        this.bs = 400 + this.Z.nextInt(400);
+        this.bt = this.Z.nextInt(40);
     }
 
     protected String t() {
@@ -129,7 +129,7 @@ public class EntityPigZombie extends EntityZombie {
     }
 
     protected void b(boolean flag0, int i0) {
-        int i1 = this.aa.nextInt(2 + i0);
+        int i1 = this.Z.nextInt(2 + i0);
 
         int i2;
 
@@ -137,7 +137,7 @@ public class EntityPigZombie extends EntityZombie {
             this.a(Items.bh, 1);
         }
 
-        i1 = this.aa.nextInt(2 + i0);
+        i1 = this.Z.nextInt(2 + i0);
 
         for (i2 = 0; i2 < i1; ++i2) {
             this.a(Items.bl, 1);
@@ -152,13 +152,13 @@ public class EntityPigZombie extends EntityZombie {
         this.a(Items.k, 1);
     }
 
-    protected void bA() {
+    protected void bC() {
         this.c(0, new ItemStack(Items.B));
     }
 
-    public IEntityLivingData a(IEntityLivingData entitylivingdata) {
-        super.a(entitylivingdata);
+    public IEntityLivingData a(IEntityLivingData ientitylivingdata) {
+        super.a(ientitylivingdata);
         this.j(false);
-        return entitylivingdata;
+        return ientitylivingdata;
     }
 }

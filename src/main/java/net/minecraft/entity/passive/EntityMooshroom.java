@@ -20,33 +20,33 @@ public class EntityMooshroom extends EntityCow {
     }
 
     public boolean a(EntityPlayer entityplayer) {
-        ItemStack itemstack = entityplayer.bn.h();
+        ItemStack itemstack = entityplayer.bm.h();
 
         if (itemstack != null && itemstack.b() == Items.z && this.d() >= 0) {
             if (itemstack.b == 1) {
-                entityplayer.bn.a(entityplayer.bn.c, new ItemStack(Items.A));
+                entityplayer.bm.a(entityplayer.bm.c, new ItemStack(Items.A));
                 return true;
             }
 
-            if (entityplayer.bn.a(new ItemStack(Items.A)) && !entityplayer.bF.d) {
-                entityplayer.bn.a(entityplayer.bn.c, 1);
+            if (entityplayer.bm.a(new ItemStack(Items.A)) && !entityplayer.bE.d) {
+                entityplayer.bm.a(entityplayer.bm.c, 1);
                 return true;
             }
         }
 
         if (itemstack != null && itemstack.b() == Items.aZ && this.d() >= 0) {
             this.B();
-            this.p.a("largeexplode", this.t, this.u + (double) (this.O / 2.0F), this.v, 0.0D, 0.0D, 0.0D);
-            if (!this.p.E) {
-                EntityCow entitycow = new EntityCow(this.p);
+            this.o.a("largeexplode", this.s, this.t + (double) (this.N / 2.0F), this.u, 0.0D, 0.0D, 0.0D);
+            if (!this.o.E) {
+                EntityCow entitycow = new EntityCow(this.o);
 
-                entitycow.b(this.t, this.u, this.v, this.z, this.A);
+                entitycow.b(this.s, this.t, this.u, this.y, this.z);
                 entitycow.g(this.aS());
-                entitycow.aN = this.aN;
-                this.p.d((Entity) entitycow);
+                entitycow.aM = this.aM;
+                this.o.d((Entity) entitycow);
 
                 for (int i0 = 0; i0 < 5; ++i0) {
-                    this.p.d((Entity) (new EntityItem(this.p, this.t, this.u + (double) this.O, this.v, new ItemStack(Blocks.Q))));
+                    this.o.d((Entity) (new EntityItem(this.o, this.s, this.t + (double) this.N, this.u, new ItemStack(Blocks.Q))));
                 }
                 itemstack.a(1, (EntityLivingBase) entityplayer);
                 this.a("mob.sheep.shear", 1.0F, 1.0F);
@@ -60,7 +60,7 @@ public class EntityMooshroom extends EntityCow {
     }
 
     public EntityMooshroom c(EntityAgeable entityageable) {
-        return new EntityMooshroom(this.p);
+        return new EntityMooshroom(this.o);
     }
 
     public EntityCow b(EntityAgeable entityageable) {

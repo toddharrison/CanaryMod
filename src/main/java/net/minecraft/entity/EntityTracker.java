@@ -11,13 +11,7 @@ import net.minecraft.entity.passive.EntityBat;
 import net.minecraft.entity.passive.EntitySquid;
 import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraft.entity.projectile.EntityEgg;
-import net.minecraft.entity.projectile.EntityFireball;
-import net.minecraft.entity.projectile.EntityFishHook;
-import net.minecraft.entity.projectile.EntityPotion;
-import net.minecraft.entity.projectile.EntitySmallFireball;
-import net.minecraft.entity.projectile.EntitySnowball;
+import net.minecraft.entity.projectile.*;
 import net.minecraft.network.Packet;
 import net.minecraft.util.IntHashMap;
 import net.minecraft.util.ReportedException;
@@ -44,7 +38,7 @@ public class EntityTracker {
 
     public EntityTracker(WorldServer worldserver) {
         this.b = worldserver;
-        this.e = worldserver.p().af().a();
+        this.e = worldserver.q().ah().d();
         canaryTracker = new CanaryEntityTracker(this, worldserver.getCanaryWorld());
     }
 
@@ -52,12 +46,13 @@ public class EntityTracker {
         if (entity instanceof EntityPlayerMP) {
             this.a(entity, 512, 2);
             EntityPlayerMP entityplayermp = (EntityPlayerMP) entity;
+            Iterator iterator = this.c.iterator();
 
-            for (Object aC : this.c) {
-                EntityTrackerEntry entitytrackerentry = (EntityTrackerEntry) aC;
+            while (iterator.hasNext()) {
+                EntityTrackerEntry entitytrackerentry = (EntityTrackerEntry) iterator.next();
 
                 if (entitytrackerentry.a != entityplayermp) {
-                        entitytrackerentry.b(entityplayermp);
+                    entitytrackerentry.b(entityplayermp);
                 }
             }
         }
@@ -142,21 +137,21 @@ public class EntityTracker {
         this.a(entity, i0, i1, false);
     }
 
-    public void a(Entity s0, int i0, final int i1, boolean flag0) {
+    public void a(Entity entity, int i0, final int i1, boolean flag0) {
         if (i0 > this.e) {
             i0 = this.e;
         }
 
         try {
-            if (this.d.b(s0.y())) {
+            if (this.d.b(entity.y())) {
                 throw new IllegalStateException("Entity is already tracked!");
             }
 
-            EntityTrackerEntry entitytrackerentry = new EntityTrackerEntry(s0, i0, i1, flag0);
+            EntityTrackerEntry entitytrackerentry = new EntityTrackerEntry(entity, i0, i1, flag0);
 
             this.c.add(entitytrackerentry);
-            this.d.a(s0.y(), entitytrackerentry);
-            
+            this.d.a(entity.y(), entitytrackerentry);
+
             // CanaryMod: update hidden player tracking state
             if (s0 instanceof EntityPlayerMP) {
                 EntityPlayerMP entityplayermp = (EntityPlayerMP) s0;
@@ -182,10 +177,10 @@ public class EntityTracker {
                     return s0;
                 }
             });
-            s0.a(crashreportcategory);
+            entity.a(crashreportcategory);
             CrashReportCategory crashreportcategory1 = crashreport.a("Entity That Is Already Tracked");
 
-            ((EntityTrackerEntry) this.d.a(s0.y())).a.a(crashreportcategory1);
+            ((EntityTrackerEntry) this.d.a(entity.y())).a.a(crashreportcategory1);
 
             try {
                 throw new ReportedException(crashreport);
@@ -277,7 +272,7 @@ public class EntityTracker {
         while (iterator.hasNext()) {
             EntityTrackerEntry entitytrackerentry = (EntityTrackerEntry) iterator.next();
 
-            if (entitytrackerentry.a != entityplayermp && entitytrackerentry.a.ai == chunk.g && entitytrackerentry.a.ak == chunk.h) {
+            if (entitytrackerentry.a != entityplayermp && entitytrackerentry.a.ah == chunk.g && entitytrackerentry.a.aj == chunk.h) {
                 entitytrackerentry.b(entityplayermp);
             }
         }
@@ -300,14 +295,15 @@ public class EntityTracker {
     public Set<EntityTrackerEntry> getTrackedEntities() {
         return c;
     }
-    
+
     /**
      * Gets teh EntityTrackerEntry for the entity with the given uuid
-     * 
+     *
      * @param uuid
-     * @return 
+     *
+     * @return
      */
     public EntityTrackerEntry getTrackerEntry(int uuid) {
-        return (EntityTrackerEntry)d.a(uuid);
+        return (EntityTrackerEntry) d.a(uuid);
     }
 }

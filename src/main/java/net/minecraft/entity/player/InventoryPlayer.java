@@ -168,7 +168,7 @@ public class InventoryPlayer implements IInventory {
     public void k() {
         for (int i0 = 0; i0 < this.a.length; ++i0) {
             if (this.a[i0] != null) {
-                this.a[i0].a(this.d.p, this.d, i0, this.c == i0);
+                this.a[i0].a(this.d.o, this.d, i0, this.c == i0);
             }
         }
     }
@@ -200,14 +200,14 @@ public class InventoryPlayer implements IInventory {
         int i;
 
         if (itemstack.i()) {
-            i = InventoryPlayer.i();
+            i = this.j();
             if (i >= 0) {
                 // CanaryMod: ItemPickUp
                 ItemPickupHook hook = (ItemPickupHook) new ItemPickupHook(((EntityPlayerMP) this.d).getPlayer(), (net.canarymod.api.entity.EntityItem) entityitem.getCanaryEntity()).call();
                 return !hook.isCanceled();
                 //
             }
-            else if (this.d.bF.d) {
+            else if (this.d.bE.d) {
                 return true;
             }
             else {
@@ -237,7 +237,7 @@ public class InventoryPlayer implements IInventory {
                 if (this.d instanceof EntityPlayerMP) { // Cause NPC may be picking something up...
                     return !((ItemPickupHook) new ItemPickupHook(((EntityPlayerMP) this.d).getPlayer(), (net.canarymod.api.entity.EntityItem) entityitem.getCanaryEntity()).call()).isCanceled();
                 }
-                return true; // TODO: NPC Behavior?
+                return true;
                 //
             }
             else {
@@ -259,7 +259,7 @@ public class InventoryPlayer implements IInventory {
                         itemstack.b = 0;
                         return true;
                     }
-                    else if (this.d.bF.d) {
+                    else if (this.d.bE.d) {
                         itemstack.b = 0;
                         return true;
                     }
@@ -273,7 +273,7 @@ public class InventoryPlayer implements IInventory {
                         itemstack.b = this.e(itemstack);
                     } while (itemstack.b > 0 && itemstack.b < i0);
 
-                    if (itemstack.b == i0 && this.d.bF.d) {
+                    if (itemstack.b == i0 && this.d.bE.d) {
                         itemstack.b = 0;
                         return true;
                     }
@@ -521,7 +521,7 @@ public class InventoryPlayer implements IInventory {
     }
 
     public boolean a(EntityPlayer entityplayer) {
-        return this.d.L ? false : entityplayer.e(this.d) <= 64.0D;
+        return this.d.K ? false : entityplayer.f(this.d) <= 64.0D;
     }
 
     public boolean c(ItemStack itemstack) {
