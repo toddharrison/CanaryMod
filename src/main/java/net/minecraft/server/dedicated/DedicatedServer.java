@@ -24,7 +24,6 @@ import net.minecraft.profiler.PlayerUsageSnooper;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.ServerEula;
 import net.minecraft.server.gui.MinecraftServerGui;
-import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraft.server.management.ServerConfigurationManager;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.CryptManager;
@@ -54,7 +53,7 @@ public class DedicatedServer extends MinecraftServer implements IServer {
     private final List<ServerCommand> j = Collections.synchronizedList(new ArrayList<ServerCommand>());
     private RConThreadQuery k;
     private RConThreadMain l;
-    private PropertyManager m; // CanaryMod: TODO: darkdiplomat- need this a minute, even if it is technically unused
+    // CanaryMod - Removed private PropertyManager m;
     private ServerEula n;
     // CanaryMod - Removed private boolean o;
     // CanaryMod - Removed private WorldSettings.GameType p;
@@ -229,9 +228,11 @@ public class DedicatedServer extends MinecraftServer implements IServer {
                 this.ax().c();
             }
 
+            /* CanaryMod: Convert unnessary
             if (!PreYggdrasilConverter.a(this.m)) {
                 return false;
             } else {
+            */
                 this.a((ServerConfigurationManager) (new DedicatedPlayerList(this)));
                 long i1 = System.nanoTime();
 
@@ -308,7 +309,9 @@ public class DedicatedServer extends MinecraftServer implements IServer {
                 }
 
                 return true;
+            /*
             }
+            */
         }
     }
 
@@ -524,6 +527,7 @@ public class DedicatedServer extends MinecraftServer implements IServer {
     }
 
     protected boolean aE() throws IOException {
+        /* CanaryMod: Vanilla Files Update disabled
         boolean flag0 = false;
 
         int i0;
@@ -582,6 +586,8 @@ public class DedicatedServer extends MinecraftServer implements IServer {
         }
 
         return flag0 || flag1 || flag2 || flag3 || flag4;
+        */
+        return true;
     }
 
     private void aG() {
