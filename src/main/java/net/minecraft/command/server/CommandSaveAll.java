@@ -47,7 +47,7 @@ public class CommandSaveAll extends CommandBase {
                 icommandsender.a(new ChatComponentTranslation("commands.save.flushStart", new Object[0]));
 
                 for (net.canarymod.api.world.World w : minecraftserver.worldManager.getAllWorlds()) {
-                    WorldServer worldserver = (WorldServer) ((CanaryWorld) w).getHandle();
+                    worldserver = (WorldServer) ((CanaryWorld) w).getHandle();
 
                     if (worldserver != null) {
                         flag0 = worldserver.c;
@@ -59,8 +59,7 @@ public class CommandSaveAll extends CommandBase {
 
                 icommandsender.a(new ChatComponentTranslation("commands.save.flushEnd", new Object[0]));
             }
-        }
-        catch (MinecraftException minecraftexception) {
+        } catch (MinecraftException minecraftexception) {
             a(icommandsender, this, "commands.save.failed", new Object[]{minecraftexception.getMessage()});
             return;
         }

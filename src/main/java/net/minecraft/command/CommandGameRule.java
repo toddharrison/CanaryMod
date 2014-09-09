@@ -32,8 +32,8 @@ public class CommandGameRule extends CommandBase {
             String s1 = astring[1];
             // CanaryMod: Fixes for MultiWorld
             GameRules gamerules =
-                    icommandsender instanceof EntityPlayerMP ? ((EntityPlayerMP) icommandsender).p.N()
-                            : icommandsender instanceof TileEntityCommandBlock ? ((TileEntityCommandBlock) icommandsender).w().N()
+                    icommandsender instanceof EntityPlayerMP ? ((EntityPlayerMP) icommandsender).o.O()
+                            : icommandsender instanceof TileEntityCommandBlock ? ((TileEntityCommandBlock) icommandsender).w().O()
                             : icommandsender instanceof EntityMinecartCommandBlock ? this.d() //NOT YET IMPLEMENTED
                             : this.d();
             //
@@ -41,17 +41,15 @@ public class CommandGameRule extends CommandBase {
             if (gamerules.e(s0)) {
                 gamerules.b(s0, s1);
                 a(icommandsender, this, "commands.gamerule.success", new Object[0]);
-            }
-            else {
+            } else {
                 a(icommandsender, this, "commands.gamerule.norule", new Object[]{s0});
             }
-        }
-        else if (astring.length == 1) {
+        } else if (astring.length == 1) {
             s0 = astring[0];
             // CanaryMod: Fixes for MultiWorld
             GameRules gamerules1 =
-                    icommandsender instanceof EntityPlayerMP ? ((EntityPlayerMP) icommandsender).p.N() //
-                            : icommandsender instanceof TileEntityCommandBlock ? ((TileEntityCommandBlock) icommandsender).w().N() //
+                    icommandsender instanceof EntityPlayerMP ? ((EntityPlayerMP) icommandsender).o.O() //
+                            : icommandsender instanceof TileEntityCommandBlock ? ((TileEntityCommandBlock) icommandsender).w().O() //
                             : icommandsender instanceof EntityMinecartCommandBlock ? this.d() //NOT YET IMPLEMENTED
                             : this.d(); //
             //
@@ -60,17 +58,14 @@ public class CommandGameRule extends CommandBase {
                 String s2 = gamerules1.a(s0);
 
                 icommandsender.a((new ChatComponentText(s0)).a(" = ").a(s2));
-            }
-            else {
+            } else {
                 a(icommandsender, this, "commands.gamerule.norule", new Object[]{s0});
             }
-        }
-        else if (astring.length == 0) {
+        } else if (astring.length == 0) {
             GameRules gamerules2 = this.d();
 
             icommandsender.a(new ChatComponentText(a(gamerules2.b())));
-        }
-        else {
+        } else {
             throw new WrongUsageException("commands.gamerule.usage", new Object[0]);
         }
     }
@@ -78,8 +73,8 @@ public class CommandGameRule extends CommandBase {
     public List a(ICommandSender icommandsender, String[] astring) {
         // CanaryMod: Fixes for MultiWorld
         String[] rules =
-                icommandsender instanceof EntityPlayerMP ? ((EntityPlayerMP) icommandsender).p.N().b() //
-                        : icommandsender instanceof TileEntityCommandBlock ? ((TileEntityCommandBlock) icommandsender).w().N().b() //
+                icommandsender instanceof EntityPlayerMP ? ((EntityPlayerMP) icommandsender).o.O().b() //
+                        : icommandsender instanceof TileEntityCommandBlock ? ((TileEntityCommandBlock) icommandsender).w().O().b() //
                         : icommandsender instanceof EntityMinecartCommandBlock ? this.d().b() //NOT YET IMPLEMENTED
                         : this.d().b(); //
         //

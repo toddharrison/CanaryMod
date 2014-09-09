@@ -4,6 +4,7 @@ import net.canarymod.Canary;
 import net.canarymod.api.world.CanaryWorld;
 import net.minecraft.command.server.*;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.network.rcon.RConConsoleSource;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumChatFormatting;
@@ -63,8 +64,7 @@ public class ServerCommandManager extends CommandHandler implements IAdminComman
             this.a(new CommandWhitelist());
             this.a(new CommandSetPlayerTimeout());
             this.a(new CommandNetstat());
-        }
-        else {
+        } else {
             this.a(new CommandPublishLocalServer());
         }
 

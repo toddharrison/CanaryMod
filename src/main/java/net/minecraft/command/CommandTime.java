@@ -27,11 +27,9 @@ public class CommandTime extends CommandBase {
             if (astring[0].equals("set")) {
                 if (astring[1].equals("day")) {
                     i0 = 1000;
-                }
-                else if (astring[1].equals("night")) {
+                } else if (astring[1].equals("night")) {
                     i0 = 13000;
-                }
-                else {
+                } else {
                     i0 = a(icommandsender, astring[1], 0);
                 }
 
@@ -57,7 +55,7 @@ public class CommandTime extends CommandBase {
 
     protected void a(ICommandSender icommandsender, int i0) {
         // CanaryMod: MultiWorld fix
-        for (net.canarymod.api.world.World w : MinecraftServer.G().worldManager.getAllWorlds()) {
+        for (net.canarymod.api.world.World w : MinecraftServer.I().worldManager.getAllWorlds()) {
             WorldServer worldserver = (WorldServer) ((CanaryWorld) w).getHandle();
 
             if (worldserver != null) {
@@ -68,7 +66,7 @@ public class CommandTime extends CommandBase {
 
     protected void b(ICommandSender icommandsender, int i0) {
         // CanaryMod: MultiWorld fix
-        for (net.canarymod.api.world.World w : MinecraftServer.G().worldManager.getAllWorlds()) {
+        for (net.canarymod.api.world.World w : MinecraftServer.I().worldManager.getAllWorlds()) {
             WorldServer worldserver = (WorldServer) ((CanaryWorld) w).getHandle();
 
             if (worldserver != null) {
