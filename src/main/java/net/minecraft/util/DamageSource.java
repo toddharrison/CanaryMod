@@ -144,7 +144,7 @@ public class DamageSource {
         String s0 = "death.attack." + this.o;
         String s1 = s0 + ".player";
 
-        return entitylivingbase1 != null && StatCollector.c(s1) ? new ChatComponentTranslation(s1, new Object[]{ entitylivingbase.c_(), entitylivingbase1.c_() }) : new ChatComponentTranslation(s0, new Object[]{ entitylivingbase.c_() });
+        return entitylivingbase1 != null && StatCollector.c(s1) ? new ChatComponentTranslation(s1, new Object[]{entitylivingbase.c_(), entitylivingbase1.c_()}) : new ChatComponentTranslation(s0, new Object[]{entitylivingbase.c_()});
     }
 
     public boolean o() {

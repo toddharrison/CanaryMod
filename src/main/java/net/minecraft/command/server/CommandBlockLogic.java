@@ -87,13 +87,16 @@ public abstract class CommandBlockLogic implements ICommandSender {
             new CommandBlockCommandHook(getReference(), this.e.split(" ")).call();
             if (Canary.getServer().consoleCommand(this.e, this.getReference())) { // Redirect for Canary Console Commands too
                 this.b = 1;
-            } else if (Configuration.getServerConfig().isCommandBlockOpped()) {
+            }
+            else if (Configuration.getServerConfig().isCommandBlockOpped()) {
                 this.b = icommandmanager.a(this, this.e);
-            } else {
+            }
+            else {
                 this.b = 0;
             }
             //
-        } else {
+        }
+        else {
             this.b = 0;
         }
 

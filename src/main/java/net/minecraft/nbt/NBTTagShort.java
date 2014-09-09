@@ -21,7 +21,8 @@ public class NBTTagShort extends NBTBase.NBTPrimitive {
         dataoutput.writeShort(this.b);
     }
 
-    void a(DataInput datainput, int i0) throws IOException {
+    void a(DataInput datainput, int i0, NBTSizeTracker nbtsizetracker) throws IOException {
+        nbtsizetracker.a(16L);
         this.b = datainput.readShort();
     }
 

@@ -64,9 +64,11 @@ public class BlockRedstoneComparator extends BlockRedstoneDiode implements ITile
 
         if (i4 >= 15) {
             return true;
-        } else if (i4 == 0) {
+        }
+        else if (i4 == 0) {
             return false;
-        } else {
+        }
+        else {
             int i5 = this.h((IBlockAccess) world, i0, i1, i2, i3); // CanaryMod: Cast World to IBlockAccess
 
             return i5 == 0 ? true : i4 >= i5;
@@ -82,7 +84,8 @@ public class BlockRedstoneComparator extends BlockRedstoneDiode implements ITile
 
         if (block.M()) {
             i4 = block.g(world, i6, i1, i7, Direction.f[i5]);
-        } else if (i4 < 15 && block.r()) {
+        }
+        else if (i4 < 15 && block.r()) {
             i6 += Direction.a[i5];
             i7 += Direction.b[i5];
             block = world.a(i6, i1, i7);
@@ -126,7 +129,8 @@ public class BlockRedstoneComparator extends BlockRedstoneDiode implements ITile
             if (i4 != i5 || this.c(i3) != this.a(world, i0, i1, i2, i3)) {
                 if (this.i(world, i0, i1, i2, i3)) {
                     world.a(i0, i1, i2, this, this.b(0), -1);
-                } else {
+                }
+                else {
                     world.a(i0, i1, i2, this, this.b(0), 0);
                 }
             }
@@ -151,7 +155,8 @@ public class BlockRedstoneComparator extends BlockRedstoneDiode implements ITile
 
             if (flag1 && !flag0) {
                 world.a(i0, i1, i2, i3 & -9, 2);
-            } else if (!flag1 && flag0) {
+            }
+            else if (!flag1 && flag0) {
                 world.a(i0, i1, i2, i3 | 8, 2);
             }
 

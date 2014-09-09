@@ -15,12 +15,7 @@ import net.minecraft.potion.PotionHelper;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ItemPotion extends Item {
 
@@ -119,12 +114,12 @@ public class ItemPotion extends Item {
             --itemstack.b;
         }
 
-        if (!entityplayer.bF.d) {
+        if (!entityplayer.bE.d) {
             if (itemstack.b <= 0) {
                 return new ItemStack(Items.bo);
             }
 
-            entityplayer.bn.a(new ItemStack(Items.bo));
+            entityplayer.bm.a(new ItemStack(Items.bo));
         }
 
         return itemstack;
@@ -140,7 +135,7 @@ public class ItemPotion extends Item {
 
     public ItemStack a(ItemStack itemstack, World world, EntityPlayer entityplayer) {
         if (g(itemstack.k())) {
-            if (!entityplayer.bF.d) {
+            if (!entityplayer.bE.d) {
                 --itemstack.b;
             }
 

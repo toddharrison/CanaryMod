@@ -508,7 +508,7 @@ public abstract class World implements IBlockAccess {
 
                     public String call() {
                         try {
-                            return String.format("ID #%d (%s // %s)", new Object[]{ Integer.valueOf(Block.b(block)), block.a(), block.getClass().getCanonicalName() });
+                            return String.format("ID #%d (%s // %s)", new Object[]{Integer.valueOf(Block.b(block)), block.a(), block.getClass().getCanonicalName()});
                         }
                         catch (Throwable throwable2) {
                             return "ID #" + Block.b(block);
@@ -2818,7 +2818,8 @@ public abstract class World implements IBlockAccess {
                 if (!world_cfg.getSpawnableWaterAnimals().contains(fqEntityName)) {
                     return false;
                 }
-            } else if (!world_cfg.getSpawnableAnimals().contains(fqEntityName)) {
+            }
+            else if (!world_cfg.getSpawnableAnimals().contains(fqEntityName)) {
                 return false;
             }
         }

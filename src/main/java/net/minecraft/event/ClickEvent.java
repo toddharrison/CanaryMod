@@ -78,17 +78,17 @@ public class ClickEvent {
         RUN_COMMAND(true), //
         SUGGEST_COMMAND(true);
 
-        private static final Map<String, Action> e = Maps.newHashMap();
-        private final boolean f;
+        private static final Map<String, Action> f = Maps.newHashMap();
+        private final boolean g;
         private final CanaryClickEventAction ccea; // CanaryMod
 
         private Action(boolean flag0) {
-            this.f = flag0;
+            this.g = flag0;
             ccea = new CanaryClickEventAction(this); // CanaryMod: install wrapper
         }
 
         public boolean a() {
-            return this.f;
+            return this.g;
         }
 
         public String b() {

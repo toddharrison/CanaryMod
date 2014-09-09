@@ -51,7 +51,7 @@ public class S23PacketBlockChange extends Packet {
     }
 
     public String b() {
-        return String.format("type=%d, data=%d, x=%d, y=%d, z=%d", new Object[]{ Integer.valueOf(Block.b(this.d)), Integer.valueOf(this.e), Integer.valueOf(this.a), Integer.valueOf(this.b), Integer.valueOf(this.c) });
+        return String.format("type=%d, data=%d, x=%d, y=%d, z=%d", new Object[]{Integer.valueOf(Block.b(this.d)), Integer.valueOf(this.e), Integer.valueOf(this.a), Integer.valueOf(this.b), Integer.valueOf(this.c)});
     }
 
     public void a(INetHandler inethandler) {

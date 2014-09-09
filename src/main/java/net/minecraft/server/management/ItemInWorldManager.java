@@ -53,7 +53,7 @@ public class ItemInWorldManager {
         }
         //
         this.c = worldsettings_gametype;
-        worldsettings_gametype.a(this.b.bF);
+        worldsettings_gametype.a(this.b.bE);
         this.b.q();
     }
 
@@ -86,7 +86,7 @@ public class ItemInWorldManager {
                 this.j = false;
             }
             else {
-                f0 = block.a(this.b, this.b.p, this.k, this.l, this.m) * (float) (i1 + 1);
+                f0 = block.a(this.b, this.b.o, this.k, this.l, this.m) * (float) (i1 + 1);
                 i0 = (int) (f0 * 10.0F);
                 if (i0 != this.o) {
                     this.a.d(this.b.y(), this.k, this.l, this.m, i0);
@@ -110,7 +110,7 @@ public class ItemInWorldManager {
             else {
                 int i2 = this.i - this.e;
 
-                f0 = block1.a(this.b, this.b.p, this.f, this.g, this.h) * (float) (i2 + 1);
+                f0 = block1.a(this.b, this.b.o, this.f, this.g, this.h) * (float) (i2 + 1);
                 i0 = (int) (f0 * 10.0F);
                 if (i0 != this.o) {
                     this.a.d(this.b.y(), this.f, this.g, this.h, i0);
@@ -145,7 +145,7 @@ public class ItemInWorldManager {
 
                 if (block.o() != Material.a) {
                     block.a(this.a, i0, i1, i2, (EntityPlayer) this.b);
-                    f0 = block.a(this.b, this.b.p, i0, i1, i2);
+                    f0 = block.a(this.b, this.b.o, i0, i1, i2);
                 }
 
                 if (block.o() != Material.a && f0 >= 1.0F) {
@@ -171,7 +171,7 @@ public class ItemInWorldManager {
             Block block = this.a.a(i0, i1, i2);
 
             if (block.o() != Material.a) {
-                float f0 = block.a(this.b, this.b.p, i0, i1, i2) * (float) (i3 + 1);
+                float f0 = block.a(this.b, this.b.o, i0, i1, i2) * (float) (i3 + 1);
 
                 if (f0 >= 0.7F) {
                     this.d = false;
@@ -234,13 +234,13 @@ public class ItemInWorldManager {
                 this.b.a.a((Packet) (new S23PacketBlockChange(i0, i1, i2, this.a)));
             }
             else {
-                ItemStack itemstack = this.b.bD();
+                ItemStack itemstack = this.b.bF();
                 boolean flag1 = this.b.a(block);
 
                 if (itemstack != null) {
                     itemstack.a(this.a, block, i0, i1, i2, this.b);
                     if (itemstack.b == 0) {
-                        this.b.bE();
+                        this.b.bG();
                     }
                 }
 
@@ -272,7 +272,7 @@ public class ItemInWorldManager {
             return false;
         }
         else {
-            entityplayer.bn.a[entityplayer.bn.c] = itemstack1;
+            entityplayer.bm.a[entityplayer.bm.c] = itemstack1;
             if (this.d()) {
                 itemstack1.b = i0;
                 if (itemstack1.g()) {
@@ -281,11 +281,11 @@ public class ItemInWorldManager {
             }
 
             if (itemstack1.b == 0) {
-                entityplayer.bn.a[entityplayer.bn.c] = null;
+                entityplayer.bm.a[entityplayer.bm.c] = null;
             }
 
-            if (!entityplayer.bw()) {
-                ((EntityPlayerMP) entityplayer).a(entityplayer.bo);
+            if (!entityplayer.by()) {
+                ((EntityPlayerMP) entityplayer).a(entityplayer.bn);
             }
 
             return true;

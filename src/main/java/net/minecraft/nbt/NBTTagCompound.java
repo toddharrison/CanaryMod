@@ -35,7 +35,7 @@ public class NBTTagCompound extends NBTBase {
         dataoutput.writeByte(0);
     }
 
-    void a(DataInput datainput, int i0) throws IOException {
+    void a(DataInput datainput, int i0, NBTSizeTracker nbtsizetracker) throws IOException {
         if (i0 > 512) {
             throw new RuntimeException("Tried to read NBT tag with too high complexity, depth > 512");
         }
@@ -44,9 +44,11 @@ public class NBTTagCompound extends NBTBase {
 
             byte b0;
 
-            while ((b0 = a(datainput)) != 0) {
-                String s0 = b(datainput);
-                NBTBase nbtbase = a(b0, s0, datainput, i0 + 1);
+            while ((b0 = a(datainput, nbtsizetracker)) != 0) {
+                String s0 = b(datainput, nbtsizetracker);
+
+                nbtsizetracker.a((long) (16 * s0.length()));
+                NBTBase nbtbase = a(b0, s0, datainput, i0 + 1, nbtsizetracker);
 
                 this.c.put(s0, nbtbase);
             }
@@ -123,24 +125,12 @@ public class NBTTagCompound extends NBTBase {
     public boolean b(String s0, int i0) {
         byte b0 = this.b(s0);
 
-        if (b0 == i0) {
-            return true;
-        }
-        else if (i0 != 99) {
-            if (b0 > 0) {
-                b.warn("NBT tag {} was of wrong type; expected {}, found {}", new Object[]{ s0, g(i0), g(b0) });
-            }
-
-            return false;
-        }
-        else {
-            return b0 == 1 || b0 == 2 || b0 == 3 || b0 == 4 || b0 == 5 || b0 == 6;
-        }
+        return b0 == i0 ? true : (i0 != 99 ? false : b0 == 1 || b0 == 2 || b0 == 3 || b0 == 4 || b0 == 5 || b0 == 6);
     }
 
     public byte d(String s0) {
         try {
-            return !this.c.containsKey(s0) ? 0 : ((NBTPrimitive) this.c.get(s0)).f();
+            return !this.c.containsKey(s0) ? 0 : ((NBTBase.NBTPrimitive) this.c.get(s0)).f();
         }
         catch (ClassCastException classcastexception) {
             return (byte) 0;
@@ -149,7 +139,7 @@ public class NBTTagCompound extends NBTBase {
 
     public short e(String s0) {
         try {
-            return !this.c.containsKey(s0) ? 0 : ((NBTPrimitive) this.c.get(s0)).e();
+            return !this.c.containsKey(s0) ? 0 : ((NBTBase.NBTPrimitive) this.c.get(s0)).e();
         }
         catch (ClassCastException classcastexception) {
             return (short) 0;
@@ -158,7 +148,7 @@ public class NBTTagCompound extends NBTBase {
 
     public int f(String s0) {
         try {
-            return !this.c.containsKey(s0) ? 0 : ((NBTPrimitive) this.c.get(s0)).d();
+            return !this.c.containsKey(s0) ? 0 : ((NBTBase.NBTPrimitive) this.c.get(s0)).d();
         }
         catch (ClassCastException classcastexception) {
             return 0;
@@ -167,7 +157,7 @@ public class NBTTagCompound extends NBTBase {
 
     public long g(String s0) {
         try {
-            return !this.c.containsKey(s0) ? 0L : ((NBTPrimitive) this.c.get(s0)).c();
+            return !this.c.containsKey(s0) ? 0L : ((NBTBase.NBTPrimitive) this.c.get(s0)).c();
         }
         catch (ClassCastException classcastexception) {
             return 0L;

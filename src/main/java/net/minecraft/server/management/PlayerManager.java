@@ -18,76 +18,76 @@ import java.util.List;
 
 public class PlayerManager {
 
-    private final WorldServer a;
-    private final List b = new ArrayList();
-    private final LongHashMap c = new LongHashMap();
-    private final List d = new ArrayList();
+    private static final Logger a = LogManager.getLogger();
+    private final WorldServer b;
+    private final List c = new ArrayList();
+    private final LongHashMap d = new LongHashMap();
     private final List e = new ArrayList();
-    private final int f;
-    private long g;
-    private final int[][] h = new int[][]{ { 1, 0 }, { 0, 1 }, { -1, 0 }, { 0, -1 } };
+    private final List f = new ArrayList();
+    private int g;
+    private long h;
+    private final int[][] i = new int[][]{{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
 
     // CanaryMod
     private CanaryPlayerManager playerManager;
 
     //
-    public PlayerManager(WorldServer worldserver, int i0) {
-        if (i0 > 15) {
-            throw new IllegalArgumentException("Too big view radius!");
-        }
-        else if (i0 < 3) {
-            throw new IllegalArgumentException("Too small view radius!");
-        }
-        else {
-            this.f = i0;
-            this.a = worldserver;
-        }
+    public PlayerManager(WorldServer worldserver) {
+        this.b = worldserver;
+        this.a(worldserver.q().ah().s());
         playerManager = new CanaryPlayerManager(this, worldserver.getCanaryWorld());
     }
 
     public WorldServer a() {
-        return this.a;
+        return this.b;
     }
 
     public void b() {
-        long i0 = this.a.H();
+        long i0 = this.b.I();
         int i1;
-        PlayerInstance playermanager_playerinstance;
+        PlayerManager.PlayerInstance playermanager_playerinstance;
 
-        if (i0 - this.g > 8000L) {
-            this.g = i0;
+        if (i0 - this.h > 8000L) {
+            this.h = i0;
 
-            for (i1 = 0; i1 < this.e.size(); ++i1) {
-                playermanager_playerinstance = (PlayerInstance) this.e.get(i1);
+            for (i1 = 0; i1 < this.f.size(); ++i1) {
+                playermanager_playerinstance = (PlayerManager.PlayerInstance) this.f.get(i1);
                 playermanager_playerinstance.b();
                 playermanager_playerinstance.a();
             }
         }
         else {
-            for (i1 = 0; i1 < this.d.size(); ++i1) {
-                playermanager_playerinstance = (PlayerInstance) this.d.get(i1);
+            for (i1 = 0; i1 < this.e.size(); ++i1) {
+                playermanager_playerinstance = (PlayerManager.PlayerInstance) this.e.get(i1);
                 playermanager_playerinstance.b();
             }
         }
 
-        this.d.clear();
-        if (this.b.isEmpty()) {
-            WorldProvider worldprovider = this.a.t;
+        this.e.clear();
+        if (this.c.isEmpty()) {
+            WorldProvider worldprovider = this.b.t;
 
             if (!worldprovider.e()) {
-                this.a.b.a();
+                this.b.b.b();
             }
         }
     }
 
-    private PlayerInstance a(int i0, int i1, boolean flag0) {
+    public boolean a(int i0, int i1) {
         long i2 = (long) i0 + 2147483647L | (long) i1 + 2147483647L << 32;
-        PlayerInstance playermanager_playerinstance = (PlayerInstance) this.c.a(i2);
+
+        return this.d.a(i2) != null;
+    }
+
+
+    private PlayerManager.PlayerInstance a(int i0, int i1, boolean flag0) {
+        long i2 = (long) i0 + 2147483647L | (long) i1 + 2147483647L << 32;
+        PlayerManager.PlayerInstance playermanager_playerinstance = (PlayerManager.PlayerInstance) this.d.a(i2);
 
         if (playermanager_playerinstance == null && flag0) {
-            playermanager_playerinstance = new PlayerInstance(i0, i1);
-            this.c.a(i2, playermanager_playerinstance);
-            this.e.add(playermanager_playerinstance);
+            playermanager_playerinstance = new PlayerManager.PlayerInstance(i0, i1);
+            this.d.a(i2, playermanager_playerinstance);
+            this.f.add(playermanager_playerinstance);
         }
 
         return playermanager_playerinstance;
@@ -96,7 +96,7 @@ public class PlayerManager {
     public void a(int i0, int i1, int i2) {
         int i3 = i0 >> 4;
         int i4 = i2 >> 4;
-        PlayerInstance playermanager_playerinstance = this.a(i3, i4, false);
+        PlayerManager.PlayerInstance playermanager_playerinstance = this.a(i3, i4, false);
 
         if (playermanager_playerinstance != null) {
             playermanager_playerinstance.a(i0 & 15, i1, i2 & 15);
@@ -104,28 +104,28 @@ public class PlayerManager {
     }
 
     public void a(EntityPlayerMP entityplayermp) {
-        int i0 = (int) entityplayermp.t >> 4;
-        int i1 = (int) entityplayermp.v >> 4;
+        int i0 = (int) entityplayermp.s >> 4;
+        int i1 = (int) entityplayermp.u >> 4;
 
-        entityplayermp.d = entityplayermp.t;
-        entityplayermp.e = entityplayermp.v;
+        entityplayermp.d = entityplayermp.s;
+        entityplayermp.e = entityplayermp.u;
 
-        for (int i2 = i0 - this.f; i2 <= i0 + this.f; ++i2) {
-            for (int i3 = i1 - this.f; i3 <= i1 + this.f; ++i3) {
+        for (int i2 = i0 - this.g; i2 <= i0 + this.g; ++i2) {
+            for (int i3 = i1 - this.g; i3 <= i1 + this.g; ++i3) {
                 this.a(i2, i3, true).a(entityplayermp);
             }
         }
 
-        this.b.add(entityplayermp);
+        this.c.add(entityplayermp);
         this.b(entityplayermp);
     }
 
     public void b(EntityPlayerMP entityplayermp) {
         ArrayList arraylist = new ArrayList(entityplayermp.f);
         int i0 = 0;
-        int i1 = this.f;
-        int i2 = (int) entityplayermp.t >> 4;
-        int i3 = (int) entityplayermp.v >> 4;
+        int i1 = this.g;
+        int i2 = (int) entityplayermp.s >> 4;
+        int i3 = (int) entityplayermp.u >> 4;
         int i4 = 0;
         int i5 = 0;
         ChunkCoordIntPair chunkcoordintpair = this.a(i2, i3, true).c;
@@ -139,7 +139,7 @@ public class PlayerManager {
 
         for (i6 = 1; i6 <= i1 * 2; ++i6) {
             for (int i7 = 0; i7 < 2; ++i7) {
-                int[] aint = this.h[i0++ % 4];
+                int[] aint = this.i[i0++ % 4];
 
                 for (int i8 = 0; i8 < i6; ++i8) {
                     i4 += aint[0];
@@ -155,8 +155,8 @@ public class PlayerManager {
         i0 %= 4;
 
         for (i6 = 0; i6 < i1 * 2; ++i6) {
-            i4 += this.h[i0][0];
-            i5 += this.h[i0][1];
+            i4 += this.i[i0][0];
+            i5 += this.i[i0][1];
             chunkcoordintpair = this.a(i2 + i4, i3 + i5, true).c;
             if (arraylist.contains(chunkcoordintpair)) {
                 entityplayermp.f.add(chunkcoordintpair);
@@ -168,9 +168,9 @@ public class PlayerManager {
         int i0 = (int) entityplayermp.d >> 4;
         int i1 = (int) entityplayermp.e >> 4;
 
-        for (int i2 = i0 - this.f; i2 <= i0 + this.f; ++i2) {
-            for (int i3 = i1 - this.f; i3 <= i1 + this.f; ++i3) {
-                PlayerInstance playermanager_playerinstance = this.a(i2, i3, false);
+        for (int i2 = i0 - this.g; i2 <= i0 + this.g; ++i2) {
+            for (int i3 = i1 - this.g; i3 <= i1 + this.g; ++i3) {
+                PlayerManager.PlayerInstance playermanager_playerinstance = this.a(i2, i3, false);
 
                 if (playermanager_playerinstance != null) {
                     playermanager_playerinstance.b(entityplayermp);
@@ -178,7 +178,7 @@ public class PlayerManager {
             }
         }
 
-        this.b.remove(entityplayermp);
+        this.c.remove(entityplayermp);
     }
 
     private boolean a(int i0, int i1, int i2, int i3, int i4) {
@@ -189,16 +189,16 @@ public class PlayerManager {
     }
 
     public void d(EntityPlayerMP entityplayermp) {
-        int i0 = (int) entityplayermp.t >> 4;
-        int i1 = (int) entityplayermp.v >> 4;
-        double d0 = entityplayermp.d - entityplayermp.t;
-        double d1 = entityplayermp.e - entityplayermp.v;
+        int i0 = (int) entityplayermp.s >> 4;
+        int i1 = (int) entityplayermp.u >> 4;
+        double d0 = entityplayermp.d - entityplayermp.s;
+        double d1 = entityplayermp.e - entityplayermp.u;
         double d2 = d0 * d0 + d1 * d1;
 
         if (d2 >= 64.0D) {
             int i2 = (int) entityplayermp.d >> 4;
             int i3 = (int) entityplayermp.e >> 4;
-            int i4 = this.f;
+            int i4 = this.g;
             int i5 = i0 - i2;
             int i6 = i1 - i3;
 
@@ -210,7 +210,7 @@ public class PlayerManager {
                         }
 
                         if (!this.a(i7 - i5, i8 - i6, i0, i1, i4)) {
-                            PlayerInstance playermanager_playerinstance = this.a(i7 - i5, i8 - i6, false);
+                            PlayerManager.PlayerInstance playermanager_playerinstance = this.a(i7 - i5, i8 - i6, false);
 
                             if (playermanager_playerinstance != null) {
                                 playermanager_playerinstance.b(entityplayermp);
@@ -220,19 +220,58 @@ public class PlayerManager {
                 }
 
                 this.b(entityplayermp);
-                entityplayermp.d = entityplayermp.t;
-                entityplayermp.e = entityplayermp.v;
+                entityplayermp.d = entityplayermp.s;
+                entityplayermp.e = entityplayermp.u;
             }
         }
     }
 
     public boolean a(EntityPlayerMP entityplayermp, int i0, int i1) {
-        PlayerInstance playermanager_playerinstance = this.a(i0, i1, false);
+        PlayerManager.PlayerInstance playermanager_playerinstance = this.a(i0, i1, false);
 
-        return playermanager_playerinstance == null ? false : playermanager_playerinstance.b.contains(entityplayermp) && !entityplayermp.f.contains(playermanager_playerinstance.c);
+        return playermanager_playerinstance != null && playermanager_playerinstance.b.contains(entityplayermp) && !entityplayermp.f.contains(playermanager_playerinstance.c);
     }
 
-    public static int a(int i0) {
+    public void a(int i0) {
+        i0 = MathHelper.a(i0, 3, 20);
+        if (i0 != this.g) {
+            int i1 = i0 - this.g;
+            Iterator iterator = this.c.iterator();
+
+            while (iterator.hasNext()) {
+                EntityPlayerMP entityplayermp = (EntityPlayerMP) iterator.next();
+                int i2 = (int) entityplayermp.s >> 4;
+                int i3 = (int) entityplayermp.u >> 4;
+                int i4;
+                int i5;
+
+                if (i1 > 0) {
+                    for (i4 = i2 - i0; i4 <= i2 + i0; ++i4) {
+                        for (i5 = i3 - i0; i5 <= i3 + i0; ++i5) {
+                            PlayerManager.PlayerInstance playermanager_playerinstance = this.a(i4, i5, true);
+
+                            if (!playermanager_playerinstance.b.contains(entityplayermp)) {
+                                playermanager_playerinstance.a(entityplayermp);
+                            }
+                        }
+                    }
+                }
+                else {
+                    for (i4 = i2 - this.g; i4 <= i2 + this.g; ++i4) {
+                        for (i5 = i3 - this.g; i5 <= i3 + this.g; ++i5) {
+                            if (!this.a(i4, i5, i2, i3, i0)) {
+                                this.a(i4, i5, true).b(entityplayermp);
+                            }
+                        }
+                    }
+                }
+            }
+
+            this.g = i0;
+        }
+    }
+
+    public static int b(int i0) {
         return i0 * 16 - 16;
     }
 
@@ -245,43 +284,43 @@ public class PlayerManager {
         private int f;
         private long g;
 
-        public PlayerInstance(int packet1, int i10) {
-            this.c = new ChunkCoordIntPair(packet1, i10);
-            PlayerManager.this.a().b.c(packet1, i10);
+        public PlayerInstance(int i0, int i1) {
+            this.c = new ChunkCoordIntPair(i0, i1);
+            PlayerManager.this.a().b.c(i0, i1);
         }
 
-        public void a(EntityPlayerMP tileentity) {
-            if (this.b.contains(tileentity)) {
-                throw new IllegalStateException("Failed to add player. " + tileentity + " already is in chunk " + this.c.a + ", " + this.c.b);
+        public void a(EntityPlayerMP entityplayermp) {
+            if (this.b.contains(entityplayermp)) {
+                PlayerManager.a.debug("Failed to add player. " + entityplayermp + " already is in chunk " + this.c.a + ", " + this.c.b);
             }
             else {
                 if (this.b.isEmpty()) {
-                    this.g = PlayerManager.this.a.H();
+                    this.g = PlayerManager.this.b.I();
                 }
 
-                this.b.add(tileentity);
-                tileentity.f.add(this.c);
+                this.b.add(entityplayermp);
+                entityplayermp.f.add(this.c);
             }
         }
 
-        public void b(EntityPlayerMP tileentity) {
-            if (this.b.contains(tileentity)) {
-                Chunk packet1 = PlayerManager.this.a.e(this.c.a, this.c.b);
+        public void b(EntityPlayerMP entityplayermp) {
+            if (this.b.contains(entityplayermp)) {
+                Chunk chunk = PlayerManager.this.b.e(this.c.a, this.c.b);
 
-                if (packet1.k()) {
-                    tileentity.a.a((Packet) (new S21PacketChunkData(packet1, true, 0)));
+                if (chunk.k()) {
+                    entityplayermp.a.a((Packet) (new S21PacketChunkData(chunk, true, 0)));
                 }
 
-                this.b.remove(tileentity);
-                tileentity.f.remove(this.c);
+                this.b.remove(entityplayermp);
+                entityplayermp.f.remove(this.c);
                 if (this.b.isEmpty()) {
-                    long i10 = (long) this.c.a + 2147483647L | (long) this.c.b + 2147483647L << 32;
+                    long i5 = (long) this.c.a + 2147483647L | (long) this.c.b + 2147483647L << 32;
 
-                    this.a(packet1);
-                    PlayerManager.this.c.d(i10);
-                    PlayerManager.this.e.remove(this);
+                    this.a(packet);
+                    PlayerManager.this.d.d(i5);
+                    PlayerManager.this.f.remove(this);
                     if (this.e > 0) {
-                        PlayerManager.this.d.remove(this);
+                        PlayerManager.this.e.remove(this);
                     }
 
                     PlayerManager.this.a().b.b(this.c.a, this.c.b);
@@ -290,40 +329,40 @@ public class PlayerManager {
         }
 
         public void a() {
-            this.a(PlayerManager.this.a.e(this.c.a, this.c.b));
+            this.a(PlayerManager.this.b.e(this.c.a, this.c.b));
         }
 
-        private void a(Chunk tileentity) {
-            tileentity.s += PlayerManager.this.a.H() - this.g;
-            this.g = PlayerManager.this.a.H();
+        private void a(Chunk chunk) {
+            chunk.s += PlayerManager.this.b.I() - this.g;
+            this.g = PlayerManager.this.b.I();
         }
 
-        public void a(int tileentity, int packet1, int i10) {
+        public void a(int i0, int i1, int i2) {
             if (this.e == 0) {
-                PlayerManager.this.d.add(this);
+                PlayerManager.this.e.add(this);
             }
 
-            this.f |= 1 << (packet1 >> 4);
+            this.f |= 1 << (i1 >> 4);
             if (this.e < 64) {
-                short i11 = (short) (tileentity << 12 | i10 << 8 | packet1);
+                short short1 = (short) (i0 << 12 | i2 << 8 | i1);
 
                 for (int list = 0; list < this.e; ++list) {
-                    if (this.d[list] == i11) {
+                    if (this.d[list] == short1) {
                         return;
                     }
                 }
 
-                this.d[this.e++] = i11;
+                this.d[this.e++] = short1;
             }
 
         }
 
-        public void a(Packet tileentity) {
-            for (int packet1 = 0; packet1 < this.b.size(); ++packet1) {
-                EntityPlayerMP i10 = (EntityPlayerMP) this.b.get(packet1);
+        public void a(Packet packet) {
+            for (int i0 = 0; i0 < this.b.size(); ++i0) {
+                EntityPlayerMP entityplayermp = (EntityPlayerMP) this.b.get(i0);
 
-                if (!i10.f.contains(this.c)) {
-                    i10.a.a(tileentity);
+                if (!entityplayermp.f.contains(this.c)) {
+                    entityplayermp.a.a(packet);
                 }
             }
 
@@ -331,47 +370,47 @@ public class PlayerManager {
 
         public void b() {
             if (this.e != 0) {
-                int tileentity;
-                int packet1;
-                int i10;
+                int i3;
+                int packet;
+                int i5;
 
                 if (this.e == 1) {
-                    tileentity = this.c.a * 16 + (this.d[0] >> 12 & 15);
-                    packet1 = this.d[0] & 255;
-                    i10 = this.c.b * 16 + (this.d[0] >> 8 & 15);
-                    this.a((Packet) (new S23PacketBlockChange(tileentity, packet1, i10, PlayerManager.this.a)));
-                    if (PlayerManager.this.a.a(tileentity, packet1, i10).u()) {
-                        this.a(PlayerManager.this.a.o(tileentity, packet1, i10));
+                    i3 = this.c.a * 16 + (this.d[0] >> 12 & 15);
+                    packet = this.d[0] & 255;
+                    i5 = this.c.b * 16 + (this.d[0] >> 8 & 15);
+                    this.a((Packet) (new S23PacketBlockChange(i3, packet, i5, PlayerManager.this.b)));
+                    if (PlayerManager.this.b.a(i3, packet, i5).u()) {
+                        this.a(PlayerManager.this.b.o(i3, packet, i5));
                     }
                 }
                 else {
-                    int i11;
+                    int i6;
 
                     if (this.e == 64) {
-                        tileentity = this.c.a * 16;
-                        packet1 = this.c.b * 16;
-                        this.a((Packet) (new S21PacketChunkData(PlayerManager.this.a.e(this.c.a, this.c.b), false, this.f)));
+                        i3 = this.c.a * 16;
+                        packet = this.c.b * 16;
+                        this.a((Packet) (new S21PacketChunkData(PlayerManager.this.b.e(this.c.a, this.c.b), false, this.f)));
 
-                        for (i10 = 0; i10 < 16; ++i10) {
-                            if ((this.f & 1 << i10) != 0) {
-                                i11 = i10 << 4;
-                                List list = PlayerManager.this.a.a(tileentity, i11, packet1, tileentity + 16, i11 + 16, packet1 + 16);
+                        for (i5 = 0; i5 < 16; ++i5) {
+                            if ((this.f & 1 << i5) != 0) {
+                                i6 = i5 << 4;
+                                List list = PlayerManager.this.b.a(i3, i6, packet, i3 + 16, i6 + 16, packet + 16);
 
-                                for (int i12 = 0; i12 < list.size(); ++i12) {
-                                    this.a((TileEntity) list.get(i12));
+                                for (int i7 = 0; i7 < list.size(); ++i7) {
+                                    this.a((TileEntity) list.get(i7));
                                 }
                             }
                         }
                     }
                     else {
-                        this.a((Packet) (new S22PacketMultiBlockChange(this.e, this.d, PlayerManager.this.a.e(this.c.a, this.c.b))));
+                        this.a((Packet) (new S22PacketMultiBlockChange(this.e, this.d, PlayerManager.this.b.e(this.c.a, this.c.b))));
 
-                        for (tileentity = 0; tileentity < this.e; ++tileentity) {
-                            packet1 = this.c.a * 16 + (this.d[tileentity] >> 12 & 15);
-                            i10 = this.d[tileentity] & 255;
-                            i11 = this.c.b * 16 + (this.d[tileentity] >> 8 & 15);
-                            if (PlayerManager.this.a.a(packet1, i10, i11).u()) {
-                                this.a(PlayerManager.this.a.o(packet1, i10, i11));
+                        for (i3 = 0; i3 < this.e; ++i3) {
+                            packet = this.c.a * 16 + (this.d[i3] >> 12 & 15);
+                            i5 = this.d[i3] & 255;
+                            i6 = this.c.b * 16 + (this.d[i3] >> 8 & 15);
+                            if (PlayerManager.this.b.a(packet, i5, i6).u()) {
+                                this.a(PlayerManager.this.b.o(packet, i5, i6));
                             }
                         }
                     }
@@ -382,12 +421,12 @@ public class PlayerManager {
             }
         }
 
-        private void a(TileEntity tileentity) {
-            if (tileentity != null) {
-                Packet packet1 = tileentity.m();
+        private void a(TileEntity p_a_1_) {
+            if (p_a_1_ != null) {
+                Packet packet = p_a_1_.m();
 
-                if (packet1 != null) {
-                    this.a(packet1);
+                if (packet != null) {
+                    this.a(packet);
                 }
             }
 

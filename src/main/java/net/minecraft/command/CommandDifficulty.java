@@ -32,13 +32,13 @@ public class CommandDifficulty extends CommandBase {
             if (astring.length > 1) { // Add an argument to allow picking a world
                 boolean loaded = MinecraftServer.G().worldManager.worldIsLoaded(astring[1]);
                 if (!loaded) {
-                    a(icommandsender, "No world loaded of Name: '%s'", new Object[]{ astring[1] });
+                    a(icommandsender, "No world loaded of Name: '%s'", new Object[]{astring[1]});
                     return;
                 }
                 worldserver = (WorldServer) ((CanaryWorld) MinecraftServer.G().worldManager.getWorld(astring[1], false)).getHandle();
             }
             MinecraftServer.G().a(enumdifficulty, worldserver);
-            a(icommandsender, "commands.difficulty.success", new Object[]{ new ChatComponentTranslation(enumdifficulty.b(), new Object[0]) });
+            a(icommandsender, "commands.difficulty.success", new Object[]{new ChatComponentTranslation(enumdifficulty.b(), new Object[0])});
         }
         else {
             throw new WrongUsageException("commands.difficulty.usage", new Object[0]);
@@ -50,7 +50,7 @@ public class CommandDifficulty extends CommandBase {
     }
 
     public List a(ICommandSender icommandsender, String[] astring) {
-        return astring.length == 1 ? a(astring, new String[]{ "peaceful", "easy", "normal", "hard" })
+        return astring.length == 1 ? a(astring, new String[]{"peaceful", "easy", "normal", "hard"})
                 : astring.length == 2 ? TabCompleteHelper.matchToLoadedWorldOfDimension(astring, DimensionType.NORMAL) // Pass existing worlds to tab complete
                 : null;
     }

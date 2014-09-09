@@ -182,7 +182,8 @@ public class Bootstrap {
 
                 if (Material.h.equals(material)) {
                     d3 = 1.0D;
-                } else {
+                }
+                else {
                     if (!Material.a.equals(material) || !Material.h.equals(world.a(i0, i1 - 1, i2).o())) {
                         return this.b.a(iblocksource, itemstack);
                     }
@@ -253,7 +254,8 @@ public class Bootstrap {
 
                 if (Material.h.equals(material) && i3 == 0) {
                     item = Items.as;
-                } else {
+                }
+                else {
                     if (!Material.i.equals(material) || i3 != 0) {
                         return super.b(iblocksource, itemstack);
                     }
@@ -265,7 +267,8 @@ public class Bootstrap {
                 if (--itemstack.b == 0) {
                     itemstack.a(item);
                     itemstack.b = 1;
-                } else if (((TileEntityDispenser) iblocksource.j()).a(new ItemStack(item)) < 0) {
+                }
+                else if (((TileEntityDispenser) iblocksource.j()).a(new ItemStack(item)) < 0) {
                     this.b.a(iblocksource, new ItemStack(item));
                 }
 
@@ -288,10 +291,12 @@ public class Bootstrap {
                     if (itemstack.a(1, world.s)) {
                         itemstack.b = 0;
                     }
-                } else if (world.a(i0, i1, i2) == Blocks.W) {
+                }
+                else if (world.a(i0, i1, i2) == Blocks.W) {
                     Blocks.W.b(world, i0, i1, i2, 1);
                     world.f(i0, i1, i2);
-                } else {
+                }
+                else {
                     this.b = false;
                 }
 
@@ -301,7 +306,8 @@ public class Bootstrap {
             protected void a(IBlockSource iblocksource) {
                 if (this.b) {
                     iblocksource.k().c(1000, iblocksource.d(), iblocksource.e(), iblocksource.f(), 0);
-                } else {
+                }
+                else {
                     iblocksource.k().c(1001, iblocksource.d(), iblocksource.e(), iblocksource.f(), 0);
                 }
 
@@ -323,12 +329,14 @@ public class Bootstrap {
                         if (!world.E) {
                             world.c(2005, i16, i17, i18, 0);
                         }
-                    } else {
+                    }
+                    else {
                         this.b = false;
                     }
 
                     return itemstack;
-                } else {
+                }
+                else {
                     return super.b(iblocksource, itemstack);
                 }
             }
@@ -336,7 +344,8 @@ public class Bootstrap {
             protected void a(IBlockSource iblocksource) {
                 if (this.b) {
                     iblocksource.k().c(1000, iblocksource.d(), iblocksource.e(), iblocksource.f(), 0);
-                } else {
+                }
+                else {
                     iblocksource.k().c(1001, iblocksource.d(), iblocksource.e(), iblocksource.f(), 0);
                 }
 

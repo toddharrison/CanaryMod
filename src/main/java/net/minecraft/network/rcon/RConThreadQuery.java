@@ -1,17 +1,14 @@
 package net.minecraft.network.rcon;
 
 
-import java.io.IOException;
-import java.net.*;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Random;
 import net.canarymod.config.Configuration;
 import net.canarymod.config.ServerConfiguration;
 import net.minecraft.server.MinecraftServer;
+
+import java.io.IOException;
+import java.net.*;
+import java.util.*;
+import java.util.Map.Entry;
 
 
 public class RConThreadQuery extends RConThreadBase {
@@ -37,23 +34,25 @@ public class RConThreadQuery extends RConThreadBase {
     public RConThreadQuery(IServer iserver) {
         super(iserver, "Query Listener");
         this.i = serverConfig.getQueryPort();
-        this.s = iserver.x();
-        this.j = iserver.y();
-        this.l = iserver.z();
-        this.k = iserver.C();
-        this.m = iserver.M();
+        this.s = iserver.y();
+        this.j = iserver.z();
+        this.l = iserver.A();
+        this.k = iserver.D();
+        this.m = iserver.O();
         this.w = 0L;
         this.r = "0.0.0.0";
         if (0 != this.s.length() && !this.r.equals(this.s)) {
             this.r = this.s;
-        } else {
+        }
+        else {
             this.s = "0.0.0.0";
 
             try {
                 InetAddress inetaddress = InetAddress.getLocalHost();
 
                 this.r = inetaddress.getHostAddress();
-            } catch (UnknownHostException unknownhostexception) {
+            }
+            catch (UnknownHostException unknownhostexception) {
                 this.c("Unable to determine local host IP, please set server-ip in \'" + serverConfig.getFile().getFilePath() + "\' : " + unknownhostexception.getMessage());
             }
         }
@@ -88,10 +87,12 @@ public class RConThreadQuery extends RConThreadBase {
                     if (!this.c(datagrampacket).booleanValue()) {
                         this.a("Invalid challenge [" + socketaddress + "]");
                         return false;
-                    } else if (15 == i0) {
+                    }
+                    else if (15 == i0) {
                         this.a(this.b(datagrampacket), datagrampacket);
                         this.a("Rules [" + socketaddress + "]");
-                    } else {
+                    }
+                    else {
                         RConOutputStream rconoutputstream = new RConOutputStream(1460);
 
                         rconoutputstream.a((int) 0);
@@ -115,14 +116,15 @@ public class RConThreadQuery extends RConThreadBase {
                 default:
                     return true;
             }
-        } else {
+        }
+        else {
             this.a("Invalid packet [" + socketaddress + "]");
             return false;
         }
     }
 
     private byte[] b(DatagramPacket datagrampacket) throws IOException {
-        long i0 = MinecraftServer.ap();
+        long i0 = MinecraftServer.ar();
 
         if (i0 < this.w + 5000L) {
             byte[] abyte = this.v.a();
@@ -133,7 +135,8 @@ public class RConThreadQuery extends RConThreadBase {
             abyte[3] = abyte1[2];
             abyte[4] = abyte1[3];
             return abyte;
-        } else {
+        }
+        else {
             this.w = i0;
             this.v.b();
             this.v.a((int) 0);
@@ -148,9 +151,9 @@ public class RConThreadQuery extends RConThreadBase {
             this.v.a("game_id");
             this.v.a("MINECRAFT");
             this.v.a("version");
-            this.v.a(this.b.A());
+            this.v.a(this.b.B());
             this.v.a("plugins");
-            this.v.a(this.b.E());
+            this.v.a(this.b.G());
             this.v.a("map");
             this.v.a(this.m);
             this.v.a("numplayers");
@@ -165,7 +168,7 @@ public class RConThreadQuery extends RConThreadBase {
             this.v.a((int) 1);
             this.v.a("player_");
             this.v.a((int) 0);
-            String[] astring = this.b.D();
+            String[] astring = this.b.E();
             String[] astring1 = astring;
             int i1 = astring.length;
 
@@ -189,7 +192,8 @@ public class RConThreadQuery extends RConThreadBase {
 
         if (!this.t.containsKey(socketaddress)) {
             return Boolean.valueOf(false);
-        } else {
+        }
+        else {
             byte[] abyte = datagrampacket.getData();
 
             return ((RConThreadQuery.Auth) this.t.get(socketaddress)).a() != RConUtils.c(abyte, 7, datagrampacket.getLength()) ? Boolean.valueOf(false) : Boolean.valueOf(true);
@@ -205,7 +209,7 @@ public class RConThreadQuery extends RConThreadBase {
 
     private void f() {
         if (this.a) {
-            long i0 = MinecraftServer.ap();
+            long i0 = MinecraftServer.ar();
 
             if (i0 >= this.h + 30000L) {
                 this.h = i0;
@@ -225,7 +229,7 @@ public class RConThreadQuery extends RConThreadBase {
 
     public void run() {
         this.b("Query running on " + this.s + ":" + this.i);
-        this.h = MinecraftServer.ap();
+        this.h = MinecraftServer.ar();
         this.p = new DatagramPacket(this.o, this.o.length);
 
         try {
@@ -234,15 +238,19 @@ public class RConThreadQuery extends RConThreadBase {
                     this.n.receive(this.p);
                     this.f();
                     this.a(this.p);
-                } catch (SocketTimeoutException sockettimeoutexception) {
+                }
+                catch (SocketTimeoutException sockettimeoutexception) {
                     this.f();
-                } catch (PortUnreachableException portunreachableexception) {
+                }
+                catch (PortUnreachableException portunreachableexception) {
                     ;
-                } catch (IOException ioexception) {
+                }
+                catch (IOException ioexception) {
                     this.a((Exception) ioexception);
                 }
             }
-        } finally {
+        }
+        finally {
             this.e();
         }
 
@@ -255,7 +263,8 @@ public class RConThreadQuery extends RConThreadBase {
                     super.a();
                 }
 
-            } else {
+            }
+            else {
                 this.c("Invalid query port " + this.i + " found in \'" + this.b.b() + "\' (queries disabled)");
             }
         }
@@ -278,11 +287,14 @@ public class RConThreadQuery extends RConThreadBase {
             this.a(this.n);
             this.n.setSoTimeout(500);
             return true;
-        } catch (SocketException socketexception) {
+        }
+        catch (SocketException socketexception) {
             this.c("Unable to initialise query system on " + this.s + ":" + this.i + " (Socket): " + socketexception.getMessage());
-        } catch (UnknownHostException unknownhostexception) {
+        }
+        catch (UnknownHostException unknownhostexception) {
             this.c("Unable to initialise query system on " + this.s + ":" + this.i + " (Unknown Host): " + unknownhostexception.getMessage());
-        } catch (Exception exception) {
+        }
+        catch (Exception exception) {
             this.c("Unable to initialise query system on " + this.s + ":" + this.i + " (E): " + exception.getMessage());
         }
 
@@ -307,7 +319,7 @@ public class RConThreadQuery extends RConThreadBase {
             this.d[3] = abyte[6];
             this.f = new String(this.d);
             this.c = (new Random()).nextInt(16777216);
-            this.e = String.format("\t%s%d\u0000", new Object[] { this.f, Integer.valueOf(this.c)}).getBytes();
+            this.e = String.format("\t%s%d\u0000", new Object[]{this.f, Integer.valueOf(this.c)}).getBytes();
         }
 
         public Boolean a(long i0) {

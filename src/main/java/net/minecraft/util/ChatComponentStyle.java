@@ -4,14 +4,10 @@ package net.minecraft.util;
 import com.google.common.base.Function;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
+import net.canarymod.api.chat.CanaryChatComponent;
 
 import java.util.Iterator;
 import java.util.List;
-
-import net.canarymod.api.chat.CanaryChatComponent;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatStyle;
-import net.minecraft.util.IChatComponent;
 
 
 public abstract class ChatComponentStyle implements IChatComponent {
@@ -20,8 +16,7 @@ public abstract class ChatComponentStyle implements IChatComponent {
     private ChatStyle b;
     private final CanaryChatComponent canaryChatComponent; // CanaryMod
 
-    public ChatComponentStyle()
-    {
+    public ChatComponentStyle() {
         this.canaryChatComponent = new CanaryChatComponent(this);
     }
 
@@ -68,7 +63,7 @@ public abstract class ChatComponentStyle implements IChatComponent {
     }
 
     public Iterator iterator() {
-        return Iterators.concat(Iterators.forArray(new ChatComponentStyle[] { this}), a((Iterable) this.a));
+        return Iterators.concat(Iterators.forArray(new ChatComponentStyle[]{this}), a((Iterable) this.a));
     }
 
     public final String c() {
@@ -115,9 +110,11 @@ public abstract class ChatComponentStyle implements IChatComponent {
     public boolean equals(Object object) {
         if (this == object) {
             return true;
-        } else if (!(object instanceof ChatComponentStyle)) {
+        }
+        else if (!(object instanceof ChatComponentStyle)) {
             return false;
-        } else {
+        }
+        else {
             ChatComponentStyle chatcomponentstyle = (ChatComponentStyle) object;
 
             return this.a.equals(chatcomponentstyle.a) && this.b().equals(chatcomponentstyle.b());
@@ -134,6 +131,6 @@ public abstract class ChatComponentStyle implements IChatComponent {
 
     @Override
     public CanaryChatComponent getWrapper() {
-	return this.canaryChatComponent;
+        return this.canaryChatComponent;
     }
 }

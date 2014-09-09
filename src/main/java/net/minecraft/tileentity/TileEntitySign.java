@@ -9,7 +9,7 @@ import net.minecraft.server.MinecraftServer;
 
 public class TileEntitySign extends TileEntity {
 
-    public String[] a = new String[]{ "", "", "", "" };
+    public String[] a = new String[]{"", "", "", ""};
     public int i = -1;
     public boolean j = true; // CanaryMod: private => public; editable
     private EntityPlayer k;

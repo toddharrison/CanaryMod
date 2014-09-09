@@ -40,11 +40,14 @@ public class ItemSlab extends ItemBlock {
         CanaryBlock clicked = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
         if (this.b) {
             return super.a(itemstack, entityplayer, world, i0, i1, i2, i3, f0, f1, f2);
-        } else if (itemstack.b == 0) {
+        }
+        else if (itemstack.b == 0) {
             return false;
-        } else if (!entityplayer.a(i0, i1, i2, i3, itemstack)) {
+        }
+        else if (!entityplayer.a(i0, i1, i2, i3, itemstack)) {
             return false;
-        } else {
+        }
+        else {
             Block block = world.a(i0, i1, i2);
             int i4 = world.e(i0, i1, i2);
             int i5 = i4 & 7;
@@ -67,7 +70,8 @@ public class ItemSlab extends ItemBlock {
                 }
 
                 return true;
-            } else {
+            }
+            else {
                 boolean ret = this.a(itemstack, entityplayer, world, i0, i1, i2, i3); // Moved up to call hook before the return
 
                 this.handled = hook != null; // Let super know we got this shit
@@ -125,7 +129,8 @@ public class ItemSlab extends ItemBlock {
             }
 
             return true;
-        } else {
+        }
+        else {
             return false;
         }
     }

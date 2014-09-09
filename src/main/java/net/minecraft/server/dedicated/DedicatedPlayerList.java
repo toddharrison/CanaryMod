@@ -48,106 +48,118 @@ public class DedicatedPlayerList extends ServerConfigurationManager {
         this.s().a();
     }
 
-    public void a(String s0) {
-        super.a(s0);
-        //this.u();
+    public void a(GameProfile gameprofile) {
+        super.a(gameprofile);
+        //this.A();
     }
 
-    public void b(String s0) {
-        super.b(s0);
-        //this.u();
+    public void b(GameProfile gameprofile) {
+        super.b(gameprofile);
+        //this.A();
     }
 
-    public void g(String s0) {
-        // CanaryMod re-route to our whitelist
-        Canary.whitelist().removePlayer(s0);
-    }
-
-    public void f(String s0) {
+    public void c(GameProfile gameprofile) {
         // Canary, re-route to our whitelist
-        Canary.whitelist().addPlayer(s0);
+        Canary.whitelist().removePlayer(gameprofile.getId());
     }
 
-    public void j() {
+    public void d(GameProfile gameprofile) {
+        // Canary, re-route to our whitelist
+        Canary.whitelist().addPlayer(gameprofile.getId());
+    }
+
+    public void a() {
         // Load whitelist
         throw new UnsupportedOperationException("Minecraft whitelist is disabled! Cannot load");
     }
 
-    private void t() {
-        // try {
-        // this.i().clear();
-        // BufferedReader bufferedreader = new BufferedReader(new FileReader(this.d));
-        // String s0 = "";
-        //
-        // while ((s0 = bufferedreader.readLine()) != null) {
-        // this.i().add(s0.trim().toLowerCase());
-        // }
-        //
-        // bufferedreader.close();
-        // } catch (Exception exception) {
-        // this.s().an().b("Failed to load operators list: " + exception);
-        // }
-    }
-
-    private void u() {
-        // try {
-        // PrintWriter printwriter = new PrintWriter(new FileWriter(this.d, false));
-        // Iterator iterator = this.i().iterator();
-        //
-        // while (iterator.hasNext()) {
-        // String s0 = (String) iterator.next();
-        //
-        // printwriter.println(s0);
-        // }
-        //
-        // printwriter.close();
-        // } catch (Exception exception) {
-        // this.s().an().b("Failed to save operators list: " + exception);
-        // }
-    }
-
     private void v() {
-        // try {
-        // this.h().clear();
-        // BufferedReader bufferedreader = new BufferedReader(new FileReader(this.e));
-        // String s0 = "";
-        //
-        // while ((s0 = bufferedreader.readLine()) != null) {
-        // this.h().add(s0.trim().toLowerCase());
-        // }
-        //
-        // bufferedreader.close();
-        // } catch (Exception exception) {
-        // this.s().an().b("Failed to load white-list: " + exception);
-        // }
+        try {
+            //this.i().f();
+        }
+        catch (IOException ioexception) {
+            g.warn("Failed to save ip banlist: ", ioexception);
+        }
     }
 
     private void w() {
-        // try {
-        // PrintWriter printwriter = new PrintWriter(new FileWriter(this.e, false));
-        // Iterator iterator = this.h().iterator();
-        //
-        // while (iterator.hasNext()) {
-        // String s0 = (String) iterator.next();
-        //
-        // printwriter.println(s0);
-        // }
-        //
-        // printwriter.close();
-        // } catch (Exception exception) {
-        // this.s().an().b("Failed to save white-list: " + exception);
-        // }
+        try {
+            //this.h().f();
+        }
+        catch (IOException ioexception) {
+            g.warn("Failed to save user banlist: ", ioexception);
+        }
     }
 
-    public boolean c(String s0) {
-        return !this.n() || this.d(s0) || Canary.ops().isOpped(s0);
+    private void x() {
+        try {
+            //this.i().g();
+        }
+        catch (IOException ioexception) {
+            g.warn("Failed to load ip banlist: ", ioexception);
+        }
+
     }
 
-    public DedicatedServer s() {
-        return (DedicatedServer) super.p();
+    private void y() {
+        try {
+            //this.h().g();
+        }
+        catch (IOException ioexception) {
+            g.warn("Failed to load user banlist: ", ioexception);
+        }
+
     }
 
-    public MinecraftServer p() {
-        return this.s();
+    private void z() {
+        try {
+            //this.m().g();
+        }
+        catch (Exception exception) {
+            g.warn("Failed to load operators list: ", exception);
+        }
+
+    }
+
+    private void A() {
+        try {
+            //this.m().f();
+        }
+        catch (Exception exception) {
+            g.warn("Failed to save operators list: ", exception);
+        }
+
+    }
+
+    private void B() {
+        try {
+            //this.k().g();
+        }
+        catch (Exception exception) {
+            g.warn("Failed to load white-list: ", exception);
+        }
+
+    }
+
+    private void C() {
+        try {
+            //this.k().f();
+        }
+        catch (Exception exception) {
+            g.warn("Failed to save white-list: ", exception);
+        }
+
+    }
+
+    public boolean e(GameProfile gameprofile) {
+        return !this.r() || Canary.ops().isOpped(gameprofile.getId());
+    }
+
+    public DedicatedServer b() {
+        return (DedicatedServer) super.c();
+    }
+
+    public MinecraftServer c() {
+        return this.b();
     }
 }

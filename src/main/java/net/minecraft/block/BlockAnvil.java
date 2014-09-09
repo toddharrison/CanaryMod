@@ -1,6 +1,5 @@
 package net.minecraft.block;
 
-import net.minecraft.block.BlockFalling;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
@@ -15,8 +14,8 @@ import net.minecraft.world.World;
 
 public class BlockAnvil extends BlockFalling {
 
-    public static final String[] a = new String[] { "intact", "slightlyDamaged", "veryDamaged"};
-    private static final String[] N = new String[] { "anvil_top_damaged_0", "anvil_top_damaged_1", "anvil_top_damaged_2"};
+    public static final String[] a = new String[]{"intact", "slightlyDamaged", "veryDamaged"};
+    private static final String[] N = new String[]{"anvil_top_damaged_0", "anvil_top_damaged_1", "anvil_top_damaged_2"};
 
     protected BlockAnvil() {
         super(Material.g);
@@ -59,7 +58,8 @@ public class BlockAnvil extends BlockFalling {
     public boolean a(World world, int i0, int i1, int i2, EntityPlayer entityplayer, int i3, float f0, float f1, float f2) {
         if (world.E) {
             return true;
-        } else {
+        }
+        else {
             entityplayer.c(i0, i1, i2);
             return true;
         }
@@ -78,7 +78,8 @@ public class BlockAnvil extends BlockFalling {
 
         if (i3 != 3 && i3 != 1) {
             this.a(0.125F, 0.0F, 0.0F, 0.875F, 1.0F, 1.0F);
-        } else {
+        }
+        else {
             this.a(0.0F, 0.0F, 0.125F, 1.0F, 1.0F, 0.875F);
         }
 

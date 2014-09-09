@@ -9,14 +9,8 @@ import net.minecraft.util.EnumChatFormatting;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
 
 
 public class CommandHandler implements ICommandManager {
@@ -85,7 +79,7 @@ public class CommandHandler implements ICommandManager {
             }
         }
         catch (WrongUsageException wrongusageexception) {
-            chatcomponenttranslation = new ChatComponentTranslation("commands.generic.usage", new Object[]{ new ChatComponentTranslation(wrongusageexception.getMessage(), wrongusageexception.a()) });
+            chatcomponenttranslation = new ChatComponentTranslation("commands.generic.usage", new Object[]{new ChatComponentTranslation(wrongusageexception.getMessage(), wrongusageexception.a())});
             chatcomponenttranslation.b().a(EnumChatFormatting.RED);
             icommandsender.a(chatcomponenttranslation);
         }

@@ -72,40 +72,51 @@ public class BlockDoor extends Block {
             if (flag0) {
                 if (!flag1) {
                     this.a(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, f0);
-                } else {
+                }
+                else {
                     this.a(0.0F, 0.0F, 1.0F - f0, 1.0F, 1.0F, 1.0F);
                 }
-            } else {
+            }
+            else {
                 this.a(0.0F, 0.0F, 0.0F, f0, 1.0F, 1.0F);
             }
-        } else if (i1 == 1) {
+        }
+        else if (i1 == 1) {
             if (flag0) {
                 if (!flag1) {
                     this.a(1.0F - f0, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
-                } else {
+                }
+                else {
                     this.a(0.0F, 0.0F, 0.0F, f0, 1.0F, 1.0F);
                 }
-            } else {
+            }
+            else {
                 this.a(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, f0);
             }
-        } else if (i1 == 2) {
+        }
+        else if (i1 == 2) {
             if (flag0) {
                 if (!flag1) {
                     this.a(0.0F, 0.0F, 1.0F - f0, 1.0F, 1.0F, 1.0F);
-                } else {
+                }
+                else {
                     this.a(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, f0);
                 }
-            } else {
+            }
+            else {
                 this.a(1.0F - f0, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
             }
-        } else if (i1 == 3) {
+        }
+        else if (i1 == 3) {
             if (flag0) {
                 if (!flag1) {
                     this.a(0.0F, 0.0F, 0.0F, f0, 1.0F, 1.0F);
-                } else {
+                }
+                else {
                     this.a(1.0F - f0, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
                 }
-            } else {
+            }
+            else {
                 this.a(0.0F, 0.0F, 1.0F - f0, 1.0F, 1.0F, 1.0F);
             }
         }
@@ -118,7 +129,8 @@ public class BlockDoor extends Block {
     public boolean a(World world, int i0, int i1, int i2, EntityPlayer entityplayer, int i3, float f0, float f1, float f2) {
         if (this.J == Material.f) {
             return true;
-        } else {
+        }
+        else {
             // CanaryMod: Block Physics
             BlockPhysicsHook blockPhysics = (BlockPhysicsHook) new BlockPhysicsHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), false).call();
             if (blockPhysics.isCanceled()) {
@@ -133,7 +145,8 @@ public class BlockDoor extends Block {
             if ((i4 & 8) == 0) {
                 world.a(i0, i1, i2, i5, 2);
                 world.c(i0, i1, i2, i0, i1, i2);
-            } else {
+            }
+            else {
                 world.a(i0, i1 - 1, i2, i5, 2);
                 world.c(i0, i1 - 1, i2, i0, i1, i2);
             }
@@ -161,7 +174,8 @@ public class BlockDoor extends Block {
             if ((i3 & 8) == 0) {
                 world.a(i0, i1, i2, i4, 2);
                 world.c(i0, i1, i2, i0, i1, i2);
-            } else {
+            }
+            else {
                 world.a(i0, i1 - 1, i2, i4, 2);
                 world.c(i0, i1 - 1, i2, i0, i1, i2);
             }
@@ -193,14 +207,16 @@ public class BlockDoor extends Block {
                 if (!world.E) {
                     this.b(world, i0, i1, i2, i3, 0);
                 }
-            } else {
+            }
+            else {
                 boolean flag1 = world.v(i0, i1, i2) || world.v(i0, i1 + 1, i2);
 
                 if ((flag1 || block.f()) && block != this) {
                     this.a(world, i0, i1, i2, flag1);
                 }
             }
-        } else {
+        }
+        else {
             if (world.a(i0, i1 - 1, i2) != this) {
                 world.f(i0, i1, i2);
             }
@@ -238,7 +254,8 @@ public class BlockDoor extends Block {
         if (flag0) {
             i4 = iblockaccess.e(i0, i1 - 1, i2);
             i5 = i3;
-        } else {
+        }
+        else {
             i4 = i3;
             i5 = iblockaccess.e(i0, i1 + 1, i2);
         }

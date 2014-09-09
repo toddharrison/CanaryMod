@@ -34,7 +34,8 @@ public abstract class BlockBasePressurePlate extends Block {
 
         if (flag0) {
             this.a(f0, 0.0F, f0, 1.0F - f0, 0.03125F, 1.0F - f0);
-        } else {
+        }
+        else {
             this.a(f0, 0.0F, f0, 1.0F - f0, 0.0625F, 1.0F - f0);
         }
     }
@@ -127,7 +128,8 @@ public abstract class BlockBasePressurePlate extends Block {
 
         if (!flag1 && flag0) {
             world.a((double) i0 + 0.5D, (double) i1 + 0.1D, (double) i2 + 0.5D, "random.click", 0.3F, 0.5F);
-        } else if (flag1 && !flag0) {
+        }
+        else if (flag1 && !flag0) {
             world.a((double) i0 + 0.5D, (double) i1 + 0.1D, (double) i2 + 0.5D, "random.click", 0.3F, 0.6F);
         }
 

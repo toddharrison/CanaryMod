@@ -10,12 +10,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemHoe;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
-import net.minecraft.item.ItemTool;
+import net.minecraft.item.*;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -23,9 +18,9 @@ import net.minecraft.nbt.NBTTagList;
 
 public class TileEntityFurnace extends TileEntity implements ISidedInventory {
 
-    private static final int[] k = new int[]{ 0 };
-    private static final int[] l = new int[]{ 2, 1 };
-    private static final int[] m = new int[]{ 1 };
+    private static final int[] k = new int[]{0};
+    private static final int[] l = new int[]{2, 1};
+    private static final int[] m = new int[]{1};
     public ItemStack[] n = new ItemStack[3]; // CanaryMod: private => public
     public int a;
     public int i;
@@ -160,38 +155,40 @@ public class TileEntityFurnace extends TileEntity implements ISidedInventory {
         }
 
         if (!this.b.E) {
-            if (this.a == 0 && this.k()) {
-                this.i = this.a = a(this.n[1]);
-                if (this.a > 0) {
-                    flag1 = true;
-                    if (this.n[1] != null) {
-                        --this.n[1].b;
-                        if (this.n[1].b == 0) {
-                            Item item = this.n[1].b().t();
+            if (this.a != 0 || this.n[1] != null && this.n[0] != null) {
+                if (this.a == 0 && this.k()) {
+                    this.i = this.a = a(this.n[1]);
+                    if (this.a > 0) {
+                        flag1 = true;
+                        if (this.n[1] != null) {
+                            --this.n[1].b;
+                            if (this.n[1].b == 0) {
+                                Item item = this.n[1].b().t();
 
-                            this.n[1] = item != null ? new ItemStack(item) : null;
+                                this.n[1] = item != null ? new ItemStack(item) : null;
+                            }
                         }
                     }
                 }
-            }
 
-            // CanaryMod: SmeltBegin
-            SmeltBeginHook sbh = null;
-            if (this.j == 0 && this.i() && this.k()) { // Check that this is the start of a smelting process and that smelting can begin
-                sbh = (SmeltBeginHook) new SmeltBeginHook(this.getCanaryFurnace(), this.n[0].getCanaryItem()).call();
-            }
-            //
-
-            if (this.i() && this.k() && (sbh == null || !sbh.isCanceled())) { // CanaryMod: Verify the hook
-                ++this.j;
-                if (this.j == 200) {
-                    this.j = 0;
-                    this.j();
-                    flag1 = true;
+                // CanaryMod: SmeltBegin
+                SmeltBeginHook sbh = null;
+                if (this.j == 0 && this.i() && this.k()) { // Check that this is the start of a smelting process and that smelting can begin
+                    sbh = (SmeltBeginHook) new SmeltBeginHook(this.getCanaryFurnace(), this.n[0].getCanaryItem()).call();
                 }
-            }
-            else {
-                this.j = 0;
+                //
+
+                if (this.i() && this.k() && (sbh == null || !sbh.isCanceled())) { // CanaryMod: Verify the hook
+                    ++this.j;
+                    if (this.j == 200) {
+                        this.j = 0;
+                        this.j();
+                        flag1 = true;
+                    }
+                }
+                else {
+                    this.j = 0;
+                }
             }
 
             if (flag0 != this.a > 0) {

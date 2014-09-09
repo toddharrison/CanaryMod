@@ -24,7 +24,7 @@ public class ItemBucketMilk extends Item {
         entityplayer.bO().a(hook.getLevelGain(), hook.getSaturationGain());
         //
 
-        if (!entityplayer.bF.d) {
+        if (!entityplayer.bE.d) {
             --itemstack.b;
         }
 

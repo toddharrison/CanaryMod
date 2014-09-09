@@ -178,9 +178,15 @@ public class TileEntityHopper extends TileEntity implements IHopper {
     public boolean i() {
         if (this.b != null && !this.b.E) {
             if (!this.j() && BlockHopper.c(this.p())) {
-                boolean flag0 = this.k();
+                boolean flag0 = false;
 
-                flag0 = a((IHopper) this) || flag0;
+                if (!this.k()) {
+                    flag0 = this.y();
+                }
+
+                if (!this.l()) {
+                    flag0 = a((IHopper) this) || flag0;
+                }
                 if (flag0) {
                     this.c(8);
                     this.e();
@@ -196,35 +202,125 @@ public class TileEntityHopper extends TileEntity implements IHopper {
     }
 
     private boolean k() {
-        IInventory iinventory = this.l();
+        ItemStack[] aitemstack = this.a;
+        int i0 = aitemstack.length;
+
+        for (int i1 = 0; i1 < i0; ++i1) {
+            ItemStack itemstack = aitemstack[i1];
+
+            if (itemstack != null) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private boolean l() {
+        ItemStack[] aitemstack = this.a;
+        int i0 = aitemstack.length;
+
+        for (int i1 = 0; i1 < i0; ++i1) {
+            ItemStack itemstack = aitemstack[i1];
+
+            if (itemstack == null || itemstack.b != itemstack.e()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+
+    private boolean y() {
+        IInventory iinventory = this.z();
 
         if (iinventory == null) {
             return false;
         }
         else {
-            for (int i0 = 0; i0 < this.a(); ++i0) {
-                if (this.a(i0) != null) {
-                    ItemStack itemstack = this.a(i0).m();
-                    // CanaryMod: Hopper Transfer hook
-                    HopperTransferHook hook = (HopperTransferHook) new HopperTransferHook(getCanaryHopper(), new net.canarymod.api.inventory.CanaryItem(itemstack), false).call();
-                    if (hook.isCanceled()) {
-                        return false;
+            int i0 = Facing.a[BlockHopper.b(this.p())];
+
+            if (this.a(iinventory, i0)) {
+                return false;
+            }
+            else {
+                for (int i1 = 0; i1 < this.a(); ++i1) {
+                    if (this.a(i1) != null) {
+                        ItemStack itemstack = this.a(i1).m();
+                        // CanaryMod: Hopper Transfer hook
+                        HopperTransferHook hook = (HopperTransferHook) new HopperTransferHook(getCanaryHopper(), new net.canarymod.api.inventory.CanaryItem(itemstack), false).call();
+                        if (hook.isCanceled()) {
+                            return false;
+                        }
+                        // CanaryMod: End
+
+                        ItemStack itemstack1 = a(iinventory, this.a(i1, 1), i0);
+
+                        if (itemstack1 == null || itemstack1.b == 0) {
+                            iinventory.e();
+                            return true;
+                        }
+
+                        this.a(i1, itemstack);
                     }
-                    // CanaryMod: End
+                }
 
-                    ItemStack itemstack1 = a(iinventory, this.a(i0, 1), Facing.a[BlockHopper.b(this.p())]);
+                return false;
+            }
+        }
+    }
 
-                    if (itemstack1 == null || itemstack1.b == 0) {
-                        iinventory.e();
-                        return true;
-                    }
+    private boolean a(IInventory iinventory, int i0) {
+        if (iinventory instanceof ISidedInventory && i0 > -1) {
+            ISidedInventory isidedinventory = (ISidedInventory) iinventory;
+            int[] aint = isidedinventory.c(i0);
 
-                    this.a(i0, itemstack);
+            for (int i1 = 0; i1 < aint.length; ++i1) {
+                ItemStack itemstack = isidedinventory.a(aint[i1]);
+
+                if (itemstack == null || itemstack.b != itemstack.e()) {
+                    return false;
                 }
             }
-
-            return false;
         }
+        else {
+            int i2 = iinventory.a();
+
+            for (int i3 = 0; i3 < i2; ++i3) {
+                ItemStack itemstack1 = iinventory.a(i3);
+
+                if (itemstack1 == null || itemstack1.b != itemstack1.e()) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    private static boolean b(IInventory iinventory, int i0) {
+        if (iinventory instanceof ISidedInventory && i0 > -1) {
+            ISidedInventory isidedinventory = (ISidedInventory) iinventory;
+            int[] aint = isidedinventory.c(i0);
+
+            for (int i1 = 0; i1 < aint.length; ++i1) {
+                if (isidedinventory.a(aint[i1]) != null) {
+                    return false;
+                }
+            }
+        }
+        else {
+            int i2 = iinventory.a();
+
+            for (int i3 = 0; i3 < i2; ++i3) {
+                if (iinventory.a(i3) != null) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     public static boolean a(IHopper ihopper) {
@@ -232,6 +328,10 @@ public class TileEntityHopper extends TileEntity implements IHopper {
 
         if (iinventory != null) {
             byte b0 = 0;
+
+            if (b(iinventory, b0)) {
+                return false;
+            }
 
             if (iinventory instanceof ISidedInventory && b0 > -1) {
                 ISidedInventory isidedinventory = (ISidedInventory) iinventory;
@@ -383,7 +483,7 @@ public class TileEntityHopper extends TileEntity implements IHopper {
         return itemstack;
     }
 
-    private IInventory l() {
+    private IInventory z() {
         int i0 = BlockHopper.b(this.p());
 
         return b(this.w(), (double) (this.c + Facing.b[i0]), (double) (this.d + Facing.c[i0]), (double) (this.e + Facing.d[i0]));
@@ -394,7 +494,7 @@ public class TileEntityHopper extends TileEntity implements IHopper {
     }
 
     public static EntityItem a(World world, double d0, double d1, double d2) {
-        List list = world.a(EntityItem.class, AxisAlignedBB.a().a(d0, d1, d2, d0 + 1.0D, d1 + 1.0D, d2 + 1.0D), IEntitySelector.a);
+        List list = world.a(EntityItem.class, AxisAlignedBB.a(d0, d1, d2, d0 + 1.0D, d1 + 1.0D, d2 + 1.0D), IEntitySelector.a);
 
         return list.size() > 0 ? (EntityItem) list.get(0) : null;
     }
@@ -418,7 +518,7 @@ public class TileEntityHopper extends TileEntity implements IHopper {
         }
 
         if (iinventory == null) {
-            List list = world.a((Entity) null, AxisAlignedBB.a().a(d0, d1, d2, d0 + 1.0D, d1 + 1.0D, d2 + 1.0D), IEntitySelector.b);
+            List list = world.a((Entity) null, AxisAlignedBB.a(d0, d1, d2, d0 + 1.0D, d1 + 1.0D, d2 + 1.0D), IEntitySelector.c);
 
             if (list != null && list.size() > 0) {
                 iinventory = (IInventory) list.get(world.s.nextInt(list.size()));

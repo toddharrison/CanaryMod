@@ -55,9 +55,9 @@ public class WorldServer extends World {
     private int P;
     private final Teleporter Q;
     private final SpawnerAnimals R = new SpawnerAnimals();
-    private ServerBlockEventList[] S = new ServerBlockEventList[]{ new ServerBlockEventList(null), new ServerBlockEventList(null) };
+    private ServerBlockEventList[] S = new ServerBlockEventList[]{new ServerBlockEventList(null), new ServerBlockEventList(null)};
     private int T;
-    private static final WeightedRandomChestContent[] U = new WeightedRandomChestContent[]{ new WeightedRandomChestContent(Items.y, 0, 1, 3, 10), new WeightedRandomChestContent(Item.a(Blocks.f), 0, 1, 3, 10), new WeightedRandomChestContent(Item.a(Blocks.r), 0, 1, 3, 10), new WeightedRandomChestContent(Items.t, 0, 1, 1, 3), new WeightedRandomChestContent(Items.p, 0, 1, 1, 5), new WeightedRandomChestContent(Items.s, 0, 1, 1, 3), new WeightedRandomChestContent(Items.o, 0, 1, 1, 5), new WeightedRandomChestContent(Items.e, 0, 2, 3, 5), new WeightedRandomChestContent(Items.P, 0, 2, 3, 3), new WeightedRandomChestContent(Item.a(Blocks.s), 0, 1, 3, 10) };
+    private static final WeightedRandomChestContent[] U = new WeightedRandomChestContent[]{new WeightedRandomChestContent(Items.y, 0, 1, 3, 10), new WeightedRandomChestContent(Item.a(Blocks.f), 0, 1, 3, 10), new WeightedRandomChestContent(Item.a(Blocks.r), 0, 1, 3, 10), new WeightedRandomChestContent(Items.t, 0, 1, 1, 3), new WeightedRandomChestContent(Items.p, 0, 1, 1, 5), new WeightedRandomChestContent(Items.s, 0, 1, 1, 3), new WeightedRandomChestContent(Items.o, 0, 1, 1, 5), new WeightedRandomChestContent(Items.e, 0, 2, 3, 5), new WeightedRandomChestContent(Items.P, 0, 2, 3, 3), new WeightedRandomChestContent(Item.a(Blocks.s), 0, 1, 3, 10)};
     private List V = new ArrayList();
     private IntHashMap W;
 
