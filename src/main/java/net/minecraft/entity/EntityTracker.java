@@ -153,8 +153,8 @@ public class EntityTracker {
             this.d.a(entity.y(), entitytrackerentry);
 
             // CanaryMod: update hidden player tracking state
-            if (s0 instanceof EntityPlayerMP) {
-                EntityPlayerMP entityplayermp = (EntityPlayerMP) s0;
+            if (entity instanceof EntityPlayerMP) {
+                EntityPlayerMP entityplayermp = (EntityPlayerMP) entity;
                 canaryTracker.forceHiddenPlayerUpdate(entityplayermp.getPlayer());
             }
             // CanaryMod: end

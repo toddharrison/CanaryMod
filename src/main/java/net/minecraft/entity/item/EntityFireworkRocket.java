@@ -52,9 +52,9 @@ public class EntityFireworkRocket extends Entity {
     }
 
     public void h() {
+        this.S = this.s;
         this.T = this.t;
         this.U = this.u;
-        this.V = this.v;
         super.h();
         this.v *= 1.15D;
         this.x *= 1.15D;
@@ -139,16 +139,16 @@ public class EntityFireworkRocket extends Entity {
 
     // CanaryMod
     public ItemStack getItemStack() {
-        return this.ag.f(8);
+        return this.af.f(8);
     }
 
     public void setItemStack(ItemStack stack) {
-        this.ag.b(8, stack);
+        this.af.b(8, stack);
         // Update Flight information
         NBTTagCompound nbttagcompound = stack.q();
         NBTTagCompound nbttagcompound1 = nbttagcompound.m("Fireworks");
         if (nbttagcompound1 != null) {
-            this.b = 10 * nbttagcompound1.d("Flight") + this.aa.nextInt(6) + this.aa.nextInt(7);
+            this.b = 10 * nbttagcompound1.d("Flight") + this.Z.nextInt(6) + this.Z.nextInt(7);
         }
     }
 //

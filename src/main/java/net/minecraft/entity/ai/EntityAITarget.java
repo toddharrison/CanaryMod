@@ -102,8 +102,7 @@ public abstract class EntityAITarget extends EntityAIBase {
                 if (entitylivingbase == ((IEntityOwnable) this.c).i_()) {
                     return false;
                 }
-            }
-            else if (entitylivingbase instanceof EntityPlayer && !flag0 && ((EntityPlayer) entitylivingbase).bF.a) {
+            } else if (entitylivingbase instanceof EntityPlayer && !flag0 && ((EntityPlayer) entitylivingbase).bE.a) {
                 return false;
             }
 

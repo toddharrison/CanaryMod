@@ -633,11 +633,11 @@ public abstract class Entity {
                         this.w = 0.0D;
                         this.x = 0.0D;
                         this.b(this.p, this.q, this.r, this.A, this.B);
-                        this.q = prevPX;
-                        this.r = prevPY;
-                        this.s = prevPZ;
-                        this.B = prevPR;
-                        this.C = prevPP;
+                        this.p = prevPX;
+                        this.q = prevPY;
+                        this.r = prevPZ;
+                        this.A = prevPR;
+                        this.B = prevPP;
                         this.ac(); //Update Rider
                     }
                 }
@@ -1865,11 +1865,11 @@ public abstract class Entity {
      * @return
      */
     public CanaryWorld getCanaryWorld() {
-        return p.getCanaryWorld();
+        return o.getCanaryWorld();
     }
 
     public void setDimension(CanaryWorld dim) {
-        this.p = dim.getHandle();
+        this.o = dim.getHandle();
     }
 
     public CanaryEntity getCanaryEntity() {
@@ -1897,7 +1897,7 @@ public abstract class Entity {
             ChunkCoordinates ochunkcoordinates;
 
             if (dimensionTo == 1) {
-                ochunkcoordinates = oworldserverTo.J();
+                ochunkcoordinates = oworldserverTo.K();
             }
             else {
                 ochunkcoordinates = oworldserverTo.l();
