@@ -408,6 +408,8 @@ public abstract class BiomeGenBase {
 
         n.remove(w);
         n.remove(x);
+        n.remove(y);
+        n.remove(I);
         ac = new NoiseGeneratorPerlin(new Random(1234L), 1);
         ad = new NoiseGeneratorPerlin(new Random(2345L), 1);
         ae = new WorldGenDoublePlant();

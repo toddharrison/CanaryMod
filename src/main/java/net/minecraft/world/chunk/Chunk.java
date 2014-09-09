@@ -663,15 +663,15 @@ public class Chunk {
 
     public void a(Entity entity) {
         this.o = true;
-        int i0 = MathHelper.c(entity.t / 16.0D);
-        int i1 = MathHelper.c(entity.v / 16.0D);
+        int i0 = MathHelper.c(entity.s / 16.0D);
+        int i1 = MathHelper.c(entity.u / 16.0D);
 
         if (i0 != this.g || i1 != this.h) {
-            t.error("Wrong location! " + entity);
-            Thread.dumpStack();
+            t.warn("Wrong location! " + entity + " (at " + i0 + ", " + i1 + " instead of " + this.g + ", " + this.h + ")");
+            // Thread.dumpStack(); // Just say no to stack dumps
         }
 
-        int i2 = MathHelper.c(entity.u / 16.0D);
+        int i2 = MathHelper.c(entity.t / 16.0D);
 
         if (i2 < 0) {
             i2 = 0;
@@ -681,15 +681,15 @@ public class Chunk {
             i2 = this.j.length - 1;
         }
 
-        entity.ah = true;
-        entity.ai = this.g;
-        entity.aj = i2;
-        entity.ak = this.h;
+        entity.ag = true;
+        entity.ah = this.g;
+        entity.ai = i2;
+        entity.aj = this.h;
         this.j[i2].add(entity);
     }
 
     public void b(Entity entity) {
-        this.a(entity, entity.aj);
+        this.a(entity, entity.ai);
     }
 
     public void a(Entity entity, int i0) {
@@ -776,27 +776,30 @@ public class Chunk {
         this.d = true;
         this.e.a(this.i.values());
 
-        for (List aJ : this.j) {
-            for (Object anAJ : aJ) {
-                Entity entity = (Entity) anAJ;
+        for (int i0 = 0; i0 < this.j.length; ++i0) {
+            Iterator iterator = this.j[i0].iterator();
+
+            while (iterator.hasNext()) {
+                Entity entity = (Entity) iterator.next();
                 entity.X();
             }
 
-            this.e.a(aJ);
+            this.e.a(this.j[i0]);
         }
     }
 
     public void d() {
         this.d = false;
+        Iterator iterator = this.i.values().iterator();
 
-        for (Object o1 : this.i.values()) {
-            TileEntity tileentity = (TileEntity) o1;
+        while (iterator.hasNext()) {
+            TileEntity tileentity = (TileEntity) iterator.next();
 
             this.e.a(tileentity);
         }
 
-        for (List aJ : this.j) {
-            this.e.b(aJ);
+        for (int i0 = 0; i0 < this.j.length; ++i0) {
+            this.e.b(this.j[i0]);
         }
     }
 
@@ -817,14 +820,14 @@ public class Chunk {
             for (int i3 = 0; i3 < list1.size(); ++i3) {
                 Entity entity1 = (Entity) list1.get(i3);
 
-                if (entity1 != entity && entity1.D.b(axisalignedbb) && (ientityselector == null || ientityselector.a(entity1))) {
+                if (entity1 != entity && entity1.C.b(axisalignedbb) && (ientityselector == null || ientityselector.a(entity1))) {
                     list.add(entity1);
                     Entity[] aentity = entity1.at();
 
                     if (aentity != null) {
                         for (int i4 = 0; i4 < aentity.length; ++i4) {
                             entity1 = aentity[i4];
-                            if (entity1 != entity && entity1.D.b(axisalignedbb) && (ientityselector == null || ientityselector.a(entity1))) {
+                            if (entity1 != entity && entity1.C.b(axisalignedbb) && (ientityselector == null || ientityselector.a(entity1))) {
                                 list.add(entity1);
                             }
                         }
@@ -847,7 +850,7 @@ public class Chunk {
             for (int i3 = 0; i3 < list1.size(); ++i3) {
                 Entity entity = (Entity) list1.get(i3);
 
-                if (oclass0.isAssignableFrom(entity.getClass()) && entity.D.b(axisalignedbb) && (ientityselector == null || ientityselector.a(entity))) {
+                if (oclass0.isAssignableFrom(entity.getClass()) && entity.C.b(axisalignedbb) && (ientityselector == null || ientityselector.a(entity))) {
                     list.add(entity);
                 }
             }
@@ -856,11 +859,11 @@ public class Chunk {
 
     public boolean a(boolean flag0) {
         if (flag0) {
-            if (this.o && this.e.H() != this.p || this.n) {
+            if (this.o && this.e.I() != this.p || this.n) {
                 return true;
             }
         }
-        else if (this.o && this.e.H() >= this.p + 600L) {
+        else if (this.o && this.e.I() >= this.p + 600L) {
             return true;
         }
 
@@ -868,7 +871,7 @@ public class Chunk {
     }
 
     public Random a(long i0) {
-        return new Random(this.e.G() + (long) (this.g * this.g * 4987142) + (long) (this.g * 5947611) + (long) (this.h * this.h) * 4392871L + (long) (this.h * 389711) ^ i0);
+        return new Random(this.e.H() + (long) (this.g * this.g * 4987142) + (long) (this.g * 5947611) + (long) (this.h * this.h) * 4392871L + (long) (this.h * 389711) ^ i0);
     }
 
     public boolean g() {

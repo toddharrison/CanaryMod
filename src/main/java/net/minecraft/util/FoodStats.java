@@ -43,7 +43,7 @@ public class FoodStats {
     }
 
     public void a(EntityPlayer entityplayer) {
-        EnumDifficulty enumdifficulty = entityplayer.p.r;
+        EnumDifficulty enumdifficulty = entityplayer.o.r;
 
         this.e = this.a;
         if (this.c > 4.0F) {
@@ -65,7 +65,7 @@ public class FoodStats {
             }
         }
 
-        if (entityplayer.p.N().b("naturalRegeneration") && this.a >= 18 && entityplayer.bP()) {
+        if (entityplayer.o.O().b("naturalRegeneration") && this.a >= 18 && entityplayer.bR()) {
             ++this.d;
             if (this.d >= 80) {
                 entityplayer.f(1.0F);

@@ -150,7 +150,7 @@ public class AnvilSaveConverter extends SaveFormatOld {
                             b.warn("Failed to fetch input stream");
                         }
                         else {
-                            NBTTagCompound nbttagcompound = CompressedStreamTools.a((DataInput) datainputstream);
+                            NBTTagCompound nbttagcompound = CompressedStreamTools.a(datainputstream);
 
                             datainputstream.close();
                             NBTTagCompound nbttagcompound1 = nbttagcompound.m("Level");
@@ -185,17 +185,17 @@ public class AnvilSaveConverter extends SaveFormatOld {
 
     }
 
-    private void a(File file3, Collection s0) {
-        File file2 = new File(file3, "region");
+    private void a(File file1, Collection collection) {
+        File file2 = new File(file1, "region");
         File[] afile = file2.listFiles(new FilenameFilter() {
 
-            public boolean accept(File file3, String s0) {
-                return s0.endsWith(".mcr");
+            public boolean accept(File p_accept_1_, String p_accept_2_) {
+                return p_accept_2_.endsWith(".mcr");
             }
         });
 
         if (afile != null) {
-            Collections.addAll(s0, afile);
+            Collections.addAll(collection, afile);
         }
 
     }

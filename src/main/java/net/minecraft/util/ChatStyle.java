@@ -283,58 +283,71 @@ public class ChatStyle {
 
     public static class Serializer implements JsonDeserializer, JsonSerializer {
 
-        public ChatStyle deserialize(JsonElement object, Type type2, JsonDeserializationContext jsonserializationcontext1) {
-            if (object.isJsonObject()) {
+        public ChatStyle deserialize(JsonElement p_deserialize_1_, Type p_deserialize_2_, JsonDeserializationContext p_deserialize_3_) {
+            if (p_deserialize_1_.isJsonObject()) {
                 ChatStyle jsonobject2 = new ChatStyle();
-                JsonObject jsonobject3 = object.getAsJsonObject();
+                JsonObject jsonobject3 = p_deserialize_1_.getAsJsonObject();
 
-                if (jsonobject3.has("bold")) {
-                    jsonobject2.c = Boolean.valueOf(jsonobject3.get("bold").getAsBoolean());
+                if (jsonobject3 == null) {
+                    return null;
                 }
-
-                if (jsonobject3.has("italic")) {
-                    jsonobject2.d = Boolean.valueOf(jsonobject3.get("italic").getAsBoolean());
-                }
-
-                if (jsonobject3.has("underlined")) {
-                    jsonobject2.e = Boolean.valueOf(jsonobject3.get("underlined").getAsBoolean());
-                }
-
-                if (jsonobject3.has("strikethrough")) {
-                    jsonobject2.f = Boolean.valueOf(jsonobject3.get("strikethrough").getAsBoolean());
-                }
-
-                if (jsonobject3.has("obfuscated")) {
-                    jsonobject2.g = Boolean.valueOf(jsonobject3.get("obfuscated").getAsBoolean());
-                }
-
-                if (jsonobject3.has("color")) {
-                    jsonobject2.b = (EnumChatFormatting) jsonserializationcontext1.deserialize(jsonobject3.get("color"), EnumChatFormatting.class);
-                }
-
-                JsonObject jsonobject1;
-
-                if (jsonobject3.has("clickEvent")) {
-                    jsonobject1 = jsonobject3.getAsJsonObject("clickEvent");
-                    ClickEvent.Action clickevent_action = ClickEvent.Action.a(jsonobject1.getAsJsonPrimitive("action").getAsString());
-                    String s0 = jsonobject1.getAsJsonPrimitive("value").getAsString();
-
-                    if (clickevent_action != null && s0 != null && clickevent_action.a()) {
-                        jsonobject2.h = new ClickEvent(clickevent_action, s0);
+                else {
+                    if (jsonobject3.has("bold")) {
+                        jsonobject2.c = Boolean.valueOf(jsonobject3.get("bold").getAsBoolean());
                     }
-                }
 
-                if (jsonobject3.has("hoverEvent")) {
-                    jsonobject1 = jsonobject3.getAsJsonObject("hoverEvent");
-                    HoverEvent.Action hoverevent_action = HoverEvent.Action.a(jsonobject1.getAsJsonPrimitive("action").getAsString());
-                    IChatComponent object0 = (IChatComponent) jsonserializationcontext1.deserialize(jsonobject1.get("value"), IChatComponent.class);
-
-                    if (hoverevent_action != null && object0 != null && hoverevent_action.a()) {
-                        jsonobject2.i = new HoverEvent(hoverevent_action, object0);
+                    if (jsonobject3.has("italic")) {
+                        jsonobject2.d = Boolean.valueOf(jsonobject3.get("italic").getAsBoolean());
                     }
-                }
 
-                return jsonobject2;
+                    if (jsonobject3.has("underlined")) {
+                        jsonobject2.e = Boolean.valueOf(jsonobject3.get("underlined").getAsBoolean());
+                    }
+
+                    if (jsonobject3.has("strikethrough")) {
+                        jsonobject2.f = Boolean.valueOf(jsonobject3.get("strikethrough").getAsBoolean());
+                    }
+
+                    if (jsonobject3.has("obfuscated")) {
+                        jsonobject2.g = Boolean.valueOf(jsonobject3.get("obfuscated").getAsBoolean());
+                    }
+
+                    if (jsonobject3.has("color")) {
+                        jsonobject2.b = (EnumChatFormatting) p_deserialize_3_.deserialize(jsonobject3.get("color"), EnumChatFormatting.class);
+                    }
+
+                    JsonObject jsonobject1;
+                    JsonPrimitive jsonprimitive;
+
+                    if (jsonobject3.has("clickEvent")) {
+                        jsonobject1 = jsonobject3.getAsJsonObject("clickEvent");
+                        if (jsonobject1 != null) {
+                            jsonprimitive = jsonobject1.getAsJsonPrimitive("action");
+                            ClickEvent.Action clickevent_action = jsonprimitive == null ? null : ClickEvent.Action.a(jsonprimitive.getAsString());
+                            JsonPrimitive jsonprimitive1 = jsonobject1.getAsJsonPrimitive("value");
+                            String s0 = jsonprimitive1 == null ? null : jsonprimitive1.getAsString();
+
+                            if (clickevent_action != null && s0 != null && clickevent_action.a()) {
+                                jsonobject2.h = new ClickEvent(clickevent_action, s0);
+                            }
+                        }
+                    }
+
+                    if (jsonobject3.has("hoverEvent")) {
+                        jsonobject1 = jsonobject3.getAsJsonObject("hoverEvent");
+                        if (jsonobject1 != null) {
+                            jsonprimitive = jsonobject1.getAsJsonPrimitive("action");
+                            HoverEvent.Action hoverevent_action = jsonprimitive == null ? null : HoverEvent.Action.a(jsonprimitive.getAsString());
+                            IChatComponent ichatcomponent = (IChatComponent) p_deserialize_3_.deserialize(jsonobject1.get("value"), IChatComponent.class);
+
+                            if (hoverevent_action != null && ichatcomponent != null && hoverevent_action.a()) {
+                                jsonobject2.i = new HoverEvent(hoverevent_action, ichatcomponent);
+                            }
+                        }
+                    }
+
+                    return jsonobject2;
+                }
             }
             else {
                 return null;

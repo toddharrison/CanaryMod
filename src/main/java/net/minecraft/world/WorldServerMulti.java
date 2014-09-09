@@ -12,7 +12,7 @@ public class WorldServerMulti extends WorldServer {
         super(minecraftserver, isavehandler, s0, i0, worldsettings, profiler);
         this.z = worldserver.z;
         this.D = worldserver.W();
-        this.x = new DerivedWorldInfo(worldserver.M());
+        this.x = new DerivedWorldInfo(worldserver.N());
     }
     // CanaryMod - allow this world to have level.dat etc too
     // protected void a() throws MinecraftException {}

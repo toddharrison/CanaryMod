@@ -217,8 +217,8 @@ public class SaveHandler implements ISaveHandler, IPlayerFileData {
             NBTTagCompound nbttagcompound = new NBTTagCompound();
 
             entityplayer.e(nbttagcompound);
-            File file1 = new File(this.globalPlayerFilesDir, entityplayer.b_() + ".dat.tmp");
-            File file2 = new File(this.globalPlayerFilesDir, entityplayer.b_() + ".dat");
+            File file1 = new File(this.globalPlayerFilesDir, entityplayer.aB().toString() + ".dat.tmp");
+            File file2 = new File(this.globalPlayerFilesDir, entityplayer.aB().toString() + ".dat");
 
             CompressedStreamTools.a(nbttagcompound, (OutputStream) (new FileOutputStream(file1)));
             if (file2.exists()) {
@@ -230,32 +230,28 @@ public class SaveHandler implements ISaveHandler, IPlayerFileData {
         catch (Exception exception) {
             a.warn("Failed to save player data for " + entityplayer.b_());
         }
+
     }
 
-    @Override
     public NBTTagCompound b(EntityPlayer entityplayer) {
-        NBTTagCompound nbttagcompound = this.a(entityplayer.b_());
+        NBTTagCompound nbttagcompound = null;
+
+        try {
+            File file1 = new File(this.c, entityplayer.aB().toString() + ".dat");
+
+            if (file1.exists() && file1.isFile()) {
+                nbttagcompound = CompressedStreamTools.a((InputStream) (new FileInputStream(file1)));
+            }
+        }
+        catch (Exception exception) {
+            a.warn("Failed to load player data for " + entityplayer.b_());
+        }
 
         if (nbttagcompound != null) {
             entityplayer.f(nbttagcompound);
         }
 
         return nbttagcompound;
-    }
-
-    public NBTTagCompound a(String s0) {
-        try {
-            File file1 = new File(this.globalPlayerFilesDir, s0 + ".dat");
-
-            if (file1.exists()) {
-                return CompressedStreamTools.a((InputStream) (new FileInputStream(file1)));
-            }
-        }
-        catch (Exception exception) {
-            a.warn("Failed to load player data for " + s0);
-        }
-
-        return null;
     }
 
     @Override
@@ -280,7 +276,7 @@ public class SaveHandler implements ISaveHandler, IPlayerFileData {
     }
 
     @Override
-    public File b(String s0) {
+    public File a(String s0) {
         return new File(this.worldDataDir, s0 + ".dat");
     }
 
@@ -291,6 +287,7 @@ public class SaveHandler implements ISaveHandler, IPlayerFileData {
 
     // CanaryMod enable writing dat files from player name and a given base tag
     // This is a copy of this.a(EntityPlayer and might need adjustments accordingly!)
+    // TODO UUID
     public void writePlayerNbt(String player, CanaryCompoundTag tag) {
         try {
             NBTTagCompound nbttagcompound = tag.getHandle();

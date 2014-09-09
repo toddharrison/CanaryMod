@@ -134,24 +134,24 @@ public class Explosion {
         int i6 = MathHelper.c(this.d + (double) this.g + 1.0D);
         int i7 = MathHelper.c(this.e - (double) this.g - 1.0D);
         int i8 = MathHelper.c(this.e + (double) this.g + 1.0D);
-        List list = this.k.b(this.f, AxisAlignedBB.a().a((double) i0, (double) i2, (double) i7, (double) i1, (double) i6, (double) i8));
-        Vec3 vec3 = this.k.U().a(this.c, this.d, this.e);
+        List list = this.k.b(this.f, AxisAlignedBB.a((double) i0, (double) i2, (double) i7, (double) i1, (double) i6, (double) i8));
+        Vec3 vec3 = Vec3.a(this.c, this.d, this.e);
 
         for (int i9 = 0; i9 < list.size(); ++i9) {
             Entity entity = (Entity) list.get(i9);
             double d7 = entity.f(this.c, this.d, this.e) / (double) this.g;
 
             if (d7 <= 1.0D) {
-                d0 = entity.t - this.c;
-                d1 = entity.u + (double) entity.g() - this.d;
-                d2 = entity.v - this.e;
+                d0 = entity.s - this.c;
+                d1 = entity.t + (double) entity.g() - this.d;
+                d2 = entity.u - this.e;
                 double d8 = (double) MathHelper.a(d0 * d0 + d1 * d1 + d2 * d2);
 
                 if (d8 != 0.0D) {
                     d0 /= d8;
                     d1 /= d8;
                     d2 /= d8;
-                    double d9 = (double) this.k.a(vec3, entity.D);
+                    double d9 = (double) this.k.a(vec3, entity.C);
                     double d10 = (1.0D - d7) * d9;
 
                     // Check entity if instance of Explosive and can damage entities
@@ -169,11 +169,11 @@ public class Explosion {
 
                     double d11 = EnchantmentProtection.a(entity, d10);
 
-                    entity.w += d0 * d11;
-                    entity.x += d1 * d11;
-                    entity.y += d2 * d11;
+                    entity.v += d0 * d11;
+                    entity.w += d1 * d11;
+                    entity.x += d2 * d11;
                     if (entity instanceof EntityPlayer) {
-                        this.l.put((EntityPlayer) entity, this.k.U().a(d0 * d10, d1 * d10, d2 * d10));
+                        this.l.put((EntityPlayer) entity, Vec3.a(d0 * d10, d1 * d10, d2 * d10));
                     }
                 }
             }

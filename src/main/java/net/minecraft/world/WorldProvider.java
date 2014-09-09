@@ -40,8 +40,8 @@ public abstract class WorldProvider {
     //
     public final void a(World world) {
         this.b = world;
-        this.c = world.M().u();
-        this.d = world.M().y();
+        this.c = world.N().u();
+        this.d = world.N().y();
         this.b();
         this.a();
     }
@@ -57,8 +57,8 @@ public abstract class WorldProvider {
     }
 
     protected void b() {
-        if (this.b.M().u() == WorldType.c) {
-            FlatGeneratorInfo flatgeneratorinfo = FlatGeneratorInfo.a(this.b.M().y());
+        if (this.b.N().u() == WorldType.c) {
+            FlatGeneratorInfo flatgeneratorinfo = FlatGeneratorInfo.a(this.b.N().y());
 
             this.e = new WorldChunkManagerHell(BiomeGenBase.d(flatgeneratorinfo.a()), 0.5F);
         }
