@@ -17,8 +17,7 @@ public class CanaryEnderCrystal extends CanaryEntity implements EnderCrystal {
     /**
      * Constructs a new wrapper for EntityEnderCrystal
      *
-     * @param entity
-     *         the EntityEnderCrystal to be wrapped
+     * @param entity the EntityEnderCrystal to be wrapped
      */
     public CanaryEnderCrystal(EntityEnderCrystal entity) {
         super(entity);
@@ -107,7 +106,7 @@ public class CanaryEnderCrystal extends CanaryEntity implements EnderCrystal {
     @Override
     public void detonate() {
         this.destroy();
-        getHandle().p.a(getHandle(), this.getX(), this.getY(), this.getZ(), power, damageWorld);
+        getHandle().o.a(getHandle(), this.getX(), this.getY(), this.getZ(), power, damageWorld);
     }
 
     /**

@@ -16,8 +16,7 @@ public class CanaryPig extends CanaryAnimalVehicle implements Pig {
     /**
      * Constructs a new wrapper for EntityPig
      *
-     * @param entity
-     *         the EntityPig to wrap
+     * @param entity the EntityPig to wrap
      */
     public CanaryPig(EntityPig entity) {
         super(entity);
@@ -41,7 +40,7 @@ public class CanaryPig extends CanaryAnimalVehicle implements Pig {
      */
     @Override
     public boolean isSaddled() {
-        return getHandle().bX();
+        return getHandle().bZ();
     }
 
     /**
