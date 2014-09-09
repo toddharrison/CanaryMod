@@ -67,15 +67,14 @@ public class ContainerPlayer extends Container {
     }
 
     public void a(IInventory iinventory) {
-        ItemStack result = CraftingManager.a().a(this.a, this.h.p);
+        ItemStack result = CraftingManager.a().a(this.a, this.h.o);
 
         // CanaryMod: Send custom recipe results to client
         if (this.h.getCanaryEntity() instanceof CanaryPlayer) {
             CraftHook hook = (CraftHook) new CraftHook(((EntityPlayerMP) this.h).getPlayer(), new CanaryPlayerCraftingMatrix(this.a), result == null ? null : result.getCanaryItem()).call();
             if (hook.isCanceled()) {
                 result = null;
-            }
-            else {
+            } else {
                 result = hook.getRecipeResult() == null ? null : ((CanaryItem) hook.getRecipeResult()).getHandle();
             }
             // Set custom result
@@ -118,42 +117,35 @@ public class ContainerPlayer extends Container {
                 }
 
                 slot.a(itemstack1, itemstack);
-            }
-            else if (i0 >= 1 && i0 < 5) {
+            } else if (i0 >= 1 && i0 < 5) {
                 if (!this.a(itemstack1, 9, 45, false)) {
                     return null;
                 }
-            }
-            else if (i0 >= 5 && i0 < 9) {
+            } else if (i0 >= 5 && i0 < 9) {
                 if (!this.a(itemstack1, 9, 45, false)) {
                     return null;
                 }
-            }
-            else if (itemstack.b() instanceof ItemArmor && !((Slot) this.c.get(5 + ((ItemArmor) itemstack.b()).b)).e()) {
+            } else if (itemstack.b() instanceof ItemArmor && !((Slot) this.c.get(5 + ((ItemArmor) itemstack.b()).b)).e()) {
                 int i1 = 5 + ((ItemArmor) itemstack.b()).b;
 
                 if (!this.a(itemstack1, i1, i1 + 1, false)) {
                     return null;
                 }
-            }
-            else if (i0 >= 9 && i0 < 36) {
+            } else if (i0 >= 9 && i0 < 36) {
                 if (!this.a(itemstack1, 36, 45, false)) {
                     return null;
                 }
-            }
-            else if (i0 >= 36 && i0 < 45) {
+            } else if (i0 >= 36 && i0 < 45) {
                 if (!this.a(itemstack1, 9, 36, false)) {
                     return null;
                 }
-            }
-            else if (!this.a(itemstack1, 9, 45, false)) {
+            } else if (!this.a(itemstack1, 9, 45, false)) {
                 return null;
             }
 
             if (itemstack1.b == 0) {
                 slot.c((ItemStack) null);
-            }
-            else {
+            } else {
                 slot.f();
             }
 

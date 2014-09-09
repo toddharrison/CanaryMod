@@ -44,7 +44,7 @@ public class SlotMerchantResult extends Slot {
     }
 
     protected void b(ItemStack itemstack) {
-        itemstack.a(this.b.p, this.b, this.c);
+        itemstack.a(this.b.o, this.b, this.c);
         this.c = 0;
     }
 

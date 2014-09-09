@@ -54,11 +54,11 @@ public class ContainerRepair extends Container {
             }
 
             public boolean a(EntityPlayer entityplayer) {
-                return (entityplayer.bF.d || entityplayer.bG >= ContainerRepair.this.a) && ContainerRepair.this.a > 0 && this.e();
+                return (entityplayer.bE.d || entityplayer.bF >= ContainerRepair.this.a) && ContainerRepair.this.a > 0 && this.e();
             }
 
             public void a(EntityPlayer entityplayer, ItemStack itemstack) {
-                if (!entityplayer.bF.d) {
+                if (!entityplayer.bE.d) {
                     entityplayer.a(-ContainerRepair.this.a);
                 }
 
@@ -69,17 +69,15 @@ public class ContainerRepair extends Container {
                     if (itemstack1 != null && itemstack1.b > ContainerRepair.this.m) {
                         itemstack1.b -= ContainerRepair.this.m;
                         ContainerRepair.this.h.a(1, itemstack1);
-                    }
-                    else {
+                    } else {
                         ContainerRepair.this.h.a(1, (ItemStack) null);
                     }
-                }
-                else {
+                } else {
                     ContainerRepair.this.h.a(1, (ItemStack) null);
                 }
 
                 ContainerRepair.this.a = 0;
-                if (!entityplayer.bF.d && !world.E && world.a(i0, i1, i2) == Blocks.bQ && entityplayer.aI().nextFloat() < 0.12F) {
+                if (!entityplayer.bE.d && !world.E && world.a(i0, i1, i2) == Blocks.bQ && entityplayer.aI().nextFloat() < 0.12F) {
                     int i3 = world.e(i0, i1, i2);
                     int i4 = i3 & 3;
                     int i5 = i3 >> 2;
@@ -88,13 +86,11 @@ public class ContainerRepair extends Container {
                     if (i5 > 2) {
                         world.f(i0, i1, i2);
                         world.c(1020, i0, i1, i2, 0);
-                    }
-                    else {
+                    } else {
                         world.a(i0, i1, i2, i1 | i2 << 2, 2);
                         world.c(1021, i0, i1, i2, 0);
                     }
-                }
-                else if (!world.E) {
+                } else if (!world.E) {
                     world.c(1021, i0, i1, i2, 0);
                 }
 
@@ -134,8 +130,7 @@ public class ContainerRepair extends Container {
         if (itemstack == null) {
             this.g.a(0, (ItemStack) null);
             this.a = 0;
-        }
-        else {
+        } else {
             ItemStack itemstack1 = itemstack.m();
             ItemStack itemstack2 = this.h.a(1);
             Map map = EnchantmentHelper.a(itemstack1);
@@ -169,8 +164,7 @@ public class ContainerRepair extends Container {
                     }
 
                     this.m = i4;
-                }
-                else {
+                } else {
                     if (!flag0 && (itemstack1.b() != itemstack2.b() || !itemstack1.g())) {
                         this.g.a(0, (ItemStack) null);
                         this.a = 0;
@@ -208,8 +202,7 @@ public class ContainerRepair extends Container {
                         if (i6 == i7) {
                             ++i7;
                             i9 = i7;
-                        }
-                        else {
+                        } else {
                             i9 = Math.max(i7, i6);
                         }
 
@@ -217,7 +210,7 @@ public class ContainerRepair extends Container {
                         int i10 = i7 - i6;
                         boolean flag1 = enchantment.a(itemstack);
 
-                        if (this.o.bF.d || itemstack.b() == Items.bR) {
+                        if (this.o.bE.d || itemstack.b() == Items.bR) {
                             flag1 = true;
                         }
 
@@ -281,8 +274,7 @@ public class ContainerRepair extends Container {
                     i0 += i1;
                     itemstack1.t();
                 }
-            }
-            else if (!this.n.equals(itemstack.s())) {
+            } else if (!this.n.equals(itemstack.s())) {
                 i1 = itemstack.g() ? 7 : itemstack.b * 5;
                 i0 += i1;
                 if (itemstack.u()) {
@@ -343,7 +335,7 @@ public class ContainerRepair extends Container {
                 this.a = 39;
             }
 
-            if (this.a >= 40 && !this.o.bF.d) {
+            if (this.a >= 40 && !this.o.bE.d) {
                 itemstack1 = null;
             }
 
@@ -416,20 +408,17 @@ public class ContainerRepair extends Container {
                 }
 
                 slot.a(itemstack1, itemstack);
-            }
-            else if (i0 != 0 && i0 != 1) {
+            } else if (i0 != 0 && i0 != 1) {
                 if (i0 >= 3 && i0 < 39 && !this.a(itemstack1, 0, 2, false)) {
                     return null;
                 }
-            }
-            else if (!this.a(itemstack1, 3, 39, false)) {
+            } else if (!this.a(itemstack1, 3, 39, false)) {
                 return null;
             }
 
             if (itemstack1.b == 0) {
                 slot.c((ItemStack) null);
-            }
-            else {
+            } else {
                 slot.f();
             }
 
@@ -450,8 +439,7 @@ public class ContainerRepair extends Container {
 
             if (StringUtils.isBlank(s0)) {
                 itemstack.t();
-            }
-            else {
+            } else {
                 itemstack.c(this.n);
             }
         }

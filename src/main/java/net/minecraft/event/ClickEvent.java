@@ -35,27 +35,23 @@ public class ClickEvent {
     public boolean equals(Object object) {
         if (this == object) {
             return true;
-        }
-        else if (object != null && this.getClass() == object.getClass()) {
+        } else if (object != null && this.getClass() == object.getClass()) {
             ClickEvent clickevent = (ClickEvent) object;
 
             if (this.a != clickevent.a) {
                 return false;
-            }
-            else {
+            } else {
                 if (this.b != null) {
                     if (!this.b.equals(clickevent.b)) {
                         return false;
                     }
-                }
-                else if (clickevent.b != null) {
+                } else if (clickevent.b != null) {
                     return false;
                 }
 
                 return true;
             }
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -102,12 +98,12 @@ public class ClickEvent {
         //
 
         public static Action a(String aclickevent_action) {
-            return e.get(aclickevent_action.toLowerCase());
+            return f.get(aclickevent_action.toLowerCase());
         }
 
         static {
             for (Action action : values()) {
-                e.put(action.b(), action);
+                f.put(action.b(), action);
             }
         }
     }

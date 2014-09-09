@@ -7,6 +7,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
+import net.minecraft.entity.monster.EntityZombie;
+import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
@@ -98,8 +100,7 @@ public class PathNavigate {
             this.c = null;
             // Canary.logInfo("path was null");
             return false;
-        }
-        else {
+        } else {
             if (!pathentity.a(this.c)) {
                 this.c = pathentity;
             }
@@ -111,8 +112,7 @@ public class PathNavigate {
             if (this.c.d() == 0) {
                 // Canary.logInfo("path was of length 0");
                 return false;
-            }
-            else {
+            } else {
                 this.d = d0;
                 Vec3 vec3 = this.j();
 
@@ -216,11 +216,11 @@ public class PathNavigate {
                 ++i0;
                 block = this.b.a(MathHelper.c(this.a.s), i0, MathHelper.c(this.a.u));
                 ++i1;
-            } while (i1 <= 16);
+            }
+            while (i1 <= 16);
 
             return (int) this.a.C.b;
-        }
-        else {
+        } else {
             return (int) (this.a.C.b + 0.5D);
         }
     }
@@ -255,8 +255,7 @@ public class PathNavigate {
 
         if (d2 < 1.0E-8D) {
             return false;
-        }
-        else {
+        } else {
             double d3 = 1.0D / Math.sqrt(d2);
 
             d0 *= d3;
@@ -265,8 +264,7 @@ public class PathNavigate {
             i2 += 2;
             if (!this.a(i3, (int) vec3.b, i4, i0, i1, i2, vec3, d0, d1)) {
                 return false;
-            }
-            else {
+            } else {
                 i0 -= 2;
                 i2 -= 2;
                 double d4 = 1.0D / Math.abs(d0);
@@ -300,13 +298,13 @@ public class PathNavigate {
                         d6 += d4;
                         i3 += i5;
                         i9 = i7 - i3;
-                    }
-                    else {
+                    } else {
                         d7 += d5;
                         i4 += i6;
                         i10 = i8 - i4;
                     }
-                } while (this.a(i3, (int) vec3.b, i4, i0, i1, i2, vec3, d0, d1));
+                }
+                while (this.a(i3, (int) vec3.b, i4, i0, i1, i2, vec3, d0, d1));
 
                 return false;
             }
@@ -319,8 +317,7 @@ public class PathNavigate {
 
         if (!this.b(i6, i1, i7, i3, i4, i5, vec3, d0, d1)) {
             return false;
-        }
-        else {
+        } else {
             for (int i8 = i6; i8 < i6 + i3; ++i8) {
                 for (int i9 = i7; i9 < i7 + i5; ++i9) {
                     double d2 = (double) i8 + 0.5D - vec3.a;

@@ -132,8 +132,7 @@ public class ContainerEnchantment extends Container {
                                 }
                             }
                         }
-                    }
-                    else {
+                    } else {
                         // CanaryMod: set case count
                         i0 = ((CanaryEnchantmentTable) this.inventory).getFakeCaseCount();
                     }
@@ -144,8 +143,7 @@ public class ContainerEnchantment extends Container {
 
                     this.b();
                 }
-            }
-            else {
+            } else {
                 for (i0 = 0; i0 < 3; ++i0) {
                     this.g[i0] = 0;
                 }
@@ -157,7 +155,7 @@ public class ContainerEnchantment extends Container {
     public boolean a(EntityPlayer entityplayer, int i0) {
         ItemStack itemstack = this.a.a(0);
 
-        if (this.g[i0] > 0 && itemstack != null && (entityplayer.bG >= this.g[i0] || entityplayer.bF.d)) {
+        if (this.g[i0] > 0 && itemstack != null && (entityplayer.bG >= this.g[i0] || entityplayer.bE.d)) {
             if (!this.h.E) {
                 List<EnchantmentData> list = EnchantmentHelper.b(this.l, itemstack, this.g[i0]);
                 boolean flag0 = itemstack.b() == Items.aG;
@@ -189,8 +187,7 @@ public class ContainerEnchantment extends Container {
                             if (!flag0 || i2 != i1) {
                                 if (flag0) {
                                     Items.bR.a(itemstack, enchantmentdata);
-                                }
-                                else {
+                                } else {
                                     itemstack.a(enchantmentdata.b, enchantmentdata.c);
                                 }
                             }
@@ -203,8 +200,7 @@ public class ContainerEnchantment extends Container {
             }
 
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -242,8 +238,7 @@ public class ContainerEnchantment extends Container {
                 if (!this.a(itemstack1, 1, 37, true)) {
                     return null;
                 }
-            }
-            else {
+            } else {
                 if (((Slot) this.c.get(0)).e() || !((Slot) this.c.get(0)).a(itemstack1)) {
                     return null;
                 }
@@ -251,8 +246,7 @@ public class ContainerEnchantment extends Container {
                 if (itemstack1.p() && itemstack1.b == 1) {
                     ((Slot) this.c.get(0)).c(itemstack1.m());
                     itemstack1.b = 0;
-                }
-                else if (itemstack1.b >= 1) {
+                } else if (itemstack1.b >= 1) {
                     ((Slot) this.c.get(0)).c(new ItemStack(itemstack1.b(), 1, itemstack1.k()));
                     --itemstack1.b;
                 }
@@ -260,8 +254,7 @@ public class ContainerEnchantment extends Container {
 
             if (itemstack1.b == 0) {
                 slot.c((ItemStack) null);
-            }
-            else {
+            } else {
                 slot.f();
             }
 
