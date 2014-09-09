@@ -340,7 +340,7 @@ public class EntityBoat extends Entity {
                     this.v = 0.0D;
                     this.w = 0.0D;
                     this.x = 0.0D;
-                    this.b(this.q, this.r, this.s, this.B, this.C);
+                    this.b(this.p, this.q, this.r, this.y, this.z);
                     this.p = ppX;
                     this.q = ppY;
                     this.r = ppZ;
@@ -372,6 +372,7 @@ public class EntityBoat extends Entity {
                 }
             }
         }
+    }
 
     public void ac() {
         if (this.l != null) {

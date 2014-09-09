@@ -1080,7 +1080,7 @@ public abstract class ServerConfigurationManager {
         }
     }
 
-    public void r(String msg) {
+    public void u(String msg) {
         // CanaryMod shutdown hook
         ServerShutdownHook hook = (ServerShutdownHook) new ServerShutdownHook(msg != null ? msg : "Server closed").call();
         //
@@ -1156,7 +1156,7 @@ public abstract class ServerConfigurationManager {
      * @param packet
      */
     public void sendPacketToPlayer(CanaryPlayer player, CanaryPacket packet) {
-        if (a.contains(player.getHandle())) {
+        if (e.contains(player.getHandle())) {
             player.getHandle().a.a(packet.getPacket());
         }
     }

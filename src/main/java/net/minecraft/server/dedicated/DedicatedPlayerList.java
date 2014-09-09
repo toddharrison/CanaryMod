@@ -7,10 +7,13 @@ package net.minecraft.server.dedicated;
 //import java.io.PrintWriter;
 //import java.util.Iterator;
 
+import com.mojang.authlib.GameProfile;
 import net.canarymod.Canary;
 import net.canarymod.config.Configuration;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.ServerConfigurationManager;
+
+import java.io.IOException;
 
 //import org.apache.logging.log4j.LogManager;
 //import org.apache.logging.log4j.Logger;

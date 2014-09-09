@@ -8,12 +8,16 @@ import net.minecraft.network.play.server.S22PacketMultiBlockChange;
 import net.minecraft.network.play.server.S23PacketBlockChange;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.LongHashMap;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class PlayerManager {
@@ -316,7 +320,7 @@ public class PlayerManager {
                 if (this.b.isEmpty()) {
                     long i5 = (long) this.c.a + 2147483647L | (long) this.c.b + 2147483647L << 32;
 
-                    this.a(packet);
+                    this.a(entityplayermp);
                     PlayerManager.this.d.d(i5);
                     PlayerManager.this.f.remove(this);
                     if (this.e > 0) {
@@ -444,11 +448,11 @@ public class PlayerManager {
 
     // CanaryMod
     public List<EntityPlayerMP> getManagedPlayers() {
-        return b;
+        return c;
     }
 
     public int getPlayerViewRadius() {
-        return f;
+        return g;
     }
     //
 }

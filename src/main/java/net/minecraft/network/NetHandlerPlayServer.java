@@ -337,7 +337,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
                 this.b.b(this.b.t - d0, c03packetplayer.i());
             }
             else if (this.e % 20 == 0) {
-                this.a(this.o, this.p, this.q, this.b.y, this.b.z, this.b.getCanaryWorld().getType().getId(), this.b.p.getCanaryWorld().getName(), TeleportHook.TeleportCause.MOVEMENT);
+                this.a(this.o, this.p, this.q, this.b.y, this.b.z, this.b.getCanaryWorld().getType().getId(), this.b.o.getCanaryWorld().getName(), TeleportHook.TeleportCause.MOVEMENT);
             }
         }
     }
@@ -639,7 +639,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
         }
         }*/
         // CanaryMod: Re-route to Player chat
-        if (this.b.v() == EntityPlayer.EnumChatVisibility.HIDDEN) {
+        if (this.b.u() == EntityPlayer.EnumChatVisibility.HIDDEN) {
             ChatComponentTranslation chatcomponenttranslation = new ChatComponentTranslation("chat.cannotSend", new Object[0]);
 
             chatcomponenttranslation.b().a(EnumChatFormatting.RED);
@@ -780,7 +780,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
         if (this.b.bo.d == c0epacketclickwindow.c() && this.b.bo.c(this.b)) {
             // CanaryMod: SlotClick
             ItemStack itemstack = c0epacketclickwindow.d() > -1 ? this.b.bo.a(c0epacketclickwindow.d()).d() : null;
-            SlotType slot_type = SlotHelper.getSlotType(this.b.bp, c0epacketclickwindow.d());
+            SlotType slot_type = SlotHelper.getSlotType(this.b.bo, c0epacketclickwindow.d());
             SecondarySlotType finer_slot = SlotHelper.getSpecificSlotType(this.b.bo, c0epacketclickwindow.d());
             GrabMode grab_mode = GrabMode.fromInt(c0epacketclickwindow.h());
             ButtonPress mouse_click = ButtonPress.matchButton(grab_mode, c0epacketclickwindow.e(), c0epacketclickwindow.d());
@@ -794,7 +794,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
                     else {
                         ArrayList arraylist = new ArrayList();
 
-                        for (int i = 0; i < this.b.bp.c.size(); ++i) {
+                        for (int i = 0; i < this.b.bo.c.size(); ++i) {
                             arraylist.add(((Slot) this.b.bo.c.get(i)).d());
                         }
 
@@ -972,10 +972,13 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
     }
 
     public void a(C17PacketCustomPayload c17packetcustompayload) {
+        PacketBuffer packetbuffer;
         ItemStack itemstack;
         ItemStack itemstack1;
 
         if ("MC|BEdit".equals(c17packetcustompayload.c())) {
+            packetbuffer = new PacketBuffer(Unpooled.wrappedBuffer(c17packetcustompayload.e()));
+
             try {
                 itemstack = packetbuffer.c();
                 if (itemstack == null) {
@@ -995,183 +998,185 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
                         return;
                     }
                 }
-                catch(Exception exception){
-                    c.error("Couldn\'t handle book info", exception);
-                    return;
-                }
-                finally{
-                    packetbuffer.release();
-                }
 
                 return;
             }
-            else if ("MC|BSign".equals(c17packetcustompayload.c())) {
-                packetbuffer = new PacketBuffer(Unpooled.wrappedBuffer(c17packetcustompayload.e()));
-                try {
-                    itemstack = packetbuffer.c();
-                    if (itemstack != null) {
-                        if (!ItemEditableBook.a(itemstack.q())) {
-                            throw new IOException("Invalid book tag!");
-                        }
+            catch (Exception exception) {
+                c.error("Couldn\'t handle book info", exception);
+                return;
+            }
+            finally {
+                packetbuffer.release();
+            }
+        }
 
-                        itemstack1 = this.b.bm.h();
-                        if (itemstack1 == null) {
-                            return;
-                        }
-                        if (itemstack.b() == Items.bB && itemstack1.b() == Items.bA) {
-                            itemstack1.a("author", (NBTBase) (new NBTTagString(this.b.b_())));
-                            itemstack1.a("title", (NBTBase) (new NBTTagString(itemstack.q().j("title"))));
-                            itemstack1.a("pages", (NBTBase) itemstack.q().c("pages", 8));
-                            itemstack1.a(Items.bB);
-                        }
+        if ("MC|BSign".equals(c17packetcustompayload.c())) {
+            packetbuffer = new PacketBuffer(Unpooled.wrappedBuffer(c17packetcustompayload.e()));
+            try {
+                itemstack = packetbuffer.c();
+                if (itemstack != null) {
+                    if (!ItemEditableBook.a(itemstack.q())) {
+                        throw new IOException("Invalid book tag!");
+                    }
 
+                    itemstack1 = this.b.bm.h();
+                    if (itemstack1 == null) {
                         return;
                     }
-                }
-                catch (Exception exception1) {
-                    c.error("Couldn\'t sign book", exception1);
+                    if (itemstack.b() == Items.bB && itemstack1.b() == Items.bA) {
+                        itemstack1.a("author", (NBTBase) (new NBTTagString(this.b.b_())));
+                        itemstack1.a("title", (NBTBase) (new NBTTagString(itemstack.q().j("title"))));
+                        itemstack1.a("pages", (NBTBase) itemstack.q().c("pages", 8));
+                        itemstack1.a(Items.bB);
+                    }
+
                     return;
                 }
-                finally {
-                    packetbuffer.release();
-                }
-
+            }
+            catch (Exception exception1) {
+                c.error("Couldn\'t sign book", exception1);
                 return;
             }
-            else {
-                DataInputStream datainputstream;
-                int i0;
+            finally {
+                packetbuffer.release();
+            }
 
-                if ("MC|TrSel".equals(c17packetcustompayload.c())) {
+            return;
+        }
+        else {
+            DataInputStream datainputstream;
+            int i0;
+
+            if ("MC|TrSel".equals(c17packetcustompayload.c())) {
+                try {
+                    datainputstream = new DataInputStream(new ByteArrayInputStream(c17packetcustompayload.e()));
+                    i0 = datainputstream.readInt();
+                    Container container = this.b.bo;
+
+                    if (container instanceof ContainerMerchant) {
+                        ((ContainerMerchant) container).e(i0);
+                    }
+                }
+                catch (Exception exception2) {
+                    c.error("Couldn\'t select trade", exception2);
+                }
+            }
+            else if ("MC|AdvCdm".equals(c17packetcustompayload.c())) {
+                if (!this.d.ad()) {
+                    this.b.a((IChatComponent) (new ChatComponentTranslation("advMode.notEnabled", new Object[0])));
+                }
+                else if (this.b.a(2, "") && this.b.bE.d) {
+                    packetbuffer = new PacketBuffer(Unpooled.wrappedBuffer(c17packetcustompayload.e()));
+                    try {
+                        byte b0 = packetbuffer.readByte();
+                        CommandBlockLogic commandblocklogic = null;
+
+                        if (b0 == 0) {
+                            TileEntity tileentity = this.b.o.o(packetbuffer.readInt(), packetbuffer.readInt(), packetbuffer.readInt());
+
+                            if (tileentity instanceof TileEntityCommandBlock) {
+                                commandblocklogic = ((TileEntityCommandBlock) tileentity).a();
+                            }
+                        }
+                        else if (b0 == 1) {
+                            Entity entity = this.b.o.a(packetbuffer.readInt());
+
+                            if (entity instanceof EntityMinecartCommandBlock) {
+                                commandblocklogic = ((EntityMinecartCommandBlock) entity).e();
+                            }
+                        }
+
+                        String s0 = packetbuffer.c(packetbuffer.readableBytes());
+
+                        if (commandblocklogic != null) {
+                            commandblocklogic.a(s0);
+                            commandblocklogic.e();
+                            this.b.a((IChatComponent) (new ChatComponentTranslation("advMode.setCommand.success", new Object[]{s0})));
+                        }
+                    }
+                    catch (Exception exception3) {
+                        c.error("Couldn\'t set command block", exception3);
+                    }
+                    finally {
+                        packetbuffer.release();
+                    }
+                }
+                else {
+                    this.b.a((IChatComponent) (new ChatComponentTranslation("advMode.notAllowed", new Object[0])));
+                }
+            }
+            else if ("MC|Beacon".equals(c17packetcustompayload.c())) {
+                if (this.b.bo instanceof ContainerBeacon) {
                     try {
                         datainputstream = new DataInputStream(new ByteArrayInputStream(c17packetcustompayload.e()));
                         i0 = datainputstream.readInt();
-                        Container container = this.b.bo;
+                        int i1 = datainputstream.readInt();
+                        ContainerBeacon containerbeacon = (ContainerBeacon) this.b.bo;
+                        Slot slot = containerbeacon.a(0);
 
-                        if (container instanceof ContainerMerchant) {
-                            ((ContainerMerchant) container).e(i0);
+                        if (slot.e()) {
+                            slot.a(1);
+                            TileEntityBeacon tileentitybeacon = containerbeacon.e();
+
+                            tileentitybeacon.d(i0);
+                            tileentitybeacon.e(i1);
+                            tileentitybeacon.e();
                         }
                     }
-                    catch (Exception exception2) {
-                        c.error("Couldn\'t select trade", exception2);
-                    }
-                }
-                else if ("MC|AdvCdm".equals(c17packetcustompayload.c())) {
-                    if (!this.d.ad()) {
-                        this.b.a((IChatComponent) (new ChatComponentTranslation("advMode.notEnabled", new Object[0])));
-                    }
-                    else if (this.b.a(2, "") && this.b.bE.d) {
-                        packetbuffer = new PacketBuffer(Unpooled.wrappedBuffer(c17packetcustompayload.e()));
-                        try {
-                            byte b0 = packetbuffer.readByte();
-                            CommandBlockLogic commandblocklogic = null;
-
-                            if (b0 == 0) {
-                                TileEntity tileentity = this.b.o.o(packetbuffer.readInt(), packetbuffer.readInt(), packetbuffer.readInt());
-
-                                if (tileentity instanceof TileEntityCommandBlock) {
-                                    commandblocklogic = ((TileEntityCommandBlock) tileentity).a();
-                                }
-                            }
-                            else if (b0 == 1) {
-                                Entity entity = this.b.o.a(packetbuffer.readInt());
-
-                                if (entity instanceof EntityMinecartCommandBlock) {
-                                    commandblocklogic = ((EntityMinecartCommandBlock) entity).e();
-                                }
-                            }
-
-                            String s0 = packetbuffer.c(packetbuffer.readableBytes());
-
-                            if (commandblocklogic != null) {
-                                commandblocklogic.a(s0);
-                                commandblocklogic.e();
-                                this.b.a((IChatComponent) (new ChatComponentTranslation("advMode.setCommand.success", new Object[]{s0})));
-                            }
-                        }
-                        catch (Exception exception3) {
-                            c.error("Couldn\'t set command block", exception3);
-                        }
-                        finally {
-                            packetbuffer.release();
-                        }
-                    }
-                    else {
-                        this.b.a((IChatComponent) (new ChatComponentTranslation("advMode.notAllowed", new Object[0])));
-                    }
-                }
-                else if ("MC|Beacon".equals(c17packetcustompayload.c())) {
-                    if (this.b.bo instanceof ContainerBeacon) {
-                        try {
-                            datainputstream = new DataInputStream(new ByteArrayInputStream(c17packetcustompayload.e()));
-                            i0 = datainputstream.readInt();
-                            int i1 = datainputstream.readInt();
-                            ContainerBeacon containerbeacon = (ContainerBeacon) this.b.bo;
-                            Slot slot = containerbeacon.a(0);
-
-                            if (slot.e()) {
-                                slot.a(1);
-                                TileEntityBeacon tileentitybeacon = containerbeacon.e();
-
-                                tileentitybeacon.d(i0);
-                                tileentitybeacon.e(i1);
-                                tileentitybeacon.e();
-                            }
-                        }
-                        catch (Exception exception4) {
-                            c.error("Couldn\'t set beacon", exception4);
-                        }
-                    }
-                }
-                else if ("MC|ItemName".equals(c17packetcustompayload.c()) && this.b.bo instanceof ContainerRepair) {
-                    ContainerRepair containerrepair = (ContainerRepair) this.b.bo;
-
-                    if (c17packetcustompayload.e() != null && c17packetcustompayload.e().length >= 1) {
-                        String s1 = ChatAllowedCharacters.a(new String(c17packetcustompayload.e(), Charsets.UTF_8));
-
-                        if (s1.length() <= 30) {
-                            containerrepair.a(s1);
-                        }
-                    }
-                    else {
-                        containerrepair.a("");
+                    catch (Exception exception4) {
+                        c.error("Couldn\'t set beacon", exception4);
                     }
                 }
             }
+            else if ("MC|ItemName".equals(c17packetcustompayload.c()) && this.b.bo instanceof ContainerRepair) {
+                ContainerRepair containerrepair = (ContainerRepair) this.b.bo;
 
-            // CanaryMod: Custom Payload implementation!
-            if ("REGISTER".equals(c17packetcustompayload.c())) {
-                try {
-                    String channel = new String(c17packetcustompayload.e(), Charsets.UTF_8);
-                    for (String chan : channel.split("\0")) {
-                        Canary.channels().registerClient(chan, this.serverHandler);
+                if (c17packetcustompayload.e() != null && c17packetcustompayload.e().length >= 1) {
+                    String s1 = ChatAllowedCharacters.a(new String(c17packetcustompayload.e(), Charsets.UTF_8));
+
+                    if (s1.length() <= 30) {
+                        containerrepair.a(s1);
                     }
-                    Canary.log.info(String.format("Player '%s' registered Custom Payload on channel(s) '%s'", this.b.getPlayer().getName(), Arrays.toString(channel.split("\0"))));
                 }
-                catch (Exception ex) {
-                    c.error("Error receiving 'C17PacketCustomPayload': " + ex.getMessage(), ex);
-                }
-            }
-            else if ("UNREGISTER".equals(c17packetcustompayload.c())) {
-                try {
-                    String channel = new String(c17packetcustompayload.e(), Charsets.UTF_8);
-                    Canary.channels().unregisterClient(channel, this.serverHandler);
-                    Canary.log.info(String.format("Player '%s' unregistered Custom Payload on channel '%s'", this.b.getPlayer().getName(), channel));
-                }
-                catch (Exception ex) {
-                    c.error("Error receiving 'C17PacketCustomPayload': " + ex.getMessage(), ex);
+                else {
+                    containerrepair.a("");
                 }
             }
-            else {
-                try {
-                    Canary.channels().sendCustomPayloadToListeners(c17packetcustompayload.c(), c17packetcustompayload.e(), this.b.getPlayer());
-                }
-                catch (Exception ex) {
-                    c.error("Error receiving 'C17PacketCustomPayload': " + ex.getMessage(), ex);
-                }
-            }
-            // CanaryMod: End
         }
+
+        // CanaryMod: Custom Payload implementation!
+        if ("REGISTER".equals(c17packetcustompayload.c())) {
+            try {
+                String channel = new String(c17packetcustompayload.e(), Charsets.UTF_8);
+                for (String chan : channel.split("\0")) {
+                    Canary.channels().registerClient(chan, this.serverHandler);
+                }
+                Canary.log.info(String.format("Player '%s' registered Custom Payload on channel(s) '%s'", this.b.getPlayer().getName(), Arrays.toString(channel.split("\0"))));
+            }
+            catch (Exception ex) {
+                c.error("Error receiving 'C17PacketCustomPayload': " + ex.getMessage(), ex);
+            }
+        }
+        else if ("UNREGISTER".equals(c17packetcustompayload.c())) {
+            try {
+                String channel = new String(c17packetcustompayload.e(), Charsets.UTF_8);
+                Canary.channels().unregisterClient(channel, this.serverHandler);
+                Canary.log.info(String.format("Player '%s' unregistered Custom Payload on channel '%s'", this.b.getPlayer().getName(), channel));
+            }
+            catch (Exception ex) {
+                c.error("Error receiving 'C17PacketCustomPayload': " + ex.getMessage(), ex);
+            }
+        }
+        else {
+            try {
+                Canary.channels().sendCustomPayloadToListeners(c17packetcustompayload.c(), c17packetcustompayload.e(), this.b.getPlayer());
+            }
+            catch (Exception ex) {
+                c.error("Error receiving 'C17PacketCustomPayload': " + ex.getMessage(), ex);
+            }
+        }
+        // CanaryMod: End
+    }
 
     public void a(EnumConnectionState enumconnectionstate, EnumConnectionState enumconnectionstate1) {
         if (enumconnectionstate1 != EnumConnectionState.PLAY) {

@@ -80,8 +80,7 @@ public abstract class World implements IBlockAccess {
     public final VillageCollection A;
     protected final VillageSiege B = new VillageSiege(this);
     public final Profiler C;
-    private final Vec3Pool J = new Vec3Pool(300, 2000);
-    private final Calendar K = Calendar.getInstance();
+    private final Calendar J = Calendar.getInstance();
     public Scoreboard D = new Scoreboard(); // Protected => public
     public boolean E;
     protected Set F = new HashSet();
@@ -1928,6 +1927,7 @@ public abstract class World implements IBlockAccess {
         EntityPlayer entityplayer;
         int i1;
         int i2;
+        int i3;
 
         for (i0 = 0; i0 < this.h.size(); ++i0) {
             entityplayer = (EntityPlayer) this.h.get(i0);

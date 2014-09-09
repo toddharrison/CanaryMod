@@ -295,7 +295,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
                 // updates your health when it is changed.
                 if (!Configuration.getWorldConfig(getCanaryWorld().getFqName()).isHealthEnabled()) {
                     super.b(this.aZ());
-                    this.L = false;
+                    this.K = false;
                 }
                 else {
                     HealthChangeHook hook = (HealthChangeHook) new HealthChangeHook(getPlayer(), bP, this.aN()).call();
@@ -496,7 +496,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
             }
 
             // CanaryMod onPortalUse && onDimensionSwitch
-            Location goingTo = simulatePortalUse(i0, MinecraftServer.G().getWorld(getCanaryWorld().getName(), i0));
+            Location goingTo = simulatePortalUse(i0, MinecraftServer.I().getWorld(getCanaryWorld().getName(), i0));
 
             PortalUseHook puh = (PortalUseHook) new PortalUseHook(getPlayer(), goingTo).call();
             DimensionSwitchHook dsh = (DimensionSwitchHook) new DimensionSwitchHook(this.getCanaryEntity(), this.getCanaryEntity().getLocation(), goingTo).call();
@@ -612,7 +612,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
         //
         this.bV();
         this.a.a((Packet) (new S2DPacketOpenWindow(this.bY, 4, s0 == null ? "" : s0, 9, s0 != null)));
-        this.bo = container
+        this.bo = container;
         this.bo.d = this.bY;
         this.bo.a((ICrafting) this);
     }
@@ -639,7 +639,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
         }
         // CanaryMod: InventoryHook
         Inventory inventory = null;
-        ContainerChest container = new ContainerChest(this.bo, iinventory);
+        ContainerChest container = new ContainerChest(this.bm, iinventory);
 
         if (iinventory instanceof TileEntityChest) {
             inventory = ((TileEntityChest) iinventory).getCanaryChest();
@@ -798,7 +798,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
         if (hook.isCanceled()) {
             return;
         }
-        ContainerHorseInventory chi = new ContainerHorseInventory(this.bn, iinventory, entityhorse);
+        ContainerHorseInventory chi = new ContainerHorseInventory(this.bm, iinventory, entityhorse);
         chi.setInventory(inv);
         //
         this.bV();
@@ -1117,7 +1117,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
             return;
         }//
 
-        this.b.af().a(this, srv.getCanaryWorld().getName(), srv.getCanaryWorld().getType().getId());
+        this.b.ah().a(this, srv.getCanaryWorld().getName(), srv.getCanaryWorld().getType().getId());
         this.bT = -1;
         this.bQ = -1.0F;
         this.bR = -1;

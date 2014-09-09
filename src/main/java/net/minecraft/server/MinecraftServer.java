@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import com.google.common.base.Charsets;
 import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.GameProfileRepository;
 import com.mojang.authlib.minecraft.MinecraftSessionService;
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
 import io.netty.buffer.ByteBuf;
@@ -38,6 +39,7 @@ import net.minecraft.profiler.PlayerUsageSnooper;
 import net.minecraft.profiler.Profiler;
 import net.minecraft.server.dedicated.DedicatedServer;
 import net.minecraft.server.gui.IUpdatePlayerListBox;
+import net.minecraft.server.management.PlayerProfileCache;
 import net.minecraft.server.management.ServerConfigurationManager;
 import net.minecraft.util.*;
 import net.minecraft.world.*;
@@ -213,12 +215,12 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
             worldsettings = new WorldSettings(worldinfo);
         }
 
-        if (this.K) {
+        if (this.L) {
             worldsettings.a();
         }
 
         if (dimType.getId() == 0) {
-            if (this.P()) {
+            if (this.R()) {
                 world = new DemoWorldServer(this, isavehandler, name, dimType.getId(), this.b);
             }
             else {
@@ -362,7 +364,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
                 this.l.e();
             }
             // CanaryMod disable plugins:
-            Logger canaryLogger = log == h ? Canary.log : new ShutdownLogger("CanaryMod");
+            Logger canaryLogger = log == i ? Canary.log : new ShutdownLogger("CanaryMod");
             canaryLogger.info("Disabling Plugins ...");
             Canary.loader().disableAllPlugins(canaryLogger);
         }
@@ -578,7 +580,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
             this.b.a(worldserver.N().k());
             this.b.a("pools");
             this.b.b();
-            if (this.w % 20 == 0) {
+            if (this.x % 20 == 0) {
                 this.b.a("timeSync");
                 // this.u.a((Packet) (new S03PacketTimeUpdate(worldserver.H(), worldserver.I(), worldserver.N().b("doDaylightCycle"))), worldserver.t.i);
                 this.u.sendPacketToDimension(new S03PacketTimeUpdate(worldserver.I(), worldserver.J(), worldserver.O().b("doDaylightCycle")), worldserver.getCanaryWorld().getName(), worldserver.t.i);
@@ -612,7 +614,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
             worldserver.r().a();
             this.b.b();
             this.b.b();
-            w.setNanoTick(this.w % 100, System.nanoTime() - i1);
+            w.setNanoTick(this.x % 100, System.nanoTime() - i1);
             // this.k[i0][this.w % 100] = System.nanoTime() - i1;
         }
 
@@ -1279,11 +1281,11 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 
     public void initShutdown(String message) {
         this.stopMsg = message;
-        this.q();
+        this.r();
     }
 
     public boolean isRunning() {
-        return this.u;
+        return this.v;
     }
 
     /**
