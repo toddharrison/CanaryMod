@@ -13,8 +13,7 @@ public class CanaryOcelot extends CanaryTameable implements Ocelot {
     /**
      * Constructs a new wrapper for EntityOcelot
      *
-     * @param entity
-     *         the EntityOcelot to wrap
+     * @param entity the EntityOcelot to wrap
      */
     public CanaryOcelot(EntityOcelot entity) {
         super(entity);
@@ -38,7 +37,7 @@ public class CanaryOcelot extends CanaryTameable implements Ocelot {
      */
     @Override
     public SkinType getSkinType() {
-        return SkinType.values()[getHandle().ce()];
+        return SkinType.values()[getHandle().cg()];
     }
 
     /**

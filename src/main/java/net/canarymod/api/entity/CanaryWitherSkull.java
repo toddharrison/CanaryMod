@@ -126,7 +126,7 @@ public class CanaryWitherSkull extends CanaryFireball implements WitherSkull {
      */
     @Override
     public void detonate() {
-        getHandle().p.a(getHandle(), getX(), getY(), getZ(), getPower(), false, damageWorld);
+        getHandle().o.a(getHandle(), getX(), getY(), getZ(), getPower(), false, damageWorld);
     }
 
     /**
