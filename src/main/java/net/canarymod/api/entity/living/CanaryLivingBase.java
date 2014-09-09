@@ -74,7 +74,7 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
      */
     @Override
     public boolean canSee(LivingBase livingbase) {
-        return getHandle().o(((CanaryEntity) livingbase).getHandle());
+        return getHandle().n(((CanaryEntity) livingbase).getHandle());
     }
 
     /**
@@ -82,7 +82,7 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
      */
     @Override
     public int getDeathTicks() {
-        return getHandle().aB;
+        return getHandle().aA;
     }
 
     /**
@@ -90,7 +90,7 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
      */
     @Override
     public void setDeathTicks(int ticks) {
-        getHandle().aB = ticks;
+        getHandle().aA = ticks;
     }
 
     /**
@@ -98,7 +98,7 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
      */
     @Override
     public int getInvulnerabilityTicks() {
-        return getHandle().aI;
+        return getHandle().aH;
     }
 
     /**
@@ -106,7 +106,7 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
      */
     @Override
     public void setInvulnerabilityTicks(int ticks) {
-        getHandle().aI = ticks;
+        getHandle().aH = ticks;
     }
 
     /**
@@ -386,22 +386,22 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
         // Get the vector that this entity is looking; Get our start position
         Vec3 vec = ((CanaryLivingBase)this).getHandle().ag();
         Position startPos = this.getPosition();
-        Position nextPos = new Position((startPos.getX() + vec.c), (startPos.getY() + vec.d) + this.getEyeHeight(),(startPos.getZ() + vec.e));
+        Position nextPos = new Position((startPos.getX() + vec.a), (startPos.getY() + vec.b) + this.getEyeHeight(),(startPos.getZ() + vec.c));
 
         while (distanceTo(startPos, nextPos) < searchRadius * searchRadius) {
             // Get the nearest entity and check that its not null (i.e. isn't an entity in the BB)
             Entity near = this.getNearestEntity(this, nextPos.getX(), nextPos.getY(), nextPos.getZ());
             if (near != null) {
-                AxisAlignedBB bb = ((CanaryEntity)near).getHandle().D;
+                AxisAlignedBB bb = ((CanaryEntity)near).getHandle().C;
                 if ((nextPos.getX() > bb.a && nextPos.getX() < bb.d) && (nextPos.getY() > bb.b && nextPos.getY() < bb.e) && (nextPos.getZ() > bb.c && nextPos.getZ() < bb.f)) {
                     toRet = near;
                     break;
                 }
                 // Calculate the next position to check, small step because we have entities here
-                nextPos = new Position((nextPos.getX() + (vec.c*.01)), (nextPos.getY() + (vec.d*.01)),(nextPos.getZ() + (vec.e*.01)));
+                nextPos = new Position((nextPos.getX() + (vec.a*.01)), (nextPos.getY() + (vec.b*.01)),(nextPos.getZ() + (vec.c*.01)));
             } else {
                 // Calculate the next position to check, large step because the immediate area is empty
-                nextPos = new Position((nextPos.getX() + (vec.c)), (nextPos.getY() + (vec.d)),(nextPos.getZ() + (vec.e)));
+                nextPos = new Position((nextPos.getX() + (vec.a)), (nextPos.getY() + (vec.b)),(nextPos.getZ() + (vec.c)));
             }
         }
         return toRet;
