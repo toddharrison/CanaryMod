@@ -72,7 +72,7 @@ public class CanaryChunkProviderServer implements ChunkProvider {
         handle.b(newChunk);
         newChunk.k = false;
         if (handle.e != null) {
-            handle.e.b();
+            handle.e.c();
         }
 
         return newChunk.getCanaryChunk();
@@ -101,7 +101,7 @@ public class CanaryChunkProviderServer implements ChunkProvider {
 
     @Override
     public String getStatistics() {
-        return handle.e();
+        return handle.f();
     }
 
     @SuppressWarnings("unchecked")

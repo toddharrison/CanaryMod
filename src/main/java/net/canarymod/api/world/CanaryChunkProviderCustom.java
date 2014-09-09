@@ -57,7 +57,7 @@ public class CanaryChunkProviderCustom implements IChunkProvider {
 
     //unloadQueuedChunks
     @Override
-    public boolean c() {
+    public boolean e() {
         //All ChunkProviders, except ChunkProviderServer return false.
         //This is an indication that unloading chunks failed
         return false;
@@ -71,8 +71,8 @@ public class CanaryChunkProviderCustom implements IChunkProvider {
 
     //getStatisticsAsString
     @Override
-    public String e() {
-        return handle.e();
+    public String f() {
+        return handle.f();
     }
 
     //getPossibleCreaturs (list of mobs that can spawn here) TODO: Should be useful to have access to!
@@ -89,8 +89,8 @@ public class CanaryChunkProviderCustom implements IChunkProvider {
 
     //getLoadedChunkCount
     @Override
-    public int f() {
-        return handle.f();
+    public int g() {
+        return handle.g();
     }
 
     //recreateStructures
@@ -100,8 +100,8 @@ public class CanaryChunkProviderCustom implements IChunkProvider {
     }
 
     @Override
-    public void b() {
-        handle.b();
+    public void c() {
+        handle.c();
     }
 
 }
