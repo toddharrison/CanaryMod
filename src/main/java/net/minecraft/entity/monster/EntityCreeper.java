@@ -204,6 +204,6 @@ public class EntityCreeper extends EntityMob {
 
     // CanaryMod: Set Charge to Creeper
     public void setCharged(boolean charged) {
-        this.ag.b(17, Byte.valueOf(charged ? (byte) 1 : (byte) 0));
+        this.af.b(17, Byte.valueOf(charged ? (byte) 1 : (byte) 0));
     }
 }

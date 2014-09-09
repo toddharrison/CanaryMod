@@ -153,7 +153,7 @@ public class EntitySpider extends EntityMob {
             }
         }
 
-        if (ientitylivingdata1 instanceof EntitySpider.GroupData) {
+        if (ientitylivingdata instanceof EntitySpider.GroupData) {
             int i0 = ((EntitySpider.GroupData) object).a;
 
             if (i0 > 0 && Potion.a[i0] != null) {

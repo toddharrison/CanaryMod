@@ -64,7 +64,7 @@ public class CanaryConfigurationManager implements ConfigurationManager {
 
     @Override
     public int getMaxPlayers() {
-        return manager.o();
+        return manager.p();
     }
 
     @Override
