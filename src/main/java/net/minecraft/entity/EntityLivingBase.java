@@ -640,7 +640,7 @@ public abstract class EntityLivingBase extends Entity {
                         return false;
                     }
 
-                    hook.setDamageDealt((f0 - this.bc));
+                    hook.setDamageDealt((f0 - this.bb));
                     if (attacker != null) {
                         hook.call();
                     }

@@ -13,6 +13,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.*;
+import java.util.UUID;
 
 public class SaveHandler implements ISaveHandler, IPlayerFileData {
 
@@ -21,7 +22,7 @@ public class SaveHandler implements ISaveHandler, IPlayerFileData {
     private final File globalPlayerFilesDir; // CanaryMod renamed from c
     private final File worldbaseDir; // CanaryMod
     private final File worldDataDir; // CanaryMod renamed from d
-    private final long e = MinecraftServer.ap();
+    private final long e = MinecraftServer.ar();
     private final String worldName; // CanaryMod renamed from f
     protected net.canarymod.api.world.DimensionType type;
 
@@ -73,12 +74,10 @@ public class SaveHandler implements ISaveHandler, IPlayerFileData {
 
             try {
                 dataoutputstream.writeLong(this.e);
-            }
-            finally {
+            } finally {
                 dataoutputstream.close();
             }
-        }
-        catch (IOException ioexception) {
+        } catch (IOException ioexception) {
             ioexception.printStackTrace();
             throw new RuntimeException("Failed to check session lock, aborting");
         }
@@ -98,12 +97,10 @@ public class SaveHandler implements ISaveHandler, IPlayerFileData {
                 if (datainputstream.readLong() != this.e) {
                     throw new MinecraftException("The save is being accessed from another location, aborting");
                 }
-            }
-            finally {
+            } finally {
                 datainputstream.close();
             }
-        }
-        catch (IOException ioexception) {
+        } catch (IOException ioexception) {
             throw new MinecraftException("Failed to check session lock, aborting");
         }
     }
@@ -124,8 +121,7 @@ public class SaveHandler implements ISaveHandler, IPlayerFileData {
                 nbttagcompound = CompressedStreamTools.a((InputStream) (new FileInputStream(file1)));
                 nbttagcompound1 = nbttagcompound.m("Data");
                 return new WorldInfo(nbttagcompound1);
-            }
-            catch (Exception exception) {
+            } catch (Exception exception) {
                 exception.printStackTrace();
             }
         }
@@ -136,8 +132,7 @@ public class SaveHandler implements ISaveHandler, IPlayerFileData {
                 nbttagcompound = CompressedStreamTools.a((InputStream) (new FileInputStream(file1)));
                 nbttagcompound1 = nbttagcompound.m("Data");
                 return new WorldInfo(nbttagcompound1);
-            }
-            catch (Exception exception1) {
+            } catch (Exception exception1) {
                 exception1.printStackTrace();
             }
         }
@@ -171,8 +166,7 @@ public class SaveHandler implements ISaveHandler, IPlayerFileData {
             if (file1.exists()) {
                 file1.delete();
             }
-        }
-        catch (Exception exception) {
+        } catch (Exception exception) {
             exception.printStackTrace();
         }
 
@@ -204,8 +198,7 @@ public class SaveHandler implements ISaveHandler, IPlayerFileData {
             if (file1.exists()) {
                 file1.delete();
             }
-        }
-        catch (Exception exception) {
+        } catch (Exception exception) {
             exception.printStackTrace();
         }
 
@@ -226,8 +219,7 @@ public class SaveHandler implements ISaveHandler, IPlayerFileData {
             }
 
             file1.renameTo(file2);
-        }
-        catch (Exception exception) {
+        } catch (Exception exception) {
             a.warn("Failed to save player data for " + entityplayer.b_());
         }
 
@@ -237,13 +229,12 @@ public class SaveHandler implements ISaveHandler, IPlayerFileData {
         NBTTagCompound nbttagcompound = null;
 
         try {
-            File file1 = new File(this.c, entityplayer.aB().toString() + ".dat");
+            File file1 = new File(this.globalPlayerFilesDir, entityplayer.aB().toString() + ".dat");
 
             if (file1.exists() && file1.isFile()) {
                 nbttagcompound = CompressedStreamTools.a((InputStream) (new FileInputStream(file1)));
             }
-        }
-        catch (Exception exception) {
+        } catch (Exception exception) {
             a.warn("Failed to load player data for " + entityplayer.b_());
         }
 
@@ -253,6 +244,24 @@ public class SaveHandler implements ISaveHandler, IPlayerFileData {
 
         return nbttagcompound;
     }
+
+    // CanaryMod: Added player.dat by UUID getter
+    public NBTTagCompound b(UUID uuid) {
+        NBTTagCompound nbttagcompound = null;
+
+        try {
+            File file1 = new File(this.globalPlayerFilesDir, uuid.toString() + ".dat");
+
+            if (file1.exists() && file1.isFile()) {
+                nbttagcompound = CompressedStreamTools.a((InputStream) (new FileInputStream(file1)));
+            }
+        } catch (Exception exception) {
+            a.warn("Failed to load player data for " + uuid.toString());
+        }
+
+        return nbttagcompound;
+    }
+    //
 
     @Override
     public IPlayerFileData e() {
@@ -288,21 +297,20 @@ public class SaveHandler implements ISaveHandler, IPlayerFileData {
     // CanaryMod enable writing dat files from player name and a given base tag
     // This is a copy of this.a(EntityPlayer and might need adjustments accordingly!)
     // TODO UUID
-    public void writePlayerNbt(String player, CanaryCompoundTag tag) {
+    public void writePlayerNbt(UUID uuid, CanaryCompoundTag tag) {
         try {
             NBTTagCompound nbttagcompound = tag.getHandle();
 
-            File file1 = new File(this.worldDir, player + ".dat.tmp");
-            File file2 = new File(this.worldDir, player + ".dat");
+            File file1 = new File(this.worldDir, uuid.toString() + ".dat.tmp");
+            File file2 = new File(this.worldDir, uuid.toString() + ".dat");
 
             CompressedStreamTools.a(nbttagcompound, (OutputStream) (new FileOutputStream(file1)));
             if (file2.exists()) {
                 file2.delete();
             }
             file1.renameTo(file2);
-        }
-        catch (Exception exception) {
-            a.warn("Failed to save player data for " + player);
+        } catch (Exception exception) {
+            a.warn("Failed to save player data for " + uuid.toString());
         }
     }
     // CanaryMod end

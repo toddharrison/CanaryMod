@@ -12,23 +12,21 @@ import net.canarymod.Canary;
 import net.canarymod.config.Configuration;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.ServerConfigurationManager;
-
-import java.io.IOException;
-
-//import org.apache.logging.log4j.LogManager;
-//import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class DedicatedPlayerList extends ServerConfigurationManager {
 
     // CanaryMod removed whitelist
     // CanaryMod: removed ops
+    private static final Logger g = LogManager.getLogger();
 
     public DedicatedPlayerList(DedicatedServer dedicatedserver) {
         super(dedicatedserver);
         // CanaryMod removed whitelist settings
         // CanaryMod: removed ops
-        this.c = Configuration.getServerConfig().getViewDistance();
-        this.b = Configuration.getServerConfig().getMaxPlayers();
+        this.a(Configuration.getServerConfig().getViewDistance());
+        this.f = Configuration.getServerConfig().getMaxPlayers();
         // CanaryMod removed references to NMS ban system
         // this.t();
         // this.v();
@@ -46,9 +44,9 @@ public class DedicatedPlayerList extends ServerConfigurationManager {
     }
 
     public void a(boolean flag0) {
-        super.a(flag0);
-        this.s().a("white-list", (Object) Boolean.valueOf(flag0));
-        this.s().a();
+        //super.a(flag0);
+        //this.b().a("white-list", (Object) Boolean.valueOf(flag0));
+        //this.b().a();
     }
 
     public void a(GameProfile gameprofile) {
@@ -63,12 +61,12 @@ public class DedicatedPlayerList extends ServerConfigurationManager {
 
     public void c(GameProfile gameprofile) {
         // Canary, re-route to our whitelist
-        Canary.whitelist().removePlayer(gameprofile.getId());
+        Canary.whitelist().removePlayer(gameprofile.getId().toString());
     }
 
     public void d(GameProfile gameprofile) {
         // Canary, re-route to our whitelist
-        Canary.whitelist().addPlayer(gameprofile.getId());
+        Canary.whitelist().addPlayer(gameprofile.getId().toString());
     }
 
     public void a() {
@@ -76,86 +74,112 @@ public class DedicatedPlayerList extends ServerConfigurationManager {
         throw new UnsupportedOperationException("Minecraft whitelist is disabled! Cannot load");
     }
 
+    @Deprecated
     private void v() {
+        throw new UnsupportedOperationException("Vanilla BanList is disabled! Use Canary.bans() instead.");
+        /* CanaryMod: disabled
         try {
-            //this.i().f();
+            this.i().f();
         }
         catch (IOException ioexception) {
             g.warn("Failed to save ip banlist: ", ioexception);
         }
+        */
     }
 
+    @Deprecated
     private void w() {
+        throw new UnsupportedOperationException("Vanilla BanList is disabled! Use Canary.bans() instead.");
+        /* CanaryMod: disabled
         try {
-            //this.h().f();
+            this.h().f();
         }
         catch (IOException ioexception) {
             g.warn("Failed to save user banlist: ", ioexception);
         }
+        */
     }
 
+    @Deprecated
     private void x() {
+        throw new UnsupportedOperationException("Vanilla BanList is disabled! Use Canary.bans() instead.");
+        /* CanaryMod: disabled
         try {
-            //this.i().g();
+            this.i().g();
         }
         catch (IOException ioexception) {
             g.warn("Failed to load ip banlist: ", ioexception);
         }
+        */
 
     }
 
+    @Deprecated
     private void y() {
+        throw new UnsupportedOperationException("Vanilla BanList is disabled! Use Canary.bans() instead.");
+        /* CanaryMod: disabled
         try {
-            //this.h().g();
+            this.h().g();
         }
         catch (IOException ioexception) {
             g.warn("Failed to load user banlist: ", ioexception);
         }
-
+        */
     }
 
+    @Deprecated
     private void z() {
+        throw new UnsupportedOperationException("Vanilla OperatorsList is disabled! Use Canary.ops() instead.");
+        /* CanaryMod: disabled
         try {
-            //this.m().g();
+            this.m().g();
         }
         catch (Exception exception) {
             g.warn("Failed to load operators list: ", exception);
         }
-
+        */
     }
 
+    @Deprecated
     private void A() {
+        throw new UnsupportedOperationException("Vanilla OperatorsList is disabled! Use Canary.ops() instead.");
+        /* CanaryMod: disabled
         try {
-            //this.m().f();
+            this.m().f();
         }
         catch (Exception exception) {
             g.warn("Failed to save operators list: ", exception);
         }
-
+        */
     }
 
+    @Deprecated
     private void B() {
+        throw new UnsupportedOperationException("Vanilla WhiteList is disabled! Use Canary.whitelist() instead.");
+        /* CanaryMod: disabled
         try {
-            //this.k().g();
+            this.k().g();
         }
         catch (Exception exception) {
             g.warn("Failed to load white-list: ", exception);
         }
-
+        */
     }
 
     private void C() {
+        throw new UnsupportedOperationException("Vanilla WhiteList is disabled! Use Canary.whitelist() instead.");
+        /* CanaryMod: disabled
         try {
-            //this.k().f();
+            this.k().f();
         }
         catch (Exception exception) {
             g.warn("Failed to save white-list: ", exception);
         }
-
+        */
     }
 
     public boolean e(GameProfile gameprofile) {
-        return !this.r() || Canary.ops().isOpped(gameprofile.getId());
+        return !this.r() || Canary.ops().isOpped(gameprofile.getId().toString());
     }
 
     public DedicatedServer b() {

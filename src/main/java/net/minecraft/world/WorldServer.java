@@ -1,8 +1,8 @@
 package net.minecraft.world;
 
+import com.google.common.collect.Lists;
 import net.canarymod.api.CanaryEntityTracker;
 import net.canarymod.api.CanaryPlayerManager;
-import net.canarymod.config.Configuration;
 import net.canarymod.hook.world.WeatherChangeHook;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEventData;
@@ -67,7 +67,7 @@ public class WorldServer extends World {
         this.J = minecraftserver;
         this.K = new EntityTracker(this);
         // CanaryMod: Use our view-distance handling
-        this.L = new PlayerManager(this, Configuration.getServerConfig().getViewDistance());
+        this.L = new PlayerManager(this);
         if (this.W == null) {
             this.W = new IntHashMap();
         }
@@ -203,11 +203,11 @@ public class WorldServer extends World {
                 }
 
                 entityplayer = (EntityPlayer) iterator.next();
-            } while (entityplayer.bL());
+            }
+            while (entityplayer.bL());
 
             return false;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -364,8 +364,7 @@ public class WorldServer extends World {
             if (this.P++ >= 1200) {
                 return;
             }
-        }
-        else {
+        } else {
             this.i();
         }
 
@@ -381,8 +380,7 @@ public class WorldServer extends World {
 
         if (i0 != this.M.size()) {
             throw new IllegalStateException("TickNextTick list out of synch");
-        }
-        else {
+        } else {
             if (i0 > 1000) {
                 i0 = 1000;
             }
@@ -417,8 +415,7 @@ public class WorldServer extends World {
                     if (block.o() != Material.a && Block.a(block, nextticklistentry.a())) {
                         try {
                             block.a(this, nextticklistentry.a, nextticklistentry.b, nextticklistentry.c, this.s);
-                        }
-                        catch (Throwable throwable) {
+                        } catch (Throwable throwable) {
                             CrashReport crashreport = CrashReport.a(throwable, "Exception while ticking a block");
                             CrashReportCategory crashreportcategory = crashreport.a("Block being ticked");
 
@@ -426,8 +423,7 @@ public class WorldServer extends World {
 
                             try {
                                 i2 = this.e(nextticklistentry.a, nextticklistentry.b, nextticklistentry.c);
-                            }
-                            catch (Throwable throwable1) {
+                            } catch (Throwable throwable1) {
                                 i2 = -1;
                             }
 
@@ -435,8 +431,7 @@ public class WorldServer extends World {
                             throw new ReportedException(crashreport);
                         }
                     }
-                }
-                else {
+                } else {
                     this.a(nextticklistentry.a, nextticklistentry.b, nextticklistentry.c, nextticklistentry.a(), 0);
                 }
             }
@@ -460,8 +455,7 @@ public class WorldServer extends World {
 
             if (i4 == 0) {
                 iterator = this.N.iterator();
-            }
-            else {
+            } else {
                 iterator = this.V.iterator();
                 if (!this.V.isEmpty()) {
                     a.debug("toBeTicked = " + this.V.size());
@@ -552,8 +546,7 @@ public class WorldServer extends World {
     protected void b(WorldSettings worldsettings) {
         if (!this.t.e()) {
             this.x.a(0, this.t.i(), 0);
-        }
-        else {
+        } else {
             this.y = true;
             WorldChunkManager worldchunkmanager = this.t.e;
             List list = worldchunkmanager.a();
@@ -566,8 +559,7 @@ public class WorldServer extends World {
             if (chunkposition != null) {
                 i0 = chunkposition.a;
                 i2 = chunkposition.c;
-            }
-            else {
+            } else {
                 a.warn("Unable to find spawn biome");
             }
 
@@ -678,8 +670,7 @@ public class WorldServer extends World {
         if (super.c(entity)) {
             this.J.ah().a(entity.s, entity.t, entity.u, 512.0D, this.t.i, new S2CPacketSpawnGlobalEntity(entity));
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -725,7 +716,8 @@ public class WorldServer extends World {
             }
 
             blockeventdata1 = (BlockEventData) iterator.next();
-        } while (!blockeventdata1.equals(blockeventdata));
+        }
+        while (!blockeventdata1.equals(blockeventdata));
 
     }
 
@@ -773,8 +765,7 @@ public class WorldServer extends World {
         if (flag0 != this.Q()) {
             if (flag0) {
                 this.J.ah().a((Packet) (new S2BPacketChangeGameState(2, 0.0F)));
-            }
-            else {
+            } else {
                 this.J.ah().a((Packet) (new S2BPacketChangeGameState(1, 0.0F)));
             }
             this.J.ah().a((Packet) (new S2BPacketChangeGameState(7, this.n)));

@@ -33,8 +33,7 @@ public class MinecraftServerGui extends JComponent implements GUIControl {
     public static GUIControl a(final DedicatedServer dedicatedserver) { // Signature Changed to return GUIControl
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        }
-        catch (Exception interruptedexception) {
+        } catch (Exception interruptedexception) {
             ;
         }
 
@@ -49,11 +48,10 @@ public class MinecraftServerGui extends JComponent implements GUIControl {
             public void windowClosing(WindowEvent windowevent) {
                 dedicatedserver.r();
 
-                while (!dedicatedserver.aq()) {
+                while (!dedicatedserver.ap()) {
                     try {
                         Thread.sleep(100L);
-                    }
-                    catch (InterruptedException interruptedexception) {
+                    } catch (InterruptedException interruptedexception) {
                         // CanaryMod Debug catcher thingy
                         if (Configuration.getServerConfig().isDebugMode()) {
                             interruptedexception.printStackTrace();
@@ -82,8 +80,7 @@ public class MinecraftServerGui extends JComponent implements GUIControl {
         try {
             this.add(logAndChat, "Center"); // Change use of c() to static logAndChat value
             this.add(this.a(), "West");
-        }
-        catch (Exception exception) {
+        } catch (Exception exception) {
             b.error("Couldn\'t build server GUI", exception);
         }
         minecraftservergui = this;
@@ -164,8 +161,7 @@ public class MinecraftServerGui extends JComponent implements GUIControl {
                     a(jtextarea, jscrollpane, s0);
                 }
             });
-        }
-        else {
+        } else {
             Document document = jtextarea.getDocument();
             JScrollBar jscrollbar = jscrollpane.getVerticalScrollBar();
             boolean flag0 = false;
@@ -176,8 +172,7 @@ public class MinecraftServerGui extends JComponent implements GUIControl {
 
             try {
                 document.insertString(document.getLength(), s0, (AttributeSet) null);
-            }
-            catch (BadLocationException badlocationexception) {
+            } catch (BadLocationException badlocationexception) {
                 ;
             }
 
@@ -198,14 +193,13 @@ public class MinecraftServerGui extends JComponent implements GUIControl {
 
     @Override
     public void start() {
-        a((DedicatedServer) MinecraftServer.G());
+        a((DedicatedServer) MinecraftServer.I());
     }
 
     /**
      * Sets up the GUI with out starting it
      *
      * @param dedicatedserver
-     *
      * @return
      */
     public static final GUIControl preInit(DedicatedServer dedicatedserver) {
