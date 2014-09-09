@@ -1121,13 +1121,13 @@ public abstract class ServerConfigurationManager {
     }
 
     public void a(int i0) {
-        // TODO: What is this?
+        this.q = i0;
         for (net.canarymod.api.world.World world : this.i.getWorldManager().getAllWorlds()) {
             WorldServer worldserver = (WorldServer) ((CanaryWorld) world).getHandle();
             worldserver.t().a(i0);
         }
         /*
-        this.q = i0;
+
         if (this.i.c != null) {
             WorldServer[] aworldserver = this.i.c;
             int i1 = aworldserver.length;
