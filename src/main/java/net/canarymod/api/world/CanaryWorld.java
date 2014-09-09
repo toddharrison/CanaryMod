@@ -46,7 +46,9 @@ public class CanaryWorld implements World {
     private DimensionType type;
     public long[] nanoTicks;
     private WorldConfiguration wrld_cfg;
-    /** The world name */
+    /**
+     * The world name
+     */
     private String name, fqName;
 
     public CanaryWorld(String name, WorldServer dimension, DimensionType type) {
@@ -85,7 +87,7 @@ public class CanaryWorld implements World {
 
     @Override
     public CanaryEntityTracker getEntityTracker() {
-        return world.q().getCanaryEntityTracker();
+        return world.r().getCanaryEntityTracker();
     }
 
     @Override
@@ -421,12 +423,12 @@ public class CanaryWorld implements World {
 
     @Override
     public PlayerManager getPlayerManager() {
-        return world.s().getPlayerManager();
+        return world.t().getPlayerManager();
     }
 
     @Override
     public void spawnParticle(Particle particle) {
-        MinecraftServer.G().t.sendPacketToDimension(new S2APacketParticles(particle), this.name, this.type.getId());
+        MinecraftServer.I().u.sendPacketToDimension(new S2APacketParticles(particle), this.name, this.type.getId());
     }
 
     @Override
@@ -482,8 +484,7 @@ public class CanaryWorld implements World {
         // Thanks to Bukkit for figuring out these numbers
         if (thundering) {
             setThunderTime(world.s.nextInt(12000) + 3600);
-        }
-        else {
+        } else {
             setThunderTime(world.s.nextInt(168000) + 12000);
         }
 
@@ -502,8 +503,7 @@ public class CanaryWorld implements World {
         // Thanks to Bukkit for figuring out these numbers
         if (downfall) {
             setRainTime(world.s.nextInt(12000) + 3600);
-        }
-        else {
+        } else {
             setRainTime(world.s.nextInt(168000) + 12000);
         }
     }
@@ -547,8 +547,7 @@ public class CanaryWorld implements World {
     public void makeExplosion(Entity exploder, double x, double y, double z, float power, boolean smoke) {
         if (exploder == null) {
             world.a((net.minecraft.entity.Entity) null, x, y, z, power, smoke);
-        }
-        else {
+        } else {
             world.a(((CanaryEntity) exploder).getHandle(), x, y, z, power, smoke);
         }
     }
@@ -629,47 +628,33 @@ public class CanaryWorld implements World {
         if (tileentity != null) {
             if (tileentity instanceof TileEntityBrewingStand) {
                 return ((TileEntityBrewingStand) tileentity).getCanaryBrewingStand();
-            }
-            else if (tileentity instanceof TileEntityBeacon) {
+            } else if (tileentity instanceof TileEntityBeacon) {
                 return ((TileEntityBeacon) tileentity).getCanaryBeacon();
-            }
-            else if (tileentity instanceof TileEntityChest) {
+            } else if (tileentity instanceof TileEntityChest) {
                 return ((TileEntityChest) tileentity).getCanaryChest();
-            }
-            else if (tileentity instanceof TileEntityCommandBlock) {
+            } else if (tileentity instanceof TileEntityCommandBlock) {
                 return ((TileEntityCommandBlock) tileentity).getCanaryCommandBlock();
-            }
-            else if (tileentity instanceof TileEntityComparator) {
+            } else if (tileentity instanceof TileEntityComparator) {
                 return ((TileEntityComparator) tileentity).getCanaryComparator();
-            }
-            else if (tileentity instanceof TileEntityDaylightDetector) {
+            } else if (tileentity instanceof TileEntityDaylightDetector) {
                 return ((TileEntityDaylightDetector) tileentity).getCanaryDaylightDetector();
-            }
-            else if (tileentity instanceof TileEntityDropper) { // Should come before Dispenser since its an instance of Dispenser too
+            } else if (tileentity instanceof TileEntityDropper) { // Should come before Dispenser since its an instance of Dispenser too
                 return ((TileEntityDropper) tileentity).getCanaryDropper();
-            }
-            else if (tileentity instanceof TileEntityDispenser) {
+            } else if (tileentity instanceof TileEntityDispenser) {
                 return ((TileEntityDispenser) tileentity).getCanaryDispenser();
-            }
-            else if (tileentity instanceof TileEntityFurnace) {
+            } else if (tileentity instanceof TileEntityFurnace) {
                 return ((TileEntityFurnace) tileentity).getCanaryFurnace();
-            }
-            else if (tileentity instanceof TileEntityHopper) {
+            } else if (tileentity instanceof TileEntityHopper) {
                 return ((TileEntityHopper) tileentity).getCanaryHopper();
-            }
-            else if (tileentity instanceof TileEntityMobSpawner) {
+            } else if (tileentity instanceof TileEntityMobSpawner) {
                 return ((TileEntityMobSpawner) tileentity).getCanaryMobSpawner();
-            }
-            else if (tileentity instanceof TileEntityNote) {
+            } else if (tileentity instanceof TileEntityNote) {
                 return ((TileEntityNote) tileentity).getCanaryNoteBlock();
-            }
-            else if (tileentity instanceof BlockJukebox.TileEntityJukebox) {
+            } else if (tileentity instanceof BlockJukebox.TileEntityJukebox) {
                 return ((BlockJukebox.TileEntityJukebox) tileentity).getCanaryJukebox();
-            }
-            else if (tileentity instanceof TileEntitySign) {
+            } else if (tileentity instanceof TileEntitySign) {
                 return ((TileEntitySign) tileentity).getCanarySign();
-            }
-            else if (tileentity instanceof TileEntitySkull) {
+            } else if (tileentity instanceof TileEntitySkull) {
                 return ((TileEntitySkull) tileentity).getCanarySkull();
             }
         }
@@ -684,7 +669,7 @@ public class CanaryWorld implements World {
         }
         int xx = x - ((x >> 4) * 16);
         int zz = z - ((z >> 4) * 16);
-        return BiomeType.fromId((byte) c.getHandle().a(xx, zz, this.getHandle().u()).ay);
+        return BiomeType.fromId((byte) c.getHandle().a(xx, zz, this.getHandle().v()).ay);
     }
 
     @Override
@@ -728,7 +713,7 @@ public class CanaryWorld implements World {
         }
         int xx = x - ((x >> 4) * 16);
         int zz = z - ((z >> 4) * 16);
-        return c.getHandle().a(xx, zz, this.getHandle().u()).getCanaryBiome();
+        return c.getHandle().a(xx, zz, this.getHandle().v()).getCanaryBiome();
     }
 
     public net.minecraft.world.World getHandle() {

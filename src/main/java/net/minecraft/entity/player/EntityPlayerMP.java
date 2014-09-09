@@ -1036,7 +1036,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
     public GameProfile bJ() {
         if (!this.getDisplayName().equals(this.b_())) {
             // We need a new GameProfile to change the display name
-            return new GameProfile(this.as.toString().replaceAll("-", ""), this.getDisplayName());
+            return new GameProfile(this.aB(), this.getDisplayName());
         }
         return super.i;
     }
@@ -1095,7 +1095,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
         }
 
         // CanaryMod: Dimension switch hook.
-        Location goingTo = this.simulatePortalUse(srv.q, MinecraftServer.G().getWorld(this.getCanaryWorld().getName(), srv.q));
+        Location goingTo = this.simulatePortalUse(srv.q, MinecraftServer.I().getWorld(this.getCanaryWorld().getName(), srv.q));
         CancelableHook hook = (CancelableHook) new DimensionSwitchHook(this.getCanaryEntity(), this.getCanaryEntity().getLocation(), goingTo).call();
         if (hook.isCanceled()) {
             return;

@@ -95,8 +95,7 @@ public class TileEntityHopper extends TileEntity implements IHopper {
                 itemstack = this.a[i0];
                 this.a[i0] = null;
                 return itemstack;
-            }
-            else {
+            } else {
                 itemstack = this.a[i0].a(i1);
                 if (this.a[i0].b == 0) {
                     this.a[i0] = null;
@@ -104,8 +103,7 @@ public class TileEntityHopper extends TileEntity implements IHopper {
 
                 return itemstack;
             }
-        }
-        else {
+        } else {
             return null;
         }
     }
@@ -116,8 +114,7 @@ public class TileEntityHopper extends TileEntity implements IHopper {
 
             this.a[i0] = null;
             return itemstack;
-        }
-        else {
+        } else {
             return null;
         }
     }
@@ -195,8 +192,7 @@ public class TileEntityHopper extends TileEntity implements IHopper {
             }
 
             return false;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -237,14 +233,12 @@ public class TileEntityHopper extends TileEntity implements IHopper {
 
         if (iinventory == null) {
             return false;
-        }
-        else {
+        } else {
             int i0 = Facing.a[BlockHopper.b(this.p())];
 
             if (this.a(iinventory, i0)) {
                 return false;
-            }
-            else {
+            } else {
                 for (int i1 = 0; i1 < this.a(); ++i1) {
                     if (this.a(i1) != null) {
                         ItemStack itemstack = this.a(i1).m();
@@ -283,8 +277,7 @@ public class TileEntityHopper extends TileEntity implements IHopper {
                     return false;
                 }
             }
-        }
-        else {
+        } else {
             int i2 = iinventory.a();
 
             for (int i3 = 0; i3 < i2; ++i3) {
@@ -309,8 +302,7 @@ public class TileEntityHopper extends TileEntity implements IHopper {
                     return false;
                 }
             }
-        }
-        else {
+        } else {
             int i2 = iinventory.a();
 
             for (int i3 = 0; i3 < i2; ++i3) {
@@ -342,8 +334,7 @@ public class TileEntityHopper extends TileEntity implements IHopper {
                         return true;
                     }
                 }
-            }
-            else {
+            } else {
                 int i1 = iinventory.a();
 
                 for (int i2 = 0; i2 < i1; ++i2) {
@@ -352,8 +343,7 @@ public class TileEntityHopper extends TileEntity implements IHopper {
                     }
                 }
             }
-        }
-        else {
+        } else {
             EntityItem entityitem = a(ihopper.w(), ihopper.x(), ihopper.aD() + 1.0D, ihopper.aE());
 
             if (entityitem != null) {
@@ -374,8 +364,7 @@ public class TileEntityHopper extends TileEntity implements IHopper {
 
             if (ihopper instanceof TileEntityHopper) {
                 hookHopper = (net.canarymod.api.inventory.Hopper) ((TileEntityHopper) ihopper).getCanaryHopper();
-            }
-            else if (ihopper instanceof EntityMinecartHopper) {
+            } else if (ihopper instanceof EntityMinecartHopper) {
                 hookHopper = (net.canarymod.api.inventory.Hopper) ((EntityMinecartHopper) ihopper).getCanaryEntity();
             }
             HopperTransferHook hook = (HopperTransferHook) new HopperTransferHook(hookHopper, new net.canarymod.api.inventory.CanaryItem(itemstack), true).call();
@@ -401,15 +390,13 @@ public class TileEntityHopper extends TileEntity implements IHopper {
 
         if (entityitem == null) {
             return false;
-        }
-        else {
+        } else {
             ItemStack itemstack = entityitem.f().m();
             ItemStack itemstack1 = a(iinventory, itemstack, -1);
 
             if (itemstack1 != null && itemstack1.b != 0) {
                 entityitem.a(itemstack1);
-            }
-            else {
+            } else {
                 flag0 = true;
                 entityitem.B();
             }
@@ -426,8 +413,7 @@ public class TileEntityHopper extends TileEntity implements IHopper {
             for (int i1 = 0; i1 < aint.length && itemstack != null && itemstack.b > 0; ++i1) {
                 itemstack = c(iinventory, itemstack, aint[i1], i0);
             }
-        }
-        else {
+        } else {
             int i2 = iinventory.a();
 
             for (int i3 = 0; i3 < i2 && itemstack != null && itemstack.b > 0; ++i3) {
@@ -460,8 +446,7 @@ public class TileEntityHopper extends TileEntity implements IHopper {
                 iinventory.a(i0, itemstack);
                 itemstack = null;
                 flag0 = true;
-            }
-            else if (a(itemstack1, itemstack)) {
+            } else if (a(itemstack1, itemstack)) {
                 int i2 = itemstack.e() - itemstack1.b;
                 int i3 = Math.min(itemstack.b, i2);
 
@@ -562,6 +547,8 @@ public class TileEntityHopper extends TileEntity implements IHopper {
     }
 
     public IInventory getOutputInventory() {
-        return this.l();
+        // TODO: Find replacement
+        return null;
+        //return this.l();
     }
 }

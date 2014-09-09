@@ -1,6 +1,5 @@
 package net.minecraft.nbt;
 
-
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.util.ReportedException;
@@ -38,8 +37,7 @@ public class NBTTagCompound extends NBTBase {
     void a(DataInput datainput, int i0, NBTSizeTracker nbtsizetracker) throws IOException {
         if (i0 > 512) {
             throw new RuntimeException("Tried to read NBT tag with too high complexity, depth > 512");
-        }
-        else {
+        } else {
             this.c.clear();
 
             byte b0;
@@ -131,8 +129,7 @@ public class NBTTagCompound extends NBTBase {
     public byte d(String s0) {
         try {
             return !this.c.containsKey(s0) ? 0 : ((NBTBase.NBTPrimitive) this.c.get(s0)).f();
-        }
-        catch (ClassCastException classcastexception) {
+        } catch (ClassCastException classcastexception) {
             return (byte) 0;
         }
     }
@@ -140,8 +137,7 @@ public class NBTTagCompound extends NBTBase {
     public short e(String s0) {
         try {
             return !this.c.containsKey(s0) ? 0 : ((NBTBase.NBTPrimitive) this.c.get(s0)).e();
-        }
-        catch (ClassCastException classcastexception) {
+        } catch (ClassCastException classcastexception) {
             return (short) 0;
         }
     }
@@ -149,8 +145,7 @@ public class NBTTagCompound extends NBTBase {
     public int f(String s0) {
         try {
             return !this.c.containsKey(s0) ? 0 : ((NBTBase.NBTPrimitive) this.c.get(s0)).d();
-        }
-        catch (ClassCastException classcastexception) {
+        } catch (ClassCastException classcastexception) {
             return 0;
         }
     }
@@ -158,8 +153,7 @@ public class NBTTagCompound extends NBTBase {
     public long g(String s0) {
         try {
             return !this.c.containsKey(s0) ? 0L : ((NBTBase.NBTPrimitive) this.c.get(s0)).c();
-        }
-        catch (ClassCastException classcastexception) {
+        } catch (ClassCastException classcastexception) {
             return 0L;
         }
     }
@@ -167,8 +161,7 @@ public class NBTTagCompound extends NBTBase {
     public float h(String s0) {
         try {
             return !this.c.containsKey(s0) ? 0.0F : ((NBTPrimitive) this.c.get(s0)).h();
-        }
-        catch (ClassCastException classcastexception) {
+        } catch (ClassCastException classcastexception) {
             return 0.0F;
         }
     }
@@ -176,8 +169,7 @@ public class NBTTagCompound extends NBTBase {
     public double i(String s0) {
         try {
             return !this.c.containsKey(s0) ? 0.0D : ((NBTPrimitive) this.c.get(s0)).g();
-        }
-        catch (ClassCastException classcastexception) {
+        } catch (ClassCastException classcastexception) {
             return 0.0D;
         }
     }
@@ -185,8 +177,7 @@ public class NBTTagCompound extends NBTBase {
     public String j(String s0) {
         try {
             return !this.c.containsKey(s0) ? "" : ((NBTBase) this.c.get(s0)).a_();
-        }
-        catch (ClassCastException classcastexception) {
+        } catch (ClassCastException classcastexception) {
             return "";
         }
     }
@@ -194,8 +185,7 @@ public class NBTTagCompound extends NBTBase {
     public byte[] k(String s0) {
         try {
             return !this.c.containsKey(s0) ? new byte[0] : ((NBTTagByteArray) this.c.get(s0)).c();
-        }
-        catch (ClassCastException classcastexception) {
+        } catch (ClassCastException classcastexception) {
             throw new ReportedException(this.a(s0, 7, classcastexception));
         }
     }
@@ -203,8 +193,7 @@ public class NBTTagCompound extends NBTBase {
     public int[] l(String s0) {
         try {
             return !this.c.containsKey(s0) ? new int[0] : ((NBTTagIntArray) this.c.get(s0)).c();
-        }
-        catch (ClassCastException classcastexception) {
+        } catch (ClassCastException classcastexception) {
             throw new ReportedException(this.a(s0, 11, classcastexception));
         }
     }
@@ -212,8 +201,7 @@ public class NBTTagCompound extends NBTBase {
     public NBTTagCompound m(String s0) {
         try {
             return !this.c.containsKey(s0) ? new NBTTagCompound() : (NBTTagCompound) this.c.get(s0);
-        }
-        catch (ClassCastException classcastexception) {
+        } catch (ClassCastException classcastexception) {
             throw new ReportedException(this.a(s0, 10, classcastexception));
         }
     }
@@ -222,14 +210,12 @@ public class NBTTagCompound extends NBTBase {
         try {
             if (this.b(s0) != 9) {
                 return new NBTTagList();
-            }
-            else {
+            } else {
                 NBTTagList nbttaglist = (NBTTagList) this.c.get(s0);
 
                 return nbttaglist.c() > 0 && nbttaglist.d() != i0 ? new NBTTagList() : nbttaglist;
             }
-        }
-        catch (ClassCastException classcastexception) {
+        } catch (ClassCastException classcastexception) {
             throw new ReportedException(this.a(s0, 9, classcastexception));
         }
     }
@@ -240,8 +226,7 @@ public class NBTTagCompound extends NBTBase {
             NBTTagList nbttaglist = (NBTTagList) this.c.get(s0);
 
             return nbttaglist;
-        }
-        catch (ClassCastException classcastexception) {
+        } catch (ClassCastException classcastexception) {
             throw new ReportedException(this.a(s0, 9, classcastexception));
         }
     }
@@ -308,8 +293,7 @@ public class NBTTagCompound extends NBTBase {
             NBTTagCompound nbttagcompound = (NBTTagCompound) object;
 
             return this.c.entrySet().equals(nbttagcompound.c.entrySet());
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -326,22 +310,21 @@ public class NBTTagCompound extends NBTBase {
         }
     }
 
-    private static byte a(DataInput datainput) throws IOException {
+    private static byte a(DataInput datainput, NBTSizeTracker nbtsizetracker) throws IOException {
         return datainput.readByte();
     }
 
-    private static String b(DataInput datainput) throws IOException {
+    private static String b(DataInput datainput, NBTSizeTracker nbtsizetracker) throws IOException {
         return datainput.readUTF();
     }
 
-    static NBTBase a(byte b0, String s0, DataInput datainput, int i0) {
+    static NBTBase a(byte b0, String s0, DataInput datainput, int i0, NBTSizeTracker nbtsizetracker) {
         NBTBase nbtbase = NBTBase.a(b0);
 
         try {
-            nbtbase.a(datainput, i0);
+            nbtbase.a(datainput, i0, nbtsizetracker);
             return nbtbase;
-        }
-        catch (IOException ioexception) {
+        } catch (IOException ioexception) {
             CrashReport crashreport = CrashReport.a(ioexception, "Loading NBT data");
             CrashReportCategory crashreportcategory = crashreport.a("NBT Tag");
 

@@ -1036,7 +1036,7 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
 
         // CanaryMod: BedEnterHook
         if (this.getCanaryEntity() instanceof CanaryPlayer) {
-            BedEnterHook beh = (BedEnterHook) new BedEnterHook(((EntityPlayerMP) this).getPlayer(), this.p.getCanaryWorld().getBlockAt(i0, i1, i2)).call();
+            BedEnterHook beh = (BedEnterHook) new BedEnterHook(((EntityPlayerMP) this).getPlayer(), this.o.getCanaryWorld().getBlockAt(i0, i1, i2)).call();
             if (beh.isCanceled()) {
                 return EnumStatus.OTHER_PROBLEM;
             }
@@ -1129,7 +1129,7 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
 
         // CanaryMod: BedLeaveHook
         if (this.getCanaryEntity() instanceof CanaryPlayer) {
-            net.canarymod.api.world.blocks.Block bed = this.p.getCanaryWorld().getBlockAt(chunkcoordinates.a, chunkcoordinates.b, chunkcoordinates.c);
+            net.canarymod.api.world.blocks.Block bed = this.o.getCanaryWorld().getBlockAt(chunkcoordinates.a, chunkcoordinates.b, chunkcoordinates.c);
 
             new BedExitHook(((EntityPlayerMP) this).getPlayer(), bed).call();
             ;

@@ -49,7 +49,7 @@ public class StatsComponent extends JComponent {
         // Changed how Strings get added from a literal to a var so we don't have to keep track of what is before the worlds
         int i = 0;
         this.d[i++] = "Memory use: " + i0 / 1024L / 1024L + " mb (" + Runtime.getRuntime().freeMemory() * 100L / Runtime.getRuntime().maxMemory() + "% free)";
-        this.d[i++] = "Avg tick: " + a.format(this.a(this.e.f) * 1.0E-6D) + " ms";
+        this.d[i++] = "Avg tick: " + a.format(this.a(this.e.g) * 1.0E-6D) + " ms";
 
         // CanaryMod: Multiworld
         Collection<World> worlds = Canary.getServer().getWorldManager().getAllWorlds();

@@ -172,8 +172,7 @@ public class CanaryChunk implements Chunk {
     public void updateSkyLightMap(boolean force) {
         if (force) {
             handle.p();
-        }
-        else {
+        } else {
             handle.o();
         }
     }
@@ -186,6 +185,6 @@ public class CanaryChunk implements Chunk {
 
     @Override
     public Biome getBiome(int x, int z) {
-        return this.getHandle().a(x, z, this.getHandle().e.u()).getCanaryBiome();
+        return this.getHandle().a(x, z, this.getHandle().e.v()).getCanaryBiome();
     }
 }

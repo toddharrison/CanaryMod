@@ -54,7 +54,7 @@ public class DedicatedServer extends MinecraftServer implements IServer {
     private final List<ServerCommand> j = Collections.synchronizedList(new ArrayList<ServerCommand>());
     private RConThreadQuery k;
     private RConThreadMain l;
-    // CanaryMod - Removed private PropertyManager m;
+    private PropertyManager m; // CanaryMod: TODO: darkdiplomat- need this a minute, even if it is technically unused
     private ServerEula n;
     // CanaryMod - Removed private boolean o;
     // CanaryMod - Removed private WorldSettings.GameType p;
@@ -66,12 +66,10 @@ public class DedicatedServer extends MinecraftServer implements IServer {
         if (!"jline.UnsupportedTerminal".equals(System.getProperty("jline.terminal"))) {
             try {
                 reader = new ConsoleReader("Minecraft", System.in, System.out, null);
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 try {
                     reader = new ConsoleReader("Minecraft", System.in, System.out, new UnsupportedTerminal());
-                }
-                catch (IOException ex) {
+                } catch (IOException ex) {
                     i.fatal("Could not initialize ConsoleReader", ex);
                 }
             }
@@ -93,8 +91,7 @@ public class DedicatedServer extends MinecraftServer implements IServer {
                         while (true) {
                             Thread.sleep(2147483647L);
                         }
-                    }
-                    catch (InterruptedException interruptedexception) {
+                    } catch (InterruptedException interruptedexception) {
                         ;
                     }
                 }
@@ -134,21 +131,18 @@ public class DedicatedServer extends MinecraftServer implements IServer {
                             while (!DedicatedServer.this.ag() && DedicatedServer.this.q() && (i0 = reader.readLine()) != null) {
                                 Canary.getServer().consoleCommand(i0);
                             }
-                        }
-                        catch (UserInterruptException e) {
+                        } catch (UserInterruptException e) {
                             reader.shutdown();
                             Canary.commands().parseCommand(Canary.getServer(), "stop", new String[]{"stop", "Ctrl-C", "at", "console"});
                         }
-                    }
-                    else {
+                    } else {
                         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
                         while (!DedicatedServer.this.ag() && DedicatedServer.this.q() && (i0 = reader.readLine()) != null) {
                             Canary.getServer().consoleCommand(i0);
                         }
                     }
-                }
-                catch (IOException i1) {
+                } catch (IOException i1) {
                     DedicatedServer.i.error("Exception handling console input", i1);
                 }
 
@@ -190,12 +184,10 @@ public class DedicatedServer extends MinecraftServer implements IServer {
             i.info("You need to agree to the EULA in order to run the server. Go to eula.txt for more info.");
             this.n.b();
             return false;
-        }
-        else {
+        } else {
             if (this.N()) {
                 this.c("127.0.0.1");
-            }
-            else {
+            } else {
                 this.d(cfg.isOnlineMode());
                 this.c(cfg.getBindIp());
             }
@@ -219,8 +211,7 @@ public class DedicatedServer extends MinecraftServer implements IServer {
 
             try {
                 this.ai().a(inetaddress, this.L());
-            }
-            catch (IOException ioexception1) {
+            } catch (IOException ioexception1) {
                 i.warn("**** FAILED TO BIND TO PORT!");
                 i.warn("The exception was: {}", new Object[]{ioexception1.toString()});
                 i.warn("Perhaps a server is already running on that port?");
@@ -240,8 +231,7 @@ public class DedicatedServer extends MinecraftServer implements IServer {
 
             if (!PreYggdrasilConverter.a(this.m)) {
                 return false;
-            }
-            else {
+            } else {
                 this.a((ServerConfigurationManager) (new DedicatedPlayerList(this)));
                 long i1 = System.nanoTime();
 
@@ -263,8 +253,7 @@ public class DedicatedServer extends MinecraftServer implements IServer {
                         if (i3 != 0L) {
                             i2 = i3;
                         }
-                    }
-                    catch (NumberFormatException numberformatexception) {
+                    } catch (NumberFormatException numberformatexception) {
                         i2 = (long) s1.hashCode();
                     }
                 }
@@ -453,20 +442,17 @@ public class DedicatedServer extends MinecraftServer implements IServer {
             ServerGuiStartHook guiHook = (ServerGuiStartHook) new ServerGuiStartHook(MinecraftServerGui.preInit(this)).call(); // CanaryMod: PreInitialize the GUI without starting it
             if (guiHook.getGui() != null) {
                 ((CanaryServer) Canary.getServer()).setCurrentGUI(guiHook.getGui());
-            }
-            else {
+            } else {
                 ((CanaryServer) Canary.getServer()).setCurrentGUI(MinecraftServerGui.a(this));
             }
             Canary.getServer().getCurrentGUI().start();
-            this.o = true;
+            this.q = true;
             MinecraftServer.setHeadless(false);
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             // Gui Failure detected
             if (Main.canRunUncontrolled() || System.console() != null) { //If we can run uncontrolled, then just send a warning
                 Canary.log.warn("GUI failed to start.", ex);
-            }
-            else { //Can't run uncontrolled, error out and kill ourselves for being failures...
+            } else { //Can't run uncontrolled, error out and kill ourselves for being failures...
                 Canary.log.fatal("GUI failed to start and no console availible to control the server... Exiting...", ex);
                 System.exit(42);
             }
@@ -497,14 +483,11 @@ public class DedicatedServer extends MinecraftServer implements IServer {
             return false;
             // } else if (this.ax().i().isEmpty()) { // CanaryMod: Empty Ops list shouldn't break spawn protections...
             // return false;
-        }
-        else if (this.aC().g(entityplayer.bJ())) {
+        } else if (this.aC().g(entityplayer.bJ())) {
             return false;
-        }
-        else if (cfg.getSpawnProtectionSize() <= 0) {
+        } else if (cfg.getSpawnProtectionSize() <= 0) {
             return false;
-        }
-        else {
+        } else {
             ChunkCoordinates chunkcoordinates = world.K();
             int i3 = MathHelper.a(i0 - chunkcoordinates.a);
             int i4 = MathHelper.a(i2 - chunkcoordinates.c);
@@ -604,8 +587,7 @@ public class DedicatedServer extends MinecraftServer implements IServer {
     private void aG() {
         try {
             Thread.sleep(5000L);
-        }
-        catch (InterruptedException interruptedexception) {
+        } catch (InterruptedException interruptedexception) {
             ;
         }
     }
