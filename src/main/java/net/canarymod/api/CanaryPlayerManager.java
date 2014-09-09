@@ -57,7 +57,7 @@ public class CanaryPlayerManager implements PlayerManager {
 
     @Override
     public int getMaxTrackingDistance() {
-        return net.minecraft.server.management.PlayerManager.a(pm.getPlayerViewRadius());
+        return net.minecraft.server.management.PlayerManager.b(pm.getPlayerViewRadius());
     }
 
     public net.minecraft.server.management.PlayerManager getHandle() {

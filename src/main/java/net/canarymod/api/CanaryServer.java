@@ -148,7 +148,7 @@ public class CanaryServer implements Server {
             cmdName = cmdName.substring(1);
         }
         if (!Canary.commands().parseCommand(this, cmdName, args)) {
-            return server.H().a(server, command) > 0; // Vanilla Commands passed
+            return server.J().a(server, command) > 0; // Vanilla Commands passed
         }
         return true;
     }
@@ -169,7 +169,7 @@ public class CanaryServer implements Server {
         }
         if (!Canary.commands().parseCommand(player, cmdName, args)) {
             if (Canary.ops().isOpped(player.getName()) || player.hasPermission("canary.vanilla.".concat(cmdName))) {
-                return server.H().a(((CanaryPlayer) player).getHandle(), command) > 0; // Vanilla Commands passed
+                return server.J().a(((CanaryPlayer) player).getHandle(), command) > 0; // Vanilla Commands passed
             }
             return false;
         }
@@ -252,10 +252,11 @@ public class CanaryServer implements Server {
      */
     @Override
     public OfflinePlayer getOfflinePlayer(String player) {
-        NBTTagCompound nbttagcompound = ServerConfigurationManager.getPlayerDatByName(player);
-        CanaryCompoundTag comp = null;
         String uuid = ToolBox.usernameToUUID(player);
-        if (nbttagcompound != null && uuid != null) {
+        if (uuid == null) return null;
+        NBTTagCompound nbttagcompound = ServerConfigurationManager.getPlayerDat(UUID.fromString(uuid));
+        CanaryCompoundTag comp = null;
+        if (nbttagcompound != null) {
             comp = new CanaryCompoundTag(nbttagcompound);
             return new CanaryOfflinePlayer(player, uuid, comp);
         }
@@ -499,7 +500,7 @@ public class CanaryServer implements Server {
      */
     @Override
     public long[] getTickTimeArray() {
-        return server.f;
+        return server.g;
     }
 
     /**
@@ -522,7 +523,7 @@ public class CanaryServer implements Server {
      */
     @Override
     public String getServerVersion() {
-        return server.z();
+        return server.A();
     }
 
     /**
@@ -580,7 +581,7 @@ public class CanaryServer implements Server {
     @Override
     public void sendPlayerListEntry(PlayerListEntry entry) {
         if (Configuration.getServerConfig().isPlayerListEnabled()) {
-            server.af().a(new S38PacketPlayerListItem(entry.getName(), entry.isShown(), entry.getPing()));
+            server.ah().a(new S38PacketPlayerListItem(entry.getName(), entry.isShown(), entry.getPing()));
         }
     }
 
@@ -589,7 +590,7 @@ public class CanaryServer implements Server {
      */
     @Override
     public int getCurrentTick() {
-        return server.aj();
+        return server.al();
     }
 
     /**

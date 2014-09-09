@@ -27,7 +27,7 @@ public class CanaryConfigurationManager implements ConfigurationManager {
 
     @Override
     public void sendPacketToAllInWorld(String world, Packet packet) {
-        for (Object p : manager.a) {
+        for (Object p : manager.e) {
             if (!(p instanceof EntityPlayerMP)) {
                 continue;
             }
@@ -40,20 +40,20 @@ public class CanaryConfigurationManager implements ConfigurationManager {
 
     @Override
     public int getNumPlayersOnline() {
-        return manager.a.size();
+        return manager.e.size();
     }
 
     @Override
     public Player getPlayerByName(String name) {
-        EntityPlayerMP player = manager.e(name);
+        EntityPlayerMP player = manager.a(name);
         return player == null ? null : player.getPlayer();
     }
 
     @Override
     public List<Player> getAllPlayers() {
-        List<Player> players = new ArrayList<Player>(manager.a.size());
+        List<Player> players = new ArrayList<Player>(manager.e.size());
 
-        for (Object p : manager.a) {
+        for (Object p : manager.e) {
             if (!(p instanceof EntityPlayerMP)) {
                 continue;
             }
@@ -64,7 +64,7 @@ public class CanaryConfigurationManager implements ConfigurationManager {
 
     @Override
     public int getMaxPlayers() {
-        return manager.k();
+        return manager.o();
     }
 
     @Override
