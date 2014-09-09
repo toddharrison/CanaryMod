@@ -53,17 +53,14 @@ public class EntityOcelot extends EntityTameable {
             if (d0 == 0.6D) {
                 this.b(true);
                 this.c(false);
-            }
-            else if (d0 == 1.33D) {
+            } else if (d0 == 1.33D) {
                 this.b(false);
                 this.c(true);
-            }
-            else {
+            } else {
                 this.b(false);
                 this.c(false);
             }
-        }
-        else {
+        } else {
             this.b(false);
             this.c(false);
         }
@@ -123,8 +120,7 @@ public class EntityOcelot extends EntityTameable {
     public boolean a(DamageSource damagesource, float f0) {
         if (this.aw()) {
             return false;
-        }
-        else {
+        } else {
             this.bp.a(false);
             return super.a(damagesource, f0);
         }
@@ -140,8 +136,7 @@ public class EntityOcelot extends EntityTameable {
             if (this.e((EntityLivingBase) entityplayer) && !this.o.E && !this.c(itemstack)) {
                 this.bp.a(!this.ca());
             }
-        }
-        else if (this.bq.f() && itemstack != null && itemstack.b() == Items.aP && entityplayer.f(this) < 9.0D) {
+        } else if (this.bq.f() && itemstack != null && itemstack.b() == Items.aP && entityplayer.f(this) < 9.0D) {
             if (!entityplayer.bE.d) {
                 --itemstack.b;
             }
@@ -162,8 +157,7 @@ public class EntityOcelot extends EntityTameable {
                     this.i(true);
                     this.bp.a(true);
                     this.o.a(this, (byte) 7);
-                }
-                else {
+                } else {
                     this.i(false);
                     this.o.a(this, (byte) 6);
                 }
@@ -194,14 +188,11 @@ public class EntityOcelot extends EntityTameable {
     public boolean a(EntityAnimal entityanimal) {
         if (entityanimal == this) {
             return false;
-        }
-        else if (!this.bZ()) {
+        } else if (!this.bZ()) {
             return false;
-        }
-        else if (!(entityanimal instanceof EntityOcelot)) {
+        } else if (!(entityanimal instanceof EntityOcelot)) {
             return false;
-        }
-        else {
+        } else {
             EntityOcelot entityocelot = (EntityOcelot) entityanimal;
 
             return !entityocelot.bZ() ? false : this.ce() && entityocelot.ce();
@@ -219,8 +210,7 @@ public class EntityOcelot extends EntityTameable {
     public boolean by() {
         if (this.o.s.nextInt(3) == 0) {
             return false;
-        }
-        else {
+        } else {
             if (this.o.b(this.C) && this.o.a((Entity) this, this.C).isEmpty() && !this.o.d(this.C)) {
                 int i0 = MathHelper.c(this.s);
                 int i1 = MathHelper.c(this.C.b);

@@ -76,8 +76,7 @@ public class EntityCow extends EntityAnimal {
         for (i2 = 0; i2 < i1; ++i2) {
             if (this.al()) {
                 this.a(Items.be, 1);
-            }
-            else {
+            } else {
                 this.a(Items.bd, 1);
             }
         }
@@ -89,14 +88,12 @@ public class EntityCow extends EntityAnimal {
         if (itemstack != null && itemstack.b() == Items.ar && !entityplayer.bE.d) {
             if (itemstack.b-- == 1) {
                 entityplayer.bm.a(entityplayer.bm.c, new ItemStack(Items.aB));
-            }
-            else if (!entityplayer.bm.a(new ItemStack(Items.aB))) {
+            } else if (!entityplayer.bm.a(new ItemStack(Items.aB))) {
                 entityplayer.a(new ItemStack(Items.aB, 1, 0), false);
             }
 
             return true;
-        }
-        else {
+        } else {
             return super.a(entityplayer);
         }
     }

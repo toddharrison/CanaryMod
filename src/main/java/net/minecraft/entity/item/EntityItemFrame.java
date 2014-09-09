@@ -41,16 +41,14 @@ public class EntityItemFrame extends EntityHanging {
     public boolean a(DamageSource damagesource, float f0) {
         if (this.aw()) {
             return false;
-        }
-        else if (this.j() != null) {
+        } else if (this.j() != null) {
             if (!this.o.E) {
                 this.b(damagesource.j(), false);
                 this.a((ItemStack) null);
             }
 
             return true;
-        }
-        else {
+        } else {
             return super.a(damagesource, f0);
         }
     }
@@ -72,8 +70,7 @@ public class EntityItemFrame extends EntityHanging {
         HangingEntityDestroyHook hook;
         if (entity instanceof EntityPlayer) {
             hook = (HangingEntityDestroyHook) new HangingEntityDestroyHook((HangingEntity) this.getCanaryEntity(), (Player) entity.getCanaryEntity(), CanaryDamageSource.getDamageSourceFromType(DamageType.GENERIC)).call();
-        }
-        else {
+        } else {
             hook = (HangingEntityDestroyHook) new HangingEntityDestroyHook((HangingEntity) this.getCanaryEntity(), null, CanaryDamageSource.getDamageSourceFromType(DamageType.GENERIC)).call();
         }
         if (hook.isCanceled()) {
@@ -172,8 +169,7 @@ public class EntityItemFrame extends EntityHanging {
                     entityplayer.bm.a(entityplayer.bm.c, (ItemStack) null);
                 }
             }
-        }
-        else if (!this.o.E) {
+        } else if (!this.o.E) {
             this.c(this.k() + 1);
         }
 

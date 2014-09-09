@@ -55,8 +55,7 @@ public abstract class EntityCreature extends EntityLiving {
                 if (!hook.isCanceled()) {
                     this.bm = entity;
                 }
-            }
-            else {
+            } else {
                 this.bm = entity;
             }
             //
@@ -64,15 +63,13 @@ public abstract class EntityCreature extends EntityLiving {
             if (this.bm != null) {
                 this.bp = this.o.a(this, this.bm, f11, true, false, false, true);
             }
-        }
-        else if (this.bm.Z()) {
+        } else if (this.bm.Z()) {
             float f1 = this.bm.e((Entity) this);
 
             if (this.p(this.bm)) {
                 this.a(this.bm, f1);
             }
-        }
-        else {
+        } else {
             this.bm = null;
         }
 
@@ -83,8 +80,7 @@ public abstract class EntityCreature extends EntityLiving {
         this.o.C.b();
         if (!this.bn && this.bm != null && (this.bp == null || this.Z.nextInt(20) == 0)) {
             this.bp = this.o.a(this, this.bm, f11, true, false, false, true);
-        }
-        else if (!this.bn && (this.bp == null && this.Z.nextInt(180) == 0 || this.Z.nextInt(120) == 0 || this.bo > 0) && this.aU < 100) {
+        } else if (!this.bn && (this.bp == null && this.Z.nextInt(180) == 0 || this.Z.nextInt(120) == 0 || this.bo > 0) && this.aU < 100) {
             this.bQ();
         }
 
@@ -103,8 +99,7 @@ public abstract class EntityCreature extends EntityLiving {
                 if (this.bp.b()) {
                     vec3 = null;
                     this.bp = null;
-                }
-                else {
+                } else {
                     vec3 = this.bp.a((Entity) this);
                 }
             }
@@ -156,8 +151,7 @@ public abstract class EntityCreature extends EntityLiving {
             }
 
             this.o.C.b();
-        }
-        else {
+        } else {
             super.bq();
             this.bp = null;
         }
@@ -297,8 +291,7 @@ public abstract class EntityCreature extends EntityLiving {
             if (f0 > 10.0F) {
                 this.a(true, true);
             }
-        }
-        else if (!this.bN() && this.bt) {
+        } else if (!this.bN() && this.bt) {
             this.bt = false;
             this.c.a(this.bs);
             this.m().a(true);

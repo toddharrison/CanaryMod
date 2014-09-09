@@ -70,8 +70,7 @@ public class EntityMinecartFurnace extends EntityMinecart {
             if (this.a * this.v + this.b * this.x < 0.0D) {
                 this.a = 0.0D;
                 this.b = 0.0D;
-            }
-            else {
+            } else {
                 this.a = this.v;
                 this.b = this.x;
             }
@@ -92,8 +91,7 @@ public class EntityMinecartFurnace extends EntityMinecart {
             this.x *= 0.800000011920929D;
             this.v += this.a * d1;
             this.x += this.b * d1;
-        }
-        else {
+        } else {
             this.v *= 0.9800000190734863D;
             this.w *= 0.0D;
             this.x *= 0.9800000190734863D;
@@ -139,8 +137,7 @@ public class EntityMinecartFurnace extends EntityMinecart {
     protected void f(boolean flag0) {
         if (flag0) {
             this.af.b(16, Byte.valueOf((byte) (this.af.a(16) | 1)));
-        }
-        else {
+        } else {
             this.af.b(16, Byte.valueOf((byte) (this.af.a(16) & -2)));
         }
     }

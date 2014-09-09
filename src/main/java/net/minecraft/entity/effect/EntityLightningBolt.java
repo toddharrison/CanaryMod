@@ -89,8 +89,7 @@ public class EntityLightningBolt extends EntityWeatherEffect {
         if (this.b < 0) {
             if (this.c == 0) {
                 this.B();
-            }
-            else if (this.b < -this.Z.nextInt(10)) {
+            } else if (this.b < -this.Z.nextInt(10)) {
                 --this.c;
                 this.b = 1;
                 this.a = this.Z.nextLong();
@@ -116,8 +115,7 @@ public class EntityLightningBolt extends EntityWeatherEffect {
         if (this.b >= 0) {
             if (this.o.E) {
                 this.o.q = 2;
-            }
-            else {
+            } else {
                 double d0 = 3.0D;
                 List list = this.o.b((Entity) this, AxisAlignedBB.a(this.s - d0, this.t - d0, this.u - d0, this.s + d0, this.t + 6.0D + d0, this.u + d0));
 

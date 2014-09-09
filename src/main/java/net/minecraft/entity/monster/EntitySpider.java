@@ -49,8 +49,7 @@ public class EntitySpider extends EntityMob {
             double d0 = 16.0D;
 
             return this.o.b(this, d0);
-        }
-        else {
+        } else {
             return null;
         }
     }
@@ -76,8 +75,7 @@ public class EntitySpider extends EntityMob {
 
         if (f1 > 0.5F && this.Z.nextInt(100) == 0) {
             this.bm = null;
-        }
-        else {
+        } else {
             if (f0 > 2.0F && f0 < 6.0F && this.Z.nextInt(10) == 0) {
                 if (this.D) {
                     double d0 = entity.s - this.s;
@@ -88,8 +86,7 @@ public class EntitySpider extends EntityMob {
                     this.x = d1 / (double) f2 * 0.5D * 0.800000011920929D + this.x * 0.20000000298023224D;
                     this.w = 0.4000000059604645D;
                 }
-            }
-            else {
+            } else {
                 super.a(entity, f0);
             }
         }
@@ -130,8 +127,7 @@ public class EntitySpider extends EntityMob {
 
         if (flag0) {
             b0 = (byte) (b0 | 1);
-        }
-        else {
+        } else {
             b0 &= -2;
         }
 
@@ -177,14 +173,11 @@ public class EntitySpider extends EntityMob {
 
             if (i0 <= 1) {
                 this.a = Potion.c.H;
-            }
-            else if (i0 <= 2) {
+            } else if (i0 <= 2) {
                 this.a = Potion.g.H;
-            }
-            else if (i0 <= 3) {
+            } else if (i0 <= 3) {
                 this.a = Potion.l.H;
-            }
-            else if (i0 <= 4) {
+            } else if (i0 <= 4) {
                 this.a = Potion.p.H;
             }
 

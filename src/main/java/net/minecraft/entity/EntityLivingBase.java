@@ -146,8 +146,7 @@ public abstract class EntityLivingBase extends Entity {
                 if (i3 == 11 || i3 == 32 || i3 == 21) {
                     block = this.o.a(i0, i1 - 1, i2);
                 }
-            }
-            else if (!this.o.E && this.R > 3.0F) {
+            } else if (!this.o.E && this.R > 3.0F) {
                 this.o.c(2006, i0, i1, i2, MathHelper.f(this.R - 3.0F));
             }
 
@@ -206,8 +205,7 @@ public abstract class EntityLivingBase extends Entity {
             if (!this.o.E && this.am() && this.m instanceof EntityLivingBase) {
                 this.a((Entity) null);
             }
-        }
-        else {
+        } else {
             this.h(300);
         }
 
@@ -234,8 +232,7 @@ public abstract class EntityLivingBase extends Entity {
 
         if (this.aS > 0) {
             --this.aS;
-        }
-        else {
+        } else {
             this.aR = null;
         }
 
@@ -246,8 +243,7 @@ public abstract class EntityLivingBase extends Entity {
         if (this.i != null) {
             if (!this.i.Z()) {
                 this.b((EntityLivingBase) null);
-            }
-            else if (this.aa - this.bm > 100) {
+            } else if (this.aa - this.bm > 100) {
                 this.b((EntityLivingBase) null);
             }
         }
@@ -339,8 +335,7 @@ public abstract class EntityLivingBase extends Entity {
     public void l(Entity entity) {
         if (entity instanceof EntityLivingBase) {
             this.bn = (EntityLivingBase) entity;
-        }
-        else {
+        } else {
             this.bn = null;
         }
 
@@ -417,17 +412,14 @@ public abstract class EntityLivingBase extends Entity {
 
         if (nbttagcompound.b("HealF", 99)) {
             this.g(nbttagcompound.h("HealF"));
-        }
-        else {
+        } else {
             NBTBase nbtbase = nbttagcompound.a("Health");
 
             if (nbtbase == null) {
                 this.g(this.aY());
-            }
-            else if (nbtbase.a() == 5) {
+            } else if (nbtbase.a() == 5) {
                 this.g(((NBTTagFloat) nbtbase).h());
-            }
-            else if (nbtbase.a() == 2) {
+            } else if (nbtbase.a() == 2) {
                 this.g((float) ((NBTTagShort) nbtbase).e());
             }
         }
@@ -449,8 +441,7 @@ public abstract class EntityLivingBase extends Entity {
                     iterator.remove();
                     this.b(potioneffect);
                 }
-            }
-            else if (potioneffect.b() % 600 == 0) {
+            } else if (potioneffect.b() % 600 == 0) {
                 this.a(potioneffect, false);
             }
         }
@@ -463,8 +454,7 @@ public abstract class EntityLivingBase extends Entity {
                     this.af.b(8, Byte.valueOf((byte) 0));
                     this.af.b(7, Integer.valueOf(0));
                     this.d(false);
-                }
-                else {
+                } else {
                     i0 = PotionHelper.a(this.f.values());
                     this.af.b(8, Byte.valueOf((byte) (PotionHelper.b(this.f.values()) ? 1 : 0)));
                     this.af.b(7, Integer.valueOf(i0));
@@ -483,8 +473,7 @@ public abstract class EntityLivingBase extends Entity {
 
             if (!this.ap()) {
                 flag1 = this.Z.nextBoolean();
-            }
-            else {
+            } else {
                 flag1 = this.Z.nextInt(15) == 0;
             }
 
@@ -545,8 +534,7 @@ public abstract class EntityLivingBase extends Entity {
                 if (this.f.containsKey(Integer.valueOf(potioneffect.a()))) {
                     ((PotionEffect) this.f.get(Integer.valueOf(potioneffect.a()))).a(potioneffect);
                     this.a((PotionEffect) this.f.get(Integer.valueOf(potioneffect.a())), true);
-                }
-                else {
+                } else {
                     this.f.put(Integer.valueOf(potioneffect.a()), potioneffect);
                     this.a(potioneffect);
                 }
@@ -622,19 +610,15 @@ public abstract class EntityLivingBase extends Entity {
     public boolean a(DamageSource damagesource, float f0) {
         if (this.aw()) {
             return false;
-        }
-        else if (this.o.E) {
+        } else if (this.o.E) {
             return false;
-        }
-        else {
+        } else {
             this.aU = 0;
             if (this.aS() <= 0.0F) {
                 return false;
-            }
-            else if (damagesource.o() && this.a(Potion.n)) {
+            } else if (damagesource.o() && this.a(Potion.n)) {
                 return false;
-            }
-            else {
+            } else {
                 if ((damagesource == DamageSource.m || damagesource == DamageSource.n) && this.q(4) != null) {
                     this.q(4).a((int) (f0 * 4.0F + this.Z.nextFloat() * f0 * 2.0F), this);
                     f0 *= 0.75F;
@@ -667,8 +651,7 @@ public abstract class EntityLivingBase extends Entity {
                     this.d((((CanaryDamageSource) hook.getDamageSource()).getHandle()), hook.getDamageDealt());
                     this.bb = f0;
                     flag0 = false;
-                }
-                else {
+                } else {
                     if (attacker != null) {
                         hook.call();
                     }
@@ -694,8 +677,7 @@ public abstract class EntityLivingBase extends Entity {
                     if (entity instanceof EntityPlayer) {
                         this.aS = 100;
                         this.aR = (EntityPlayer) entity;
-                    }
-                    else if (entity instanceof EntityWolf) {
+                    } else if (entity instanceof EntityWolf) {
                         EntityWolf entitywolf = (EntityWolf) entity;
 
                         if (entitywolf.bZ()) {
@@ -722,8 +704,7 @@ public abstract class EntityLivingBase extends Entity {
 
                         this.az = (float) (Math.atan2(d1, d0) * 180.0D / 3.1415927410125732D) - this.y;
                         this.a(entity, f0, d0, d1);
-                    }
-                    else {
+                    } else {
                         this.az = (float) ((int) (Math.random() * 2.0D) * 180);
                     }
                 }
@@ -737,8 +718,7 @@ public abstract class EntityLivingBase extends Entity {
                     }
 
                     this.a(damagesource);
-                }
-                else {
+                } else {
                     s0 = this.aT();
                     if (flag0 && s0 != null) {
                         this.a(s0, this.bf(), this.bg());
@@ -921,8 +901,7 @@ public abstract class EntityLivingBase extends Entity {
     protected float c(DamageSource damagesource, float f0) {
         if (damagesource.h()) {
             return f0;
-        }
-        else {
+        } else {
             if (this instanceof EntityZombie) {
                 f0 = f0;
             }
@@ -940,8 +919,7 @@ public abstract class EntityLivingBase extends Entity {
 
             if (f0 <= 0.0F) {
                 return 0.0F;
-            }
-            else {
+            } else {
                 i0 = EnchantmentHelper.a(this.ak(), damagesource);
                 if (i0 > 20) {
                     i0 = 20;
@@ -1023,8 +1001,7 @@ public abstract class EntityLivingBase extends Entity {
                 this.au = 0;
                 this.at = false;
             }
-        }
-        else {
+        } else {
             this.au = 0;
         }
 
@@ -1146,8 +1123,7 @@ public abstract class EntityLivingBase extends Entity {
             if (this.E && this.c(this.v, this.w + 0.6000000238418579D - this.t + d0, this.x)) {
                 this.w = 0.30000001192092896D;
             }
-        }
-        else if (this.P() && (!(this instanceof EntityPlayer) || !((EntityPlayer) this).bE.b)) {
+        } else if (this.P() && (!(this instanceof EntityPlayer) || !((EntityPlayer) this).bE.b)) {
             d0 = this.t;
             this.a(f0, f1, 0.02F);
             this.d(this.v, this.w, this.x);
@@ -1158,8 +1134,7 @@ public abstract class EntityLivingBase extends Entity {
             if (this.E && this.c(this.v, this.w + 0.6000000238418579D - this.t + d0, this.x)) {
                 this.w = 0.30000001192092896D;
             }
-        }
-        else {
+        } else {
             float f2 = 0.91F;
 
             if (this.D) {
@@ -1171,8 +1146,7 @@ public abstract class EntityLivingBase extends Entity {
 
             if (this.D) {
                 f4 = this.bl() * f3;
-            }
-            else {
+            } else {
                 f4 = this.aQ;
             }
 
@@ -1221,12 +1195,10 @@ public abstract class EntityLivingBase extends Entity {
             if (this.o.E && (!this.o.d((int) this.s, 0, (int) this.u) || !this.o.d((int) this.s, (int) this.u).d)) {
                 if (this.t > 0.0D) {
                     this.w = -0.1D;
-                }
-                else {
+                } else {
                     this.w = 0.0D;
                 }
-            }
-            else {
+            } else {
                 this.w -= 0.08D;
             }
 
@@ -1417,8 +1389,7 @@ public abstract class EntityLivingBase extends Entity {
             --this.bg;
             this.b(d0, d1, d2);
             this.b(this.y, this.z);
-        }
-        else if (!this.br()) {
+        } else if (!this.br()) {
             this.v *= 0.98D;
             this.w *= 0.98D;
             this.x *= 0.98D;
@@ -1442,14 +1413,12 @@ public abstract class EntityLivingBase extends Entity {
             this.bd = 0.0F;
             this.be = 0.0F;
             this.bf = 0.0F;
-        }
-        else if (this.br()) {
+        } else if (this.br()) {
             if (this.bk()) {
                 this.o.C.a("newAi");
                 this.bn();
                 this.o.C.b();
-            }
-            else {
+            } else {
                 this.o.C.a("oldAi");
                 this.bq();
                 this.o.C.b();
@@ -1464,12 +1433,10 @@ public abstract class EntityLivingBase extends Entity {
                     this.bj();
                     this.bq = 10;
                 }
-            }
-            else {
+            } else {
                 this.w += 0.03999999910593033D;
             }
-        }
-        else {
+        } else {
             this.bq = 0;
         }
 
@@ -1565,8 +1532,7 @@ public abstract class EntityLivingBase extends Entity {
             f3 = -MathHelper.b(-this.z * 0.017453292F);
             f4 = MathHelper.a(-this.z * 0.017453292F);
             return Vec3.a((double) (f2 * f3), (double) f4, (double) (f1 * f3));
-        }
-        else {
+        } else {
             f1 = this.B + (this.z - this.B) * f0;
             f2 = this.A + (this.y - this.A) * f0;
             f3 = MathHelper.b(-f2 * 0.017453292F - 3.1415927F);

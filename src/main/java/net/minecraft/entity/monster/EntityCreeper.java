@@ -185,8 +185,7 @@ public class EntityCreeper extends EntityMob {
 
             if (this.bZ()) {
                 this.o.a(this, this.s, this.t, this.u, (float) (this.bs * 2), flag0);
-            }
-            else {
+            } else {
                 this.o.a(this, this.s, this.t, this.u, (float) this.bs, flag0);
             }
 

@@ -109,8 +109,7 @@ public class EntityPotion extends EntityThrowable {
 
                                 if (Potion.a[i0].b()) {
                                     Potion.a[i0].a(this.j(), entitylivingbase, potioneffect.c(), d1);
-                                }
-                                else {
+                                } else {
                                     int i1 = (int) (d1 * (double) potioneffect.b() + 0.5D);
 
                                     if (i1 > 20) {
@@ -132,8 +131,7 @@ public class EntityPotion extends EntityThrowable {
         super.a(nbttagcompound);
         if (nbttagcompound.b("Potion", 10)) {
             this.c = ItemStack.a(nbttagcompound.m("Potion"));
-        }
-        else {
+        } else {
             this.a(nbttagcompound.f("potionValue"));
         }
 

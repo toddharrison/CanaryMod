@@ -118,8 +118,7 @@ public abstract class EntityThrowable extends Entity implements IProjectile {
             this.x *= (double) (this.Z.nextFloat() * 0.2F);
             this.i = 0;
             this.at = 0;
-        }
-        else {
+        } else {
             ++this.at;
         }
 
@@ -166,8 +165,7 @@ public abstract class EntityThrowable extends Entity implements IProjectile {
         if (movingobjectposition != null) {
             if (movingobjectposition.a == MovingObjectPosition.MovingObjectType.BLOCK && this.o.a(movingobjectposition.b, movingobjectposition.c, movingobjectposition.d) == Blocks.aO) {
                 this.ah();
-            }
-            else {
+            } else {
                 this.a(movingobjectposition);
             }
         }

@@ -155,8 +155,7 @@ public abstract class EntityLiving extends EntityLivingBase {
             }
 
             return i0;
-        }
-        else {
+        } else {
             return this.b;
         }
     }
@@ -183,8 +182,7 @@ public abstract class EntityLiving extends EntityLivingBase {
         if (this.bk()) {
             this.bn.a();
             return f1;
-        }
-        else {
+        } else {
             return super.f(f0, f1);
         }
     }
@@ -246,8 +244,7 @@ public abstract class EntityLiving extends EntityLivingBase {
             if (this.bw instanceof EntityLivingBase) {
                 nbttagcompound1.a("UUIDMost", this.bw.aB().getMostSignificantBits());
                 nbttagcompound1.a("UUIDLeast", this.bw.aB().getLeastSignificantBits());
-            }
-            else if (this.bw instanceof EntityHanging) {
+            } else if (this.bw instanceof EntityHanging) {
                 EntityHanging entityhanging = (EntityHanging) this.bw;
 
                 nbttagcompound1.a("X", entityhanging.b);
@@ -324,37 +321,30 @@ public abstract class EntityLiving extends EntityLivingBase {
                             if (i0 == 0) {
                                 if (itemstack.b() instanceof ItemSword && !(itemstack1.b() instanceof ItemSword)) {
                                     flag0 = true;
-                                }
-                                else if (itemstack.b() instanceof ItemSword && itemstack1.b() instanceof ItemSword) {
+                                } else if (itemstack.b() instanceof ItemSword && itemstack1.b() instanceof ItemSword) {
                                     ItemSword itemsword = (ItemSword) itemstack.b();
                                     ItemSword itemsword1 = (ItemSword) itemstack1.b();
 
                                     if (itemsword.i() == itemsword1.i()) {
                                         flag0 = itemstack.k() > itemstack1.k() || itemstack.p() && !itemstack1.p();
-                                    }
-                                    else {
+                                    } else {
                                         flag0 = itemsword.i() > itemsword1.i();
                                     }
-                                }
-                                else {
+                                } else {
                                     flag0 = false;
                                 }
-                            }
-                            else if (itemstack.b() instanceof ItemArmor && !(itemstack1.b() instanceof ItemArmor)) {
+                            } else if (itemstack.b() instanceof ItemArmor && !(itemstack1.b() instanceof ItemArmor)) {
                                 flag0 = true;
-                            }
-                            else if (itemstack.b() instanceof ItemArmor && itemstack1.b() instanceof ItemArmor) {
+                            } else if (itemstack.b() instanceof ItemArmor && itemstack1.b() instanceof ItemArmor) {
                                 ItemArmor itemarmor = (ItemArmor) itemstack.b();
                                 ItemArmor itemarmor1 = (ItemArmor) itemstack1.b();
 
                                 if (itemarmor.c == itemarmor1.c) {
                                     flag0 = itemstack.k() > itemstack1.k() || itemstack.p() && !itemstack1.p();
-                                }
-                                else {
+                                } else {
                                     flag0 = itemarmor.c > itemarmor1.c;
                                 }
-                            }
-                            else {
+                            } else {
                                 flag0 = false;
                             }
                         }
@@ -399,8 +389,7 @@ public abstract class EntityLiving extends EntityLivingBase {
     protected void w() {
         if (this.bt) {
             this.aU = 0;
-        }
-        else {
+        } else {
             EntityPlayer entityplayer = this.o.a(this, -1.0D);
 
             if (entityplayer != null) {
@@ -415,8 +404,7 @@ public abstract class EntityLiving extends EntityLivingBase {
 
                 if (this.aU > 600 && this.Z.nextInt(800) == 0 && d3 > 1024.0D && this.v()) {
                     this.B();
-                }
-                else if (d3 < 1024.0D) {
+                } else if (d3 < 1024.0D) {
                     this.aU = 0;
                 }
             }
@@ -467,8 +455,7 @@ public abstract class EntityLiving extends EntityLivingBase {
             if (entityplayer != null) {
                 this.bu = entityplayer;
                 this.g = 10 + this.Z.nextInt(20);
-            }
-            else {
+            } else {
                 this.bf = (this.Z.nextFloat() - 0.5F) * 20.0F;
             }
         }
@@ -478,8 +465,7 @@ public abstract class EntityLiving extends EntityLivingBase {
             if (this.g-- <= 0 || this.bu.K || this.bu.f((Entity) this) > (double) (f0 * f0)) {
                 this.bu = null;
             }
-        }
-        else {
+        } else {
             if (this.Z.nextFloat() < 0.05F) {
                 this.bf = (this.Z.nextFloat() - 0.5F) * 20.0F;
             }
@@ -509,8 +495,7 @@ public abstract class EntityLiving extends EntityLivingBase {
             EntityLivingBase entitylivingbase = (EntityLivingBase) entity;
 
             d2 = entitylivingbase.t + (double) entitylivingbase.g() - (this.t + (double) this.g());
-        }
-        else {
+        } else {
             d2 = (entity.C.b + entity.C.e) / 2.0D - (this.t + (double) this.g());
         }
 
@@ -547,8 +532,7 @@ public abstract class EntityLiving extends EntityLivingBase {
     public int ax() {
         if (this.o() == null) {
             return 3;
-        }
-        else {
+        } else {
             int i0 = (int) (this.aS() - this.aY() * 0.33F);
 
             i0 -= (3 - this.o.r.a()) * 4;
@@ -660,8 +644,7 @@ public abstract class EntityLiving extends EntityLivingBase {
             }
 
             return 0;
-        }
-        else {
+        } else {
             return 4;
         }
     }
@@ -671,68 +654,52 @@ public abstract class EntityLiving extends EntityLivingBase {
             case 4:
                 if (i1 == 0) {
                     return Items.Q;
-                }
-                else if (i1 == 1) {
+                } else if (i1 == 1) {
                     return Items.ag;
-                }
-                else if (i1 == 2) {
+                } else if (i1 == 2) {
                     return Items.U;
-                }
-                else if (i1 == 3) {
+                } else if (i1 == 3) {
                     return Items.Y;
-                }
-                else if (i1 == 4) {
+                } else if (i1 == 4) {
                     return Items.ac;
                 }
 
             case 3:
                 if (i1 == 0) {
                     return Items.R;
-                }
-                else if (i1 == 1) {
+                } else if (i1 == 1) {
                     return Items.ah;
-                }
-                else if (i1 == 2) {
+                } else if (i1 == 2) {
                     return Items.V;
-                }
-                else if (i1 == 3) {
+                } else if (i1 == 3) {
                     return Items.Z;
-                }
-                else if (i1 == 4) {
+                } else if (i1 == 4) {
                     return Items.ad;
                 }
 
             case 2:
                 if (i1 == 0) {
                     return Items.S;
-                }
-                else if (i1 == 1) {
+                } else if (i1 == 1) {
                     return Items.ai;
-                }
-                else if (i1 == 2) {
+                } else if (i1 == 2) {
                     return Items.W;
-                }
-                else if (i1 == 3) {
+                } else if (i1 == 3) {
                     return Items.aa;
-                }
-                else if (i1 == 4) {
+                } else if (i1 == 4) {
                     return Items.ae;
                 }
 
             case 1:
                 if (i1 == 0) {
                     return Items.T;
-                }
-                else if (i1 == 1) {
+                } else if (i1 == 1) {
                     return Items.aj;
-                }
-                else if (i1 == 2) {
+                } else if (i1 == 2) {
                     return Items.X;
-                }
-                else if (i1 == 3) {
+                } else if (i1 == 3) {
                     return Items.ab;
-                }
-                else if (i1 == 4) {
+                } else if (i1 == 4) {
                     return Items.af;
                 }
 
@@ -814,8 +781,7 @@ public abstract class EntityLiving extends EntityLivingBase {
         if (this.bN() && this.bO() == entityplayer) {
             this.a(true, !entityplayer.bE.d);
             return true;
-        }
-        else {
+        } else {
             ItemStack itemstack = entityplayer.bm.h();
 
             if (itemstack != null && itemstack.b() == Items.ca && this.bM()) {
@@ -901,8 +867,7 @@ public abstract class EntityLiving extends EntityLivingBase {
                         break;
                     }
                 }
-            }
-            else if (this.bx.b("X", 99) && this.bx.b("Y", 99) && this.bx.b("Z", 99)) {
+            } else if (this.bx.b("X", 99) && this.bx.b("Y", 99) && this.bx.b("Z", 99)) {
                 int i0 = this.bx.f("X");
                 int i1 = this.bx.f("Y");
                 int i2 = this.bx.f("Z");
@@ -913,8 +878,7 @@ public abstract class EntityLiving extends EntityLivingBase {
                 }
 
                 this.bw = entityleashknot;
-            }
-            else {
+            } else {
                 this.a(false, true);
             }
         }

@@ -31,8 +31,7 @@ public class ServersideAttributeMap extends BaseAttributeMap {
     public IAttributeInstance b(IAttribute IAttribute) {
         if (this.b.containsKey(IAttribute.a())) {
             throw new IllegalArgumentException("Attribute is already registered!");
-        }
-        else {
+        } else {
             ModifiableAttributeInstance modifiableattributeinstance = new ModifiableAttributeInstance(this, IAttribute);
 
             this.b.put(IAttribute.a(), modifiableattributeinstance);

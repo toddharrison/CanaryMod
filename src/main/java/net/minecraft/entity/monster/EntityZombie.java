@@ -96,8 +96,7 @@ public class EntityZombie extends EntityMob {
             this.bu = flag0;
             if (flag0) {
                 this.c.a(1, this.bs);
-            }
-            else {
+            } else {
                 this.c.a((EntityAIBase) this.bs);
             }
         }
@@ -173,8 +172,7 @@ public class EntityZombie extends EntityMob {
     public boolean a(DamageSource damagesource, float f0) {
         if (!super.a(damagesource, f0)) {
             return false;
-        }
-        else {
+        } else {
             EntityLivingBase entitylivingbase = this.o();
 
             if (entitylivingbase == null && this.bT() instanceof EntityLivingBase) {
@@ -287,8 +285,7 @@ public class EntityZombie extends EntityMob {
 
             if (i0 == 0) {
                 this.c(0, new ItemStack(Items.l));
-            }
-            else {
+            } else {
                 this.c(0, new ItemStack(Items.a));
             }
         }
@@ -373,8 +370,7 @@ public class EntityZombie extends EntityMob {
                         entitychicken.i(true);
                         this.a((Entity) entitychicken);
                     }
-                }
-                else if ((double) this.o.s.nextFloat() < 0.05D) {
+                } else if ((double) this.o.s.nextFloat() < 0.05D) {
                     EntityChicken entitychicken1 = new EntityChicken(this.o);
 
                     entitychicken1.b(this.s, this.t, this.u, this.y, 0.0F);
@@ -431,8 +427,7 @@ public class EntityZombie extends EntityMob {
             }
 
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }

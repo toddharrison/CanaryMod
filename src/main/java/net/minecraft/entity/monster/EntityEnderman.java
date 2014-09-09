@@ -80,8 +80,7 @@ public class EntityEnderman extends EntityMob {
                     this.a(true);
                     return entityplayer;
                 }
-            }
-            else {
+            } else {
                 this.bt = 0;
             }
         }
@@ -94,8 +93,7 @@ public class EntityEnderman extends EntityMob {
 
         if (itemstack != null && itemstack.b() == Item.a(Blocks.aK)) {
             return false;
-        }
-        else {
+        } else {
             Vec3 vec3 = entityplayer.j(1.0F).a();
             Vec3 vec31 = Vec3.a(this.s - entityplayer.s, this.C.b + (double) (this.N / 2.0F) - (entityplayer.t + (double) entityplayer.g()), this.u - entityplayer.u);
             double d0 = vec31.b();
@@ -147,8 +145,7 @@ public class EntityEnderman extends EntityMob {
                         //
                     }
                 }
-            }
-            else if (this.Z.nextInt(2000) == 0) {
+            } else if (this.Z.nextInt(2000) == 0) {
                 i0 = MathHelper.c(this.s - 1.0D + this.Z.nextDouble() * 2.0D);
                 i1 = MathHelper.c(this.t + this.Z.nextDouble() * 2.0D);
                 i2 = MathHelper.c(this.u - 1.0D + this.Z.nextDouble() * 2.0D);
@@ -206,12 +203,10 @@ public class EntityEnderman extends EntityMob {
                     }
 
                     this.bs = 0;
-                }
-                else if (this.bm.f((Entity) this) > 256.0D && this.bs++ >= 30 && this.c(this.bm)) {
+                } else if (this.bm.f((Entity) this) > 256.0D && this.bs++ >= 30 && this.c(this.bm)) {
                     this.bs = 0;
                 }
-            }
-            else {
+            } else {
                 this.a(false);
                 this.bs = 0;
             }
@@ -261,8 +256,7 @@ public class EntityEnderman extends EntityMob {
 
                 if (block.o().c()) {
                     flag1 = true;
-                }
-                else {
+                } else {
                     --this.t;
                     --i1;
                 }
@@ -279,8 +273,7 @@ public class EntityEnderman extends EntityMob {
         if (!flag0) {
             this.b(d3, d4, d5);
             return false;
-        }
-        else {
+        } else {
             short short1 = 128;
 
             for (int i3 = 0; i3 < short1; ++i3) {
@@ -348,8 +341,7 @@ public class EntityEnderman extends EntityMob {
     public boolean a(DamageSource damagesource, float f0) {
         if (this.aw()) {
             return false;
-        }
-        else {
+        } else {
             this.a(true);
             if (damagesource instanceof EntityDamageSource && damagesource.j() instanceof EntityPlayer) {
                 this.bv = true;
@@ -365,8 +357,7 @@ public class EntityEnderman extends EntityMob {
                 }
 
                 return false;
-            }
-            else {
+            } else {
                 return super.a(damagesource, f0);
             }
         }

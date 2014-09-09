@@ -72,8 +72,7 @@ public class EntityItem extends Entity {
     public void h() {
         if (this.f() == null) {
             this.B();
-        }
-        else {
+        } else {
             super.h();
             if (this.b > 0) {
                 --this.b;
@@ -131,8 +130,7 @@ public class EntityItem extends Entity {
                 EntityDespawnHook hook = (EntityDespawnHook) new EntityDespawnHook(getCanaryEntity()).call();
                 if (!hook.isCanceled()) {
                     this.B();
-                }
-                else {
+                } else {
                     this.a = 0; // Reset Age
                 }
                 //
@@ -153,33 +151,25 @@ public class EntityItem extends Entity {
     public boolean a(EntityItem entityitem) {
         if (entityitem == this) {
             return false;
-        }
-        else if (entityitem.Z() && this.Z()) {
+        } else if (entityitem.Z() && this.Z()) {
             ItemStack itemstack = this.f();
             ItemStack itemstack1 = entityitem.f();
 
             if (itemstack1.b() != itemstack.b()) {
                 return false;
-            }
-            else if (itemstack1.p() ^ itemstack.p()) {
+            } else if (itemstack1.p() ^ itemstack.p()) {
                 return false;
-            }
-            else if (itemstack1.p() && !itemstack1.q().equals(itemstack.q())) {
+            } else if (itemstack1.p() && !itemstack1.q().equals(itemstack.q())) {
                 return false;
-            }
-            else if (itemstack1.b() == null) {
+            } else if (itemstack1.b() == null) {
                 return false;
-            }
-            else if (itemstack1.b().n() && itemstack1.k() != itemstack.k()) {
+            } else if (itemstack1.b().n() && itemstack1.k() != itemstack.k()) {
                 return false;
-            }
-            else if (itemstack1.b < itemstack.b) {
+            } else if (itemstack1.b < itemstack.b) {
                 return entityitem.a(this);
-            }
-            else if (itemstack1.b + itemstack.b > itemstack1.e()) {
+            } else if (itemstack1.b + itemstack.b > itemstack1.e()) {
                 return false;
-            }
-            else {
+            } else {
                 itemstack1.b += itemstack.b;
                 entityitem.b = Math.max(entityitem.b, this.b);
                 entityitem.a = Math.min(entityitem.a, this.a);
@@ -187,8 +177,7 @@ public class EntityItem extends Entity {
                 this.B();
                 return true;
             }
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -208,11 +197,9 @@ public class EntityItem extends Entity {
     public boolean a(DamageSource damagesource, float f0) {
         if (this.aw()) {
             return false;
-        }
-        else if (this.f() != null && this.f().b() == Items.bN && damagesource.c()) {
+        } else if (this.f() != null && this.f().b() == Items.bN && damagesource.c()) {
             return false;
-        }
-        else {
+        } else {
             this.Q();
             this.e = (int) ((float) this.e - f0);
             if (this.e <= 0) {

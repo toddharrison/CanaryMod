@@ -65,8 +65,7 @@ public class EntityTNTPrimed extends Entity {
             if (!this.o.E) {
                 this.f();
             }
-        }
-        else {
+        } else {
             this.o.a("smoke", this.s, this.t + 0.5D, this.u, 0.0D, 0.0D, 0.0D);
         }
     }

@@ -160,8 +160,7 @@ public class EntitySheep extends EntityAnimal {
 
         if (flag0) {
             this.af.b(16, Byte.valueOf((byte) (b0 | 16)));
-        }
-        else {
+        } else {
             this.af.b(16, Byte.valueOf((byte) (b0 & -17)));
         }
     }
@@ -205,8 +204,7 @@ public class EntitySheep extends EntityAnimal {
 
         if (itemstack != null && itemstack.b() == Items.aR) {
             i2 = itemstack.k();
-        }
-        else {
+        } else {
             i2 = this.o.s.nextBoolean() ? i0 : i1;
         }
 

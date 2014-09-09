@@ -104,15 +104,13 @@ public class EntityDragon extends EntityLiving implements IEntityMultiPart, IMob
             f1 = (this.Z.nextFloat() - 0.5F) * 4.0F;
             f2 = (this.Z.nextFloat() - 0.5F) * 8.0F;
             this.o.a("largeexplode", this.s + (double) f0, this.t + 2.0D + (double) f1, this.u + (double) f2, 0.0D, 0.0D, 0.0D);
-        }
-        else {
+        } else {
             this.bP();
             f0 = 0.2F / (MathHelper.a(this.v * this.v + this.x * this.x) * 10.0F + 1.0F);
             f0 *= (float) Math.pow(2.0D, this.w);
             if (this.bA) {
                 this.by += f0 * 0.5F;
-            }
-            else {
+            } else {
                 this.by += f0;
             }
 
@@ -148,8 +146,7 @@ public class EntityDragon extends EntityLiving implements IEntityMultiPart, IMob
                     this.b(d3, d0, d1);
                     this.b(this.y, this.z);
                 }
-            }
-            else {
+            } else {
                 d3 = this.h - this.s;
                 d0 = this.i - this.t;
                 d1 = this.bm - this.u;
@@ -167,8 +164,7 @@ public class EntityDragon extends EntityLiving implements IEntityMultiPart, IMob
                     }
 
                     this.i = this.bD.C.b + d7;
-                }
-                else {
+                } else {
                     this.h += this.Z.nextGaussian() * 2.0D;
                     this.bm += this.Z.nextGaussian() * 2.0D;
                 }
@@ -224,8 +220,7 @@ public class EntityDragon extends EntityLiving implements IEntityMultiPart, IMob
                 this.a(0.0F, -1.0F, f7 * (f4 * f6 + (1.0F - f6)));
                 if (this.bA) {
                     this.d(this.v * 0.800000011920929D, this.w * 0.800000011920929D, this.x * 0.800000011920929D);
-                }
-                else {
+                } else {
                     this.d(this.v, this.w, this.x);
                 }
 
@@ -317,8 +312,7 @@ public class EntityDragon extends EntityLiving implements IEntityMultiPart, IMob
                 }
 
                 this.bC = null;
-            }
-            else if (this.aa % 10 == 0 && this.aS() < this.aY()) {
+            } else if (this.aa % 10 == 0 && this.aS() < this.aY()) {
                 this.g(this.aS() + 1.0F);
             }
         }
@@ -376,8 +370,7 @@ public class EntityDragon extends EntityLiving implements IEntityMultiPart, IMob
         this.bz = false;
         if (this.Z.nextInt(2) == 0 && !this.o.h.isEmpty()) {
             this.bD = (Entity) this.o.h.get(this.Z.nextInt(this.o.h.size()));
-        }
-        else {
+        } else {
             boolean flag0 = false;
 
             do {
@@ -391,7 +384,8 @@ public class EntityDragon extends EntityLiving implements IEntityMultiPart, IMob
                 double d2 = this.u - this.bm;
 
                 flag0 = d0 * d0 + d1 * d1 + d2 * d2 > 100.0D;
-            } while (!flag0);
+            }
+            while (!flag0);
 
             this.bD = null;
         }
@@ -419,8 +413,7 @@ public class EntityDragon extends EntityLiving implements IEntityMultiPart, IMob
                     if (block.o() != Material.a) {
                         if (block != Blocks.Z && block != Blocks.bs && block != Blocks.h && this.o.O().b("mobGriefing")) {
                             flag1 = this.o.f(i6, i7, i8) || flag1;
-                        }
-                        else {
+                        } else {
                             flag0 = true;
                         }
                     }
@@ -530,14 +523,11 @@ public class EntityDragon extends EntityLiving implements IEntityMultiPart, IMob
                             if (d2 <= ((double) (b1 - 1) - 0.5D) * ((double) (b1 - 1) - 0.5D)) {
                                 this.o.b(i3, i2, i4, Blocks.h);
                             }
-                        }
-                        else if (i2 > b0) {
+                        } else if (i2 > b0) {
                             this.o.b(i3, i2, i4, Blocks.a);
-                        }
-                        else if (d2 > ((double) (b1 - 1) - 0.5D) * ((double) (b1 - 1) - 0.5D)) {
+                        } else if (d2 > ((double) (b1 - 1) - 0.5D) * ((double) (b1 - 1) - 0.5D)) {
                             this.o.b(i3, i2, i4, Blocks.h);
-                        }
-                        else {
+                        } else {
                             this.o.b(i3, i2, i4, Blocks.bq);
                         }
                     }

@@ -53,8 +53,7 @@ public class EntityMooshroom extends EntityCow {
             }
 
             return true;
-        }
-        else {
+        } else {
             return super.a(entityplayer);
         }
     }

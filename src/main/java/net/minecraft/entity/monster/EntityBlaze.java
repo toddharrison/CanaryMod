@@ -86,8 +86,7 @@ public class EntityBlaze extends EntityMob {
         if (this.aB <= 0 && f0 < 2.0F && entity.C.e > this.C.b && entity.C.b < this.C.e) {
             this.aB = 20;
             this.n(entity);
-        }
-        else if (f0 < 30.0F) {
+        } else if (f0 < 30.0F) {
             double d0 = entity.s - this.s;
             double d1 = entity.C.b + (double) (entity.N / 2.0F) - (this.t + (double) (this.N / 2.0F));
             double d2 = entity.u - this.u;
@@ -97,11 +96,9 @@ public class EntityBlaze extends EntityMob {
                 if (this.br == 1) {
                     this.aB = 60;
                     this.a(true);
-                }
-                else if (this.br <= 4) {
+                } else if (this.br <= 4) {
                     this.aB = 6;
-                }
-                else {
+                } else {
                     this.aB = 100;
                     this.br = 0;
                     this.a(false);
@@ -156,8 +153,7 @@ public class EntityBlaze extends EntityMob {
 
         if (flag0) {
             b0 = (byte) (b0 | 1);
-        }
-        else {
+        } else {
             b0 &= -2;
         }
 

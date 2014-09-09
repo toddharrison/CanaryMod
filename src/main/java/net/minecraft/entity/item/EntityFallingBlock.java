@@ -80,8 +80,7 @@ public class EntityFallingBlock extends Entity {
     public void h() {
         if (this.e.o() == Material.a) {
             this.B();
-        }
-        else {
+        } else {
             this.p = this.s;
             this.q = this.t;
             this.r = this.u;
@@ -138,13 +137,11 @@ public class EntityFallingBlock extends Entity {
                                     tileentity.e();
                                 }
                             }
-                        }
-                        else if (this.c && !this.f) {
+                        } else if (this.c && !this.f) {
                             this.a(new ItemStack(this.e, 1, this.e.a(this.a)), 0.0F);
                         }
                     }
-                }
-                else if (this.b > 100 && !this.o.E && (i1 < 1 || i1 > 256) || this.b > 600) {
+                } else if (this.b > 100 && !this.o.E && (i1 < 1 || i1 > 256) || this.b > 600) {
                     if (this.c) {
                         this.a(new ItemStack(this.e, 1, this.e.a(this.a)), 0.0F);
                     }
@@ -181,8 +178,7 @@ public class EntityFallingBlock extends Entity {
                     ++i1;
                     if (i1 > 2) {
                         this.f = true;
-                    }
-                    else {
+                    } else {
                         this.a = i2 | i1 << 2;
                     }
                 }
@@ -207,8 +203,7 @@ public class EntityFallingBlock extends Entity {
     protected void a(NBTTagCompound nbttagcompound) {
         if (nbttagcompound.b("TileID", 99)) {
             this.e = Block.e(nbttagcompound.f("TileID"));
-        }
-        else {
+        } else {
             this.e = Block.e(nbttagcompound.d("Tile") & 255);
         }
 
@@ -218,8 +213,7 @@ public class EntityFallingBlock extends Entity {
             this.g = nbttagcompound.n("HurtEntities");
             this.i = nbttagcompound.h("FallHurtAmount");
             this.h = nbttagcompound.f("FallHurtMax");
-        }
-        else if (this.e == Blocks.bQ) {
+        } else if (this.e == Blocks.bQ) {
             this.g = true;
         }
 

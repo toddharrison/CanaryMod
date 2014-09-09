@@ -120,8 +120,7 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
     public String b_() {
         if (this.bH()) {
             return this.bG();
-        }
-        else {
+        } else {
             int i0 = this.bZ();
 
             switch (i0) {
@@ -153,8 +152,7 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
 
         if (flag0) {
             this.af.b(16, Integer.valueOf(i1 | i0));
-        }
-        else {
+        } else {
             this.af.b(16, Integer.valueOf(i1 & ~i0));
         }
     }
@@ -188,8 +186,7 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
     public void a(boolean flag0) {
         if (flag0) {
             this.a(this.ci());
-        }
-        else {
+        } else {
             this.a(1.0F);
         }
     }
@@ -227,8 +224,7 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
     private int e(ItemStack itemstack) {
         if (itemstack == null) {
             return 0;
-        }
-        else {
+        } else {
             Item item = itemstack.b();
 
             return item == Items.bX ? 1 : (item == Items.bY ? 2 : (item == Items.bZ ? 3 : 0));
@@ -391,8 +387,7 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
         if (this.aa > 20) {
             if (i0 == 0 && i0 != this.cl()) {
                 this.a("mob.horse.armor", 0.5F, 1.0F);
-            }
-            else if (i0 != this.cl()) {
+            } else if (i0 != this.cl()) {
                 this.a("mob.horse.armor", 0.5F, 1.0F);
             }
 
@@ -495,15 +490,12 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
                     if (i3 == 0 && this.Z.nextInt(10) == 0) {
                         this.a("mob.horse.breathe", block_soundtype.c() * 0.6F, block_soundtype.d());
                     }
-                }
-                else if (this.bP <= 5) {
+                } else if (this.bP <= 5) {
                     this.a("mob.horse.wood", block_soundtype.c() * 0.15F, block_soundtype.d());
                 }
-            }
-            else if (block_soundtype == Block.f) {
+            } else if (block_soundtype == Block.f) {
                 this.a("mob.horse.wood", block_soundtype.c() * 0.15F, block_soundtype.d());
-            }
-            else {
+            } else {
                 this.a("mob.horse.soft", block_soundtype.c() * 0.15F, block_soundtype.d());
             }
         }
@@ -548,18 +540,14 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
 
         if (itemstack != null && itemstack.b() == Items.bx) {
             return super.a(entityplayer);
-        }
-        else if (!this.cc() && this.cE()) {
+        } else if (!this.cc() && this.cE()) {
             return false;
-        }
-        else if (this.cc() && this.cb() && entityplayer.an()) {
+        } else if (this.cc() && this.cb() && entityplayer.an()) {
             this.g(entityplayer);
             return true;
-        }
-        else if (this.cg() && this.l != null) {
+        } else if (this.cg() && this.l != null) {
             return super.a(entityplayer);
-        }
-        else {
+        } else {
             if (itemstack != null) {
                 boolean flag0 = false;
 
@@ -568,11 +556,9 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
 
                     if (itemstack.b() == Items.bX) {
                         b0 = 1;
-                    }
-                    else if (itemstack.b() == Items.bY) {
+                    } else if (itemstack.b() == Items.bY) {
                         b0 = 2;
-                    }
-                    else if (itemstack.b() == Items.bZ) {
+                    } else if (itemstack.b() == Items.bZ) {
                         b0 = 3;
                     }
 
@@ -596,27 +582,22 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
                         f0 = 2.0F;
                         short1 = 60;
                         b1 = 3;
-                    }
-                    else if (itemstack.b() == Items.aT) {
+                    } else if (itemstack.b() == Items.aT) {
                         f0 = 1.0F;
                         short1 = 30;
                         b1 = 3;
-                    }
-                    else if (itemstack.b() == Items.P) {
+                    } else if (itemstack.b() == Items.P) {
                         f0 = 7.0F;
                         short1 = 180;
                         b1 = 3;
-                    }
-                    else if (Block.a(itemstack.b()) == Blocks.cf) {
+                    } else if (Block.a(itemstack.b()) == Blocks.cf) {
                         f0 = 20.0F;
                         short1 = 180;
-                    }
-                    else if (itemstack.b() == Items.e) {
+                    } else if (itemstack.b() == Items.e) {
                         f0 = 3.0F;
                         short1 = 60;
                         b1 = 3;
-                    }
-                    else if (itemstack.b() == Items.bK) {
+                    } else if (itemstack.b() == Items.bK) {
                         f0 = 4.0F;
                         short1 = 60;
                         b1 = 5;
@@ -624,8 +605,7 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
                             flag0 = true;
                             this.f(entityplayer);
                         }
-                    }
-                    else if (itemstack.b() == Items.ao) {
+                    } else if (itemstack.b() == Items.ao) {
                         f0 = 10.0F;
                         short1 = 240;
                         b1 = 10;
@@ -688,13 +668,11 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
             if (this.cg() && this.l == null) {
                 if (itemstack != null && itemstack.a(entityplayer, (EntityLivingBase) this)) {
                     return true;
-                }
-                else {
+                } else {
                     this.i(entityplayer);
                     return true;
                 }
-            }
-            else {
+            } else {
                 return super.a(entityplayer);
             }
         }
@@ -710,8 +688,7 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
             CancelableHook hook = null;
             if (this.l == null) {
                 hook = new VehicleEnterHook((Vehicle) this.entity, entityplayer.getCanaryHuman());
-            }
-            else if (this.l == entityplayer) {
+            } else if (this.l == entityplayer) {
                 hook = new VehicleExitHook((Vehicle) this.entity, entityplayer.getCanaryHuman());
             }
             if (hook != null) {
@@ -829,8 +806,7 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
             if (this.bJ > 1.0F) {
                 this.bJ = 1.0F;
             }
-        }
-        else {
+        } else {
             this.bJ += (0.0F - this.bJ) * 0.4F - 0.05F;
             if (this.bJ < 0.0F) {
                 this.bJ = 0.0F;
@@ -844,8 +820,7 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
             if (this.bL > 1.0F) {
                 this.bL = 1.0F;
             }
-        }
-        else {
+        } else {
             this.bI = false;
             this.bL += (0.8F * this.bL * this.bL * this.bL - this.bL) * 0.6F - 0.05F;
             if (this.bL < 0.0F) {
@@ -859,8 +834,7 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
             if (this.bN > 1.0F) {
                 this.bN = 1.0F;
             }
-        }
-        else {
+        } else {
             this.bN += (0.0F - this.bN) * 0.7F - 0.05F;
             if (this.bN < 0.0F) {
                 this.bN = 0.0F;
@@ -995,8 +969,7 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
 
             this.aF += (f4 - this.aF) * 0.4F;
             this.aG += this.aF;
-        }
-        else {
+        } else {
             this.W = 0.5F;
             this.aQ = 0.02F;
             super.e(f0, f1);
@@ -1090,8 +1063,7 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
             if (itemstack != null && itemstack.b() == Items.av) {
                 this.bG.a(0, itemstack);
             }
-        }
-        else if (nbttagcompound.n("Saddle")) {
+        } else if (nbttagcompound.n("Saddle")) {
             this.bG.a(0, new ItemStack(Items.av));
         }
 
@@ -1101,11 +1073,9 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
     public boolean a(EntityAnimal entityanimal) {
         if (entityanimal == this) {
             return false;
-        }
-        else if (entityanimal.getClass() != this.getClass()) {
+        } else if (entityanimal.getClass() != this.getClass()) {
             return false;
-        }
-        else {
+        } else {
             EntityHorse entityhorse = (EntityHorse) entityanimal;
 
             if (this.cT() && entityhorse.cT()) {
@@ -1113,8 +1083,7 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
                 int i1 = entityhorse.bZ();
 
                 return i0 == i1 || i0 == 0 && i1 == 1 || i0 == 1 && i1 == 0;
-            }
-            else {
+            } else {
                 return false;
             }
         }
@@ -1129,8 +1098,7 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
 
         if (i0 == i1) {
             i2 = i0;
-        }
-        else if (i0 == 0 && i1 == 1 || i0 == 1 && i1 == 0) {
+        } else if (i0 == 0 && i1 == 1 || i0 == 1 && i1 == 0) {
             i2 = 2;
         }
 
@@ -1140,11 +1108,9 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
 
             if (i3 < 4) {
                 i4 = this.ca() & 255;
-            }
-            else if (i3 < 8) {
+            } else if (i3 < 8) {
                 i4 = entityhorse.ca() & 255;
-            }
-            else {
+            } else {
                 i4 = this.Z.nextInt(7);
             }
 
@@ -1152,11 +1118,9 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
 
             if (i5 < 2) {
                 i4 |= this.ca() & '\uff00';
-            }
-            else if (i5 < 4) {
+            } else if (i5 < 4) {
                 i4 |= entityhorse.ca() & '\uff00';
-            }
-            else {
+            } else {
                 i4 |= this.Z.nextInt(5) << 8 & '\uff00';
             }
 
@@ -1185,12 +1149,10 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
         if (ientitylivingdata1 instanceof EntityHorse.GroupData) {
             i1 = ((EntityHorse.GroupData) ientitylivingdata1).a;
             i0 = ((EntityHorse.GroupData) ientitylivingdata1).b & 255 | this.Z.nextInt(5) << 8;
-        }
-        else {
+        } else {
             if (this.Z.nextInt(10) == 0) {
                 i1 = 1;
-            }
-            else {
+            } else {
                 int i2 = this.Z.nextInt(7);
                 int i3 = this.Z.nextInt(5);
 
@@ -1211,20 +1173,17 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
             this.a(SharedMonsterAttributes.a).a((double) this.cV());
             if (i1 == 0) {
                 this.a(SharedMonsterAttributes.d).a(this.cX());
-            }
-            else {
+            } else {
                 this.a(SharedMonsterAttributes.d).a(0.17499999701976776D);
             }
-        }
-        else {
+        } else {
             this.a(SharedMonsterAttributes.a).a(15.0D);
             this.a(SharedMonsterAttributes.d).a(0.20000000298023224D);
         }
 
         if (i1 != 2 && i1 != 1) {
             this.a(bv).a(this.cW());
-        }
-        else {
+        } else {
             this.a(bv).a(0.5D);
         }
 
@@ -1240,16 +1199,14 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
         if (this.cu()) {
             if (i0 < 0) {
                 i0 = 0;
-            }
-            else {
+            } else {
                 this.bI = true;
                 this.cU();
             }
 
             if (i0 >= 90) {
                 this.bt = 1.0F;
-            }
-            else {
+            } else {
                 this.bt = 0.4F + 0.4F * (float) i0 / 90.0F;
             }
         }

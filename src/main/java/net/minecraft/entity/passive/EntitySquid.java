@@ -98,12 +98,10 @@ public class EntitySquid extends EntityWaterMob {
                 if ((double) f0 > 0.75D) {
                     this.bx = 1.0F;
                     this.bz = 1.0F;
-                }
-                else {
+                } else {
                     this.bz *= 0.8F;
                 }
-            }
-            else {
+            } else {
                 this.bv = 0.0F;
                 this.bx *= 0.9F;
                 this.bz *= 0.99F;
@@ -120,8 +118,7 @@ public class EntitySquid extends EntityWaterMob {
             this.y = this.aM;
             this.br += 3.1415927F * this.bz * 1.5F;
             this.bp += (-((float) Math.atan2((double) f0, this.w)) * 180.0F / 3.1415927F - this.bp) * 0.1F;
-        }
-        else {
+        } else {
             this.bv = MathHelper.e(MathHelper.a(this.bt)) * 3.1415927F * 0.25F;
             if (!this.o.E) {
                 this.v = 0.0D;
@@ -142,8 +139,7 @@ public class EntitySquid extends EntityWaterMob {
         ++this.aU;
         if (this.aU > 100) {
             this.bA = this.bB = this.bC = 0.0F;
-        }
-        else if (this.Z.nextInt(50) == 0 || !this.ac || this.bA == 0.0F && this.bB == 0.0F && this.bC == 0.0F) {
+        } else if (this.Z.nextInt(50) == 0 || !this.ac || this.bA == 0.0F && this.bB == 0.0F && this.bC == 0.0F) {
             float f0 = this.Z.nextFloat() * 3.1415927F * 2.0F;
 
             this.bA = MathHelper.b(f0) * 0.2F;

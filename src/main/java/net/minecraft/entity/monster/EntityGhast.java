@@ -42,13 +42,11 @@ public class EntityGhast extends EntityFlying implements IMob {
     public boolean a(DamageSource damagesource, float f0) {
         if (this.aw()) {
             return false;
-        }
-        else if ("fireball".equals(damagesource.p()) && damagesource.j() instanceof EntityPlayer) {
+        } else if ("fireball".equals(damagesource.p()) && damagesource.j() instanceof EntityPlayer) {
             super.a(damagesource, 1000.0F);
             ((EntityPlayer) damagesource.j()).a((StatBase) AchievementList.z);
             return true;
-        }
-        else {
+        } else {
             return super.a(damagesource, f0);
         }
     }
@@ -88,8 +86,7 @@ public class EntityGhast extends EntityFlying implements IMob {
                 this.v += d0 / d3 * 0.1D;
                 this.w += d1 / d3 * 0.1D;
                 this.x += d2 / d3 * 0.1D;
-            }
-            else {
+            } else {
                 this.i = this.s;
                 this.bm = this.t;
                 this.bn = this.u;
@@ -144,12 +141,10 @@ public class EntityGhast extends EntityFlying implements IMob {
                     this.o.d((Entity) entitylargefireball);
                     this.bp = -40;
                 }
-            }
-            else if (this.bp > 0) {
+            } else if (this.bp > 0) {
                 --this.bp;
             }
-        }
-        else {
+        } else {
             this.aM = this.y = -((float) Math.atan2(this.v, this.x)) * 180.0F / 3.1415927F;
             if (this.bp > 0) {
                 --this.bp;

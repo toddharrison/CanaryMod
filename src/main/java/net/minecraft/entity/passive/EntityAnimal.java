@@ -74,8 +74,7 @@ public abstract class EntityAnimal extends EntityAgeable implements IAnimals {
 
                 this.o.a(s0, this.s + (double) (this.Z.nextFloat() * this.M * 2.0F) - (double) this.M, this.t + 0.5D + (double) (this.Z.nextFloat() * this.N), this.u + (double) (this.Z.nextFloat() * this.M * 2.0F) - (double) this.M, d0, d1, d2);
             }
-        }
-        else {
+        } else {
             this.bq = 0;
         }
 
@@ -96,16 +95,14 @@ public abstract class EntityAnimal extends EntityAgeable implements IAnimals {
             if (entityplayer.bF() == null || !this.c(entityplayer.bF())) {
                 this.bm = null;
             }
-        }
-        else if (entity instanceof EntityAnimal) {
+        } else if (entity instanceof EntityAnimal) {
             EntityAnimal entityanimal = (EntityAnimal) entity;
 
             if (this.d() > 0 && entityanimal.d() < 0) {
                 if ((double) f0 < 2.5D) {
                     this.bn = true;
                 }
-            }
-            else if (this.bp > 0 && entityanimal.bp > 0) {
+            } else if (this.bp > 0 && entityanimal.bp > 0) {
                 if (entityanimal.bm == null) {
                     entityanimal.bm = this;
                 }
@@ -121,12 +118,10 @@ public abstract class EntityAnimal extends EntityAgeable implements IAnimals {
                     if (this.bq == 60) {
                         this.b((EntityAnimal) entity);
                     }
-                }
-                else {
+                } else {
                     this.bq = 0;
                 }
-            }
-            else {
+            } else {
                 this.bq = 0;
                 this.bm = null;
             }
@@ -176,8 +171,7 @@ public abstract class EntityAnimal extends EntityAgeable implements IAnimals {
     public boolean a(DamageSource damagesource, float f0) {
         if (this.aw()) {
             return false;
-        }
-        else {
+        } else {
             this.bo = 60;
             if (!this.bk()) {
                 IAttributeInstance iattributeinstance = this.a(SharedMonsterAttributes.d);
@@ -210,8 +204,7 @@ public abstract class EntityAnimal extends EntityAgeable implements IAnimals {
     protected Entity bR() {
         if (this.bo > 0) {
             return null;
-        }
-        else {
+        } else {
             float f0 = 8.0F;
             List list;
             int i0;
@@ -226,8 +219,7 @@ public abstract class EntityAnimal extends EntityAgeable implements IAnimals {
                         return entityanimal;
                     }
                 }
-            }
-            else if (this.d() == 0) {
+            } else if (this.d() == 0) {
                 list = this.o.a(EntityPlayer.class, this.C.b((double) f0, (double) f0, (double) f0));
 
                 for (i0 = 0; i0 < list.size(); ++i0) {
@@ -237,8 +229,7 @@ public abstract class EntityAnimal extends EntityAgeable implements IAnimals {
                         return entityplayer;
                     }
                 }
-            }
-            else if (this.d() > 0) {
+            } else if (this.d() > 0) {
                 list = this.o.a(this.getClass(), this.C.b((double) f0, (double) f0, (double) f0));
 
                 for (i0 = 0; i0 < list.size(); ++i0) {
@@ -290,8 +281,7 @@ public abstract class EntityAnimal extends EntityAgeable implements IAnimals {
 
             this.f(entityplayer);
             return true;
-        }
-        else {
+        } else {
             return super.a(entityplayer);
         }
     }

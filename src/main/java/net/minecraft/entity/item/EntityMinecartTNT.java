@@ -43,8 +43,7 @@ public class EntityMinecartTNT extends EntityMinecart {
         if (this.a > 0) {
             --this.a;
             this.o.a("smoke", this.s, this.t + 0.5D, this.u, 0.0D, 0.0D, 0.0D);
-        }
-        else if (this.a == 0) {
+        } else if (this.a == 0) {
             this.c(this.v * this.v + this.x * this.x);
         }
 

@@ -58,8 +58,7 @@ public class EntitySilverfish extends EntityMob {
     public boolean a(DamageSource damagesource, float f0) {
         if (this.aw()) {
             return false;
-        }
-        else {
+        } else {
             if (this.bp <= 0 && (damagesource instanceof EntityDamageSource || damagesource == DamageSource.k)) {
                 this.bp = 20;
             }
@@ -113,8 +112,7 @@ public class EntitySilverfish extends EntityMob {
                                         ImmutablePair immutablepair = BlockSilverfish.b(i6);
 
                                         this.o.d(i0 + i3, i1 + i4, i2 + i5, (Block) immutablepair.getLeft(), ((Integer) immutablepair.getRight()).intValue(), 3);
-                                    }
-                                    else {
+                                    } else {
                                         this.o.a(i0 + i3, i1 + i4, i2 + i5, false);
                                     }
 
@@ -142,12 +140,10 @@ public class EntitySilverfish extends EntityMob {
                     this.o.d(i0 + Facing.b[i7], i1 + Facing.c[i7], i2 + Facing.d[i7], Blocks.aU, BlockSilverfish.a(block, i3), 3);
                     this.s();
                     this.B();
-                }
-                else {
+                } else {
                     this.bQ();
                 }
-            }
-            else if (this.bm != null && !this.bS()) {
+            } else if (this.bm != null && !this.bS()) {
                 this.bm = null;
             }
         }
@@ -166,8 +162,7 @@ public class EntitySilverfish extends EntityMob {
             EntityPlayer entityplayer = this.o.a(this, 5.0D);
 
             return entityplayer == null;
-        }
-        else {
+        } else {
             return false;
         }
     }

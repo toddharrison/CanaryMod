@@ -163,8 +163,7 @@ public class EntityArrow extends Entity implements IProjectile {
                 if (this.at == 1200) {
                     this.B();
                 }
-            }
-            else {
+            } else {
                 this.i = false;
                 this.v *= (double) (this.Z.nextFloat() * 0.2F);
                 this.w *= (double) (this.Z.nextFloat() * 0.2F);
@@ -172,8 +171,7 @@ public class EntityArrow extends Entity implements IProjectile {
                 this.at = 0;
                 this.au = 0;
             }
-        }
-        else {
+        } else {
             ++this.au;
             Vec3 vec3 = Vec3.a(this.s, this.t, this.u);
             Vec3 vec31 = Vec3.a(this.s + this.v, this.t + this.w, this.u + this.x);
@@ -241,8 +239,7 @@ public class EntityArrow extends Entity implements IProjectile {
 
                     if (this.c == null) {
                         damagesource = DamageSource.a(this, this);
-                    }
-                    else {
+                    } else {
                         damagesource = DamageSource.a(this, this.c);
                     }
 
@@ -279,8 +276,7 @@ public class EntityArrow extends Entity implements IProjectile {
                         if (!(movingobjectposition.g instanceof EntityEnderman)) {
                             this.B();
                         }
-                    }
-                    else {
+                    } else {
                         this.v *= -0.10000000149011612D;
                         this.w *= -0.10000000149011612D;
                         this.x *= -0.10000000149011612D;
@@ -288,8 +284,7 @@ public class EntityArrow extends Entity implements IProjectile {
                         this.A += 180.0F;
                         this.au = 0;
                     }
-                }
-                else {
+                } else {
                     this.d = movingobjectposition.b;
                     this.e = movingobjectposition.c;
                     this.f = movingobjectposition.d;
@@ -395,8 +390,7 @@ public class EntityArrow extends Entity implements IProjectile {
 
         if (nbttagcompound.b("pickup", 99)) {
             this.a = nbttagcompound.d("pickup");
-        }
-        else if (nbttagcompound.b("player", 99)) {
+        } else if (nbttagcompound.b("player", 99)) {
             this.a = nbttagcompound.n("player") ? 1 : 0;
         }
     }
@@ -442,8 +436,7 @@ public class EntityArrow extends Entity implements IProjectile {
 
         if (flag0) {
             this.af.b(16, Byte.valueOf((byte) (b0 | 1)));
-        }
-        else {
+        } else {
             this.af.b(16, Byte.valueOf((byte) (b0 & -2)));
         }
     }

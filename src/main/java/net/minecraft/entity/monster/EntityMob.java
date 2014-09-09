@@ -56,8 +56,7 @@ public abstract class EntityMob extends EntityCreature implements IMob {
     public boolean a(DamageSource damagesource, float f0) {
         if (this.aw()) {
             return false;
-        }
-        else if (super.a(damagesource, f0)) {
+        } else if (super.a(damagesource, f0)) {
             Entity entity = damagesource.j();
 
             if (this.l != entity && this.m != entity) {
@@ -68,20 +67,17 @@ public abstract class EntityMob extends EntityCreature implements IMob {
                         if (!hook.isCanceled()) {
                             this.bm = entity;
                         }
-                    }
-                    else {
+                    } else {
                         this.bm = entity;
                     }
                     //
                 }
 
                 return true;
-            }
-            else {
+            } else {
                 return true;
             }
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -149,8 +145,7 @@ public abstract class EntityMob extends EntityCreature implements IMob {
 
         if (this.o.b(EnumSkyBlock.Sky, i0, i1, i2) > this.Z.nextInt(32)) {
             return false;
-        }
-        else {
+        } else {
             int i3 = this.o.k(i0, i1, i2);
 
             if (this.o.P()) {

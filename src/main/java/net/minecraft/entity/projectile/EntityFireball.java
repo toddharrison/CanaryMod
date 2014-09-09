@@ -67,8 +67,7 @@ public abstract class EntityFireball extends Entity {
     public void h() {
         if (!this.o.E && (this.a != null && this.a.K || !this.o.d((int) this.s, (int) this.t, (int) this.u))) {
             this.B();
-        }
-        else {
+        } else {
             super.h();
             this.e(1);
             if (this.i) {
@@ -87,8 +86,7 @@ public abstract class EntityFireball extends Entity {
                 this.x *= (double) (this.Z.nextFloat() * 0.2F);
                 this.at = 0;
                 this.au = 0;
-            }
-            else {
+            } else {
                 ++this.au;
             }
 
@@ -214,8 +212,7 @@ public abstract class EntityFireball extends Entity {
             this.v = nbttaglist.d(0);
             this.w = nbttaglist.d(1);
             this.x = nbttaglist.d(2);
-        }
-        else {
+        } else {
             this.B();
         }
     }
@@ -231,8 +228,7 @@ public abstract class EntityFireball extends Entity {
     public boolean a(DamageSource damagesource, float f0) {
         if (this.aw()) {
             return false;
-        }
-        else {
+        } else {
             this.Q();
             if (damagesource.j() != null) {
                 Vec3 vec3 = damagesource.j().ag();
@@ -251,8 +247,7 @@ public abstract class EntityFireball extends Entity {
                 }
 
                 return true;
-            }
-            else {
+            } else {
                 return false;
             }
         }

@@ -66,8 +66,7 @@ public class ModifiableAttributeInstance implements IAttributeInstance {
     public void a(AttributeModifier attributemodifier) {
         if (this.a(attributemodifier.a()) != null) {
             throw new IllegalArgumentException("Modifier is already applied on this attribute!");
-        }
-        else {
+        } else {
             Object object = (Set) this.d.get(attributemodifier.b());
 
             if (object == null) {

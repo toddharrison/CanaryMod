@@ -55,8 +55,7 @@ public class EntityWitherSkull extends EntityFireball {
                         if (movingobjectposition.g.a(DamageSource.a(this.a), 8.0F) && !movingobjectposition.g.Z()) {
                             this.a.f(5.0F);
                         }
-                    }
-                    else {
+                    } else {
                         movingobjectposition.g.a(DamageSource.k, 5.0F);
                     }
 
@@ -65,8 +64,7 @@ public class EntityWitherSkull extends EntityFireball {
 
                         if (this.o.r == EnumDifficulty.NORMAL) {
                             b0 = 10;
-                        }
-                        else if (this.o.r == EnumDifficulty.HARD) {
+                        } else if (this.o.r == EnumDifficulty.HARD) {
                             b0 = 40;
                         }
 

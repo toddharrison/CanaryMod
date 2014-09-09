@@ -41,8 +41,7 @@ public class EntitySmallFireball extends EntityFireball {
                     if (!movingobjectposition.g.K() && movingobjectposition.g.a(DamageSource.a((EntityFireball) this, this.a), 5.0F)) {
                         movingobjectposition.g.e(5);
                     }
-                }
-                else {
+                } else {
                     int i0 = movingobjectposition.b;
                     int i1 = movingobjectposition.c;
                     int i2 = movingobjectposition.d;

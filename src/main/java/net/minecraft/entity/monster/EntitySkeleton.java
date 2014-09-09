@@ -82,8 +82,7 @@ public class EntitySkeleton extends EntityMob implements IRangedAttackMob {
             }
 
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -161,8 +160,7 @@ public class EntitySkeleton extends EntityMob implements IRangedAttackMob {
             for (i2 = 0; i2 < i1; ++i2) {
                 this.a(Items.h, 1);
             }
-        }
-        else {
+        } else {
             i1 = this.Z.nextInt(3 + i0);
 
             for (i2 = 0; i2 < i1; ++i2) {
@@ -195,8 +193,7 @@ public class EntitySkeleton extends EntityMob implements IRangedAttackMob {
             this.a(1);
             this.c(0, new ItemStack(Items.q));
             this.a(SharedMonsterAttributes.e).a(4.0D);
-        }
-        else {
+        } else {
             this.c.a(4, this.bp);
             this.bC();
             this.bD();
@@ -222,8 +219,7 @@ public class EntitySkeleton extends EntityMob implements IRangedAttackMob {
 
         if (itemstack != null && itemstack.b() == Items.f) {
             this.c.a(4, this.bp);
-        }
-        else {
+        } else {
             this.c.a(4, this.bq);
         }
     }
@@ -259,8 +255,7 @@ public class EntitySkeleton extends EntityMob implements IRangedAttackMob {
         this.ae = i0 == 1;
         if (i0 == 1) {
             this.a(0.72F, 2.34F);
-        }
-        else {
+        } else {
             this.a(0.6F, 1.8F);
         }
     }

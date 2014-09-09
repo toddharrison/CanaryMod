@@ -1,5 +1,6 @@
 package net.minecraft.world.gen;
 
+import com.google.common.collect.Lists;
 import net.canarymod.api.world.CanaryChunkProviderServer;
 import net.canarymod.hook.world.ChunkCreatedHook;
 import net.canarymod.hook.world.ChunkCreationHook;
@@ -74,8 +75,7 @@ public class ChunkProviderServer implements IChunkProvider {
             if (i2 < -short1 || i2 > short1 || i3 < -short1 || i3 > short1) {
                 this.c.add(Long.valueOf(ChunkCoordIntPair.a(i0, i1)));
             }
-        }
-        else {
+        } else {
             this.c.add(Long.valueOf(ChunkCoordIntPair.a(i0, i1)));
         }
     }
@@ -113,12 +113,10 @@ public class ChunkProviderServer implements IChunkProvider {
                 //
                 else if (this.e == null) {
                     chunk = this.d;
-                }
-                else {
+                } else {
                     try {
                         chunk = this.e.d(i0, i1);
-                    }
-                    catch (Throwable throwable) {
+                    } catch (Throwable throwable) {
                         CrashReport crashreport = CrashReport.a(throwable, "Exception generating new chunk");
                         CrashReportCategory crashreportcategory = crashreport.a("Chunk to be generated");
 
@@ -161,8 +159,7 @@ public class ChunkProviderServer implements IChunkProvider {
     private Chunk f(int i0, int i1) {
         if (this.f == null) {
             return null;
-        }
-        else {
+        } else {
             try {
                 Chunk chunk = this.f.a(this.i, i0, i1);
 
@@ -174,8 +171,7 @@ public class ChunkProviderServer implements IChunkProvider {
                 }
 
                 return chunk;
-            }
-            catch (Exception exception) {
+            } catch (Exception exception) {
                 b.error("Couldn\'t load chunk", exception);
                 return null;
             }
@@ -187,8 +183,7 @@ public class ChunkProviderServer implements IChunkProvider {
         if (this.f != null) {
             try {
                 this.f.b(this.i, chunk);
-            }
-            catch (Exception exception) {
+            } catch (Exception exception) {
                 b.error("Couldn\'t save entities", exception);
             }
         }
@@ -200,11 +195,9 @@ public class ChunkProviderServer implements IChunkProvider {
             try {
                 chunk.p = this.i.I();
                 this.f.a(this.i, chunk);
-            }
-            catch (IOException ioexception) {
+            } catch (IOException ioexception) {
                 b.error("Couldn\'t save chunk", ioexception);
-            }
-            catch (MinecraftException minecraftexception) {
+            } catch (MinecraftException minecraftexception) {
                 b.error("Couldn\'t save chunk; already in use by another instance of Minecraft?", minecraftexception);
             }
         }

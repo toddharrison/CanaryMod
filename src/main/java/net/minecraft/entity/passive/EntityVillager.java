@@ -92,8 +92,7 @@ public class EntityVillager extends EntityAgeable implements IMerchant, INpc {
             this.bp = this.o.A.a(MathHelper.c(this.s), MathHelper.c(this.t), MathHelper.c(this.u), 32);
             if (this.bp == null) {
                 this.bX();
-            }
-            else {
+            } else {
                 ChunkCoordinates chunkcoordinates = this.bp.a();
 
                 this.a(chunkcoordinates.a, chunkcoordinates.b, chunkcoordinates.c, (int) ((float) this.bp.b() * 0.6F));
@@ -146,8 +145,7 @@ public class EntityVillager extends EntityAgeable implements IMerchant, INpc {
             }
 
             return true;
-        }
-        else {
+        } else {
             return super.a(entityplayer);
         }
     }
@@ -243,12 +241,10 @@ public class EntityVillager extends EntityAgeable implements IMerchant, INpc {
             if (entity != null) {
                 if (entity instanceof EntityPlayer) {
                     this.bp.a(entity.b_(), -2);
-                }
-                else if (entity instanceof IMob) {
+                } else if (entity instanceof IMob) {
                     this.bp.h();
                 }
-            }
-            else if (entity == null) {
+            } else if (entity == null) {
                 EntityPlayer entityplayer = this.o.a(this, 16.0D);
 
                 if (entityplayer != null) {
@@ -281,8 +277,7 @@ public class EntityVillager extends EntityAgeable implements IMerchant, INpc {
             this.bw = true;
             if (this.bt != null) {
                 this.by = this.bt.b_();
-            }
-            else {
+            } else {
                 this.by = null;
             }
         }
@@ -297,8 +292,7 @@ public class EntityVillager extends EntityAgeable implements IMerchant, INpc {
             this.a_ = -this.q();
             if (itemstack != null) {
                 this.a("mob.villager.yes", this.bf(), this.bg());
-            }
-            else {
+            } else {
                 this.a("mob.villager.no", this.bf(), this.bg());
             }
         }
@@ -321,8 +315,7 @@ public class EntityVillager extends EntityAgeable implements IMerchant, INpc {
     private void t(int i0) {
         if (this.bu != null) {
             this.bA = MathHelper.c((float) this.bu.size()) * 0.2F;
-        }
-        else {
+        } else {
             this.bA = 0.0F;
         }
 
@@ -481,8 +474,7 @@ public class EntityVillager extends EntityAgeable implements IMerchant, INpc {
             if (i0 < 0) {
                 itemstack = new ItemStack(Items.bC, 1, 0);
                 itemstack1 = new ItemStack(item, -i0, 0);
-            }
-            else {
+            } else {
                 itemstack = new ItemStack(Items.bC, i0, 0);
                 itemstack1 = new ItemStack(item, 1, 0);
             }

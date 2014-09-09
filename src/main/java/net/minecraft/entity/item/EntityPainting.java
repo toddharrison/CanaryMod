@@ -89,8 +89,7 @@ public class EntityPainting extends EntityHanging {
         if (entity instanceof EntityPlayer) {
             isPlayer = true;
             hook = (HangingEntityDestroyHook) new HangingEntityDestroyHook((HangingEntity) this.getCanaryEntity(), (Player) entity.getCanaryEntity(), CanaryDamageSource.getDamageSourceFromType(DamageType.GENERIC)).call();
-        }
-        else {
+        } else {
             hook = (HangingEntityDestroyHook) new HangingEntityDestroyHook((HangingEntity) this.getCanaryEntity(), null, CanaryDamageSource.getDamageSourceFromType(DamageType.GENERIC)).call();
         }
         if (hook.isCanceled()) {

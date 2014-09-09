@@ -102,23 +102,18 @@ public class EntityWitch extends EntityMob implements IRangedAttackMob {
 
                     this.a(SharedMonsterAttributes.d).b(bq);
                 }
-            }
-            else {
+            } else {
                 short short1 = -1;
 
                 if (this.Z.nextFloat() < 0.15F && this.a(Material.h) && !this.a(Potion.o)) {
                     short1 = 8237;
-                }
-                else if (this.Z.nextFloat() < 0.15F && this.al() && !this.a(Potion.n)) {
+                } else if (this.Z.nextFloat() < 0.15F && this.al() && !this.a(Potion.n)) {
                     short1 = 16307;
-                }
-                else if (this.Z.nextFloat() < 0.05F && this.aS() < this.aY()) {
+                } else if (this.Z.nextFloat() < 0.05F && this.aS() < this.aY()) {
                     short1 = 16341;
-                }
-                else if (this.Z.nextFloat() < 0.25F && this.o() != null && !this.a(Potion.c) && this.o().f(this) > 121.0D) {
+                } else if (this.Z.nextFloat() < 0.25F && this.o() != null && !this.a(Potion.c) && this.o().f(this) > 121.0D) {
                     short1 = 16274;
-                }
-                else if (this.Z.nextFloat() < 0.25F && this.o() != null && !this.a(Potion.c) && this.o().f(this) > 121.0D) {
+                } else if (this.Z.nextFloat() < 0.25F && this.o() != null && !this.a(Potion.c) && this.o().f(this) > 121.0D) {
                     short1 = 16274;
                 }
 
@@ -183,11 +178,9 @@ public class EntityWitch extends EntityMob implements IRangedAttackMob {
 
             if (f1 >= 8.0F && !entitylivingbase.a(Potion.d)) {
                 entitypotion.a(32698);
-            }
-            else if (entitylivingbase.aS() >= 8.0F && !entitylivingbase.a(Potion.u)) {
+            } else if (entitylivingbase.aS() >= 8.0F && !entitylivingbase.a(Potion.u)) {
                 entitypotion.a(32660);
-            }
-            else if (f1 <= 3.0F && !entitylivingbase.a(Potion.t) && this.Z.nextFloat() < 0.25F) {
+            } else if (f1 <= 3.0F && !entitylivingbase.a(Potion.t) && this.Z.nextFloat() < 0.25F) {
                 entitypotion.a(32696);
             }
 

@@ -43,8 +43,7 @@ public class EntityEnderEye extends Entity {
             this.a = this.s + d2 / (double) f0 * 12.0D;
             this.c = this.u + d3 / (double) f0 * 12.0D;
             this.b = this.t + 8.0D;
-        }
-        else {
+        } else {
             this.a = d0;
             this.b = (double) i0;
             this.c = d1;
@@ -100,8 +99,7 @@ public class EntityEnderEye extends Entity {
             this.x = Math.sin((double) f2) * d2;
             if (this.t < this.b) {
                 this.w += (1.0D - this.w) * 0.014999999664723873D;
-            }
-            else {
+            } else {
                 this.w += (-1.0D - this.w) * 0.014999999664723873D;
             }
         }
@@ -112,8 +110,7 @@ public class EntityEnderEye extends Entity {
             for (int i0 = 0; i0 < 4; ++i0) {
                 this.o.a("bubble", this.s - this.v * (double) f3, this.t - this.w * (double) f3, this.u - this.x * (double) f3, this.v, this.w, this.x);
             }
-        }
-        else {
+        } else {
             this.o.a("portal", this.s - this.v * (double) f3 + this.Z.nextDouble() * 0.6D - 0.3D, this.t - this.w * (double) f3 - 0.5D, this.u - this.x * (double) f3 + this.Z.nextDouble() * 0.6D - 0.3D, this.v, this.w, this.x);
         }
 
@@ -124,8 +121,7 @@ public class EntityEnderEye extends Entity {
                 this.B();
                 if (this.e) {
                     this.o.d((Entity) (new EntityItem(this.o, this.s, this.t, this.u, new ItemStack(Items.bv))));
-                }
-                else {
+                } else {
                     this.o.c(2003, (int) Math.round(this.s), (int) Math.round(this.t), (int) Math.round(this.u), 0);
                 }
             }

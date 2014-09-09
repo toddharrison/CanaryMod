@@ -110,8 +110,7 @@ public class EntitySlime extends EntityLiving implements IMob {
             }
 
             this.h = -0.5F;
-        }
-        else if (!this.D && flag0) {
+        } else if (!this.D && flag0) {
             this.h = 1.0F;
         }
 
@@ -131,8 +130,7 @@ public class EntitySlime extends EntityLiving implements IMob {
             MobTargetHook hook = (MobTargetHook) new MobTargetHook((net.canarymod.api.entity.living.LivingBase) this.getCanaryEntity(), (net.canarymod.api.entity.living.LivingBase) entityplayer.getCanaryEntity()).call();
             if (!hook.isCanceled()) {
                 this.a(entityplayer, 10.0F, 20.0F);
-            }
-            else {
+            } else {
                 entityplayer = null;
             }
             //
@@ -151,8 +149,7 @@ public class EntitySlime extends EntityLiving implements IMob {
 
             this.bd = 1.0F - this.Z.nextFloat() * 2.0F;
             this.be = (float) (1 * this.bX());
-        }
-        else {
+        } else {
             this.bc = false;
             if (this.D) {
                 this.bd = this.be = 0.0F;
@@ -238,8 +235,7 @@ public class EntitySlime extends EntityLiving implements IMob {
 
         if (this.o.N().u() == WorldType.c && this.Z.nextInt(4) != 1) {
             return false;
-        }
-        else {
+        } else {
             if (this.bX() == 1 || this.o.r != EnumDifficulty.PEACEFUL) {
                 BiomeGenBase biomegenbase = this.o.a(MathHelper.c(this.s), MathHelper.c(this.u));
 

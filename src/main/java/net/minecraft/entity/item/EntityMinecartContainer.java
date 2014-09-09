@@ -68,8 +68,7 @@ public abstract class EntityMinecartContainer extends EntityMinecart implements 
                 itemstack = this.a[i0];
                 this.a[i0] = null;
                 return itemstack;
-            }
-            else {
+            } else {
                 itemstack = this.a[i0].a(i1);
                 if (this.a[i0].b == 0) {
                     this.a[i0] = null;
@@ -77,8 +76,7 @@ public abstract class EntityMinecartContainer extends EntityMinecart implements 
 
                 return itemstack;
             }
-        }
-        else {
+        } else {
             return null;
         }
     }
@@ -89,8 +87,7 @@ public abstract class EntityMinecartContainer extends EntityMinecart implements 
 
             this.a[i0] = null;
             return itemstack;
-        }
-        else {
+        } else {
             return null;
         }
     }

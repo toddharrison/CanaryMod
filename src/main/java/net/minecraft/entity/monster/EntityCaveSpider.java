@@ -30,8 +30,7 @@ public class EntityCaveSpider extends EntitySpider {
 
                 if (this.o.r == EnumDifficulty.NORMAL) {
                     b0 = 7;
-                }
-                else if (this.o.r == EnumDifficulty.HARD) {
+                } else if (this.o.r == EnumDifficulty.HARD) {
                     b0 = 15;
                 }
 
@@ -41,8 +40,7 @@ public class EntityCaveSpider extends EntitySpider {
             }
 
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }

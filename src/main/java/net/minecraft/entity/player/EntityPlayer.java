@@ -183,8 +183,7 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
                 if (--this.g == 0 && !this.o.E) {
                     this.p();
                 }
-            }
-            else {
+            } else {
                 this.bB();
             }
         }
@@ -202,13 +201,11 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
             if (!this.o.E) {
                 if (!this.j()) {
                     this.a(true, true, false);
-                }
-                else if (this.o.w()) {
+                } else if (this.o.w()) {
                     this.a(false, true, true);
                 }
             }
-        }
-        else if (this.b > 0) {
+        } else if (this.b > 0) {
             ++this.b;
             if (this.b >= 110) {
                 this.b = 0;
@@ -355,8 +352,7 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
             }
 
             this.m = null;
-        }
-        else {
+        } else {
             super.a(entity);
         }
     }
@@ -365,8 +361,7 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
         if (!this.o.E && this.an()) {
             this.a((Entity) null);
             this.b(false);
-        }
-        else {
+        } else {
             double d0 = this.s;
             double d1 = this.t;
             double d2 = this.u;
@@ -436,8 +431,7 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
 
             if (this.m != null && !this.m.K) {
                 axisalignedbb = this.C.a(this.m.C).b(1.0D, 0.0D, 1.0D);
-            }
-            else {
+            } else {
                 axisalignedbb = this.C.b(1.0D, 0.5D, 1.0D);
             }
 
@@ -489,8 +483,7 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
         if (damagesource != null) {
             this.v = (double) (-MathHelper.b((this.az + this.y) * 3.1415927F / 180.0F) * 0.1F);
             this.x = (double) (-MathHelper.a((this.az + this.y) * 3.1415927F / 180.0F) * 0.1F);
-        }
-        else {
+        } else {
             this.v = this.x = 0.0D;
         }
         this.L = 0.1F;
@@ -512,8 +505,7 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
         if (entity instanceof EntityPlayer) {
             this.a(StatList.y, 1);
             collection.addAll(this.bU().a(IScoreObjectiveCriteria.d));
-        }
-        else {
+        } else {
             this.a(StatList.w, 1);
         }
 
@@ -538,11 +530,9 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
     public EntityItem a(ItemStack itemstack, boolean flag0, boolean flag1) {
         if (itemstack == null) {
             return null;
-        }
-        else if (itemstack.b == 0) {
+        } else if (itemstack.b == 0) {
             return null;
-        }
-        else {
+        } else {
             EntityItem entityitem = new EntityItem(this.o, this.s, this.t - 0.30000001192092896D + (double) this.g(), this.u, itemstack);
 
             entityitem.b = 40;
@@ -559,8 +549,7 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
                 entityitem.v = (double) (-MathHelper.a(f2) * f1);
                 entityitem.x = (double) (MathHelper.b(f2) * f1);
                 entityitem.w = 0.20000000298023224D;
-            }
-            else {
+            } else {
                 f0 = 0.3F;
                 entityitem.v = (double) (-MathHelper.a(this.y / 180.0F * 3.1415927F) * MathHelper.b(this.z / 180.0F * 3.1415927F) * f0);
                 entityitem.x = (double) (MathHelper.b(this.y / 180.0F * 3.1415927F) * MathHelper.b(this.z / 180.0F * 3.1415927F) * f0);
@@ -608,8 +597,7 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
 
                 if (!itemstack.b(block) && f0 <= 1.0F) {
                     f0 += f1 * 0.08F;
-                }
-                else {
+                } else {
                     f0 += f1;
                 }
             }
@@ -730,16 +718,13 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
     public boolean a(DamageSource damagesource, float f0) {
         if (this.aw()) {
             return false;
-        }
-        else if (this.bE.a && !damagesource.g()) {
+        } else if (this.bE.a && !damagesource.g()) {
             return false;
-        }
-        else {
+        } else {
             this.aU = 0;
             if (this.aS() <= 0.0F) {
                 return false;
-            }
-            else {
+            } else {
                 if (this.bm() && !this.o.E) {
                     this.a(true, true, false);
                 }
@@ -760,8 +745,7 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
 
                 if (f0 == 0.0F) {
                     return false;
-                }
-                else {
+                } else {
                     Entity entity = damagesource.j();
 
                     if (entity instanceof EntityArrow && ((EntityArrow) entity).c != null) {
@@ -878,13 +862,11 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
             }
 
             return false;
-        }
-        else {
+        } else {
             if (itemstack != null && itemstack == this.bF()) {
                 if (itemstack.b <= 0 && !this.bE.d) {
                     this.bG();
-                }
-                else if (itemstack.b < itemstack1.b && this.bE.d) {
+                } else if (itemstack.b < itemstack1.b && this.bE.d) {
                     itemstack.b = itemstack1.b;
                 }
             }
@@ -991,8 +973,7 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
                         }
 
                         this.a(0.3F);
-                    }
-                    else if (flag1) {
+                    } else if (flag1) {
                         entity.F();
                     }
                 }
@@ -1089,8 +1070,7 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
 
             this.w(i4);
             this.b((double) ((float) i0 + f0), (double) ((float) i1 + 0.9375F), (double) ((float) i2 + f1));
-        }
-        else {
+        } else {
             this.b((double) ((float) i0 + 0.5F), (double) ((float) i1 + 0.9375F), (double) ((float) i2 + 0.5F));
         }
 
@@ -1158,8 +1138,7 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
 
         if (flag0) {
             this.b = 0;
-        }
-        else {
+        } else {
             this.b = 100;
         }
 
@@ -1183,8 +1162,7 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
             ChunkCoordinates chunkcoordinates1 = BlockBed.a(world, chunkcoordinates.a, chunkcoordinates.b, chunkcoordinates.c, 0);
 
             return chunkcoordinates1;
-        }
-        else { //World Spawn
+        } else { //World Spawn
             Material material = world.a(chunkcoordinates.a, chunkcoordinates.b, chunkcoordinates.c).o();
             Material material1 = world.a(chunkcoordinates.a, chunkcoordinates.b + 1, chunkcoordinates.c).o();
             boolean flag1 = !material.a() && !material.d();
@@ -1207,8 +1185,7 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
 
         if (flag0) {
             this.af.b(16, Byte.valueOf((byte) (b0 | 1 << i0)));
-        }
-        else {
+        } else {
             this.af.b(16, Byte.valueOf((byte) (b0 & ~(1 << i0))));
         }
 
@@ -1229,8 +1206,7 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
         if (chunkcoordinates != null) {
             this.c = new ChunkCoordinates(chunkcoordinates);
             this.d = flag0;
-        }
-        else {
+        } else {
             this.c = null;
             this.d = false;
         }
@@ -1248,8 +1224,7 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
         this.a(StatList.r, 1);
         if (this.ao()) {
             this.a(0.8F);
-        }
-        else {
+        } else {
             this.a(0.2F);
         }
     }
@@ -1267,8 +1242,7 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
             super.e(f0, f1);
             this.w = d3 * 0.6D;
             this.aQ = f2;
-        }
-        else {
+        } else {
             super.e(f0, f1);
         }
 
@@ -1289,32 +1263,27 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
                     this.a(StatList.m, i0);
                     this.a(0.015F * (float) i0 * 0.01F);
                 }
-            }
-            else if (this.M()) {
+            } else if (this.M()) {
                 i0 = Math.round(MathHelper.a(d0 * d0 + d2 * d2) * 100.0F);
                 if (i0 > 0) {
                     this.a(StatList.i, i0);
                     this.a(0.015F * (float) i0 * 0.01F);
                 }
-            }
-            else if (this.h_()) {
+            } else if (this.h_()) {
                 if (d1 > 0.0D) {
                     this.a(StatList.k, (int) Math.round(d1 * 100.0D));
                 }
-            }
-            else if (this.D) {
+            } else if (this.D) {
                 i0 = Math.round(MathHelper.a(d0 * d0 + d2 * d2) * 100.0F);
                 if (i0 > 0) {
                     this.a(StatList.h, i0);
                     if (this.ao()) {
                         this.a(0.099999994F * (float) i0 * 0.01F);
-                    }
-                    else {
+                    } else {
                         this.a(0.01F * (float) i0 * 0.01F);
                     }
                 }
-            }
-            else {
+            } else {
                 i0 = Math.round(MathHelper.a(d0 * d0 + d2 * d2) * 100.0F);
                 if (i0 > 25) {
                     this.a(StatList.l, i0);
@@ -1332,18 +1301,14 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
                     this.a(StatList.n, i0);
                     if (this.e == null) {
                         this.e = new ChunkCoordinates(MathHelper.c(this.s), MathHelper.c(this.t), MathHelper.c(this.u));
-                    }
-                    else if ((double) this.e.e(MathHelper.c(this.s), MathHelper.c(this.t), MathHelper.c(this.u)) >= 1000000.0D) {
+                    } else if ((double) this.e.e(MathHelper.c(this.s), MathHelper.c(this.t), MathHelper.c(this.u)) >= 1000000.0D) {
                         this.a((StatBase) AchievementList.q, 1);
                     }
-                }
-                else if (this.m instanceof EntityBoat) {
+                } else if (this.m instanceof EntityBoat) {
                     this.a(StatList.o, i0);
-                }
-                else if (this.m instanceof EntityPig) {
+                } else if (this.m instanceof EntityPig) {
                     this.a(StatList.p, i0);
-                }
-                else if (this.m instanceof EntityHorse) {
+                } else if (this.m instanceof EntityHorse) {
                     this.a(StatList.q, i0);
                 }
             }
@@ -1459,8 +1424,7 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
     public boolean d(int i0, int i1, int i2) {
         if (this.bE.e) {
             return true;
-        }
-        else {
+        } else {
             Block block = this.o.a(i0, i1, i2);
 
             if (block.o() != Material.a) {
@@ -1488,8 +1452,7 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
     protected int e(EntityPlayer entityplayer) {
         if (this.o.O().b("keepInventory")) {
             return 0;
-        }
-        else {
+        } else {
             int i0 = this.bF * 7;
 
             return i0 > 100 ? 100 : i0;
@@ -1510,8 +1473,7 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
             this.bH = entityplayer.bH;
             this.c(entityplayer.bD());
             this.aq = entityplayer.aq;
-        }
-        else if (this.o.O().b("keepInventory")) {
+        } else if (this.o.O().b("keepInventory")) {
             this.bm.b(entityplayer.bm);
             this.bF = entityplayer.bF;
             this.bG = entityplayer.bG;
@@ -1673,8 +1635,7 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
     public void setXP(int i) {
         if (i < this.bF) {
             this.removeXP(this.bF - i);
-        }
-        else {
+        } else {
             this.w(i - this.bF);
         }
         updateXP();

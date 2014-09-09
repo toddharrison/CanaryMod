@@ -86,8 +86,7 @@ public class EntityBoat extends Entity {
     public boolean a(DamageSource damagesource, float f0) {
         if (this.aw()) {
             return false;
-        }
-        else if (!this.o.E && !this.K) {
+        } else if (!this.o.E && !this.K) {
             // CanaryMod: VehicleDamage
             net.canarymod.api.entity.Entity attk = null;
 
@@ -122,8 +121,7 @@ public class EntityBoat extends Entity {
             }
 
             return true;
-        }
-        else {
+        } else {
             return true;
         }
     }
@@ -181,8 +179,7 @@ public class EntityBoat extends Entity {
                     d8 = this.s - d4 * d6 * 0.8D + d5 * d7;
                     d9 = this.u - d5 * d6 * 0.8D - d4 * d7;
                     this.o.a("splash", d8, this.t - 0.125D, d9, this.v, this.w, this.x);
-                }
-                else {
+                } else {
                     d8 = this.s + d4 + d5 * d6 * 0.7D;
                     d9 = this.u + d5 - d4 * d6 * 0.7D;
                     this.o.a("splash", d8, this.t - 0.125D, d9, this.v, this.w, this.x);
@@ -204,8 +201,7 @@ public class EntityBoat extends Entity {
                 --this.c;
                 this.b(d4, d5, d10);
                 this.b(this.y, this.z);
-            }
-            else {
+            } else {
                 d4 = this.s + this.v;
                 d5 = this.t + this.w;
                 d10 = this.u + this.x;
@@ -220,13 +216,11 @@ public class EntityBoat extends Entity {
                 this.w *= 0.949999988079071D;
                 this.x *= 0.9900000095367432D;
             }
-        }
-        else {
+        } else {
             if (d0 < 1.0D) {
                 d4 = d0 * 2.0D - 1.0D;
                 this.w += 0.03999999910593033D * d4;
-            }
-            else {
+            } else {
                 if (this.w < 0.0D) {
                     this.w /= 2.0D;
                 }
@@ -255,8 +249,7 @@ public class EntityBoat extends Entity {
                 if (this.b > 0.35D) {
                     this.b = 0.35D;
                 }
-            }
-            else {
+            } else {
                 this.b -= (this.b - 0.07D) / 35.0D;
                 if (this.b < 0.07D) {
                     this.b = 0.07D;
@@ -277,8 +270,7 @@ public class EntityBoat extends Entity {
                     if (block == Blocks.aC) {
                         this.o.f(i3, i5, i1);
                         this.E = false;
-                    }
-                    else if (block == Blocks.bi) {
+                    } else if (block == Blocks.bi) {
                         this.o.a(i3, i5, i1, true);
                         this.E = false;
                     }
@@ -304,8 +296,7 @@ public class EntityBoat extends Entity {
                         this.a(Items.y, 1, 0.0F);
                     }
                 }
-            }
-            else {
+            } else {
                 this.v *= 0.9900000095367432D;
                 this.w *= 0.949999988079071D;
                 this.x *= 0.9900000095367432D;
@@ -392,16 +383,14 @@ public class EntityBoat extends Entity {
     public boolean c(EntityPlayer entityplayer) {
         if (this.l != null && this.l instanceof EntityPlayer && this.l != entityplayer) {
             return true;
-        }
-        else {
+        } else {
             if (!this.o.E) {
                 // CanaryMod: VehicleEnter/VehicleExit
                 CancelableHook hook = null;
 
                 if (this.l == null) {
                     hook = new VehicleEnterHook((Vehicle) this.entity, (LivingBase) entityplayer.getCanaryEntity());
-                }
-                else if (this.l == entityplayer) {
+                } else if (this.l == entityplayer) {
                     hook = new VehicleExitHook((Vehicle) this.entity, (LivingBase) entityplayer.getCanaryEntity());
                 }
                 if (hook != null) {
@@ -441,8 +430,7 @@ public class EntityBoat extends Entity {
 
                 this.R = 0.0F;
             }
-        }
-        else if (this.o.a(i0, i1 - 1, i2).o() != Material.h && d0 < 0.0D) {
+        } else if (this.o.a(i0, i1 - 1, i2).o() != Material.h && d0 < 0.0D) {
             this.R = (float) ((double) this.R - d0);
         }
 

@@ -121,8 +121,7 @@ public class EntityXPOrb extends Entity {
     public boolean a(DamageSource damagesource, float f0) {
         if (this.aw()) {
             return false;
-        }
-        else {
+        } else {
             this.Q();
             this.d = (int) ((float) this.d - f0);
             if (this.d <= 0) {

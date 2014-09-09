@@ -97,12 +97,10 @@ public class EntityMinecartCommandBlock extends EntityMinecart {
         if (i0 == 24) {
             try {
                 this.a.b(IChatComponent.Serializer.a(this.z().e(24)));
-            }
-            catch (Throwable throwable) {
+            } catch (Throwable throwable) {
                 ;
             }
-        }
-        else if (i0 == 23) {
+        } else if (i0 == 23) {
             this.a.a(this.z().e(23));
         }
 

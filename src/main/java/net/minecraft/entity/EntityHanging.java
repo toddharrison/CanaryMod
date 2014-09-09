@@ -47,8 +47,7 @@ public abstract class EntityHanging extends Entity {
 
         if (i0 != 2 && i0 != 0) {
             f0 = 0.5F;
-        }
-        else {
+        } else {
             f2 = 0.5F;
             this.y = this.A = (float) (Direction.f[i0] * 90);
         }
@@ -120,8 +119,7 @@ public abstract class EntityHanging extends Entity {
     public boolean e() {
         if (!this.o.a((Entity) this, this.C).isEmpty()) {
             return false;
-        }
-        else {
+        } else {
             int i0 = Math.max(1, this.f() / 16);
             int i1 = Math.max(1, this.i() / 16);
             int i2 = this.b;
@@ -152,8 +150,7 @@ public abstract class EntityHanging extends Entity {
 
                     if (this.a != 2 && this.a != 0) {
                         material = this.o.a(this.b, i3 + i6, i4 + i5).o();
-                    }
-                    else {
+                    } else {
                         material = this.o.a(i2 + i5, i3 + i6, this.d).o();
                     }
 
@@ -174,7 +171,8 @@ public abstract class EntityHanging extends Entity {
                 }
 
                 entity = (Entity) iterator.next();
-            } while (!(entity instanceof EntityHanging));
+            }
+            while (!(entity instanceof EntityHanging));
 
             return false;
         }
@@ -195,8 +193,7 @@ public abstract class EntityHanging extends Entity {
     public boolean a(DamageSource damagesource, float f0) {
         if (this.aw()) {
             return false;
-        }
-        else {
+        } else {
             if (!this.K && !this.o.E) {
                 EntityPlayer entityplayer = null;
 
@@ -262,8 +259,7 @@ public abstract class EntityHanging extends Entity {
     public void a(NBTTagCompound nbttagcompound) {
         if (nbttagcompound.b("Direction", 99)) {
             this.a = nbttagcompound.d("Direction");
-        }
-        else {
+        } else {
             switch (nbttagcompound.d("Dir")) {
                 case 0:
                     this.a = 2;

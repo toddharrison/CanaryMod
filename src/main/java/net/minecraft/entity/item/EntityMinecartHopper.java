@@ -103,8 +103,7 @@ public class EntityMinecartHopper extends EntityMinecartContainer implements IHo
     public boolean aF() {
         if (TileEntityHopper.a((IHopper) this)) {
             return true;
-        }
-        else {
+        } else {
             List list = this.o.a(EntityItem.class, this.C.b(0.25D, 0.0D, 0.25D), IEntitySelector.a);
 
             if (list.size() > 0) {

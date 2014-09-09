@@ -119,8 +119,7 @@ public abstract class EntityMinecart extends Entity {
         if (!this.o.E && !this.K) {
             if (this.aw()) {
                 return false;
-            }
-            else {
+            } else {
                 // CanaryMod: VehicleDamage
                 net.canarymod.api.entity.Entity attk = null;
 
@@ -147,16 +146,14 @@ public abstract class EntityMinecart extends Entity {
 
                     if (flag0 && !this.k_()) {
                         this.B();
-                    }
-                    else {
+                    } else {
                         this.a(damagesource);
                     }
                 }
 
                 return true;
             }
-        }
-        else {
+        } else {
             return true;
         }
     }
@@ -213,8 +210,7 @@ public abstract class EntityMinecart extends Entity {
 
                         if (this.o.t.i == -1) {
                             b0 = 0;
-                        }
-                        else {
+                        } else {
                             b0 = -1;
                         }
 
@@ -223,8 +219,7 @@ public abstract class EntityMinecart extends Entity {
 
                     this.an = false;
                 }
-            }
-            else {
+            } else {
                 if (this.ao > 0) {
                     this.ao -= 4;
                 }
@@ -253,13 +248,11 @@ public abstract class EntityMinecart extends Entity {
                 --this.d;
                 this.b(d0, d1, d2);
                 this.b(this.y, this.z);
-            }
-            else {
+            } else {
                 this.b(this.s, this.t, this.u);
                 this.b(this.y, this.z);
             }
-        }
-        else {
+        } else {
             float prevRot = this.y, prevPit = this.z;
             double ppX = this.p, ppY = this.q, ppZ = this.r;
             this.p = this.s;
@@ -293,8 +286,7 @@ public abstract class EntityMinecart extends Entity {
                     }
                     //
                 }
-            }
-            else {
+            } else {
                 this.b(d4);
             }
 
@@ -475,8 +467,7 @@ public abstract class EntityMinecart extends Entity {
                 this.v *= 0.0D;
                 this.w *= 0.0D;
                 this.x *= 0.0D;
-            }
-            else {
+            } else {
                 this.v *= 0.5D;
                 this.w *= 0.0D;
                 this.x *= 0.5D;
@@ -497,12 +488,10 @@ public abstract class EntityMinecart extends Entity {
         if (d2 == 0.0D) {
             this.s = (double) i0 + 0.5D;
             d7 = this.u - (double) i2;
-        }
-        else if (d3 == 0.0D) {
+        } else if (d3 == 0.0D) {
             this.u = (double) i2 + 0.5D;
             d7 = this.s - (double) i0;
-        }
-        else {
+        } else {
             d12 = this.s - d8;
             d13 = this.u - d9;
             d7 = (d12 * d2 + d13 * d3) * 2.0D;
@@ -537,8 +526,7 @@ public abstract class EntityMinecart extends Entity {
         this.d(d12, 0.0D, d13);
         if (aint[0][1] != 0 && MathHelper.c(this.s) - i0 == aint[0][0] && MathHelper.c(this.u) - i2 == aint[0][2]) {
             this.b(this.s, this.t + (double) aint[0][1], this.u);
-        }
-        else if (aint[1][1] != 0 && MathHelper.c(this.s) - i0 == aint[1][0] && MathHelper.c(this.u) - i2 == aint[1][2]) {
+        } else if (aint[1][1] != 0 && MathHelper.c(this.s) - i0 == aint[1][0] && MathHelper.c(this.u) - i2 == aint[1][2]) {
             this.b(this.s, this.t + (double) aint[1][1], this.u);
         }
 
@@ -574,20 +562,16 @@ public abstract class EntityMinecart extends Entity {
 
                 this.v += this.v / d15 * d16;
                 this.x += this.x / d15 * d16;
-            }
-            else if (i3 == 1) {
+            } else if (i3 == 1) {
                 if (this.o.a(i0 - 1, i1, i2).r()) {
                     this.v = 0.02D;
-                }
-                else if (this.o.a(i0 + 1, i1, i2).r()) {
+                } else if (this.o.a(i0 + 1, i1, i2).r()) {
                     this.v = -0.02D;
                 }
-            }
-            else if (i3 == 0) {
+            } else if (i3 == 0) {
                 if (this.o.a(i0, i1, i2 - 1).r()) {
                     this.x = 0.02D;
-                }
-                else if (this.o.a(i0, i1, i2 + 1).r()) {
+                } else if (this.o.a(i0, i1, i2 + 1).r()) {
                     this.x = -0.02D;
                 }
             }
@@ -599,8 +583,7 @@ public abstract class EntityMinecart extends Entity {
             this.v *= 0.996999979019165D;
             this.w *= 0.0D;
             this.x *= 0.996999979019165D;
-        }
-        else {
+        } else {
             this.v *= 0.9599999785423279D;
             this.w *= 0.0D;
             this.x *= 0.9599999785423279D;
@@ -645,12 +628,10 @@ public abstract class EntityMinecart extends Entity {
             if (d10 == 0.0D) {
                 d0 = (double) i0 + 0.5D;
                 d3 = d2 - (double) i2;
-            }
-            else if (d12 == 0.0D) {
+            } else if (d12 == 0.0D) {
                 d2 = (double) i2 + 0.5D;
                 d3 = d0 - (double) i0;
-            }
-            else {
+            } else {
                 double d13 = d0 - d4;
                 double d14 = d2 - d6;
 
@@ -669,8 +650,7 @@ public abstract class EntityMinecart extends Entity {
             }
 
             return Vec3.a(d0, d1, d2);
-        }
-        else {
+        } else {
             return null;
         }
     }
@@ -764,15 +744,13 @@ public abstract class EntityMinecart extends Entity {
                             this.g(entity.v - d0, 0.0D, entity.x - d1);
                             entity.v *= 0.949999988079071D;
                             entity.x *= 0.949999988079071D;
-                        }
-                        else if (((EntityMinecart) entity).m() != 2 && this.m() == 2) {
+                        } else if (((EntityMinecart) entity).m() != 2 && this.m() == 2) {
                             entity.v *= 0.20000000298023224D;
                             entity.x *= 0.20000000298023224D;
                             entity.g(this.v + d0, 0.0D, this.x + d1);
                             this.v *= 0.949999988079071D;
                             this.x *= 0.949999988079071D;
-                        }
-                        else {
+                        } else {
                             d7 /= 2.0D;
                             d8 /= 2.0D;
                             this.v *= 0.20000000298023224D;
@@ -782,8 +760,7 @@ public abstract class EntityMinecart extends Entity {
                             entity.x *= 0.20000000298023224D;
                             entity.g(d7 + d0, 0.0D, d8 + d1);
                         }
-                    }
-                    else {
+                    } else {
                         this.g(-d0, 0.0D, -d1);
                         entity.g(d0 / 4.0D, 0.0D, d1 / 4.0D);
                     }
@@ -821,8 +798,7 @@ public abstract class EntityMinecart extends Entity {
     public Block n() {
         if (!this.t()) {
             return this.o();
-        }
-        else {
+        } else {
             int i0 = this.z().c(20) & '\uffff';
 
             return Block.e(i0);

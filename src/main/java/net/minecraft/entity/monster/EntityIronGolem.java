@@ -59,8 +59,7 @@ public class EntityIronGolem extends EntityGolem {
             this.bp = this.o.A.a(MathHelper.c(this.s), MathHelper.c(this.t), MathHelper.c(this.u), 32);
             if (this.bp == null) {
                 this.bX();
-            }
-            else {
+            } else {
                 ChunkCoordinates chunkcoordinates = this.bp.a();
 
                 this.a(chunkcoordinates.a, chunkcoordinates.b, chunkcoordinates.c, (int) ((float) this.bp.b() * 0.6F));
@@ -187,8 +186,7 @@ public class EntityIronGolem extends EntityGolem {
 
         if (flag0) {
             this.af.b(16, Byte.valueOf((byte) (b0 | 1)));
-        }
-        else {
+        } else {
             this.af.b(16, Byte.valueOf((byte) (b0 & -2)));
         }
     }

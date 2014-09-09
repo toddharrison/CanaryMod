@@ -122,8 +122,7 @@ public class EntityChicken extends EntityAnimal {
 
         if (this.al()) {
             this.a(Items.bg, 1);
-        }
-        else {
+        } else {
             this.a(Items.bf, 1);
         }
     }

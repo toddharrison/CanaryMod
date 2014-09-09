@@ -72,8 +72,7 @@ public class EntityBat extends EntityAmbientCreature {
 
         if (flag0) {
             this.af.b(16, Byte.valueOf((byte) (b0 | 1)));
-        }
-        else {
+        } else {
             this.af.b(16, Byte.valueOf((byte) (b0 & -2)));
         }
     }
@@ -87,8 +86,7 @@ public class EntityBat extends EntityAmbientCreature {
         if (this.bP()) {
             this.v = this.w = this.x = 0.0D;
             this.t = (double) MathHelper.c(this.t) + 1.0D - (double) this.N;
-        }
-        else {
+        } else {
             this.w *= 0.6000000238418579D;
         }
     }
@@ -99,8 +97,7 @@ public class EntityBat extends EntityAmbientCreature {
             if (!this.o.a(MathHelper.c(this.s), (int) this.t + 1, MathHelper.c(this.u)).r()) {
                 this.a(false);
                 this.o.a((EntityPlayer) null, 1015, (int) this.s, (int) this.t, (int) this.u, 0);
-            }
-            else {
+            } else {
                 if (this.Z.nextInt(200) == 0) {
                     this.aO = (float) this.Z.nextInt(360);
                 }
@@ -110,8 +107,7 @@ public class EntityBat extends EntityAmbientCreature {
                     this.o.a((EntityPlayer) null, 1015, (int) this.s, (int) this.t, (int) this.u, 0);
                 }
             }
-        }
-        else {
+        } else {
             if (this.h != null && (!this.o.c(this.h.a, this.h.b, this.h.c) || this.h.b < 1)) {
                 this.h = null;
             }
@@ -155,8 +151,7 @@ public class EntityBat extends EntityAmbientCreature {
     public boolean a(DamageSource damagesource, float f0) {
         if (this.aw()) {
             return false;
-        }
-        else {
+        } else {
             if (!this.o.E && this.bP()) {
                 this.a(false);
             }
@@ -180,8 +175,7 @@ public class EntityBat extends EntityAmbientCreature {
 
         if (i0 >= 63) {
             return false;
-        }
-        else {
+        } else {
             int i1 = MathHelper.c(this.s);
             int i2 = MathHelper.c(this.u);
             int i3 = this.o.k(i1, i0, i2);
@@ -192,8 +186,7 @@ public class EntityBat extends EntityAmbientCreature {
                 if (this.Z.nextBoolean()) {
                     return false;
                 }
-            }
-            else {
+            } else {
                 b0 = 7;
             }
 

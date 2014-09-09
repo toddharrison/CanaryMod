@@ -49,8 +49,7 @@ public class EntityLeashKnot extends EntityHanging {
         //CanaryMod start
         if (entity instanceof EntityPlayer) {
             new HangingEntityDestroyHook((HangingEntity) this.getCanaryEntity(), (Player) entity.getCanaryEntity(), CanaryDamageSource.getDamageSourceFromType(DamageType.GENERIC)).call();
-        }
-        else {
+        } else {
             new HangingEntityDestroyHook((HangingEntity) this.getCanaryEntity(), null, CanaryDamageSource.getDamageSourceFromType(DamageType.GENERIC)).call();
         }
         //CanaryMod end

@@ -96,14 +96,12 @@ public class EntityPig extends EntityAnimal {
     public boolean a(EntityPlayer entityplayer) {
         if (super.a(entityplayer)) {
             return true;
-        }
-        else if (this.bZ() && !this.o.E && (this.l == null || this.l == entityplayer)) {
+        } else if (this.bZ() && !this.o.E && (this.l == null || this.l == entityplayer)) {
             // CanaryMod: VehicleEnter/VehicleExit
             CancelableHook hook;
             if (this.l == null) {
                 hook = new VehicleEnterHook((Vehicle) this.entity, entityplayer.getCanaryHuman());
-            }
-            else {
+            } else {
                 hook = new VehicleExitHook((Vehicle) this.entity, entityplayer.getCanaryHuman());
             }
             hook.call();
@@ -112,8 +110,7 @@ public class EntityPig extends EntityAnimal {
             }
             //
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -128,8 +125,7 @@ public class EntityPig extends EntityAnimal {
         for (int i2 = 0; i2 < i1; ++i2) {
             if (this.al()) {
                 this.a(Items.am, 1);
-            }
-            else {
+            } else {
                 this.a(Items.al, 1);
             }
         }
@@ -146,8 +142,7 @@ public class EntityPig extends EntityAnimal {
     public void i(boolean flag0) {
         if (flag0) {
             this.af.b(16, Byte.valueOf((byte) 1));
-        }
-        else {
+        } else {
             this.af.b(16, Byte.valueOf((byte) 0));
         }
     }

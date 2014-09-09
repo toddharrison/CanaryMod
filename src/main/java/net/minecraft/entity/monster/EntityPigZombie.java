@@ -82,8 +82,7 @@ public class EntityPigZombie extends EntityZombie {
     public boolean a(DamageSource damagesource, float f0) {
         if (this.aw()) {
             return false;
-        }
-        else {
+        } else {
             Entity entity = damagesource.j();
 
             if (entity instanceof EntityPlayer) {
