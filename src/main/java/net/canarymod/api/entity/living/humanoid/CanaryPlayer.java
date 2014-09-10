@@ -578,8 +578,6 @@ public class CanaryPlayer extends CanaryHuman implements Player {
         }
         //defaultChatpattern.put("%name", getDisplayName()); // Display name not initialized at this time
         defaultChatpattern.put("%prefix", getPrefix());
-        // Update the data source with the players name.
-        Canary.usersAndGroups().addOrUpdatePlayerData(this);
     }
 
     /**
