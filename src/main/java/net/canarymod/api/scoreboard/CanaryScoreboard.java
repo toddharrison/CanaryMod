@@ -31,17 +31,21 @@ public class CanaryScoreboard implements Scoreboard {
     }
 
     @Override
-    public void addScoreObjective(String name) {
-        if (getScoreObjective(name) == null) {
+    public ScoreObjective addScoreObjective(String name) {
+        ScoreObjective so = getScoreObjective(name);
+        if (so == null) {
             this.handle.a(name, net.minecraft.scoreboard.IScoreObjectiveCriteria.b);
         }
+        return so;
     }
 
     @Override
-    public void addScoreObjective(String name, ScoreObjectiveCriteria criteria) {
-        if (getScoreObjective(name) == null) {
-            this.handle.a(name, ((CanaryScoreDummyCriteria) criteria).getHandle());
+    public ScoreObjective addScoreObjective(String name, ScoreObjectiveCriteria criteria) {
+        ScoreObjective so = getScoreObjective(name);
+        if (so == null) {
+            so = this.handle.a(name, ((CanaryScoreDummyCriteria) criteria).getHandle()).getCanaryScoreObjective();
         }
+        return so;
     }
 
     @Override
