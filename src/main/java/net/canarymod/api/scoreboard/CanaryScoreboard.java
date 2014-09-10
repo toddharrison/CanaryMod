@@ -1,5 +1,6 @@
 package net.canarymod.api.scoreboard;
 
+import net.canarymod.Canary;
 import net.canarymod.api.entity.living.humanoid.CanaryPlayer;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.minecraft.network.play.server.S3DPacketDisplayScoreboard;
@@ -128,13 +129,24 @@ public class CanaryScoreboard implements Scoreboard {
     }
 
     @Override
-    public void setScoreObjectivePostion(ScorePosition type, ScoreObjective objective) {
+    public void setScoreboardPosition(ScorePosition type, ScoreObjective objective) {
         handle.a(type.getId(), ((CanaryScoreObjective) objective).getHandle());
     }
 
     @Override
-    public void setScoreObjectivePostion(ScorePosition type, ScoreObjective objective, Player player) {
+    public void setScoreboardPosition(ScorePosition type, ScoreObjective objective, Player player) {
         ((CanaryPlayer) player).getHandle().a.a(new S3DPacketDisplayScoreboard(type.getId(), ((CanaryScoreObjective) objective).getHandle()));
     }
 
+    @Override
+    public void clearScoreboardPosition(ScorePosition type) {
+        for (Player p : Canary.getServer().getConfigurationManager().getAllPlayers()) {
+            clearScoreboardPosition(type, p);
+        }
+    }
+
+    @Override
+    public void clearScoreboardPosition(ScorePosition type, Player player) {
+        ((CanaryPlayer) player).getHandle().a.a(new S3DPacketDisplayScoreboard(type.getId(), null));
+    }
 }
