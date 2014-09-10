@@ -5,6 +5,7 @@ import net.minecraft.nbt.NBTTagCompound;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Set;
 
 /**
  * CompoundTag wrapper implementation
@@ -42,6 +43,10 @@ public class CanaryCompoundTag extends CanaryBaseTag implements CompoundTag {
             values.add(CanaryBaseTag.wrap(tag));
         }
         return values;
+    }
+
+    public Set<String> keySet() {
+        return getHandle().c();
     }
 
     /**
