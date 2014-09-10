@@ -24,7 +24,7 @@ public abstract class EntityHanging extends Entity {
 
     public EntityHanging(World world) {
         super(world);
-        this.M = 0.0F;
+        this.L = 0.0F;
         this.a(0.5F, 0.5F);
     }
 
@@ -40,17 +40,16 @@ public abstract class EntityHanging extends Entity {
 
     public void a(int i0) {
         this.a = i0;
-        this.B = this.z = (float) (i0 * 90);
+        this.A = this.y = (float) (i0 * 90);
         float f0 = (float) this.f();
         float f1 = (float) this.i();
         float f2 = (float) this.f();
 
         if (i0 != 2 && i0 != 0) {
             f0 = 0.5F;
-        }
-        else {
+        } else {
             f2 = 0.5F;
-            this.z = this.B = (float) (Direction.f[i0] * 90);
+            this.y = this.A = (float) (Direction.f[i0] * 90);
         }
 
         f0 /= 32.0F;
@@ -97,7 +96,7 @@ public abstract class EntityHanging extends Entity {
         this.b((double) f3, (double) f4, (double) f5);
         float f7 = -0.03125F;
 
-        this.D.b((double) (f3 - f0 - f7), (double) (f4 - f1 - f7), (double) (f5 - f2 - f7), (double) (f3 + f0 + f7), (double) (f4 + f1 + f7), (double) (f5 + f2 + f7));
+        this.C.b((double) (f3 - f0 - f7), (double) (f4 - f1 - f7), (double) (f5 - f2 - f7), (double) (f3 + f0 + f7), (double) (f4 + f1 + f7), (double) (f5 + f2 + f7));
     }
 
     private float c(int i0) {
@@ -105,12 +104,12 @@ public abstract class EntityHanging extends Entity {
     }
 
     public void h() {
+        this.p = this.s;
         this.q = this.t;
         this.r = this.u;
-        this.s = this.v;
-        if (this.e++ == 100 && !this.p.E) {
+        if (this.e++ == 100 && !this.o.E) {
             this.e = 0;
-            if (!this.L && !this.e()) {
+            if (!this.K && !this.e()) {
                 this.B();
                 this.b((Entity) null);
             }
@@ -118,10 +117,9 @@ public abstract class EntityHanging extends Entity {
     }
 
     public boolean e() {
-        if (!this.p.a((Entity) this, this.D).isEmpty()) {
+        if (!this.o.a((Entity) this, this.C).isEmpty()) {
             return false;
-        }
-        else {
+        } else {
             int i0 = Math.max(1, this.f() / 16);
             int i1 = Math.max(1, this.i() / 16);
             int i2 = this.b;
@@ -129,32 +127,31 @@ public abstract class EntityHanging extends Entity {
             int i4 = this.d;
 
             if (this.a == 2) {
-                i2 = MathHelper.c(this.t - (double) ((float) this.f() / 32.0F));
+                i2 = MathHelper.c(this.s - (double) ((float) this.f() / 32.0F));
             }
 
             if (this.a == 1) {
-                i4 = MathHelper.c(this.v - (double) ((float) this.f() / 32.0F));
+                i4 = MathHelper.c(this.u - (double) ((float) this.f() / 32.0F));
             }
 
             if (this.a == 0) {
-                i2 = MathHelper.c(this.t - (double) ((float) this.f() / 32.0F));
+                i2 = MathHelper.c(this.s - (double) ((float) this.f() / 32.0F));
             }
 
             if (this.a == 3) {
-                i4 = MathHelper.c(this.v - (double) ((float) this.f() / 32.0F));
+                i4 = MathHelper.c(this.u - (double) ((float) this.f() / 32.0F));
             }
 
-            i3 = MathHelper.c(this.u - (double) ((float) this.i() / 32.0F));
+            i3 = MathHelper.c(this.t - (double) ((float) this.i() / 32.0F));
 
             for (int i5 = 0; i5 < i0; ++i5) {
                 for (int i6 = 0; i6 < i1; ++i6) {
                     Material material;
 
                     if (this.a != 2 && this.a != 0) {
-                        material = this.p.a(this.b, i3 + i6, i4 + i5).o();
-                    }
-                    else {
-                        material = this.p.a(i2 + i5, i3 + i6, this.d).o();
+                        material = this.o.a(this.b, i3 + i6, i4 + i5).o();
+                    } else {
+                        material = this.o.a(i2 + i5, i3 + i6, this.d).o();
                     }
 
                     if (!material.a()) {
@@ -163,7 +160,7 @@ public abstract class EntityHanging extends Entity {
                 }
             }
 
-            List list = this.p.b((Entity) this, this.D);
+            List list = this.o.b((Entity) this, this.C);
             Iterator iterator = list.iterator();
 
             Entity entity;
@@ -174,7 +171,8 @@ public abstract class EntityHanging extends Entity {
                 }
 
                 entity = (Entity) iterator.next();
-            } while (!(entity instanceof EntityHanging));
+            }
+            while (!(entity instanceof EntityHanging));
 
             return false;
         }
@@ -184,20 +182,19 @@ public abstract class EntityHanging extends Entity {
         return true;
     }
 
-    public boolean i(Entity entity) {
+    public boolean j(Entity entity) {
         return entity instanceof EntityPlayer ? this.a(DamageSource.a((EntityPlayer) entity), 0.0F) : false;
     }
 
     public void i(int i0) {
-        this.p.X();
+        this.o.X();
     }
 
     public boolean a(DamageSource damagesource, float f0) {
         if (this.aw()) {
             return false;
-        }
-        else {
-            if (!this.L && !this.p.E) {
+        } else {
+            if (!this.K && !this.o.E) {
                 EntityPlayer entityplayer = null;
 
                 if (damagesource.i() instanceof EntityPlayer) {
@@ -223,14 +220,14 @@ public abstract class EntityHanging extends Entity {
     }
 
     public void d(double d0, double d1, double d2) {
-        if (!this.p.E && !this.L && d0 * d0 + d1 * d1 + d2 * d2 > 0.0D) {
+        if (!this.o.E && !this.K && d0 * d0 + d1 * d1 + d2 * d2 > 0.0D) {
             this.B();
             this.b((Entity) null);
         }
     }
 
     public void g(double d0, double d1, double d2) {
-        if (!this.p.E && !this.L && d0 * d0 + d1 * d1 + d2 * d2 > 0.0D) {
+        if (!this.o.E && !this.K && d0 * d0 + d1 * d1 + d2 * d2 > 0.0D) {
             this.B();
             this.b((Entity) null);
         }
@@ -262,8 +259,7 @@ public abstract class EntityHanging extends Entity {
     public void a(NBTTagCompound nbttagcompound) {
         if (nbttagcompound.b("Direction", 99)) {
             this.a = nbttagcompound.d("Direction");
-        }
-        else {
+        } else {
             switch (nbttagcompound.d("Dir")) {
                 case 0:
                     this.a = 2;

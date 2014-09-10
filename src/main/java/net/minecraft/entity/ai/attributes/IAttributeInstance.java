@@ -7,9 +7,9 @@ import java.util.Collection;
 import java.util.UUID;
 
 
-public interface AttributeInstance {
+public interface IAttributeInstance {
 
-    Attribute a();
+    IAttribute a();
 
     double b();
 

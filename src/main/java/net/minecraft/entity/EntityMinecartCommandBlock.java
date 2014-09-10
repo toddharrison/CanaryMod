@@ -1,6 +1,6 @@
 package net.minecraft.entity;
 
-
+import net.canarymod.api.entity.vehicle.CanaryCommandBlockMinecart;
 import net.minecraft.block.Block;
 import net.minecraft.command.server.CommandBlockLogic;
 import net.minecraft.entity.item.EntityMinecart;
@@ -23,21 +23,27 @@ public class EntityMinecartCommandBlock extends EntityMinecart {
         }
 
         public ChunkCoordinates f_() {
-            return new ChunkCoordinates(MathHelper.c(EntityMinecartCommandBlock.this.t), MathHelper.c(EntityMinecartCommandBlock.this.u + 0.5D), MathHelper.c(EntityMinecartCommandBlock.this.v));
+            return new ChunkCoordinates(MathHelper.c(EntityMinecartCommandBlock.this.s), MathHelper.c(EntityMinecartCommandBlock.this.t + 0.5D), MathHelper.c(EntityMinecartCommandBlock.this.u));
         }
 
         public World d() {
-            return EntityMinecartCommandBlock.this.p;
+            return EntityMinecartCommandBlock.this.o;
+        }
+
+        public net.canarymod.api.CommandBlockLogic getReference() {
+            return (net.canarymod.api.CommandBlockLogic) EntityMinecartCommandBlock.this.getCanaryEntity();
         }
     };
     private int b = 0;
 
     public EntityMinecartCommandBlock(World world) {
         super(world);
+        this.entity = new CanaryCommandBlockMinecart(this); // CanaryMod: Wrap Entity
     }
 
     public EntityMinecartCommandBlock(World world, double d0, double d1, double d2) {
         super(world, d0, d1, d2);
+        this.entity = new CanaryCommandBlockMinecart(this); // CanaryMod: Wrap Entity
     }
 
     protected void c() {
@@ -71,15 +77,15 @@ public class EntityMinecartCommandBlock extends EntityMinecart {
     }
 
     public void a(int i0, int i1, int i2, boolean flag0) {
-        if (flag0 && this.ab - this.b >= 4) {
-            this.e().a(this.p);
-            this.b = this.ab;
+        if (flag0 && this.aa - this.b >= 4) {
+            this.e().a(this.o);
+            this.b = this.aa;
         }
 
     }
 
     public boolean c(EntityPlayer entityplayer) {
-        if (this.p.E) {
+        if (this.o.E) {
             entityplayer.a(this.e());
         }
 
@@ -91,12 +97,10 @@ public class EntityMinecartCommandBlock extends EntityMinecart {
         if (i0 == 24) {
             try {
                 this.a.b(IChatComponent.Serializer.a(this.z().e(24)));
-            }
-            catch (Throwable throwable) {
+            } catch (Throwable throwable) {
                 ;
             }
-        }
-        else if (i0 == 23) {
+        } else if (i0 == 23) {
             this.a.a(this.z().e(23));
         }
 

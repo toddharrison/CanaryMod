@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="INFO" packages="net.minecraft,com.mojang,net.canarymod">
+<Configuration status="INFO" packages="net.minecraft,com.mojang,CanaryMod">
     <Appenders>
         <Console name="WINDOWS_COMPAT" target="SYSTEM_OUT"/>
         <Queue name="SysOut">

@@ -9,15 +9,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIControlledByPlayer;
-import net.minecraft.entity.ai.EntityAIFollowParent;
-import net.minecraft.entity.ai.EntityAILookIdle;
-import net.minecraft.entity.ai.EntityAIMate;
-import net.minecraft.entity.ai.EntityAIPanic;
-import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.ai.EntityAITempt;
-import net.minecraft.entity.ai.EntityAIWander;
-import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.ai.*;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.monster.EntityPigZombie;
 import net.minecraft.entity.player.EntityPlayer;
@@ -64,20 +56,20 @@ public class EntityPig extends EntityAnimal {
         super.bn();
     }
 
-    public boolean bC() {
-        ItemStack itemstack = ((EntityPlayer) this.m).be();
+    public boolean bE() {
+        ItemStack itemstack = ((EntityPlayer) this.l).be();
 
         return itemstack != null && itemstack.b() == Items.bM;
     }
 
     protected void c() {
         super.c();
-        this.ag.a(16, Byte.valueOf((byte) 0));
+        this.af.a(16, Byte.valueOf((byte) 0));
     }
 
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.a("Saddle", this.bX());
+        nbttagcompound.a("Saddle", this.bZ());
     }
 
     public void a(NBTTagCompound nbttagcompound) {
@@ -104,14 +96,12 @@ public class EntityPig extends EntityAnimal {
     public boolean a(EntityPlayer entityplayer) {
         if (super.a(entityplayer)) {
             return true;
-        }
-        else if (this.bX() && !this.p.E && (this.m == null || this.m == entityplayer)) {
+        } else if (this.bZ() && !this.o.E && (this.l == null || this.l == entityplayer)) {
             // CanaryMod: VehicleEnter/VehicleExit
             CancelableHook hook;
-            if (this.n == null) {
+            if (this.l == null) {
                 hook = new VehicleEnterHook((Vehicle) this.entity, entityplayer.getCanaryHuman());
-            }
-            else {
+            } else {
                 hook = new VehicleExitHook((Vehicle) this.entity, entityplayer.getCanaryHuman());
             }
             hook.call();
@@ -120,8 +110,7 @@ public class EntityPig extends EntityAnimal {
             }
             //
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -131,62 +120,60 @@ public class EntityPig extends EntityAnimal {
     }
 
     protected void b(boolean flag0, int i0) {
-        int i1 = this.aa.nextInt(3) + 1 + this.aa.nextInt(1 + i0);
+        int i1 = this.Z.nextInt(3) + 1 + this.Z.nextInt(1 + i0);
 
         for (int i2 = 0; i2 < i1; ++i2) {
             if (this.al()) {
                 this.a(Items.am, 1);
-            }
-            else {
+            } else {
                 this.a(Items.al, 1);
             }
         }
 
-        if (this.bX()) {
+        if (this.bZ()) {
             this.a(Items.av, 1);
         }
     }
 
-    public boolean bX() {
-        return (this.ag.a(16) & 1) != 0;
+    public boolean bZ() {
+        return (this.af.a(16) & 1) != 0;
     }
 
     public void i(boolean flag0) {
         if (flag0) {
-            this.ag.b(16, Byte.valueOf((byte) 1));
-        }
-        else {
-            this.ag.b(16, Byte.valueOf((byte) 0));
+            this.af.b(16, Byte.valueOf((byte) 1));
+        } else {
+            this.af.b(16, Byte.valueOf((byte) 0));
         }
     }
 
     public void a(EntityLightningBolt entitylightningbolt) {
-        if (!this.p.E) {
-            EntityPigZombie entitypigzombie = new EntityPigZombie(this.p);
+        if (!this.o.E) {
+            EntityPigZombie entitypigzombie = new EntityPigZombie(this.o);
 
             entitypigzombie.c(0, new ItemStack(Items.B));
-            entitypigzombie.b(this.t, this.u, this.v, this.z, this.A);
-            this.p.d((Entity) entitypigzombie);
+            entitypigzombie.b(this.s, this.t, this.u, this.y, this.z);
+            this.o.d((Entity) entitypigzombie);
             this.B();
         }
     }
 
     protected void b(float f0) {
         super.b(f0);
-        if (f0 > 5.0F && this.m instanceof EntityPlayer) {
-            ((EntityPlayer) this.m).a((StatBase) AchievementList.u);
+        if (f0 > 5.0F && this.l instanceof EntityPlayer) {
+            ((EntityPlayer) this.l).a((StatBase) AchievementList.u);
         }
     }
 
     public EntityPig b(EntityAgeable entityageable) {
-        return new EntityPig(this.p);
+        return new EntityPig(this.o);
     }
 
     public boolean c(ItemStack itemstack) {
         return itemstack != null && itemstack.b() == Items.bF;
     }
 
-    public EntityAIControlledByPlayer bY() {
+    public EntityAIControlledByPlayer ca() {
         return this.bp;
     }
 

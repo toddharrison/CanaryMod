@@ -2,6 +2,7 @@ package net.minecraft.block;
 
 import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.blocks.CanaryBlock;
+import net.canarymod.hook.world.BlockPhysicsHook;
 import net.canarymod.hook.world.RedstoneChangeHook;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -14,14 +15,21 @@ import java.util.Random;
 
 public class BlockRedstoneRepeater extends BlockRedstoneDiode {
 
-    public static final double[] b = new double[]{ -0.0625D, 0.0625D, 0.1875D, 0.3125D };
-    private static final int[] M = new int[]{ 1, 2, 3, 4 };
+    public static final double[] b = new double[]{-0.0625D, 0.0625D, 0.1875D, 0.3125D};
+    private static final int[] M = new int[]{1, 2, 3, 4};
 
     protected BlockRedstoneRepeater(boolean flag0) {
         super(flag0);
     }
 
     public boolean a(World world, int i0, int i1, int i2, EntityPlayer entityplayer, int i3, float f0, float f1, float f2) {
+        // CanaryMod: Block Physics
+        BlockPhysicsHook blockPhysics = (BlockPhysicsHook) new BlockPhysicsHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), false).call();
+        if (blockPhysics.isCanceled()) {
+            return false;
+        }
+        //
+
         int i4 = world.e(i0, i1, i2);
         int i5 = (i4 & 12) >> 2;
 

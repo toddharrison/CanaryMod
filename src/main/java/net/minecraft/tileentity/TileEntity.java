@@ -164,28 +164,28 @@ public class TileEntity {
         this.g = -1;
     }
 
-    public void a(CrashReportCategory i1) {
-        i1.a("Name", new Callable() {
+    public void a(CrashReportCategory crashreportcategory) {
+        crashreportcategory.a("Name", new Callable() {
 
             public String call() {
                 return (String) TileEntity.j.get(TileEntity.this.getClass()) + " // " + TileEntity.this.getClass().getCanonicalName();
             }
         });
-        CrashReportCategory.a(i1, this.c, this.d, this.e, this.q(), this.p());
-        i1.a("Actual block type", new Callable() {
+        CrashReportCategory.a(crashreportcategory, this.c, this.d, this.e, this.q(), this.p());
+        crashreportcategory.a("Actual block type", new Callable() {
 
             public String call() {
                 int i1 = Block.b(TileEntity.this.b.a(TileEntity.this.c, TileEntity.this.d, TileEntity.this.e));
 
                 try {
-                    return String.format("ID #%d (%s // %s)", new Object[]{ Integer.valueOf(i1), Block.e(i1).a(), Block.e(i1).getClass().getCanonicalName() });
+                    return String.format("ID #%d (%s // %s)", new Object[]{Integer.valueOf(i1), Block.e(i1).a(), Block.e(i1).getClass().getCanonicalName()});
                 }
                 catch (Throwable throwable) {
                     return "ID #" + i1;
                 }
             }
         });
-        i1.a("Actual block data value", new Callable() {
+        crashreportcategory.a("Actual block data value", new Callable() {
 
             public String call() {
                 int i1 = TileEntity.this.b.e(TileEntity.this.c, TileEntity.this.d, TileEntity.this.e);
@@ -194,9 +194,9 @@ public class TileEntity {
                     return "Unknown? (Got " + i1 + ")";
                 }
                 else {
-                    String s0 = String.format("%4s", new Object[]{ Integer.toBinaryString(i1) }).replace(" ", "0");
+                    String s0 = String.format("%4s", new Object[]{Integer.toBinaryString(i1)}).replace(" ", "0");
 
-                    return String.format("%1$d / 0x%1$X / 0b%2$s", new Object[]{ Integer.valueOf(i1), s0 });
+                    return String.format("%1$d / 0x%1$X / 0b%2$s", new Object[]{Integer.valueOf(i1), s0});
                 }
             }
         });

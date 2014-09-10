@@ -53,16 +53,16 @@ public class EntityFallingBlock extends Entity {
         this.i = 2.0F;
         this.e = block;
         this.a = i0;
-        this.l = true;
+        this.k = true;
         this.a(0.98F, 0.98F);
-        this.M = this.O / 2.0F;
+        this.L = this.N / 2.0F;
         this.b(d0, d1, d2);
+        this.v = 0.0D;
         this.w = 0.0D;
         this.x = 0.0D;
-        this.y = 0.0D;
-        this.q = d0;
-        this.r = d1;
-        this.s = d2;
+        this.p = d0;
+        this.q = d1;
+        this.r = d2;
         this.entity = new CanaryFallingBlock(this); // CanaryMod: Wrap Entity
     }
 
@@ -74,50 +74,49 @@ public class EntityFallingBlock extends Entity {
     }
 
     public boolean R() {
-        return !this.L;
+        return !this.K;
     }
 
     public void h() {
         if (this.e.o() == Material.a) {
             this.B();
-        }
-        else {
+        } else {
+            this.p = this.s;
             this.q = this.t;
             this.r = this.u;
-            this.s = this.v;
             ++this.b;
-            this.x -= 0.03999999910593033D;
-            this.d(this.w, this.x, this.y);
+            this.w -= 0.03999999910593033D;
+            this.d(this.v, this.w, this.x);
+            this.v *= 0.9800000190734863D;
             this.w *= 0.9800000190734863D;
             this.x *= 0.9800000190734863D;
-            this.y *= 0.9800000190734863D;
-            if (!this.p.E) {
-                int i0 = MathHelper.c(this.t);
-                int i1 = MathHelper.c(this.u);
-                int i2 = MathHelper.c(this.v);
+            if (!this.o.E) {
+                int i0 = MathHelper.c(this.s);
+                int i1 = MathHelper.c(this.t);
+                int i2 = MathHelper.c(this.u);
 
                 if (this.b == 1) {
-                    if (this.p.a(i0, i1, i2) != this.e) {
+                    if (this.o.a(i0, i1, i2) != this.e) {
                         this.B();
                         return;
                     }
 
-                    this.p.f(i0, i1, i2);
+                    this.o.f(i0, i1, i2);
                 }
 
-                if (this.E) {
-                    this.w *= 0.699999988079071D;
-                    this.y *= 0.699999988079071D;
-                    this.x *= -0.5D;
-                    if (this.p.a(i0, i1, i2) != Blocks.M) {
+                if (this.D) {
+                    this.v *= 0.699999988079071D;
+                    this.x *= 0.699999988079071D;
+                    this.w *= -0.5D;
+                    if (this.o.a(i0, i1, i2) != Blocks.M) {
                         this.B();
-                        if (!this.f && this.p.a(this.e, i0, i1, i2, true, 1, (Entity) null, (ItemStack) null) && !BlockFalling.e(this.p, i0, i1 - 1, i2) && this.p.d(i0, i1, i2, this.e, this.a, 3)) {
+                        if (!this.f && this.o.a(this.e, i0, i1, i2, true, 1, (Entity) null, (ItemStack) null) && !BlockFalling.e(this.o, i0, i1 - 1, i2) && this.o.d(i0, i1, i2, this.e, this.a, 3)) {
                             if (this.e instanceof BlockFalling) {
-                                ((BlockFalling) this.e).a(this.p, i0, i1, i2, this.a);
+                                ((BlockFalling) this.e).a(this.o, i0, i1, i2, this.a);
                             }
 
                             if (this.d != null && this.e instanceof ITileEntityProvider) {
-                                TileEntity tileentity = this.p.o(i0, i1, i2);
+                                TileEntity tileentity = this.o.o(i0, i1, i2);
 
                                 if (tileentity != null) {
                                     NBTTagCompound nbttagcompound = new NBTTagCompound();
@@ -138,13 +137,11 @@ public class EntityFallingBlock extends Entity {
                                     tileentity.e();
                                 }
                             }
-                        }
-                        else if (this.c && !this.f) {
+                        } else if (this.c && !this.f) {
                             this.a(new ItemStack(this.e, 1, this.e.a(this.a)), 0.0F);
                         }
                     }
-                }
-                else if (this.b > 100 && !this.p.E && (i1 < 1 || i1 > 256) || this.b > 600) {
+                } else if (this.b > 100 && !this.o.E && (i1 < 1 || i1 > 256) || this.b > 600) {
                     if (this.c) {
                         this.a(new ItemStack(this.e, 1, this.e.a(this.a)), 0.0F);
                     }
@@ -159,7 +156,7 @@ public class EntityFallingBlock extends Entity {
             int i0 = MathHelper.f(f0 - 1.0F);
 
             if (i0 > 0) {
-                ArrayList arraylist = new ArrayList(this.p.b((Entity) this, this.D));
+                ArrayList arraylist = new ArrayList(this.o.b((Entity) this, this.C));
                 boolean flag0 = this.e == Blocks.bQ;
                 DamageSource damagesource = flag0 ? DamageSource.m : DamageSource.n;
                 Iterator iterator = arraylist.iterator();
@@ -174,15 +171,14 @@ public class EntityFallingBlock extends Entity {
                     //
                 }
 
-                if (flag0 && (double) this.aa.nextFloat() < 0.05000000074505806D + (double) i0 * 0.05D) {
+                if (flag0 && (double) this.Z.nextFloat() < 0.05000000074505806D + (double) i0 * 0.05D) {
                     int i1 = this.a >> 2;
                     int i2 = this.a & 3;
 
                     ++i1;
                     if (i1 > 2) {
                         this.f = true;
-                    }
-                    else {
+                    } else {
                         this.a = i2 | i1 << 2;
                     }
                 }
@@ -207,8 +203,7 @@ public class EntityFallingBlock extends Entity {
     protected void a(NBTTagCompound nbttagcompound) {
         if (nbttagcompound.b("TileID", 99)) {
             this.e = Block.e(nbttagcompound.f("TileID"));
-        }
-        else {
+        } else {
             this.e = Block.e(nbttagcompound.d("Tile") & 255);
         }
 
@@ -218,8 +213,7 @@ public class EntityFallingBlock extends Entity {
             this.g = nbttagcompound.n("HurtEntities");
             this.i = nbttagcompound.h("FallHurtAmount");
             this.h = nbttagcompound.f("FallHurtMax");
-        }
-        else if (this.e == Blocks.bQ) {
+        } else if (this.e == Blocks.bQ) {
             this.g = true;
         }
 

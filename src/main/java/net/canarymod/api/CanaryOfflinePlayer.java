@@ -1,11 +1,8 @@
 package net.canarymod.api;
 
 import net.canarymod.Canary;
-import net.canarymod.api.nbt.CanaryBaseTag;
-import net.canarymod.api.nbt.CanaryCompoundTag;
-import net.canarymod.api.nbt.CanaryDoubleTag;
-import net.canarymod.api.nbt.CompoundTag;
-import net.canarymod.api.nbt.ListTag;
+import net.canarymod.ToolBox;
+import net.canarymod.api.nbt.*;
 import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.api.world.DimensionType;
 import net.canarymod.api.world.UnknownWorldException;
@@ -20,6 +17,7 @@ import net.minecraft.world.storage.SaveHandler;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 
 import static net.canarymod.Canary.log;
 
@@ -37,13 +35,15 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
     private String prefix = null;
     private String name;
     private boolean isMuted;
+    private UUID uuid;
 
-    public CanaryOfflinePlayer(String name, CanaryCompoundTag tag) {
+    public CanaryOfflinePlayer(String name, String uuid, CanaryCompoundTag tag) {
         this.data = tag;
         this.name = name;
-        provider = Canary.permissionManager().getPlayerProvider(name, getWorld().getFqName());
-        String[] data = Canary.usersAndGroups().getPlayerData(name);
-        Group[] subs = Canary.usersAndGroups().getModuleGroupsForPlayer(name);
+        this.uuid = UUID.fromString(uuid);
+        provider = Canary.permissionManager().getPlayerProvider(getUUIDString(), getWorld().getFqName());
+        String[] data = Canary.usersAndGroups().getPlayerData(getUUIDString());
+        Group[] subs = Canary.usersAndGroups().getModuleGroupsForPlayer(getUUIDString());
         groups = new LinkedList<Group>();
         groups.add(Canary.usersAndGroups().getGroup(data[1]));
         for (Group g : subs) {
@@ -117,8 +117,7 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
         String world = data.getString("LevelName");
         try {
             return Canary.getServer().getWorldManager().getWorld(world, DimensionType.fromId(dim), false);
-        }
-        catch (UnknownWorldException e) {
+        } catch (UnknownWorldException e) {
             return Canary.getServer().getDefaultWorld();
         }
     }
@@ -145,6 +144,20 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
     @Override
     public String getName() {
         return name;
+    }
+
+    /**
+     * @{inheritDoc}
+     */
+    @Override
+    public UUID getUUID() {
+        String uuid = ToolBox.usernameToUUID(getName());
+        return uuid == null ? null : UUID.fromString(uuid);
+    }
+
+    @Override
+    public String getUUIDString() {
+        return ToolBox.usernameToUUID(getName());
     }
 
     /**
@@ -280,12 +293,11 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
             return;
         }
         if (getNBT() != null) {
-            ISaveHandler handler = ((CanaryWorld) getWorld()).getHandle().L();
+            ISaveHandler handler = ((CanaryWorld) getWorld()).getHandle().M();
             if (handler instanceof SaveHandler) {
                 SaveHandler shandler = (SaveHandler) handler;
-                shandler.writePlayerNbt(getName(), (CanaryCompoundTag) getNBT());
-            }
-            else {
+                shandler.writePlayerNbt(uuid, (CanaryCompoundTag) getNBT());
+            } else {
                 log.error(getName() + "'s OfflinePlayer could not be saved! Unsupported SaveHandler!");
             }
         }
@@ -603,8 +615,8 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
     public void increaseHealth(float health) {
         if (getNBT() != null) {
             float newHealth = Math.max(0, getHealth() + health);
-            getNBT().put("HealF", health);
-            getNBT().put("Health", (short) ((int) Math.ceil((double) health)));
+            getNBT().put("HealF", newHealth);
+            getNBT().put("Health", (short) ((int) Math.ceil((double) newHealth)));
         }
     }
 }

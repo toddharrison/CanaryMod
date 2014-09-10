@@ -1,6 +1,7 @@
 package net.canarymod.api.entity.living.animal;
 
 import net.canarymod.api.entity.EntityType;
+import net.canarymod.api.entity.living.AmbientCreature;
 import net.minecraft.entity.passive.EntityBat;
 
 import static net.canarymod.api.entity.EntityType.BAT;
@@ -10,7 +11,7 @@ import static net.canarymod.api.entity.EntityType.BAT;
  *
  * @author Jason (darkdiplomat)
  */
-public class CanaryBat extends CanaryAnimal implements Bat {
+public class CanaryBat extends CanaryAnimal implements Bat, AmbientCreature {
 
     /**
      * Constructs a new wrapper for EntityBat
@@ -58,4 +59,13 @@ public class CanaryBat extends CanaryAnimal implements Bat {
     public EntityBat getHandle() {
         return (EntityBat) entity;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isAmbient() {
+        return true;
+    }
+
 }

@@ -16,8 +16,7 @@ public class CanarySheep extends CanaryAgeableAnimal implements Sheep {
     /**
      * Constructs a new wrapper for EntitySheep
      *
-     * @param entity
-     *         the EntitySheep to wrap
+     * @param entity the EntitySheep to wrap
      */
     public CanarySheep(EntitySheep entity) {
         super(entity);
@@ -49,7 +48,7 @@ public class CanarySheep extends CanaryAgeableAnimal implements Sheep {
      */
     @Override
     public DyeColor getColor() {
-        return DyeColor.values()[getHandle().bX()];
+        return DyeColor.values()[getHandle().bZ()];
     }
 
     /**

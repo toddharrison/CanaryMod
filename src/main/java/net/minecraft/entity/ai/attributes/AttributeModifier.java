@@ -57,22 +57,19 @@ public class AttributeModifier {
     public boolean equals(Object object) {
         if (this == object) {
             return true;
-        }
-        else if (object != null && this.getClass() == object.getClass()) {
+        } else if (object != null && this.getClass() == object.getClass()) {
             AttributeModifier attributemodifier = (AttributeModifier) object;
 
             if (this.d != null) {
                 if (!this.d.equals(attributemodifier.d)) {
                     return false;
                 }
-            }
-            else if (attributemodifier.d != null) {
+            } else if (attributemodifier.d != null) {
                 return false;
             }
 
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }

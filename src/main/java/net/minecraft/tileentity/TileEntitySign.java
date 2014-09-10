@@ -1,5 +1,7 @@
 package net.minecraft.tileentity;
 
+import com.mojang.authlib.GameProfile;
+import net.canarymod.ToolBox;
 import net.canarymod.api.world.blocks.CanarySign;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -7,9 +9,11 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S33PacketUpdateSign;
 import net.minecraft.server.MinecraftServer;
 
+import java.util.UUID;
+
 public class TileEntitySign extends TileEntity {
 
-    public String[] a = new String[]{ "", "", "", "" };
+    public String[] a = new String[]{"", "", "", ""};
     public int i = -1;
     public boolean j = true; // CanaryMod: private => public; editable
     private EntityPlayer k;
@@ -25,7 +29,7 @@ public class TileEntitySign extends TileEntity {
         nbttagcompound.a("Text2", this.a[1]);
         nbttagcompound.a("Text3", this.a[2]);
         nbttagcompound.a("Text4", this.a[3]);
-        nbttagcompound.a("Owner", this.k != null ? k.b_() : "");
+        nbttagcompound.a("Owner", this.k != null ? k.bJ().getId().toString() : "");
     }
 
     public void a(NBTTagCompound nbttagcompound) {
@@ -62,7 +66,11 @@ public class TileEntitySign extends TileEntity {
             if (this.owner_name.isEmpty()) {
                 return null;
             }
-            this.k = MinecraftServer.G().af().e(owner_name);
+            if (ToolBox.isUUID(owner_name)) {
+                this.k = MinecraftServer.I().ah().f(new GameProfile(UUID.fromString(owner_name), null));
+            } else {
+                this.k = MinecraftServer.I().ah().f(new GameProfile(UUID.fromString(ToolBox.usernameToUUID(owner_name)), owner_name));
+            }
         }
         //
         return this.k;

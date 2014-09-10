@@ -83,12 +83,18 @@ public class CanaryItemFactory implements ItemFactory {
 
         String type;
         int meta = 0;
-        if (data[data.length - 1].matches("\\d+")) {
-            meta = Integer.parseInt(data[data.length - 1]);
-            type = StringUtils.joinString(data, ":", 0, data.length - 2);
-        } else {
-            type = StringUtils.joinString(data, ":", 0);
+        int endIndex = data.length - 1;
+        if (data.length > 1 && data[endIndex].matches("\\d+")) {
+            meta = Integer.parseInt(data[endIndex]);
+            endIndex--;
         }
+
+        if (data.length == 1 && !data[0].matches("\\d+")) {
+            data = new String[]{"minecraft", data[0]};
+            endIndex++;
+        }
+
+        type = StringUtils.joinString(data, ":", 0, endIndex);
 
         if (type.matches("\\d+")) {
             item = (CanaryItem) (newItem(ItemType.fromIdAndData(Integer.parseInt(type), meta)));

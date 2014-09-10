@@ -54,6 +54,7 @@ public class ItemSlab extends ItemBlock {
             boolean flag0 = (i4 & 8) != 0;
 
             if ((i3 == 1 && !flag0 || i3 == 0 && flag0) && block == this.c && i5 == itemstack.k()) {
+                // CanaryMod: BlockPlace / set face, block placed, and call hook
                 clicked.setFaceClicked(BlockFace.fromByte((byte) i3));
                 CanaryBlock placed = new CanaryBlock((short) i4, (short) i5, i0, i1, i2, world.getCanaryWorld());
 
@@ -74,7 +75,7 @@ public class ItemSlab extends ItemBlock {
                 boolean ret = this.a(itemstack, entityplayer, world, i0, i1, i2, i3); // Moved up to call hook before the return
 
                 this.handled = hook != null; // Let super know we got this shit
-                return (hook != null && hook.isCanceled()) ? false : ret ? true : super.a(itemstack, entityplayer, world, i0, i1, i2, i3, f0, f1, f2);
+                return (!(hook != null && hook.isCanceled())) && (ret || super.a(itemstack, entityplayer, world, i0, i1, i2, i3, f0, f1, f2));
             }
         }
     }
@@ -82,8 +83,8 @@ public class ItemSlab extends ItemBlock {
     private boolean a(ItemStack itemstack, EntityPlayer entityplayer, World world, int i0, int i1, int i2, int i3) {
         // CanaryMod: BlockPlaceHook
         CanaryBlock clicked = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
-
         clicked.setFaceClicked(BlockFace.fromByte((byte) i3));
+        //
 
         if (i3 == 0) {
             --i1;
@@ -116,7 +117,6 @@ public class ItemSlab extends ItemBlock {
         if (block == this.c && i5 == itemstack.k()) {
             // Call hook
             CanaryBlock placed = new CanaryBlock((short) i4, (short) i5, i0, i1, i2, world.getCanaryWorld());
-
             hook = (BlockPlaceHook) new BlockPlaceHook(((EntityPlayerMP) entityplayer).getPlayer(), clicked, placed).call();
             if (hook.isCanceled()) {
                 return false;

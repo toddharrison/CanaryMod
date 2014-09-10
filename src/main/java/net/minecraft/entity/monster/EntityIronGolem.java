@@ -7,17 +7,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIAttackOnCollide;
-import net.minecraft.entity.ai.EntityAIDefendVillage;
-import net.minecraft.entity.ai.EntityAIHurtByTarget;
-import net.minecraft.entity.ai.EntityAILookAtVillager;
-import net.minecraft.entity.ai.EntityAILookIdle;
-import net.minecraft.entity.ai.EntityAIMoveThroughVillage;
-import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
-import net.minecraft.entity.ai.EntityAIMoveTowardsTarget;
-import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
-import net.minecraft.entity.ai.EntityAIWander;
-import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.ai.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -56,7 +46,7 @@ public class EntityIronGolem extends EntityGolem {
 
     protected void c() {
         super.c();
-        this.ag.a(16, Byte.valueOf((byte) 0));
+        this.af.a(16, Byte.valueOf((byte) 0));
     }
 
     public boolean bk() {
@@ -65,12 +55,11 @@ public class EntityIronGolem extends EntityGolem {
 
     protected void bp() {
         if (--this.bq <= 0) {
-            this.bq = 70 + this.aa.nextInt(50);
-            this.bp = this.p.A.a(MathHelper.c(this.t), MathHelper.c(this.u), MathHelper.c(this.v), 32);
+            this.bq = 70 + this.Z.nextInt(50);
+            this.bp = this.o.A.a(MathHelper.c(this.s), MathHelper.c(this.t), MathHelper.c(this.u), 32);
             if (this.bp == null) {
-                this.bV();
-            }
-            else {
+                this.bX();
+            } else {
                 ChunkCoordinates chunkcoordinates = this.bp.a();
 
                 this.a(chunkcoordinates.a, chunkcoordinates.b, chunkcoordinates.c, (int) ((float) this.bp.b() * 0.6F));
@@ -90,12 +79,12 @@ public class EntityIronGolem extends EntityGolem {
         return i0;
     }
 
-    protected void n(Entity entity) {
+    protected void o(Entity entity) {
         if (entity instanceof IMob && this.aI().nextInt(20) == 0) {
             this.d((EntityLivingBase) entity);
         }
 
-        super.n(entity);
+        super.o(entity);
     }
 
     public void e() {
@@ -108,25 +97,25 @@ public class EntityIronGolem extends EntityGolem {
             --this.bs;
         }
 
-        if (this.w * this.w + this.y * this.y > 2.500000277905201E-7D && this.aa.nextInt(5) == 0) {
-            int i0 = MathHelper.c(this.t);
-            int i1 = MathHelper.c(this.u - 0.20000000298023224D - (double) this.M);
-            int i2 = MathHelper.c(this.v);
-            Block block = this.p.a(i0, i1, i2);
+        if (this.v * this.v + this.x * this.x > 2.500000277905201E-7D && this.Z.nextInt(5) == 0) {
+            int i0 = MathHelper.c(this.s);
+            int i1 = MathHelper.c(this.t - 0.20000000298023224D - (double) this.L);
+            int i2 = MathHelper.c(this.u);
+            Block block = this.o.a(i0, i1, i2);
 
             if (block.o() != Material.a) {
-                this.p.a("blockcrack_" + Block.b(block) + "_" + this.p.e(i0, i1, i2), this.t + ((double) this.aa.nextFloat() - 0.5D) * (double) this.N, this.D.b + 0.1D, this.v + ((double) this.aa.nextFloat() - 0.5D) * (double) this.N, 4.0D * ((double) this.aa.nextFloat() - 0.5D), 0.5D, ((double) this.aa.nextFloat() - 0.5D) * 4.0D);
+                this.o.a("blockcrack_" + Block.b(block) + "_" + this.o.e(i0, i1, i2), this.s + ((double) this.Z.nextFloat() - 0.5D) * (double) this.M, this.C.b + 0.1D, this.u + ((double) this.Z.nextFloat() - 0.5D) * (double) this.M, 4.0D * ((double) this.Z.nextFloat() - 0.5D), 0.5D, ((double) this.Z.nextFloat() - 0.5D) * 4.0D);
             }
         }
     }
 
     public boolean a(Class oclass0) {
-        return this.ca() && EntityPlayer.class.isAssignableFrom(oclass0) ? false : super.a(oclass0);
+        return this.cc() && EntityPlayer.class.isAssignableFrom(oclass0) ? false : super.a(oclass0);
     }
 
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.a("PlayerCreated", this.ca());
+        nbttagcompound.a("PlayerCreated", this.cc());
     }
 
     public void a(NBTTagCompound nbttagcompound) {
@@ -134,26 +123,26 @@ public class EntityIronGolem extends EntityGolem {
         this.i(nbttagcompound.n("PlayerCreated"));
     }
 
-    public boolean m(Entity entity) {
+    public boolean n(Entity entity) {
         this.br = 10;
-        this.p.a(this, (byte) 4);
-        boolean flag0 = entity.a(DamageSource.a((EntityLivingBase) this), (float) (7 + this.aa.nextInt(15)));
+        this.o.a(this, (byte) 4);
+        boolean flag0 = entity.a(DamageSource.a((EntityLivingBase) this), (float) (7 + this.Z.nextInt(15)));
 
         if (flag0) {
-            entity.x += 0.4000000059604645D;
+            entity.w += 0.4000000059604645D;
         }
 
         this.a("mob.irongolem.throw", 1.0F, 1.0F);
         return flag0;
     }
 
-    public Village bX() {
+    public Village bZ() {
         return this.bp;
     }
 
     public void a(boolean flag0) {
         this.bs = flag0 ? 400 : 0;
-        this.p.a(this, (byte) 11);
+        this.o.a(this, (byte) 11);
     }
 
     protected String aT() {
@@ -169,7 +158,7 @@ public class EntityIronGolem extends EntityGolem {
     }
 
     protected void b(boolean flag0, int i0) {
-        int i1 = this.aa.nextInt(3);
+        int i1 = this.Z.nextInt(3);
 
         int i2;
 
@@ -177,35 +166,34 @@ public class EntityIronGolem extends EntityGolem {
             this.a(Item.a((Block) Blocks.O), 1, 0.0F);
         }
 
-        i2 = 3 + this.aa.nextInt(3);
+        i2 = 3 + this.Z.nextInt(3);
 
         for (int i3 = 0; i3 < i2; ++i3) {
             this.a(Items.j, 1);
         }
     }
 
-    public int bZ() {
+    public int cb() {
         return this.bs;
     }
 
-    public boolean ca() {
-        return (this.ag.a(16) & 1) != 0;
+    public boolean cc() {
+        return (this.af.a(16) & 1) != 0;
     }
 
     public void i(boolean flag0) {
-        byte b0 = this.ag.a(16);
+        byte b0 = this.af.a(16);
 
         if (flag0) {
-            this.ag.b(16, Byte.valueOf((byte) (b0 | 1)));
-        }
-        else {
-            this.ag.b(16, Byte.valueOf((byte) (b0 & -2)));
+            this.af.b(16, Byte.valueOf((byte) (b0 | 1)));
+        } else {
+            this.af.b(16, Byte.valueOf((byte) (b0 & -2)));
         }
     }
 
     public void a(DamageSource damagesource) {
-        if (!this.ca() && this.aS != null && this.bp != null) {
-            this.bp.a(this.aS.b_(), -5);
+        if (!this.cc() && this.aR != null && this.bp != null) {
+            this.bp.a(this.aR.b_(), -5);
         }
 
         super.a(damagesource);

@@ -1,6 +1,11 @@
 package net.minecraft.entity.item;
 
+import net.canarymod.Canary;
 import net.canarymod.api.entity.vehicle.CanaryTNTMinecart;
+import net.canarymod.api.entity.vehicle.Minecart;
+import net.canarymod.api.entity.vehicle.TNTMinecart;
+import net.canarymod.hook.entity.MinecartActivateHook;
+import net.canarymod.hook.world.TNTActivateHook;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.entity.Entity;
@@ -37,14 +42,13 @@ public class EntityMinecartTNT extends EntityMinecart {
         super.h();
         if (this.a > 0) {
             --this.a;
-            this.p.a("smoke", this.t, this.u + 0.5D, this.v, 0.0D, 0.0D, 0.0D);
-        }
-        else if (this.a == 0) {
-            this.c(this.w * this.w + this.y * this.y);
+            this.o.a("smoke", this.s, this.t + 0.5D, this.u, 0.0D, 0.0D, 0.0D);
+        } else if (this.a == 0) {
+            this.c(this.v * this.v + this.x * this.x);
         }
 
-        if (this.F) {
-            double d0 = this.w * this.w + this.y * this.y;
+        if (this.E) {
+            double d0 = this.v * this.v + this.x * this.x;
 
             if (d0 >= 0.009999999776482582D) {
                 this.c(d0);
@@ -54,7 +58,7 @@ public class EntityMinecartTNT extends EntityMinecart {
 
     public void a(DamageSource damagesource) {
         super.a(damagesource);
-        double d0 = this.w * this.w + this.y * this.y;
+        double d0 = this.v * this.v + this.x * this.x;
 
         if (!damagesource.c()) {
             this.a(new ItemStack(Blocks.W, 1), 0.0F);
@@ -66,14 +70,14 @@ public class EntityMinecartTNT extends EntityMinecart {
     }
 
     protected void c(double d0) {
-        if (!this.p.E) {
+        if (!this.o.E) {
             double d1 = Math.sqrt(d0);
 
             if (d1 > 5.0D) {
                 d1 = 5.0D;
             }
 
-            this.p.a(this, this.t, this.u, this.v, (float) (4.0D + this.aa.nextDouble() * 1.5D * d1), true);
+            this.o.a(this, this.s, this.t, this.u, (float) (4.0D + this.Z.nextDouble() * 1.5D * d1), true);
             this.B();
         }
     }
@@ -90,15 +94,22 @@ public class EntityMinecartTNT extends EntityMinecart {
 
     public void a(int i0, int i1, int i2, boolean flag0) {
         if (flag0 && this.a < 0) {
-            this.e();
+            // CanaryMod: MinecartActivate
+            MinecartActivateHook mah = (MinecartActivateHook) new MinecartActivateHook((Minecart) this.getCanaryEntity(), (i1 & 8) != 0).call();
+            TNTActivateHook tah = (TNTActivateHook) new TNTActivateHook((TNTMinecart) this.getCanaryEntity()).call();
+            Canary.hooks().callHook(mah);
+            if (!mah.isCanceled() && !tah.isCanceled()) {
+                this.e();
+            }
+            //
         }
     }
 
     public void e() {
         this.a = 80;
-        if (!this.p.E) {
-            this.p.a(this, (byte) 10);
-            this.p.a((Entity) this, "game.tnt.primed", 1.0F, 1.0F);
+        if (!this.o.E) {
+            this.o.a(this, (byte) 10);
+            this.o.a((Entity) this, "game.tnt.primed", 1.0F, 1.0F);
         }
     }
 

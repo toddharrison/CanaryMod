@@ -28,7 +28,6 @@ public class CanaryCommandBlock extends CanaryTileEntity implements CommandBlock
      */
     public CanaryCommandBlock(TileEntityCommandBlock tileentity) {
         super(tileentity);
-        group = Canary.usersAndGroups().getGroup(Configuration.getServerConfig().getCommandBlockGroupName());
     }
 
     /**
@@ -68,9 +67,7 @@ public class CanaryCommandBlock extends CanaryTileEntity implements CommandBlock
      */
     @Override
     public boolean hasPermission(String node) {
-        PermissionCheckHook hook = new PermissionCheckHook(node, this, group.hasPermission(node));
-        Canary.hooks().callHook(hook);
-        return hook.getResult();
+        return Configuration.getServerConfig().isCommandBlockOpped() || (getGroup() != null && ((PermissionCheckHook) new PermissionCheckHook(node, this, group.hasPermission(node)).call()).getResult());
     }
 
     /**
@@ -78,7 +75,7 @@ public class CanaryCommandBlock extends CanaryTileEntity implements CommandBlock
      */
     @Override
     public boolean safeHasPermission(String node) {
-        return group.hasPermission(node);
+        return Configuration.getServerConfig().isCommandBlockOpped() || (getGroup() != null && group.hasPermission(node));
     }
 
     /**
@@ -118,7 +115,16 @@ public class CanaryCommandBlock extends CanaryTileEntity implements CommandBlock
      */
     @Override
     public Group getGroup() {
-        return this.group;
+        if (group == null) {
+            String gName = Configuration.getServerConfig().getCommandBlockGroupName();
+            if (gName != null && Canary.usersAndGroups().groupExists(gName)) {
+                group = Canary.usersAndGroups().getGroup(gName);
+            } else {
+                Canary.log.warn("CommandBlock has a bad group configuration... Please check your config and fix this.");
+                group = Canary.usersAndGroups().getDefaultGroup();
+            }
+        }
+        return group;
     }
 
     /**

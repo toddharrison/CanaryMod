@@ -7,7 +7,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityDaylightDetector;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.IBlockAccess;
@@ -17,7 +17,7 @@ import java.util.Random;
 
 public class BlockDaylightDetector extends BlockContainer {
 
-    private Icon[] a = new Icon[2];
+    private IIcon[] a = new IIcon[2];
 
     public BlockDaylightDetector() {
         super(Material.d);

@@ -16,8 +16,8 @@ import java.util.List;
 
 public class TileEntityBrewingStand extends TileEntity implements ISidedInventory {
 
-    private static final int[] a = new int[]{ 3 };
-    private static final int[] i = new int[]{ 0, 1, 2 };
+    private static final int[] a = new int[]{3};
+    private static final int[] i = new int[]{0, 1, 2};
     public ItemStack[] j = new ItemStack[4]; // CanaryMod: private => public
     private int k;
     private int l;

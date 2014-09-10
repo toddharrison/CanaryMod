@@ -82,7 +82,7 @@ public class BlockLever extends Block {
         int i5 = i3 & 8;
 
         if (i4 == b(1)) {
-            if ((MathHelper.c((double) (entitylivingbase.z * 4.0F / 360.0F) + 0.5D) & 1) == 0) {
+            if ((MathHelper.c((double) (entitylivingbase.y * 4.0F / 360.0F) + 0.5D) & 1) == 0) {
                 world.a(i0, i1, i2, 5 | i5, 2);
             }
             else {
@@ -90,7 +90,7 @@ public class BlockLever extends Block {
             }
         }
         else if (i4 == b(0)) {
-            if ((MathHelper.c((double) (entitylivingbase.z * 4.0F / 360.0F) + 0.5D) & 1) == 0) {
+            if ((MathHelper.c((double) (entitylivingbase.y * 4.0F / 360.0F) + 0.5D) & 1) == 0) {
                 world.a(i0, i1, i2, 7 | i5, 2);
             }
             else {

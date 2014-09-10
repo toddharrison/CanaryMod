@@ -202,7 +202,7 @@ public final class ItemStack {
     }
 
     public void a(int i0, EntityLivingBase entitylivingbase) {
-        if (!(entitylivingbase instanceof EntityPlayer) || !((EntityPlayer) entitylivingbase).bF.d) {
+        if (!(entitylivingbase instanceof EntityPlayer) || !((EntityPlayer) entitylivingbase).bE.d) {
             if (this.g()) {
                 if (this.a(i0, entitylivingbase.aI())) {
                     entitylivingbase.a(this);
@@ -212,7 +212,7 @@ public final class ItemStack {
 
                         entityplayer.a(StatList.F[Item.b(this.e)], 1);
                         if (this.b == 0 && this.b() instanceof ItemBow) {
-                            entityplayer.bE();
+                            entityplayer.bG();
                         }
                     }
 

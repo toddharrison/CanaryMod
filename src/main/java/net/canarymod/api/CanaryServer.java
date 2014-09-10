@@ -4,35 +4,23 @@ import net.canarymod.Canary;
 import net.canarymod.Main;
 import net.canarymod.api.entity.living.humanoid.CanaryPlayer;
 import net.canarymod.api.entity.living.humanoid.Player;
-import net.canarymod.api.entity.vehicle.CanaryCommandBlockMinecart;
 import net.canarymod.api.gui.GUIControl;
 import net.canarymod.api.inventory.CanaryItem;
-import net.canarymod.api.inventory.recipes.CanaryRecipe;
-import net.canarymod.api.inventory.recipes.CraftingRecipe;
-import net.canarymod.api.inventory.recipes.Recipe;
-import net.canarymod.api.inventory.recipes.ShapedRecipeHelper;
-import net.canarymod.api.inventory.recipes.SmeltRecipe;
+import net.canarymod.api.inventory.recipes.*;
 import net.canarymod.api.nbt.CanaryCompoundTag;
 import net.canarymod.api.world.World;
 import net.canarymod.api.world.WorldManager;
-import net.canarymod.api.world.blocks.CanaryCommandBlock;
 import net.canarymod.config.Configuration;
 import net.canarymod.hook.command.ConsoleCommandHook;
 import net.canarymod.hook.system.PermissionCheckHook;
 import net.canarymod.logger.Logman;
 import net.canarymod.tasks.ServerTask;
 import net.canarymod.tasks.ServerTaskManager;
-import net.minecraft.command.ICommandSender;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.item.crafting.FurnaceRecipes;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.ShapedRecipes;
-import net.minecraft.item.crafting.ShapelessRecipes;
+import net.minecraft.item.crafting.*;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.S38PacketPlayerListItem;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.dedicated.DedicatedServer;
 import net.minecraft.server.gui.MinecraftServerGui;
 import net.minecraft.server.management.ServerConfigurationManager;
 import net.visualillusionsent.utils.TaskManager;
@@ -40,12 +28,10 @@ import net.visualillusionsent.utils.TaskManager;
 import java.io.File;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static net.canarymod.Canary.log;
+import net.canarymod.ToolBox;
 
 /**
  * Main entry point of the software
@@ -162,7 +148,7 @@ public class CanaryServer implements Server {
             cmdName = cmdName.substring(1);
         }
         if (!Canary.commands().parseCommand(this, cmdName, args)) {
-            return ((DedicatedServer) server).H().a(server, command) > 0; // Vanilla Commands passed
+            return server.J().a(server, command) > 0; // Vanilla Commands passed
         }
         return true;
     }
@@ -182,9 +168,10 @@ public class CanaryServer implements Server {
             cmdName = cmdName.substring(1);
         }
         if (!Canary.commands().parseCommand(player, cmdName, args)) {
-            if (Canary.ops().isOpped(player.getName())) { //TODO: Temporary until I make the Permission system implementation on Vanilla Commands
-                return ((DedicatedServer) server).H().a(((CanaryPlayer) player).getHandle(), command) > 0; // Vanilla Commands passed
+            if (Canary.ops().isOpped(player.getName()) || player.hasPermission("canary.vanilla.".concat(cmdName))) {
+                return server.J().a(((CanaryPlayer) player).getHandle(), command) > 0; // Vanilla Commands passed
             }
+            return false;
         }
         return true;
     }
@@ -205,16 +192,9 @@ public class CanaryServer implements Server {
         if (cmdName.startsWith("/")) {
             cmdName = cmdName.substring(1);
         }
-        if (!Canary.commands().parseCommand(cmdBlockLogic, cmdName, args)) {
-            ICommandSender nmsCBL =
-                    cmdBlockLogic instanceof CanaryCommandBlock //
-                            ? ((CanaryCommandBlock) cmdBlockLogic).getLogic() //
-                            : cmdBlockLogic instanceof CanaryCommandBlockMinecart //
-                            ? ((CanaryCommandBlockMinecart) cmdBlockLogic).getLogic() //
-                            : server; // default to server on an unknown implementation of CommandBlockLogic
-            return ((DedicatedServer) server).H().a(nmsCBL, command) > 0; // Vanilla Commands passed
-        }
-        return true;
+
+        // Don't pass off to Vanilla as that is already handled in NMS.CommandBlockLogic
+        return Canary.commands().parseCommand(cmdBlockLogic, cmdName, args);
     }
 
     /**
@@ -239,6 +219,9 @@ public class CanaryServer implements Server {
         return !timers.containsKey(uniqueName);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Player matchPlayer(String name) {
         Player lastPlayer = null;
@@ -264,16 +247,25 @@ public class CanaryServer implements Server {
         return lastPlayer;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public OfflinePlayer getOfflinePlayer(String player) {
-        NBTTagCompound nbttagcompound = ServerConfigurationManager.getPlayerDatByName(player);
+        String uuid = ToolBox.usernameToUUID(player);
+        if (uuid == null) return null;
+        NBTTagCompound nbttagcompound = ServerConfigurationManager.getPlayerDat(UUID.fromString(uuid));
         CanaryCompoundTag comp = null;
         if (nbttagcompound != null) {
             comp = new CanaryCompoundTag(nbttagcompound);
+            return new CanaryOfflinePlayer(player, uuid, comp);
         }
-        return new CanaryOfflinePlayer(player, comp);
+        return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public PlayerReference matchKnownPlayer(String player) {
         PlayerReference reference = matchPlayer(player);
@@ -283,11 +275,51 @@ public class CanaryServer implements Server {
         return reference;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Player getPlayer(String name) {
         return server.getConfigurationManager().getPlayerByName(name);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Player getPlayerFromUUID(String uuid) {
+        Player player = null;
+
+        for (Player p : server.getConfigurationManager().getAllPlayers()) {
+            if (p.getUUIDString().equals(uuid)) {
+                player = p;
+                break;
+            }
+        }
+
+        return player;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Player getPlayerFromUUID(UUID uuid) {
+        Player player = null;
+
+        for (Player p : server.getConfigurationManager().getAllPlayers()) {
+            if (p.getUUID().equals(uuid)) {
+                player = p;
+                break;
+            }
+        }
+
+        return player;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Player> getPlayerList() {
         return server.getConfigurationManager().getAllPlayers();
@@ -468,7 +500,7 @@ public class CanaryServer implements Server {
      */
     @Override
     public long[] getTickTimeArray() {
-        return server.f;
+        return server.g;
     }
 
     /**
@@ -491,7 +523,7 @@ public class CanaryServer implements Server {
      */
     @Override
     public String getServerVersion() {
-        return server.z();
+        return server.A();
     }
 
     /**
@@ -549,7 +581,7 @@ public class CanaryServer implements Server {
     @Override
     public void sendPlayerListEntry(PlayerListEntry entry) {
         if (Configuration.getServerConfig().isPlayerListEnabled()) {
-            server.af().a(new S38PacketPlayerListItem(entry.getName(), entry.isShown(), entry.getPing()));
+            server.ah().a(new S38PacketPlayerListItem(entry.getName(), entry.isShown(), entry.getPing()));
         }
     }
 
@@ -558,7 +590,7 @@ public class CanaryServer implements Server {
      */
     @Override
     public int getCurrentTick() {
-        return server.aj();
+        return server.al();
     }
 
     /**

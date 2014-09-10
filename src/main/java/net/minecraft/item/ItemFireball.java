@@ -76,7 +76,7 @@ public class ItemFireball extends Item {
                     world.b(i0, i1, i2, (Block) Blocks.ab);
                 }
 
-                if (!entityplayer.bF.d) {
+                if (!entityplayer.bE.d) {
                     --itemstack.b;
                 }
 

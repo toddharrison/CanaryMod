@@ -1,15 +1,10 @@
 package net.minecraft.block;
 
+import net.canarymod.Canary;
 import net.canarymod.hook.world.DispenseHook;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
-import net.minecraft.dispenser.IBehaviorDispenseItem;
-import net.minecraft.dispenser.IBlockSource;
-import net.minecraft.dispenser.IPosition;
-import net.minecraft.dispenser.IRegistry;
-import net.minecraft.dispenser.PositionImpl;
-import net.minecraft.dispenser.RegistryDefaulted;
+import net.minecraft.dispenser.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -21,6 +16,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityDispenser;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IRegistry;
+import net.minecraft.util.RegistryDefaulted;
 import net.minecraft.world.World;
 
 import java.util.Random;
@@ -120,6 +117,7 @@ public class BlockDispenser extends BlockContainer {
     }
 
     public void a(World world, int i0, int i1, int i2, Block block) {
+        Canary.log.debug("Unholy Fux");
         boolean flag0 = world.v(i0, i1, i2) || world.v(i0, i1 + 1, i2);
         int i3 = world.e(i0, i1, i2);
         boolean flag1 = (i3 & 8) != 0;
@@ -180,9 +178,9 @@ public class BlockDispenser extends BlockContainer {
 
                         float f3 = 0.05F;
 
-                        entityitem.w = (double) ((float) this.b.nextGaussian() * f3);
-                        entityitem.x = (double) ((float) this.b.nextGaussian() * f3 + 0.2F);
-                        entityitem.y = (double) ((float) this.b.nextGaussian() * f3);
+                        entityitem.v = (double) ((float) this.b.nextGaussian() * f3);
+                        entityitem.w = (double) ((float) this.b.nextGaussian() * f3 + 0.2F);
+                        entityitem.x = (double) ((float) this.b.nextGaussian() * f3);
                         world.d((Entity) entityitem);
                     }
                 }

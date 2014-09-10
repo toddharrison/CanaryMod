@@ -41,10 +41,10 @@ public class EntitySnowball extends EntityThrowable {
             }
 
             for (int i0 = 0; i0 < 8; ++i0) {
-                this.p.a("snowballpoof", this.t, this.u, this.v, 0.0D, 0.0D, 0.0D);
+                this.o.a("snowballpoof", this.s, this.t, this.u, 0.0D, 0.0D, 0.0D);
             }
 
-            if (!this.p.E) {
+            if (!this.o.E) {
                 this.B();
             }
         }

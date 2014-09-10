@@ -1,6 +1,7 @@
 package net.minecraft.tileentity;
 
 import net.canarymod.api.world.blocks.CanaryNoteBlock;
+import net.canarymod.hook.world.NoteBlockPlayHook;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
@@ -58,7 +59,12 @@ public class TileEntityNote extends TileEntity {
                 b0 = 4;
             }
 
-            world.c(i0, i1, i2, Blocks.B, b0, this.a);
+            // CanaryMod: NoteBlockPlay
+            NoteBlockPlayHook nbph = (NoteBlockPlayHook) new NoteBlockPlayHook(getCanaryNoteBlock()).call();
+            if (!nbph.isCanceled()) {
+                world.c(i0, i1, i2, Blocks.B, b0, this.a);
+            }
+            //
         }
     }
 

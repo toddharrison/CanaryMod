@@ -29,11 +29,11 @@ public class EntityLightningBolt extends EntityWeatherEffect {
         super(world);
         this.b(d0, d1, d2, 0.0F, 0.0F);
         this.b = 2;
-        this.a = this.aa.nextLong();
-        this.c = this.aa.nextInt(3) + 1;
+        this.a = this.Z.nextLong();
+        this.c = this.Z.nextInt(3) + 1;
         this.entity = new CanaryLightningBolt(this); // CanaryMod: Wrap Entity
 
-        if (!world.E && world.N().b("doFireTick") && (world.r == EnumDifficulty.NORMAL || world.r == EnumDifficulty.HARD) && world.a(MathHelper.c(d0), MathHelper.c(d1), MathHelper.c(d2), 10)) {
+        if (!world.E && world.O().b("doFireTick") && (world.r == EnumDifficulty.NORMAL || world.r == EnumDifficulty.HARD) && world.a(MathHelper.c(d0), MathHelper.c(d1), MathHelper.c(d2), 10)) {
             int i0 = MathHelper.c(d0);
             int i1 = MathHelper.c(d1);
             int i2 = MathHelper.c(d2);
@@ -53,9 +53,9 @@ public class EntityLightningBolt extends EntityWeatherEffect {
             }
 
             for (i0 = 0; i0 < 4; ++i0) {
-                i1 = MathHelper.c(d0) + this.aa.nextInt(3) - 1;
-                i2 = MathHelper.c(d1) + this.aa.nextInt(3) - 1;
-                int i3 = MathHelper.c(d2) + this.aa.nextInt(3) - 1;
+                i1 = MathHelper.c(d0) + this.Z.nextInt(3) - 1;
+                i2 = MathHelper.c(d1) + this.Z.nextInt(3) - 1;
+                int i3 = MathHelper.c(d2) + this.Z.nextInt(3) - 1;
 
                 if (world.a(i1, i2, i3).o() == Material.a && Blocks.ab.c(world, i1, i2, i3)) {
 
@@ -78,8 +78,8 @@ public class EntityLightningBolt extends EntityWeatherEffect {
         super.h();
 
         if (this.b == 2) {
-            this.p.a(this.t, this.u, this.v, "ambient.weather.thunder", 10000.0F, 0.8F + this.aa.nextFloat() * 0.2F);
-            this.p.a(this.t, this.u, this.v, "random.explode", 2.0F, 0.5F + this.aa.nextFloat() * 0.2F);
+            this.o.a(this.s, this.t, this.u, "ambient.weather.thunder", 10000.0F, 0.8F + this.Z.nextFloat() * 0.2F);
+            this.o.a(this.s, this.t, this.u, "random.explode", 2.0F, 0.5F + this.Z.nextFloat() * 0.2F);
             // CanaryMod: LightningStrike
             new LightningStrikeHook((LightningBolt) this.getCanaryEntity()).call();
             //
@@ -89,23 +89,22 @@ public class EntityLightningBolt extends EntityWeatherEffect {
         if (this.b < 0) {
             if (this.c == 0) {
                 this.B();
-            }
-            else if (this.b < -this.aa.nextInt(10)) {
+            } else if (this.b < -this.Z.nextInt(10)) {
                 --this.c;
                 this.b = 1;
-                this.a = this.aa.nextLong();
-                if (!this.p.E && this.p.N().b("doFireTick") && this.p.a(MathHelper.c(this.t), MathHelper.c(this.u), MathHelper.c(this.v), 10)) {
-                    int i0 = MathHelper.c(this.t);
-                    int i1 = MathHelper.c(this.u);
-                    int i2 = MathHelper.c(this.v);
+                this.a = this.Z.nextLong();
+                if (!this.o.E && this.o.O().b("doFireTick") && this.o.a(MathHelper.c(this.s), MathHelper.c(this.t), MathHelper.c(this.u), 10)) {
+                    int i0 = MathHelper.c(this.s);
+                    int i1 = MathHelper.c(this.t);
+                    int i2 = MathHelper.c(this.u);
 
-                    if (this.p.a(i0, i1, i2).o() == Material.a && Blocks.ab.c(this.p, i0, i1, i2)) {
+                    if (this.o.a(i0, i1, i2).o() == Material.a && Blocks.ab.c(this.o, i0, i1, i2)) {
                         // CanaryMod: Ignition
                         CanaryBlock ignited = (CanaryBlock) getCanaryWorld().getBlockAt(i0, i1, i2);
                         ignited.setStatus((byte) 5); // LightningBolt Status 5
                         IgnitionHook hook = (IgnitionHook) new IgnitionHook(ignited, null, null, IgnitionCause.LIGHTNING_STRIKE).call();
                         if (!hook.isCanceled()) {
-                            this.p.b(i0, i1, i2, (Block) Blocks.ab);
+                            this.o.b(i0, i1, i2, (Block) Blocks.ab);
                         }
                         //
                     }
@@ -114,12 +113,11 @@ public class EntityLightningBolt extends EntityWeatherEffect {
         }
 
         if (this.b >= 0) {
-            if (this.p.E) {
-                this.p.q = 2;
-            }
-            else {
+            if (this.o.E) {
+                this.o.q = 2;
+            } else {
                 double d0 = 3.0D;
-                List list = this.p.b((Entity) this, AxisAlignedBB.a().a(this.t - d0, this.u - d0, this.v - d0, this.t + d0, this.u + 6.0D + d0, this.v + d0));
+                List list = this.o.b((Entity) this, AxisAlignedBB.a(this.s - d0, this.t - d0, this.u - d0, this.s + d0, this.t + 6.0D + d0, this.u + d0));
 
                 for (int i3 = 0; i3 < list.size(); ++i3) {
                     Entity entity = (Entity) list.get(i3);

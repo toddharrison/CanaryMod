@@ -15,12 +15,7 @@ import net.minecraft.potion.PotionHelper;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ItemPotion extends Item {
 
@@ -49,8 +44,7 @@ public class ItemPotion extends Item {
             }
 
             return arraylist;
-        }
-        else {
+        } else {
             List list = (List) this.a.get(Integer.valueOf(itemstack.k()));
 
             if (list == null) {
@@ -104,7 +98,7 @@ public class ItemPotion extends Item {
             return itemstack;
         }
         // Apply food changes
-        entityplayer.bO().a(hook.getLevelGain(), hook.getSaturationGain());
+        entityplayer.bQ().a(hook.getLevelGain(), hook.getSaturationGain());
         // And finally add the effects
         if (hook.getPotionEffects() != null) {
             for (net.canarymod.api.potion.PotionEffect effect : hook.getPotionEffects()) {
@@ -115,16 +109,16 @@ public class ItemPotion extends Item {
         }
         //
 
-        if (!entityplayer.bF.d) { // moved
+        if (!entityplayer.bE.d) { // moved
             --itemstack.b;
         }
 
-        if (!entityplayer.bF.d) {
+        if (!entityplayer.bE.d) {
             if (itemstack.b <= 0) {
                 return new ItemStack(Items.bo);
             }
 
-            entityplayer.bn.a(new ItemStack(Items.bo));
+            entityplayer.bm.a(new ItemStack(Items.bo));
         }
 
         return itemstack;
@@ -140,7 +134,7 @@ public class ItemPotion extends Item {
 
     public ItemStack a(ItemStack itemstack, World world, EntityPlayer entityplayer) {
         if (g(itemstack.k())) {
-            if (!entityplayer.bF.d) {
+            if (!entityplayer.bE.d) {
                 --itemstack.b;
             }
 
@@ -150,8 +144,7 @@ public class ItemPotion extends Item {
             }
 
             return itemstack;
-        }
-        else {
+        } else {
             entityplayer.a(itemstack, this.d_(itemstack));
             return itemstack;
         }
@@ -168,8 +161,7 @@ public class ItemPotion extends Item {
     public String n(ItemStack itemstack) {
         if (itemstack.k() == 0) {
             return StatCollector.a("item.emptyPotion.name").trim();
-        }
-        else {
+        } else {
             String s0 = "";
 
             if (g(itemstack.k())) {
@@ -183,8 +175,7 @@ public class ItemPotion extends Item {
                 s1 = ((PotionEffect) list.get(0)).f();
                 s1 = s1 + ".postfix";
                 return s0 + StatCollector.a(s1).trim();
-            }
-            else {
+            } else {
                 s1 = PotionHelper.c(itemstack.k());
                 return StatCollector.a(s1).trim() + " " + super.n(itemstack);
             }

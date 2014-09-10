@@ -16,8 +16,7 @@ public class CanaryWolf extends CanaryTameable implements Wolf {
     /**
      * Constructs a new wrapper for EntityWolf
      *
-     * @param entity
-     *         the EntityWolf to wrap
+     * @param entity the EntityWolf to wrap
      */
     public CanaryWolf(EntityWolf entity) {
         super(entity);
@@ -49,7 +48,7 @@ public class CanaryWolf extends CanaryTameable implements Wolf {
      */
     @Override
     public DyeColor getCollarColor() {
-        return DyeColor.values()[getHandle().ch()];
+        return DyeColor.values()[getHandle().cj()];
     }
 
     /**
@@ -57,7 +56,7 @@ public class CanaryWolf extends CanaryTameable implements Wolf {
      */
     @Override
     public boolean isAngry() {
-        return getHandle().cg();
+        return getHandle().ci();
     }
 
     /**

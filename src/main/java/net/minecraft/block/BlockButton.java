@@ -1,6 +1,7 @@
 package net.minecraft.block;
 
 import net.canarymod.api.world.blocks.CanaryBlock;
+import net.canarymod.hook.world.BlockPhysicsHook;
 import net.canarymod.hook.world.RedstoneChangeHook;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
@@ -152,6 +153,13 @@ public abstract class BlockButton extends Block {
     }
 
     public boolean a(World world, int i0, int i1, int i2, EntityPlayer entityplayer, int i3, float f0, float f1, float f2) {
+        // CanaryMod: Block Physics
+        BlockPhysicsHook blockPhysics = (BlockPhysicsHook) new BlockPhysicsHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), false).call();
+        if (blockPhysics.isCanceled()) {
+            return false;
+        }
+        //
+
         int i4 = world.e(i0, i1, i2);
         int i5 = i4 & 7;
         int i6 = 8 - (i4 & 8);
@@ -219,6 +227,12 @@ public abstract class BlockButton extends Block {
                     this.n(world, i0, i1, i2);
                 }
                 else {
+                    // CanaryMod: Block Physics
+                    BlockPhysicsHook blockPhysics = (BlockPhysicsHook) new BlockPhysicsHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), false).call();
+                    if (blockPhysics.isCanceled()) {
+                        return;
+                    }
+                    //
                     // CanaryMod: RedstoneChange; Stone Button off
                     RedstoneChangeHook hook = (RedstoneChangeHook) new RedstoneChangeHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), 15, 0).call();
                     if (hook.isCanceled()) {
@@ -261,7 +275,7 @@ public abstract class BlockButton extends Block {
         boolean flag0 = (i3 & 8) != 0;
 
         this.b(i3);
-        List list = world.a(EntityArrow.class, AxisAlignedBB.a().a((double) i0 + this.B, (double) i1 + this.C, (double) i2 + this.D, (double) i0 + this.E, (double) i1 + this.F, (double) i2 + this.G));
+        List list = world.a(EntityArrow.class, AxisAlignedBB.a((double) i0 + this.B, (double) i1 + this.C, (double) i2 + this.D, (double) i0 + this.E, (double) i1 + this.F, (double) i2 + this.G));
         boolean flag1 = !list.isEmpty();
 
         if (flag1 && !flag0) {
@@ -279,6 +293,14 @@ public abstract class BlockButton extends Block {
         }
 
         if (!flag1 && flag0) {
+            // CanaryMod: Block Physics
+            BlockPhysicsHook blockPhysics = (BlockPhysicsHook) new BlockPhysicsHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), false).call();
+            if (blockPhysics.isCanceled()) {
+                world.a(i0, i1, i2, this, this.a(world));  // Reschedule
+                return;
+            }
+            //
+
             // CanaryMod: RedstoneChange; Wood Button off
             RedstoneChangeHook hook = (RedstoneChangeHook) new RedstoneChangeHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), 15, 0).call();
             if (hook.isCanceled()) {

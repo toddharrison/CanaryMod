@@ -23,8 +23,7 @@ public class CanaryVillager extends CanaryEntityLiving implements Villager {
     /**
      * Constructs a new wrapper for EntityVillager
      *
-     * @param entity
-     *         the EntityVillager to wrap
+     * @param entity the EntityVillager to wrap
      */
     public CanaryVillager(EntityVillager entity) {
         super(entity);
@@ -44,7 +43,7 @@ public class CanaryVillager extends CanaryEntityLiving implements Villager {
      */
     @Override
     public Profession getProfession() {
-        return Profession.fromId(getHandle().bX());
+        return Profession.fromId(getHandle().bZ());
     }
 
     /**
@@ -76,7 +75,7 @@ public class CanaryVillager extends CanaryEntityLiving implements Villager {
      */
     @Override
     public boolean isPlaying() {
-        return getHandle().bZ();
+        return getHandle().cb();
     }
 
     /**

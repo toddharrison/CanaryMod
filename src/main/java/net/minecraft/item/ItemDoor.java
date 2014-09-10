@@ -50,7 +50,7 @@ public class ItemDoor extends Item {
                     }
                     //
 
-                    int i4 = MathHelper.c((double) ((entityplayer.z + 180.0F) * 4.0F / 360.0F) - 0.5D) & 3;
+                    int i4 = MathHelper.c((double) ((entityplayer.y + 180.0F) * 4.0F / 360.0F) - 0.5D) & 3;
 
                     a(world, i0, i1, i2, i4, block);
                     --itemstack.b;

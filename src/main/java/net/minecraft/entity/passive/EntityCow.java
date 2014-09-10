@@ -4,14 +4,7 @@ import net.canarymod.api.entity.living.animal.CanaryCow;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIFollowParent;
-import net.minecraft.entity.ai.EntityAILookIdle;
-import net.minecraft.entity.ai.EntityAIMate;
-import net.minecraft.entity.ai.EntityAIPanic;
-import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.ai.EntityAITempt;
-import net.minecraft.entity.ai.EntityAIWander;
-import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.ai.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -70,7 +63,7 @@ public class EntityCow extends EntityAnimal {
     }
 
     protected void b(boolean flag0, int i0) {
-        int i1 = this.aa.nextInt(3) + this.aa.nextInt(1 + i0);
+        int i1 = this.Z.nextInt(3) + this.Z.nextInt(1 + i0);
 
         int i2;
 
@@ -78,38 +71,35 @@ public class EntityCow extends EntityAnimal {
             this.a(Items.aA, 1);
         }
 
-        i1 = this.aa.nextInt(3) + 1 + this.aa.nextInt(1 + i0);
+        i1 = this.Z.nextInt(3) + 1 + this.Z.nextInt(1 + i0);
 
         for (i2 = 0; i2 < i1; ++i2) {
             if (this.al()) {
                 this.a(Items.be, 1);
-            }
-            else {
+            } else {
                 this.a(Items.bd, 1);
             }
         }
     }
 
     public boolean a(EntityPlayer entityplayer) {
-        ItemStack itemstack = entityplayer.bn.h();
+        ItemStack itemstack = entityplayer.bm.h();
 
-        if (itemstack != null && itemstack.b() == Items.ar && !entityplayer.bF.d) {
+        if (itemstack != null && itemstack.b() == Items.ar && !entityplayer.bE.d) {
             if (itemstack.b-- == 1) {
-                entityplayer.bn.a(entityplayer.bn.c, new ItemStack(Items.aB));
-            }
-            else if (!entityplayer.bn.a(new ItemStack(Items.aB))) {
+                entityplayer.bm.a(entityplayer.bm.c, new ItemStack(Items.aB));
+            } else if (!entityplayer.bm.a(new ItemStack(Items.aB))) {
                 entityplayer.a(new ItemStack(Items.aB, 1, 0), false);
             }
 
             return true;
-        }
-        else {
+        } else {
             return super.a(entityplayer);
         }
     }
 
     public EntityCow b(EntityAgeable entityageable) {
-        return new EntityCow(this.p);
+        return new EntityCow(this.o);
     }
 
     public EntityAgeable a(EntityAgeable entityageable) {

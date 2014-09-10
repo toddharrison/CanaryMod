@@ -41,7 +41,7 @@ public class ItemBucket extends Item {
                     return itemstack;
                 }
 
-                // CanaryMod: BlockDestoryHook
+                // CanaryMod: BlockDestroyHook
                 CanaryBlock clicked = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
                 BlockDestroyHook hook = new BlockDestroyHook(((EntityPlayerMP) entityplayer).getPlayer(), clicked);
                 //
@@ -72,6 +72,7 @@ public class ItemBucket extends Item {
                         if (hook.isCanceled()) {
                             return itemstack;
                         }
+                        //
 
                         world.f(i0, i1, i2);
                         return this.a(itemstack, entityplayer, Items.at);
@@ -111,7 +112,8 @@ public class ItemBucket extends Item {
                         return itemstack;
                     }
 
-                    if (this.a(world, i0, i1, i2) && !entityplayer.bF.d) {
+                    // CanaryMod: Pass player to tryPlace
+                    if (this.a(world, i0, i1, i2, entityplayer, false) && !entityplayer.bE.d) {
                         return new ItemStack(Items.ar);
                     }
                 }
@@ -122,14 +124,14 @@ public class ItemBucket extends Item {
     }
 
     private ItemStack a(ItemStack itemstack, EntityPlayer entityplayer, Item item) {
-        if (entityplayer.bF.d) {
+        if (entityplayer.bE.d) {
             return itemstack;
         }
         else if (--itemstack.b <= 0) {
             return new ItemStack(item);
         }
         else {
-            if (!entityplayer.bn.a(new ItemStack(item))) {
+            if (!entityplayer.bm.a(new ItemStack(item))) {
                 entityplayer.a(new ItemStack(item, 1, 0), false);
             }
 
@@ -138,11 +140,11 @@ public class ItemBucket extends Item {
     }
 
     public boolean a(World world, int i0, int i1, int i2) {
-        return a(world, i0, i1, i2, null); // CanaryMod: redirection
+        return a(world, i0, i1, i2, null, false); // CanaryMod: redirection
     }
 
-    // CanaryMod: We need a Player for hooks
-    public boolean a(World world, int i0, int i1, int i2, EntityPlayer entityplayer) {
+    // CanaryMod: We need a Player for hooks, testOnly is to simulate a Dispenser letting stuff happen
+    public boolean a(World world, int i0, int i1, int i2, EntityPlayer entityplayer, boolean testOnly) {
         if (this.a == Blocks.a) {
             return false;
         }
@@ -162,6 +164,10 @@ public class ItemBucket extends Item {
                     }
                 }
                 else {
+                    if (!world.E && flag0 && !material.d()) {
+                        world.a(i0, i1, i2, true);
+                    }
+
                     // CanaryMod: BlockPlaceHook water/lava bucket
                     if (entityplayer != null) {
                         CanaryBlock clicked = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
@@ -173,11 +179,12 @@ public class ItemBucket extends Item {
                         }
                     }
                     //
-                    if (!world.E && flag0 && !material.d()) {
-                        world.a(i0, i1, i2, true);
-                    }
 
-                    world.d(i0, i1, i2, this.a, 0, 3);
+                    // CanaryMod: Dispense helper
+                    if (!testOnly) {
+                        world.d(i0, i1, i2, this.a, 0, 3);
+                    }
+                    //
                 }
 
                 return true;

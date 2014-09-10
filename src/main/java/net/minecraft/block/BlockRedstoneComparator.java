@@ -2,6 +2,7 @@ package net.minecraft.block;
 
 import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.blocks.CanaryBlock;
+import net.canarymod.hook.world.BlockPhysicsHook;
 import net.canarymod.hook.world.RedstoneChangeHook;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -51,7 +52,7 @@ public class BlockRedstoneComparator extends BlockRedstoneDiode implements ITile
     }
 
     private int j(World world, int i0, int i1, int i2, int i3) {
-        return !this.d(i3) ? this.h(world, i0, i1, i2, i3) : Math.max(this.h(world, i0, i1, i2, i3) - this.h(world, i0, i1, i2, i3), 0);
+        return !this.d(i3) ? this.h(world, i0, i1, i2, i3) : Math.max(this.h(world, i0, i1, i2, i3) - this.h((IBlockAccess) world, i0, i1, i2, i3), 0);
     }
 
     public boolean d(int i0) {
@@ -68,7 +69,7 @@ public class BlockRedstoneComparator extends BlockRedstoneDiode implements ITile
             return false;
         }
         else {
-            int i5 = this.h((IBlockAccess) world, i0, i1, i2, i3); // CanaryMod: Cast World to IBlockAccess for method f
+            int i5 = this.h((IBlockAccess) world, i0, i1, i2, i3); // CanaryMod: Cast World to IBlockAccess
 
             return i5 == 0 ? true : i4 >= i5;
         }
@@ -101,6 +102,12 @@ public class BlockRedstoneComparator extends BlockRedstoneDiode implements ITile
     }
 
     public boolean a(World world, int i0, int i1, int i2, EntityPlayer entityplayer, int i3, float f0, float f1, float f2) {
+        // CanaryMod: Block Physics
+        BlockPhysicsHook blockPhysics = (BlockPhysicsHook) new BlockPhysicsHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), false).call();
+        if (blockPhysics.isCanceled()) {
+            return false;
+        }
+        //
         int i4 = world.e(i0, i1, i2);
         boolean flag0 = this.a | (i4 & 8) != 0;
         boolean flag1 = !this.d(i4);

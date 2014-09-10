@@ -4,7 +4,7 @@ import com.mojang.authlib.GameProfile;
 import io.netty.util.concurrent.GenericFutureListener;
 import net.canarymod.hook.system.ServerListPingHook;
 import net.minecraft.network.EnumConnectionState;
-import net.minecraft.network.INetworkManager;
+import net.minecraft.network.NetworkManager;
 import net.minecraft.network.ServerStatusResponse;
 import net.minecraft.network.status.INetHandlerStatusServer;
 import net.minecraft.network.status.client.C00PacketServerQuery;
@@ -20,11 +20,11 @@ import java.util.Arrays;
 public class NetHandlerStatusServer implements INetHandlerStatusServer {
 
     private final MinecraftServer a;
-    private final INetworkManager b;
+    private final NetworkManager b;
 
-    public NetHandlerStatusServer(MinecraftServer minecraftserver, INetworkManager inetworkmanager) {
+    public NetHandlerStatusServer(MinecraftServer minecraftserver, NetworkManager networkmanager) {
         this.a = minecraftserver;
-        this.b = inetworkmanager;
+        this.b = networkmanager;
     }
 
     public void a(IChatComponent ichatcomponent) {
@@ -41,7 +41,7 @@ public class NetHandlerStatusServer implements INetHandlerStatusServer {
 
     public void a(C00PacketServerQuery c00packetserverquery) {
         // CanaryMod: ServerListPingHook
-        ServerStatusResponse ssr = this.a.at();
+        ServerStatusResponse ssr = this.a.ay();
         ServerListPingHook hook = (ServerListPingHook) new ServerListPingHook(ssr.a().e(), ssr.b().b(), ssr.b().a(), ssr.d(), Arrays.asList(ssr.b().c())).call();
         if (hook.isCanceled()) {
             // Response Denied!
@@ -49,7 +49,7 @@ public class NetHandlerStatusServer implements INetHandlerStatusServer {
         }
         // Recreate the ServerStatusResponse to be sent so that the default isn't destroyed
         ssr = new ServerStatusResponse();
-        ssr.a(new ServerStatusResponse.MinecraftProtocolVersionIdentifier("1.7.2", 4)); //Protocol (do not change this at all [except in the case of updating to new Minecraft]!)
+        ssr.a(new ServerStatusResponse.MinecraftProtocolVersionIdentifier("1.7.10", 5)); //Protocol (do not change this at all [except in the case of updating to new Minecraft]!)
         ServerStatusResponse.PlayerCountData ssrpcd = new ServerStatusResponse.PlayerCountData(hook.getMaxPlayers(), hook.getCurrentPlayers());
         ssrpcd.a(hook.getProfiles().toArray(new GameProfile[hook.getProfiles().size()]));
         ssr.a(ssrpcd); //Max/Online Players & GameProfiles

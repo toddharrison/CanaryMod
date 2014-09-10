@@ -1,23 +1,22 @@
 package net.canarymod.api.entity.living;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import net.canarymod.api.CanaryDamageSource;
 import net.canarymod.api.DamageSource;
 import net.canarymod.api.DamageType;
 import net.canarymod.api.attributes.AttributeMap;
 import net.canarymod.api.entity.CanaryEntity;
 import net.canarymod.api.entity.Entity;
-import net.canarymod.api.potion.CanaryPotion;
-import net.canarymod.api.potion.CanaryPotionEffect;
-import net.canarymod.api.potion.Potion;
-import net.canarymod.api.potion.PotionEffect;
-import net.canarymod.api.potion.PotionEffectType;
+import net.canarymod.api.potion.*;
+import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.api.world.position.Location;
+import net.canarymod.api.world.position.Position;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.Vec3;
 
 public abstract class CanaryLivingBase extends CanaryEntity implements LivingBase {
 
@@ -59,7 +58,7 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
      */
     @Override
     public double getMaxHealth() {
-        return getHandle().aX().a(SharedMonsterAttributes.a).b();
+        return getHandle().a(SharedMonsterAttributes.a).e();
     }
 
     /**
@@ -75,7 +74,7 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
      */
     @Override
     public boolean canSee(LivingBase livingbase) {
-        return getHandle().o(((CanaryEntity) livingbase).getHandle());
+        return getHandle().n(((CanaryEntity) livingbase).getHandle());
     }
 
     /**
@@ -83,7 +82,7 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
      */
     @Override
     public int getDeathTicks() {
-        return getHandle().aB;
+        return getHandle().aA;
     }
 
     /**
@@ -91,7 +90,7 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
      */
     @Override
     public void setDeathTicks(int ticks) {
-        getHandle().aB = ticks;
+        getHandle().aA = ticks;
     }
 
     /**
@@ -99,7 +98,7 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
      */
     @Override
     public int getInvulnerabilityTicks() {
-        return getHandle().aI;
+        return getHandle().aH;
     }
 
     /**
@@ -107,7 +106,7 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
      */
     @Override
     public void setInvulnerabilityTicks(int ticks) {
-        getHandle().aI = ticks;
+        getHandle().aH = ticks;
     }
 
     /**
@@ -367,6 +366,73 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
     @Override
     public AttributeMap getAttributeMap() {
         return getHandle().bc().getWrapper();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Entity getTargetLookingAt() {
+        return this.getTargetLookingAt(64);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Entity getTargetLookingAt(int searchRadius) {
+        Entity toRet = null;
+        
+        // Get the vector that this entity is looking; Get our start position
+        Vec3 vec = ((CanaryLivingBase)this).getHandle().ag();
+        Position startPos = this.getPosition();
+        Position nextPos = new Position((startPos.getX() + vec.a), (startPos.getY() + vec.b) + this.getEyeHeight(),(startPos.getZ() + vec.c));
+
+        while (distanceTo(startPos, nextPos) < searchRadius * searchRadius) {
+            // Get the nearest entity and check that its not null (i.e. isn't an entity in the BB)
+            Entity near = this.getNearestEntity(this, nextPos.getX(), nextPos.getY(), nextPos.getZ());
+            if (near != null) {
+                AxisAlignedBB bb = ((CanaryEntity)near).getHandle().C;
+                if ((nextPos.getX() > bb.a && nextPos.getX() < bb.d) && (nextPos.getY() > bb.b && nextPos.getY() < bb.e) && (nextPos.getZ() > bb.c && nextPos.getZ() < bb.f)) {
+                    toRet = near;
+                    break;
+                }
+                // Calculate the next position to check, small step because we have entities here
+                nextPos = new Position((nextPos.getX() + (vec.a*.01)), (nextPos.getY() + (vec.b*.01)),(nextPos.getZ() + (vec.c*.01)));
+            } else {
+                // Calculate the next position to check, large step because the immediate area is empty
+                nextPos = new Position((nextPos.getX() + (vec.a)), (nextPos.getY() + (vec.b)),(nextPos.getZ() + (vec.c)));
+            }
+        }
+        return toRet;
+    }
+        
+    /**
+     * Returns the distance between the two positions
+     * @param pos1
+     * @param pos2
+     * @return 
+     */
+    private double distanceTo(Position pos1, Position pos2) {
+        double xDiff = pos1.getX() - pos2.getX();
+        double yDiff = pos1.getY() - pos2.getY();
+        double zDiff = pos1.getZ() - pos2.getZ();
+
+        return xDiff * xDiff + yDiff * yDiff + zDiff * zDiff;
+    }
+
+    /**
+    * Gets the entity nearest to the searching entity within a 5 meter radius of the given position
+    */
+    private Entity getNearestEntity(CanaryLivingBase entity, double x, double y, double z) {
+        // Get the entities world
+        net.canarymod.api.world.World w = entity.getWorld();
+        // create a bounding box around the point with the given coordinates
+        AxisAlignedBB aabb = AxisAlignedBB.a(x - .5, y - .5, z - .5, x + .5, y + .5, z + .5);
+        // get the entity in the Bounding box closest to the entity searching
+        net.minecraft.entity.Entity target = ((CanaryWorld)w).getHandle().a(net.minecraft.entity.EntityLiving.class, aabb, ((CanaryLivingBase)entity).getHandle());
+
+        return (target == null) ? null : target.getCanaryEntity();
     }
 
     /**

@@ -4,17 +4,9 @@ import net.canarymod.api.entity.living.animal.CanarySheep;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EntityLivingData;
+import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIEatGrass;
-import net.minecraft.entity.ai.EntityAIFollowParent;
-import net.minecraft.entity.ai.EntityAILookIdle;
-import net.minecraft.entity.ai.EntityAIMate;
-import net.minecraft.entity.ai.EntityAIPanic;
-import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.ai.EntityAITempt;
-import net.minecraft.entity.ai.EntityAIWander;
-import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.ai.*;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -33,11 +25,11 @@ public class EntitySheep extends EntityAnimal {
 
     private final InventoryCrafting bq = new InventoryCrafting(new Container() {
 
-        public boolean a(EntityPlayer var1) {
+        public boolean a(EntityPlayer entityplayer) {
             return false;
         }
     }, 2, 1);
-    public static final float[][] bp = new float[][]{ { 1.0F, 1.0F, 1.0F }, { 0.85F, 0.5F, 0.2F }, { 0.7F, 0.3F, 0.85F }, { 0.4F, 0.6F, 0.85F }, { 0.9F, 0.9F, 0.2F }, { 0.5F, 0.8F, 0.1F }, { 0.95F, 0.5F, 0.65F }, { 0.3F, 0.3F, 0.3F }, { 0.6F, 0.6F, 0.6F }, { 0.3F, 0.5F, 0.6F }, { 0.5F, 0.25F, 0.7F }, { 0.2F, 0.3F, 0.7F }, { 0.4F, 0.3F, 0.2F }, { 0.4F, 0.5F, 0.2F }, { 0.6F, 0.2F, 0.2F }, { 0.1F, 0.1F, 0.1F } };
+    public static final float[][] bp = new float[][]{{1.0F, 1.0F, 1.0F}, {0.85F, 0.5F, 0.2F}, {0.7F, 0.3F, 0.85F}, {0.4F, 0.6F, 0.85F}, {0.9F, 0.9F, 0.2F}, {0.5F, 0.8F, 0.1F}, {0.95F, 0.5F, 0.65F}, {0.3F, 0.3F, 0.3F}, {0.6F, 0.6F, 0.6F}, {0.3F, 0.5F, 0.6F}, {0.5F, 0.25F, 0.7F}, {0.2F, 0.3F, 0.7F}, {0.4F, 0.3F, 0.2F}, {0.4F, 0.5F, 0.2F}, {0.6F, 0.2F, 0.2F}, {0.1F, 0.1F, 0.1F}};
     private int br;
     private EntityAIEatGrass bs = new EntityAIEatGrass(this);
 
@@ -69,7 +61,7 @@ public class EntitySheep extends EntityAnimal {
     }
 
     public void e() {
-        if (this.p.E) {
+        if (this.o.E) {
             this.br = Math.max(0, this.br - 1);
         }
 
@@ -84,12 +76,12 @@ public class EntitySheep extends EntityAnimal {
 
     protected void c() {
         super.c();
-        this.ag.a(16, new Byte((byte) 0));
+        this.af.a(16, new Byte((byte) 0));
     }
 
     protected void b(boolean flag0, int i0) {
-        if (!this.bY()) {
-            this.a(new ItemStack(Item.a(Blocks.L), 1, this.bX()), 0.0F);
+        if (!this.ca()) {
+            this.a(new ItemStack(Item.a(Blocks.L), 1, this.bZ()), 0.0F);
         }
     }
 
@@ -98,19 +90,19 @@ public class EntitySheep extends EntityAnimal {
     }
 
     public boolean a(EntityPlayer entityplayer) {
-        ItemStack itemstack = entityplayer.bn.h();
+        ItemStack itemstack = entityplayer.bm.h();
 
-        if (itemstack != null && itemstack.b() == Items.aZ && !this.bY() && !this.f()) {
-            if (!this.p.E) {
+        if (itemstack != null && itemstack.b() == Items.aZ && !this.ca() && !this.f()) {
+            if (!this.o.E) {
                 this.i(true);
-                int i0 = 1 + this.aa.nextInt(3);
+                int i0 = 1 + this.Z.nextInt(3);
 
                 for (int i1 = 0; i1 < i0; ++i1) {
-                    EntityItem entityitem = this.a(new ItemStack(Item.a(Blocks.L), 1, this.bX()), 1.0F);
+                    EntityItem entityitem = this.a(new ItemStack(Item.a(Blocks.L), 1, this.bZ()), 1.0F);
 
-                    entityitem.x += (double) (this.aa.nextFloat() * 0.05F);
-                    entityitem.w += (double) ((this.aa.nextFloat() - this.aa.nextFloat()) * 0.1F);
-                    entityitem.y += (double) ((this.aa.nextFloat() - this.aa.nextFloat()) * 0.1F);
+                    entityitem.w += (double) (this.Z.nextFloat() * 0.05F);
+                    entityitem.v += (double) ((this.Z.nextFloat() - this.Z.nextFloat()) * 0.1F);
+                    entityitem.x += (double) ((this.Z.nextFloat() - this.Z.nextFloat()) * 0.1F);
                 }
             }
 
@@ -123,8 +115,8 @@ public class EntitySheep extends EntityAnimal {
 
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.a("Sheared", this.bY());
-        nbttagcompound.a("Color", (byte) this.bX());
+        nbttagcompound.a("Sheared", this.ca());
+        nbttagcompound.a("Color", (byte) this.bZ());
     }
 
     public void a(NBTTagCompound nbttagcompound) {
@@ -149,28 +141,27 @@ public class EntitySheep extends EntityAnimal {
         this.a("mob.sheep.step", 0.15F, 1.0F);
     }
 
-    public int bX() {
-        return this.ag.a(16) & 15;
+    public int bZ() {
+        return this.af.a(16) & 15;
     }
 
     public void s(int i0) {
-        byte b0 = this.ag.a(16);
+        byte b0 = this.af.a(16);
 
-        this.ag.b(16, Byte.valueOf((byte) (b0 & 240 | i0 & 15)));
+        this.af.b(16, Byte.valueOf((byte) (b0 & 240 | i0 & 15)));
     }
 
-    public boolean bY() {
-        return (this.ag.a(16) & 16) != 0;
+    public boolean ca() {
+        return (this.af.a(16) & 16) != 0;
     }
 
     public void i(boolean flag0) {
-        byte b0 = this.ag.a(16);
+        byte b0 = this.af.a(16);
 
         if (flag0) {
-            this.ag.b(16, Byte.valueOf((byte) (b0 | 16)));
-        }
-        else {
-            this.ag.b(16, Byte.valueOf((byte) (b0 & -17)));
+            this.af.b(16, Byte.valueOf((byte) (b0 | 16)));
+        } else {
+            this.af.b(16, Byte.valueOf((byte) (b0 & -17)));
         }
     }
 
@@ -182,7 +173,7 @@ public class EntitySheep extends EntityAnimal {
 
     public EntitySheep b(EntityAgeable entityageable) {
         EntitySheep entitysheep = (EntitySheep) entityageable;
-        EntitySheep entitysheep1 = new EntitySheep(this.p);
+        EntitySheep entitysheep1 = new EntitySheep(this.o);
         int i0 = this.a(this, entitysheep);
 
         entitysheep1.s(15 - i0);
@@ -196,10 +187,10 @@ public class EntitySheep extends EntityAnimal {
         }
     }
 
-    public EntityLivingData a(EntityLivingData entitylivingdata) {
-        entitylivingdata = super.a(entitylivingdata);
-        this.s(a(this.p.s));
-        return entitylivingdata;
+    public IEntityLivingData a(IEntityLivingData ientitylivingdata) {
+        ientitylivingdata = super.a(ientitylivingdata);
+        this.s(a(this.o.s));
+        return ientitylivingdata;
     }
 
     private int a(EntityAnimal entityanimal, EntityAnimal entityanimal1) {
@@ -208,21 +199,20 @@ public class EntitySheep extends EntityAnimal {
 
         this.bq.a(0).b(i0);
         this.bq.a(1).b(i1);
-        ItemStack itemstack = CraftingManager.a().a(this.bq, ((EntitySheep) entityanimal).p);
+        ItemStack itemstack = CraftingManager.a().a(this.bq, ((EntitySheep) entityanimal).o);
         int i2;
 
         if (itemstack != null && itemstack.b() == Items.aR) {
             i2 = itemstack.k();
-        }
-        else {
-            i2 = this.p.s.nextBoolean() ? i0 : i1;
+        } else {
+            i2 = this.o.s.nextBoolean() ? i0 : i1;
         }
 
         return i2;
     }
 
     private int b(EntityAnimal entityanimal) {
-        return 15 - ((EntitySheep) entityanimal).bX();
+        return 15 - ((EntitySheep) entityanimal).bZ();
     }
 
     public EntityAgeable a(EntityAgeable entityageable) {

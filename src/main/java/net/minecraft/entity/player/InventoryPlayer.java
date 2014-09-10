@@ -116,16 +116,14 @@ public class InventoryPlayer implements IInventory {
             i1 = this.j();
             if (i1 < 0) {
                 return i0;
-            }
-            else {
+            } else {
                 if (this.a[i1] == null) {
                     this.a[i1] = ItemStack.b(itemstack);
                 }
 
                 return 0;
             }
-        }
-        else {
+        } else {
             i1 = this.d(itemstack);
             if (i1 < 0) {
                 i1 = this.j();
@@ -133,8 +131,7 @@ public class InventoryPlayer implements IInventory {
 
             if (i1 < 0) {
                 return i0;
-            }
-            else {
+            } else {
                 if (this.a[i1] == null) {
                     this.a[i1] = new ItemStack(item, 0, itemstack.k());
                     if (itemstack.p()) {
@@ -154,8 +151,7 @@ public class InventoryPlayer implements IInventory {
 
                 if (i2 == 0) {
                     return i0;
-                }
-                else {
+                } else {
                     i0 -= i2;
                     this.a[i1].b += i2;
                     this.a[i1].c = 5;
@@ -168,7 +164,7 @@ public class InventoryPlayer implements IInventory {
     public void k() {
         for (int i0 = 0; i0 < this.a.length; ++i0) {
             if (this.a[i0] != null) {
-                this.a[i0].a(this.d.p, this.d, i0, this.c == i0);
+                this.a[i0].a(this.d.o, this.d, i0, this.c == i0);
             }
         }
     }
@@ -178,8 +174,7 @@ public class InventoryPlayer implements IInventory {
 
         if (i0 < 0) {
             return false;
-        }
-        else {
+        } else {
             if (--this.a[i0].b <= 0) {
                 this.a[i0] = null;
             }
@@ -200,21 +195,18 @@ public class InventoryPlayer implements IInventory {
         int i;
 
         if (itemstack.i()) {
-            i = InventoryPlayer.i();
+            i = this.j();
             if (i >= 0) {
                 // CanaryMod: ItemPickUp
                 ItemPickupHook hook = (ItemPickupHook) new ItemPickupHook(((EntityPlayerMP) this.d).getPlayer(), (net.canarymod.api.entity.EntityItem) entityitem.getCanaryEntity()).call();
                 return !hook.isCanceled();
                 //
-            }
-            else if (this.d.bF.d) {
+            } else if (this.d.bE.d) {
                 return true;
-            }
-            else {
+            } else {
                 return false;
             }
-        }
-        else {
+        } else {
             int slot = 0;
             int left = itemstack.b;
 
@@ -224,8 +216,7 @@ public class InventoryPlayer implements IInventory {
 
                 if (itemstack1 == null) {
                     delta = Math.min(64, left);
-                }
-                else if (itemstack1.b < 64 && itemstack.c == itemstack1.c && itemstack.e() == itemstack1.e()) {
+                } else if (itemstack1.b < 64 && itemstack.c == itemstack1.c && itemstack.e() == itemstack1.e()) {
                     delta = Math.min(64 - itemstack.b, left);
                 }
                 left -= delta;
@@ -234,11 +225,12 @@ public class InventoryPlayer implements IInventory {
             while (left > 0 && slot < 36);
             if (itemstack.b - left > 0) {
                 // CanaryMod: ItemPickUp
-                ItemPickupHook hook = (ItemPickupHook) new ItemPickupHook(((EntityPlayerMP) this.d).getPlayer(), (net.canarymod.api.entity.EntityItem) entityitem.getCanaryEntity()).call();
-                return !hook.isCanceled();
+                if (this.d instanceof EntityPlayerMP) { // Cause NPC may be picking something up...
+                    return !((ItemPickupHook) new ItemPickupHook(((EntityPlayerMP) this.d).getPlayer(), (net.canarymod.api.entity.EntityItem) entityitem.getCanaryEntity()).call()).isCanceled();
+                }
+                return true;
                 //
-            }
-            else {
+            } else {
                 return false;
             }
         }
@@ -256,31 +248,27 @@ public class InventoryPlayer implements IInventory {
                         this.a[i0].c = 5;
                         itemstack.b = 0;
                         return true;
-                    }
-                    else if (this.d.bF.d) {
+                    } else if (this.d.bE.d) {
                         itemstack.b = 0;
                         return true;
-                    }
-                    else {
+                    } else {
                         return false;
                     }
-                }
-                else {
+                } else {
                     do {
                         i0 = itemstack.b;
                         itemstack.b = this.e(itemstack);
-                    } while (itemstack.b > 0 && itemstack.b < i0);
+                    }
+                    while (itemstack.b > 0 && itemstack.b < i0);
 
-                    if (itemstack.b == i0 && this.d.bF.d) {
+                    if (itemstack.b == i0 && this.d.bE.d) {
                         itemstack.b = 0;
                         return true;
-                    }
-                    else {
+                    } else {
                         return itemstack.b < i0;
                     }
                 }
-            }
-            catch (Throwable throwable) {
+            } catch (Throwable throwable) {
                 CrashReport crashreport = CrashReport.a(throwable, "Adding item to inventory");
                 CrashReportCategory crashreportcategory = crashreport.a("Item being added");
 
@@ -294,8 +282,7 @@ public class InventoryPlayer implements IInventory {
                 });
                 throw new ReportedException(crashreport);
             }
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -315,8 +302,7 @@ public class InventoryPlayer implements IInventory {
                 itemstack = aitemstack[i0];
                 aitemstack[i0] = null;
                 return itemstack;
-            }
-            else {
+            } else {
                 itemstack = aitemstack[i0].a(i1);
                 if (aitemstack[i0].b == 0) {
                     aitemstack[i0] = null;
@@ -324,8 +310,7 @@ public class InventoryPlayer implements IInventory {
 
                 return itemstack;
             }
-        }
-        else {
+        } else {
             return null;
         }
     }
@@ -343,8 +328,7 @@ public class InventoryPlayer implements IInventory {
 
             aitemstack[i0] = null;
             return itemstack;
-        }
-        else {
+        } else {
             return null;
         }
     }
@@ -446,8 +430,7 @@ public class InventoryPlayer implements IInventory {
     public boolean b(Block block) {
         if (block.o().l()) {
             return true;
-        }
-        else {
+        } else {
             ItemStack itemstack = this.a(this.c);
 
             return itemstack != null ? itemstack.b(block) : false;
@@ -519,7 +502,7 @@ public class InventoryPlayer implements IInventory {
     }
 
     public boolean a(EntityPlayer entityplayer) {
-        return this.d.L ? false : entityplayer.e(this.d) <= 64.0D;
+        return this.d.K ? false : entityplayer.f(this.d) <= 64.0D;
     }
 
     public boolean c(ItemStack itemstack) {

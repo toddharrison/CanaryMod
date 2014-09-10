@@ -4,20 +4,7 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
 import net.canarymod.api.inventory.CanaryBaseItem;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockDirt;
-import net.minecraft.block.BlockDoublePlant;
-import net.minecraft.block.BlockFlower;
-import net.minecraft.block.BlockNewLog;
-import net.minecraft.block.BlockOldLog;
-import net.minecraft.block.BlockQuartz;
-import net.minecraft.block.BlockSand;
-import net.minecraft.block.BlockSandStone;
-import net.minecraft.block.BlockSapling;
-import net.minecraft.block.BlockSilverfish;
-import net.minecraft.block.BlockStoneBrick;
-import net.minecraft.block.BlockWall;
-import net.minecraft.block.BlockWood;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -27,13 +14,9 @@ import net.minecraft.entity.item.EntityPainting;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.init.RegistryNamespaced;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionHelper;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.StatCollector;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
 
 import java.util.HashSet;
@@ -244,7 +227,7 @@ public class Item {
         e.a(2265, "record_ward", (new ItemRecord("ward")).c("record").f("record_ward"));
         e.a(2266, "record_11", (new ItemRecord("11")).c("record").f("record_11"));
         e.a(2267, "record_wait", (new ItemRecord("wait")).c("record").f("record_wait"));
-        HashSet hashset = Sets.newHashSet(new Block[]{ Blocks.a, Blocks.bo, Blocks.C, Blocks.bm, Blocks.bp, Blocks.bL, Blocks.aj, Blocks.aH, Blocks.aQ, Blocks.bP, Blocks.K, Blocks.M, Blocks.ay, Blocks.aS, Blocks.bb, Blocks.an, Blocks.bV, Blocks.bD, Blocks.bv, Blocks.bc, Blocks.az, Blocks.bU, Blocks.af, Blocks.as, Blocks.aR, Blocks.av, Blocks.ao });
+        HashSet hashset = Sets.newHashSet(new Block[]{Blocks.a, Blocks.bo, Blocks.C, Blocks.bm, Blocks.bp, Blocks.bL, Blocks.aj, Blocks.aH, Blocks.aQ, Blocks.bP, Blocks.K, Blocks.M, Blocks.ay, Blocks.aS, Blocks.bb, Blocks.an, Blocks.bV, Blocks.bD, Blocks.bv, Blocks.bc, Blocks.az, Blocks.bU, Blocks.af, Blocks.as, Blocks.aR, Blocks.av, Blocks.ao});
         Iterator iterator = Block.c.b().iterator();
 
         while (iterator.hasNext()) {
@@ -319,7 +302,7 @@ public class Item {
                 object = new ItemColored(Blocks.bd, false);
             }
             else if (block == Blocks.H) {
-                object = (new ItemColored(Blocks.H, true)).a(new String[]{ "shrub", "grass", "fern" });
+                object = (new ItemColored(Blocks.H, true)).a(new String[]{"shrub", "grass", "fern"});
             }
             else if (block == Blocks.N) {
                 object = (new ItemMultiTexture(Blocks.N, Blocks.N, BlockFlower.b)).b("flower");
@@ -525,12 +508,12 @@ public class Item {
 
     protected MovingObjectPosition a(World world, EntityPlayer entityplayer, boolean flag0) {
         float f0 = 1.0F;
-        float f1 = entityplayer.C + (entityplayer.A - entityplayer.C) * f0;
-        float f2 = entityplayer.B + (entityplayer.z - entityplayer.B) * f0;
-        double d0 = entityplayer.q + (entityplayer.t - entityplayer.q) * (double) f0;
-        double d1 = entityplayer.r + (entityplayer.u - entityplayer.r) * (double) f0 + 1.62D - (double) entityplayer.M;
-        double d2 = entityplayer.s + (entityplayer.v - entityplayer.s) * (double) f0;
-        Vec3 vec3 = world.U().a(d0, d1, d2);
+        float f1 = entityplayer.B + (entityplayer.z - entityplayer.B) * f0;
+        float f2 = entityplayer.A + (entityplayer.y - entityplayer.A) * f0;
+        double d0 = entityplayer.p + (entityplayer.s - entityplayer.p) * (double) f0;
+        double d1 = entityplayer.q + (entityplayer.t - entityplayer.q) * (double) f0 + 1.62D - (double) entityplayer.L;
+        double d2 = entityplayer.r + (entityplayer.u - entityplayer.r) * (double) f0;
+        Vec3 vec3 = Vec3.a(d0, d1, d2);
         float f3 = MathHelper.b(-f2 * 0.017453292F - 3.1415927F);
         float f4 = MathHelper.a(-f2 * 0.017453292F - 3.1415927F);
         float f5 = -MathHelper.b(-f1 * 0.017453292F);
@@ -578,7 +561,7 @@ public class Item {
         private final float i;
         private final int j;
 
-        private static final ToolMaterial[] $VALUES = new ToolMaterial[]{ WOOD, STONE, IRON, EMERALD, GOLD };
+        private static final ToolMaterial[] $VALUES = new ToolMaterial[]{WOOD, STONE, IRON, EMERALD, GOLD};
 
         private ToolMaterial(String s0, int i0, int i1, int i2, float f0, float f1, int i3) {
             this.f = i1;

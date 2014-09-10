@@ -6,27 +6,15 @@ import io.netty.buffer.Unpooled;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import net.canarymod.Canary;
-import net.canarymod.LineTracer;
 import net.canarymod.ToolBox;
 import net.canarymod.api.CanaryNetServerHandler;
 import net.canarymod.api.entity.living.humanoid.Player;
-import net.canarymod.api.inventory.slot.ButtonPress;
-import net.canarymod.api.inventory.slot.GrabMode;
-import net.canarymod.api.inventory.slot.SecondarySlotType;
-import net.canarymod.api.inventory.slot.SlotHelper;
-import net.canarymod.api.inventory.slot.SlotType;
+import net.canarymod.api.inventory.slot.*;
 import net.canarymod.api.world.blocks.BlockFace;
 import net.canarymod.api.world.blocks.CanaryBlock;
 import net.canarymod.api.world.position.Location;
 import net.canarymod.config.Configuration;
-import net.canarymod.hook.player.BlockRightClickHook;
-import net.canarymod.hook.player.DisconnectionHook;
-import net.canarymod.hook.player.KickHook;
-import net.canarymod.hook.player.PlayerArmSwingHook;
-import net.canarymod.hook.player.PlayerMoveHook;
-import net.canarymod.hook.player.SignChangeHook;
-import net.canarymod.hook.player.SlotClickHook;
-import net.canarymod.hook.player.TeleportHook;
+import net.canarymod.hook.player.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.command.server.CommandBlockLogic;
 import net.minecraft.crash.CrashReport;
@@ -41,12 +29,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Items;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ContainerBeacon;
-import net.minecraft.inventory.ContainerMerchant;
-import net.minecraft.inventory.ContainerRepair;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.*;
 import net.minecraft.item.ItemEditableBook;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemWritableBook;
@@ -54,14 +37,7 @@ import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.network.play.INetHandlerPlayServer;
 import net.minecraft.network.play.client.*;
-import net.minecraft.network.play.server.S00PacketKeepAlive;
-import net.minecraft.network.play.server.S02PacketChat;
-import net.minecraft.network.play.server.S08PacketPlayerPosLook;
-import net.minecraft.network.play.server.S23PacketBlockChange;
-import net.minecraft.network.play.server.S2FPacketSetSlot;
-import net.minecraft.network.play.server.S32PacketConfirmTransaction;
-import net.minecraft.network.play.server.S3APacketTabComplete;
-import net.minecraft.network.play.server.S40PacketDisconnect;
+import net.minecraft.network.play.server.*;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.stats.AchievementList;
 import net.minecraft.stats.StatBase;
@@ -69,14 +45,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityBeacon;
 import net.minecraft.tileentity.TileEntityCommandBlock;
 import net.minecraft.tileentity.TileEntitySign;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.ChatAllowedCharacters;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IChatComponent;
-import net.minecraft.util.IntHashMap;
-import net.minecraft.util.ReportedException;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.visualillusionsent.utils.DateUtils;
@@ -86,17 +55,13 @@ import org.apache.logging.log4j.Logger;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.Callable;
 
 public class NetHandlerPlayServer implements INetHandlerPlayServer {
 
     private static final Logger c = LogManager.getLogger();
-    public final INetworkManager a;
+    public final NetworkManager a;
     public final MinecraftServer d;// private to public
     public EntityPlayerMP b;
     private int e;
@@ -119,10 +84,10 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
     private final String lastJoin = DateUtils.longToDateTime(System.currentTimeMillis());
     //
 
-    public NetHandlerPlayServer(MinecraftServer minecraftserver, INetworkManager inetworkmanager, EntityPlayerMP entityplayermp) {
+    public NetHandlerPlayServer(MinecraftServer minecraftserver, NetworkManager networkmanager, EntityPlayerMP entityplayermp) {
         this.d = minecraftserver;
-        this.a = inetworkmanager;
-        inetworkmanager.a((INetHandler) this);
+        this.a = networkmanager;
+        networkmanager.a((INetHandler) this);
         this.b = entityplayermp;
         entityplayermp.a = this;
         serverHandler = new CanaryNetServerHandler(this);
@@ -131,7 +96,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
     public void a() {
         this.g = false;
         ++this.e;
-        this.d.a.a("keepAlive");
+        this.d.b.a("keepAlive");
         if ((long) this.e - this.k > 40L) {
             this.k = (long) this.e;
             this.i = this.d();
@@ -147,11 +112,12 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
             --this.m;
         }
 
-        this.d.a.c("playerTick");
-        this.d.a.b();
+        if (this.b.x() > 0L && this.d.as() > 0 && MinecraftServer.ar() - this.b.x() > (long) (this.d.as() * 1000 * 60)) {
+            this.c("You have been idle for too long!");
+        }
     }
 
-    public INetworkManager b() {
+    public NetworkManager b() {
         return this.a;
     }
 
@@ -164,7 +130,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
 
     public void kickNoHook(String s0) {
         final ChatComponentText chatcomponenttext = new ChatComponentText(s0);
-        this.a.a(new S40PacketDisconnect(chatcomponenttext), new GenericFutureListener[]{ new GenericFutureListener() {
+        this.a.a(new S40PacketDisconnect(chatcomponenttext), new GenericFutureListener[]{new GenericFutureListener() {
             public void operationComplete(Future future) {
                 NetHandlerPlayServer.this.a.a((IChatComponent) chatcomponenttext);
             }
@@ -181,9 +147,9 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
         WorldServer worldserver = (WorldServer) this.b.getCanaryWorld().getHandle(); // this.d.a(this.b.aq);
 
         this.g = true;
-        if (!this.b.j) {
+        if (!this.b.i) {
             //CanaryMod: Don't idle-kick when only moving (this was missing here)
-            this.b.w();
+            this.b.v();
             double d0;
 
             if (!this.r) {
@@ -213,32 +179,32 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
                 double d2;
                 double d3;
 
-                if (this.b.n != null) {
-                    float f0 = this.b.z;
-                    float f1 = this.b.A;
+                if (this.b.m != null) {
+                    float f0 = this.b.y;
+                    float f1 = this.b.z;
 
-                    this.b.n.ac();
-                    d1 = this.b.t;
-                    d2 = this.b.u;
-                    d3 = this.b.v;
+                    this.b.m.ac();
+                    d1 = this.b.s;
+                    d2 = this.b.t;
+                    d3 = this.b.u;
                     if (c03packetplayer.k()) {
                         f0 = c03packetplayer.g();
                         f1 = c03packetplayer.h();
                     }
 
-                    this.b.E = c03packetplayer.i();
+                    this.b.D = c03packetplayer.i();
                     this.b.i();
-                    this.b.W = 0.0F;
+                    this.b.V = 0.0F;
                     this.b.a(d1, d2, d3, f0, f1);
-                    if (this.b.n != null) {
-                        this.b.n.ac();
+                    if (this.b.m != null) {
+                        this.b.m.ac();
                     }
 
-                    this.d.af().d(this.b);
+                    this.d.ah().d(this.b);
                     if (this.r) {
-                        this.o = this.b.t;
-                        this.p = this.b.u;
-                        this.q = this.b.v;
+                        this.o = this.b.s;
+                        this.p = this.b.t;
+                        this.q = this.b.u;
                     }
 
                     worldserver.g(this.b);
@@ -247,20 +213,20 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
 
                 if (this.b.bm()) {
                     this.b.i();
-                    this.b.a(this.o, this.p, this.q, this.b.z, this.b.A);
+                    this.b.a(this.o, this.p, this.q, this.b.y, this.b.z);
                     worldserver.g(this.b);
                     return;
                 }
 
-                d0 = this.b.u;
-                this.o = this.b.t;
-                this.p = this.b.u;
-                this.q = this.b.v;
-                d1 = this.b.t;
-                d2 = this.b.u;
-                d3 = this.b.v;
-                float f2 = this.b.z;
-                float f3 = this.b.A;
+                d0 = this.b.t;
+                this.o = this.b.s;
+                this.p = this.b.t;
+                this.q = this.b.u;
+                d1 = this.b.s;
+                d2 = this.b.t;
+                d3 = this.b.u;
+                float f2 = this.b.y;
+                float f3 = this.b.z;
 
                 if (c03packetplayer.j() && c03packetplayer.d() == -999.0D && c03packetplayer.f() == -999.0D) {
                     c03packetplayer.a(false);
@@ -291,45 +257,45 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
                 }
 
                 this.b.i();
-                this.b.W = 0.0F;
+                this.b.V = 0.0F;
                 this.b.a(this.o, this.p, this.q, f2, f3);
                 if (!this.r) {
                     return;
                 }
 
-                d4 = d1 - this.b.t;
-                double d5 = d2 - this.b.u;
-                double d6 = d3 - this.b.v;
-                double d7 = Math.min(Math.abs(d4), Math.abs(this.b.w));
-                double d8 = Math.min(Math.abs(d5), Math.abs(this.b.x));
-                double d9 = Math.min(Math.abs(d6), Math.abs(this.b.y));
+                d4 = d1 - this.b.s;
+                double d5 = d2 - this.b.t;
+                double d6 = d3 - this.b.u;
+                double d7 = Math.min(Math.abs(d4), Math.abs(this.b.v));
+                double d8 = Math.min(Math.abs(d5), Math.abs(this.b.w));
+                double d9 = Math.min(Math.abs(d6), Math.abs(this.b.x));
                 double d10 = d7 * d7 + d8 * d8 + d9 * d9;
 
-                if (d10 > 100.0D && (!this.d.L() || !this.d.K().equals(this.b.b_()))) {
+                if (d10 > 100.0D && (!this.d.N() || !this.d.M().equals(this.b.b_()))) {
                     c.warn(this.b.b_() + " moved too quickly! " + d4 + "," + d5 + "," + d6 + " (" + d7 + ", " + d8 + ", " + d9 + ")");
-                    this.a(this.o, this.p, this.q, this.b.z, this.b.A, this.b.p.getCanaryWorld().getType().getId(), this.b.p.getCanaryWorld().getName(), TeleportHook.TeleportCause.MOVEMENT);
+                    this.a(this.o, this.p, this.q, this.b.y, this.b.z, this.b.getCanaryWorld().getType().getId(), this.b.getCanaryWorld().getName(), TeleportHook.TeleportCause.MOVEMENT);
                     return;
                 }
 
                 float f4 = 0.0625F;
-                boolean flag0 = worldserver.a(this.b, this.b.D.c().e((double) f4, (double) f4, (double) f4)).isEmpty();
+                boolean flag0 = worldserver.a(this.b, this.b.C.b().e((double) f4, (double) f4, (double) f4)).isEmpty();
 
-                if (this.b.E && !c03packetplayer.i() && d5 > 0.0D) {
+                if (this.b.D && !c03packetplayer.i() && d5 > 0.0D) {
                     this.b.bj();
                 }
 
                 this.b.d(d4, d5, d6);
-                this.b.E = c03packetplayer.i();
+                this.b.D = c03packetplayer.i();
                 this.b.k(d4, d5, d6);
                 double d11 = d5;
 
-                d4 = d1 - this.b.t;
-                d5 = d2 - this.b.u;
+                d4 = d1 - this.b.s;
+                d5 = d2 - this.b.t;
                 if (d5 > -0.5D || d5 < 0.5D) {
                     d5 = 0.0D;
                 }
 
-                d6 = d3 - this.b.v;
+                d6 = d3 - this.b.u;
                 d10 = d4 * d4 + d5 * d5 + d6 * d6;
                 boolean flag1 = false;
 
@@ -339,14 +305,14 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
                 }
 
                 this.b.a(d1, d2, d3, f2, f3);
-                boolean flag2 = worldserver.a(this.b, this.b.D.c().e((double) f4, (double) f4, (double) f4)).isEmpty();
+                boolean flag2 = worldserver.a(this.b, this.b.C.b().e((double) f4, (double) f4, (double) f4)).isEmpty();
 
                 if (flag0 && (flag1 || !flag2) && !this.b.bm()) {
                     this.a(this.o, this.p, this.q, f2, f3, b.getCanaryWorld().getType().getId(), b.getCanaryWorld().getName(), TeleportHook.TeleportCause.MOVEMENT);
                     return;
                 }
 
-                AxisAlignedBB axisalignedbb = this.b.D.c().b((double) f4, (double) f4, (double) f4).a(0.0D, -0.55D, 0.0D);
+                AxisAlignedBB axisalignedbb = this.b.C.b().b((double) f4, (double) f4, (double) f4).a(0.0D, -0.55D, 0.0D);
 
                 // CanaryMod: check on flying capability instead of mode
                 // moved allow-flight to per-world config
@@ -366,12 +332,12 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
                     }
                 }
 
-                this.b.E = c03packetplayer.i();
-                this.d.af().d(this.b);
-                this.b.b(this.b.u - d0, c03packetplayer.i());
+                this.b.D = c03packetplayer.i();
+                this.d.ah().d(this.b);
+                this.b.b(this.b.t - d0, c03packetplayer.i());
             }
             else if (this.e % 20 == 0) {
-                this.a(this.o, this.p, this.q, this.b.z, this.b.A, this.b.p.getCanaryWorld().getType().getId(), this.b.p.getCanaryWorld().getName(), TeleportHook.TeleportCause.MOVEMENT);
+                this.a(this.o, this.p, this.q, this.b.y, this.b.z, this.b.getCanaryWorld().getType().getId(), this.b.o.getCanaryWorld().getName(), TeleportHook.TeleportCause.MOVEMENT);
             }
         }
     }
@@ -393,11 +359,10 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
         this.b.a.a((Packet) (new S08PacketPlayerPosLook(d0, d1 + 1.6200000047683716D, d2, f0, f1, false)));
     }
 
-    @Override
     public void a(C07PacketPlayerDigging c07packetplayerdigging) {
         WorldServer worldserver = (WorldServer) this.b.getCanaryWorld().getHandle(); // this.d.a(this.b.aq);
 
-        this.b.w();
+        this.b.v();
         if (c07packetplayerdigging.g() == 4) {
             this.b.a(false);
         }
@@ -405,7 +370,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
             this.b.a(true);
         }
         else if (c07packetplayerdigging.g() == 5) {
-            this.b.by();
+            this.b.bA();
         }
         else {
             boolean flag0 = false;
@@ -427,16 +392,16 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
             int i2 = c07packetplayerdigging.e();
 
             if (flag0) {
-                double d0 = this.b.t - ((double) i0 + 0.5D);
-                double d1 = this.b.u - ((double) i1 + 0.5D) + 1.5D;
-                double d2 = this.b.v - ((double) i2 + 0.5D);
+                double d0 = this.b.s - ((double) i0 + 0.5D);
+                double d1 = this.b.t - ((double) i1 + 0.5D) + 1.5D;
+                double d2 = this.b.u - ((double) i2 + 0.5D);
                 double d3 = d0 * d0 + d1 * d1 + d2 * d2;
 
                 if (d3 > 36.0D) {
                     return;
                 }
 
-                if (i1 >= this.d.ad()) {
+                if (i1 >= this.d.af()) {
                     return;
                 }
             }
@@ -466,36 +431,43 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
         }
     }
 
-    @Override
+    private CanaryBlock lastRightClicked;
+
     public void a(C08PacketPlayerBlockPlacement c08packetplayerblockplacement) {
         WorldServer worldserver = (WorldServer) this.b.getCanaryWorld().getHandle(); // this.d.a(this.c.ar);
-        ItemStack itemstack = this.b.bn.h();
+        ItemStack itemstack = this.b.bm.h();
         boolean flag0 = false;
         int i0 = c08packetplayerblockplacement.c();
         int i1 = c08packetplayerblockplacement.d();
         int i2 = c08packetplayerblockplacement.e();
         int i3 = c08packetplayerblockplacement.f();
 
-        this.b.w();
+        this.b.v();
 
         // CanaryMod: BlockRightClick/ItemUse
         CanaryBlock blockClicked = (CanaryBlock) worldserver.getCanaryWorld().getBlockAt(i0, i1, i2);
         blockClicked.setFaceClicked(BlockFace.fromByte((byte) i3));
 
+        if (i3 == 255) {
+            // item use: use last right clicked block
+            blockClicked = lastRightClicked;
+            lastRightClicked = null;
+        }
+        else {
+            lastRightClicked = blockClicked;
+        }
+
         if (c08packetplayerblockplacement.f() == 255) {
             if (itemstack == null) {
                 return;
             }
-            // Correct coordinates on block
-            LineTracer trace = new LineTracer(this.b.getPlayer(), 6, 0.2);
 
-            blockClicked = (CanaryBlock) trace.getTargetBlock();
             blockClicked = blockClicked != null ? blockClicked : new CanaryBlock((short) 0, (short) 0, ToolBox.floorToBlock(this.o), ToolBox.floorToBlock(this.p), ToolBox.floorToBlock(this.q), this.b.getCanaryWorld());
             //
             this.b.c.itemUsed(this.b.getPlayer(), worldserver, itemstack, blockClicked); // CanaryMod: Redirect through ItemInWorldManager.itemUsed
         }
-        else if (c08packetplayerblockplacement.d() >= this.d.ad() - 1 && (c08packetplayerblockplacement.f() == 1 || c08packetplayerblockplacement.d() >= this.d.ad())) {
-            ChatComponentTranslation chatcomponenttranslation = new ChatComponentTranslation("build.tooHigh", new Object[]{ Integer.valueOf(this.d.ad()) });
+        else if (c08packetplayerblockplacement.d() >= this.d.af() - 1 && (c08packetplayerblockplacement.f() == 1 || c08packetplayerblockplacement.d() >= this.d.af())) {
+            ChatComponentTranslation chatcomponenttranslation = new ChatComponentTranslation("build.tooHigh", new Object[]{Integer.valueOf(this.d.af())});
 
             chatcomponenttranslation.b().a(EnumChatFormatting.RED);
             this.b.a.a((Packet) (new S02PacketChat(chatcomponenttranslation)));
@@ -544,54 +516,53 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
             this.b.a.a((Packet) (new S23PacketBlockChange(i0, i1, i2, worldserver)));
         }
 
-        itemstack = this.b.bn.h();
+        itemstack = this.b.bm.h();
         if (itemstack != null && itemstack.b == 0) {
-            this.b.bn.a[this.b.bn.c] = null;
+            this.b.bm.a[this.b.bm.c] = null;
             itemstack = null;
         }
 
         if (itemstack == null || itemstack.n() == 0) {
-            this.b.h = true;
-            this.b.bn.a[this.b.bn.c] = ItemStack.b(this.b.bn.a[this.b.bn.c]);
-            Slot slot = this.b.bp.a((IInventory) this.b.bn, this.b.bn.c);
+            this.b.g = true;
+            this.b.bm.a[this.b.bm.c] = ItemStack.b(this.b.bm.a[this.b.bm.c]);
+            Slot slot = this.b.bo.a((IInventory) this.b.bm, this.b.bm.c);
 
-            this.b.bp.b();
-            this.b.h = false;
-            if (!ItemStack.b(this.b.bn.h(), c08packetplayerblockplacement.g())) {
-                this.a((Packet) (new S2FPacketSetSlot(this.b.bp.d, slot.g, this.b.bn.h())));
+            this.b.bo.b();
+            this.b.g = false;
+            if (!ItemStack.b(this.b.bm.h(), c08packetplayerblockplacement.g())) {
+                this.a((Packet) (new S2FPacketSetSlot(this.b.bo.d, slot.g, this.b.bm.h())));
             }
         }
     }
 
-    @Override
     public void a(IChatComponent ichatcomponent) {
-        c.info(this.b.b_() + " lost connection: " + ichatcomponent.e());
+        c.info(this.b.b_() + " lost connection: " + ichatcomponent);
         this.b.storeLastJoin(lastJoin); // Respawning could push this around, so save at a true disconnect
-        this.d.au();
-        ChatComponentTranslation chatcomponenttranslation = new ChatComponentTranslation("multiplayer.player.left", new Object[]{ this.b.c_() });
+        this.d.az();
+        ChatComponentTranslation chatcomponenttranslation = new ChatComponentTranslation("multiplayer.player.left", new Object[]{this.b.c_()});
         chatcomponenttranslation.b().a(EnumChatFormatting.YELLOW);
 
         // CanaryMod: DisconnectionHook
         DisconnectionHook hook = (DisconnectionHook) new DisconnectionHook(this.b.getPlayer(), ichatcomponent.e(), chatcomponenttranslation.e()).call();
         if (!hook.isHidden()) {
-            this.d.af().a((IChatComponent) chatcomponenttranslation);
+            this.d.ah().a((IChatComponent) chatcomponenttranslation);
         }
         //
         this.b.n();
-        this.d.af().e(this.b);
+        this.d.ah().e(this.b);
         // CanaryMod unregester Custom Payload registrations
         Canary.channels().unregisterClientAll(serverHandler);
         // End
-        if (this.d.L() && this.b.b_().equals(this.d.K())) {
+        if (this.d.N() && this.b.b_().equals(this.d.M())) {
             c.info("Stopping singleplayer server as player logged out");
-            this.d.q();
+            this.d.r();
         }
     }
 
     public void a(final Packet packet) {
         if (packet instanceof S02PacketChat) {
             S02PacketChat s02packetchat = (S02PacketChat) packet;
-            EntityPlayer.EnumChatVisibility entityplayer_enumchatvisibility = this.b.v();
+            EntityPlayer.EnumChatVisibility entityplayer_enumchatvisibility = this.b.u();
 
             if (entityplayer_enumchatvisibility == EntityPlayer.EnumChatVisibility.HIDDEN) {
                 return;
@@ -621,8 +592,8 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
 
     public void a(C09PacketHeldItemChange c09packethelditemchange) {
         if (c09packethelditemchange.c() >= 0 && c09packethelditemchange.c() < InventoryPlayer.i()) {
-            this.b.bn.c = c09packethelditemchange.c();
-            this.b.w();
+            this.b.bm.c = c09packethelditemchange.c();
+            this.b.v();
         }
         else {
             c.warn(this.b.b_() + " tried to set an invalid carried item");
@@ -632,13 +603,14 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
     @Override
     public void a(C01PacketChatMessage c01packetchatmessage) {
         /* Diff visibility funkyness
-        if (this.b.v() == EntityPlayer.EnumChatVisibility.HIDDEN) {
+        if (this.b.u() == EntityPlayer.EnumChatVisibility.HIDDEN) {
             ChatComponentTranslation chatcomponenttranslation = new ChatComponentTranslation("chat.cannotSend", new Object[0]);
 
             chatcomponenttranslation.b().a(EnumChatFormatting.RED);
             this.a((Packet) (new S02PacketChat(chatcomponenttranslation)));
-        } else {
-            this.b.w();
+        } 
+        else {
+            this.b.v();
             String s0 = c01packetchatmessage.c();
 
             s0 = StringUtils.normalizeSpace(s0);
@@ -652,21 +624,22 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
 
             if (s0.startsWith("/")) {
                 this.d(s0);
-            } else {
+            } 
+            else {
                 ChatComponentTranslation chatcomponenttranslation1 = new ChatComponentTranslation("chat.type.text", new Object[] { this.b.c_(), s0});
 
-                this.d.af().a(chatcomponenttranslation1, false);
+                this.d.ah().a(chatcomponenttranslation1, false);
             }
 
             this.l += 20;
-            if (this.l > 200 && !this.d.af().d(this.b.b_())) {
+            if (this.l > 200 && !this.d.ah().g(this.b.bJ())) {
                 this.c("disconnect.spam");
             }
 
         }
         }*/
         // CanaryMod: Re-route to Player chat
-        if (this.b.v() == EntityPlayer.EnumChatVisibility.HIDDEN) {
+        if (this.b.u() == EntityPlayer.EnumChatVisibility.HIDDEN) {
             ChatComponentTranslation chatcomponenttranslation = new ChatComponentTranslation("chat.cannotSend", new Object[0]);
 
             chatcomponenttranslation.b().a(EnumChatFormatting.RED);
@@ -675,7 +648,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
         }
         // Reuse Anti-Spam but implement our config into the system
         this.l += 20;
-        boolean op = this.d.af().d(this.b.b_()), ignore = this.b.getPlayer().canIgnoreRestrictions(); // OP or Ignores restrictions
+        boolean op = this.d.ah().g(this.b.bJ()), ignore = this.b.getPlayer().canIgnoreRestrictions(); // OP or Ignores restrictions
         String spamProLvl = Configuration.getServerConfig().getSpamProtectionLevel();
         if (spamProLvl.toLowerCase().equals("all") || (spamProLvl.toLowerCase().equals("default") && !(op || ignore))) {
             if (this.l > 200) {
@@ -688,12 +661,11 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
     }
 
     private void d(String s0) {
-        this.d.H().a(this.b, s0);
+        this.d.J().a(this.b, s0);
     }
 
-    @Override
     public void a(C0APacketAnimation c0apacketanimation) {
-        this.b.w();
+        this.b.v();
         if (c0apacketanimation.d() == 1) {
             // CanaryMod: Arm Swinging
             new PlayerArmSwingHook(this.b.getPlayer()).call();
@@ -702,7 +674,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
     }
 
     public void a(C0BPacketEntityAction c0bpacketentityaction) {
-        this.b.w();
+        this.b.v();
         if (c0bpacketentityaction.d() == 1) {
             this.b.b(true);
         }
@@ -720,12 +692,12 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
             this.r = false;
         }
         else if (c0bpacketentityaction.d() == 6) {
-            if (this.b.n != null && this.b.n instanceof EntityHorse) {
-                ((EntityHorse) this.b.n).w(c0bpacketentityaction.e());
+            if (this.b.m != null && this.b.m instanceof EntityHorse) {
+                ((EntityHorse) this.b.m).w(c0bpacketentityaction.e());
             }
         }
-        else if (c0bpacketentityaction.d() == 7 && this.b.n != null && this.b.n instanceof EntityHorse) {
-            ((EntityHorse) this.b.n).g(this.b);
+        else if (c0bpacketentityaction.d() == 7 && this.b.m != null && this.b.m instanceof EntityHorse) {
+            ((EntityHorse) this.b.m).g(this.b);
         }
 
     }
@@ -734,18 +706,18 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
         WorldServer worldserver = (WorldServer) this.b.getCanaryWorld().getHandle(); // this.d.a(this.b.aq);
         Entity entity = c02packetuseentity.a((World) worldserver);
 
-        this.b.w();
+        this.b.v();
         if (entity != null) {
-            boolean flag0 = this.b.o(entity);
+            boolean flag0 = this.b.p(entity);
             double d0 = 36.0D;
 
             if (!flag0) {
                 d0 = 9.0D;
             }
 
-            if (this.b.e(entity) < d0) {
+            if (this.b.f(entity) < d0) {
                 if (c02packetuseentity.c() == C02PacketUseEntity.Action.INTERACT) {
-                    this.b.p(entity);
+                    this.b.q(entity);
                 }
                 else if (c02packetuseentity.c() == C02PacketUseEntity.Action.ATTACK) {
                     if (entity instanceof EntityItem || entity instanceof EntityXPOrb || entity instanceof EntityArrow || entity == this.b) {
@@ -754,25 +726,25 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
                         return;
                     }
 
-                    this.b.q(entity);
+                    this.b.r(entity);
                 }
             }
         }
     }
 
     public void a(C16PacketClientStatus c16packetclientstatus) {
-        this.b.w();
+        this.b.v();
         C16PacketClientStatus.EnumState c16packetclientstatus_enumstate = c16packetclientstatus.c();
 
         switch (NetHandlerPlayServer.SwitchEnumState.a[c16packetclientstatus_enumstate.ordinal()]) {
             case 1:
-                if (this.b.j) {
-                    this.b = this.d.af().a(this.b, 0, true);
+                if (this.b.i) {
+                    this.b = this.d.ah().a(this.b, 0, true);
                 }
-                else if (this.b.r().M().t()) {
-                    if (this.d.L() && this.b.b_().equals(this.d.K())) {
+                else if (this.b.r().N().t()) {
+                    if (this.d.N() && this.b.b_().equals(this.d.M())) {
                         this.b.a.c("You have died. Game over, man, it\'s game over!");
-                        this.d.S();
+                        this.d.U();
                     }
                     else {
                         // CanaryMod use our Ban System instead
@@ -785,12 +757,12 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
                         return;
                     }
 
-                    this.b = this.d.af().a(this.b, 0, false);
+                    this.b = this.d.ah().a(this.b, 0, false);
                 }
                 break;
 
             case 2:
-                this.b.x().a(this.b);
+                this.b.w().a(this.b);
                 break;
 
             case 3:
@@ -804,63 +776,63 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
     }
 
     public void a(C0EPacketClickWindow c0epacketclickwindow) {
-        this.b.w();
-        if (this.b.bp.d == c0epacketclickwindow.c() && this.b.bp.c(this.b)) {
+        this.b.v();
+        if (this.b.bo.d == c0epacketclickwindow.c() && this.b.bo.c(this.b)) {
             // CanaryMod: SlotClick
-            ItemStack itemstack = c0epacketclickwindow.d() > -1 ? this.b.bp.a(c0epacketclickwindow.d()).d() : null;
-            SlotType slot_type = SlotHelper.getSlotType(this.b.bp, c0epacketclickwindow.d());
-            SecondarySlotType finer_slot = SlotHelper.getSpecificSlotType(this.b.bp, c0epacketclickwindow.d());
+            ItemStack itemstack = c0epacketclickwindow.d() > -1 ? this.b.bo.a(c0epacketclickwindow.d()).d() : null;
+            SlotType slot_type = SlotHelper.getSlotType(this.b.bo, c0epacketclickwindow.d());
+            SecondarySlotType finer_slot = SlotHelper.getSpecificSlotType(this.b.bo, c0epacketclickwindow.d());
             GrabMode grab_mode = GrabMode.fromInt(c0epacketclickwindow.h());
             ButtonPress mouse_click = ButtonPress.matchButton(grab_mode, c0epacketclickwindow.e(), c0epacketclickwindow.d());
-            SlotClickHook sch = (SlotClickHook) new SlotClickHook(this.b.getPlayer(), this.b.bp.getInventory(), itemstack != null ? itemstack.getCanaryItem() : null, slot_type, finer_slot, grab_mode, mouse_click, (short) c0epacketclickwindow.d(), c0epacketclickwindow.f()).call();
+            SlotClickHook sch = (SlotClickHook) new SlotClickHook(this.b.getPlayer(), this.b.bo.getInventory(), itemstack != null ? itemstack.getCanaryItem() : null, slot_type, finer_slot, grab_mode, mouse_click, (short) c0epacketclickwindow.d(), c0epacketclickwindow.f()).call();
             if (sch.isCanceled()) {
                 if (sch.doUpdate()) {
                     if (c0epacketclickwindow.h() == 0) {
-                        this.b.bp.updateSlot(c0epacketclickwindow.d());
-                        this.b.updateSlot(-1, -1, this.b.bn.o());
+                        this.b.bo.updateSlot(c0epacketclickwindow.d());
+                        this.b.updateSlot(-1, -1, this.b.bm.o());
                     }
                     else {
                         ArrayList arraylist = new ArrayList();
 
-                        for (int i = 0; i < this.b.bp.c.size(); ++i) {
-                            arraylist.add(((Slot) this.b.bp.c.get(i)).d());
+                        for (int i = 0; i < this.b.bo.c.size(); ++i) {
+                            arraylist.add(((Slot) this.b.bo.c.get(i)).d());
                         }
 
-                        this.b.a(this.b.bp, arraylist);
+                        this.b.a(this.b.bo, arraylist);
                     }
                 }
                 return;
             }
             //
-            itemstack = this.b.bp.a(c0epacketclickwindow.d(), c0epacketclickwindow.e(), c0epacketclickwindow.h(), this.b);
+            itemstack = this.b.bo.a(c0epacketclickwindow.d(), c0epacketclickwindow.e(), c0epacketclickwindow.h(), this.b);
 
             if (ItemStack.b(c0epacketclickwindow.g(), itemstack)) {
                 this.b.a.a((Packet) (new S32PacketConfirmTransaction(c0epacketclickwindow.c(), c0epacketclickwindow.f(), true)));
-                this.b.h = true;
-                this.b.bp.b();
+                this.b.g = true;
+                this.b.bo.b();
                 this.b.l();
-                this.b.h = false;
+                this.b.g = false;
             }
             else {
-                this.n.a(this.b.bp.d, Short.valueOf(c0epacketclickwindow.f()));
+                this.n.a(this.b.bo.d, Short.valueOf(c0epacketclickwindow.f()));
                 this.b.a.a((Packet) (new S32PacketConfirmTransaction(c0epacketclickwindow.c(), c0epacketclickwindow.f(), false)));
-                this.b.bp.a(this.b, false);
+                this.b.bo.a(this.b, false);
                 ArrayList arraylist = new ArrayList();
 
-                for (int i0 = 0; i0 < this.b.bp.c.size(); ++i0) {
-                    arraylist.add(((Slot) this.b.bp.c.get(i0)).d());
+                for (int i0 = 0; i0 < this.b.bo.c.size(); ++i0) {
+                    arraylist.add(((Slot) this.b.bo.c.get(i0)).d());
                 }
 
-                this.b.a(this.b.bp, (List) arraylist);
+                this.b.a(this.b.bo, (List) arraylist);
             }
         }
     }
 
     public void a(C11PacketEnchantItem c11packetenchantitem) {
-        this.b.w();
-        if (this.b.bp.d == c11packetenchantitem.c() && this.b.bp.c(this.b)) {
-            this.b.bp.a((EntityPlayer) this.b, c11packetenchantitem.d());
-            this.b.bp.b();
+        this.b.v();
+        if (this.b.bo.d == c11packetenchantitem.c() && this.b.bo.c(this.b)) {
+            this.b.bo.a((EntityPlayer) this.b, c11packetenchantitem.d());
+            this.b.bo.b();
         }
 
     }
@@ -875,13 +847,13 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
 
             if (flag1 && flag2 && flag3) {
                 if (itemstack == null) {
-                    this.b.bo.a(c10packetcreativeinventoryaction.c(), (ItemStack) null);
+                    this.b.bn.a(c10packetcreativeinventoryaction.c(), (ItemStack) null);
                 }
                 else {
-                    this.b.bo.a(c10packetcreativeinventoryaction.c(), itemstack);
+                    this.b.bn.a(c10packetcreativeinventoryaction.c(), itemstack);
                 }
 
-                this.b.bo.a(this.b, true);
+                this.b.bn.a(this.b, true);
             }
             else if (flag0 && flag2 && flag3 && this.m < 200) {
                 this.m += 20;
@@ -895,15 +867,15 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
     }
 
     public void a(C0FPacketConfirmTransaction c0fpacketconfirmtransaction) {
-        Short oshort = (Short) this.n.a(this.b.bp.d);
+        Short oshort = (Short) this.n.a(this.b.bo.d);
 
-        if (oshort != null && c0fpacketconfirmtransaction.d() == oshort.shortValue() && this.b.bp.d == c0fpacketconfirmtransaction.c() && !this.b.bp.c(this.b)) {
-            this.b.bp.a(this.b, true);
+        if (oshort != null && c0fpacketconfirmtransaction.d() == oshort.shortValue() && this.b.bo.d == c0fpacketconfirmtransaction.c() && !this.b.bo.c(this.b)) {
+            this.b.bo.a(this.b, true);
         }
     }
 
     public void a(C12PacketUpdateSign c12packetupdatesign) {
-        this.b.w();
+        this.b.v();
         WorldServer worldserver = (WorldServer) this.b.getCanaryWorld().getHandle(); // this.d.a(this.b.aq);
 
         if (worldserver.d(c12packetupdatesign.c(), c12packetupdatesign.d(), c12packetupdatesign.e())) {
@@ -970,7 +942,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
         if (c00packetkeepalive.c() == this.h) {
             int i0 = (int) (this.d() - this.i);
 
-            this.b.i = (this.b.i * 3 + i0) / 4;
+            this.b.h = (this.b.h * 3 + i0) / 4;
         }
     }
 
@@ -979,7 +951,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
     }
 
     public void a(C13PacketPlayerAbilities c13packetplayerabilities) {
-        this.b.bF.b = c13packetplayerabilities.d() && this.b.bF.c;
+        this.b.bE.b = c13packetplayerabilities.d() && this.b.bE.c;
     }
 
     public void a(C14PacketTabComplete c14packettabcomplete) {
@@ -1000,43 +972,76 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
     }
 
     public void a(C17PacketCustomPayload c17packetcustompayload) {
+        PacketBuffer packetbuffer;
         ItemStack itemstack;
         ItemStack itemstack1;
 
         if ("MC|BEdit".equals(c17packetcustompayload.c())) {
+            packetbuffer = new PacketBuffer(Unpooled.wrappedBuffer(c17packetcustompayload.e()));
+
             try {
-                itemstack = (new PacketBuffer(Unpooled.wrappedBuffer(c17packetcustompayload.e()))).c();
+                itemstack = packetbuffer.c();
+                if (itemstack == null) {
+                    return;
+                }
                 if (!ItemWritableBook.a(itemstack.q())) {
                     throw new IOException("Invalid book tag!");
                 }
 
-                itemstack1 = this.b.bn.h();
-                if (itemstack.b() == Items.bA && itemstack.b() == itemstack1.b()) {
-                    itemstack1.a("pages", (NBTBase) itemstack.q().c("pages", 8));
+                itemstack1 = this.b.bm.h();
+                if (itemstack1 != null) {
+                    if (itemstack.b() == Items.bA && itemstack.b() == itemstack1.b()) {
+                        BookEditHook beh = (BookEditHook) new BookEditHook(itemstack.getCanaryItem(), this.b.getPlayer()).call();
+                        if (!beh.isCanceled()) {
+                            itemstack1.a("pages", (NBTBase) itemstack.q().c("pages", 8));
+                        }
+                        return;
+                    }
                 }
+
+                return;
             }
             catch (Exception exception) {
                 c.error("Couldn\'t handle book info", exception);
+                return;
+            }
+            finally {
+                packetbuffer.release();
             }
         }
-        else if ("MC|BSign".equals(c17packetcustompayload.c())) {
-            try {
-                itemstack = (new PacketBuffer(Unpooled.wrappedBuffer(c17packetcustompayload.e()))).c();
-                if (!ItemEditableBook.a(itemstack.q())) {
-                    throw new IOException("Invalid book tag!");
-                }
 
-                itemstack1 = this.b.bn.h();
-                if (itemstack.b() == Items.bB && itemstack1.b() == Items.bA) {
-                    itemstack1.a("author", (NBTBase) (new NBTTagString(this.b.b_())));
-                    itemstack1.a("title", (NBTBase) (new NBTTagString(itemstack.q().j("title"))));
-                    itemstack1.a("pages", (NBTBase) itemstack.q().c("pages", 8));
-                    itemstack1.a(Items.bB);
+        if ("MC|BSign".equals(c17packetcustompayload.c())) {
+            packetbuffer = new PacketBuffer(Unpooled.wrappedBuffer(c17packetcustompayload.e()));
+            try {
+                itemstack = packetbuffer.c();
+                if (itemstack != null) {
+                    if (!ItemEditableBook.a(itemstack.q())) {
+                        throw new IOException("Invalid book tag!");
+                    }
+
+                    itemstack1 = this.b.bm.h();
+                    if (itemstack1 == null) {
+                        return;
+                    }
+                    if (itemstack.b() == Items.bB && itemstack1.b() == Items.bA) {
+                        itemstack1.a("author", (NBTBase) (new NBTTagString(this.b.b_())));
+                        itemstack1.a("title", (NBTBase) (new NBTTagString(itemstack.q().j("title"))));
+                        itemstack1.a("pages", (NBTBase) itemstack.q().c("pages", 8));
+                        itemstack1.a(Items.bB);
+                    }
+
+                    return;
                 }
             }
             catch (Exception exception1) {
                 c.error("Couldn\'t sign book", exception1);
+                return;
             }
+            finally {
+                packetbuffer.release();
+            }
+
+            return;
         }
         else {
             DataInputStream datainputstream;
@@ -1046,7 +1051,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
                 try {
                     datainputstream = new DataInputStream(new ByteArrayInputStream(c17packetcustompayload.e()));
                     i0 = datainputstream.readInt();
-                    Container container = this.b.bp;
+                    Container container = this.b.bo;
 
                     if (container instanceof ContainerMerchant) {
                         ((ContainerMerchant) container).e(i0);
@@ -1057,24 +1062,24 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
                 }
             }
             else if ("MC|AdvCdm".equals(c17packetcustompayload.c())) {
-                if (!this.d.ab()) {
+                if (!this.d.ad()) {
                     this.b.a((IChatComponent) (new ChatComponentTranslation("advMode.notEnabled", new Object[0])));
                 }
-                else if (this.b.a(2, "") && this.b.bF.d) {
+                else if (this.b.a(2, "") && this.b.bE.d) {
+                    packetbuffer = new PacketBuffer(Unpooled.wrappedBuffer(c17packetcustompayload.e()));
                     try {
-                        PacketBuffer packetbuffer = new PacketBuffer(Unpooled.wrappedBuffer(c17packetcustompayload.e()));
                         byte b0 = packetbuffer.readByte();
                         CommandBlockLogic commandblocklogic = null;
 
                         if (b0 == 0) {
-                            TileEntity tileentity = this.b.p.o(packetbuffer.readInt(), packetbuffer.readInt(), packetbuffer.readInt());
+                            TileEntity tileentity = this.b.o.o(packetbuffer.readInt(), packetbuffer.readInt(), packetbuffer.readInt());
 
                             if (tileentity instanceof TileEntityCommandBlock) {
                                 commandblocklogic = ((TileEntityCommandBlock) tileentity).a();
                             }
                         }
                         else if (b0 == 1) {
-                            Entity entity = this.b.p.a(packetbuffer.readInt());
+                            Entity entity = this.b.o.a(packetbuffer.readInt());
 
                             if (entity instanceof EntityMinecartCommandBlock) {
                                 commandblocklogic = ((EntityMinecartCommandBlock) entity).e();
@@ -1086,11 +1091,14 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
                         if (commandblocklogic != null) {
                             commandblocklogic.a(s0);
                             commandblocklogic.e();
-                            this.b.a((IChatComponent) (new ChatComponentTranslation("advMode.setCommand.success", new Object[]{ s0 })));
+                            this.b.a((IChatComponent) (new ChatComponentTranslation("advMode.setCommand.success", new Object[]{s0})));
                         }
                     }
                     catch (Exception exception3) {
                         c.error("Couldn\'t set command block", exception3);
+                    }
+                    finally {
+                        packetbuffer.release();
                     }
                 }
                 else {
@@ -1098,12 +1106,12 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
                 }
             }
             else if ("MC|Beacon".equals(c17packetcustompayload.c())) {
-                if (this.b.bp instanceof ContainerBeacon) {
+                if (this.b.bo instanceof ContainerBeacon) {
                     try {
                         datainputstream = new DataInputStream(new ByteArrayInputStream(c17packetcustompayload.e()));
                         i0 = datainputstream.readInt();
                         int i1 = datainputstream.readInt();
-                        ContainerBeacon containerbeacon = (ContainerBeacon) this.b.bp;
+                        ContainerBeacon containerbeacon = (ContainerBeacon) this.b.bo;
                         Slot slot = containerbeacon.a(0);
 
                         if (slot.e()) {
@@ -1120,8 +1128,8 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
                     }
                 }
             }
-            else if ("MC|ItemName".equals(c17packetcustompayload.c()) && this.b.bp instanceof ContainerRepair) {
-                ContainerRepair containerrepair = (ContainerRepair) this.b.bp;
+            else if ("MC|ItemName".equals(c17packetcustompayload.c()) && this.b.bo instanceof ContainerRepair) {
+                ContainerRepair containerrepair = (ContainerRepair) this.b.bo;
 
                 if (c17packetcustompayload.e() != null && c17packetcustompayload.e().length >= 1) {
                     String s1 = ChatAllowedCharacters.a(new String(c17packetcustompayload.e(), Charsets.UTF_8));
@@ -1139,7 +1147,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
         // CanaryMod: Custom Payload implementation!
         if ("REGISTER".equals(c17packetcustompayload.c())) {
             try {
-                String channel = c17packetcustompayload.c();
+                String channel = new String(c17packetcustompayload.e(), Charsets.UTF_8);
                 for (String chan : channel.split("\0")) {
                     Canary.channels().registerClient(chan, this.serverHandler);
                 }
@@ -1151,7 +1159,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
         }
         else if ("UNREGISTER".equals(c17packetcustompayload.c())) {
             try {
-                String channel = c17packetcustompayload.c();
+                String channel = new String(c17packetcustompayload.e(), Charsets.UTF_8);
                 Canary.channels().unregisterClient(channel, this.serverHandler);
                 Canary.log.info(String.format("Player '%s' unregistered Custom Payload on channel '%s'", this.b.getPlayer().getName(), channel));
             }

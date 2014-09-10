@@ -10,7 +10,7 @@ import net.minecraft.entity.item.EntityMinecartTNT;
  * @author Jason (darkdiplomat)
  */
 public class CanaryTNTMinecart extends CanaryMinecart implements TNTMinecart {
-    private boolean damageWorld, damageEntity;
+    private boolean damageWorld = true, damageEntity = true;
     private float power = 4.0F;
 
     /**

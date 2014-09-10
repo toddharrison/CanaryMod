@@ -1,5 +1,6 @@
 package net.minecraft.world.gen;
 
+import com.google.common.collect.Lists;
 import net.canarymod.api.world.CanaryChunkProviderServer;
 import net.canarymod.hook.world.ChunkCreatedHook;
 import net.canarymod.hook.world.ChunkCreationHook;
@@ -13,11 +14,7 @@ import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.IProgressUpdate;
 import net.minecraft.util.LongHashMap;
 import net.minecraft.util.ReportedException;
-import net.minecraft.world.ChunkCoordIntPair;
-import net.minecraft.world.ChunkPosition;
-import net.minecraft.world.MinecraftException;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.*;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.EmptyChunk;
 import net.minecraft.world.chunk.IChunkProvider;
@@ -26,16 +23,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class ChunkProviderServer implements IChunkProvider {
 
-    private static Logger b = LogManager.getLogger();
-    public Set c = new HashSet(); // CanaryMod private->public
+    private static final Logger b = LogManager.getLogger();
+    public Set c = Collections.synchronizedSet(new HashSet<Long>()); // CanaryMod private->public
     private Chunk d;
     public IChunkProvider e; // CanaryMod private->public
     public IChunkLoader f; // //CanaryMod private->public
@@ -68,9 +61,13 @@ public class ChunkProviderServer implements IChunkProvider {
         return this.g.b(ChunkCoordIntPair.a(i0, i1));
     }
 
+    public List a() {
+        return this.h;
+    }
+
     public void b(int i0, int i1) {
         if (this.i.t.e()) {
-            ChunkCoordinates chunkcoordinates = this.i.J();
+            ChunkCoordinates chunkcoordinates = this.i.K();
             int i2 = i0 * 16 + 8 - chunkcoordinates.a;
             int i3 = i1 * 16 + 8 - chunkcoordinates.c;
             short short1 = 128;
@@ -78,13 +75,12 @@ public class ChunkProviderServer implements IChunkProvider {
             if (i2 < -short1 || i2 > short1 || i3 < -short1 || i3 > short1) {
                 this.c.add(Long.valueOf(ChunkCoordIntPair.a(i0, i1)));
             }
-        }
-        else {
+        } else {
             this.c.add(Long.valueOf(ChunkCoordIntPair.a(i0, i1)));
         }
     }
 
-    public void a() {
+    public void b() {
         Iterator iterator = this.h.iterator();
 
         while (iterator.hasNext()) {
@@ -117,19 +113,17 @@ public class ChunkProviderServer implements IChunkProvider {
                 //
                 else if (this.e == null) {
                     chunk = this.d;
-                }
-                else {
+                } else {
                     try {
                         chunk = this.e.d(i0, i1);
-                    }
-                    catch (Throwable throwable) {
+                    } catch (Throwable throwable) {
                         CrashReport crashreport = CrashReport.a(throwable, "Exception generating new chunk");
                         CrashReportCategory crashreportcategory = crashreport.a("Chunk to be generated");
 
                         //TODO: Remove casts?
-                        crashreportcategory.a("Location", (Object) String.format("%d,%d", new Object[]{ Integer.valueOf(i0), Integer.valueOf(i1) }));
+                        crashreportcategory.a("Location", (Object) String.format("%d,%d", new Object[]{Integer.valueOf(i0), Integer.valueOf(i1)}));
                         crashreportcategory.a("Position hash", (Object) Long.valueOf(i2));
-                        crashreportcategory.a("Generator", (Object) this.e.e());
+                        crashreportcategory.a("Generator", (Object) this.e.f());
                         throw new ReportedException(crashreport);
                     }
                     // CanaryMod: ChunkCreated
@@ -165,21 +159,19 @@ public class ChunkProviderServer implements IChunkProvider {
     private Chunk f(int i0, int i1) {
         if (this.f == null) {
             return null;
-        }
-        else {
+        } else {
             try {
                 Chunk chunk = this.f.a(this.i, i0, i1);
 
                 if (chunk != null) {
-                    chunk.p = this.i.H();
+                    chunk.p = this.i.I();
                     if (this.e != null) {
                         this.e.e(i0, i1);
                     }
                 }
 
                 return chunk;
-            }
-            catch (Exception exception) {
+            } catch (Exception exception) {
                 b.error("Couldn\'t load chunk", exception);
                 return null;
             }
@@ -191,8 +183,7 @@ public class ChunkProviderServer implements IChunkProvider {
         if (this.f != null) {
             try {
                 this.f.b(this.i, chunk);
-            }
-            catch (Exception exception) {
+            } catch (Exception exception) {
                 b.error("Couldn\'t save entities", exception);
             }
         }
@@ -202,13 +193,11 @@ public class ChunkProviderServer implements IChunkProvider {
     public void b(Chunk chunk) {
         if (this.f != null) {
             try {
-                chunk.p = this.i.H();
+                chunk.p = this.i.I();
                 this.f.a(this.i, chunk);
-            }
-            catch (IOException ioexception) {
+            } catch (IOException ioexception) {
                 b.error("Couldn\'t save chunk", ioexception);
-            }
-            catch (MinecraftException minecraftexception) {
+            } catch (MinecraftException minecraftexception) {
                 b.error("Couldn\'t save chunk; already in use by another instance of Minecraft?", minecraftexception);
             }
         }
@@ -228,9 +217,10 @@ public class ChunkProviderServer implements IChunkProvider {
 
     public boolean a(boolean flag0, IProgressUpdate iprogressupdate) {
         int i0 = 0;
+        ArrayList arraylist = Lists.newArrayList(this.h);
 
-        for (int i1 = 0; i1 < this.h.size(); ++i1) {
-            Chunk chunk = (Chunk) this.h.get(i1);
+        for (int i1 = 0; i1 < arraylist.size(); ++i1) {
+            Chunk chunk = (Chunk) arraylist.get(i1);
 
             if (flag0) {
                 this.a(chunk);
@@ -249,33 +239,35 @@ public class ChunkProviderServer implements IChunkProvider {
         return true;
     }
 
-    public void b() {
+    public void c() {
         if (this.f != null) {
             this.f.b();
         }
     }
 
-    public boolean c() {
+    public boolean d() {
         if (!this.i.c) {
             for (int i0 = 0; i0 < 100; ++i0) {
-                if (!this.c.isEmpty()) {
-                    Long olong = (Long) this.c.iterator().next();
-                    Chunk chunk = (Chunk) this.g.a(olong.longValue());
+                synchronized (this.c) {
+                    if (!this.c.isEmpty()) {
+                        Long olong = (Long) this.c.iterator().next();
+                        Chunk chunk = (Chunk) this.g.a(olong.longValue());
 
-                    if (chunk != null) {
-                        // CanaryMod: ChunkUnload
-                        ChunkUnloadHook hook = (ChunkUnloadHook) new ChunkUnloadHook(chunk.getCanaryChunk(), i.getCanaryWorld()).call();
-                        if (hook.isCanceled()) {
-                            // TODO: Might need to return false instead ... unsure
-                            return true;
+                        if (chunk != null) {
+                            // CanaryMod: ChunkUnload
+                            ChunkUnloadHook hook = (ChunkUnloadHook) new ChunkUnloadHook(chunk.getCanaryChunk(), i.getCanaryWorld()).call();
+                            if (hook.isCanceled()) {
+                                // TODO: Might need to return false instead ... unsure
+                                return true;
+                            }
+                            //
+                            chunk.d();
+                            this.b(chunk);
+                            this.a(chunk);
+                            this.h.remove(chunk);
                         }
-                        //
-                        chunk.d();
-                        this.b(chunk);
-                        this.a(chunk);
                         this.c.remove(olong);
                         this.g.d(olong.longValue());
-                        this.h.remove(chunk);
                     }
                 }
             }
@@ -285,14 +277,14 @@ public class ChunkProviderServer implements IChunkProvider {
             }
         }
 
-        return this.e.c();
+        return this.e.d();
     }
 
-    public boolean d() {
+    public boolean e() {
         return !this.i.c;
     }
 
-    public String e() {
+    public String f() {
         return "ServerChunkCache: " + this.g.a() + " Drop: " + this.c.size();
     }
 
@@ -304,7 +296,7 @@ public class ChunkProviderServer implements IChunkProvider {
         return this.e.a(world, s0, i0, i1, i2);
     }
 
-    public int f() {
+    public int g() {
         return this.g.a();
     }
 

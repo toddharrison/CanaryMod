@@ -3,7 +3,7 @@ package net.minecraft.entity.monster;
 import net.canarymod.api.entity.living.monster.CanaryCaveSpider;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EntityLivingData;
+import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -23,15 +23,14 @@ public class EntityCaveSpider extends EntitySpider {
         this.a(SharedMonsterAttributes.a).a(12.0D);
     }
 
-    public boolean m(Entity entity) {
-        if (super.m(entity)) {
+    public boolean n(Entity entity) {
+        if (super.n(entity)) {
             if (entity instanceof EntityLivingBase) {
                 byte b0 = 0;
 
-                if (this.p.r == EnumDifficulty.NORMAL) {
+                if (this.o.r == EnumDifficulty.NORMAL) {
                     b0 = 7;
-                }
-                else if (this.p.r == EnumDifficulty.HARD) {
+                } else if (this.o.r == EnumDifficulty.HARD) {
                     b0 = 15;
                 }
 
@@ -41,13 +40,12 @@ public class EntityCaveSpider extends EntitySpider {
             }
 
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
 
-    public EntityLivingData a(EntityLivingData entitylivingdata) {
-        return entitylivingdata;
+    public IEntityLivingData a(IEntityLivingData ientitylivingdata) {
+        return ientitylivingdata;
     }
 }

@@ -1,6 +1,7 @@
 package net.minecraft.item;
 
 import net.canarymod.api.world.blocks.BlockFace;
+import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.blocks.CanaryBlock;
 import net.canarymod.hook.player.BlockPlaceHook;
 import net.minecraft.creativetab.CreativeTabs;
@@ -29,8 +30,8 @@ public class ItemSign extends Item {
         else {
             // CanaryMod: BlockPlaceHook
             CanaryBlock clicked = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
-
             clicked.setFaceClicked(BlockFace.fromByte((byte) i3));
+            //
 
             if (i3 == 1) {
                 ++i1;
@@ -63,7 +64,7 @@ public class ItemSign extends Item {
             }
             else {
                 // Create and call
-                CanaryBlock placed = new CanaryBlock((short) (i3 == 1 ? 63 : 68), (short) 0, i0, i1, i2, world.getCanaryWorld());
+                CanaryBlock placed = new CanaryBlock(i3 == 1 ? BlockType.SignPost : BlockType.WallSign, i0, i1, i2, world.getCanaryWorld());
                 BlockPlaceHook hook = (BlockPlaceHook) new BlockPlaceHook(((EntityPlayerMP) entityplayer).getPlayer(), clicked, placed).call();
                 if (hook.isCanceled()) {
                     return false;
@@ -71,7 +72,7 @@ public class ItemSign extends Item {
                 //
 
                 if (i3 == 1) {
-                    int i4 = MathHelper.c((double) ((entityplayer.z + 180.0F) * 16.0F / 360.0F) + 0.5D) & 15;
+                    int i4 = MathHelper.c((double) ((entityplayer.y + 180.0F) * 16.0F / 360.0F) + 0.5D) & 15;
 
                     world.d(i0, i1, i2, Blocks.an, i4, 3);
                 }

@@ -2,11 +2,7 @@ package net.minecraft.tileentity;
 
 import net.canarymod.api.CanaryMobSpawnerLogic;
 import net.canarymod.api.MobSpawnerLogic;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EntityLivingData;
+import net.minecraft.entity.*;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -98,7 +94,7 @@ public abstract class MobSpawnerBaseLogic {
                         return;
                     }
 
-                    int i1 = this.a().a(entity.getClass(), AxisAlignedBB.a().a((double) this.b(), (double) this.c(), (double) this.d(), (double) (this.b() + 1), (double) (this.c() + 1), (double) (this.d() + 1)).b((double) (this.m * 2), 4.0D, (double) (this.m * 2))).size();
+                    int i1 = this.a().a(entity.getClass(), AxisAlignedBB.a((double) this.b(), (double) this.c(), (double) this.d(), (double) (this.b() + 1), (double) (this.c() + 1), (double) (this.d() + 1)).b((double) (this.m * 2), 4.0D, (double) (this.m * 2))).size();
 
                     if (i1 >= this.k) {
                         this.j();
@@ -111,7 +107,7 @@ public abstract class MobSpawnerBaseLogic {
                     EntityLiving entityliving = entity instanceof EntityLiving ? (EntityLiving) entity : null;
 
                     entity.b(d0, d3, d4, this.a().s.nextFloat() * 360.0F, 0.0F);
-                    if (entityliving == null || entityliving.bw()) {
+                    if (entityliving == null || entityliving.by()) {
                         this.a(entity);
                         this.a().c(2004, this.b(), this.c(), this.d(), 0);
                         if (entityliving != null) {
@@ -144,15 +140,15 @@ public abstract class MobSpawnerBaseLogic {
             }
 
             entity.f(nbttagcompound);
-            if (entity.p != null) {
-                entity.p.d(entity);
+            if (entity.o != null) {
+                entity.o.d(entity);
             }
 
             NBTTagCompound nbttagcompound1;
 
             for (Entity entity1 = entity; nbttagcompound.b("Riding", 10); nbttagcompound = nbttagcompound1) {
                 nbttagcompound1 = nbttagcompound.m("Riding");
-                Entity entity2 = EntityList.a(nbttagcompound1.j("id"), entity.p);
+                Entity entity2 = EntityList.a(nbttagcompound1.j("id"), entity.o);
 
                 if (entity2 != null) {
                     NBTTagCompound nbttagcompound2 = new NBTTagCompound();
@@ -168,9 +164,9 @@ public abstract class MobSpawnerBaseLogic {
                     }
 
                     entity2.f(nbttagcompound2);
-                    entity2.b(entity1.t, entity1.u, entity1.v, entity1.z, entity1.A);
-                    if (entity.p != null) {
-                        entity.p.d(entity2);
+                    entity2.b(entity1.s, entity1.t, entity1.u, entity1.y, entity1.z);
+                    if (entity.o != null) {
+                        entity.o.d(entity2);
                     }
 
                     entity1.a(entity2);
@@ -179,8 +175,8 @@ public abstract class MobSpawnerBaseLogic {
                 entity1 = entity2;
             }
         }
-        else if (entity instanceof EntityLivingBase && entity.p != null) {
-            ((EntityLiving) entity).a((EntityLivingData) null);
+        else if (entity instanceof EntityLivingBase && entity.o != null) {
+            ((EntityLiving) entity).a((IEntityLivingData) null);
             this.a().d(entity);
         }
 
@@ -198,7 +194,7 @@ public abstract class MobSpawnerBaseLogic {
         }
 
         if (this.e != null && this.e.size() > 0) {
-            this.a((WeightedRandomMinecart) WeightedRandom.a(this.a().s, (Collection) this.e));
+            this.a((MobSpawnerBaseLogic.WeightedRandomMinecart) WeightedRandom.a(this.a().s, (Collection) this.e));
         }
 
         this.a(1);
@@ -212,7 +208,7 @@ public abstract class MobSpawnerBaseLogic {
             NBTTagList nbttaglist = nbttagcompound.c("SpawnPotentials", 10);
 
             for (int i0 = 0; i0 < nbttaglist.c(); ++i0) {
-                this.e.add(new WeightedRandomMinecart(nbttaglist.b(i0)));
+                this.e.add(new MobSpawnerBaseLogic.WeightedRandomMinecart(nbttaglist.b(i0)));
             }
         }
         else {
@@ -220,10 +216,10 @@ public abstract class MobSpawnerBaseLogic {
         }
 
         if (nbttagcompound.b("SpawnData", 10)) {
-            this.a(new WeightedRandomMinecart(nbttagcompound.m("SpawnData"), this.a));
+            this.a(new MobSpawnerBaseLogic.WeightedRandomMinecart(nbttagcompound.m("SpawnData"), this.a));
         }
         else {
-            this.a((WeightedRandomMinecart) null);
+            this.a((MobSpawnerBaseLogic.WeightedRandomMinecart) null);
         }
 
         if (nbttagcompound.b("MinSpawnDelay", 99)) {
@@ -266,7 +262,7 @@ public abstract class MobSpawnerBaseLogic {
                 Iterator iterator = this.e.iterator();
 
                 while (iterator.hasNext()) {
-                    WeightedRandomMinecart mobspawnerbaselogic_weightedrandomminecart = (WeightedRandomMinecart) iterator.next();
+                    MobSpawnerBaseLogic.WeightedRandomMinecart mobspawnerbaselogic_weightedrandomminecart = (MobSpawnerBaseLogic.WeightedRandomMinecart) iterator.next();
 
                     nbttaglist.a((NBTBase) mobspawnerbaselogic_weightedrandomminecart.a());
                 }
@@ -289,11 +285,11 @@ public abstract class MobSpawnerBaseLogic {
         }
     }
 
-    public WeightedRandomMinecart i() {
+    public MobSpawnerBaseLogic.WeightedRandomMinecart i() {
         return this.f;
     }
 
-    public void a(WeightedRandomMinecart mobspawnerbaselogic_weightedrandomminecart) {
+    public void a(MobSpawnerBaseLogic.WeightedRandomMinecart mobspawnerbaselogic_weightedrandomminecart) {
         this.f = mobspawnerbaselogic_weightedrandomminecart;
     }
 

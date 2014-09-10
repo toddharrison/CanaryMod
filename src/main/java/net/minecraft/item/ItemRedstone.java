@@ -20,8 +20,8 @@ public class ItemRedstone extends Item {
     public boolean a(ItemStack itemstack, EntityPlayer entityplayer, World world, int i0, int i1, int i2, int i3, float f0, float f1, float f2) {
         // CanaryMod: BlockPlaceHook
         CanaryBlock clicked = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
-
         clicked.setFaceClicked(BlockFace.fromByte((byte) i3));
+        //
 
         if (world.a(i0, i1, i2) != Blocks.aC) {
             if (i3 == 0) {
@@ -58,7 +58,7 @@ public class ItemRedstone extends Item {
         }
         else {
             // set placed
-            CanaryBlock placed = new CanaryBlock((short) BlockType.RedstoneBlock.getId(), (short) 0, i0, i1, i2, world.getCanaryWorld());
+            CanaryBlock placed = new CanaryBlock(BlockType.RedstoneBlock, i0, i1, i2, world.getCanaryWorld());
             // Create and Call
             BlockPlaceHook hook = (BlockPlaceHook) new BlockPlaceHook(((EntityPlayerMP) entityplayer).getPlayer(), clicked, placed).call();
             if (hook.isCanceled()) {

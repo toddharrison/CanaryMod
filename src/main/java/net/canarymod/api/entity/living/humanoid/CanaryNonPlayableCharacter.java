@@ -5,15 +5,17 @@ import net.canarymod.api.entity.CanaryEntity;
 import net.canarymod.api.entity.Entity;
 import net.canarymod.api.entity.EntityType;
 import net.canarymod.api.packet.CanaryPacket;
+import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.chat.Colors;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.play.server.S0CPacketSpawnPlayer;
 import net.minecraft.network.play.server.S13PacketDestroyEntities;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-import static net.canarymod.Canary.log;
+import net.canarymod.api.PathFinder;
+import net.canarymod.api.entity.living.humanoid.npc.NPCBehaviorListener;
+import net.canarymod.api.entity.living.humanoid.npc.NPCBehaviorRegistry;
 
 /**
  * NonPlayableCharacter implementation
@@ -21,7 +23,6 @@ import static net.canarymod.Canary.log;
  * @author Jason (darkdiplomat)
  */
 public class CanaryNonPlayableCharacter extends CanaryHuman implements NonPlayableCharacter {
-    private final List<NPCBehavior> behaviors;
     private String prefix = "<" + Colors.ORANGE + "NPC " + Colors.WHITE + "%name> ";
 
     /**
@@ -32,7 +33,6 @@ public class CanaryNonPlayableCharacter extends CanaryHuman implements NonPlayab
      */
     public CanaryNonPlayableCharacter(EntityNonPlayableCharacter npc) {
         super(npc);
-        this.behaviors = Collections.synchronizedList(new ArrayList<NPCBehavior>());
     }
 
     @Override
@@ -74,27 +74,9 @@ public class CanaryNonPlayableCharacter extends CanaryHuman implements NonPlayab
      */
     @Override
     public void lookAtNearest() {
-        Player toLookAt = null;
-
-        for (Player player : Canary.getServer().getPlayerList()) {
-            if (player.getWorld().getName().equals(this.getWorld().getName())) {
-                if (player.getWorld().getType() == this.getWorld().getType()) {
-                    if (toLookAt != null) {
-                        if (distanceTo(player) > 15) {
-                            continue;
-                        }
-                        if (distanceTo(player) < distanceTo(toLookAt)) {
-                            toLookAt = player;
-                        }
-                    }
-                    else {
-                        toLookAt = player;
-                    }
-                }
-            }
-        }
-        if (toLookAt != null) {
-            lookAt(toLookAt);
+        net.minecraft.entity.Entity target = ((CanaryWorld) this.getWorld()).getHandle().a(EntityPlayerMP.class, this.getHandle().C.b(15.0D, 15.0D, 15.0D), this.getHandle());
+        if (target != null) {
+            lookAt(target.getCanaryEntity());
         }
     }
 
@@ -119,33 +101,6 @@ public class CanaryNonPlayableCharacter extends CanaryHuman implements NonPlayab
      * {@inheritDoc}
      */
     @Override
-    public List<NPCBehavior> getBehaviors() {
-        return this.behaviors;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public NPCBehavior removeBehavior(NPCBehavior behavior) {
-        if (this.behaviors.contains(behavior)) {
-            return this.behaviors.remove(behaviors.indexOf(behavior));
-        }
-        return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean addBehavior(NPCBehavior behavior) {
-        return this.behaviors.add(behavior);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void chat(String msg) {
         Canary.getServer().broadcastMessage(prefix.replace("%name", getName()) + msg);
     }
@@ -156,84 +111,6 @@ public class CanaryNonPlayableCharacter extends CanaryHuman implements NonPlayab
     @Override
     public void privateMessage(Player player, String msg) {
         player.message("(MSG) " + prefix.replace("%name", getName()) + msg);
-    }
-
-    void update() {
-        try {
-            synchronized (behaviors) {
-                for (NPCBehavior behavior : behaviors) {
-                    try {
-                        if (!isDead()) {
-                            behavior.onUpdate();
-                        }
-                    }
-                    catch (Exception ex) {
-                        log.error("Exception while calling onUpdate in behavior" + behavior.getClass().getSimpleName() + " for NPC " + this.getName(), ex);
-                    }
-                }
-            }
-        }
-        catch (Exception ex) {
-            log.error("Exception while calling update for NPC " + this.getName(), ex);
-        }
-    }
-
-    void clicked(Player player) {
-        try {
-            synchronized (behaviors) {
-                for (NPCBehavior behavior : behaviors) {
-                    try {
-                        if (!isDead()) {
-                            behavior.onClicked(player);
-                        }
-                    }
-                    catch (Exception ex) {
-                        log.error("Exception while calling onClicked in behavior" + behavior.getClass().getSimpleName() + " for NPC " + this.getName(), ex);
-                    }
-                }
-            }
-        }
-        catch (Exception ex) {
-            log.error("Exception while calling clicked for NPC " + this.getName(), ex);
-        }
-    }
-
-    void attacked(CanaryEntity entity) {
-        try {
-            synchronized (behaviors) {
-                for (NPCBehavior behavior : behaviors) {
-                    try {
-                        if (!isDead()) {
-                            behavior.onAttacked(entity);
-                        }
-                    }
-                    catch (Exception ex) {
-                        log.error("Exception while calling onAttack in behavior" + behavior.getClass().getSimpleName() + " for NPC " + this.getName(), ex);
-                    }
-                }
-            }
-        }
-        catch (Exception ex) {
-            log.error("Exception occured while calling attacked for NPC " + this.getName(), ex);
-        }
-    }
-
-    void destroyed() {
-        try {
-            synchronized (behaviors) {
-                for (NPCBehavior behavior : behaviors) {
-                    try {
-                        behavior.onDestroy();
-                    }
-                    catch (Exception ex) {
-                        log.error("Exception while calling onDestroyed in behavior" + behavior.getClass().getSimpleName() + " for NPC " + this.getName(), ex);
-                    }
-                }
-            }
-        }
-        catch (Exception ex) {
-            log.error("Exception occured while calling destroyed for NPC " + this.getName(), ex);
-        }
     }
 
     /**
@@ -268,6 +145,30 @@ public class CanaryNonPlayableCharacter extends CanaryHuman implements NonPlayab
         hash = 89 * hash + this.getID();
         hash = 89 * hash + (this.getName() != null ? this.getName().hashCode() : 0);
         return hash;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public PathFinder getPathFinder() {
+        return this.getHandle().getPathNavigate().getCanaryPathFinderNPC();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public NPCBehaviorListener getRegisteredListener(Class<? extends NPCBehaviorListener> clazz) {
+        return NPCBehaviorRegistry.getRegisteredListener(clazz, this);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<NPCBehaviorListener> geRegisteredListeners() {
+        return NPCBehaviorRegistry.getRegisteredListeners(this);
     }
 
     /**

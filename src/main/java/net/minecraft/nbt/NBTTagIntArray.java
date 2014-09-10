@@ -27,9 +27,10 @@ public class NBTTagIntArray extends NBTBase {
 
     }
 
-    void a(DataInput datainput, int i0) throws IOException {
+    void a(DataInput datainput, int i0, NBTSizeTracker nbtsizetracker) throws IOException {
         int i1 = datainput.readInt();
 
+        nbtsizetracker.a((long) (32 * i1));
         this.b = new int[i1];
 
         for (int i2 = 0; i2 < i1; ++i2) {

@@ -28,6 +28,12 @@ public class TileEntityCommandBlock extends TileEntity {
         public void e() {
             TileEntityCommandBlock.this.w().g(TileEntityCommandBlock.this.c, TileEntityCommandBlock.this.d, TileEntityCommandBlock.this.e);
         }
+
+        // CanaryMod: Add method to get CommandBlock reference (Can be either CanaryCommandBlock or CanaryCommandBlockMinecart)
+        public net.canarymod.api.CommandBlockLogic getReference() {
+            return TileEntityCommandBlock.this.getCanaryCommandBlock();
+        }
+        //
     };
 
     public TileEntityCommandBlock() {

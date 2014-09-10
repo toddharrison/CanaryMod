@@ -21,7 +21,7 @@ import java.util.List;
 
 public class TileEntityBeacon extends TileEntity implements IInventory {
 
-    public static final Potion[][] a = new Potion[][]{ { Potion.c, Potion.e }, { Potion.m, Potion.j }, { Potion.g }, { Potion.l } };
+    public static final Potion[][] a = new Potion[][]{{Potion.c, Potion.e}, {Potion.m, Potion.j}, {Potion.g}, {Potion.l}};
     private boolean k;
     private int l = -1;
     private int m;
@@ -34,7 +34,7 @@ public class TileEntityBeacon extends TileEntity implements IInventory {
     }
 
     public void h() {
-        if (this.b.H() % 80L == 0L) {
+        if (this.b.I() % 80L == 0L) {
             this.y();
             this.x();
         }
@@ -50,9 +50,9 @@ public class TileEntityBeacon extends TileEntity implements IInventory {
                 b0 = 1;
             }
 
-            AxisAlignedBB axisalignedbb = AxisAlignedBB.a().a((double) this.c, (double) this.d, (double) this.e, (double) (this.c + 1), (double) (this.d + 1), (double) (this.e + 1)).b(d0, d0, d0);
+            AxisAlignedBB axisalignedbb = AxisAlignedBB.a((double) this.c, (double) this.d, (double) this.e, (double) (this.c + 1), (double) (this.d + 1), (double) (this.e + 1)).b(d0, d0, d0);
 
-            axisalignedbb.e = (double) this.b.Q();
+            axisalignedbb.e = (double) this.b.R();
             List list = this.b.a(EntityPlayer.class, axisalignedbb);
             Iterator iterator = list.iterator();
 
@@ -116,7 +116,7 @@ public class TileEntityBeacon extends TileEntity implements IInventory {
         }
 
         if (!this.b.E && this.l == 4 && i0 < this.l) {
-            Iterator iterator = this.b.a(EntityPlayer.class, AxisAlignedBB.a().a((double) this.c, (double) this.d, (double) this.e, (double) this.c, (double) (this.d - 4), (double) this.e).b(10.0D, 5.0D, 10.0D)).iterator();
+            Iterator iterator = this.b.a(EntityPlayer.class, AxisAlignedBB.a((double) this.c, (double) this.d, (double) this.e, (double) this.c, (double) (this.d - 4), (double) this.e).b(10.0D, 5.0D, 10.0D)).iterator();
 
             while (iterator.hasNext()) {
                 EntityPlayer entityplayer = (EntityPlayer) iterator.next();

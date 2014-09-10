@@ -34,27 +34,27 @@ public class EntityEgg extends EntityThrowable {
                 movingobjectposition.g.a(DamageSource.a((Entity) this, this.j()), 0.0F);
             }
 
-            if (!this.p.E && this.aa.nextInt(8) == 0) {
+            if (!this.o.E && this.Z.nextInt(8) == 0) {
                 byte b0 = 1;
 
-                if (this.aa.nextInt(32) == 0) {
+                if (this.Z.nextInt(32) == 0) {
                     b0 = 4;
                 }
 
                 for (int i0 = 0; i0 < b0; ++i0) {
-                    EntityChicken entitychicken = new EntityChicken(this.p);
+                    EntityChicken entitychicken = new EntityChicken(this.o);
 
                     entitychicken.c(-24000);
-                    entitychicken.b(this.t, this.u, this.v, this.z, 0.0F);
-                    this.p.d((Entity) entitychicken);
+                    entitychicken.b(this.s, this.t, this.u, this.y, 0.0F);
+                    this.o.d((Entity) entitychicken);
                 }
             }
 
             for (int i1 = 0; i1 < 8; ++i1) {
-                this.p.a("snowballpoof", this.t, this.u, this.v, 0.0D, 0.0D, 0.0D);
+                this.o.a("snowballpoof", this.s, this.t, this.u, 0.0D, 0.0D, 0.0D);
             }
 
-            if (!this.p.E) {
+            if (!this.o.E) {
                 this.B();
             }
         }

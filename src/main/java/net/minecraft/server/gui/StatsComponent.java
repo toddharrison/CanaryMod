@@ -1,22 +1,16 @@
 package net.minecraft.server.gui;
 
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
+import net.canarymod.Canary;
+import net.canarymod.api.world.World;
+import net.minecraft.server.MinecraftServer;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 import java.util.Collection;
-import java.util.Collections;
-import javax.swing.JComponent;
-import javax.swing.Timer;
-
-import net.canarymod.Canary;
-import net.canarymod.api.world.CanaryWorld;
-import net.canarymod.api.world.World;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.WorldServer;
 
 
 public class StatsComponent extends JComponent {
@@ -55,13 +49,13 @@ public class StatsComponent extends JComponent {
         // Changed how Strings get added from a literal to a var so we don't have to keep track of what is before the worlds
         int i = 0;
         this.d[i++] = "Memory use: " + i0 / 1024L / 1024L + " mb (" + Runtime.getRuntime().freeMemory() * 100L / Runtime.getRuntime().maxMemory() + "% free)";
-        this.d[i++] = "Avg tick: " + a.format(this.a(this.e.f) * 1.0E-6D) + " ms";
+        this.d[i++] = "Avg tick: " + a.format(this.a(this.e.g) * 1.0E-6D) + " ms";
 
         // CanaryMod: Multiworld
         Collection<World> worlds = Canary.getServer().getWorldManager().getAllWorlds();
         if (worlds != null) {
             for (World world : worlds) {
-                this.d[i] = "World " + world.getName()+ ": " + world.getType().getName() + ":" + world.getType().getId() + " at " + a.format(world.getNanoTick(Canary.getServer().getCurrentTick() % 100) * 1.0E-6D) + " ms/t";
+                this.d[i] = "World " + world.getName() + ": " + world.getType().getName() + ":" + world.getType().getId() + " at " + a.format(world.getNanoTick(Canary.getServer().getCurrentTick() % 100) * 1.0E-6D) + " ms/t";
                 if (world != null && world.getChunkProvider() != null) {
                     this.d[i] += ", " + world.getChunkProvider().canSave();
                 }

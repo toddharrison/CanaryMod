@@ -1,6 +1,6 @@
 <!--
   Maven build file for CanaryMod
-  Copyright (c) 2012-2014 CanaryMod Team <http://www.canarymod.net>
+  Copyright (c) 2012-2014 The CanaryMod Team <http://www.canarymod.net>
   CanaryMod is available under the BSD 3-Clause License
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -9,14 +9,14 @@
     <groupId>net.canarymod</groupId>
     <artifactId>CanaryMod</artifactId>
     <packaging>jar</packaging>
-    <version>1.0-RC-4-SNAPSHOT</version>
+    <version>1.1.0-1.7.10-SNAPSHOT</version>
     <name>CanaryMod</name>
     <url>http://www.canarymod.net</url>
     <inceptionYear>2012</inceptionYear>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <minecraft.server.version>1.7.2C</minecraft.server.version>
-        <api.version>1.0-RC-4-SNAPSHOT</api.version>
+        <minecraft.server.version>1.7.10_01</minecraft.server.version>
+        <api.version>1.1.0-SNAPSHOT</api.version>
         <maven.build.timestamp.format>dd MMMM yyyy HH:mm z</maven.build.timestamp.format>
     </properties>
     <licenses>
@@ -24,50 +24,54 @@
             <name>BSD 3-Clause License</name>
             <url>http://opensource.org/licenses/BSD-3-Clause</url>
             <comments>
-                Copyright (C) 2012-2014, CanaryMod Team
-                Under the management of FallenMoonNetwork, PlayBlack, and Visual Illusions Entertainment
+                Copyright (c) 2012 - 2014, CanaryMod Team
+                Under the management of PlayBlack and Visual Illusions Entertainment
                 All rights reserved.
 
-                Redistribution and use in source and binary forms, with or without modification,
-                are permitted provided that the following conditions are met:
-
-                1. Redistributions of source code must retain the above copyright notice,
-                this list of conditions and the following disclaimer.
-
-                2. Redistributions in binary form must reproduce the above copyright notice,
-                this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-
-                3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products
+                Redistribution and use in source and binary forms, with or without
+                modification, are permitted provided that the following conditions are met:
+                * Redistributions of source code must retain the above copyright
+                notice, this list of conditions and the following disclaimer.
+                * Redistributions in binary form must reproduce the above copyright
+                notice, this list of conditions and the following disclaimer in the
+                documentation and/or other materials provided with the distribution.
+                * Neither the name of the CanaryMod Team nor the
+                names of its contributors may be used to endorse or promote products
                 derived from this software without specific prior written permission.
 
-                THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
-                INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-                IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
-                OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
-                OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-                OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-                EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+                THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+                ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+                WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+                DISCLAIMED. IN NO EVENT SHALL CANARYMOD TEAM OR ITS CONTRIBUTORS BE LIABLE FOR ANY
+                DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+                (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+                LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+                ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+                (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+                SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-                Any source code from the Minecraft Server is not owned by CanaryMod Team, FallenMoonNetwork, PlayBlack, Viusal Illusions Entertainment,
-                or its contributors and is not covered by above license.
-                Usage of source code from the Minecraft Server is subject to the Minecraft End User License Agreement as set forth by Mojang AB.
+                Any source code from the Minecraft Server is not owned by CanaryMod Team, PlayBlack,
+                Visual Illusions Entertainment, or its contributors and is not covered by above license.
+                Usage of source code from the Minecraft Server is subject to the Minecraft End User License Agreement
+                as set forth by Mojang AB.
                 The Minecraft EULA can be viewed at https://account.mojang.com/documents/minecraft_eula
-                FallenMoonNetwork, CanaryMod Team, PlayBlack, Visual Illusions Entertainment, CanaryLib, CanaryMod, and its contributors are NOT affiliated with, endorsed,
-                or sponsored by Mojang AB, makers of Minecraft.
+                CanaryMod Team, PlayBlack, Visual Illusions Entertainment, CanaryLib, CanaryMod,
+                and its contributors are NOT affiliated with, endorsed, or sponsored by Mojang AB, makers of Minecraft.
                 "Minecraft" is a trademark of Notch Development AB
+                "CanaryMod" name is used with permission from FallenMoonNetwork.
             </comments>
         </license>
     </licenses>
     <scm>
-        <connection>scm:git:git://github.com/FallenMoonNetwork/CanaryRecode.git</connection>
-        <url>https://github.com/FallenMoonNetwork/CanaryRecode</url>
-        <developerConnection>scm:git:git@github.com:FallenMoonNetwork/CanaryRecode.git</developerConnection>
+        <connection>scm:git:git://github.com/CanaryModTeam/CanaryRecode.git</connection>
+        <url>https://github.com/CanaryModTeam/CanaryRecode</url>
+        <developerConnection>scm:git:git@github.com:CanaryModTeam/CanaryRecode.git</developerConnection>
     </scm>
     <repositories>
         <repository>
-            <id>vi-repo2</id>
+            <id>vi-repo</id>
             <name>Visual Illusions Repository</name>
-            <url>http://repo2.visualillusionsent.net/repository/public/</url>
+            <url>http://repo.visualillusionsent.net/repository/public/</url>
         </repository>
     </repositories>
     <dependencies>
@@ -82,15 +86,15 @@
             <version>${minecraft.server.version}</version>
         </dependency>
         <dependency>
-            <groupId>jline</groupId>
-            <artifactId>jline</artifactId>
-            <version>2.11</version>
-        </dependency>
-        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>3.8.1</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>jline</groupId>
+            <artifactId>jline</artifactId>
+            <version>2.11</version>
         </dependency>
     </dependencies>
     <build>
@@ -233,7 +237,7 @@
                             <footer>
                                 <![CDATA[Licensed under the <a href="http://opensource.org/licenses/BSD-3-Clause">BSD 3-Clause License</a>]]></footer>
                             <links>
-                                <link>http://docs.visualillusionsent.net/VIUtils/1.2.1/</link>
+                                <link>http://docs.visualillusionsent.net/VIUtils/1.3.0/</link>
                                 <link>http://www.jdom.org/docs/apidocs/</link>
                             </links>
                             <tags>

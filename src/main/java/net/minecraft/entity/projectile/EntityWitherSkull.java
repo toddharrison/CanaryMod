@@ -1,6 +1,7 @@
 package net.minecraft.entity.projectile;
 
 import net.canarymod.api.entity.CanaryWitherSkull;
+import net.canarymod.hook.entity.ProjectileHitHook;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
@@ -45,35 +46,37 @@ public class EntityWitherSkull extends EntityFireball {
     }
 
     protected void a(MovingObjectPosition movingobjectposition) {
-        if (!this.p.E) {
-            if (movingobjectposition.g != null) {
-                if (this.a != null) {
-                    if (movingobjectposition.g.a(DamageSource.a(this.a), 8.0F) && !movingobjectposition.g.Z()) {
-                        this.a.f(5.0F);
-                    }
-                }
-                else {
-                    movingobjectposition.g.a(DamageSource.k, 5.0F);
-                }
-
-                if (movingobjectposition.g instanceof EntityLivingBase) {
-                    byte b0 = 0;
-
-                    if (this.p.r == EnumDifficulty.NORMAL) {
-                        b0 = 10;
-                    }
-                    else if (this.p.r == EnumDifficulty.HARD) {
-                        b0 = 40;
+        if (!this.o.E) {
+            // CanaryMod: ProjectileHit
+            ProjectileHitHook hook = (ProjectileHitHook) new ProjectileHitHook(this.getCanaryEntity(), movingobjectposition == null || movingobjectposition.g == null ? null : movingobjectposition.g.getCanaryEntity()).call();
+            if (!hook.isCanceled()) { //
+                if (movingobjectposition.g != null) {
+                    if (this.a != null) {
+                        if (movingobjectposition.g.a(DamageSource.a(this.a), 8.0F) && !movingobjectposition.g.Z()) {
+                            this.a.f(5.0F);
+                        }
+                    } else {
+                        movingobjectposition.g.a(DamageSource.k, 5.0F);
                     }
 
-                    if (b0 > 0) {
-                        ((EntityLivingBase) movingobjectposition.g).c(new PotionEffect(Potion.v.H, 20 * b0, 1));
+                    if (movingobjectposition.g instanceof EntityLivingBase) {
+                        byte b0 = 0;
+
+                        if (this.o.r == EnumDifficulty.NORMAL) {
+                            b0 = 10;
+                        } else if (this.o.r == EnumDifficulty.HARD) {
+                            b0 = 40;
+                        }
+
+                        if (b0 > 0) {
+                            ((EntityLivingBase) movingobjectposition.g).c(new PotionEffect(Potion.v.H, 20 * b0, 1));
+                        }
                     }
                 }
+
+                this.o.a(this, this.s, this.t, this.u, 1.0F, false, this.o.O().b("mobGriefing"));
+                this.B();
             }
-
-            this.p.a(this, this.t, this.u, this.v, 1.0F, false, this.p.N().b("mobGriefing"));
-            this.B();
         }
     }
 
@@ -86,14 +89,14 @@ public class EntityWitherSkull extends EntityFireball {
     }
 
     protected void c() {
-        this.ag.a(10, Byte.valueOf((byte) 0));
+        this.af.a(10, Byte.valueOf((byte) 0));
     }
 
     public boolean f() {
-        return this.ag.a(10) == 1;
+        return this.af.a(10) == 1;
     }
 
     public void a(boolean flag0) {
-        this.ag.b(10, Byte.valueOf((byte) (flag0 ? 1 : 0)));
+        this.af.b(10, Byte.valueOf((byte) (flag0 ? 1 : 0)));
     }
 }

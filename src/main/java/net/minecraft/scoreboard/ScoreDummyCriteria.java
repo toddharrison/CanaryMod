@@ -4,7 +4,7 @@ import net.canarymod.api.scoreboard.CanaryScoreDummyCriteria;
 
 import java.util.List;
 
-public class ScoreDummyCriteria implements ScoreObjectiveCriteria {
+public class ScoreDummyCriteria implements IScoreObjectiveCriteria {
 
     private final String g;
     protected net.canarymod.api.scoreboard.ScoreObjectiveCriteria criteria;
@@ -12,8 +12,8 @@ public class ScoreDummyCriteria implements ScoreObjectiveCriteria {
     public ScoreDummyCriteria(String s0) {
         this.g = s0;
         // CanaryMod: lets not add doubles, otay?
-        if (!ScoreObjectiveCriteria.a.containsKey(s0)) {
-            ScoreObjectiveCriteria.a.put(s0, this);
+        if (!IScoreObjectiveCriteria.a.containsKey(s0)) {
+            IScoreObjectiveCriteria.a.put(s0, this);
         }//
         // CanaryMod: Set Variable
         if (!(this instanceof ScoreHealthCriteria)) {

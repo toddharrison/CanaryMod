@@ -21,15 +21,14 @@ public class EntityNPCLookHelper {
     }
 
     public void a(Entity entity, float f0, float f1) {
-        this.e = entity.t;
+        this.e = entity.s;
         if (entity instanceof EntityLivingBase) {
-            this.f = entity.u + (double) entity.g();
-        }
-        else {
-            this.f = (entity.D.b + entity.D.e) / 2.0D;
+            this.f = entity.t + (double) entity.g();
+        } else {
+            this.f = (entity.C.b + entity.C.e) / 2.0D;
         }
 
-        this.g = entity.v;
+        this.g = entity.u;
         this.b = f0;
         this.c = f1;
         this.d = true;
@@ -45,32 +44,31 @@ public class EntityNPCLookHelper {
     }
 
     public void a() {
-        this.a.A = 0.0F;
+        this.a.z = 0.0F;
         if (this.d) {
             this.d = false;
-            double d0 = this.e - this.a.t;
-            double d1 = this.f - (this.a.u + (double) this.a.g());
-            double d2 = this.g - this.a.v;
+            double d0 = this.e - this.a.s;
+            double d1 = this.f - (this.a.t + (double) this.a.g());
+            double d2 = this.g - this.a.u;
             double d3 = (double) MathHelper.a(d0 * d0 + d2 * d2);
             float f0 = (float) (Math.atan2(d2, d0) * 180.0D / 3.1415927410125732D) - 90.0F;
             float f1 = (float) (-(Math.atan2(d1, d3) * 180.0D / 3.1415927410125732D));
 
-            this.a.A = this.a(this.a.A, f1, this.c);
-            this.a.aP = this.a(this.a.aP, f0, this.b);
-        }
-        else {
-            this.a.aP = this.a(this.a.aP, this.a.aN, 10.0F);
+            this.a.z = this.a(this.a.z, f1, this.c);
+            this.a.aO = this.a(this.a.aO, f0, this.b);
+        } else {
+            this.a.aO = this.a(this.a.aO, this.a.aM, 10.0F);
         }
 
-        float f2 = MathHelper.g(this.a.aP - this.a.aN);
+        float f2 = MathHelper.g(this.a.aO - this.a.aM);
 
         if (!this.a.getPathNavigate().g()) {
             if (f2 < -75.0F) {
-                this.a.aP = this.a.aN - 75.0F;
+                this.a.aO = this.a.aM - 75.0F;
             }
 
             if (f2 > 75.0F) {
-                this.a.aP = this.a.aN + 75.0F;
+                this.a.aO = this.a.aM + 75.0F;
             }
         }
 

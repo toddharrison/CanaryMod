@@ -10,7 +10,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
 import java.util.Random;
@@ -19,7 +19,7 @@ public abstract class BlockLeaves extends BlockLeavesBase {
 
 
     int[] a;
-    protected Icon[][] M = new Icon[2][];
+    protected IIcon[][] M = new IIcon[2][];
 
     public BlockLeaves() {
         super(Material.j, false);
@@ -69,7 +69,6 @@ public abstract class BlockLeaves extends BlockLeavesBase {
                 if (world.b(i0 - i4, i1 - i4, i2 - i4, i0 + i4, i1 + i4, i2 + i4)) {
                     int i8;
                     int i9;
-                    int i10;
 
                     for (i7 = -b0; i7 <= b0; ++i7) {
                         for (i8 = -b0; i8 <= b0; ++i8) {
@@ -94,7 +93,7 @@ public abstract class BlockLeaves extends BlockLeavesBase {
                     for (i7 = 1; i7 <= 4; ++i7) {
                         for (i8 = -b0; i8 <= b0; ++i8) {
                             for (i9 = -b0; i9 <= b0; ++i9) {
-                                for (i10 = -b0; i10 <= b0; ++i10) {
+                                for (int i10 = -b0; i10 <= b0; ++i10) {
                                     if (this.a[(i8 + i6) * i5 + (i9 + i6) * b1 + i10 + i6] == i7 - 1) {
                                         if (this.a[(i8 + i6 - 1) * i5 + (i9 + i6) * b1 + i10 + i6] == -2) {
                                             this.a[(i8 + i6 - 1) * i5 + (i9 + i6) * b1 + i10 + i6] = i7;
@@ -194,7 +193,7 @@ public abstract class BlockLeaves extends BlockLeavesBase {
     }
 
     public void a(World world, EntityPlayer entityplayer, int i0, int i1, int i2, int i3) {
-        if (!world.E && entityplayer.bD() != null && entityplayer.bD().b() == Items.aZ) {
+        if (!world.E && entityplayer.bF() != null && entityplayer.bF().b() == Items.aZ) {
             entityplayer.a(StatList.C[Block.b((Block) this)], 1);
             this.a(world, i0, i1, i2, new ItemStack(Item.a((Block) this), 1, i3 & 3));
         }

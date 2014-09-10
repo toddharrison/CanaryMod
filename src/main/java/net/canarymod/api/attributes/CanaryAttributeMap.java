@@ -2,8 +2,8 @@ package net.canarymod.api.attributes;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
-import net.minecraft.entity.ai.attributes.AttributeInstance;
 import net.minecraft.entity.ai.attributes.BaseAttributeMap;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 
 import java.util.ArrayList;
@@ -28,8 +28,8 @@ public class CanaryAttributeMap implements AttributeMap {
 
     @Override
     public ModifiedAttribute getModifiedAttributeByName(String name) {
-        AttributeInstance attributeInstance = getNative().a(name);
-        return attributeInstance != null ? attributeInstance.getWrapper() : null;
+        IAttributeInstance IAttributeInstance = getNative().a(name);
+        return IAttributeInstance != null ? IAttributeInstance.getWrapper() : null;
     }
 
     @Override

@@ -15,7 +15,7 @@ import net.minecraft.world.gen.FlatGeneratorInfo;
 
 public abstract class WorldProvider {
 
-    public static final float[] a = new float[]{ 1.0F, 0.75F, 0.5F, 0.25F, 0.0F, 0.25F, 0.5F, 0.75F };
+    public static final float[] a = new float[]{1.0F, 0.75F, 0.5F, 0.25F, 0.0F, 0.25F, 0.5F, 0.75F};
     public World b;
     public WorldType c;
     public String d;
@@ -40,8 +40,8 @@ public abstract class WorldProvider {
     //
     public final void a(World world) {
         this.b = world;
-        this.c = world.M().u();
-        this.d = world.M().y();
+        this.c = world.N().u();
+        this.d = world.N().y();
         this.b();
         this.a();
     }
@@ -57,12 +57,11 @@ public abstract class WorldProvider {
     }
 
     protected void b() {
-        if (this.b.M().u() == WorldType.c) {
-            FlatGeneratorInfo flatgeneratorinfo = FlatGeneratorInfo.a(this.b.M().y());
+        if (this.b.N().u() == WorldType.c) {
+            FlatGeneratorInfo flatgeneratorinfo = FlatGeneratorInfo.a(this.b.N().y());
 
             this.e = new WorldChunkManagerHell(BiomeGenBase.d(flatgeneratorinfo.a()), 0.5F);
-        }
-        else {
+        } else {
             this.e = new WorldChunkManager(this.b);
         }
     }
@@ -70,13 +69,12 @@ public abstract class WorldProvider {
     public IChunkProvider c() {
         //CanaryMod changed that to load custom generators from dim types
         if (this.canaryDimensionType.hasChunkProvider()) {
-            IChunkProvider nmsProvider = (IChunkProvider) (this.c == WorldType.c ? new ChunkProviderFlat(this.b, this.b.G(), this.b.M().s(), this.d) : new ChunkProviderGenerate(this.b, this.b.G(), this.b.M().s()));
+            IChunkProvider nmsProvider = (IChunkProvider) (this.c == WorldType.c ? new ChunkProviderFlat(this.b, this.b.H(), this.b.N().s(), this.d) : new ChunkProviderGenerate(this.b, this.b.H(), this.b.N().s()));
             ChunkProviderCustom dimProvider = canaryDimensionType.getChunkProvider();
             dimProvider.setWorld(this.b.getCanaryWorld());
             return new CanaryChunkProviderCustom(dimProvider, nmsProvider);
-        }
-        else {
-            return (IChunkProvider) (this.c == WorldType.c ? new ChunkProviderFlat(this.b, this.b.G(), this.b.M().s(), this.d) : new ChunkProviderGenerate(this.b, this.b.G(), this.b.M().s()));
+        } else {
+            return (IChunkProvider) (this.c == WorldType.c ? new ChunkProviderFlat(this.b, this.b.H(), this.b.N().s(), this.d) : new ChunkProviderGenerate(this.b, this.b.H(), this.b.N().s()));
         }
         //
 //        return (IChunkProvider) (this.c == WorldType.c ? new ChunkProviderFlat(this.b, this.b.G(), this.b.M().s(), this.d) : new ChunkProviderGenerate(this.b, this.b.G(), this.b.M().s()));

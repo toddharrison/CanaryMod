@@ -38,7 +38,7 @@ public class CanaryEnderman extends CanaryEntityMob implements Enderman {
      */
     @Override
     public short getCarriedBlockID() {
-        return (short) net.minecraft.block.Block.b(getHandle().bZ());
+        return (short) net.minecraft.block.Block.b(getHandle().cb());
     }
 
     /**
@@ -54,7 +54,7 @@ public class CanaryEnderman extends CanaryEntityMob implements Enderman {
      */
     @Override
     public short getCarriedBlockMetaData() {
-        return (short) getHandle().ca();
+        return (short) getHandle().cc();
     }
 
     /**
@@ -70,7 +70,7 @@ public class CanaryEnderman extends CanaryEntityMob implements Enderman {
      */
     @Override
     public boolean randomTeleport() {
-        return getHandle().bX();
+        return getHandle().bZ();
     }
 
     /**
@@ -78,7 +78,7 @@ public class CanaryEnderman extends CanaryEntityMob implements Enderman {
      */
     @Override
     public boolean isScreaming() {
-        return getHandle().cb();
+        return getHandle().cd();
     }
 
     /**

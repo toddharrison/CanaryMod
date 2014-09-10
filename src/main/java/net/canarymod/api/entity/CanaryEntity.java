@@ -29,32 +29,32 @@ public abstract class CanaryEntity implements Entity {
 
     @Override
     public double getX() {
-        return entity.t;
+        return entity.s;
     }
 
     @Override
     public double getY() {
-        return entity.u;
+        return entity.t;
     }
 
     @Override
     public double getZ() {
-        return entity.v;
+        return entity.u;
     }
 
     @Override
     public double getMotionX() {
-        return entity.w;
+        return entity.v;
     }
 
     @Override
     public double getMotionY() {
-        return entity.x;
+        return entity.w;
     }
 
     @Override
     public double getMotionZ() {
-        return entity.y;
+        return entity.x;
     }
 
     @Override
@@ -64,58 +64,58 @@ public abstract class CanaryEntity implements Entity {
 
     @Override
     public float getRotation() {
-        return entity.z;
+        return entity.B;
     }
 
     @Override
     public void setX(double x) {
-        this.entity.t = x;
+        this.entity.s = x;
     }
 
     @Override
     public void setX(int x) {
-        this.entity.t = x;
+        this.entity.s = x;
 
     }
 
     @Override
     public void setY(double y) {
-        this.entity.u = y;
+        this.entity.t = y;
 
     }
 
     @Override
     public void setY(int y) {
-        this.entity.u = y;
+        this.entity.t = y;
 
     }
 
     @Override
     public void setZ(double z) {
-        this.entity.v = z;
+        this.entity.u = z;
     }
 
     @Override
     public void setZ(int z) {
-        this.entity.v = z;
+        this.entity.u = z;
     }
 
     @Override
     public void setMotionX(double motionX) {
-        entity.w = motionX;
-        entity.K = true;
+        entity.v = motionX;
+        entity.H = true;
     }
 
     @Override
     public void setMotionY(double motionY) {
-        entity.x = motionY;
-        entity.K = true;
+        entity.w = motionY;
+        entity.H = true;
     }
 
     @Override
     public void setMotionZ(double motionZ) {
-        entity.y = motionZ;
-        entity.K = true;
+        entity.x = motionZ;
+        entity.H = true;
     }
 
     @Override
@@ -125,22 +125,25 @@ public abstract class CanaryEntity implements Entity {
 
     @Override
     public void moveEntity(double motionX, double motionY, double motionZ) {
-        entity.w = motionX;
-        entity.x = motionY;
-        entity.y = motionZ;
-        entity.K = true;
+        entity.v = motionX;
+        entity.w = motionY;
+        entity.x = motionZ;
+        entity.H = true;
     }
 
     @Override
     public void setPitch(float pitch) {
         entity.A = pitch;
-
     }
 
     @Override
     public void setRotation(float rotation) {
-        entity.z = rotation;
+        entity.B = rotation;
+    }
 
+    @Override
+    public float getEyeHeight() {
+        return entity.g();
     }
 
     @Override
@@ -184,7 +187,6 @@ public abstract class CanaryEntity implements Entity {
     @Override
     public void setFireTicks(int ticks) {
         this.entity.e = ticks;
-
     }
 
     @Override
@@ -306,9 +308,9 @@ public abstract class CanaryEntity implements Entity {
     @Override
     public boolean canSpawn() {
         if (this.isLiving()) {
-            return ((net.minecraft.entity.EntityLiving) entity).bw();
+            return ((net.minecraft.entity.EntityLiving) entity).by();
         }
-        return getHandle().p.a(entity, entity.D).isEmpty(); //Is not occupied space
+        return getHandle().o.a(entity, entity.C).isEmpty(); //Is not occupied space
     }
 
     @Override
@@ -318,21 +320,21 @@ public abstract class CanaryEntity implements Entity {
 
     @Override
     public boolean isRidden() {
-        return entity.m != null;
+        return entity.l != null;
     }
 
     @Override
     public Entity getRiding() {
-        if (entity.n != null) {
-            return entity.n.getCanaryEntity();
+        if (entity.m != null) {
+            return entity.m.getCanaryEntity();
         }
         return null;
     }
 
     @Override
     public Entity getRider() {
-        if (entity.n != null) {
-            return entity.n.getCanaryEntity();
+        if (entity.m != null) {
+            return entity.m.getCanaryEntity();
         }
         return null;
     }
@@ -367,13 +369,13 @@ public abstract class CanaryEntity implements Entity {
 
     @Override
     public boolean isDead() {
-        return entity.L;
+        return entity.K;
     }
 
     @Override
     public boolean spawn() {
         entity.b(getX() + 0.5d, getY(), getZ() + 0.5d, getRotation(), 0f);
-        return entity.p.d(entity);
+        return entity.o.d(entity);
     }
 
     @Override
@@ -384,7 +386,7 @@ public abstract class CanaryEntity implements Entity {
             net.minecraft.entity.Entity mob2 = ((CanaryEntity) rider).getHandle();
 
             mob2.b(getX(), getY(), getZ(), getRotation(), 0f);
-            ret &= entity.p.d(mob2);
+            ret &= entity.o.d(mob2);
             mob2.a(entity);
         }
         return ret;
@@ -412,10 +414,24 @@ public abstract class CanaryEntity implements Entity {
         return entity.getMetaData();
     }
 
+    @Override
+    public String toString() {
+        return String.format("%s[Native: %s]", this.getClass().getSimpleName(), getHandle());
+    }
+
     /**
      * Gets the Minecraft entity being wrapped
      *
      * @return entity
      */
     public abstract net.minecraft.entity.Entity getHandle();
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isAmbient() {
+        return false;
+    }
+
 }

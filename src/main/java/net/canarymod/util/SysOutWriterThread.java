@@ -76,17 +76,22 @@ public class SysOutWriterThread extends Thread {
             }
 
             try {
-                reader.print(ConsoleReader.RESET_LINE + "");
-                reader.flush();
-                out.write(replaceColours(message).getBytes());
-                out.flush();
+                if (this.reader == null) {
+                    out.write(message.getBytes());
+                    out.flush();
+                } else {
+                    reader.print(ConsoleReader.RESET_LINE + "");
+                    reader.flush();
+                    out.write(replaceColours(message).getBytes());
+                    out.flush();
 
-                try {
-                    reader.drawLine();
-                } catch (IOException e) {
-                    reader.getCursorBuffer().clear();
+                    try {
+                        reader.drawLine();
+                    } catch (IOException e) {
+                        reader.getCursorBuffer().clear();
+                    }
+                    reader.flush();
                 }
-                reader.flush();
             } catch (IOException e) {
                 // Don't use loggers here, since we're the logger.
                 System.err.println("Error while printing to ConsoleReader");

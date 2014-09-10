@@ -17,15 +17,15 @@ public abstract class BaseAttributeMap {
     protected final Map a = new HashMap();
     protected final Map b = new LowerStringMap();
 
-    public AttributeInstance a(Attribute attribute) {
-        return (AttributeInstance) this.a.get(attribute);
+    public IAttributeInstance a(IAttribute IAttribute) {
+        return (IAttributeInstance) this.a.get(IAttribute);
     }
 
-    public AttributeInstance a(String s0) {
-        return (AttributeInstance) this.b.get(s0);
+    public IAttributeInstance a(String s0) {
+        return (IAttributeInstance) this.b.get(s0);
     }
 
-    public abstract AttributeInstance b(Attribute attribute);
+    public abstract IAttributeInstance b(IAttribute IAttribute);
 
     public Collection a() {
         return this.b.values();
@@ -39,7 +39,7 @@ public abstract class BaseAttributeMap {
 
         while (iterator.hasNext()) {
             Entry entry = (Entry) iterator.next();
-            AttributeInstance attributeinstance = this.a((String) entry.getKey());
+            IAttributeInstance attributeinstance = this.a((String) entry.getKey());
 
             if (attributeinstance != null) {
                 attributeinstance.b((AttributeModifier) entry.getValue());
@@ -53,7 +53,7 @@ public abstract class BaseAttributeMap {
 
         while (iterator.hasNext()) {
             Entry entry = (Entry) iterator.next();
-            AttributeInstance attributeinstance = this.a((String) entry.getKey());
+            IAttributeInstance attributeinstance = this.a((String) entry.getKey());
 
             if (attributeinstance != null) {
                 attributeinstance.b((AttributeModifier) entry.getValue());

@@ -24,8 +24,8 @@ public class ItemReed extends Item {
 
         // CanaryMod: BlockPlaceHook
         CanaryBlock clicked = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
-
         clicked.setFaceClicked(BlockFace.fromByte((byte) i3));
+        //
 
         if (block == Blocks.aC && (world.e(i0, i1, i2) & 7) < 1) {
             i3 = 1;

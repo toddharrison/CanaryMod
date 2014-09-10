@@ -14,10 +14,10 @@ public class EntityNPCMoveHelper {
     private boolean f;
 
     public EntityNPCMoveHelper(EntityNonPlayableCharacter entityliving) {
-        this.a = entityliving;
-        this.b = entityliving.u;
-        this.c = entityliving.v;
-        this.d = entityliving.w;
+        this.a = entityliving;;
+        this.b = entityliving.s;
+        this.c = entityliving.t;
+        this.d = entityliving.u;
     }
 
     public boolean a() {
@@ -37,23 +37,24 @@ public class EntityNPCMoveHelper {
     }
 
     public void c() {
-        this.a.entityliving_n_clone(0.0F);
+        this.a.n(0.0F);
         if (this.f) {
             this.f = false;
-            int i0 = MathHelper.c(this.a.D.b + 0.5D);
-            double d0 = this.b - this.a.t;
-            double d1 = this.d - this.a.v;
+            int i0 = MathHelper.c(this.a.C.b + 0.5D);
+            double d0 = this.b - this.a.s;
+            double d1 = this.d - this.a.u;
             double d2 = this.c - (double) i0;
             double d3 = d0 * d0 + d2 * d2 + d1 * d1;
 
             if (d3 >= 2.500000277905201E-7D) {
                 float f0 = (float) (Math.atan2(d1, d0) * 180.0D / 3.1415927410125732D) - 90.0F;
 
-                this.a.z = this.a(this.a.z, f0, 30.0F);
+                this.a.y = this.a(this.a.y, f0, 30.0F);
                 this.a.i((float) (this.e * this.a.a(SharedMonsterAttributes.d).e()));
                 if (d2 > 0.0D && d0 * d0 + d1 * d1 < 1.0D) {
                     this.a.getJumpHelper().a();
                 }
+
             }
         }
     }

@@ -77,7 +77,7 @@ public class CanaryHorse extends CanaryAnimalVehicle implements Horse {
      */
     @Override
     public boolean isChested() {
-        return getHandle().ci();
+        return getHandle().ck();
     }
 
     /**
@@ -117,7 +117,7 @@ public class CanaryHorse extends CanaryAnimalVehicle implements Horse {
      */
     @Override
     public int getRawType() {
-        return getHandle().bX();
+        return getHandle().bZ();
     }
 
     /**
@@ -141,7 +141,7 @@ public class CanaryHorse extends CanaryAnimalVehicle implements Horse {
      */
     @Override
     public int getVariant() {
-        return getHandle().bY();
+        return getHandle().ca();
     }
 
     /**
@@ -157,7 +157,7 @@ public class CanaryHorse extends CanaryAnimalVehicle implements Horse {
      */
     @Override
     public int getTemper() {
-        return getHandle().co();
+        return getHandle().cq();
     }
 
     /**
@@ -173,7 +173,7 @@ public class CanaryHorse extends CanaryAnimalVehicle implements Horse {
      */
     @Override
     public boolean isTamed() {
-        return getHandle().ca();
+        return getHandle().cc();
     }
 
     /**
@@ -221,7 +221,7 @@ public class CanaryHorse extends CanaryAnimalVehicle implements Horse {
      */
     @Override
     public String getOwnerName() {
-        return getHandle().cf();
+        return getHandle().ch();
     }
 
     /**

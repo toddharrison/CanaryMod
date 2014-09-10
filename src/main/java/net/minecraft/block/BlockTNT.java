@@ -83,10 +83,10 @@ public class BlockTNT extends Block {
     }
 
     public boolean a(World world, int i0, int i1, int i2, EntityPlayer entityplayer, int i3, float f0, float f1, float f2) {
-        if (entityplayer.bD() != null && entityplayer.bD().b() == Items.d) {
+        if (entityplayer.bF() != null && entityplayer.bF().b() == Items.d) {
             this.a(world, i0, i1, i2, 1, entityplayer, ActivationCause.FIRE); // CanaryMod: Add FIRE cause
             world.f(i0, i1, i2);
-            entityplayer.bD().a(1, (EntityLivingBase) entityplayer);
+            entityplayer.bF().a(1, (EntityLivingBase) entityplayer);
             return true;
         }
         else {

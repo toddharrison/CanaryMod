@@ -45,16 +45,16 @@ public class ItemFood extends Item {
                 };
             }
             else {
-                effects = new net.canarymod.api.potion.PotionEffect[]{ new CanaryPotionEffect(new PotionEffect(Potion.x.H, 2400, 0)) };
+                effects = new net.canarymod.api.potion.PotionEffect[]{new CanaryPotionEffect(new PotionEffect(Potion.x.H, 2400, 0))};
             }
         }
         else if (!world.E && this.n > 0 && world.s.nextFloat() < this.q) {
-            effects = new net.canarymod.api.potion.PotionEffect[]{ new CanaryPotionEffect(new PotionEffect(this.n, this.o * 20, this.p)) };
+            effects = new net.canarymod.api.potion.PotionEffect[]{new CanaryPotionEffect(new PotionEffect(this.n, this.o * 20, this.p))};
         }
         EatHook hook = (EatHook) new EatHook(((EntityPlayerMP) entityplayer).getPlayer(), itemstack.getCanaryItem(), this.b, this.c, effects).call();
         if (!hook.isCanceled()) {
             --itemstack.b;
-            entityplayer.bO().a(hook.getLevelGain(), hook.getSaturationGain());
+            entityplayer.bQ().a(hook.getLevelGain(), hook.getSaturationGain());
             world.a((Entity) entityplayer, "random.burp", 0.5F, world.s.nextFloat() * 0.1F + 0.9F);
             // this.c(itemstack, world, entityplayer); moved above and below
             if (hook.getPotionEffects() != null) {

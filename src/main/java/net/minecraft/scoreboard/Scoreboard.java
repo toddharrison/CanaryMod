@@ -2,13 +2,7 @@ package net.minecraft.scoreboard;
 
 import net.canarymod.api.scoreboard.CanaryScoreboard;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Scoreboard {
 
@@ -25,19 +19,19 @@ public class Scoreboard {
         return (ScoreObjective) this.a.get(s0);
     }
 
-    public ScoreObjective a(String s0, ScoreObjectiveCriteria scoreobjectivecriteria) {
+    public ScoreObjective a(String s0, IScoreObjectiveCriteria iscoreobjectivecriteria) {
         ScoreObjective scoreobjective = this.b(s0);
 
         if (scoreobjective != null) {
             throw new IllegalArgumentException("An objective with the name \'" + s0 + "\' already exists!");
         }
         else {
-            scoreobjective = new ScoreObjective(this, s0, scoreobjectivecriteria);
-            Object object = (List) this.b.get(scoreobjectivecriteria);
+            scoreobjective = new ScoreObjective(this, s0, iscoreobjectivecriteria);
+            Object object = (List) this.b.get(iscoreobjectivecriteria);
 
             if (object == null) {
                 object = new ArrayList();
-                this.b.put(scoreobjectivecriteria, object);
+                this.b.put(iscoreobjectivecriteria, object);
             }
 
             ((List) object).add(scoreobjective);
@@ -47,8 +41,8 @@ public class Scoreboard {
         }
     }
 
-    public Collection a(ScoreObjectiveCriteria scoreobjectivecriteria) {
-        Collection collection = (Collection) this.b.get(scoreobjectivecriteria);
+    public Collection a(IScoreObjectiveCriteria iscoreobjectivecriteria) {
+        Collection collection = (Collection) this.b.get(iscoreobjectivecriteria);
 
         return collection == null ? new ArrayList() : new ArrayList(collection);
     }

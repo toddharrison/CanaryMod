@@ -29,9 +29,8 @@ public class ItemSeeds extends Item {
 
                 // CanaryMod: BlockPlaceHook
                 CanaryBlock clicked = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
-
                 clicked.setFaceClicked(BlockFace.fromByte((byte) 1)); // Should be 1
-                CanaryBlock placed = new CanaryBlock((short) Block.b(this.a), (short) 0, i0, i1, i2, world.getCanaryWorld());
+                CanaryBlock placed = new CanaryBlock((short) Block.b(this.a), (short) 0, i0, i1 + 1, i2, world.getCanaryWorld());
                 BlockPlaceHook hook = (BlockPlaceHook) new BlockPlaceHook(((EntityPlayerMP) entityplayer).getPlayer(), clicked, placed).call();
                 if (hook.isCanceled()) {
                     return false;

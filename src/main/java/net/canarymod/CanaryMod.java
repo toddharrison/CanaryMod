@@ -22,7 +22,6 @@ import net.canarymod.user.ReservelistProvider;
 import net.canarymod.user.UserAndGroupsProvider;
 import net.canarymod.user.WhitelistProvider;
 import net.canarymod.warp.WarpProvider;
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.config.LoggerConfig;
@@ -47,7 +46,6 @@ public class CanaryMod extends Canary {
         DatabaseLoader.load();
         NativeTranslate.initialize(); // Intialize native translation bridge
 
-        this.config = new Configuration();
         setLoggerLevelDynamic(); //Once we know if debug is enabled, you can change the level accordingly
         this.motd = new MessageOfTheDay();
         // Initialize the subsystems that do not rely on others
@@ -100,7 +98,7 @@ public class CanaryMod extends Canary {
     }
 
     public void initMOTDListener() {
-        new CanaryMessageOfTheDayListener(getServer());
+        motd().registerMOTDListener(new CanaryMessageOfTheDayListener(), (net.canarymod.motd.MOTDOwner) getServer(), false);
     }
 
     @Override
@@ -116,7 +114,7 @@ public class CanaryMod extends Canary {
     static void setLoggerLevelDynamic() {
         LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
         LoggerConfig logger = ctx.getConfiguration().getLoggers().get(LogManager.ROOT_LOGGER_NAME);
-        logger.setLevel(Configuration.getServerConfig().isDebugMode() ? Level.ALL : Level.INFO);
+        logger.setLevel(Configuration.getServerConfig().getLoggerLevel());
         ctx.updateLoggers();
     }
 }
