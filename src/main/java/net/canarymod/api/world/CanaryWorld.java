@@ -445,7 +445,22 @@ public class CanaryWorld implements World {
     public void playAUXEffectAt(Player player, AuxiliarySoundEffect effect) {
         world.a(player != null ? ((CanaryPlayer) player).getHandle() : null, effect.type.getDigits(), effect.x, effect.y, effect.z, effect.extra);
     }
+    
+    @Override
+    public int getBlockPower(Block block) {
+        return getBlockPower(block.getX(), block.getY(), block.getZ());
+    }
 
+    @Override
+    public int getBlockPower(Position position) {
+        return getBlockPower(position.getBlockX(), position.getBlockY(), position.getBlockZ());
+    }
+
+    @Override
+    public int getBlockPower(int x, int y, int z) {
+        return world.u(x, y, z);
+    }
+    
     @Override
     public boolean isBlockPowered(Block block) {
         return isBlockPowered(block.getX(), block.getY(), block.getZ());
