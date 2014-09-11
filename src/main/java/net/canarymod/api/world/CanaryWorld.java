@@ -378,7 +378,7 @@ public class CanaryWorld implements World {
 
     @Override
     public int getLightLevelAt(int x, int y, int z) {
-        return world.b(EnumSkyBlock.Sky, x, y, z);
+        return world.b(x, y, z, true);
     }
 
     @Override
