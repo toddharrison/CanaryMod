@@ -44,6 +44,25 @@ public class SaveHandler implements ISaveHandler, IPlayerFileData {
         this.type = type;
         this.h();
     }
+    
+    /**
+     * Primarily added for scoreboards, could be used for other things as well.
+     * @param file1 worlds folder
+     * @param s0 name of secondary folder inside
+     */
+    public SaveHandler(File file1, String s0) {
+        // CanaryMod refactored for more flexible folder structure
+        this.worldDir = new File(file1, s0);
+        this.worldDir.mkdirs();
+
+        // CanaryMod put the players files in a global place valid for all worlds
+        this.globalPlayerFilesDir = new File(file1, "players");
+        this.worldDataDir = new File(this.worldDir, ""); // CanaryMod: no data folder put in root folder
+        this.worldDataDir.mkdirs();
+        this.worldName = s0;
+        this.worldbaseDir = file1;
+        this.h();
+    }
 
     // CanaryMod added getname
 

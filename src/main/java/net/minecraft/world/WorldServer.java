@@ -1,8 +1,11 @@
 package net.minecraft.world;
 
 import com.google.common.collect.Lists;
+import java.util.*;
+import net.canarymod.Canary;
 import net.canarymod.api.CanaryEntityTracker;
 import net.canarymod.api.CanaryPlayerManager;
+import net.canarymod.api.scoreboard.CanaryScoreboard;
 import net.canarymod.hook.world.WeatherChangeHook;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEventData;
@@ -38,8 +41,6 @@ import net.minecraft.world.gen.feature.WorldGeneratorBonusChest;
 import net.minecraft.world.storage.ISaveHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.util.*;
 
 public class WorldServer extends World {
 
@@ -81,16 +82,9 @@ public class WorldServer extends World {
         }
 
         this.Q = new Teleporter(this);
-        this.D = new ServerScoreboard(minecraftserver);
-        ScoreboardSaveData scoreboardsavedata = (ScoreboardSaveData) this.z.a(ScoreboardSaveData.class, "scoreboard");
-
-        if (scoreboardsavedata == null) {
-            scoreboardsavedata = new ScoreboardSaveData();
-            this.z.a("scoreboard", (WorldSavedData) scoreboardsavedata);
-        }
-
-        scoreboardsavedata.a(this.D);
-        ((ServerScoreboard) this.D).a(scoreboardsavedata);
+        
+        // CanaryMod: overide scoreboard data
+        this.D = ((CanaryScoreboard)Canary.scoreboards().getScoreboard()).getHandle();
     }
 
     @Override
@@ -636,6 +630,8 @@ public class WorldServer extends World {
         this.G();
         this.w.a(this.x, this.J.ah().t());
         this.z.a();
+        // CanaryMod: save Scoreboard Data
+        Canary.scoreboards().saveAllScoreboards();
     }
 
     protected void a(Entity entity) {
