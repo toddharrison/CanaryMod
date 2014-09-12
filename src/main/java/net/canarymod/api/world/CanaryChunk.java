@@ -5,10 +5,7 @@ import net.canarymod.api.world.blocks.TileEntity;
 import net.canarymod.api.world.position.Position;
 import net.minecraft.world.ChunkPosition;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Chunk implementation
@@ -132,6 +129,9 @@ public class CanaryChunk implements Chunk {
         List<Entity>[] toRet = new List[handle.j.length];
         for (int index = 0; index < handle.j.length; index++) {
             for (Object e : handle.j[index]) {
+                if (toRet[index] == null) {
+                    toRet[index] = new ArrayList<Entity>();
+                }
                 toRet[index].add(((net.minecraft.entity.Entity) e).getCanaryEntity());
             }
         }
