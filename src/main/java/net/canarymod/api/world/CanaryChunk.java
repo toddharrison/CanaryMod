@@ -128,10 +128,8 @@ public class CanaryChunk implements Chunk {
     public List<Entity>[] getEntityLists() {
         List<Entity>[] toRet = new List[handle.j.length];
         for (int index = 0; index < handle.j.length; index++) {
+            toRet[index] = new ArrayList<Entity>();
             for (Object e : handle.j[index]) {
-                if (toRet[index] == null) {
-                    toRet[index] = new ArrayList<Entity>();
-                }
                 toRet[index].add(((net.minecraft.entity.Entity) e).getCanaryEntity());
             }
         }
