@@ -1,6 +1,7 @@
 CanaryMod
 =========
 
+[![Build Status](https://ci.visualillusionsent.net/buildStatus/icon?job=CanaryMod)](https://ci.visualillusionsent.net/job/CanaryMod/)
 [Latest Build](http://ci.visualillusionsent.net/job/CanaryMod/lastBuild/net.canarymod$CanaryMod/)  
 [Latest Successful Build](http://ci.visualillusionsent.net/job/CanaryMod/lastSuccessfulBuild/net.canarymod$CanaryMod/)  
 
