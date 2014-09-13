@@ -16,7 +16,6 @@ import net.canarymod.kit.KitProvider;
 import net.canarymod.motd.CanaryMessageOfTheDayListener;
 import net.canarymod.motd.MessageOfTheDay;
 import net.canarymod.permissionsystem.PermissionManager;
-import net.canarymod.plugin.PluginLoader;
 import net.canarymod.plugin.PluginManager;
 import net.canarymod.user.OperatorsProvider;
 import net.canarymod.user.ReservelistProvider;
