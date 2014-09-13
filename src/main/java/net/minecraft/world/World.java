@@ -291,19 +291,15 @@ public abstract class World implements IBlockAccess {
                 }
 
                 // CanaryMod: BlockUpdate
-                boolean flag0 = false;
+                boolean flag0 = chunk.a(i0 & 15, i1, i2 & 15, block, i3);
                 CanaryBlock cblock;
                 if (canaryDimension != null) {
                     cblock = (CanaryBlock) this.canaryDimension.getBlockAt(i0, i1, i2);
                     BlockUpdateHook hook = (BlockUpdateHook) new BlockUpdateHook(cblock, i3).call();
-                    if (!hook.isCanceled()) {
-                        flag0 = chunk.a(i0 & 15, i1, i2 & 15, block, i3);
+                    if (hook.isCanceled()) {
+                        flag0 = false;
                     }
                     //
-                }
-                else {
-                    // Do not forward things when the world wrapper isn't init yet
-                    flag0 = chunk.a(i0 & 15, i1, i2 & 15, block, i3);
                 }
 
                 this.C.a("checkLight");
