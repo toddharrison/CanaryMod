@@ -78,7 +78,7 @@ public class EntityItem extends Entity {
                 --this.b;
             }
 
-            boolean tmpTouch = this.I; // CanaryMod
+            boolean tmpTouch = this.D; // CanaryMod
 
             this.p = this.s;
             this.q = this.t;
@@ -105,17 +105,17 @@ public class EntityItem extends Entity {
 
             if (this.D) {
                 f0 = this.o.a(MathHelper.c(this.s), MathHelper.c(this.C.b) - 1, MathHelper.c(this.u)).K * 0.98F;
-            }
 
-            // CanaryMod: ItemTouchGround
-            // It does touch the ground now, but didn't in last tick
-            if (!tmpTouch) {
-                ItemTouchGroundHook hook = (ItemTouchGroundHook) new ItemTouchGroundHook((net.canarymod.api.entity.EntityItem) getCanaryEntity()).call();
-                if (hook.isCanceled()) {
-                    this.B(); // kill the item
+                // CanaryMod: ItemTouchGround
+                // It does touch the ground now, but didn't in last tick
+                if (!tmpTouch) {
+                    ItemTouchGroundHook hook = (ItemTouchGroundHook) new ItemTouchGroundHook((net.canarymod.api.entity.EntityItem) getCanaryEntity()).call();
+                    if (hook.isCanceled()) {
+                        this.B(); // kill the item
+                    }
                 }
+                //
             }
-            //
 
             this.v *= (double) f0;
             this.w *= 0.9800000190734863D;

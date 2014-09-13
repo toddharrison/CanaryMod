@@ -9,11 +9,22 @@ public class Scoreboard {
     private final Map a = new HashMap();
     private final Map b = new HashMap();
     private final Map c = new HashMap();
-    private final ScoreObjective[] d = new ScoreObjective[3];
+    private static final ScoreObjective[] d = new ScoreObjective[3]; // CanaryMod: make static
     private final Map e = new HashMap();
     private final Map f = new HashMap();
 
-    private CanaryScoreboard scoreboard = new CanaryScoreboard(this);
+    // CanaryMod: Start CanaryScoreboard 
+    protected CanaryScoreboard scoreboard;
+    
+    public Scoreboard() {
+        scoreboard = new CanaryScoreboard(this, "scoreboard");
+    }
+    
+    /**@param name The save name associated with this Scoreboard */
+    public Scoreboard(String name) {
+        scoreboard = new CanaryScoreboard(this, name);
+    }
+    // CanaryMod: End CanaryScoreboard
 
     public ScoreObjective b(String s0) {
         return (ScoreObjective) this.a.get(s0);

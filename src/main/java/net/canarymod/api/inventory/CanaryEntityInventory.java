@@ -404,15 +404,20 @@ public abstract class CanaryEntityInventory implements Inventory {
             // Add the items to the existing stack of items
             if (itemExisting != null && (!item.isEnchanted() || Configuration.getServerConfig().allowEnchantmentStacking())) {
                 // Add as much items as possible to the stack
-                int k = Math.min(maxAmount - itemExisting.getAmount(), item.getAmount());
+                int k = Math.min(itemExisting.getMaxAmount() - itemExisting.getAmount(), item.getAmount());
                 itemExisting.setAmount(itemExisting.getAmount() + k);
                 amount -= k;
+                // make sure to set itemExisting to null, else we will loop infinitely
+                itemExisting = null;
                 continue;
             }
             // We still have slots, but no stack, create a new stack.
             int eslot = getEmptySlot();
 
             if (eslot != -1) {
+                // Set the amount on item so the NBT copies the correct amounts.
+                item.setAmount(amount);
+                // Create NBT Tags and new Item, then copy NBT from existing item to new item
                 CanaryCompoundTag nbt = new CanaryCompoundTag();
 
                 ((CanaryItem) item).getHandle().b(nbt.getHandle());

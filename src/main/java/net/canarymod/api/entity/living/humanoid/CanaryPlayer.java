@@ -1063,6 +1063,11 @@ public class CanaryPlayer extends CanaryHuman implements Player {
     public boolean isPlayerHidden(Player player, Player isHidden) {
         return this.getWorld().getEntityTracker().isPlayerHidden(player, this);
     }
+    
+    @Override
+    public void setCompassTarget(int x, int y, int z) {
+        this.sendPacket(new CanaryPacket(new net.minecraft.network.play.server.S05PacketSpawnPosition(x, y, z)));
+    }
 
     /**
      * {@inheritDoc}

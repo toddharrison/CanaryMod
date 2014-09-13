@@ -5,6 +5,7 @@ import net.canarymod.api.chat.CanaryChatStyle;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.packet.CanaryPacket;
 import net.canarymod.api.packet.Packet;
+import net.minecraft.event.ClickEvent;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.network.play.server.S02PacketChat;
 import net.minecraft.network.play.server.S07PacketRespawn;
@@ -13,6 +14,7 @@ import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 
 import java.util.StringTokenizer;
+import java.util.regex.Pattern;
 
 /**
  * Wrap up NetServerHandler to minimize entry point to notch code
@@ -22,6 +24,7 @@ import java.util.StringTokenizer;
 public class CanaryNetServerHandler implements NetServerHandler {
 
     private NetHandlerPlayServer handler;
+    private final Pattern urlPattern = Pattern.compile("^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]");
 
     public CanaryNetServerHandler(NetHandlerPlayServer handle) {
         handler = handle;
@@ -114,13 +117,27 @@ public class CanaryNetServerHandler implements NetServerHandler {
                             break;
                     }
                 }
+
                 if (workingMsg.length() > 1) { // Only reset things if there was something beyond the style
-                    toSend.appendSibling(working.appendText(workingMsg.substring(1)));
+                    if (workingMsg.contains(" ")) { // Only urlFormat if there are spaces?
+                        toSend = urlFormat(toSend, working, workingMsg, true);
+                    }
+                    else {
+                        toSend.appendSibling(working.appendText(workingMsg.substring(1)));
+                    }
                     working = new ChatComponentText("").getWrapper();
                 }
             }
+            else if (workingMsg.length() > 1) {
+                if (workingMsg.contains(" ")) { // Only urlFormat if there are spaces?
+                    toSend = urlFormat(toSend, working, workingMsg, false);
+                }
+                else {
+                    toSend.appendSibling(working.appendText(workingMsg));
+                }
+                working = new ChatComponentText("").getWrapper();
+            }
             else {
-                //No style in this part
                 toSend.appendSibling(working.appendText(workingMsg));
                 working = new ChatComponentText("").getWrapper();
             }
@@ -166,5 +183,31 @@ public class CanaryNetServerHandler implements NetServerHandler {
             default:
                 return null;
         }
+    }
+
+    private CanaryChatComponent urlFormat(CanaryChatComponent toSend, CanaryChatComponent working, String workingMsg, boolean styleSet) {
+        String[] subWorking = styleSet ? workingMsg.substring(1).split(" ") : workingMsg.split(" "); // Find the URL
+        StringBuilder subRebuild = new StringBuilder(); // Rebuild everything before and after the URL
+
+        for (String sub : subWorking) {
+            if (urlPattern.matcher(sub).matches()) {
+                CanaryChatStyle urlStyle = new ChatStyle().getWrapper();
+                toSend.appendSibling(working.appendText(subRebuild.toString())); // append everything before the URL
+                working = new ChatComponentText("").getWrapper();
+                ClickEvent clickEvent = new ClickEvent(ClickEvent.Action.OPEN_URL, sub); // Create the ClickEvent Action for the URL
+                urlStyle.setChatClickEvent(clickEvent.getWrapper()); // Append the action
+                toSend.appendSibling(working.setChatStyle(urlStyle).appendText(sub.concat(" "))); // Append the url again
+                working = new ChatComponentText("").getWrapper();
+                subRebuild.delete(0, subRebuild.length()); // Reset the subRebuilder to handle things after the URL
+            }
+            else {
+                subRebuild.append(sub).append(" ");
+            }
+        }
+        if (subRebuild.length() > 0) {
+            toSend.appendSibling(working.appendText(subRebuild.toString())); // Append whats left over
+        }
+
+        return toSend;
     }
 }

@@ -65,7 +65,7 @@ public abstract class Entity {
     public float A; // previous Yaw
     public float B; // previous Pitch
     public final AxisAlignedBB C;
-    public boolean D;
+    public boolean D; // On Ground
     public boolean E;
     public boolean F;
     public boolean G;

@@ -12,6 +12,7 @@ import net.canarymod.api.PlayerListEntry;
 import net.canarymod.api.entity.living.humanoid.CanaryPlayer;
 import net.canarymod.api.nbt.CanaryCompoundTag;
 import net.canarymod.api.packet.CanaryPacket;
+import net.canarymod.api.scoreboard.CanaryScoreboardManager;
 import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.api.world.DimensionType;
 import net.canarymod.api.world.position.Location;
@@ -142,18 +143,22 @@ public abstract class ServerConfigurationManager {
         nethandlerplayserver.a((Packet) (new S09PacketHeldItemChange(entityplayermp.bm.c)));
         entityplayermp.w().d();
         entityplayermp.w().b(entityplayermp);
-        this.a((ServerScoreboard) worldserver.W(), entityplayermp);
+        // CanaryMod: comment this out and use our own Method
+        //this.a((ServerScoreboard) worldserver.W(), entityplayermp);
+        ((CanaryScoreboardManager)Canary.scoreboards()).updateClientAll(entityplayermp);
+        // CanaryMod: End
         this.i.az();
         // CanaryMod: Use display name
         ChatComponentTranslation chatcomponenttranslation = new ChatComponentTranslation("multiplayer.player.joined", new Object[]{entityplayermp.getDisplayName()});
         chatcomponenttranslation.b().a(EnumChatFormatting.YELLOW);
+        // CanaryMod: End
+        this.c(entityplayermp);
         // CanaryMod Connection hook
         ConnectionHook hook = (ConnectionHook) new ConnectionHook(entityplayermp.getPlayer(), chatcomponenttranslation.e(), firstTime).call();
         if (!hook.isHidden()) {
             this.a((IChatComponent) chatcomponenttranslation);
         }
         // CanaryMod end
-        this.c(entityplayermp);
         nethandlerplayserver.a(entityplayermp.s, entityplayermp.t, entityplayermp.u, entityplayermp.y, entityplayermp.z, entityplayermp.ap, w.getName(), TeleportHook.TeleportCause.RESPAWN);
         this.b(entityplayermp, worldserver);
         if (this.i.V().length() > 0) {
@@ -188,7 +193,8 @@ public abstract class ServerConfigurationManager {
         //
     }
 
-    protected void a(ServerScoreboard serverscoreboard, EntityPlayerMP entityplayermp) {
+    // CanaryMod: protected to public
+    public void a(ServerScoreboard serverscoreboard, EntityPlayerMP entityplayermp) {
         HashSet hashset = new HashSet();
         Iterator iterator = serverscoreboard.g().iterator();
 

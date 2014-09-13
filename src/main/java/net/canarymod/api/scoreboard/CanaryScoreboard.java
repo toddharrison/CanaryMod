@@ -15,9 +15,11 @@ import java.util.List;
 public class CanaryScoreboard implements Scoreboard {
 
     private net.minecraft.scoreboard.Scoreboard handle;
+    protected String saveName;
 
-    public CanaryScoreboard(net.minecraft.scoreboard.Scoreboard handle) {
+    public CanaryScoreboard(net.minecraft.scoreboard.Scoreboard handle, String saveName) {
         this.handle = handle;
+        this.saveName = saveName;
     }
 
     @Override
@@ -34,7 +36,7 @@ public class CanaryScoreboard implements Scoreboard {
     public ScoreObjective addScoreObjective(String name) {
         ScoreObjective so = getScoreObjective(name);
         if (so == null) {
-            this.handle.a(name, net.minecraft.scoreboard.IScoreObjectiveCriteria.b);
+            so = this.handle.a(name, net.minecraft.scoreboard.IScoreObjectiveCriteria.b).getCanaryScoreObjective();
         }
         return so;
     }
@@ -55,7 +57,11 @@ public class CanaryScoreboard implements Scoreboard {
 
     @Override
     public ScoreObjective getScoreObjective(String name) {
-        return handle.getScoreObjective(name).getCanaryScoreObjective();
+        net.minecraft.scoreboard.ScoreObjective so = handle.getScoreObjective(name);
+        if (so!= null) {
+            return so.getCanaryScoreObjective();
+        }
+        return null;
     }
 
     @Override
@@ -152,5 +158,10 @@ public class CanaryScoreboard implements Scoreboard {
     @Override
     public void clearScoreboardPosition(ScorePosition type, Player player) {
         ((CanaryPlayer) player).getHandle().a.a(new S3DPacketDisplayScoreboard(type.getId(), null));
+    }
+    
+    @Override
+    public String getSaveName() {
+        return saveName;
     }
 }
