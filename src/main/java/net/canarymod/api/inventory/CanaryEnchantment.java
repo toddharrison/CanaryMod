@@ -2,7 +2,6 @@ package net.canarymod.api.inventory;
 
 import net.canarymod.api.CanaryDamageSource;
 import net.canarymod.api.DamageSource;
-import net.canarymod.api.entity.CanaryEntity;
 import net.canarymod.api.entity.living.EntityLiving;
 import net.minecraft.enchantment.EnchantmentData;
 
@@ -82,7 +81,9 @@ public class CanaryEnchantment implements Enchantment {
      */
     @Override
     public float getDamageModifier(EntityLiving entity) {
-        return getHandle().a(level, (net.minecraft.entity.EntityLiving) ((CanaryEntity) entity).getHandle());
+        return 0.0F;
+        // TODO: I think this may have been removed.
+        //return getHandle().a(level, (net.minecraft.entity.EntityLiving) ((CanaryEntity) entity).getHandle());
     }
 
     /**

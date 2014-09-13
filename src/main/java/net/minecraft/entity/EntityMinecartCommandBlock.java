@@ -23,11 +23,11 @@ public class EntityMinecartCommandBlock extends EntityMinecart {
         }
 
         public ChunkCoordinates f_() {
-            return new ChunkCoordinates(MathHelper.c(EntityMinecartCommandBlock.this.t), MathHelper.c(EntityMinecartCommandBlock.this.u + 0.5D), MathHelper.c(EntityMinecartCommandBlock.this.v));
+            return new ChunkCoordinates(MathHelper.c(EntityMinecartCommandBlock.this.s), MathHelper.c(EntityMinecartCommandBlock.this.t + 0.5D), MathHelper.c(EntityMinecartCommandBlock.this.u));
         }
 
         public World d() {
-            return EntityMinecartCommandBlock.this.p;
+            return EntityMinecartCommandBlock.this.o;
         }
 
         public net.canarymod.api.CommandBlockLogic getReference() {
@@ -77,15 +77,15 @@ public class EntityMinecartCommandBlock extends EntityMinecart {
     }
 
     public void a(int i0, int i1, int i2, boolean flag0) {
-        if (flag0 && this.ab - this.b >= 4) {
-            this.e().a(this.p);
-            this.b = this.ab;
+        if (flag0 && this.aa - this.b >= 4) {
+            this.e().a(this.o);
+            this.b = this.aa;
         }
 
     }
 
     public boolean c(EntityPlayer entityplayer) {
-        if (this.p.E) {
+        if (this.o.E) {
             entityplayer.a(this.e());
         }
 

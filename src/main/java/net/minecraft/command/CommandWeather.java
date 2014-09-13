@@ -34,43 +34,39 @@ public class CommandWeather extends CommandBase {
             if (astring.length > 1) {
                 // CanaryMod: inject world selection
                 if (astring.length > 2) {
-                    boolean loaded = MinecraftServer.G().worldManager.worldIsLoaded(astring[1]);
+                    boolean loaded = MinecraftServer.I().worldManager.worldIsLoaded(astring[1]);
                     if (!loaded) {
-                        a(icommandsender, "No world loaded of Name: '%s'", new Object[]{ astring[1] });
+                        a(icommandsender, this, "No world loaded of Name: '%s'", new Object[]{astring[1]});
                         return;
                     }
-                    worldserver = (WorldServer) ((CanaryWorld) MinecraftServer.G().worldManager.getWorld(astring[1], false)).getHandle();
+                    worldserver = (WorldServer) ((CanaryWorld) MinecraftServer.I().worldManager.getWorld(astring[1], false)).getHandle();
                     i0 = a(icommandsender, astring[2], 1, 1000000) * 20;
-                }
-                else if (astring[1].matches("\\d+")) {
+                } else if (astring[1].matches("\\d+")) {
                     i0 = a(icommandsender, astring[1], 1, 1000000) * 20;
-                }
-                else {
-                    boolean loaded = MinecraftServer.G().worldManager.worldIsLoaded(astring[1]);
+                } else {
+                    boolean loaded = MinecraftServer.I().worldManager.worldIsLoaded(astring[1]);
                     if (!loaded) {
-                        a(icommandsender, "No world loaded of Name: '%s'", new Object[]{ astring[1] });
+                        a(icommandsender, this, "No world loaded of Name: '%s'", new Object[]{astring[1]});
                         return;
                     }
-                    worldserver = (WorldServer) ((CanaryWorld) MinecraftServer.G().worldManager.getWorld(astring[1], false)).getHandle();
+                    worldserver = (WorldServer) ((CanaryWorld) MinecraftServer.I().worldManager.getWorld(astring[1], false)).getHandle();
                 }
             }
 
-            WorldInfo worldinfo = worldserver.M();
-            if (worldserver.M().j() == 0) {
+            WorldInfo worldinfo = worldserver.N();
+            if (worldserver.N().j() == 0) {
                 if ("clear".equalsIgnoreCase(astring[0])) {
                     worldinfo.g(0);
                     worldinfo.f(0);
                     worldinfo.b(false);
                     worldinfo.a(false);
-                    a(icommandsender, "commands.weather.clear", new Object[0]);
-                }
-                else if ("rain".equalsIgnoreCase(astring[0])) {
+                    a(icommandsender, this, "commands.weather.clear", new Object[0]);
+                } else if ("rain".equalsIgnoreCase(astring[0])) {
                     worldinfo.g(i0);
                     worldinfo.b(true);
                     worldinfo.a(false);
-                    a(icommandsender, "commands.weather.rain", new Object[0]);
-                }
-                else {
+                    a(icommandsender, this, "commands.weather.rain", new Object[0]);
+                } else {
                     if (!"thunder".equalsIgnoreCase(astring[0])) {
                         throw new WrongUsageException("commands.weather.usage", new Object[0]);
                     }
@@ -79,17 +75,16 @@ public class CommandWeather extends CommandBase {
                     worldinfo.f(i0);
                     worldinfo.b(true);
                     worldinfo.a(true);
-                    a(icommandsender, "commands.weather.thunder", new Object[0]);
+                    a(icommandsender, this, "commands.weather.thunder", new Object[0]);
                 }
-            }
-            else {
+            } else {
                 throw new WrongUsageException("commands.weather.usage", new Object[0]);
             }
         }
     }
 
     public List a(ICommandSender icommandsender, String[] astring) {
-        return astring.length == 1 ? a(astring, new String[]{ "clear", "rain", "thunder" })
+        return astring.length == 1 ? a(astring, new String[]{"clear", "rain", "thunder"})
                 : astring.length == 2 ? TabCompleteHelper.matchToLoadedWorldOfDimension(astring, DimensionType.NORMAL)
                 : null;
     }

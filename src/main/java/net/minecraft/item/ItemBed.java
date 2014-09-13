@@ -22,16 +22,18 @@ public class ItemBed extends Item {
     public boolean a(ItemStack itemstack, EntityPlayer entityplayer, World world, int i0, int i1, int i2, int i3, float f0, float f1, float f2) {
         if (world.E) {
             return true;
-        } else if (i3 != 1) {
+        }
+        else if (i3 != 1) {
             return false;
-        } else {
+        }
+        else {
             // CanaryMod: BlockPlaceHook
             CanaryBlock clicked = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2); // Store Clicked
             clicked.setFaceClicked(BlockFace.fromByte((byte) i3)); // Set face clicked
 
             ++i1;
             BlockBed blockbed = (BlockBed) Blocks.C;
-            int i4 = MathHelper.c((double) (entityplayer.z * 4.0F / 360.0F) + 0.5D) & 3;
+            int i4 = MathHelper.c((double) (entityplayer.y * 4.0F / 360.0F) + 0.5D) & 3;
             byte b0 = 0;
             byte b1 = 0;
 
@@ -67,10 +69,12 @@ public class ItemBed extends Item {
 
                     --itemstack.b;
                     return true;
-                } else {
+                }
+                else {
                     return false;
                 }
-            } else {
+            }
+            else {
                 return false;
             }
         }

@@ -106,7 +106,7 @@ public class CanaryArrow extends CanaryProjectile implements Arrow {
      */
     @Override
     public int getTicksInGround() {
-        return getHandle().j;
+        return getHandle().at;
     }
 
     /**

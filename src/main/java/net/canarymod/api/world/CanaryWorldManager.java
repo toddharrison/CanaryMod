@@ -7,16 +7,7 @@ import net.canarymod.config.Configuration;
 import net.canarymod.hook.system.UnloadWorldHook;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 import static net.canarymod.Canary.log;
 
@@ -35,31 +26,37 @@ public class CanaryWorldManager implements WorldManager {
     private static final Object worldLock = new Object();
 
     public CanaryWorldManager() {
+        markedForUnload = new HashMap<String, Boolean>(1);
         File worldsFolders = new File("worlds");
 
         if (!worldsFolders.exists()) {
             worldsFolders.mkdirs();
+            return;
         }
-        try {
-            int worldNum = worldsFolders.listFiles().length;
+        File[] worlds = worldsFolders.listFiles();
+        if (worlds == null) {
+            log.warn("No worlds found to be loaded!");
+            return;
+        }
+        int worldNum = worlds.length;
+        if (worldNum == 0) {
+            worldNum = 1;
+        }
 
-            if (worldNum == 0) {
-                worldNum = 1;
+        existingWorlds = new ArrayList<String>(worldNum);
+        loadedWorlds = new HashMap<String, World>(worldNum);
+        for (String f : worldsFolders.list()) {
+            File world = new File(worldsFolders, f);
+            File[] dimensions = world.listFiles();
+            if (dimensions == null) {
+                log.warn("No dimensions founds for World - ".concat(world.getName()));
+                continue;
             }
-            existingWorlds = new ArrayList<String>(worldNum);
-            loadedWorlds = new HashMap<String, World>(worldNum);
-            for (String f : worldsFolders.list()) {
-                File world = new File(worldsFolders, f);
-                for (File fqname : world.listFiles()) {
-                    if (fqname.isDirectory() && fqname.getName().contains("_")) {
-                        existingWorlds.add(fqname.getName());
-                    }
+            for (File fqname : dimensions) {
+                if (fqname.isDirectory() && fqname.getName().contains("_")) {
+                    existingWorlds.add(fqname.getName());
                 }
             }
-            markedForUnload = new HashMap<String, Boolean>(1);
-        }
-        catch (NullPointerException e) {
-            log.error("Failed to initialize world manager!", e);
         }
     }
 

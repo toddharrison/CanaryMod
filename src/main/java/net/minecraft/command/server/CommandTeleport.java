@@ -1,7 +1,11 @@
-package net.minecraft.command;
+package net.minecraft.command.server;
 
 
 import net.canarymod.hook.player.TeleportHook;
+import net.minecraft.command.CommandBase;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.command.PlayerNotFoundException;
+import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
@@ -47,32 +51,32 @@ public class CommandTeleport extends CommandBase {
                         throw new PlayerNotFoundException();
                     }
 
-                    if (entityplayermp1.p != entityplayermp.p) {
-                        a(icommandsender, "commands.tp.notSameDimension", new Object[0]);
+                    if (entityplayermp1.o != entityplayermp.o) {
+                        a(icommandsender, this, "commands.tp.notSameDimension", new Object[0]);
                         return;
                     }
 
                     entityplayermp.a((Entity) null);
                     // CanaryMod: Multiworld Fix and Teleportation Cause
-                    entityplayermp.a.a(entityplayermp1.t, entityplayermp1.u, entityplayermp1.v, entityplayermp1.z, entityplayermp1.A, entityplayermp1.getCanaryWorld().getType().getId(), entityplayermp1.getCanaryWorld().getName(), TeleportHook.TeleportCause.COMMAND);
-                    a(icommandsender, "commands.tp.success", new Object[]{ entityplayermp.b_(), entityplayermp1.b_() });
+                    entityplayermp.a.a(entityplayermp1.s, entityplayermp1.t, entityplayermp1.u, entityplayermp1.y, entityplayermp1.z, entityplayermp1.getCanaryWorld().getType().getId(), entityplayermp1.getCanaryWorld().getName(), TeleportHook.TeleportCause.COMMAND);
+                    a(icommandsender, this, "commands.tp.success", new Object[]{entityplayermp.b_(), entityplayermp1.b_()});
                 }
             }
-            else if (entityplayermp.p != null) {
+            else if (entityplayermp.o != null) {
                 int i0 = astring.length - 3;
-                double d0 = a(icommandsender, entityplayermp.t, astring[i0++]);
-                double d1 = a(icommandsender, entityplayermp.u, astring[i0++], 0, 0);
-                double d2 = a(icommandsender, entityplayermp.v, astring[i0++]);
+                double d0 = a(icommandsender, entityplayermp.s, astring[i0++]);
+                double d1 = a(icommandsender, entityplayermp.t, astring[i0++], 0, 0);
+                double d2 = a(icommandsender, entityplayermp.u, astring[i0++]);
 
                 entityplayermp.a((Entity) null);
                 entityplayermp.a(d0, d1, d2);
-                a(icommandsender, "commands.tp.success.coordinates", new Object[]{ entityplayermp.b_(), Double.valueOf(d0), Double.valueOf(d1), Double.valueOf(d2) });
+                a(icommandsender, this, "commands.tp.success.coordinates", new Object[]{entityplayermp.b_(), Double.valueOf(d0), Double.valueOf(d1), Double.valueOf(d2)});
             }
         }
     }
 
     public List a(ICommandSender icommandsender, String[] astring) {
-        return astring.length != 1 && astring.length != 2 ? null : a(astring, MinecraftServer.G().D());
+        return astring.length != 1 && astring.length != 2 ? null : a(astring, MinecraftServer.I().E());
     }
 
     public boolean a(String[] astring, int i0) {

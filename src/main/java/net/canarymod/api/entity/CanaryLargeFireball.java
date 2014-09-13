@@ -13,8 +13,7 @@ public class CanaryLargeFireball extends CanaryFireball implements LargeFireball
     /**
      * Constructs a new wrapper for EntityLargeFireball
      *
-     * @param entity
-     *         the EntityLargeFireball to wrap
+     * @param entity the EntityLargeFireball to wrap
      */
     public CanaryLargeFireball(EntityLargeFireball entity) {
         super(entity);
@@ -116,7 +115,7 @@ public class CanaryLargeFireball extends CanaryFireball implements LargeFireball
     @Override
     public void detonate() {
         this.destroy();
-        getHandle().p.a(getHandle(), getX(), getY(), getZ(), getPower(), true, damageWorld);
+        getHandle().o.a(getHandle(), getX(), getY(), getZ(), getPower(), true, damageWorld);
     }
 
     /**

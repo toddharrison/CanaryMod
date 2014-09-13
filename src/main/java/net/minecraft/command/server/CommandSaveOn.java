@@ -18,7 +18,7 @@ public class CommandSaveOn extends CommandBase {
     }
 
     public void b(ICommandSender icommandsender, String[] astring) {
-        MinecraftServer minecraftserver = MinecraftServer.G();
+        MinecraftServer minecraftserver = MinecraftServer.I();
         boolean flag0 = false;
 
         // CanaryMod: Fix for MultiWorld
@@ -32,7 +32,7 @@ public class CommandSaveOn extends CommandBase {
         }
 
         if (flag0) {
-            a(icommandsender, "commands.save.enabled", new Object[0]);
+            a(icommandsender, this, "commands.save.enabled", new Object[0]);
         }
         else {
             throw new CommandException("commands.save-on.alreadyOn", new Object[0]);

@@ -1,8 +1,8 @@
 package net.minecraft.world;
 
+import com.google.common.collect.Lists;
 import net.canarymod.api.CanaryEntityTracker;
 import net.canarymod.api.CanaryPlayerManager;
-import net.canarymod.config.Configuration;
 import net.canarymod.hook.world.WeatherChangeHook;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEventData;
@@ -55,9 +55,9 @@ public class WorldServer extends World {
     private int P;
     private final Teleporter Q;
     private final SpawnerAnimals R = new SpawnerAnimals();
-    private ServerBlockEventList[] S = new ServerBlockEventList[]{ new ServerBlockEventList(null), new ServerBlockEventList(null) };
+    private ServerBlockEventList[] S = new ServerBlockEventList[]{new ServerBlockEventList(null), new ServerBlockEventList(null)};
     private int T;
-    private static final WeightedRandomChestContent[] U = new WeightedRandomChestContent[]{ new WeightedRandomChestContent(Items.y, 0, 1, 3, 10), new WeightedRandomChestContent(Item.a(Blocks.f), 0, 1, 3, 10), new WeightedRandomChestContent(Item.a(Blocks.r), 0, 1, 3, 10), new WeightedRandomChestContent(Items.t, 0, 1, 1, 3), new WeightedRandomChestContent(Items.p, 0, 1, 1, 5), new WeightedRandomChestContent(Items.s, 0, 1, 1, 3), new WeightedRandomChestContent(Items.o, 0, 1, 1, 5), new WeightedRandomChestContent(Items.e, 0, 2, 3, 5), new WeightedRandomChestContent(Items.P, 0, 2, 3, 3), new WeightedRandomChestContent(Item.a(Blocks.s), 0, 1, 3, 10) };
+    private static final WeightedRandomChestContent[] U = new WeightedRandomChestContent[]{new WeightedRandomChestContent(Items.y, 0, 1, 3, 10), new WeightedRandomChestContent(Item.a(Blocks.f), 0, 1, 3, 10), new WeightedRandomChestContent(Item.a(Blocks.r), 0, 1, 3, 10), new WeightedRandomChestContent(Items.t, 0, 1, 1, 3), new WeightedRandomChestContent(Items.p, 0, 1, 1, 5), new WeightedRandomChestContent(Items.s, 0, 1, 1, 3), new WeightedRandomChestContent(Items.o, 0, 1, 1, 5), new WeightedRandomChestContent(Items.e, 0, 2, 3, 5), new WeightedRandomChestContent(Items.P, 0, 2, 3, 3), new WeightedRandomChestContent(Item.a(Blocks.s), 0, 1, 3, 10)};
     private List V = new ArrayList();
     private IntHashMap W;
 
@@ -67,7 +67,7 @@ public class WorldServer extends World {
         this.J = minecraftserver;
         this.K = new EntityTracker(this);
         // CanaryMod: Use our view-distance handling
-        this.L = new PlayerManager(this, Configuration.getServerConfig().getViewDistance());
+        this.L = new PlayerManager(this);
         if (this.W == null) {
             this.W = new IntHashMap();
         }
@@ -96,13 +96,13 @@ public class WorldServer extends World {
     @Override
     public void b() {
         super.b();
-        if (this.M().t() && this.r != EnumDifficulty.HARD) {
+        if (this.N().t() && this.r != EnumDifficulty.HARD) {
             this.r = EnumDifficulty.HARD;
         }
 
         this.t.e.b();
         if (this.e()) {
-            if (this.N().b("doDaylightCycle")) {
+            if (this.O().b("doDaylightCycle")) {
                 long i0 = this.x.g() + 24000L;
                 this.x.c(i0 - i0 % 24000L);
                 this.d();
@@ -110,12 +110,12 @@ public class WorldServer extends World {
         }
 
         this.C.a("mobSpawner");
-        if (this.N().b("doMobSpawning")) {
+        if (this.O().b("doMobSpawning")) {
             this.R.a(this, this.G, this.H, this.x.f() % 400L == 0L);
         }
 
         this.C.c("chunkSource");
-        this.v.c();
+        this.v.d();
         int i1 = this.a(1.0F);
 
         if (i1 != this.j) {
@@ -123,7 +123,7 @@ public class WorldServer extends World {
         }
 
         this.x.b(this.x.f() + 1L);
-        if (this.N().b("doDaylightCycle")) {
+        if (this.O().b("doDaylightCycle")) {
             this.x.c(this.x.g() + 1L);
         }
         this.C.c("tickPending");
@@ -136,13 +136,13 @@ public class WorldServer extends World {
         this.A.a();
         this.B.a();
         this.C.c("portalForcer");
-        this.Q.a(this.H());
+        this.Q.a(this.I());
         this.C.b();
         this.Z();
     }
 
     public BiomeGenBase.SpawnListEntry a(EnumCreatureType enumcreaturetype, int i0, int i1, int i2) {
-        List list = this.K().a(enumcreaturetype, i0, i1, i2);
+        List list = this.L().a(enumcreaturetype, i0, i1, i2);
 
         return list != null && !list.isEmpty() ? (BiomeGenBase.SpawnListEntry) WeightedRandom.a(this.s, (Collection) list) : null;
     }
@@ -203,11 +203,11 @@ public class WorldServer extends World {
                 }
 
                 entityplayer = (EntityPlayer) iterator.next();
-            } while (entityplayer.bJ());
+            }
+            while (entityplayer.bL());
 
             return false;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -235,7 +235,7 @@ public class WorldServer extends World {
             int i6;
             int i7;
 
-            if (this.s.nextInt(100000) == 0 && this.P() && this.O()) {
+            if (this.s.nextInt(100000) == 0 && this.Q() && this.P()) {
                 this.k = this.k * 3 + 1013904223;
                 i4 = this.k >> 2;
                 i5 = i2 + (i4 & 15);
@@ -257,11 +257,11 @@ public class WorldServer extends World {
                     this.b(i5 + i2, i7 - 1, i6 + i3, Blocks.aD);
                 }
 
-                if (this.P() && this.e(i5 + i2, i7, i6 + i3, true)) {
+                if (this.Q() && this.e(i5 + i2, i7, i6 + i3, true)) {
                     this.b(i5 + i2, i7, i6 + i3, Blocks.aC);
                 }
 
-                if (this.P()) {
+                if (this.Q()) {
                     BiomeGenBase biomegenbase = this.a(i5 + i2, i6 + i3);
 
                     if (biomegenbase.e()) {
@@ -364,8 +364,7 @@ public class WorldServer extends World {
             if (this.P++ >= 1200) {
                 return;
             }
-        }
-        else {
+        } else {
             this.i();
         }
 
@@ -381,8 +380,7 @@ public class WorldServer extends World {
 
         if (i0 != this.M.size()) {
             throw new IllegalStateException("TickNextTick list out of synch");
-        }
-        else {
+        } else {
             if (i0 > 1000) {
                 i0 = 1000;
             }
@@ -417,8 +415,7 @@ public class WorldServer extends World {
                     if (block.o() != Material.a && Block.a(block, nextticklistentry.a())) {
                         try {
                             block.a(this, nextticklistentry.a, nextticklistentry.b, nextticklistentry.c, this.s);
-                        }
-                        catch (Throwable throwable) {
+                        } catch (Throwable throwable) {
                             CrashReport crashreport = CrashReport.a(throwable, "Exception while ticking a block");
                             CrashReportCategory crashreportcategory = crashreport.a("Block being ticked");
 
@@ -426,8 +423,7 @@ public class WorldServer extends World {
 
                             try {
                                 i2 = this.e(nextticklistentry.a, nextticklistentry.b, nextticklistentry.c);
-                            }
-                            catch (Throwable throwable1) {
+                            } catch (Throwable throwable1) {
                                 i2 = -1;
                             }
 
@@ -435,8 +431,7 @@ public class WorldServer extends World {
                             throw new ReportedException(crashreport);
                         }
                     }
-                }
-                else {
+                } else {
                     this.a(nextticklistentry.a, nextticklistentry.b, nextticklistentry.c, nextticklistentry.a(), 0);
                 }
             }
@@ -460,8 +455,7 @@ public class WorldServer extends World {
 
             if (i4 == 0) {
                 iterator = this.N.iterator();
-            }
-            else {
+            } else {
                 iterator = this.V.iterator();
                 if (!this.V.isEmpty()) {
                     a.debug("toBeTicked = " + this.V.size());
@@ -496,7 +490,7 @@ public class WorldServer extends World {
         }
 
 /* REMOVED
-        if (!this.J.X() && (entity instanceof EntityAnimal || entity instanceof EntityWaterMob)) {
+        if (!this.J.Z() && (entity instanceof EntityAnimal || entity instanceof EntityWaterMob)) {
             entity.B();
         }
 
@@ -552,12 +546,11 @@ public class WorldServer extends World {
     protected void b(WorldSettings worldsettings) {
         if (!this.t.e()) {
             this.x.a(0, this.t.i(), 0);
-        }
-        else {
+        } else {
             this.y = true;
             WorldChunkManager worldchunkmanager = this.t.e;
             List list = worldchunkmanager.a();
-            Random random = new Random(this.G());
+            Random random = new Random(this.H());
             ChunkPosition chunkposition = worldchunkmanager.a(0, 0, 256, list, random);
             int i0 = 0;
             int i1 = this.t.i();
@@ -566,8 +559,7 @@ public class WorldServer extends World {
             if (chunkposition != null) {
                 i0 = chunkposition.a;
                 i2 = chunkposition.c;
-            }
-            else {
+            } else {
                 a.warn("Unable to find spawn biome");
             }
 
@@ -610,7 +602,7 @@ public class WorldServer extends World {
 
     public void a(boolean flag0, IProgressUpdate iprogressupdate) throws MinecraftException {
         // CanaryMod assume every world is able to save
-        if (this.v.d()) {
+        if (this.v.e()) {
             if (iprogressupdate != null) {
                 iprogressupdate.a("Saving level");
             }
@@ -621,18 +613,28 @@ public class WorldServer extends World {
             }
 
             this.v.a(flag0, iprogressupdate);
+            ArrayList arraylist = Lists.newArrayList(this.b.a());
+            Iterator iterator = arraylist.iterator();
+
+            while (iterator.hasNext()) {
+                Chunk chunk = (Chunk) iterator.next();
+
+                if (chunk != null && !this.L.a(chunk.g, chunk.h)) {
+                    this.b.b(chunk.g, chunk.h);
+                }
+            }
         }
     }
 
     public void m() {
-        if (this.v.d()) {
-            this.v.b();
+        if (this.v.e()) {
+            this.v.c();
         }
     }
 
     protected void a() throws MinecraftException {
-        this.F();
-        this.w.a(this.x, this.J.af().q());
+        this.G();
+        this.w.a(this.x, this.J.ah().t());
         this.z.a();
     }
 
@@ -666,16 +668,15 @@ public class WorldServer extends World {
 
     public boolean c(Entity entity) {
         if (super.c(entity)) {
-            this.J.af().a(entity.t, entity.u, entity.v, 512.0D, this.t.i, new S2CPacketSpawnGlobalEntity(entity));
+            this.J.ah().a(entity.s, entity.t, entity.u, 512.0D, this.t.i, new S2CPacketSpawnGlobalEntity(entity));
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
 
     public void a(Entity entity, byte b0) {
-        this.q().b(entity, new S19PacketEntityStatus(entity, b0));
+        this.r().b(entity, new S19PacketEntityStatus(entity, b0));
     }
 
     public Explosion a(Entity entity, double d0, double d1, double d2, float f0, boolean flag0, boolean flag1) {
@@ -715,7 +716,8 @@ public class WorldServer extends World {
             }
 
             blockeventdata1 = (BlockEventData) iterator.next();
-        } while (!blockeventdata1.equals(blockeventdata));
+        }
+        while (!blockeventdata1.equals(blockeventdata));
 
     }
 
@@ -730,7 +732,7 @@ public class WorldServer extends World {
                 BlockEventData blockeventdata = (BlockEventData) iterator.next();
 
                 if (this.a(blockeventdata)) {
-                    this.J.af().a((double) blockeventdata.a(), (double) blockeventdata.b(), (double) blockeventdata.c(), 64.0D, this.t.i, new S24PacketBlockAction(blockeventdata.a(), blockeventdata.b(), blockeventdata.c(), blockeventdata.f(), blockeventdata.d(), blockeventdata.e()));
+                    this.J.ah().a((double) blockeventdata.a(), (double) blockeventdata.b(), (double) blockeventdata.c(), 64.0D, this.t.i, new S24PacketBlockAction(blockeventdata.a(), blockeventdata.b(), blockeventdata.c(), blockeventdata.f(), blockeventdata.d(), blockeventdata.e()));
                 }
             }
 
@@ -749,42 +751,45 @@ public class WorldServer extends World {
     }
 
     protected void o() {
-        boolean flag0 = this.P();
+        boolean flag0 = this.Q();
 
         super.o();
         if (this.m != this.n) {
             // CanaryMod: method change
-            this.J.af().sendPacketToDimension((Packet) (new S2BPacketChangeGameState(7, this.n)), getCanaryWorld().getName(), this.t.i);
+            this.J.ah().sendPacketToDimension((Packet) (new S2BPacketChangeGameState(7, this.n)), getCanaryWorld().getName(), this.t.i);
         }
         if (this.o != this.p) {
             // CanaryMod: method change
-            this.J.af().sendPacketToDimension((Packet) (new S2BPacketChangeGameState(8, this.p)), getCanaryWorld().getName(), this.t.i);
+            this.J.ah().sendPacketToDimension((Packet) (new S2BPacketChangeGameState(8, this.p)), getCanaryWorld().getName(), this.t.i);
         }
-        if (flag0 != this.P()) {
+        if (flag0 != this.Q()) {
             if (flag0) {
-                this.J.af().a((Packet) (new S2BPacketChangeGameState(2, 0.0F)));
+                this.J.ah().a((Packet) (new S2BPacketChangeGameState(2, 0.0F)));
+            } else {
+                this.J.ah().a((Packet) (new S2BPacketChangeGameState(1, 0.0F)));
             }
-            else {
-                this.J.af().a((Packet) (new S2BPacketChangeGameState(1, 0.0F)));
-            }
-            this.J.af().a((Packet) (new S2BPacketChangeGameState(7, this.n)));
-            this.J.af().a((Packet) (new S2BPacketChangeGameState(8, this.p)));
+            this.J.ah().a((Packet) (new S2BPacketChangeGameState(7, this.n)));
+            this.J.ah().a((Packet) (new S2BPacketChangeGameState(8, this.p)));
         }
     }
 
-    public MinecraftServer p() {
+    protected int p() {
+        return this.J.ah().s();
+    }
+
+    public MinecraftServer q() {
         return this.J;
     }
 
-    public EntityTracker q() {
+    public EntityTracker r() {
         return this.K;
     }
 
-    public PlayerManager s() {
+    public PlayerManager t() {
         return this.L;
     }
 
-    public Teleporter t() {
+    public Teleporter u() {
         return this.Q;
     }
 

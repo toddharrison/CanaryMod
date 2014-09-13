@@ -25,7 +25,7 @@ public class BlockPortal extends BlockBreakable {
 
     public void a(World world, int i0, int i1, int i2, Random random) {
         super.a(world, i0, i1, i2, random);
-        if (world.t.d() && world.N().b("doMobSpawning") && random.nextInt(2000) < world.r.a()) {
+        if (world.t.d() && world.O().b("doMobSpawning") && random.nextInt(2000) < world.r.a()) {
             int i3;
 
             for (i3 = i1; !World.a((IBlockAccess) world, i0, i3, i2) && i3 > 0; --i3) {
@@ -36,7 +36,7 @@ public class BlockPortal extends BlockBreakable {
                 Entity entity = ItemMonsterPlacer.a(world, 57, (double) i0 + 0.5D, (double) i3 + 1.1D, (double) i2 + 0.5D);
 
                 if (entity != null) {
-                    entity.an = entity.ai();
+                    entity.am = entity.ai();
                 }
             }
         }
@@ -52,7 +52,8 @@ public class BlockPortal extends BlockBreakable {
         if (i3 == 0) {
             if (iblockaccess.a(i0 - 1, i1, i2) != this && iblockaccess.a(i0 + 1, i1, i2) != this) {
                 i3 = 2;
-            } else {
+            }
+            else {
                 i3 = 1;
             }
 
@@ -112,9 +113,11 @@ public class BlockPortal extends BlockBreakable {
 
         if (i3 == 1 && (!blockportal_size.b() || blockportal_size.e < blockportal_size.h * blockportal_size.g)) {
             world.b(i0, i1, i2, Blocks.a);
-        } else if (i3 == 2 && (!blockportal_size1.b() || blockportal_size1.e < blockportal_size1.h * blockportal_size1.g)) {
+        }
+        else if (i3 == 2 && (!blockportal_size1.b() || blockportal_size1.e < blockportal_size1.h * blockportal_size1.g)) {
             world.b(i0, i1, i2, Blocks.a);
-        } else if (i3 == 0 && !blockportal_size.b() && !blockportal_size1.b()) {
+        }
+        else if (i3 == 0 && !blockportal_size.b() && !blockportal_size1.b()) {
             world.b(i0, i1, i2, Blocks.a);
         }
 
@@ -125,7 +128,7 @@ public class BlockPortal extends BlockBreakable {
     }
 
     public void a(World world, int i0, int i1, int i2, Entity entity) {
-        if (entity.n == null && entity.m == null) {
+        if (entity.m == null && entity.l == null) {
             entity.ah();
         }
     }
@@ -135,6 +138,7 @@ public class BlockPortal extends BlockBreakable {
     }
 
     public static class Size {
+        //TODO: Restore Portal Reconstruct Job/onPortalCreate
 
         private final World a;
         private final int b;
@@ -145,20 +149,20 @@ public class BlockPortal extends BlockBreakable {
         private int g;
         private int h;
 
-        public Size(World i17, int i18, int i19, int i20, int i21) {
-            this.a = i17;
-            this.b = i21;
-            this.d = BlockPortal.a[i21][0];
-            this.c = BlockPortal.a[i21][1];
+        public Size(World world, int i0, int i1, int i2, int i3) {
+            this.a = world;
+            this.b = i3;
+            this.d = BlockPortal.a[i3][0];
+            this.c = BlockPortal.a[i3][1];
 
-            for (int i10 = i19; i19 > i10 - 21 && i19 > 0 && this.a(i17.a(i18, i19 - 1, i20)); --i19) {
+            for (int i10 = i1; i1 > i10 - 21 && i1 > 0 && this.a(world.a(i0, i1 - 1, i2)); --i1) {
                 ;
             }
 
-            int i11 = this.a(i18, i19, i20, this.d) - 1;
+            int i11 = this.a(i0, i1, i2, this.d) - 1;
 
             if (i11 >= 0) {
-                this.f = new ChunkCoordinates(i18 + i11 * Direction.a[this.d], i19, i20 + i11 * Direction.b[this.d]);
+                this.f = new ChunkCoordinates(i0 + i11 * Direction.a[this.d], i1, i2 + i11 * Direction.b[this.d]);
                 this.h = this.a(this.f.a, this.f.b, this.f.c, this.c);
                 if (this.h < 2 || this.h > 21) {
                     this.f = null;
@@ -172,28 +176,28 @@ public class BlockPortal extends BlockBreakable {
 
         }
 
-        protected int a(int i17, int i18, int i19, int i20) {
-            int i10 = Direction.a[i20];
-            int i11 = Direction.b[i20];
+        protected int a(int i0, int i1, int i2, int i3) {
+            int i4 = Direction.a[i3];
+            int i5 = Direction.b[i3];
 
-            int i21;
+            int i6;
             Block block;
 
-            for (i21 = 0; i21 < 22; ++i21) {
-                block = this.a.a(i17 + i10 * i21, i18, i19 + i11 * i21);
+            for (i6 = 0; i6 < 22; ++i6) {
+                block = this.a.a(i0 + i4 * i6, i1, i2 + i5 * i6);
                 if (!this.a(block)) {
                     break;
                 }
 
-                Block block1 = this.a.a(i17 + i10 * i21, i18 - 1, i19 + i11 * i21);
+                Block block1 = this.a.a(i0 + i4 * i6, i1 - 1, i2 + i5 * i6);
 
                 if (block1 != Blocks.Z) {
                     break;
                 }
             }
 
-            block = this.a.a(i17 + i10 * i21, i18, i19 + i11 * i21);
-            return block == Blocks.Z ? i21 : 0;
+            block = this.a.a(i0 + i4 * i6, i1, i2 + i5 * i6);
+            return block == Blocks.Z ? i6 : 0;
         }
 
         protected int a() {
@@ -224,7 +228,8 @@ public class BlockPortal extends BlockBreakable {
                         if (i21 != Blocks.Z) {
                             break label56;
                         }
-                    } else if (i18 == this.h - 1) {
+                    }
+                    else if (i18 == this.h - 1) {
                         i21 = this.a.a(i19 + Direction.a[BlockPortal.a[this.b][1]], i17, i20 + Direction.b[BlockPortal.a[this.b][1]]);
                         if (i21 != Blocks.Z) {
                             break label56;
@@ -245,7 +250,8 @@ public class BlockPortal extends BlockBreakable {
 
             if (this.g <= 21 && this.g >= 3) {
                 return this.g;
-            } else {
+            }
+            else {
                 this.f = null;
                 this.h = 0;
                 this.g = 0;
@@ -253,8 +259,8 @@ public class BlockPortal extends BlockBreakable {
             }
         }
 
-        protected boolean a(Block i17) {
-            return i17.J == Material.a || i17 == Blocks.ab || i17 == Blocks.aO;
+        protected boolean a(Block block) {
+            return block.J == Material.a || block == Blocks.ab || block == Blocks.aO;
         }
 
         public boolean b() {
@@ -262,14 +268,14 @@ public class BlockPortal extends BlockBreakable {
         }
 
         public void c() {
-            for (int i17 = 0; i17 < this.h; ++i17) {
-                int i18 = this.f.a + Direction.a[this.c] * i17;
-                int i19 = this.f.c + Direction.b[this.c] * i17;
+            for (int i0 = 0; i0 < this.h; ++i0) {
+                int i1 = this.f.a + Direction.a[this.c] * i0;
+                int i2 = this.f.c + Direction.b[this.c] * i0;
 
-                for (int i20 = 0; i20 < this.g; ++i20) {
-                    int i21 = this.f.b + i20;
+                for (int i3 = 0; i3 < this.g; ++i3) {
+                    int i4 = this.f.b + i3;
 
-                    this.a.d(i18, i21, i19, Blocks.aO, this.b, 2);
+                    this.a.d(i1, i4, i2, Blocks.aO, this.b, 2);
                 }
             }
 

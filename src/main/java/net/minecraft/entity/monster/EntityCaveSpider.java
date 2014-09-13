@@ -23,15 +23,14 @@ public class EntityCaveSpider extends EntitySpider {
         this.a(SharedMonsterAttributes.a).a(12.0D);
     }
 
-    public boolean m(Entity entity) {
-        if (super.m(entity)) {
+    public boolean n(Entity entity) {
+        if (super.n(entity)) {
             if (entity instanceof EntityLivingBase) {
                 byte b0 = 0;
 
-                if (this.p.r == EnumDifficulty.NORMAL) {
+                if (this.o.r == EnumDifficulty.NORMAL) {
                     b0 = 7;
-                }
-                else if (this.p.r == EnumDifficulty.HARD) {
+                } else if (this.o.r == EnumDifficulty.HARD) {
                     b0 = 15;
                 }
 
@@ -41,13 +40,12 @@ public class EntityCaveSpider extends EntitySpider {
             }
 
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
 
-    public IEntityLivingData a(IEntityLivingData entitylivingdata) {
-        return entitylivingdata;
+    public IEntityLivingData a(IEntityLivingData ientitylivingdata) {
+        return ientitylivingdata;
     }
 }

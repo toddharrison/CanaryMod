@@ -72,8 +72,7 @@ public class EntityAITasks {
                     this.c.add(entityaitasks_entityaitaskentry);
                 }
             }
-        }
-        else {
+        } else {
             iterator = this.c.iterator();
 
             while (iterator.hasNext()) {
@@ -128,8 +127,7 @@ public class EntityAITasks {
                         this.d.b();
                         return false;
                     }
-                }
-                else if (this.c.contains(entityaitasks_entityaitaskentry1) && !entityaitasks_entityaitaskentry1.a.i()) {
+                } else if (this.c.contains(entityaitasks_entityaitaskentry1) && !entityaitasks_entityaitaskentry1.a.i()) {
                     this.d.b();
                     return false;
                 }

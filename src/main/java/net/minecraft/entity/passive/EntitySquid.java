@@ -30,7 +30,7 @@ public class EntitySquid extends EntityWaterMob {
     public EntitySquid(World world) {
         super(world);
         this.a(0.95F, 0.95F);
-        this.by = 1.0F / (this.aa.nextFloat() + 1.0F) * 0.2F;
+        this.by = 1.0F / (this.Z.nextFloat() + 1.0F) * 0.2F;
         this.entity = new CanarySquid(this); // CanaryMod: Wrap Entity
     }
 
@@ -64,7 +64,7 @@ public class EntitySquid extends EntityWaterMob {
     }
 
     protected void b(boolean flag0, int i0) {
-        int i1 = this.aa.nextInt(3 + i0) + 1;
+        int i1 = this.Z.nextInt(3 + i0) + 1;
 
         for (int i2 = 0; i2 < i1; ++i2) {
             this.a(new ItemStack(Items.aR, 1, 0), 0.0F);
@@ -72,7 +72,7 @@ public class EntitySquid extends EntityWaterMob {
     }
 
     public boolean M() {
-        return this.p.a(this.D.b(0.0D, -0.6000000238418579D, 0.0D), Material.h, (Entity) this);
+        return this.o.a(this.C.b(0.0D, -0.6000000238418579D, 0.0D), Material.h, (Entity) this);
     }
 
     public void e() {
@@ -84,8 +84,8 @@ public class EntitySquid extends EntityWaterMob {
         this.bt += this.by;
         if (this.bt > 6.2831855F) {
             this.bt -= 6.2831855F;
-            if (this.aa.nextInt(10) == 0) {
-                this.by = 1.0F / (this.aa.nextFloat() + 1.0F) * 0.2F;
+            if (this.Z.nextInt(10) == 0) {
+                this.by = 1.0F / (this.Z.nextFloat() + 1.0F) * 0.2F;
             }
         }
 
@@ -98,36 +98,33 @@ public class EntitySquid extends EntityWaterMob {
                 if ((double) f0 > 0.75D) {
                     this.bx = 1.0F;
                     this.bz = 1.0F;
-                }
-                else {
+                } else {
                     this.bz *= 0.8F;
                 }
-            }
-            else {
+            } else {
                 this.bv = 0.0F;
                 this.bx *= 0.9F;
                 this.bz *= 0.99F;
             }
 
-            if (!this.p.E) {
-                this.w = (double) (this.bA * this.bx);
-                this.x = (double) (this.bB * this.bx);
-                this.y = (double) (this.bC * this.bx);
+            if (!this.o.E) {
+                this.v = (double) (this.bA * this.bx);
+                this.w = (double) (this.bB * this.bx);
+                this.x = (double) (this.bC * this.bx);
             }
 
-            f0 = MathHelper.a(this.w * this.w + this.y * this.y);
-            this.aN += (-((float) Math.atan2(this.w, this.y)) * 180.0F / 3.1415927F - this.aN) * 0.1F;
-            this.z = this.aN;
+            f0 = MathHelper.a(this.v * this.v + this.x * this.x);
+            this.aM += (-((float) Math.atan2(this.v, this.x)) * 180.0F / 3.1415927F - this.aM) * 0.1F;
+            this.y = this.aM;
             this.br += 3.1415927F * this.bz * 1.5F;
-            this.bp += (-((float) Math.atan2((double) f0, this.x)) * 180.0F / 3.1415927F - this.bp) * 0.1F;
-        }
-        else {
+            this.bp += (-((float) Math.atan2((double) f0, this.w)) * 180.0F / 3.1415927F - this.bp) * 0.1F;
+        } else {
             this.bv = MathHelper.e(MathHelper.a(this.bt)) * 3.1415927F * 0.25F;
-            if (!this.p.E) {
-                this.w = 0.0D;
-                this.x -= 0.08D;
-                this.x *= 0.9800000190734863D;
-                this.y = 0.0D;
+            if (!this.o.E) {
+                this.v = 0.0D;
+                this.w -= 0.08D;
+                this.w *= 0.9800000190734863D;
+                this.x = 0.0D;
             }
 
             this.bp = (float) ((double) this.bp + (double) (-90.0F - this.bp) * 0.02D);
@@ -135,26 +132,25 @@ public class EntitySquid extends EntityWaterMob {
     }
 
     public void e(float f0, float f1) {
-        this.d(this.w, this.x, this.y);
+        this.d(this.v, this.w, this.x);
     }
 
     protected void bq() {
-        ++this.aV;
-        if (this.aV > 100) {
+        ++this.aU;
+        if (this.aU > 100) {
             this.bA = this.bB = this.bC = 0.0F;
-        }
-        else if (this.aa.nextInt(50) == 0 || !this.ad || this.bA == 0.0F && this.bB == 0.0F && this.bC == 0.0F) {
-            float f0 = this.aa.nextFloat() * 3.1415927F * 2.0F;
+        } else if (this.Z.nextInt(50) == 0 || !this.ac || this.bA == 0.0F && this.bB == 0.0F && this.bC == 0.0F) {
+            float f0 = this.Z.nextFloat() * 3.1415927F * 2.0F;
 
             this.bA = MathHelper.b(f0) * 0.2F;
-            this.bB = -0.1F + this.aa.nextFloat() * 0.2F;
+            this.bB = -0.1F + this.Z.nextFloat() * 0.2F;
             this.bC = MathHelper.a(f0) * 0.2F;
         }
 
         this.w();
     }
 
-    public boolean bw() {
-        return this.u > 45.0D && this.u < 63.0D && super.bw();
+    public boolean by() {
+        return this.t > 45.0D && this.t < 63.0D && super.by();
     }
 }

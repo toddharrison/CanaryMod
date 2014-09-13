@@ -38,7 +38,7 @@ public class CanarySkeleton extends CanaryEntityMob implements Skeleton {
      */
     @Override
     public boolean isWitherSkeleton() {
-        return getHandle().bZ() == 1;
+        return getHandle().cb() == 1;
     }
 
     /**

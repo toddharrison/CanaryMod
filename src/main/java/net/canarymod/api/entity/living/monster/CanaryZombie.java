@@ -38,7 +38,7 @@ public class CanaryZombie extends CanaryEntityMob implements Zombie {
      */
     @Override
     public boolean isVillager() {
-        return getHandle().bZ();
+        return getHandle().cb();
     }
 
     /**
@@ -86,7 +86,7 @@ public class CanaryZombie extends CanaryEntityMob implements Zombie {
      */
     @Override
     public boolean isConverting() {
-        return getHandle().ca();
+        return getHandle().cc();
     }
 
     /**
@@ -102,7 +102,7 @@ public class CanaryZombie extends CanaryEntityMob implements Zombie {
      */
     @Override
     public void convertToVillager() {
-        getHandle().cb();
+        getHandle().cd();
     }
 
     /**

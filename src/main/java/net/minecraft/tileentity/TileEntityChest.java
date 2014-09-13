@@ -227,9 +227,14 @@ public class TileEntityChest extends TileEntity implements IInventory {
     }
 
     private boolean a(int i0, int i1, int i2) {
-        Block block = this.b.a(i0, i1, i2);
+        if (this.b == null) {
+            return false;
+        }
+        else {
+            Block block = this.b.a(i0, i1, i2);
 
-        return block instanceof BlockChest && ((BlockChest) block).a == this.j();
+            return block instanceof BlockChest && ((BlockChest) block).a == this.j();
+        }
     }
 
     public void h() {
@@ -241,14 +246,14 @@ public class TileEntityChest extends TileEntity implements IInventory {
         if (!this.b.E && this.o != 0 && (this.q + this.c + this.d + this.e) % 200 == 0) {
             this.o = 0;
             f0 = 5.0F;
-            List list = this.b.a(EntityPlayer.class, AxisAlignedBB.a().a((double) ((float) this.c - f0), (double) ((float) this.d - f0), (double) ((float) this.e - f0), (double) ((float) (this.c + 1) + f0), (double) ((float) (this.d + 1) + f0), (double) ((float) (this.e + 1) + f0)));
+            List list = this.b.a(EntityPlayer.class, AxisAlignedBB.a((double) ((float) this.c - f0), (double) ((float) this.d - f0), (double) ((float) this.e - f0), (double) ((float) (this.c + 1) + f0), (double) ((float) (this.d + 1) + f0), (double) ((float) (this.e + 1) + f0)));
             Iterator iterator = list.iterator();
 
             while (iterator.hasNext()) {
                 EntityPlayer entityplayer = (EntityPlayer) iterator.next();
 
-                if (entityplayer.bp instanceof ContainerChest) {
-                    IInventory iinventory = ((ContainerChest) entityplayer.bp).e();
+                if (entityplayer.bo instanceof ContainerChest) {
+                    IInventory iinventory = ((ContainerChest) entityplayer.bo).e();
 
                     if (iinventory == this || iinventory instanceof InventoryLargeChest && ((InventoryLargeChest) iinventory).a((IInventory) this)) {
                         ++this.o;

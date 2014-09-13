@@ -11,13 +11,7 @@ import net.minecraft.entity.passive.EntityBat;
 import net.minecraft.entity.passive.EntitySquid;
 import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraft.entity.projectile.EntityEgg;
-import net.minecraft.entity.projectile.EntityFireball;
-import net.minecraft.entity.projectile.EntityFishHook;
-import net.minecraft.entity.projectile.EntityPotion;
-import net.minecraft.entity.projectile.EntitySmallFireball;
-import net.minecraft.entity.projectile.EntitySnowball;
+import net.minecraft.entity.projectile.*;
 import net.minecraft.network.Packet;
 import net.minecraft.util.IntHashMap;
 import net.minecraft.util.ReportedException;
@@ -44,7 +38,7 @@ public class EntityTracker {
 
     public EntityTracker(WorldServer worldserver) {
         this.b = worldserver;
-        this.e = worldserver.p().af().a();
+        this.e = worldserver.q().ah().d();
         canaryTracker = new CanaryEntityTracker(this, worldserver.getCanaryWorld());
     }
 
@@ -52,88 +46,64 @@ public class EntityTracker {
         if (entity instanceof EntityPlayerMP) {
             this.a(entity, 512, 2);
             EntityPlayerMP entityplayermp = (EntityPlayerMP) entity;
+            Iterator iterator = this.c.iterator();
 
-            for (Object aC : this.c) {
-                EntityTrackerEntry entitytrackerentry = (EntityTrackerEntry) aC;
+            while (iterator.hasNext()) {
+                EntityTrackerEntry entitytrackerentry = (EntityTrackerEntry) iterator.next();
 
                 if (entitytrackerentry.a != entityplayermp) {
-                        entitytrackerentry.b(entityplayermp);
+                    entitytrackerentry.b(entityplayermp);
                 }
             }
-        }
-        else if (entity instanceof EntityFishHook) {
+        } else if (entity instanceof EntityFishHook) {
             this.a(entity, 64, 5, true);
-        }
-        else if (entity instanceof EntityArrow) {
+        } else if (entity instanceof EntityArrow) {
             this.a(entity, 64, 20, false);
-        }
-        else if (entity instanceof EntitySmallFireball) {
+        } else if (entity instanceof EntitySmallFireball) {
             this.a(entity, 64, 10, false);
-        }
-        else if (entity instanceof EntityFireball) {
+        } else if (entity instanceof EntityFireball) {
             this.a(entity, 64, 10, false);
-        }
-        else if (entity instanceof EntitySnowball) {
+        } else if (entity instanceof EntitySnowball) {
             this.a(entity, 64, 10, true);
-        }
-        else if (entity instanceof EntityEnderPearl) {
+        } else if (entity instanceof EntityEnderPearl) {
             this.a(entity, 64, 10, true);
-        }
-        else if (entity instanceof EntityEnderEye) {
+        } else if (entity instanceof EntityEnderEye) {
             this.a(entity, 64, 4, true);
-        }
-        else if (entity instanceof EntityEgg) {
+        } else if (entity instanceof EntityEgg) {
             this.a(entity, 64, 10, true);
-        }
-        else if (entity instanceof EntityPotion) {
+        } else if (entity instanceof EntityPotion) {
             this.a(entity, 64, 10, true);
-        }
-        else if (entity instanceof EntityExpBottle) {
+        } else if (entity instanceof EntityExpBottle) {
             this.a(entity, 64, 10, true);
-        }
-        else if (entity instanceof EntityFireworkRocket) {
+        } else if (entity instanceof EntityFireworkRocket) {
             this.a(entity, 64, 10, true);
-        }
-        else if (entity instanceof EntityItem) {
+        } else if (entity instanceof EntityItem) {
             this.a(entity, 64, 20, true);
-        }
-        else if (entity instanceof EntityMinecart) {
+        } else if (entity instanceof EntityMinecart) {
             this.a(entity, 80, 3, true);
-        }
-        else if (entity instanceof EntityBoat) {
+        } else if (entity instanceof EntityBoat) {
             this.a(entity, 80, 3, true);
-        }
-        else if (entity instanceof EntitySquid) {
+        } else if (entity instanceof EntitySquid) {
             this.a(entity, 64, 3, true);
-        }
-        else if (entity instanceof EntityWither) {
+        } else if (entity instanceof EntityWither) {
             this.a(entity, 80, 3, false);
-        }
-        else if (entity instanceof EntityBat) {
+        } else if (entity instanceof EntityBat) {
             this.a(entity, 80, 3, false);
-        }
-        else if (entity instanceof IAnimals) {
+        } else if (entity instanceof IAnimals) {
             this.a(entity, 80, 3, true);
-        }
-        else if (entity instanceof EntityDragon) {
+        } else if (entity instanceof EntityDragon) {
             this.a(entity, 160, 3, true);
-        }
-        else if (entity instanceof EntityTNTPrimed) {
+        } else if (entity instanceof EntityTNTPrimed) {
             this.a(entity, 160, 10, true);
-        }
-        else if (entity instanceof EntityFallingBlock) {
+        } else if (entity instanceof EntityFallingBlock) {
             this.a(entity, 160, 20, true);
-        }
-        else if (entity instanceof EntityHanging) {
+        } else if (entity instanceof EntityHanging) {
             this.a(entity, 160, Integer.MAX_VALUE, false);
-        }
-        else if (entity instanceof EntityXPOrb) {
+        } else if (entity instanceof EntityXPOrb) {
             this.a(entity, 160, 20, true);
-        }
-        else if (entity instanceof EntityEnderCrystal) {
+        } else if (entity instanceof EntityEnderCrystal) {
             this.a(entity, 256, Integer.MAX_VALUE, false);
-        }
-        else if (entity instanceof EntityNonPlayableCharacter) { // CanaryMod: NPC
+        } else if (entity instanceof EntityNonPlayableCharacter) { // CanaryMod: NPC
             this.a(entity, 512, 2);
         }
     }
@@ -142,30 +112,29 @@ public class EntityTracker {
         this.a(entity, i0, i1, false);
     }
 
-    public void a(Entity s0, int i0, final int i1, boolean flag0) {
+    public void a(Entity entity, int i0, final int i1, boolean flag0) {
         if (i0 > this.e) {
             i0 = this.e;
         }
 
         try {
-            if (this.d.b(s0.y())) {
+            if (this.d.b(entity.y())) {
                 throw new IllegalStateException("Entity is already tracked!");
             }
 
-            EntityTrackerEntry entitytrackerentry = new EntityTrackerEntry(s0, i0, i1, flag0);
+            EntityTrackerEntry entitytrackerentry = new EntityTrackerEntry(entity, i0, i1, flag0);
 
             this.c.add(entitytrackerentry);
-            this.d.a(s0.y(), entitytrackerentry);
-            
+            this.d.a(entity.y(), entitytrackerentry);
+
             // CanaryMod: update hidden player tracking state
-            if (s0 instanceof EntityPlayerMP) {
-                EntityPlayerMP entityplayermp = (EntityPlayerMP) s0;
+            if (entity instanceof EntityPlayerMP) {
+                EntityPlayerMP entityplayermp = (EntityPlayerMP) entity;
                 canaryTracker.forceHiddenPlayerUpdate(entityplayermp.getPlayer());
             }
             // CanaryMod: end
             entitytrackerentry.b(this.b.h);
-        }
-        catch (Throwable s01) {
+        } catch (Throwable s01) {
             CrashReport crashreport = CrashReport.a(s01, "Adding entity to track");
             CrashReportCategory crashreportcategory = crashreport.a("Entity To Track");
 
@@ -182,15 +151,14 @@ public class EntityTracker {
                     return s0;
                 }
             });
-            s0.a(crashreportcategory);
+            entity.a(crashreportcategory);
             CrashReportCategory crashreportcategory1 = crashreport.a("Entity That Is Already Tracked");
 
-            ((EntityTrackerEntry) this.d.a(s0.y())).a.a(crashreportcategory1);
+            ((EntityTrackerEntry) this.d.a(entity.y())).a.a(crashreportcategory1);
 
             try {
                 throw new ReportedException(crashreport);
-            }
-            catch (ReportedException reportedexception) {
+            } catch (ReportedException reportedexception) {
                 a.error("\"Silently\" catching entity tracking error.", reportedexception);
             }
         }
@@ -277,7 +245,7 @@ public class EntityTracker {
         while (iterator.hasNext()) {
             EntityTrackerEntry entitytrackerentry = (EntityTrackerEntry) iterator.next();
 
-            if (entitytrackerentry.a != entityplayermp && entitytrackerentry.a.ai == chunk.g && entitytrackerentry.a.ak == chunk.h) {
+            if (entitytrackerentry.a != entityplayermp && entitytrackerentry.a.ah == chunk.g && entitytrackerentry.a.aj == chunk.h) {
                 entitytrackerentry.b(entityplayermp);
             }
         }
@@ -300,14 +268,14 @@ public class EntityTracker {
     public Set<EntityTrackerEntry> getTrackedEntities() {
         return c;
     }
-    
+
     /**
      * Gets teh EntityTrackerEntry for the entity with the given uuid
-     * 
+     *
      * @param uuid
-     * @return 
+     * @return
      */
     public EntityTrackerEntry getTrackerEntry(int uuid) {
-        return (EntityTrackerEntry)d.a(uuid);
+        return (EntityTrackerEntry) d.a(uuid);
     }
 }

@@ -155,7 +155,7 @@ public class ContainerEnchantment extends Container {
     public boolean a(EntityPlayer entityplayer, int i0) {
         ItemStack itemstack = this.a.a(0);
 
-        if (this.g[i0] > 0 && itemstack != null && (entityplayer.bG >= this.g[i0] || entityplayer.bF.d)) {
+        if (this.g[i0] > 0 && itemstack != null && (entityplayer.bG >= this.g[i0] || entityplayer.bE.d)) {
             if (!this.h.E) {
                 List<EnchantmentData> list = EnchantmentHelper.b(this.l, itemstack, this.g[i0]);
                 boolean flag0 = itemstack.b() == Items.aG;

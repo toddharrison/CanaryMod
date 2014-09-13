@@ -200,7 +200,7 @@ public class WorldInfo {
         nbttagcompound.a("Time", this.g);
         nbttagcompound.a("DayTime", this.h);
         nbttagcompound.a("SizeOnDisk", this.j);
-        nbttagcompound.a("LastPlayed", MinecraftServer.ap());
+        nbttagcompound.a("LastPlayed", MinecraftServer.ar());
         nbttagcompound.a("LevelName", this.m);
         nbttagcompound.a("version", this.n);
         nbttagcompound.a("rainTime", this.p);

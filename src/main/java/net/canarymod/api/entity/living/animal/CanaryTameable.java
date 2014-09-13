@@ -13,8 +13,7 @@ public abstract class CanaryTameable extends CanaryAgeableAnimal implements Tame
     /**
      * Constructs a new wrapper for EntityTameable
      *
-     * @param entity
-     *         the EntityTameable to wrap
+     * @param entity the EntityTameable to wrap
      */
     public CanaryTameable(EntityTameable entity) {
         super(entity);
@@ -25,7 +24,7 @@ public abstract class CanaryTameable extends CanaryAgeableAnimal implements Tame
      */
     @Override
     public LivingBase getOwner() {
-        return (LivingBase) getHandle().bZ().getCanaryEntity();
+        return (LivingBase) getHandle().cb().getCanaryEntity();
     }
 
     /**
@@ -57,7 +56,7 @@ public abstract class CanaryTameable extends CanaryAgeableAnimal implements Tame
      */
     @Override
     public boolean isTamed() {
-        return getHandle().bX();
+        return getHandle().bZ();
     }
 
     /**

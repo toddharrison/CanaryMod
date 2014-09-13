@@ -171,7 +171,7 @@ public abstract class BlockRedstoneDiode extends BlockDirectional {
     }
 
     public void a(World world, int i0, int i1, int i2, EntityLivingBase entitylivingbase, ItemStack itemstack) {
-        int i3 = ((MathHelper.c((double) (entitylivingbase.z * 4.0F / 360.0F) + 0.5D) & 3) + 2) % 4;
+        int i3 = ((MathHelper.c((double) (entitylivingbase.y * 4.0F / 360.0F) + 0.5D) & 3) + 2) % 4;
 
         world.a(i0, i1, i2, i3, 3);
         boolean flag0 = this.a(world, i0, i1, i2, i3);

@@ -13,8 +13,7 @@ public abstract class CanaryFireball extends CanaryEntity implements Fireball {
     /**
      * Constructs a new wrapper for EntityFireball
      *
-     * @param entity
-     *         the EntityFireball to be wrapped
+     * @param entity the EntityFireball to be wrapped
      */
     public CanaryFireball(EntityFireball entity) {
         super(entity);
@@ -30,7 +29,7 @@ public abstract class CanaryFireball extends CanaryEntity implements Fireball {
      */
     @Override
     public int getTicksAlive() {
-        return getHandle().j;
+        return getHandle().at;
     }
 
     /**

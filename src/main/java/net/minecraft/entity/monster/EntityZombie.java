@@ -2,12 +2,14 @@ package net.minecraft.entity.monster;
 
 import net.canarymod.api.entity.living.monster.CanaryZombie;
 import net.minecraft.block.Block;
+import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
+import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -24,6 +26,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.UUID;
 
 public class EntityZombie extends EntityMob {
@@ -60,7 +63,7 @@ public class EntityZombie extends EntityMob {
         this.a(SharedMonsterAttributes.b).a(40.0D);
         this.a(SharedMonsterAttributes.d).a(0.23000000417232513D);
         this.a(SharedMonsterAttributes.e).a(3.0D);
-        this.bc().b(bp).a(this.aa.nextDouble() * 0.10000000149011612D);
+        this.bc().b(bp).a(this.Z.nextDouble() * 0.10000000149011612D);
     }
 
     protected void c() {
@@ -84,7 +87,7 @@ public class EntityZombie extends EntityMob {
         return true;
     }
 
-    public boolean bX() {
+    public boolean bZ() {
         return this.bu;
     }
 
@@ -93,8 +96,7 @@ public class EntityZombie extends EntityMob {
             this.bu = flag0;
             if (flag0) {
                 this.c.a(1, this.bs);
-            }
-            else {
+            } else {
                 this.c.a((EntityAIBase) this.bs);
             }
         }
@@ -115,18 +117,18 @@ public class EntityZombie extends EntityMob {
 
     public void i(boolean flag0) {
         this.z().b(12, Byte.valueOf((byte) (flag0 ? 1 : 0)));
-        if (this.p != null && !this.p.E) {
-            IAttributeInstance attributeinstance = this.a(SharedMonsterAttributes.d);
+        if (this.o != null && !this.o.E) {
+            IAttributeInstance iattributeinstance = this.a(SharedMonsterAttributes.d);
 
-            attributeinstance.b(br);
+            iattributeinstance.b(br);
             if (flag0) {
-                attributeinstance.a(br);
+                iattributeinstance.a(br);
             }
         }
         this.k(flag0);
     }
 
-    public boolean bZ() {
+    public boolean cb() {
         return this.z().a(13) == 1;
     }
 
@@ -135,16 +137,16 @@ public class EntityZombie extends EntityMob {
     }
 
     public void e() {
-        if (this.p.v() && !this.p.E && !this.f()) {
+        if (this.o.w() && !this.o.E && !this.f()) {
             float f0 = this.d(1.0F);
 
-            if (f0 > 0.5F && this.aa.nextFloat() * 30.0F < (f0 - 0.4F) * 2.0F && this.p.i(MathHelper.c(this.t), MathHelper.c(this.u), MathHelper.c(this.v))) {
+            if (f0 > 0.5F && this.Z.nextFloat() * 30.0F < (f0 - 0.4F) * 2.0F && this.o.i(MathHelper.c(this.s), MathHelper.c(this.t), MathHelper.c(this.u))) {
                 boolean flag0 = true;
                 ItemStack itemstack = this.q(4);
 
                 if (itemstack != null) {
                     if (itemstack.g()) {
-                        itemstack.b(itemstack.j() + this.aa.nextInt(2));
+                        itemstack.b(itemstack.j() + this.Z.nextInt(2));
                         if (itemstack.j() >= itemstack.l()) {
                             this.a(itemstack);
                             this.c(4, (ItemStack) null);
@@ -160,39 +162,42 @@ public class EntityZombie extends EntityMob {
             }
         }
 
+        if (this.am() && this.o() != null && this.m instanceof EntityChicken) {
+            ((EntityLiving) this.m).m().a(this.m().e(), 1.5D);
+        }
+
         super.e();
     }
 
     public boolean a(DamageSource damagesource, float f0) {
         if (!super.a(damagesource, f0)) {
             return false;
-        }
-        else {
+        } else {
             EntityLivingBase entitylivingbase = this.o();
 
-            if (entitylivingbase == null && this.bR() instanceof EntityLivingBase) {
-                entitylivingbase = (EntityLivingBase) this.bR();
+            if (entitylivingbase == null && this.bT() instanceof EntityLivingBase) {
+                entitylivingbase = (EntityLivingBase) this.bT();
             }
 
             if (entitylivingbase == null && damagesource.j() instanceof EntityLivingBase) {
                 entitylivingbase = (EntityLivingBase) damagesource.j();
             }
 
-            if (entitylivingbase != null && this.p.r == EnumDifficulty.HARD && (double) this.aa.nextFloat() < this.a(bp).e()) {
-                int i0 = MathHelper.c(this.t);
-                int i1 = MathHelper.c(this.u);
-                int i2 = MathHelper.c(this.v);
-                EntityZombie entityzombie = new EntityZombie(this.p);
+            if (entitylivingbase != null && this.o.r == EnumDifficulty.HARD && (double) this.Z.nextFloat() < this.a(bp).e()) {
+                int i0 = MathHelper.c(this.s);
+                int i1 = MathHelper.c(this.t);
+                int i2 = MathHelper.c(this.u);
+                EntityZombie entityzombie = new EntityZombie(this.o);
 
                 for (int i3 = 0; i3 < 50; ++i3) {
-                    int i4 = i0 + MathHelper.a(this.aa, 7, 40) * MathHelper.a(this.aa, -1, 1);
-                    int i5 = i1 + MathHelper.a(this.aa, 7, 40) * MathHelper.a(this.aa, -1, 1);
-                    int i6 = i2 + MathHelper.a(this.aa, 7, 40) * MathHelper.a(this.aa, -1, 1);
+                    int i4 = i0 + MathHelper.a(this.Z, 7, 40) * MathHelper.a(this.Z, -1, 1);
+                    int i5 = i1 + MathHelper.a(this.Z, 7, 40) * MathHelper.a(this.Z, -1, 1);
+                    int i6 = i2 + MathHelper.a(this.Z, 7, 40) * MathHelper.a(this.Z, -1, 1);
 
-                    if (World.a((IBlockAccess) this.p, i4, i5 - 1, i6) && this.p.k(i4, i5, i6) < 10) {
+                    if (World.a((IBlockAccess) this.o, i4, i5 - 1, i6) && this.o.k(i4, i5, i6) < 10) {
                         entityzombie.b((double) i4, (double) i5, (double) i6);
-                        if (this.p.b(entityzombie.D) && this.p.a((Entity) entityzombie, entityzombie.D).isEmpty() && !this.p.d(entityzombie.D)) {
-                            this.p.d((Entity) entityzombie);
+                        if (this.o.b(entityzombie.C) && this.o.a((Entity) entityzombie, entityzombie.C).isEmpty() && !this.o.d(entityzombie.C)) {
+                            this.o.d((Entity) entityzombie);
                             entityzombie.d(entitylivingbase);
                             entityzombie.a((IEntityLivingData) null);
                             this.a(bp).a(new AttributeModifier("Zombie reinforcement caller charge", -0.05000000074505806D, 0));
@@ -208,25 +213,25 @@ public class EntityZombie extends EntityMob {
     }
 
     public void h() {
-        if (!this.p.E && this.ca()) {
-            int i0 = this.cc();
+        if (!this.o.E && this.cc()) {
+            int i0 = this.ce();
 
             this.bt -= i0;
             if (this.bt <= 0) {
-                this.cb();
+                this.cd();
             }
         }
 
         super.h();
     }
 
-    public boolean m(Entity entity) {
-        boolean flag0 = super.m(entity);
+    public boolean n(Entity entity) {
+        boolean flag0 = super.n(entity);
 
         if (flag0) {
-            int i0 = this.p.r.a();
+            int i0 = this.o.r.a();
 
-            if (this.be() == null && this.al() && this.aa.nextFloat() < (float) i0 * 0.3F) {
+            if (this.be() == null && this.al() && this.Z.nextFloat() < (float) i0 * 0.3F) {
                 entity.e(2 * i0);
             }
         }
@@ -259,7 +264,7 @@ public class EntityZombie extends EntityMob {
     }
 
     protected void n(int i0) {
-        switch (this.aa.nextInt(3)) {
+        switch (this.Z.nextInt(3)) {
             case 0:
                 this.a(Items.j, 1);
                 break;
@@ -273,15 +278,14 @@ public class EntityZombie extends EntityMob {
         }
     }
 
-    protected void bA() {
-        super.bA();
-        if (this.aa.nextFloat() < (this.p.r == EnumDifficulty.HARD ? 0.05F : 0.01F)) {
-            int i0 = this.aa.nextInt(3);
+    protected void bC() {
+        super.bC();
+        if (this.Z.nextFloat() < (this.o.r == EnumDifficulty.HARD ? 0.05F : 0.01F)) {
+            int i0 = this.Z.nextInt(3);
 
             if (i0 == 0) {
                 this.c(0, new ItemStack(Items.l));
-            }
-            else {
+            } else {
                 this.c(0, new ItemStack(Items.a));
             }
         }
@@ -293,12 +297,12 @@ public class EntityZombie extends EntityMob {
             nbttagcompound.a("IsBaby", true);
         }
 
-        if (this.bZ()) {
+        if (this.cb()) {
             nbttagcompound.a("IsVillager", true);
         }
 
-        nbttagcompound.a("ConversionTime", this.ca() ? this.bt : -1);
-        nbttagcompound.a("CanBreakDoors", this.bX());
+        nbttagcompound.a("ConversionTime", this.cc() ? this.bt : -1);
+        nbttagcompound.a("CanBreakDoors", this.bZ());
     }
 
     public void a(NBTTagCompound nbttagcompound) {
@@ -319,37 +323,37 @@ public class EntityZombie extends EntityMob {
 
     public void a(EntityLivingBase entitylivingbase) {
         super.a(entitylivingbase);
-        if ((this.p.r == EnumDifficulty.NORMAL || this.p.r == EnumDifficulty.HARD) && entitylivingbase instanceof EntityVillager) {
-            if (this.aa.nextBoolean()) {
+        if ((this.o.r == EnumDifficulty.NORMAL || this.o.r == EnumDifficulty.HARD) && entitylivingbase instanceof EntityVillager) {
+            if (this.o.r != EnumDifficulty.HARD && this.Z.nextBoolean()) {
                 return;
             }
 
-            EntityZombie entityzombie = new EntityZombie(this.p);
+            EntityZombie entityzombie = new EntityZombie(this.o);
 
-            entityzombie.j(entitylivingbase);
-            this.p.e((Entity) entitylivingbase);
+            entityzombie.k(entitylivingbase);
+            this.o.e((Entity) entitylivingbase);
             entityzombie.a((IEntityLivingData) null);
             entityzombie.j(true);
             if (entitylivingbase.f()) {
                 entityzombie.i(true);
             }
 
-            this.p.d((Entity) entityzombie);
-            this.p.a((EntityPlayer) null, 1016, (int) this.t, (int) this.u, (int) this.v, 0);
+            this.o.d((Entity) entityzombie);
+            this.o.a((EntityPlayer) null, 1016, (int) this.s, (int) this.t, (int) this.u, 0);
         }
     }
 
-    public IEntityLivingData a(IEntityLivingData entitylivingdata) {
-        Object object = super.a(entitylivingdata);
-        float f0 = this.p.b(this.t, this.u, this.v);
+    public IEntityLivingData a(IEntityLivingData ientitylivingdata) {
+        Object ientitylivingdata1 = super.a(ientitylivingdata);
+        float f0 = this.o.b(this.s, this.t, this.u);
 
-        this.h(this.aa.nextFloat() < 0.55F * f0);
-        if (object == null) {
-            object = new GroupData(this.p.s.nextFloat() < 0.05F, this.p.s.nextFloat() < 0.05F, null);
+        this.h(this.Z.nextFloat() < 0.55F * f0);
+        if (ientitylivingdata1 == null) {
+            ientitylivingdata1 = new EntityZombie.GroupData(this.o.s.nextFloat() < 0.05F, this.o.s.nextFloat() < 0.05F, null);
         }
 
-        if (object instanceof GroupData) {
-            GroupData entityzombie_groupdata = (GroupData) object;
+        if (ientitylivingdata1 instanceof EntityZombie.GroupData) {
+            EntityZombie.GroupData entityzombie_groupdata = (EntityZombie.GroupData) ientitylivingdata1;
 
             if (entityzombie_groupdata.b) {
                 this.j(true);
@@ -357,56 +361,73 @@ public class EntityZombie extends EntityMob {
 
             if (entityzombie_groupdata.a) {
                 this.i(true);
+                if ((double) this.o.s.nextFloat() < 0.05D) {
+                    List list = this.o.a(EntityChicken.class, this.C.b(5.0D, 3.0D, 5.0D), IEntitySelector.b);
+
+                    if (!list.isEmpty()) {
+                        EntityChicken entitychicken = (EntityChicken) list.get(0);
+
+                        entitychicken.i(true);
+                        this.a((Entity) entitychicken);
+                    }
+                } else if ((double) this.o.s.nextFloat() < 0.05D) {
+                    EntityChicken entitychicken1 = new EntityChicken(this.o);
+
+                    entitychicken1.b(this.s, this.t, this.u, this.y, 0.0F);
+                    entitychicken1.a((IEntityLivingData) null);
+                    entitychicken1.i(true);
+                    this.o.d((Entity) entitychicken1);
+                    this.a((Entity) entitychicken1);
+                }
             }
         }
 
-        this.a(this.aa.nextFloat() < f0 * 0.1F);
-        this.bA();
-        this.bB();
+        this.a(this.Z.nextFloat() < f0 * 0.1F);
+        this.bC();
+        this.bD();
         if (this.q(4) == null) {
-            Calendar calendar = this.p.V();
+            Calendar calendar = this.o.V();
 
-            if (calendar.get(2) + 1 == 10 && calendar.get(5) == 31 && this.aa.nextFloat() < 0.25F) {
-                this.c(4, new ItemStack(this.aa.nextFloat() < 0.1F ? Blocks.aP : Blocks.aK));
+            if (calendar.get(2) + 1 == 10 && calendar.get(5) == 31 && this.Z.nextFloat() < 0.25F) {
+                this.c(4, new ItemStack(this.Z.nextFloat() < 0.1F ? Blocks.aP : Blocks.aK));
                 this.e[4] = 0.0F;
             }
         }
 
-        this.a(SharedMonsterAttributes.c).a(new AttributeModifier("Random spawn bonus", this.aa.nextDouble() * 0.05000000074505806D, 0));
-        double d0 = this.aa.nextDouble() * 1.5D * (double) this.p.b(this.t, this.u, this.v);
+        this.a(SharedMonsterAttributes.c).a(new AttributeModifier("Random spawn bonus", this.Z.nextDouble() * 0.05000000074505806D, 0));
+        double d0 = this.Z.nextDouble() * 1.5D * (double) this.o.b(this.s, this.t, this.u);
 
         if (d0 > 1.0D) {
             this.a(SharedMonsterAttributes.b).a(new AttributeModifier("Random zombie-spawn bonus", d0, 2));
         }
 
-        if (this.aa.nextFloat() < f0 * 0.05F) {
-            this.a(bp).a(new AttributeModifier("Leader zombie bonus", this.aa.nextDouble() * 0.25D + 0.5D, 0));
-            this.a(SharedMonsterAttributes.a).a(new AttributeModifier("Leader zombie bonus", this.aa.nextDouble() * 3.0D + 1.0D, 2));
+        if (this.Z.nextFloat() < f0 * 0.05F) {
+            this.a(bp).a(new AttributeModifier("Leader zombie bonus", this.Z.nextDouble() * 0.25D + 0.5D, 0));
+            this.a(SharedMonsterAttributes.a).a(new AttributeModifier("Leader zombie bonus", this.Z.nextDouble() * 3.0D + 1.0D, 2));
             this.a(true);
         }
 
-        return (IEntityLivingData) object;
+        return (IEntityLivingData) ientitylivingdata1;
     }
 
     public boolean a(EntityPlayer entityplayer) {
-        ItemStack itemstack = entityplayer.bD();
+        ItemStack itemstack = entityplayer.bF();
 
-        if (itemstack != null && itemstack.b() == Items.ao && itemstack.k() == 0 && this.bZ() && this.a(Potion.t)) {
-            if (!entityplayer.bF.d) {
+        if (itemstack != null && itemstack.b() == Items.ao && itemstack.k() == 0 && this.cb() && this.a(Potion.t)) {
+            if (!entityplayer.bE.d) {
                 --itemstack.b;
             }
 
             if (itemstack.b <= 0) {
-                entityplayer.bn.a(entityplayer.bn.c, (ItemStack) null);
+                entityplayer.bm.a(entityplayer.bm.c, (ItemStack) null);
             }
 
-            if (!this.p.E) {
-                this.a(this.aa.nextInt(2401) + 3600);
+            if (!this.o.E) {
+                this.a(this.Z.nextInt(2401) + 3600);
             }
 
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -415,47 +436,47 @@ public class EntityZombie extends EntityMob {
         this.bt = i0;
         this.z().b(14, Byte.valueOf((byte) 1));
         this.m(Potion.t.H);
-        this.c(new PotionEffect(Potion.g.H, i0, Math.min(this.p.r.a() - 1, 0)));
-        this.p.a(this, (byte) 16);
+        this.c(new PotionEffect(Potion.g.H, i0, Math.min(this.o.r.a() - 1, 0)));
+        this.o.a(this, (byte) 16);
     }
 
     protected boolean v() {
-        return !this.ca();
+        return !this.cc();
     }
 
-    public boolean ca() {
+    public boolean cc() {
         return this.z().a(14) == 1;
     }
 
-    public void cb() { // CanaryMod: protected => public
-        EntityVillager entityvillager = new EntityVillager(this.p);
+    public void cd() { // CanaryMod: protected => public
+        EntityVillager entityvillager = new EntityVillager(this.o);
 
-        entityvillager.j(this);
+        entityvillager.k(this);
         entityvillager.a((IEntityLivingData) null);
-        entityvillager.cb();
+        entityvillager.cd();
         if (this.f()) {
             entityvillager.c(-24000);
         }
 
-        this.p.e((Entity) this);
-        this.p.d((Entity) entityvillager);
+        this.o.e((Entity) this);
+        this.o.d((Entity) entityvillager);
         entityvillager.c(new PotionEffect(Potion.k.H, 200, 0));
-        this.p.a((EntityPlayer) null, 1017, (int) this.t, (int) this.u, (int) this.v, 0);
+        this.o.a((EntityPlayer) null, 1017, (int) this.s, (int) this.t, (int) this.u, 0);
     }
 
-    protected int cc() {
+    protected int ce() {
         int i0 = 1;
 
-        if (this.aa.nextFloat() < 0.01F) {
+        if (this.Z.nextFloat() < 0.01F) {
             int i1 = 0;
 
-            for (int i2 = (int) this.t - 4; i2 < (int) this.t + 4 && i1 < 14; ++i2) {
-                for (int i3 = (int) this.u - 4; i3 < (int) this.u + 4 && i1 < 14; ++i3) {
-                    for (int i4 = (int) this.v - 4; i4 < (int) this.v + 4 && i1 < 14; ++i4) {
-                        Block block = this.p.a(i2, i3, i4);
+            for (int i2 = (int) this.s - 4; i2 < (int) this.s + 4 && i1 < 14; ++i2) {
+                for (int i3 = (int) this.t - 4; i3 < (int) this.t + 4 && i1 < 14; ++i3) {
+                    for (int i4 = (int) this.u - 4; i4 < (int) this.u + 4 && i1 < 14; ++i4) {
+                        Block block = this.o.a(i2, i3, i4);
 
                         if (block == Blocks.aY || block == Blocks.C) {
-                            if (this.aa.nextFloat() < 0.3F) {
+                            if (this.Z.nextFloat() < 0.3F) {
                                 ++i0;
                             }
 
@@ -493,15 +514,15 @@ public class EntityZombie extends EntityMob {
         public boolean a;
         public boolean b;
 
-        private GroupData(boolean flag2, boolean flag3) {
+        private GroupData(boolean flag0, boolean flag1) {
             this.a = false;
             this.b = false;
-            this.a = flag2;
-            this.b = flag3;
+            this.a = flag0;
+            this.b = flag1;
         }
 
-        GroupData(boolean flag2, boolean flag3, Object object) {
-            this(flag2, flag3);
+        GroupData(boolean flag0, boolean flag1, Object object) {
+            this(flag0, flag1);
         }
     }
 

@@ -34,7 +34,8 @@ public abstract class BlockBasePressurePlate extends Block {
 
         if (flag0) {
             this.a(f0, 0.0F, f0, 1.0F - f0, 0.03125F, 1.0F - f0);
-        } else {
+        }
+        else {
             this.a(f0, 0.0F, f0, 1.0F - f0, 0.0625F, 1.0F - f0);
         }
     }
@@ -127,7 +128,8 @@ public abstract class BlockBasePressurePlate extends Block {
 
         if (!flag1 && flag0) {
             world.a((double) i0 + 0.5D, (double) i1 + 0.1D, (double) i2 + 0.5D, "random.click", 0.3F, 0.5F);
-        } else if (flag1 && !flag0) {
+        }
+        else if (flag1 && !flag0) {
             world.a((double) i0 + 0.5D, (double) i1 + 0.1D, (double) i2 + 0.5D, "random.click", 0.3F, 0.6F);
         }
 
@@ -139,7 +141,7 @@ public abstract class BlockBasePressurePlate extends Block {
     protected AxisAlignedBB a(int i0, int i1, int i2) {
         float f0 = 0.125F;
 
-        return AxisAlignedBB.a().a((double) ((float) i0 + f0), (double) i1, (double) ((float) i2 + f0), (double) ((float) (i0 + 1) - f0), (double) i1 + 0.25D, (double) ((float) (i2 + 1) - f0));
+        return AxisAlignedBB.a((double) ((float) i0 + f0), (double) i1, (double) ((float) i2 + f0), (double) ((float) (i0 + 1) - f0), (double) i1 + 0.25D, (double) ((float) (i2 + 1) - f0));
     }
 
     public void a(World world, int i0, int i1, int i2, Block block, int i3) {

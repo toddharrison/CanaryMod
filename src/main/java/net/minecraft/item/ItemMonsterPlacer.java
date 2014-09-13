@@ -66,7 +66,7 @@ public class ItemMonsterPlacer extends Item {
                     ((EntityLiving) entity).a(itemstack.s());
                 }
 
-                if (!entityplayer.bF.d) {
+                if (!entityplayer.bE.d) {
                     --itemstack.b;
                 }
             }
@@ -107,7 +107,7 @@ public class ItemMonsterPlacer extends Item {
                                 ((EntityLiving) entity).a(itemstack.s());
                             }
 
-                            if (!entityplayer.bF.d) {
+                            if (!entityplayer.bE.d) {
                                 --itemstack.b;
                             }
                         }
@@ -136,8 +136,8 @@ public class ItemMonsterPlacer extends Item {
                     EntityLiving entityliving = (EntityLiving) entity;
 
                     entity.b(d0, d1, d2, MathHelper.g(world.s.nextFloat() * 360.0F), 0.0F);
-                    entityliving.aP = entityliving.z;
-                    entityliving.aN = entityliving.z;
+                    entityliving.aO = entityliving.y;
+                    entityliving.aM = entityliving.y;
                     entityliving.a((IEntityLivingData) null);
                     if (spawn) { // CanaryMod check if spawn is allowed
                         world.d(entity);

@@ -178,9 +178,9 @@ public class BlockDispenser extends BlockContainer {
 
                         float f3 = 0.05F;
 
-                        entityitem.w = (double) ((float) this.b.nextGaussian() * f3);
-                        entityitem.x = (double) ((float) this.b.nextGaussian() * f3 + 0.2F);
-                        entityitem.y = (double) ((float) this.b.nextGaussian() * f3);
+                        entityitem.v = (double) ((float) this.b.nextGaussian() * f3);
+                        entityitem.w = (double) ((float) this.b.nextGaussian() * f3 + 0.2F);
+                        entityitem.x = (double) ((float) this.b.nextGaussian() * f3);
                         world.d((Entity) entityitem);
                     }
                 }

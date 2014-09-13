@@ -75,7 +75,7 @@ public class Village {
             if (vec3 != null) {
                 EntityIronGolem entityirongolem = new EntityIronGolem(this.a);
 
-                entityirongolem.b(vec3.c, vec3.d, vec3.e);
+                entityirongolem.b(vec3.a, vec3.b, vec3.c);
                 this.a.d((Entity) entityirongolem);
                 ++this.l;
             }
@@ -89,7 +89,7 @@ public class Village {
             int i9 = i2 + this.a.s.nextInt(16) - 8;
 
             if (this.a(i7, i8, i9) && this.b(i7, i8, i9, i3, i4, i5)) {
-                return this.a.U().a((double) i7, (double) i8, (double) i9);
+                return Vec3.a((double) i7, (double) i8, (double) i9);
             }
         }
 
@@ -119,13 +119,13 @@ public class Village {
     }
 
     private void j() {
-        List list = this.a.a(EntityIronGolem.class, AxisAlignedBB.a().a((double) (this.d.a - this.e), (double) (this.d.b - 4), (double) (this.d.c - this.e), (double) (this.d.a + this.e), (double) (this.d.b + 4), (double) (this.d.c + this.e)));
+        List list = this.a.a(EntityIronGolem.class, AxisAlignedBB.a((double) (this.d.a - this.e), (double) (this.d.b - 4), (double) (this.d.c - this.e), (double) (this.d.a + this.e), (double) (this.d.b + 4), (double) (this.d.c + this.e)));
 
         this.l = list.size();
     }
 
     private void k() {
-        List list = this.a.a(EntityVillager.class, AxisAlignedBB.a().a((double) (this.d.a - this.e), (double) (this.d.b - 4), (double) (this.d.c - this.e), (double) (this.d.a + this.e), (double) (this.d.b + 4), (double) (this.d.c + this.e)));
+        List list = this.a.a(EntityVillager.class, AxisAlignedBB.a((double) (this.d.a - this.e), (double) (this.d.b - 4), (double) (this.d.c - this.e), (double) (this.d.a + this.e), (double) (this.d.b + 4), (double) (this.d.c + this.e)));
 
         this.h = list.size();
         if (this.h == 0) {
@@ -261,7 +261,7 @@ public class Village {
 
         for (int i0 = 0; i0 < this.k.size(); ++i0) {
             VillageAgressor village_villageagressor1 = (VillageAgressor) this.k.get(i0);
-            double d1 = village_villageagressor1.a.e(entitylivingbase);
+            double d1 = village_villageagressor1.a.f(entitylivingbase);
 
             if (d1 <= d0) {
                 village_villageagressor = village_villageagressor1;
@@ -284,7 +284,7 @@ public class Village {
                 EntityPlayer entityplayer1 = this.a.a(s0);
 
                 if (entityplayer1 != null) {
-                    double d1 = entityplayer1.e(entitylivingbase);
+                    double d1 = entityplayer1.f(entitylivingbase);
 
                     if (d1 <= d0) {
                         entityplayer = entityplayer1;

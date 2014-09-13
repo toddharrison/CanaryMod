@@ -55,7 +55,8 @@ public class ItemRedstone extends Item {
 
         if (!entityplayer.a(i0, i1, i2, i3, itemstack)) {
             return false;
-        } else {
+        }
+        else {
             // set placed
             CanaryBlock placed = new CanaryBlock(BlockType.RedstoneBlock, i0, i1, i2, world.getCanaryWorld());
             // Create and Call

@@ -14,11 +14,9 @@ public class RangedAttribute extends BaseAttribute {
         this.b = d2;
         if (d1 > d2) {
             throw new IllegalArgumentException("Minimum value cannot be bigger than maximum value!");
-        }
-        else if (d0 < d1) {
+        } else if (d0 < d1) {
             throw new IllegalArgumentException("Default value cannot be lower than minimum value!");
-        }
-        else if (d0 > d2) {
+        } else if (d0 > d2) {
             throw new IllegalArgumentException("Default value cannot be bigger than maximum value!");
         }
         this.canaryAttribute = new CanaryRangedAttribute(this);

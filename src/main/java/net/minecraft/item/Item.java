@@ -508,12 +508,12 @@ public class Item {
 
     protected MovingObjectPosition a(World world, EntityPlayer entityplayer, boolean flag0) {
         float f0 = 1.0F;
-        float f1 = entityplayer.C + (entityplayer.A - entityplayer.C) * f0;
-        float f2 = entityplayer.B + (entityplayer.z - entityplayer.B) * f0;
-        double d0 = entityplayer.q + (entityplayer.t - entityplayer.q) * (double) f0;
-        double d1 = entityplayer.r + (entityplayer.u - entityplayer.r) * (double) f0 + 1.62D - (double) entityplayer.M;
-        double d2 = entityplayer.s + (entityplayer.v - entityplayer.s) * (double) f0;
-        Vec3 vec3 = world.U().a(d0, d1, d2);
+        float f1 = entityplayer.B + (entityplayer.z - entityplayer.B) * f0;
+        float f2 = entityplayer.A + (entityplayer.y - entityplayer.A) * f0;
+        double d0 = entityplayer.p + (entityplayer.s - entityplayer.p) * (double) f0;
+        double d1 = entityplayer.q + (entityplayer.t - entityplayer.q) * (double) f0 + 1.62D - (double) entityplayer.L;
+        double d2 = entityplayer.r + (entityplayer.u - entityplayer.r) * (double) f0;
+        Vec3 vec3 = Vec3.a(d0, d1, d2);
         float f3 = MathHelper.b(-f2 * 0.017453292F - 3.1415927F);
         float f4 = MathHelper.a(-f2 * 0.017453292F - 3.1415927F);
         float f5 = -MathHelper.b(-f1 * 0.017453292F);

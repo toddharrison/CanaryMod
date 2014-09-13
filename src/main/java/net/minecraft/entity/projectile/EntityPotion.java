@@ -80,19 +80,19 @@ public class EntityPotion extends EntityThrowable {
     }
 
     protected void a(MovingObjectPosition movingobjectposition) {
-        if (!this.p.E) {
+        if (!this.o.E) {
             List list = Items.bn.g(this.c);
 
             if (list != null && !list.isEmpty()) {
-                AxisAlignedBB axisalignedbb = this.D.b(4.0D, 2.0D, 4.0D);
-                List list1 = this.p.a(EntityLivingBase.class, axisalignedbb);
+                AxisAlignedBB axisalignedbb = this.C.b(4.0D, 2.0D, 4.0D);
+                List list1 = this.o.a(EntityLivingBase.class, axisalignedbb);
 
                 if (list1 != null && !list1.isEmpty()) {
                     Iterator iterator = list1.iterator();
 
                     while (iterator.hasNext()) {
                         EntityLivingBase entitylivingbase = (EntityLivingBase) iterator.next();
-                        double d0 = this.e(entitylivingbase);
+                        double d0 = this.f(entitylivingbase);
 
                         if (d0 < 16.0D) {
                             double d1 = 1.0D - Math.sqrt(d0) / 4.0D;
@@ -109,8 +109,7 @@ public class EntityPotion extends EntityThrowable {
 
                                 if (Potion.a[i0].b()) {
                                     Potion.a[i0].a(this.j(), entitylivingbase, potioneffect.c(), d1);
-                                }
-                                else {
+                                } else {
                                     int i1 = (int) (d1 * (double) potioneffect.b() + 0.5D);
 
                                     if (i1 > 20) {
@@ -123,7 +122,7 @@ public class EntityPotion extends EntityThrowable {
                 }
             }
 
-            this.p.c(2002, (int) Math.round(this.t), (int) Math.round(this.u), (int) Math.round(this.v), this.k());
+            this.o.c(2002, (int) Math.round(this.s), (int) Math.round(this.t), (int) Math.round(this.u), this.k());
             this.B();
         }
     }
@@ -132,8 +131,7 @@ public class EntityPotion extends EntityThrowable {
         super.a(nbttagcompound);
         if (nbttagcompound.b("Potion", 10)) {
             this.c = ItemStack.a(nbttagcompound.m("Potion"));
-        }
-        else {
+        } else {
             this.a(nbttagcompound.f("potionValue"));
         }
 

@@ -23,7 +23,7 @@ public abstract class EntityMob extends EntityCreature implements IMob {
         float f0 = this.d(1.0F);
 
         if (f0 > 0.5F) {
-            this.aV += 2;
+            this.aU += 2;
         }
 
         super.e();
@@ -31,7 +31,7 @@ public abstract class EntityMob extends EntityCreature implements IMob {
 
     public void h() {
         super.h();
-        if (!this.p.E && this.p.r == EnumDifficulty.PEACEFUL) {
+        if (!this.o.E && this.o.r == EnumDifficulty.PEACEFUL) {
             this.B();
         }
     }
@@ -44,41 +44,37 @@ public abstract class EntityMob extends EntityCreature implements IMob {
         return "game.hostile.swim.splash";
     }
 
-    protected Entity bP() {
-        EntityPlayer entityplayer = this.p.b(this, 16.0D);
+    protected Entity bR() {
+        EntityPlayer entityplayer = this.o.b(this, 16.0D);
 
-        return entityplayer != null && this.o(entityplayer) ? entityplayer : null;
+        return entityplayer != null && this.p(entityplayer) ? entityplayer : null;
     }
 
     public boolean a(DamageSource damagesource, float f0) {
         if (this.aw()) {
             return false;
-        }
-        else if (super.a(damagesource, f0)) {
+        } else if (super.a(damagesource, f0)) {
             Entity entity = damagesource.j();
 
-            if (this.m != entity && this.n != entity) {
+            if (this.l != entity && this.m != entity) {
                 if (entity != this) {
                     // CanaryMod: MobTarget
                     if (entity instanceof EntityLiving) {
                         MobTargetHook hook = (MobTargetHook) new MobTargetHook((net.canarymod.api.entity.living.EntityLiving) this.getCanaryEntity(), (net.canarymod.api.entity.living.EntityLiving) entity.getCanaryEntity()).call();
                         if (!hook.isCanceled()) {
-                            this.j = entity;
+                            this.bm = entity;
                         }
-                    }
-                    else {
-                        this.j = entity;
+                    } else {
+                        this.bm = entity;
                     }
                     //
                 }
 
                 return true;
-            }
-            else {
+            } else {
                 return true;
             }
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -95,7 +91,7 @@ public abstract class EntityMob extends EntityCreature implements IMob {
         return i0 > 4 ? "game.hostile.hurt.fall.big" : "game.hostile.hurt.fall.small";
     }
 
-    public boolean m(Entity entity) {
+    public boolean n(Entity entity) {
         float f0 = (float) this.a(SharedMonsterAttributes.e).e();
         int i0 = 0;
 
@@ -108,9 +104,9 @@ public abstract class EntityMob extends EntityCreature implements IMob {
 
         if (flag0) {
             if (i0 > 0) {
-                entity.g((double) (-MathHelper.a(this.z * 3.1415927F / 180.0F) * (float) i0 * 0.5F), 0.1D, (double) (MathHelper.b(this.z * 3.1415927F / 180.0F) * (float) i0 * 0.5F));
-                this.w *= 0.6D;
-                this.y *= 0.6D;
+                entity.g((double) (-MathHelper.a(this.y * 3.1415927F / 180.0F) * (float) i0 * 0.5F), 0.1D, (double) (MathHelper.b(this.y * 3.1415927F / 180.0F) * (float) i0 * 0.5F));
+                this.v *= 0.6D;
+                this.x *= 0.6D;
             }
 
             int i1 = EnchantmentHelper.a((EntityLivingBase) this);
@@ -129,41 +125,40 @@ public abstract class EntityMob extends EntityCreature implements IMob {
     }
 
     protected void a(Entity entity, float f0) {
-        if (this.aC <= 0 && f0 < 2.0F && entity.D.e > this.D.b && entity.D.b < this.D.e) {
-            this.aC = 20;
-            this.m(entity);
+        if (this.aB <= 0 && f0 < 2.0F && entity.C.e > this.C.b && entity.C.b < this.C.e) {
+            this.aB = 20;
+            this.n(entity);
         }
     }
 
     public float a(int i0, int i1, int i2) {
-        return 0.5F - this.p.n(i0, i1, i2);
+        return 0.5F - this.o.n(i0, i1, i2);
     }
 
     protected boolean j_() {
-        int i0 = MathHelper.c(this.t);
-        int i1 = MathHelper.c(this.D.b);
-        int i2 = MathHelper.c(this.v);
+        int i0 = MathHelper.c(this.s);
+        int i1 = MathHelper.c(this.C.b);
+        int i2 = MathHelper.c(this.u);
 
-        if (this.p.b(EnumSkyBlock.Sky, i0, i1, i2) > this.aa.nextInt(32)) {
+        if (this.o.b(EnumSkyBlock.Sky, i0, i1, i2) > this.Z.nextInt(32)) {
             return false;
-        }
-        else {
-            int i3 = this.p.k(i0, i1, i2);
+        } else {
+            int i3 = this.o.k(i0, i1, i2);
 
-            if (this.p.O()) {
-                int i4 = this.p.j;
+            if (this.o.P()) {
+                int i4 = this.o.j;
 
-                this.p.j = 10;
-                i3 = this.p.k(i0, i1, i2);
-                this.p.j = i4;
+                this.o.j = 10;
+                i3 = this.o.k(i0, i1, i2);
+                this.o.j = i4;
             }
 
-            return i3 <= this.aa.nextInt(8);
+            return i3 <= this.Z.nextInt(8);
         }
     }
 
-    public boolean bw() {
-        return this.p.r != EnumDifficulty.PEACEFUL && this.j_() && super.bw();
+    public boolean by() {
+        return this.o.r != EnumDifficulty.PEACEFUL && this.j_() && super.by();
     }
 
     protected void aD() {

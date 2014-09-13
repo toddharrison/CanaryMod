@@ -23,7 +23,7 @@ public class EntityGhast extends EntityFlying implements IMob {
 
     public int h;
     public double i;
-    public double j;
+    public double bm;
     public double bn;
     public Entity bq; // CanaryMod: private => public; Target
     public int br; // CanaryMod: private => public; argoCoolDown
@@ -34,7 +34,7 @@ public class EntityGhast extends EntityFlying implements IMob {
     public EntityGhast(World world) {
         super(world);
         this.a(4.0F, 4.0F);
-        this.af = true;
+        this.ae = true;
         this.b = 5;
         this.entity = new CanaryGhast(this); // CanaryMod: Wrap Entity
     }
@@ -42,20 +42,18 @@ public class EntityGhast extends EntityFlying implements IMob {
     public boolean a(DamageSource damagesource, float f0) {
         if (this.aw()) {
             return false;
-        }
-        else if ("fireball".equals(damagesource.p()) && damagesource.j() instanceof EntityPlayer) {
+        } else if ("fireball".equals(damagesource.p()) && damagesource.j() instanceof EntityPlayer) {
             super.a(damagesource, 1000.0F);
             ((EntityPlayer) damagesource.j()).a((StatBase) AchievementList.z);
             return true;
-        }
-        else {
+        } else {
             return super.a(damagesource, f0);
         }
     }
 
     protected void c() {
         super.c();
-        this.ag.a(16, Byte.valueOf((byte) 0));
+        this.af.a(16, Byte.valueOf((byte) 0));
     }
 
     protected void aD() {
@@ -64,45 +62,44 @@ public class EntityGhast extends EntityFlying implements IMob {
     }
 
     protected void bq() {
-        if (!this.p.E && this.p.r == EnumDifficulty.PEACEFUL) {
+        if (!this.o.E && this.o.r == EnumDifficulty.PEACEFUL) {
             this.B();
         }
 
         this.w();
         this.bo = this.bp;
-        double d0 = this.i - this.t;
-        double d1 = this.j - this.u;
-        double d2 = this.bn - this.v;
+        double d0 = this.i - this.s;
+        double d1 = this.bm - this.t;
+        double d2 = this.bn - this.u;
         double d3 = d0 * d0 + d1 * d1 + d2 * d2;
 
         if (d3 < 1.0D || d3 > 3600.0D) {
-            this.i = this.t + (double) ((this.aa.nextFloat() * 2.0F - 1.0F) * 16.0F);
-            this.j = this.u + (double) ((this.aa.nextFloat() * 2.0F - 1.0F) * 16.0F);
-            this.bn = this.v + (double) ((this.aa.nextFloat() * 2.0F - 1.0F) * 16.0F);
+            this.i = this.s + (double) ((this.Z.nextFloat() * 2.0F - 1.0F) * 16.0F);
+            this.bm = this.t + (double) ((this.Z.nextFloat() * 2.0F - 1.0F) * 16.0F);
+            this.bn = this.u + (double) ((this.Z.nextFloat() * 2.0F - 1.0F) * 16.0F);
         }
 
         if (this.h-- <= 0) {
-            this.h += this.aa.nextInt(5) + 2;
+            this.h += this.Z.nextInt(5) + 2;
             d3 = (double) MathHelper.a(d3);
-            if (this.a(this.i, this.j, this.bn, d3)) {
-                this.w += d0 / d3 * 0.1D;
-                this.x += d1 / d3 * 0.1D;
-                this.y += d2 / d3 * 0.1D;
-            }
-            else {
-                this.i = this.t;
-                this.j = this.u;
-                this.bn = this.v;
+            if (this.a(this.i, this.bm, this.bn, d3)) {
+                this.v += d0 / d3 * 0.1D;
+                this.w += d1 / d3 * 0.1D;
+                this.x += d2 / d3 * 0.1D;
+            } else {
+                this.i = this.s;
+                this.bm = this.t;
+                this.bn = this.u;
             }
         }
 
-        if (this.bq != null && this.bq.L) {
+        if (this.bq != null && this.bq.K) {
             this.bq = null;
         }
 
         if (this.bq == null || this.br-- <= 0) {
             // CanaryMod: MobTarget
-            EntityPlayer entity = this.p.b(this, 100.0D);
+            EntityPlayer entity = this.o.b(this, 100.0D);
 
             if (entity != null) {
                 MobTargetHook hook = (MobTargetHook) new MobTargetHook((net.canarymod.api.entity.living.LivingBase) this.getCanaryEntity(), (net.canarymod.api.entity.living.LivingBase) entity.getCanaryEntity()).call();
@@ -118,63 +115,61 @@ public class EntityGhast extends EntityFlying implements IMob {
 
         double d4 = 64.0D;
 
-        if (this.bq != null && this.bq.e((Entity) this) < d4 * d4) {
-            double d5 = this.bq.t - this.t;
-            double d6 = this.bq.D.b + (double) (this.bq.O / 2.0F) - (this.u + (double) (this.O / 2.0F));
-            double d7 = this.bq.v - this.v;
+        if (this.bq != null && this.bq.f((Entity) this) < d4 * d4) {
+            double d5 = this.bq.s - this.s;
+            double d6 = this.bq.C.b + (double) (this.bq.N / 2.0F) - (this.t + (double) (this.N / 2.0F));
+            double d7 = this.bq.u - this.u;
 
-            this.aN = this.z = -((float) Math.atan2(d5, d7)) * 180.0F / 3.1415927F;
-            if (this.o(this.bq)) {
+            this.aM = this.y = -((float) Math.atan2(d5, d7)) * 180.0F / 3.1415927F;
+            if (this.p(this.bq)) {
                 if (this.bp == 10) {
-                    this.p.a((EntityPlayer) null, 1007, (int) this.t, (int) this.u, (int) this.v, 0);
+                    this.o.a((EntityPlayer) null, 1007, (int) this.s, (int) this.t, (int) this.u, 0);
                 }
 
                 ++this.bp;
                 if (this.bp == 20) {
-                    this.p.a((EntityPlayer) null, 1008, (int) this.t, (int) this.u, (int) this.v, 0);
-                    EntityLargeFireball entitylargefireball = new EntityLargeFireball(this.p, this, d5, d6, d7);
+                    this.o.a((EntityPlayer) null, 1008, (int) this.s, (int) this.t, (int) this.u, 0);
+                    EntityLargeFireball entitylargefireball = new EntityLargeFireball(this.o, this, d5, d6, d7);
 
                     entitylargefireball.e = this.bs;
                     double d8 = 4.0D;
                     Vec3 vec3 = this.j(1.0F);
 
-                    entitylargefireball.t = this.t + vec3.c * d8;
-                    entitylargefireball.u = this.u + (double) (this.O / 2.0F) + 0.5D;
-                    entitylargefireball.v = this.v + vec3.e * d8;
-                    this.p.d((Entity) entitylargefireball);
+                    entitylargefireball.s = this.s + vec3.a * d8;
+                    entitylargefireball.t = this.t + (double) (this.N / 2.0F) + 0.5D;
+                    entitylargefireball.u = this.u + vec3.c * d8;
+                    this.o.d((Entity) entitylargefireball);
                     this.bp = -40;
                 }
-            }
-            else if (this.bp > 0) {
+            } else if (this.bp > 0) {
                 --this.bp;
             }
-        }
-        else {
-            this.aN = this.z = -((float) Math.atan2(this.w, this.y)) * 180.0F / 3.1415927F;
+        } else {
+            this.aM = this.y = -((float) Math.atan2(this.v, this.x)) * 180.0F / 3.1415927F;
             if (this.bp > 0) {
                 --this.bp;
             }
         }
 
-        if (!this.p.E) {
-            byte b0 = this.ag.a(16);
+        if (!this.o.E) {
+            byte b0 = this.af.a(16);
             byte b1 = (byte) (this.bp > 10 ? 1 : 0);
 
             if (b0 != b1) {
-                this.ag.b(16, Byte.valueOf(b1));
+                this.af.b(16, Byte.valueOf(b1));
             }
         }
     }
 
     private boolean a(double d0, double d1, double d2, double d3) {
-        double d4 = (this.i - this.t) / d3;
-        double d5 = (this.j - this.u) / d3;
-        double d6 = (this.bn - this.v) / d3;
-        AxisAlignedBB axisalignedbb = this.D.c();
+        double d4 = (this.i - this.s) / d3;
+        double d5 = (this.bm - this.t) / d3;
+        double d6 = (this.bn - this.u) / d3;
+        AxisAlignedBB axisalignedbb = this.C.b();
 
         for (int i0 = 1; (double) i0 < d3; ++i0) {
             axisalignedbb.d(d4, d5, d6);
-            if (!this.p.a((Entity) this, axisalignedbb).isEmpty()) {
+            if (!this.o.a((Entity) this, axisalignedbb).isEmpty()) {
                 return false;
             }
         }
@@ -199,7 +194,7 @@ public class EntityGhast extends EntityFlying implements IMob {
     }
 
     protected void b(boolean flag0, int i0) {
-        int i1 = this.aa.nextInt(2) + this.aa.nextInt(1 + i0);
+        int i1 = this.Z.nextInt(2) + this.Z.nextInt(1 + i0);
 
         int i2;
 
@@ -207,7 +202,7 @@ public class EntityGhast extends EntityFlying implements IMob {
             this.a(Items.bk, 1);
         }
 
-        i1 = this.aa.nextInt(3) + this.aa.nextInt(1 + i0);
+        i1 = this.Z.nextInt(3) + this.Z.nextInt(1 + i0);
 
         for (i2 = 0; i2 < i1; ++i2) {
             this.a(Items.H, 1);
@@ -218,11 +213,11 @@ public class EntityGhast extends EntityFlying implements IMob {
         return 10.0F;
     }
 
-    public boolean bw() {
-        return this.aa.nextInt(20) == 0 && super.bw() && this.p.r != EnumDifficulty.PEACEFUL;
+    public boolean by() {
+        return this.Z.nextInt(20) == 0 && super.by() && this.o.r != EnumDifficulty.PEACEFUL;
     }
 
-    public int bz() {
+    public int bB() {
         return 1;
     }
 

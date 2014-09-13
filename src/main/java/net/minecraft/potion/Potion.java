@@ -106,8 +106,8 @@ public class Potion {
             ((EntityPlayer) entitylivingbase).a(0.025F * (float) (i0 + 1));
         }
         else if (this.H == y.H && entitylivingbase instanceof EntityPlayer) {
-            if (!entitylivingbase.p.E) {
-                ((EntityPlayer) entitylivingbase).bO().a(i0 + 1, 1.0F);
+            if (!entitylivingbase.o.E) {
+                ((EntityPlayer) entitylivingbase).bQ().a(i0 + 1, 1.0F);
             }
         }
         else if ((this.H != h.H || entitylivingbase.aR()) && (this.H != i.H || !entitylivingbase.aR())) {
@@ -197,10 +197,10 @@ public class Potion {
         return this.K;
     }
 
-    public Potion a(IAttribute IAttribute, String s0, double d0, int i0) {
+    public Potion a(IAttribute iattribute, String s0, double d0, int i0) {
         AttributeModifier attributemodifier = new AttributeModifier(UUID.fromString(s0), this.a(), d0, i0);
 
-        this.I.put(IAttribute, attributemodifier);
+        this.I.put(iattribute, attributemodifier);
         return this;
     }
 
@@ -209,10 +209,10 @@ public class Potion {
 
         while (iterator.hasNext()) {
             Entry entry = (Entry) iterator.next();
-            IAttributeInstance attributeinstance = baseattributemap.a((IAttribute) entry.getKey());
+            IAttributeInstance iattributeinstance = baseattributemap.a((IAttribute) entry.getKey());
 
-            if (attributeinstance != null) {
-                attributeinstance.b((AttributeModifier) entry.getValue());
+            if (iattributeinstance != null) {
+                iattributeinstance.b((AttributeModifier) entry.getValue());
             }
         }
     }
@@ -222,13 +222,13 @@ public class Potion {
 
         while (iterator.hasNext()) {
             Entry entry = (Entry) iterator.next();
-            IAttributeInstance attributeinstance = baseattributemap.a((IAttribute) entry.getKey());
+            IAttributeInstance iattributeinstance = baseattributemap.a((IAttribute) entry.getKey());
 
-            if (attributeinstance != null) {
+            if (iattributeinstance != null) {
                 AttributeModifier attributemodifier = (AttributeModifier) entry.getValue();
 
-                attributeinstance.b(attributemodifier);
-                attributeinstance.a(new AttributeModifier(attributemodifier.a(), this.a() + " " + i0, this.a(i0, attributemodifier), attributemodifier.c()));
+                iattributeinstance.b(attributemodifier);
+                iattributeinstance.a(new AttributeModifier(attributemodifier.a(), this.a() + " " + i0, this.a(i0, attributemodifier), attributemodifier.c()));
             }
         }
     }

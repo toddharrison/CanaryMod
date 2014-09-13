@@ -249,7 +249,7 @@ public class BlockDoor extends Block {
     }
 
     public void a(World world, int i0, int i1, int i2, int i3, EntityPlayer entityplayer) {
-        if (entityplayer.bF.d && (i3 & 8) != 0 && world.a(i0, i1 - 1, i2) == this) {
+        if (entityplayer.bE.d && (i3 & 8) != 0 && world.a(i0, i1 - 1, i2) == this) {
             world.f(i0, i1 - 1, i2);
         }
 

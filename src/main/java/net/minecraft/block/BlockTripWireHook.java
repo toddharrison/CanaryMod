@@ -147,7 +147,8 @@ public class BlockTripWireHook extends Block {
             if (block != Blocks.bD && i10 != i4) {
                 aint[i10] = -1;
                 flag4 = false;
-            } else {
+            }
+            else {
                 i13 = i10 == i4 ? i5 : world.e(i11, i1, i12);
                 boolean flag7 = (i13 & 8) != 8;
                 boolean flag8 = (i13 & 1) == 1;
@@ -194,7 +195,8 @@ public class BlockTripWireHook extends Block {
                 if (i13 >= 0) {
                     if (flag4) {
                         i13 |= 4;
-                    } else {
+                    }
+                    else {
                         i13 &= -5;
                     }
 
@@ -212,11 +214,14 @@ public class BlockTripWireHook extends Block {
     private void a(World world, int i0, int i1, int i2, boolean flag0, boolean flag1, boolean flag2, boolean flag3) {
         if (flag1 && !flag3) {
             world.a((double) i0 + 0.5D, (double) i1 + 0.1D, (double) i2 + 0.5D, "random.click", 0.4F, 0.6F);
-        } else if (!flag1 && flag3) {
+        }
+        else if (!flag1 && flag3) {
             world.a((double) i0 + 0.5D, (double) i1 + 0.1D, (double) i2 + 0.5D, "random.click", 0.4F, 0.5F);
-        } else if (flag0 && !flag2) {
+        }
+        else if (flag0 && !flag2) {
             world.a((double) i0 + 0.5D, (double) i1 + 0.1D, (double) i2 + 0.5D, "random.click", 0.4F, 0.7F);
-        } else if (!flag0 && flag2) {
+        }
+        else if (!flag0 && flag2) {
             world.a((double) i0 + 0.5D, (double) i1 + 0.1D, (double) i2 + 0.5D, "random.bowhit", 0.4F, 1.2F / (world.s.nextFloat() * 0.2F + 0.9F));
         }
 
@@ -226,11 +231,14 @@ public class BlockTripWireHook extends Block {
         world.d(i0, i1, i2, this);
         if (i3 == 3) {
             world.d(i0 - 1, i1, i2, this);
-        } else if (i3 == 1) {
+        }
+        else if (i3 == 1) {
             world.d(i0 + 1, i1, i2, this);
-        } else if (i3 == 0) {
+        }
+        else if (i3 == 0) {
             world.d(i0, i1, i2 - 1, this);
-        } else if (i3 == 2) {
+        }
+        else if (i3 == 2) {
             world.d(i0, i1, i2 + 1, this);
         }
 
@@ -241,7 +249,8 @@ public class BlockTripWireHook extends Block {
             this.b(world, i0, i1, i2, world.e(i0, i1, i2), 0);
             world.f(i0, i1, i2);
             return false;
-        } else {
+        }
+        else {
             return true;
         }
     }
@@ -252,11 +261,14 @@ public class BlockTripWireHook extends Block {
 
         if (i3 == 3) {
             this.a(0.0F, 0.2F, 0.5F - f0, f0 * 2.0F, 0.8F, 0.5F + f0);
-        } else if (i3 == 1) {
+        }
+        else if (i3 == 1) {
             this.a(1.0F - f0 * 2.0F, 0.2F, 0.5F - f0, 1.0F, 0.8F, 0.5F + f0);
-        } else if (i3 == 0) {
+        }
+        else if (i3 == 0) {
             this.a(0.5F - f0, 0.2F, 0.0F, 0.5F + f0, 0.8F, f0 * 2.0F);
-        } else if (i3 == 2) {
+        }
+        else if (i3 == 2) {
             this.a(0.5F - f0, 0.2F, 1.0F - f0 * 2.0F, 0.5F + f0, 0.8F, 1.0F);
         }
 
@@ -276,11 +288,14 @@ public class BlockTripWireHook extends Block {
 
             if (i4 == 3) {
                 world.d(i0 - 1, i1, i2, this);
-            } else if (i4 == 1) {
+            }
+            else if (i4 == 1) {
                 world.d(i0 + 1, i1, i2, this);
-            } else if (i4 == 0) {
+            }
+            else if (i4 == 0) {
                 world.d(i0, i1, i2 - 1, this);
-            } else if (i4 == 2) {
+            }
+            else if (i4 == 2) {
                 world.d(i0, i1, i2 + 1, this);
             }
         }
@@ -297,7 +312,8 @@ public class BlockTripWireHook extends Block {
 
         if ((i4 & 8) != 8) {
             return 0;
-        } else {
+        }
+        else {
             int i5 = i4 & 3;
 
             return i5 == 2 && i3 == 2 ? 15 : (i5 == 0 && i3 == 3 ? 15 : (i5 == 1 && i3 == 4 ? 15 : (i5 == 3 && i3 == 5 ? 15 : 0)));

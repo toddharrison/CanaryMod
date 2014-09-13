@@ -30,7 +30,8 @@ public class ItemBucket extends Item {
 
         if (movingobjectposition == null) {
             return itemstack;
-        } else {
+        }
+        else {
             if (movingobjectposition.a == MovingObjectPosition.MovingObjectType.BLOCK) {
                 int i0 = movingobjectposition.b;
                 int i1 = movingobjectposition.c;
@@ -77,7 +78,8 @@ public class ItemBucket extends Item {
                         return this.a(itemstack, entityplayer, Items.at);
                     }
 
-                } else {
+                }
+                else {
                     if (this.a == Blocks.a) {
                         return new ItemStack(Items.ar);
                     }
@@ -111,7 +113,7 @@ public class ItemBucket extends Item {
                     }
 
                     // CanaryMod: Pass player to tryPlace
-                    if (this.a(world, i0, i1, i2, entityplayer, false) && !entityplayer.bF.d) {
+                    if (this.a(world, i0, i1, i2, entityplayer, false) && !entityplayer.bE.d) {
                         return new ItemStack(Items.ar);
                     }
                 }
@@ -122,12 +124,14 @@ public class ItemBucket extends Item {
     }
 
     private ItemStack a(ItemStack itemstack, EntityPlayer entityplayer, Item item) {
-        if (entityplayer.bF.d) {
+        if (entityplayer.bE.d) {
             return itemstack;
-        } else if (--itemstack.b <= 0) {
+        }
+        else if (--itemstack.b <= 0) {
             return new ItemStack(item);
-        } else {
-            if (!entityplayer.bn.a(new ItemStack(item))) {
+        }
+        else {
+            if (!entityplayer.bm.a(new ItemStack(item))) {
                 entityplayer.a(new ItemStack(item, 1, 0), false);
             }
 
@@ -143,20 +147,23 @@ public class ItemBucket extends Item {
     public boolean a(World world, int i0, int i1, int i2, EntityPlayer entityplayer, boolean testOnly) {
         if (this.a == Blocks.a) {
             return false;
-        } else {
+        }
+        else {
             Material material = world.a(i0, i1, i2).o();
             boolean flag0 = !material.a();
 
             if (!world.c(i0, i1, i2) && !flag0) {
                 return false;
-            } else {
+            }
+            else {
                 if (world.t.f && this.a == Blocks.i) {
                     world.a((double) ((float) i0 + 0.5F), (double) ((float) i1 + 0.5F), (double) ((float) i2 + 0.5F), "random.fizz", 0.5F, 2.6F + (world.s.nextFloat() - world.s.nextFloat()) * 0.8F);
 
                     for (int i3 = 0; i3 < 8; ++i3) {
                         world.a("largesmoke", (double) i0 + Math.random(), (double) i1 + Math.random(), (double) i2 + Math.random(), 0.0D, 0.0D, 0.0D);
                     }
-                } else {
+                }
+                else {
                     if (!world.E && flag0 && !material.d()) {
                         world.a(i0, i1, i2, true);
                     }

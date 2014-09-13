@@ -9,11 +9,7 @@ import net.minecraft.item.Item;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 public class BlockRedstoneTorch extends BlockTorch {
 
@@ -28,7 +24,7 @@ public class BlockRedstoneTorch extends BlockTorch {
         List list = (List) b.get(world);
 
         if (flag0) {
-            list.add(new Toggle(i0, i1, i2, world.H()));
+            list.add(new Toggle(i0, i1, i2, world.I()));
         }
 
         int i3 = 0;
@@ -114,7 +110,7 @@ public class BlockRedstoneTorch extends BlockTorch {
         boolean flag0 = this.m(world, i0, i1, i2);
         List list = (List) b.get(world);
 
-        while (list != null && !list.isEmpty() && world.H() - ((Toggle) list.get(0)).d > 60L) {
+        while (list != null && !list.isEmpty() && world.I() - ((Toggle) list.get(0)).d > 60L) {
             list.remove(0);
         }
 

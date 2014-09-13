@@ -17,11 +17,11 @@ public class EntityEnderCrystal extends Entity {
 
     public EntityEnderCrystal(World world) {
         super(world);
-        this.l = true;
+        this.k = true;
         this.a(2.0F, 2.0F);
-        this.M = this.O / 2.0F;
+        this.L = this.N / 2.0F;
         this.b = 5;
-        this.a = this.aa.nextInt(100000);
+        this.a = this.Z.nextInt(100000);
         this.entity = new CanaryEnderCrystal(this); // CanaryMod: Wrap Entity
     }
 
@@ -30,21 +30,21 @@ public class EntityEnderCrystal extends Entity {
     }
 
     protected void c() {
-        this.ag.a(8, Integer.valueOf(this.b));
+        this.af.a(8, Integer.valueOf(this.b));
     }
 
     public void h() {
+        this.p = this.s;
         this.q = this.t;
         this.r = this.u;
-        this.s = this.v;
         ++this.a;
-        this.ag.b(8, Integer.valueOf(this.b));
-        int i0 = MathHelper.c(this.t);
-        int i1 = MathHelper.c(this.u);
-        int i2 = MathHelper.c(this.v);
+        this.af.b(8, Integer.valueOf(this.b));
+        int i0 = MathHelper.c(this.s);
+        int i1 = MathHelper.c(this.t);
+        int i2 = MathHelper.c(this.u);
 
-        if (this.p.t instanceof WorldProviderEnd && this.p.a(i0, i1, i2) != Blocks.ab) {
-            this.p.b(i0, i1, i2, (Block) Blocks.ab);
+        if (this.o.t instanceof WorldProviderEnd && this.o.a(i0, i1, i2) != Blocks.ab) {
+            this.o.b(i0, i1, i2, (Block) Blocks.ab);
         }
     }
 
@@ -61,21 +61,20 @@ public class EntityEnderCrystal extends Entity {
     public boolean a(DamageSource damagesource, float f0) {
         if (this.aw()) {
             return false;
-        }
-        else {
-            if (!this.L && !this.p.E) {
+        } else {
+            if (!this.K && !this.o.E) {
                 // CanaryMod: Check if one hit can kill this entity
                 if (((CanaryEnderCrystal) entity).isOneHitDetonate()) {
                     this.b = 0;
-                }
-                else {
+                } else {
                     this.b -= f0;
                 }
                 //
                 if (this.b <= 0) {
                     this.B();
-                    if (!this.p.E) {
-                        this.p.a(this, this.t, this.u, this.v, ((CanaryEnderCrystal) entity).getPower(), true); // CanaryMod: configure Explosion power and set the entity properly
+                    if (!this.o.E) {
+                        // CanaryMod: configure Explosion power and set the entity properly
+                        this.o.a(this, this.s, this.t, this.u, ((CanaryEnderCrystal) entity).getPower(), true);
                     }
                 }
             }

@@ -1,6 +1,6 @@
 <!--
   Maven build file for CanaryMod
-  Copyright (c) 2012-2014 CanaryMod Team <http://www.canarymod.net>
+  Copyright (c) 2012-2014 The CanaryMod Team <http://www.canarymod.net>
   CanaryMod is available under the BSD 3-Clause License
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -9,14 +9,14 @@
     <groupId>net.canarymod</groupId>
     <artifactId>CanaryMod</artifactId>
     <packaging>jar</packaging>
-    <version>1.7.2-1.0.0</version>
+    <version>1.1.0-1.7.10-SNAPSHOT</version>
     <name>CanaryMod</name>
     <url>http://www.canarymod.net</url>
     <inceptionYear>2012</inceptionYear>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <minecraft.server.version>1.7.2D</minecraft.server.version>
-        <api.version>1.0.0</api.version>
+        <minecraft.server.version>1.7.10_01</minecraft.server.version>
+        <api.version>1.1.0-SNAPSHOT</api.version>
         <maven.build.timestamp.format>dd MMMM yyyy HH:mm z</maven.build.timestamp.format>
     </properties>
     <licenses>
@@ -86,20 +86,15 @@
             <version>${minecraft.server.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.scala-lang</groupId>
-            <artifactId>scala-library</artifactId>
-            <version>2.11.2</version>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>3.8.1</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>jline</groupId>
             <artifactId>jline</artifactId>
             <version>2.11</version>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>3.8.1</version>
-            <scope>test</scope>
         </dependency>
     </dependencies>
     <build>
@@ -120,37 +115,6 @@
                     <source>1.6</source>
                     <target>1.6</target>
                 </configuration>
-                <executions>
-                    <execution>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>compile</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <!-- Scala Plugin -->
-            <plugin>
-                <groupId>net.alchim31.maven</groupId>
-                <artifactId>scala-maven-plugin</artifactId>
-                <version>3.2.0</version>
-                <executions>
-                    <execution>
-                        <id>scala-compile-first</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>add-source</goal>
-                            <goal>compile</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>scala-test-compile</id>
-                        <phase>process-test-resources</phase>
-                        <goals>
-                            <goal>testCompile</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
             <!-- Dependency shader -->
             <plugin>

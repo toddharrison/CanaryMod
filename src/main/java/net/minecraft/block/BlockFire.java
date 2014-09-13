@@ -3,6 +3,7 @@ package net.minecraft.block;
 import net.canarymod.api.world.blocks.CanaryBlock;
 import net.canarymod.hook.world.IgnitionHook;
 import net.canarymod.hook.world.IgnitionHook.IgnitionCause;
+import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.AxisAlignedBB;
@@ -78,7 +79,7 @@ public class BlockFire extends Block {
     }
 
     public void a(World world, int i0, int i1, int i2, Random random) {
-        if (world.N().b("doFireTick")) {
+        if (world.O().b("doFireTick")) {
             boolean flag0 = world.a(i0, i1 - 1, i2) == Blocks.aL;
 
             if (world.t instanceof WorldProviderEnd && world.a(i0, i1 - 1, i2) == Blocks.h) {
@@ -89,7 +90,7 @@ public class BlockFire extends Block {
                 world.f(i0, i1, i2);
             }
 
-            if (!flag0 && world.P() && (world.y(i0, i1, i2) || world.y(i0 - 1, i1, i2) || world.y(i0 + 1, i1, i2) || world.y(i0, i1, i2 - 1) || world.y(i0, i1, i2 + 1))) {
+            if (!flag0 && world.Q() && (world.y(i0, i1, i2) || world.y(i0 - 1, i1, i2) || world.y(i0 + 1, i1, i2) || world.y(i0, i1, i2 - 1) || world.y(i0, i1, i2 + 1))) {
                 world.f(i0, i1, i2);
             }
             else {
@@ -142,7 +143,7 @@ public class BlockFire extends Block {
                                             i9 /= 2;
                                         }
 
-                                        if (i9 > 0 && random.nextInt(i7) <= i9 && (!world.P() || !world.y(i4, i6, i5)) && !world.y(i4 - 1, i6, i2) && !world.y(i4 + 1, i6, i5) && !world.y(i4, i6, i5 - 1) && !world.y(i4, i6, i5 + 1)) {
+                                        if (i9 > 0 && random.nextInt(i7) <= i9 && (!world.Q() || !world.y(i4, i6, i5)) && !world.y(i4 - 1, i6, i2) && !world.y(i4 + 1, i6, i5) && !world.y(i4, i6, i5 - 1) && !world.y(i4, i6, i5 + 1)) {
                                             int i10 = i3 + random.nextInt(5) / 4;
 
                                             if (i10 > 15) {
@@ -268,5 +269,9 @@ public class BlockFire extends Block {
                 world.a(i0, i1, i2, this, this.a(world) + world.s.nextInt(10));
             }
         }
+    }
+
+    public MapColor f(int i0) {
+        return MapColor.f;
     }
 }

@@ -78,10 +78,10 @@ public abstract class CommandBlockLogic implements ICommandSender {
             this.b = 0;
         }
 
-        MinecraftServer minecraftserver = MinecraftServer.G();
+        MinecraftServer minecraftserver = MinecraftServer.I();
 
         if (minecraftserver != null && minecraftserver.ab()) {
-            ICommandManager icommandmanager = minecraftserver.H();
+            ICommandManager icommandmanager = minecraftserver.J();
 
             // CanaryMod: CommandBlockCommand
             new CommandBlockCommandHook(getReference(), this.e.split(" ")).call();

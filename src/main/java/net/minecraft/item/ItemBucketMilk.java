@@ -21,10 +21,10 @@ public class ItemBucketMilk extends Item {
             return itemstack;
         }
         // For those Lactose intolerant
-        entityplayer.bO().a(hook.getLevelGain(), hook.getSaturationGain());
+        entityplayer.bQ().a(hook.getLevelGain(), hook.getSaturationGain());
         //
 
-        if (!entityplayer.bF.d) {
+        if (!entityplayer.bE.d) {
             --itemstack.b;
         }
 

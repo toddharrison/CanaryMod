@@ -164,7 +164,7 @@ public abstract class CanaryEntityLiving extends CanaryLivingBase implements Ent
      */
     @Override
     public boolean canPickUpLoot() {
-        return getHandle().bH();
+        return getHandle().bJ();
     }
 
     /**
@@ -180,7 +180,7 @@ public abstract class CanaryEntityLiving extends CanaryLivingBase implements Ent
      */
     @Override
     public boolean isPersistenceRequired() {
-        return getHandle().bI();
+        return getHandle().bK();
     }
 
     /**
@@ -204,7 +204,7 @@ public abstract class CanaryEntityLiving extends CanaryLivingBase implements Ent
      */
     @Override
     public boolean hasDisplayName() {
-        return getHandle().bF();
+        return getHandle().bI();
     }
 
     /**
@@ -212,7 +212,7 @@ public abstract class CanaryEntityLiving extends CanaryLivingBase implements Ent
      */
     @Override
     public String getDisplayName() {
-        return getHandle().bE();
+        return getHandle().bG();
     }
 
     /**
@@ -230,8 +230,8 @@ public abstract class CanaryEntityLiving extends CanaryLivingBase implements Ent
      * {@inheritDoc}
      */
     @Override
-    public boolean showingDisplayName() {
-        return getHandle().bG();
+    public boolean showingDisplayName() { // TODO: checkthat this is actually right
+        return getHandle().bI();
     }
 
     /**

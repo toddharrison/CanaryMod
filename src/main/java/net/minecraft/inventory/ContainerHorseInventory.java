@@ -1,7 +1,6 @@
 package net.minecraft.inventory;
 
 import net.canarymod.api.inventory.Inventory;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -29,13 +28,13 @@ public class ContainerHorseInventory extends Container {
         this.a(new Slot(iinventory1, 1, 8, 36) {
 
             public boolean a(ItemStack itemstack1) {
-                return super.a(itemstack1) && entityhorse.cz() && EntityHorse.a(itemstack1.b());
+                return super.a(itemstack1) && entityhorse.cB() && EntityHorse.a(itemstack1.b());
             }
         });
         int i1;
         int i2;
 
-        if (entityhorse.ci()) {
+        if (entityhorse.ck()) {
             for (i1 = 0; i1 < b0; ++i1) {
                 for (i2 = 0; i2 < 5; ++i2) {
                     this.a(new Slot(iinventory1, 2 + i2 + i1 * 5, 80 + i2 * 18, 18 + i1 * 18));
@@ -55,7 +54,7 @@ public class ContainerHorseInventory extends Container {
     }
 
     public boolean a(EntityPlayer entityplayer) {
-        return this.a.a(entityplayer) && this.f.Z() && this.f.d((Entity) entityplayer) < 8.0F;
+        return this.a.a(entityplayer) && this.f.Z() && this.f.e(entityplayer) < 8.0F;
     }
 
     public ItemStack b(EntityPlayer entityplayer, int i0) {
@@ -70,25 +69,21 @@ public class ContainerHorseInventory extends Container {
                 if (!this.a(itemstack1, this.a.a(), this.c.size(), true)) {
                     return null;
                 }
-            }
-            else if (this.a(1).a(itemstack1) && !this.a(1).e()) {
+            } else if (this.a(1).a(itemstack1) && !this.a(1).e()) {
                 if (!this.a(itemstack1, 1, 2, false)) {
                     return null;
                 }
-            }
-            else if (this.a(0).a(itemstack1)) {
+            } else if (this.a(0).a(itemstack1)) {
                 if (!this.a(itemstack1, 0, 1, false)) {
                     return null;
                 }
-            }
-            else if (this.a.a() <= 2 || !this.a(itemstack1, 2, this.a.a(), false)) {
+            } else if (this.a.a() <= 2 || !this.a(itemstack1, 2, this.a.a(), false)) {
                 return null;
             }
 
             if (itemstack1.b == 0) {
                 slot.c((ItemStack) null);
-            }
-            else {
+            } else {
                 slot.f();
             }
         }

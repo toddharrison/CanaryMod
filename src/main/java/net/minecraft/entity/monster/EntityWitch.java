@@ -64,7 +64,7 @@ public class EntityWitch extends EntityMob implements IRangedAttackMob {
         this.z().b(21, Byte.valueOf((byte) (flag0 ? 1 : 0)));
     }
 
-    public boolean bX() {
+    public boolean bZ() {
         return this.z().a(21) == 1;
     }
 
@@ -79,8 +79,8 @@ public class EntityWitch extends EntityMob implements IRangedAttackMob {
     }
 
     public void e() {
-        if (!this.p.E) {
-            if (this.bX()) {
+        if (!this.o.E) {
+            if (this.bZ()) {
                 if (this.bs-- <= 0) {
                     this.a(false);
                     ItemStack itemstack = this.be();
@@ -102,23 +102,18 @@ public class EntityWitch extends EntityMob implements IRangedAttackMob {
 
                     this.a(SharedMonsterAttributes.d).b(bq);
                 }
-            }
-            else {
+            } else {
                 short short1 = -1;
 
-                if (this.aa.nextFloat() < 0.15F && this.a(Material.h) && !this.a(Potion.o)) {
+                if (this.Z.nextFloat() < 0.15F && this.a(Material.h) && !this.a(Potion.o)) {
                     short1 = 8237;
-                }
-                else if (this.aa.nextFloat() < 0.15F && this.al() && !this.a(Potion.n)) {
+                } else if (this.Z.nextFloat() < 0.15F && this.al() && !this.a(Potion.n)) {
                     short1 = 16307;
-                }
-                else if (this.aa.nextFloat() < 0.05F && this.aS() < this.aY()) {
+                } else if (this.Z.nextFloat() < 0.05F && this.aS() < this.aY()) {
                     short1 = 16341;
-                }
-                else if (this.aa.nextFloat() < 0.25F && this.o() != null && !this.a(Potion.c) && this.o().e(this) > 121.0D) {
+                } else if (this.Z.nextFloat() < 0.25F && this.o() != null && !this.a(Potion.c) && this.o().f(this) > 121.0D) {
                     short1 = 16274;
-                }
-                else if (this.aa.nextFloat() < 0.25F && this.o() != null && !this.a(Potion.c) && this.o().e(this) > 121.0D) {
+                } else if (this.Z.nextFloat() < 0.25F && this.o() != null && !this.a(Potion.c) && this.o().f(this) > 121.0D) {
                     short1 = 16274;
                 }
 
@@ -126,15 +121,15 @@ public class EntityWitch extends EntityMob implements IRangedAttackMob {
                     this.c(0, new ItemStack(Items.bn, 1, short1));
                     this.bs = this.be().n();
                     this.a(true);
-                    IAttributeInstance attributeinstance = this.a(SharedMonsterAttributes.d);
+                    IAttributeInstance iattributeinstance = this.a(SharedMonsterAttributes.d);
 
-                    attributeinstance.b(bq);
-                    attributeinstance.a(bq);
+                    iattributeinstance.b(bq);
+                    iattributeinstance.a(bq);
                 }
             }
 
-            if (this.aa.nextFloat() < 7.5E-4F) {
-                this.p.a(this, (byte) 15);
+            if (this.Z.nextFloat() < 7.5E-4F) {
+                this.o.a(this, (byte) 15);
             }
         }
 
@@ -155,14 +150,14 @@ public class EntityWitch extends EntityMob implements IRangedAttackMob {
     }
 
     protected void b(boolean flag0, int i0) {
-        int i1 = this.aa.nextInt(3) + 1;
+        int i1 = this.Z.nextInt(3) + 1;
 
         for (int i2 = 0; i2 < i1; ++i2) {
-            int i3 = this.aa.nextInt(3);
-            Item item = br[this.aa.nextInt(br.length)];
+            int i3 = this.Z.nextInt(3);
+            Item item = br[this.Z.nextInt(br.length)];
 
             if (i0 > 0) {
-                i3 += this.aa.nextInt(i0 + 1);
+                i3 += this.Z.nextInt(i0 + 1);
             }
 
             for (int i4 = 0; i4 < i3; ++i4) {
@@ -172,27 +167,25 @@ public class EntityWitch extends EntityMob implements IRangedAttackMob {
     }
 
     public void a(EntityLivingBase entitylivingbase, float f0) {
-        if (!this.bX()) {
-            EntityPotion entitypotion = new EntityPotion(this.p, this, 32732);
+        if (!this.bZ()) {
+            EntityPotion entitypotion = new EntityPotion(this.o, this, 32732);
 
-            entitypotion.A -= -20.0F;
-            double d0 = entitylivingbase.t + entitylivingbase.w - this.t;
-            double d1 = entitylivingbase.u + (double) entitylivingbase.g() - 1.100000023841858D - this.u;
-            double d2 = entitylivingbase.v + entitylivingbase.y - this.v;
+            entitypotion.z -= -20.0F;
+            double d0 = entitylivingbase.s + entitylivingbase.v - this.s;
+            double d1 = entitylivingbase.t + (double) entitylivingbase.g() - 1.100000023841858D - this.t;
+            double d2 = entitylivingbase.u + entitylivingbase.x - this.u;
             float f1 = MathHelper.a(d0 * d0 + d2 * d2);
 
             if (f1 >= 8.0F && !entitylivingbase.a(Potion.d)) {
                 entitypotion.a(32698);
-            }
-            else if (entitylivingbase.aS() >= 8.0F && !entitylivingbase.a(Potion.u)) {
+            } else if (entitylivingbase.aS() >= 8.0F && !entitylivingbase.a(Potion.u)) {
                 entitypotion.a(32660);
-            }
-            else if (f1 <= 3.0F && !entitylivingbase.a(Potion.t) && this.aa.nextFloat() < 0.25F) {
+            } else if (f1 <= 3.0F && !entitylivingbase.a(Potion.t) && this.Z.nextFloat() < 0.25F) {
                 entitypotion.a(32696);
             }
 
             entitypotion.c(d0, d1 + (double) (f1 * 0.2F), d2, 0.75F, 8.0F);
-            this.p.d((Entity) entitypotion);
+            this.o.d((Entity) entitypotion);
         }
     }
 }

@@ -37,7 +37,7 @@ public final class EntityNonPlayableCharacter extends EntityPlayer {
 
     private static GameProfile genFakeProfile(String name) {
         UUID five$SaysthisisntUniqueAtAll = UUID.randomUUID();
-        return new GameProfile(five$SaysthisisntUniqueAtAll.toString().replaceAll("-", ""), name);
+        return new GameProfile(five$SaysthisisntUniqueAtAll, name);
     }
 
     public EntityNonPlayableCharacter(String name, Location location) {
@@ -51,11 +51,11 @@ public final class EntityNonPlayableCharacter extends EntityPlayer {
         this.path_navigate.b(false);
         this.path_navigate.d(false);
         this.path_navigate.e(true);
-        this.X = 0.0F;
-        this.M = 0.0F;
+        this.V = 0.0F;
+        this.L = 0.0F;
         this.b((double) location.getX(), location.getY(), location.getZ(), location.getRotation(), location.getPitch());
-        while (!world.a(this, this.D).isEmpty()) {
-            this.b(this.t, this.u + 1.0D, this.v);
+        while (!world.a(this, this.C).isEmpty()) {
+            this.b(this.s, this.t + 1.0D, this.u);
         }
         this.entity = new CanaryNonPlayableCharacter(this);
     }
@@ -92,7 +92,7 @@ public final class EntityNonPlayableCharacter extends EntityPlayer {
 
     @Override
     public void h() {
-        if (!this.L) {
+        if (!this.K) {
             new Update().call(getNPC());
         }
         super.h();
@@ -139,7 +139,7 @@ public final class EntityNonPlayableCharacter extends EntityPlayer {
     }
 
     public void entityliving_n_clone(float f0) {
-        this.bf = f0;
+        this.be = f0;
         super.i(f0);
     }
 
@@ -187,7 +187,7 @@ public final class EntityNonPlayableCharacter extends EntityPlayer {
     */
     @Override
     public void a(Entity entity, int i0) {
-        if (!entity.L && !this.p.E) {
+        if (!entity.K && !this.o.E) {
             super.a(entity, i0);
             if (entity instanceof EntityItem) {
                 new PickupItem(((EntityItem)entity).getEntityItem().getItem()).call(this.getNPC());
@@ -205,10 +205,10 @@ public final class EntityNonPlayableCharacter extends EntityPlayer {
     *  These are the few extra methods needed for path finding and Vanilla AI 
     *  system to work.
     */
-    
+
 
     public void n(float f0) {
-        this.bf = f0;
+        this.be = f0;
     }
 
     public void i(float f0) {
@@ -229,25 +229,24 @@ public final class EntityNonPlayableCharacter extends EntityPlayer {
     }
 
     public void a(Entity entity, float f0, float f1) {
-        double d0 = entity.t - this.t;
-        double d1 = entity.v - this.v;
+        double d0 = entity.s - this.s;
+        double d1 = entity.u - this.u;
         double d2;
 
         if (entity instanceof EntityLivingBase) {
             EntityLivingBase entitylivingbase = (EntityLivingBase) entity;
 
-            d2 = entitylivingbase.u + (double) entitylivingbase.g() - (this.u + (double) this.g());
-        }
-        else {
-            d2 = (entity.D.b + entity.D.e) / 2.0D - (this.u + (double) this.g());
+            d2 = entitylivingbase.t + (double) entitylivingbase.g() - (this.t + (double) this.g());
+        } else {
+            d2 = (entity.C.b + entity.C.e) / 2.0D - (this.t + (double) this.g());
         }
 
         double d3 = (double) MathHelper.a(d0 * d0 + d1 * d1);
         float f2 = (float) (Math.atan2(d1, d0) * 180.0D / 3.1415927410125732D) - 90.0F;
         float f3 = (float) (-(Math.atan2(d2, d3) * 180.0D / 3.1415927410125732D));
 
-        this.A = this.b(this.A, f3, f1);
-        this.z = this.b(this.z, f2, f0);
+        this.z = this.b(this.z, f3, f1);
+        this.y = this.b(this.y, f2, f0);
     }
 
     private float b(float f0, float f1, float f2) {

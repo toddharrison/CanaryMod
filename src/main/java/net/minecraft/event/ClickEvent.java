@@ -35,27 +35,23 @@ public class ClickEvent {
     public boolean equals(Object object) {
         if (this == object) {
             return true;
-        }
-        else if (object != null && this.getClass() == object.getClass()) {
+        } else if (object != null && this.getClass() == object.getClass()) {
             ClickEvent clickevent = (ClickEvent) object;
 
             if (this.a != clickevent.a) {
                 return false;
-            }
-            else {
+            } else {
                 if (this.b != null) {
                     if (!this.b.equals(clickevent.b)) {
                         return false;
                     }
-                }
-                else if (clickevent.b != null) {
+                } else if (clickevent.b != null) {
                     return false;
                 }
 
                 return true;
             }
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -78,17 +74,17 @@ public class ClickEvent {
         RUN_COMMAND(true), //
         SUGGEST_COMMAND(true);
 
-        private static final Map<String, Action> e = Maps.newHashMap();
-        private final boolean f;
+        private static final Map<String, Action> f = Maps.newHashMap();
+        private final boolean g;
         private final CanaryClickEventAction ccea; // CanaryMod
 
         private Action(boolean flag0) {
-            this.f = flag0;
+            this.g = flag0;
             ccea = new CanaryClickEventAction(this); // CanaryMod: install wrapper
         }
 
         public boolean a() {
-            return this.f;
+            return this.g;
         }
 
         public String b() {
@@ -102,12 +98,12 @@ public class ClickEvent {
         //
 
         public static Action a(String aclickevent_action) {
-            return e.get(aclickevent_action.toLowerCase());
+            return f.get(aclickevent_action.toLowerCase());
         }
 
         static {
             for (Action action : values()) {
-                e.put(action.b(), action);
+                f.put(action.b(), action);
             }
         }
     }

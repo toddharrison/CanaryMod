@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.UUID;
 
 import static net.canarymod.Canary.log;
-import net.canarymod.ToolBox;
 
 /**
  * Offline Player implementation
@@ -118,8 +117,7 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
         String world = data.getString("LevelName");
         try {
             return Canary.getServer().getWorldManager().getWorld(world, DimensionType.fromId(dim), false);
-        }
-        catch (UnknownWorldException e) {
+        } catch (UnknownWorldException e) {
             return Canary.getServer().getDefaultWorld();
         }
     }
@@ -295,12 +293,11 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
             return;
         }
         if (getNBT() != null) {
-            ISaveHandler handler = ((CanaryWorld) getWorld()).getHandle().L();
+            ISaveHandler handler = ((CanaryWorld) getWorld()).getHandle().M();
             if (handler instanceof SaveHandler) {
                 SaveHandler shandler = (SaveHandler) handler;
-                shandler.writePlayerNbt(getName(), (CanaryCompoundTag) getNBT());
-            }
-            else {
+                shandler.writePlayerNbt(uuid, (CanaryCompoundTag) getNBT());
+            } else {
                 log.error(getName() + "'s OfflinePlayer could not be saved! Unsupported SaveHandler!");
             }
         }

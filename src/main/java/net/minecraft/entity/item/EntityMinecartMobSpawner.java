@@ -13,11 +13,11 @@ public class EntityMinecartMobSpawner extends EntityMinecart {
     public final MobSpawnerBaseLogic a = new MobSpawnerBaseLogic() { // CanaryMod: private -> public
 
         public void a(int var1) {
-            EntityMinecartMobSpawner.this.p.a(EntityMinecartMobSpawner.this, (byte) var1);
+            EntityMinecartMobSpawner.this.o.a(EntityMinecartMobSpawner.this, (byte) var1);
         }
 
         public World a() {
-            return EntityMinecartMobSpawner.this.p;
+            return EntityMinecartMobSpawner.this.o;
         }
 
         public int b() {

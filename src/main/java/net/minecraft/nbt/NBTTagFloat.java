@@ -23,7 +23,8 @@ public class NBTTagFloat extends NBTBase.NBTPrimitive {
         dataoutput.writeFloat(this.b);
     }
 
-    void a(DataInput datainput, int i0) throws IOException {
+    void a(DataInput datainput, int i0, NBTSizeTracker nbtsizetracker) throws IOException {
+        nbtsizetracker.a(32L);
         this.b = datainput.readFloat();
     }
 

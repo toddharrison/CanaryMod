@@ -23,7 +23,7 @@ public class EntityFireworkRocket extends Entity {
     }
 
     protected void c() {
-        this.ag.a(8, 5);
+        this.af.a(8, 5);
     }
 
     public EntityFireworkRocket(World world, double d0, double d1, double d2, ItemStack itemstack) {
@@ -31,11 +31,11 @@ public class EntityFireworkRocket extends Entity {
         this.a = 0;
         this.a(0.25F, 0.25F);
         this.b(d0, d1, d2);
-        this.M = 0.0F;
+        this.L = 0.0F;
         int i0 = 1;
 
         if (itemstack != null && itemstack.p()) {
-            this.ag.b(8, itemstack);
+            this.af.b(8, itemstack);
             NBTTagCompound nbttagcompound = itemstack.q();
             NBTTagCompound nbttagcompound1 = nbttagcompound.m("Fireworks");
 
@@ -44,58 +44,58 @@ public class EntityFireworkRocket extends Entity {
             }
         }
 
-        this.w = this.aa.nextGaussian() * 0.001D;
-        this.y = this.aa.nextGaussian() * 0.001D;
-        this.x = 0.05D;
-        this.b = 10 * i0 + this.aa.nextInt(6) + this.aa.nextInt(7);
+        this.v = this.Z.nextGaussian() * 0.001D;
+        this.x = this.Z.nextGaussian() * 0.001D;
+        this.w = 0.05D;
+        this.b = 10 * i0 + this.Z.nextInt(6) + this.Z.nextInt(7);
         this.entity = new CanaryFireworkRocket(this); // CanaryMod: Wrap Entity
     }
 
     public void h() {
+        this.S = this.s;
         this.T = this.t;
         this.U = this.u;
-        this.V = this.v;
         super.h();
-        this.w *= 1.15D;
-        this.y *= 1.15D;
-        this.x += 0.04D;
-        this.d(this.w, this.x, this.y);
-        float f0 = MathHelper.a(this.w * this.w + this.y * this.y);
+        this.v *= 1.15D;
+        this.x *= 1.15D;
+        this.w += 0.04D;
+        this.d(this.v, this.w, this.x);
+        float f0 = MathHelper.a(this.v * this.v + this.x * this.x);
 
-        this.z = (float) (Math.atan2(this.w, this.y) * 180.0D / 3.1415927410125732D);
+        this.y = (float) (Math.atan2(this.v, this.x) * 180.0D / 3.1415927410125732D);
 
-        for (this.A = (float) (Math.atan2(this.x, (double) f0) * 180.0D / 3.1415927410125732D); this.A - this.C < -180.0F; this.C -= 360.0F) {
+        for (this.z = (float) (Math.atan2(this.w, (double) f0) * 180.0D / 3.1415927410125732D); this.z - this.B < -180.0F; this.B -= 360.0F) {
             ;
-        }
-
-        while (this.A - this.C >= 180.0F) {
-            this.C += 360.0F;
-        }
-
-        while (this.z - this.B < -180.0F) {
-            this.B -= 360.0F;
         }
 
         while (this.z - this.B >= 180.0F) {
             this.B += 360.0F;
         }
 
-        this.A = this.C + (this.A - this.C) * 0.2F;
+        while (this.y - this.A < -180.0F) {
+            this.A -= 360.0F;
+        }
+
+        while (this.y - this.A >= 180.0F) {
+            this.A += 360.0F;
+        }
+
         this.z = this.B + (this.z - this.B) * 0.2F;
+        this.y = this.A + (this.y - this.A) * 0.2F;
         if (this.a == 0) {
-            this.p.a((Entity) this, "fireworks.launch", 3.0F, 1.0F);
+            this.o.a((Entity) this, "fireworks.launch", 3.0F, 1.0F);
         }
 
         ++this.a;
-        if (this.p.E && this.a % 2 < 2) {
-            this.p.a("fireworksSpark", this.t, this.u - 0.3D, this.v, this.aa.nextGaussian() * 0.05D, -this.x * 0.5D, this.aa.nextGaussian() * 0.05D);
+        if (this.o.E && this.a % 2 < 2) {
+            this.o.a("fireworksSpark", this.s, this.t - 0.3D, this.u, this.Z.nextGaussian() * 0.05D, -this.w * 0.5D, this.Z.nextGaussian() * 0.05D);
         }
 
-        if (!this.p.E && this.a > this.b) {
+        if (!this.o.E && this.a > this.b) {
             // CanaryMod: FireworkExplode
             FireworkExplodeHook hook = (FireworkExplodeHook) new FireworkExplodeHook((FireworkRocket) this.getCanaryEntity()).call();
             if (!hook.isCanceled()) {
-                this.p.a(this, (byte) 17);
+                this.o.a(this, (byte) 17);
                 this.B();
             }
             //
@@ -105,7 +105,7 @@ public class EntityFireworkRocket extends Entity {
     public void b(NBTTagCompound nbttagcompound) {
         nbttagcompound.a("Life", this.a);
         nbttagcompound.a("LifeTime", this.b);
-        ItemStack itemstack = this.ag.f(8);
+        ItemStack itemstack = this.af.f(8);
 
         if (itemstack != null) {
             NBTTagCompound nbttagcompound1 = new NBTTagCompound();
@@ -124,7 +124,7 @@ public class EntityFireworkRocket extends Entity {
             ItemStack itemstack = ItemStack.a(nbttagcompound1);
 
             if (itemstack != null) {
-                this.ag.b(8, itemstack);
+                this.af.b(8, itemstack);
             }
         }
     }
@@ -137,17 +137,19 @@ public class EntityFireworkRocket extends Entity {
         return false;
     }
 
+    // CanaryMod
     public ItemStack getItemStack() {
-        return this.ag.f(8);
+        return this.af.f(8);
     }
 
     public void setItemStack(ItemStack stack) {
-        this.ag.b(8, stack);
+        this.af.b(8, stack);
         // Update Flight information
         NBTTagCompound nbttagcompound = stack.q();
         NBTTagCompound nbttagcompound1 = nbttagcompound.m("Fireworks");
         if (nbttagcompound1 != null) {
-            this.b = 10 * nbttagcompound1.d("Flight") + this.aa.nextInt(6) + this.aa.nextInt(7);
+            this.b = 10 * nbttagcompound1.d("Flight") + this.Z.nextInt(6) + this.Z.nextInt(7);
         }
     }
+//
 }

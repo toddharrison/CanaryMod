@@ -31,11 +31,12 @@ public class NBTTagList extends NBTBase {
 
     }
 
-    void a(DataInput datainput, int i0) throws IOException {
+    void a(DataInput datainput, int i0, NBTSizeTracker nbtsizetracker) throws IOException {
         if (i0 > 512) {
             throw new RuntimeException("Tried to read NBT tag with too high complexity, depth > 512");
         }
         else {
+            nbtsizetracker.a(8L);
             this.c = datainput.readByte();
             int i1 = datainput.readInt();
 
@@ -44,7 +45,7 @@ public class NBTTagList extends NBTBase {
             for (int i2 = 0; i2 < i1; ++i2) {
                 NBTBase nbtbase = NBTBase.a(this.c);
 
-                nbtbase.a(datainput, i0 + 1);
+                nbtbase.a(datainput, i0 + 1, nbtsizetracker);
                 this.b.add(nbtbase);
             }
 

@@ -25,8 +25,9 @@ public class NBTTagString extends NBTBase {
         dataoutput.writeUTF(this.b);
     }
 
-    void a(DataInput datainput, int i0) throws IOException {
+    void a(DataInput datainput, int i0, NBTSizeTracker nbtsizetracker) throws IOException {
         this.b = datainput.readUTF();
+        nbtsizetracker.a((long) (16 * this.b.length()));
     }
 
     public byte a() {

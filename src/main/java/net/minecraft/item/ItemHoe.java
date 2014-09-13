@@ -46,7 +46,8 @@ public class ItemHoe extends Item {
                     itemstack.a(1, (EntityLivingBase) entityplayer);
                     return true;
                 }
-            } else {
+            }
+            else {
                 return false;
             }
         }

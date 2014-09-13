@@ -39,7 +39,7 @@ public class PathNavigateNPC {
     private CanaryPathFinderNPC nav = new CanaryPathFinderNPC(this); // CanaryMod: our var
 
     public PathNavigateNPC(EntityNonPlayableCharacter entityNPC, World world) {
-        this.a = entityNPC;
+        this.a = entityNPC;;
         this.b = world;
         this.e = entityNPC.a(SharedMonsterAttributes.b);
     }
@@ -77,7 +77,7 @@ public class PathNavigateNPC {
     }
 
     public float d() {
-        return (float) searchRange; // CanaryMod: manually set the search radius
+        return (float) this.e.e();
     }
 
     public PathEntity a(double d0, double d1, double d2) {
@@ -104,8 +104,7 @@ public class PathNavigateNPC {
         if (pathentity == null) {
             this.c = null;
             return false;
-        }
-        else {
+        } else {
             if (!pathentity.a(this.c)) {
                 this.c = pathentity;
             }
@@ -116,15 +115,14 @@ public class PathNavigateNPC {
 
             if (this.c.d() == 0) {
                 return false;
-            }
-            else {
+            } else {
                 this.d = d0;
                 Vec3 vec3 = this.j();
 
                 this.h = this.g;
+                this.i.a = vec3.a;
+                this.i.b = vec3.b;
                 this.i.c = vec3.c;
-                this.i.d = vec3.d;
-                this.i.e = vec3.e;
                 return true;
             }
         }
@@ -145,7 +143,7 @@ public class PathNavigateNPC {
                 Vec3 vec3 = this.c.a((Entity) this.a);
 
                 if (vec3 != null) {
-                    this.a.getMoveHelper().a(vec3.c, vec3.d, vec3.e, this.d);
+                    this.a.getMoveHelper().a(vec3.a, vec3.b, vec3.c, this.d);
                 }
             }
         }
@@ -156,13 +154,13 @@ public class PathNavigateNPC {
         int i0 = this.c.d();
 
         for (int i1 = this.c.e(); i1 < this.c.d(); ++i1) {
-            if (this.c.a(i1).b != (int) vec3.d) {
+            if (this.c.a(i1).b != (int) vec3.b) {
                 i0 = i1;
                 break;
             }
         }
 
-        float f0 = this.a.N * this.a.N;
+        float f0 = this.a.M * this.a.M;
 
         int i2;
 
@@ -172,8 +170,8 @@ public class PathNavigateNPC {
             }
         }
 
-        i2 = MathHelper.f(this.a.N);
-        int i3 = (int) this.a.O + 1;
+        i2 = MathHelper.f(this.a.M);
+        int i3 = (int) this.a.N + 1;
         int i4 = i2;
 
         for (int i5 = i0 - 1; i5 >= this.c.e(); --i5) {
@@ -189,9 +187,9 @@ public class PathNavigateNPC {
             }
 
             this.h = this.g;
+            this.i.a = vec3.a;
+            this.i.b = vec3.b;
             this.i.c = vec3.c;
-            this.i.d = vec3.d;
-            this.i.e = vec3.e;
         }
 
     }
@@ -205,13 +203,13 @@ public class PathNavigateNPC {
     }
 
     private Vec3 j() {
-        return this.b.U().a(this.a.t, (double) this.k(), this.a.v);
+        return Vec3.a(this.a.s, (double) this.k(), this.a.u);
     }
 
     private int k() {
         if (this.a.M() && this.m) {
-            int i0 = (int) this.a.D.b;
-            Block block = this.b.a(MathHelper.c(this.a.t), i0, MathHelper.c(this.a.v));
+            int i0 = (int) this.a.C.b;
+            Block block = this.b.a(MathHelper.c(this.a.s), i0, MathHelper.c(this.a.u));
             int i1 = 0;
 
             do {
@@ -220,19 +218,18 @@ public class PathNavigateNPC {
                 }
 
                 ++i0;
-                block = this.b.a(MathHelper.c(this.a.t), i0, MathHelper.c(this.a.v));
+                block = this.b.a(MathHelper.c(this.a.s), i0, MathHelper.c(this.a.u));
                 ++i1;
             } while (i1 <= 16);
 
-            return (int) this.a.D.b;
-        }
-        else {
-            return (int) (this.a.D.b + 0.5D);
+            return (int) this.a.C.b;
+        } else {
+            return (int) (this.a.C.b + 0.5D);
         }
     }
 
     private boolean l() {
-        return this.a.E || this.m && this.m();
+        return this.a.D || this.m && this.m() || this.a.am();// && this.a instanceof EntityZombie && this.a.m instanceof EntityChicken;
     }
 
     private boolean m() {
@@ -240,7 +237,7 @@ public class PathNavigateNPC {
     }
 
     private void n() {
-        if (!this.b.i(MathHelper.c(this.a.t), (int) (this.a.D.b + 0.5D), MathHelper.c(this.a.v))) {
+        if (!this.b.i(MathHelper.c(this.a.s), (int) (this.a.C.b + 0.5D), MathHelper.c(this.a.u))) {
             for (int i0 = 0; i0 < this.c.d(); ++i0) {
                 PathPoint pathpoint = this.c.a(i0);
 
@@ -254,32 +251,30 @@ public class PathNavigateNPC {
     }
 
     private boolean a(Vec3 vec3, Vec3 vec31, int i0, int i1, int i2) {
-        int i3 = MathHelper.c(vec3.c);
-        int i4 = MathHelper.c(vec3.e);
-        double d0 = vec31.c - vec3.c;
-        double d1 = vec31.e - vec3.e;
+        int i3 = MathHelper.c(vec3.a);
+        int i4 = MathHelper.c(vec3.c);
+        double d0 = vec31.a - vec3.a;
+        double d1 = vec31.c - vec3.c;
         double d2 = d0 * d0 + d1 * d1;
 
         if (d2 < 1.0E-8D) {
             return false;
-        }
-        else {
+        } else {
             double d3 = 1.0D / Math.sqrt(d2);
 
             d0 *= d3;
             d1 *= d3;
             i0 += 2;
             i2 += 2;
-            if (!this.a(i3, (int) vec3.d, i4, i0, i1, i2, vec3, d0, d1)) {
+            if (!this.a(i3, (int) vec3.b, i4, i0, i1, i2, vec3, d0, d1)) {
                 return false;
-            }
-            else {
+            } else {
                 i0 -= 2;
                 i2 -= 2;
                 double d4 = 1.0D / Math.abs(d0);
                 double d5 = 1.0D / Math.abs(d1);
-                double d6 = (double) (i3 * 1) - vec3.c;
-                double d7 = (double) (i4 * 1) - vec3.e;
+                double d6 = (double) (i3 * 1) - vec3.a;
+                double d7 = (double) (i4 * 1) - vec3.c;
 
                 if (d0 >= 0.0D) {
                     ++d6;
@@ -293,8 +288,8 @@ public class PathNavigateNPC {
                 d7 /= d1;
                 int i5 = d0 < 0.0D ? -1 : 1;
                 int i6 = d1 < 0.0D ? -1 : 1;
-                int i7 = MathHelper.c(vec31.c);
-                int i8 = MathHelper.c(vec31.e);
+                int i7 = MathHelper.c(vec31.a);
+                int i8 = MathHelper.c(vec31.c);
                 int i9 = i7 - i3;
                 int i10 = i8 - i4;
 
@@ -307,13 +302,12 @@ public class PathNavigateNPC {
                         d6 += d4;
                         i3 += i5;
                         i9 = i7 - i3;
-                    }
-                    else {
+                    } else {
                         d7 += d5;
                         i4 += i6;
                         i10 = i8 - i4;
                     }
-                } while (this.a(i3, (int) vec3.d, i4, i0, i1, i2, vec3, d0, d1));
+                } while (this.a(i3, (int) vec3.b, i4, i0, i1, i2, vec3, d0, d1));
 
                 return false;
             }
@@ -326,12 +320,11 @@ public class PathNavigateNPC {
 
         if (!this.b(i6, i1, i7, i3, i4, i5, vec3, d0, d1)) {
             return false;
-        }
-        else {
+        } else {
             for (int i8 = i6; i8 < i6 + i3; ++i8) {
                 for (int i9 = i7; i9 < i7 + i5; ++i9) {
-                    double d2 = (double) i8 + 0.5D - vec3.c;
-                    double d3 = (double) i9 + 0.5D - vec3.e;
+                    double d2 = (double) i8 + 0.5D - vec3.a;
+                    double d3 = (double) i9 + 0.5D - vec3.c;
 
                     if (d2 * d0 + d3 * d1 >= 0.0D) {
                         Block block = this.b.a(i8, i1 - 1, i9);
@@ -360,8 +353,8 @@ public class PathNavigateNPC {
         for (int i6 = i0; i6 < i0 + i3; ++i6) {
             for (int i7 = i1; i7 < i1 + i4; ++i7) {
                 for (int i8 = i2; i8 < i2 + i5; ++i8) {
-                    double d2 = (double) i6 + 0.5D - vec3.c;
-                    double d3 = (double) i8 + 0.5D - vec3.e;
+                    double d2 = (double) i6 + 0.5D - vec3.a;
+                    double d3 = (double) i8 + 0.5D - vec3.c;
 
                     if (d2 * d0 + d3 * d1 >= 0.0D) {
                         Block block = this.b.a(i6, i7, i8);
