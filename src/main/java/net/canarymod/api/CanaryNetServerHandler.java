@@ -119,28 +119,16 @@ public class CanaryNetServerHandler implements NetServerHandler {
                 }
 
                 if (workingMsg.length() > 1) { // Only reset things if there was something beyond the style
-                    if (workingMsg.contains(" ")) { // Only urlFormat if there are spaces?
-                        toSend = urlFormat(toSend, working, workingMsg, true);
-                    }
-                    else {
-                        toSend.appendSibling(working.appendText(workingMsg.substring(1)));
-                    }
-                    working = new ChatComponentText("").getWrapper();
+                    urlFormat(toSend, working, workingMsg, true);
                 }
             }
             else if (workingMsg.length() > 1) {
-                if (workingMsg.contains(" ")) { // Only urlFormat if there are spaces?
-                    toSend = urlFormat(toSend, working, workingMsg, false);
-                }
-                else {
-                    toSend.appendSibling(working.appendText(workingMsg));
-                }
-                working = new ChatComponentText("").getWrapper();
+                urlFormat(toSend, working, workingMsg, false);
             }
             else {
                 toSend.appendSibling(working.appendText(workingMsg));
-                working = new ChatComponentText("").getWrapper();
             }
+            working = new ChatComponentText("").getWrapper();
         }
         return toSend;
     }
@@ -185,29 +173,38 @@ public class CanaryNetServerHandler implements NetServerHandler {
         }
     }
 
-    private CanaryChatComponent urlFormat(CanaryChatComponent toSend, CanaryChatComponent working, String workingMsg, boolean styleSet) {
+    private void urlFormat(CanaryChatComponent toSend, CanaryChatComponent working, String workingMsg, boolean styleSet) {
         String[] subWorking = styleSet ? workingMsg.substring(1).split(" ") : workingMsg.split(" "); // Find the URL
+        boolean addSpaces = workingMsg.contains(" "); // if its only one string then there probably was no spaces
         StringBuilder subRebuild = new StringBuilder(); // Rebuild everything before and after the URL
-
+        net.canarymod.api.chat.ChatStyle workingStyle = working.getChatStyle().clone();
         for (String sub : subWorking) {
             if (urlPattern.matcher(sub).matches()) {
-                CanaryChatStyle urlStyle = new ChatStyle().getWrapper();
+                net.canarymod.api.chat.ChatStyle urlStyle = new ChatStyle().getWrapper();
                 toSend.appendSibling(working.appendText(subRebuild.toString())); // append everything before the URL
-                working = new ChatComponentText("").getWrapper();
+                working = new ChatComponentText("").getWrapper(); // reset working
+
                 ClickEvent clickEvent = new ClickEvent(ClickEvent.Action.OPEN_URL, sub); // Create the ClickEvent Action for the URL
+                if (styleSet) {
+                    urlStyle = workingStyle.clone(); // Need to pull the formatting in as well
+                }
                 urlStyle.setChatClickEvent(clickEvent.getWrapper()); // Append the action
-                toSend.appendSibling(working.setChatStyle(urlStyle).appendText(sub.concat(" "))); // Append the url again
-                working = new ChatComponentText("").getWrapper();
+                toSend.appendSibling(working.setChatStyle(urlStyle).appendText(sub.concat(addSpaces ? " " : ""))); // Append URL
+
+                working = new ChatComponentText("").getWrapper(); // reset working again
+                working.setChatStyle(workingStyle.clone()); // reset working style
+
                 subRebuild.delete(0, subRebuild.length()); // Reset the subRebuilder to handle things after the URL
             }
             else {
-                subRebuild.append(sub).append(" ");
+                subRebuild.append(sub);
+                if (addSpaces) {
+                    subRebuild.append(" "); // Append that there space
+                }
             }
         }
         if (subRebuild.length() > 0) {
             toSend.appendSibling(working.appendText(subRebuild.toString())); // Append whats left over
         }
-
-        return toSend;
     }
 }

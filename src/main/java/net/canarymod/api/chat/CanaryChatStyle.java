@@ -173,6 +173,11 @@ public class CanaryChatStyle implements ChatStyle {
         return getNative().n().getWrapper();
     }
 
+    @Override
+    public final ChatStyle clone() {
+        return getNative().m().getWrapper();
+    }
+
     public net.minecraft.util.ChatStyle getNative() {
         return nmsChatStyle;
     }
