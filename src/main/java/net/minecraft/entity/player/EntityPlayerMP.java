@@ -289,15 +289,15 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
             }
 
             // CanaryMod: HealthChange / HealthEnabled
-            if (this.aS() != this.bQ && bR != this.bp.a() && this.getPlayer() != null) {
+            if ((this.aS() != this.bQ || this.bR != this.bp.a()) && this.getPlayer() != null) {
                 // updates your health when it is changed.
                 if (!Configuration.getWorldConfig(getCanaryWorld().getFqName()).isHealthEnabled()) {
-                    super.b(this.aZ());
+                    super.b(this.aY());
                     this.K = false;
                 } else {
-                    HealthChangeHook hook = (HealthChangeHook) new HealthChangeHook(getPlayer(), bP, this.aN()).call();
+                    HealthChangeHook hook = (HealthChangeHook) new HealthChangeHook(getPlayer(), bQ, this.aS()).call();
                     if (hook.isCanceled()) {
-                        super.b(this.bP);
+                        super.b(this.bQ);
                     }
                 }
             }
