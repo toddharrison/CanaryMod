@@ -37,10 +37,10 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
     private boolean isMuted;
     private UUID uuid;
 
-    public CanaryOfflinePlayer(String name, String uuid, CanaryCompoundTag tag) {
+    public CanaryOfflinePlayer(String name, UUID uuid, CanaryCompoundTag tag) {
         this.data = tag;
         this.name = name;
-        this.uuid = UUID.fromString(uuid);
+        this.uuid = uuid;
         provider = Canary.permissionManager().getPlayerProvider(getUUIDString(), getWorld().getFqName());
         String[] data = Canary.usersAndGroups().getPlayerData(getUUIDString());
         Group[] subs = Canary.usersAndGroups().getModuleGroupsForPlayer(getUUIDString());
@@ -117,7 +117,8 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
         String world = data.getString("LevelName");
         try {
             return Canary.getServer().getWorldManager().getWorld(world, DimensionType.fromId(dim), false);
-        } catch (UnknownWorldException e) {
+        }
+        catch (UnknownWorldException e) {
             return Canary.getServer().getDefaultWorld();
         }
     }
@@ -297,7 +298,8 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
             if (handler instanceof SaveHandler) {
                 SaveHandler shandler = (SaveHandler) handler;
                 shandler.writePlayerNbt(uuid, (CanaryCompoundTag) getNBT());
-            } else {
+            }
+            else {
                 log.error(getName() + "'s OfflinePlayer could not be saved! Unsupported SaveHandler!");
             }
         }

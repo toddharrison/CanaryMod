@@ -2,6 +2,7 @@ package net.canarymod.api;
 
 import net.canarymod.Canary;
 import net.canarymod.Main;
+import net.canarymod.ToolBox;
 import net.canarymod.api.entity.living.humanoid.CanaryPlayer;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.gui.GUIControl;
@@ -31,7 +32,6 @@ import java.net.UnknownHostException;
 import java.util.*;
 
 import static net.canarymod.Canary.log;
-import net.canarymod.ToolBox;
 
 /**
  * Main entry point of the software
@@ -252,13 +252,21 @@ public class CanaryServer implements Server {
      */
     @Override
     public OfflinePlayer getOfflinePlayer(String player) {
-        String uuid = ToolBox.usernameToUUID(player);
+        UUID uuid = ToolBox.uuidFromUsername(player);
         if (uuid == null) return null;
-        NBTTagCompound nbttagcompound = ServerConfigurationManager.getPlayerDat(UUID.fromString(uuid));
-        CanaryCompoundTag comp = null;
+        return getOfflinePlayer(uuid);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public OfflinePlayer getOfflinePlayer(UUID uuid) {
+        NBTTagCompound nbttagcompound = ServerConfigurationManager.getPlayerDat(uuid);
+        CanaryCompoundTag comp;
         if (nbttagcompound != null) {
             comp = new CanaryCompoundTag(nbttagcompound);
-            return new CanaryOfflinePlayer(player, uuid, comp);
+            return new CanaryOfflinePlayer(server.ax().a(uuid).getName(), uuid, comp);
         }
         return null;
     }
@@ -271,6 +279,18 @@ public class CanaryServer implements Server {
         PlayerReference reference = matchPlayer(player);
         if (reference == null) {
             reference = getOfflinePlayer(player);
+        }
+        return reference;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public PlayerReference matchKnownPlayer(UUID uuid) {
+        PlayerReference reference = getPlayerFromUUID(uuid);
+        if (reference == null) {
+            reference = getOfflinePlayer(uuid);
         }
         return reference;
     }
