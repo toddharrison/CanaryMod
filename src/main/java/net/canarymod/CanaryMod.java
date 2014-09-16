@@ -2,6 +2,7 @@ package net.canarymod;
 
 import net.canarymod.api.CanaryServer;
 import net.canarymod.api.channels.CanaryChannelManager;
+import net.canarymod.api.commandsys.CanaryPlayerSelector;
 import net.canarymod.api.factory.CanaryFactory;
 import net.canarymod.api.scoreboard.CanaryScoreboardManager;
 import net.canarymod.bansystem.BanManager;
@@ -58,6 +59,7 @@ public class CanaryMod extends Canary {
         this.ops = new OperatorsProvider();
         this.reservelist = new ReservelistProvider();
         this.factory = new CanaryFactory();
+        this.playerSelector = new CanaryPlayerSelector();
         this.channelManager = new CanaryChannelManager();
         // Initialize the plugin loader and scan for plugins
         this.pluginManager = new PluginManager();
