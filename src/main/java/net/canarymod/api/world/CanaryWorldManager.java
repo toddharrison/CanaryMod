@@ -7,6 +7,7 @@ import net.canarymod.config.Configuration;
 import net.canarymod.hook.system.UnloadWorldHook;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.util.*;
 
 import static net.canarymod.Canary.log;
@@ -15,8 +16,8 @@ import static net.canarymod.Canary.log;
  * This is a container for all of the worlds.
  *
  * @author Jos Kuijpers
- * @author Chris Ksoll
- * @author Jason (darkdiplomat)
+ * @author Chris Ksoll (damagefilter)
+ * @author Jason Jones (darkdiplomat)
  */
 public class CanaryWorldManager implements WorldManager {
 
@@ -25,37 +26,54 @@ public class CanaryWorldManager implements WorldManager {
     private Map<String, Boolean> markedForUnload;
     private static final Object worldLock = new Object();
 
+    private final FileFilter worldFilter = new FileFilter() {
+        @Override
+        public boolean accept(File pathname) {
+            return pathname.isDirectory();
+        }
+    };
+
+    private final FileFilter dimensionFilter = new FileFilter() {
+        @Override
+        public boolean accept(File pathname) {
+            return pathname.isDirectory() && pathname.getName().contains("_");
+        }
+    };
+
     public CanaryWorldManager() {
         markedForUnload = new HashMap<String, Boolean>(1);
         File worldsFolders = new File("worlds");
 
         if (!worldsFolders.exists()) {
             worldsFolders.mkdirs();
+            // Resonable defaults
+            existingWorlds = new ArrayList<String>(3);
+            loadedWorlds = new HashMap<String, World>(3);
             return;
         }
-        File[] worlds = worldsFolders.listFiles();
+        File[] worlds = worldsFolders.listFiles(worldFilter);
         if (worlds == null) {
+            // Resonable defaults
+            existingWorlds = new ArrayList<String>(3);
+            loadedWorlds = new HashMap<String, World>(3);
             log.warn("No worlds found to be loaded!");
             return;
         }
         int worldNum = worlds.length;
         if (worldNum == 0) {
-            worldNum = 1;
+            worldNum = 3; // Resonable default
         }
 
         existingWorlds = new ArrayList<String>(worldNum);
         loadedWorlds = new HashMap<String, World>(worldNum);
-        for (String f : worldsFolders.list()) {
-            File world = new File(worldsFolders, f);
-            File[] dimensions = world.listFiles();
+        for (File world : worlds) {
+            File[] dimensions = world.listFiles(dimensionFilter);
             if (dimensions == null) {
-                log.warn("No dimensions founds for World - ".concat(world.getName()));
+                log.warn("No dimensions found for World - ".concat(world.getName()));
                 continue;
             }
             for (File fqname : dimensions) {
-                if (fqname.isDirectory() && fqname.getName().contains("_")) {
-                    existingWorlds.add(fqname.getName());
-                }
+                existingWorlds.add(fqname.getName());
             }
         }
     }
