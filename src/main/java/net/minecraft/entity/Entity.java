@@ -1858,7 +1858,7 @@ public abstract class Entity {
             x = (double) MathHelper.a((int) x, -29999872, 29999872);
             z = (double) MathHelper.a((int) z, -29999872, 29999872);
         }
-        return new Location(oworldserverTo.getCanaryWorld(), x, y, z, rotX, rotY);
+        return new Location(oworldserverTo.getCanaryWorld(), x, y, z, rotY, rotX);
     }
 
     public CompoundTag getMetaData() {

@@ -59,12 +59,12 @@ public abstract class CanaryEntity implements Entity {
 
     @Override
     public float getPitch() {
-        return entity.y;
+        return entity.z;
     }
 
     @Override
     public float getRotation() {
-        return entity.z;
+        return entity.y;
     }
 
     @Override
@@ -130,12 +130,12 @@ public abstract class CanaryEntity implements Entity {
 
     @Override
     public void setPitch(float pitch) {
-        entity.y = pitch;
+        entity.z = pitch;
     }
 
     @Override
     public void setRotation(float rotation) {
-        entity.z = rotation;
+        entity.y = rotation;
     }
 
     @Override
