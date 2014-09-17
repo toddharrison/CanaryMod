@@ -26,6 +26,8 @@ Pull Requests
 It helps us when others take the time to submit fixes rather than just pointing out bugs/inconsistancies.  
 However, We have standards for the sources we have. Things like formatting  
 and generally following the [Sun/Oracle coding standards](http://www.oracle.com/technetwork/java/javase/documentation/codeconvtoc-136057.html)  
+We also ask that you read and sign our [Contribitors License Agreement Form](https://dl.dropboxusercontent.com/u/25586491/Canary/CanaryModTeam_CLA.pdf)  
+(Please note that Mailing Address may be omitted and if submitted will only be used as an alternative contact method if anything should change in the project)  
 
 Source Formatting and requirements
 -------------
