@@ -27,8 +27,17 @@ public class CommandTime extends CommandBase {
             if (astring[0].equals("set")) {
                 if (astring[1].equals("day")) {
                     i0 = 1000;
-                } else if (astring[1].equals("night")) {
+                }
+                // CanaryMod: add midday
+                else if (astring[1].equals("midday")) {
+                    i0 = 6000;
+                }
+                else if (astring[1].equals("night")) {
                     i0 = 13000;
+                }
+                // CanaryMod: add midnight
+                else if (astring[1].equals("midnight")) {
+                    i0 = 18000;
                 } else {
                     i0 = a(icommandsender, astring[1], 0);
                 }
@@ -50,7 +59,8 @@ public class CommandTime extends CommandBase {
     }
 
     public List a(ICommandSender icommandsender, String[] astring) {
-        return astring.length == 1 ? a(astring, new String[]{"set", "add"}) : (astring.length == 2 && astring[0].equals("set") ? a(astring, new String[]{"day", "night"}) : null);
+        // CanaryMod: Add midday and midnight to the tab complete
+        return astring.length == 1 ? a(astring, new String[]{ "set", "add" }) : (astring.length == 2 && astring[0].equals("set") ? a(astring, new String[]{ "day", "midday", "night", "midnight" }) : null);
     }
 
     protected void a(ICommandSender icommandsender, int i0) {

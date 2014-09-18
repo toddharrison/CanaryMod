@@ -48,20 +48,26 @@ public class ServerCommandManager extends CommandHandler implements IAdminComman
         this.a(new CommandTestForBlock());
         this.a(new CommandMessageRaw());
         if (MinecraftServer.I().X()) {
+            /* CanaryMod: Disable commands that are overridden
             this.a(new CommandOp());
             this.a(new CommandDeOp());
+            */
             this.a(new CommandStop());
             this.a(new CommandSaveAll());
             this.a(new CommandSaveOff());
             this.a(new CommandSaveOn());
+            /*
             this.a(new CommandBanIp());
             this.a(new CommandPardonIp());
             this.a(new CommandBanPlayer());
             this.a(new CommandListBans());
             this.a(new CommandPardonPlayer());
             this.a(new CommandServerKick());
+            */
             this.a(new CommandListPlayers());
+            /*
             this.a(new CommandWhitelist());
+            */
             this.a(new CommandSetPlayerTimeout());
             this.a(new CommandNetstat());
         } else {
