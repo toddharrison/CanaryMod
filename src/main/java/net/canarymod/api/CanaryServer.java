@@ -5,18 +5,23 @@ import net.canarymod.Main;
 import net.canarymod.ToolBox;
 import net.canarymod.api.entity.living.humanoid.CanaryPlayer;
 import net.canarymod.api.entity.living.humanoid.Player;
+import net.canarymod.api.entity.vehicle.CanaryCommandBlockMinecart;
 import net.canarymod.api.gui.GUIControl;
 import net.canarymod.api.inventory.CanaryItem;
 import net.canarymod.api.inventory.recipes.*;
 import net.canarymod.api.nbt.CanaryCompoundTag;
 import net.canarymod.api.world.World;
 import net.canarymod.api.world.WorldManager;
+import net.canarymod.api.world.blocks.CanaryCommandBlock;
+import net.canarymod.chat.MessageReceiver;
+import net.canarymod.chat.ReceiverType;
 import net.canarymod.config.Configuration;
 import net.canarymod.hook.command.ConsoleCommandHook;
 import net.canarymod.hook.system.PermissionCheckHook;
 import net.canarymod.logger.Logman;
 import net.canarymod.tasks.ServerTask;
 import net.canarymod.tasks.ServerTaskManager;
+import net.minecraft.command.ICommandSender;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.*;
 import net.minecraft.nbt.NBTTagCompound;
@@ -195,6 +200,26 @@ public class CanaryServer implements Server {
 
         // Don't pass off to Vanilla as that is already handled in NMS.CommandBlockLogic
         return Canary.commands().parseCommand(cmdBlockLogic, cmdName, args);
+    }
+
+    @Override
+    public void executeVanillaCommand(MessageReceiver caller, String command) {
+        ICommandSender sender;
+        switch (caller.getReceiverType()) {
+            case PLAYER:
+                sender = ((CanaryPlayer)caller).getHandle();
+                break;
+            case COMMANDBLOCK:
+                sender = ((CanaryCommandBlock)caller).getLogic();
+                break;
+            case COMMANDBLOCKENTITY:
+                sender = ((CanaryCommandBlockMinecart)caller).getLogic();
+                break;
+            case SERVER:
+            default:
+                sender = this.server;
+        }
+        server.J().a(sender, command);
     }
 
     /**
@@ -396,6 +421,11 @@ public class CanaryServer implements Server {
     @Override
     public boolean safeHasPermission(String node) {
         return true;
+    }
+
+    @Override
+    public ReceiverType getReceiverType() {
+        return ReceiverType.SERVER;
     }
 
     @Override

@@ -19,6 +19,7 @@ import net.canarymod.api.world.blocks.*;
 import net.canarymod.api.world.position.Direction;
 import net.canarymod.api.world.position.Location;
 import net.canarymod.chat.Colors;
+import net.canarymod.chat.ReceiverType;
 import net.canarymod.chat.TextFormat;
 import net.canarymod.config.Configuration;
 import net.canarymod.hook.command.PlayerCommandHook;
@@ -73,6 +74,11 @@ public class CanaryPlayer extends CanaryHuman implements Player {
     @Override
     public boolean isPlayer() {
         return true;
+    }
+
+    @Override
+    public ReceiverType getReceiverType() {
+        return ReceiverType.PLAYER;
     }
 
     /**

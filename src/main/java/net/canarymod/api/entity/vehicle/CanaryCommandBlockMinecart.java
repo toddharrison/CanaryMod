@@ -3,6 +3,7 @@ package net.canarymod.api.entity.vehicle;
 import net.canarymod.Canary;
 import net.canarymod.api.entity.EntityType;
 import net.canarymod.api.world.CanaryWorld;
+import net.canarymod.chat.ReceiverType;
 import net.canarymod.config.Configuration;
 import net.canarymod.hook.system.PermissionCheckHook;
 import net.canarymod.logger.Logman;
@@ -87,6 +88,11 @@ public class CanaryCommandBlockMinecart extends CanaryMinecart implements Comman
     @Override
     public boolean safeHasPermission(String node) {
         return Configuration.getServerConfig().isCommandBlockOpped() || (getGroup() != null && group.hasPermission(node));
+    }
+
+    @Override
+    public ReceiverType getReceiverType() {
+        return ReceiverType.COMMANDBLOCKENTITY;
     }
 
     /**

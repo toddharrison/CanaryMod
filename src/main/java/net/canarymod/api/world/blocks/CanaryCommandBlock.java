@@ -2,6 +2,7 @@ package net.canarymod.api.world.blocks;
 
 import net.canarymod.Canary;
 import net.canarymod.api.world.CanaryWorld;
+import net.canarymod.chat.ReceiverType;
 import net.canarymod.config.Configuration;
 import net.canarymod.hook.system.PermissionCheckHook;
 import net.canarymod.logger.Logman;
@@ -76,6 +77,11 @@ public class CanaryCommandBlock extends CanaryTileEntity implements CommandBlock
     @Override
     public boolean safeHasPermission(String node) {
         return Configuration.getServerConfig().isCommandBlockOpped() || (getGroup() != null && group.hasPermission(node));
+    }
+
+    @Override
+    public ReceiverType getReceiverType() {
+        return ReceiverType.COMMANDBLOCK;
     }
 
     /**
