@@ -172,8 +172,11 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
         if (nbttagcompound.b("playerGameType", 99)) {
-            if (MinecraftServer.I().ap()) {
-                this.c.a(MinecraftServer.I().i());
+            // CanaryMod: Modify how game mode is set
+            //if (MinecraftServer.I().ap()) {
+            if (Configuration.getWorldConfig(o.getCanaryWorld().getFqName()).forceDefaultGamemode()) {
+                //this.c.a(MinecraftServer.I().i());
+                this.c.a(o.N().r());
             } else {
                 this.c.a(WorldSettings.GameType.a(nbttagcompound.f("playerGameType")));
             }

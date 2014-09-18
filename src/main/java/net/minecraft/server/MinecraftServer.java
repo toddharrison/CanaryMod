@@ -232,9 +232,9 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
         }
 
         world.a((IWorldAccess) (new WorldManager(this, world)));
-        if (!this.N()) {
-            world.N().a(WorldSettings.GameType.a(config.getGameMode().getId()));
-        }
+        //if (!this.N()) { // CanaryMod: Always set game mode defaults
+        world.N().a(WorldSettings.GameType.a(config.getGameMode().getId()));
+        //}
 
         this.u.a(new WorldServer[]{world}); // Init player data files
 
