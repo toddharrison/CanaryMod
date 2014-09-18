@@ -1,6 +1,8 @@
 package net.minecraft.command.server;
 
 
+import net.canarymod.Canary;
+import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.hook.player.TeleportHook;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
@@ -9,6 +11,7 @@ import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.WorldServer;
 
 import java.util.List;
 
@@ -51,10 +54,12 @@ public class CommandTeleport extends CommandBase {
                         throw new PlayerNotFoundException();
                     }
 
+                    /* CanaryMod: Allow interdimensional teleporting
                     if (entityplayermp1.o != entityplayermp.o) {
                         a(icommandsender, this, "commands.tp.notSameDimension", new Object[0]);
                         return;
                     }
+                    */
 
                     entityplayermp.a((Entity) null);
                     // CanaryMod: Multiworld Fix and Teleportation Cause
@@ -63,13 +68,26 @@ public class CommandTeleport extends CommandBase {
                 }
             }
             else if (entityplayermp.o != null) {
-                int i0 = astring.length - 3;
+                int i0 = astring.length > 5 ? astring.length - 5 : astring.length - 3;
                 double d0 = a(icommandsender, entityplayermp.s, astring[i0++]);
                 double d1 = a(icommandsender, entityplayermp.t, astring[i0++], 0, 0);
                 double d2 = a(icommandsender, entityplayermp.u, astring[i0++]);
 
+                // CanaryMod: Add param for world specifications
+                WorldServer worldServer = null;
+                boolean forceLoad;
+                if (astring.length > 5) {
+                    worldServer = (WorldServer) ((CanaryWorld) Canary.getServer().getWorld(astring[i0])).getHandle();
+                }
+
+                if (worldServer != null && entityplayermp.o != worldServer) {
+                    Canary.getServer().getConfigurationManager().switchDimension(entityplayermp.getPlayer(), worldServer.getCanaryWorld(), false);
+                }
+                //
+
                 entityplayermp.a((Entity) null);
                 entityplayermp.a(d0, d1, d2);
+
                 a(icommandsender, this, "commands.tp.success.coordinates", new Object[]{entityplayermp.b_(), Double.valueOf(d0), Double.valueOf(d1), Double.valueOf(d2)});
             }
         }
