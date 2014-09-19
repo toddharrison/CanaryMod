@@ -80,12 +80,12 @@ public class CommandTeleport extends CommandBase {
                 // CanaryMod: Add params for world specifications
                 CanaryWorld canaryWorld = null;
                 boolean load = false;
-                if (astring.length > 4) {
+                if (astring.length > i0) {
                     if (!Canary.getServer().getWorldManager().worldExists(astring[i0])) {
-                        a(icommandsender, this, "World non-existant or not loaded", new Object[0]);
+                        a(icommandsender, this, "World non-existent or not loaded", new Object[0]);
                         return;
                     }
-                    if (astring.length > 5) {
+                    if (astring.length > i0 + 1) {
                         load = BooleanUtils.parseBoolean(astring[i0 + 1]);
                     }
                     try {
