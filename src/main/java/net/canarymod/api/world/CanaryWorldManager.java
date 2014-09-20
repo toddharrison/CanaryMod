@@ -196,8 +196,11 @@ public class CanaryWorldManager implements WorldManager {
         String mainName = name.replaceAll("_.+", "");
         File file = new File("worlds/" + name.replaceAll("_.+", "") + "/" + name);
         File dir = new File("worldsbackup/" + name + "(" + System.currentTimeMillis() + ")"); // Timestamp the backup
-        return dir.mkdirs() && file.renameTo(new File(dir, file.getName()));
-
+        boolean success = dir.mkdirs() && file.renameTo(new File(dir, file.getName()));
+        if (success) {
+            existingWorlds.remove(name);
+        }
+        return success;
     }
 
     @Override
