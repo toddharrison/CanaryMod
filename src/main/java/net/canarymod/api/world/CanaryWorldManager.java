@@ -5,6 +5,7 @@ import net.canarymod.api.CanaryServer;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.config.Configuration;
 import net.canarymod.hook.system.UnloadWorldHook;
+import net.minecraft.world.WorldServer;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -191,14 +192,12 @@ public class CanaryWorldManager implements WorldManager {
     }
 
     @Override
-    public void destroyWorld(String name) {
-        File file = new File("worlds/" + name);
-        File dir = new File("worldsbackups/" + name);
-        boolean success = file.renameTo(new File(dir, file.getName()));
+    public boolean destroyWorld(String name) {
+        String mainName = name.replaceAll("_.+", "");
+        File file = new File("worlds/" + name.replaceAll("_.+", "") + "/" + name);
+        File dir = new File("worldsbackup/" + name + "(" + System.currentTimeMillis() + ")"); // Timestamp the backup
+        return dir.mkdirs() && file.renameTo(new File(dir, file.getName()));
 
-        if (!success) {
-            log.error("Attempted to move world " + name + " but it appeared to be still in use! Worlds should get unloaded before they are removed!");
-        }
     }
 
     @Override
@@ -243,10 +242,11 @@ public class CanaryWorldManager implements WorldManager {
                     }
                 }
                 world.save();
+                ((WorldServer) world.getHandle()).n(); // close out the SaveHandler Session Lock
                 new UnloadWorldHook(world).call();
                 loadedWorlds.remove(world.getFqName());
+                world.dereference(); // prevent a leak
                 iter.remove();
-
             }
         }
     }

@@ -92,7 +92,7 @@ public abstract class World implements IBlockAccess {
     int[] I;
 
     // CanaryMod: multiworld
-    protected CanaryWorld canaryDimension;
+    public CanaryWorld canaryDimension;
 
     public BiomeGenBase a(final int i0, final int i1) {
         if (this.d(i0, 0, i1)) {

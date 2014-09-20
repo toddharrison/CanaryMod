@@ -445,7 +445,7 @@ public class CanaryWorld implements World {
     public void playAUXEffectAt(Player player, AuxiliarySoundEffect effect) {
         world.a(player != null ? ((CanaryPlayer) player).getHandle() : null, effect.type.getDigits(), effect.x, effect.y, effect.z, effect.extra);
     }
-    
+
     @Override
     public int getBlockPower(Block block) {
         return getBlockPower(block.getX(), block.getY(), block.getZ());
@@ -460,7 +460,7 @@ public class CanaryWorld implements World {
     public int getBlockPower(int x, int y, int z) {
         return world.u(x, y, z);
     }
-    
+
     @Override
     public boolean isBlockPowered(Block block) {
         return isBlockPowered(block.getX(), block.getY(), block.getZ());
@@ -499,7 +499,8 @@ public class CanaryWorld implements World {
         // Thanks to Bukkit for figuring out these numbers
         if (thundering) {
             setThunderTime(world.s.nextInt(12000) + 3600);
-        } else {
+        }
+        else {
             setThunderTime(world.s.nextInt(168000) + 12000);
         }
 
@@ -518,7 +519,8 @@ public class CanaryWorld implements World {
         // Thanks to Bukkit for figuring out these numbers
         if (downfall) {
             setRainTime(world.s.nextInt(12000) + 3600);
-        } else {
+        }
+        else {
             setRainTime(world.s.nextInt(168000) + 12000);
         }
     }
@@ -562,7 +564,8 @@ public class CanaryWorld implements World {
     public void makeExplosion(Entity exploder, double x, double y, double z, float power, boolean smoke) {
         if (exploder == null) {
             world.a((net.minecraft.entity.Entity) null, x, y, z, power, smoke);
-        } else {
+        }
+        else {
             world.a(((CanaryEntity) exploder).getHandle(), x, y, z, power, smoke);
         }
     }
@@ -643,33 +646,47 @@ public class CanaryWorld implements World {
         if (tileentity != null) {
             if (tileentity instanceof TileEntityBrewingStand) {
                 return ((TileEntityBrewingStand) tileentity).getCanaryBrewingStand();
-            } else if (tileentity instanceof TileEntityBeacon) {
+            }
+            else if (tileentity instanceof TileEntityBeacon) {
                 return ((TileEntityBeacon) tileentity).getCanaryBeacon();
-            } else if (tileentity instanceof TileEntityChest) {
+            }
+            else if (tileentity instanceof TileEntityChest) {
                 return ((TileEntityChest) tileentity).getCanaryChest();
-            } else if (tileentity instanceof TileEntityCommandBlock) {
+            }
+            else if (tileentity instanceof TileEntityCommandBlock) {
                 return ((TileEntityCommandBlock) tileentity).getCanaryCommandBlock();
-            } else if (tileentity instanceof TileEntityComparator) {
+            }
+            else if (tileentity instanceof TileEntityComparator) {
                 return ((TileEntityComparator) tileentity).getCanaryComparator();
-            } else if (tileentity instanceof TileEntityDaylightDetector) {
+            }
+            else if (tileentity instanceof TileEntityDaylightDetector) {
                 return ((TileEntityDaylightDetector) tileentity).getCanaryDaylightDetector();
-            } else if (tileentity instanceof TileEntityDropper) { // Should come before Dispenser since its an instance of Dispenser too
+            }
+            else if (tileentity instanceof TileEntityDropper) { // Should come before Dispenser since its an instance of Dispenser too
                 return ((TileEntityDropper) tileentity).getCanaryDropper();
-            } else if (tileentity instanceof TileEntityDispenser) {
+            }
+            else if (tileentity instanceof TileEntityDispenser) {
                 return ((TileEntityDispenser) tileentity).getCanaryDispenser();
-            } else if (tileentity instanceof TileEntityFurnace) {
+            }
+            else if (tileentity instanceof TileEntityFurnace) {
                 return ((TileEntityFurnace) tileentity).getCanaryFurnace();
-            } else if (tileentity instanceof TileEntityHopper) {
+            }
+            else if (tileentity instanceof TileEntityHopper) {
                 return ((TileEntityHopper) tileentity).getCanaryHopper();
-            } else if (tileentity instanceof TileEntityMobSpawner) {
+            }
+            else if (tileentity instanceof TileEntityMobSpawner) {
                 return ((TileEntityMobSpawner) tileentity).getCanaryMobSpawner();
-            } else if (tileentity instanceof TileEntityNote) {
+            }
+            else if (tileentity instanceof TileEntityNote) {
                 return ((TileEntityNote) tileentity).getCanaryNoteBlock();
-            } else if (tileentity instanceof BlockJukebox.TileEntityJukebox) {
+            }
+            else if (tileentity instanceof BlockJukebox.TileEntityJukebox) {
                 return ((BlockJukebox.TileEntityJukebox) tileentity).getCanaryJukebox();
-            } else if (tileentity instanceof TileEntitySign) {
+            }
+            else if (tileentity instanceof TileEntitySign) {
                 return ((TileEntitySign) tileentity).getCanarySign();
-            } else if (tileentity instanceof TileEntitySkull) {
+            }
+            else if (tileentity instanceof TileEntitySkull) {
                 return ((TileEntitySkull) tileentity).getCanarySkull();
             }
         }
@@ -754,5 +771,10 @@ public class CanaryWorld implements World {
     @Override
     public String toString() {
         return "CanaryWorld{" + "world=" + world + ", type=" + type + ", name=" + name + ", fqName=" + fqName + '}';
+    }
+
+    void dereference() {
+        world.canaryDimension = null;
+        this.world = null;
     }
 }
