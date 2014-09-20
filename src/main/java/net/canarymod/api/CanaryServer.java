@@ -1,5 +1,6 @@
 package net.canarymod.api;
 
+import com.mojang.authlib.GameProfile;
 import net.canarymod.Canary;
 import net.canarymod.Main;
 import net.canarymod.ToolBox;
@@ -21,6 +22,7 @@ import net.canarymod.hook.system.PermissionCheckHook;
 import net.canarymod.logger.Logman;
 import net.canarymod.tasks.ServerTask;
 import net.canarymod.tasks.ServerTaskManager;
+import net.canarymod.util.NMSToolBox;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.*;
@@ -291,7 +293,17 @@ public class CanaryServer implements Server {
         CanaryCompoundTag comp;
         if (nbttagcompound != null) {
             comp = new CanaryCompoundTag(nbttagcompound);
-            return new CanaryOfflinePlayer(server.ax().a(uuid).getName(), uuid, comp);
+            GameProfile profile = server.ax().a(uuid);
+            if (profile != null) {
+                return new CanaryOfflinePlayer(profile.getName(), uuid, comp);
+            }
+            else {
+                String name = NMSToolBox.usernameFromUUID(uuid);
+                if (name != null) {
+                    return new CanaryOfflinePlayer(name, uuid, comp);
+                }
+                return new CanaryOfflinePlayer("PLAYER_NAME_UNKNOWN", uuid, comp);
+            }
         }
         return null;
     }
@@ -641,6 +653,14 @@ public class CanaryServer implements Server {
     @Override
     public int getCurrentTick() {
         return server.al();
+    }
+
+    public GameProfile gameprofileFromCache(UUID uuid) {
+        return server.ax().a(uuid);
+    }
+
+    public GameProfile gameprofileFromCache(String username) {
+        return server.ax().a(username);
     }
 
     /**
