@@ -14,7 +14,11 @@ import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.IProgressUpdate;
 import net.minecraft.util.LongHashMap;
 import net.minecraft.util.ReportedException;
-import net.minecraft.world.*;
+import net.minecraft.world.ChunkCoordIntPair;
+import net.minecraft.world.ChunkPosition;
+import net.minecraft.world.MinecraftException;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.EmptyChunk;
 import net.minecraft.world.chunk.IChunkProvider;
@@ -23,7 +27,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 public class ChunkProviderServer implements IChunkProvider {
 
@@ -98,6 +107,7 @@ public class ChunkProviderServer implements IChunkProvider {
 
         if (chunk == null) {
             chunk = this.f(i0, i1);
+            boolean newchunk = chunk == null; // CanaryMod: Tracking on new chunks
             if (chunk == null) {
                 // CanaryMod: ChunkCreation
                 ChunkCreationHook hook = (ChunkCreationHook) new ChunkCreationHook(i0, i1, i.getCanaryWorld()).call();
@@ -137,7 +147,7 @@ public class ChunkProviderServer implements IChunkProvider {
             if (chunk != null) {
                 chunk.c();
                 // CanaryMod: ChunkLoaded
-                new ChunkLoadedHook(chunk.getCanaryChunk(), i.getCanaryWorld()).call();
+                new ChunkLoadedHook(chunk.getCanaryChunk(), i.getCanaryWorld(), newchunk).call();
                 //
                 if (chunk.k && this.a(i0 + 1, i1 + 1) && this.a(i0, i1 + 1) && this.a(i0 + 1, i1)) {
                     this.a(this, i0, i1);
