@@ -411,6 +411,47 @@ public abstract class CanaryEntity implements Entity {
         return entity.getMetaData();
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isAmbient() {
+        return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isOnGround() {
+        return getHandle().D;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isInWeb() {
+        return getHandle().I;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isInWater() {
+        return getHandle().ac;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isInLava() {
+        return getHandle().P();
+    }
+
     @Override
     public String toString() {
         return String.format("%s[Native: %s]", this.getClass().getSimpleName(), getHandle());
@@ -422,13 +463,5 @@ public abstract class CanaryEntity implements Entity {
      * @return entity
      */
     public abstract net.minecraft.entity.Entity getHandle();
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean isAmbient() {
-        return false;
-    }
 
 }

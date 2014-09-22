@@ -70,7 +70,7 @@ public abstract class Entity {
     public boolean F;
     public boolean G;
     public boolean H;// Velocity Changed
-    protected boolean I; // In Web
+    public boolean I; // CanaryMod: protected => public (In Web)
     public boolean J;
     public boolean K; //DEAD
     public float L;
@@ -92,7 +92,7 @@ public abstract class Entity {
     public int aa;
     public int ab;
     public int e; // CanaryMod: private -> public (FireTicks)
-    protected boolean ac;
+    public boolean ac; // CanaryMod: protected => public (In Water [liquid?])
     public int ad;
     private boolean f;
     protected boolean ae;
