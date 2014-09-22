@@ -1,5 +1,7 @@
 package net.minecraft.block;
 
+import net.canarymod.api.world.blocks.CanaryBlock;
+import net.canarymod.hook.world.BlockGrowHook;
 import net.canarymod.hook.world.TreeGrowHook;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
@@ -36,7 +38,14 @@ public class BlockSapling extends BlockBush implements IGrowable {
         int i3 = world.e(i0, i1, i2);
 
         if ((i3 & 8) == 0) {
-            world.a(i0, i1, i2, i3 | 8, 4);
+            // CanaryMod: BlockGrowHook
+            CanaryBlock growth = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
+            growth.setData((short) (i3 | 8));
+            BlockGrowHook blockGrowHook = new BlockGrowHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), growth);
+            if (!blockGrowHook.isCanceled()) {
+                world.a(i0, i1, i2, i3 | 8, 4);
+            }
+            //
         }
         else {
             // CanaryMod: TreeGrow; If someone figures out how to get more information into this, let me know - darkdiplomat;
