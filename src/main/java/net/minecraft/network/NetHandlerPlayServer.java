@@ -112,7 +112,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
             --this.m;
         }
 
-        if (this.b.x() > 0L && this.d.as() > 0 && MinecraftServer.ar() - this.b.x() > (long) (this.d.as() * 1000 * 60)) {
+        if (this.b.x() > 0L && this.d.as() > 0 && MinecraftServer.ar() - this.b.x() > (long) (this.d.as() * 1000 * 60) && !this.b.getPlayer().canIgnoreRestrictions()) { // CanaryMod: If IgnoreRestrictions/no idle kick
             this.c("You have been idle for too long!");
         }
     }
