@@ -92,7 +92,8 @@ public class BlockPortal extends BlockBreakable {
                 blockportal_size.c();
                 return true;
             }
-        } else if (blockportal_size1.b() && blockportal_size1.e == 0) {
+        }
+        else if (blockportal_size1.b() && blockportal_size1.e == 0) {
             hook = (PortalCreateHook) new PortalCreateHook(blockportal_size1.getPortalBlocks()).call();
             if (!hook.isCanceled()) {
                 blockportal_size1.c();

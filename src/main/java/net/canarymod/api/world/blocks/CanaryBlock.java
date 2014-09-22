@@ -46,10 +46,20 @@ public class CanaryBlock implements Block {
         this.data = type.getData();
     }
 
+    public CanaryBlock(BlockType type, int data, int x, int y, int z, World world) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.world = world;
+        this.type = type;
+        this.data = (short) data;
+    }
+
     @Override
     public short getTypeId() {
-        if(type != null)
+        if (type != null) {
             return type.getId();
+        }
         return 0;
     }
 

@@ -1,7 +1,10 @@
 package net.minecraft.block;
 
 import net.canarymod.api.CanaryDamageSource;
+import net.canarymod.api.world.blocks.BlockType;
+import net.canarymod.api.world.blocks.CanaryBlock;
 import net.canarymod.hook.entity.DamageHook;
+import net.canarymod.hook.world.BlockGrowHook;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -32,9 +35,16 @@ public class BlockCactus extends Block {
                 int i4 = world.e(i0, i1, i2);
 
                 if (i4 == 15) {
-                    world.b(i0, i1 + 1, i2, (Block) this);
-                    world.a(i0, i1, i2, 0, 4);
-                    this.a(world, i0, i1 + 1, i2, (Block) this);
+                    // CanaryMod: BlockGrow
+                    CanaryBlock original = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
+                    CanaryBlock growth = new CanaryBlock(BlockType.Cactus, i0, i1 + 1, i2, world.getCanaryWorld());
+                    BlockGrowHook blockGrowHook = (BlockGrowHook) new BlockGrowHook(original, growth).call();
+                    if (!blockGrowHook.isCanceled()) {
+                        world.b(i0, i1 + 1, i2, (Block) this);
+                        world.a(i0, i1, i2, 0, 4);
+                        this.a(world, i0, i1 + 1, i2, (Block) this);
+                    }
+                    //
                 }
                 else {
                     world.a(i0, i1, i2, i4 + 1, 4);

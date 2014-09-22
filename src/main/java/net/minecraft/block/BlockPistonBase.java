@@ -88,7 +88,8 @@ public class BlockPistonBase extends Block {
                     }
                     //
                 }
-            } else if (!flag0 && c(i3)) {
+            }
+            else if (!flag0 && c(i3)) {
                 // CanaryMod: PistonRetract
                 moving = new CanaryBlock((short) Block.b(world.a(i0 + Facing.b[i4] * 2, i1 + Facing.c[i4] * 2, i2 + Facing.d[i4] * 2)), (byte) 0, (i0 + Facing.b[i4]), (i1 + Facing.c[i4]), (i2 + Facing.d[i4]), world.getCanaryWorld());
                 PistonRetractHook hook = (PistonRetractHook) new PistonRetractHook(piston, moving).call();
@@ -125,7 +126,8 @@ public class BlockPistonBase extends Block {
 
             world.a(i0, i1, i2, i4 | 8, 2);
             world.a((double) i0 + 0.5D, (double) i1 + 0.5D, (double) i2 + 0.5D, "tile.piston.out", 0.5F, world.s.nextFloat() * 0.25F + 0.6F);
-        } else if (i3 == 1) {
+        }
+        else if (i3 == 1) {
             TileEntity tileentity = world.o(i0 + Facing.b[i4], i1 + Facing.c[i4], i2 + Facing.d[i4]);
 
             if (tileentity instanceof TileEntityPiston) {
@@ -165,10 +167,12 @@ public class BlockPistonBase extends Block {
                     world.d(i0, i1, i2, Blocks.M, i8, 3);
                     world.a(i0, i1, i2, BlockPistonMoving.a(block, i8, i4, false, false));
                     world.f(i5, i6, i7);
-                } else if (!flag1) {
+                }
+                else if (!flag1) {
                     world.f(i0 + Facing.b[i4], i1 + Facing.c[i4], i2 + Facing.d[i4]);
                 }
-            } else {
+            }
+            else {
                 world.f(i0 + Facing.b[i4], i1 + Facing.c[i4], i2 + Facing.d[i4]);
             }
 
@@ -208,7 +212,8 @@ public class BlockPistonBase extends Block {
                 case 5:
                     this.a(0.0F, 0.0F, 0.0F, 0.75F, 1.0F, 1.0F);
             }
-        } else {
+        }
+        else {
             this.a(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
         }
     }
@@ -260,7 +265,8 @@ public class BlockPistonBase extends Block {
     private static boolean a(Block block, World world, int i0, int i1, int i2, boolean flag0) {
         if (block == Blocks.Z) {
             return false;
-        } else {
+        }
+        else {
             if (block != Blocks.J && block != Blocks.F) {
                 if (block.f(world, i0, i1, i2) == -1.0F) {
                     return false;
@@ -277,7 +283,8 @@ public class BlockPistonBase extends Block {
 
                     return true;
                 }
-            } else if (c(world.e(i0, i1, i2))) {
+            }
+            else if (c(world.e(i0, i1, i2))) {
                 return false;
             }
 
@@ -378,7 +385,8 @@ public class BlockPistonBase extends Block {
                 if (block1 == this && i11 == i0 && i12 == i1 && i13 == i2) {
                     world.d(i4, i5, i6, Blocks.M, i3 | (this.a ? 8 : 0), 4);
                     world.a(i4, i5, i6, BlockPistonMoving.a(Blocks.K, i3 | (this.a ? 8 : 0), i3, true, false));
-                } else {
+                }
+                else {
                     world.d(i4, i5, i6, Blocks.M, i14, 4);
                     world.a(i4, i5, i6, BlockPistonMoving.a(block1, i14, i3, true, false));
                 }
