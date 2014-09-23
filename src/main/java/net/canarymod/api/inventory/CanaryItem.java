@@ -1,8 +1,15 @@
 package net.canarymod.api.inventory;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
+import net.canarymod.api.attributes.AttributeModifier;
+import net.canarymod.api.attributes.CanaryAttributeModifier;
 import net.canarymod.api.nbt.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+
+import java.util.Collection;
+import java.util.Map;
 
 /**
  * Item wrapper implementation
@@ -439,6 +446,25 @@ public class CanaryItem implements Item {
     @Override
     public void readFromTag(CompoundTag tag) {
         getHandle().c(((CanaryCompoundTag) tag).getHandle());
+    }
+
+    @Override
+    public Multimap<String, AttributeModifier> getAttributes() {
+        Multimap rawAttributes = getHandle().D();
+        Multimap<String, AttributeModifier> toRet = HashMultimap.create();
+        for (Map.Entry entry : (Collection<Map.Entry>) rawAttributes.entries()) {
+            toRet.put((String) entry.getKey(), ((net.minecraft.entity.ai.attributes.AttributeModifier) entry.getValue()).getWrapper());
+        }
+        return toRet;
+    }
+
+    @Override
+    public void updateAttributes(Multimap<String, AttributeModifier> attributes) {
+        Multimap rawAttributes = getHandle().D();
+        rawAttributes.clear(); // Clear out the old stuff
+        for (Map.Entry<String, AttributeModifier> entry : attributes.entries()) {
+            rawAttributes.put(entry.getKey(), ((CanaryAttributeModifier) entry.getValue()).getNative());
+        }
     }
 
     /**
