@@ -1,6 +1,5 @@
 package net.minecraft.block;
 
-import net.canarymod.Canary;
 import net.canarymod.hook.world.DispenseHook;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
@@ -74,7 +73,7 @@ public class BlockDispenser extends BlockContainer {
             return true;
         }
         else {
-            TileEntityDispenser tileentitydispenser = (TileEntityDispenser) world.o(i0, i1, i2);
+            TileEntityDispenser tileentitydispenser = (TileEntityDispenser)world.o(i0, i1, i2);
 
             if (tileentitydispenser != null) {
                 entityplayer.a(tileentitydispenser);
@@ -86,14 +85,14 @@ public class BlockDispenser extends BlockContainer {
 
     protected void e(World world, int i0, int i1, int i2) {
         BlockSourceImpl blocksourceimpl = new BlockSourceImpl(world, i0, i1, i2);
-        TileEntityDispenser tileentitydispenser = (TileEntityDispenser) blocksourceimpl.j();
+        TileEntityDispenser tileentitydispenser = (TileEntityDispenser)blocksourceimpl.j();
 
         if (tileentitydispenser != null) {
             int i3 = tileentitydispenser.i();
 
             if (i3 < 0) {
                 // CanaryMod: Dispense Smoke
-                DispenseHook hook = (DispenseHook) new DispenseHook(tileentitydispenser.getCanaryDispenser(), null).call();
+                DispenseHook hook = (DispenseHook)new DispenseHook(tileentitydispenser.getCanaryDispenser(), null).call();
                 if (!hook.isCanceled()) {
                     world.c(1001, i0, i1, i2, 0);
                 }
@@ -113,11 +112,10 @@ public class BlockDispenser extends BlockContainer {
     }
 
     public IBehaviorDispenseItem a(ItemStack itemstack) { // CanaryMod: protected => public
-        return (IBehaviorDispenseItem) a.a(itemstack.b());
+        return (IBehaviorDispenseItem)a.a(itemstack.b());
     }
 
     public void a(World world, int i0, int i1, int i2, Block block) {
-        Canary.log.debug("Unholy Fux");
         boolean flag0 = world.v(i0, i1, i2) || world.v(i0, i1 + 1, i2);
         int i3 = world.e(i0, i1, i2);
         boolean flag1 = (i3 & 8) != 0;
@@ -146,12 +144,12 @@ public class BlockDispenser extends BlockContainer {
 
         world.a(i0, i1, i2, i3, 2);
         if (itemstack.u()) {
-            ((TileEntityDispenser) world.o(i0, i1, i2)).a(itemstack.s());
+            ((TileEntityDispenser)world.o(i0, i1, i2)).a(itemstack.s());
         }
     }
 
     public void a(World world, int i0, int i1, int i2, Block block, int i3) {
-        TileEntityDispenser tileentitydispenser = (TileEntityDispenser) world.o(i0, i1, i2);
+        TileEntityDispenser tileentitydispenser = (TileEntityDispenser)world.o(i0, i1, i2);
 
         if (tileentitydispenser != null) {
             for (int i4 = 0; i4 < tileentitydispenser.a(); ++i4) {
@@ -170,18 +168,18 @@ public class BlockDispenser extends BlockContainer {
                         }
 
                         itemstack.b -= i5;
-                        EntityItem entityitem = new EntityItem(world, (double) ((float) i0 + f0), (double) ((float) i1 + f1), (double) ((float) i2 + f2), new ItemStack(itemstack.b(), i5, itemstack.k()));
+                        EntityItem entityitem = new EntityItem(world, (double)((float)i0 + f0), (double)((float)i1 + f1), (double)((float)i2 + f2), new ItemStack(itemstack.b(), i5, itemstack.k()));
 
                         if (itemstack.p()) {
-                            entityitem.f().d((NBTTagCompound) itemstack.q().b());
+                            entityitem.f().d((NBTTagCompound)itemstack.q().b());
                         }
 
                         float f3 = 0.05F;
 
-                        entityitem.v = (double) ((float) this.b.nextGaussian() * f3);
-                        entityitem.w = (double) ((float) this.b.nextGaussian() * f3 + 0.2F);
-                        entityitem.x = (double) ((float) this.b.nextGaussian() * f3);
-                        world.d((Entity) entityitem);
+                        entityitem.v = (double)((float)this.b.nextGaussian() * f3);
+                        entityitem.w = (double)((float)this.b.nextGaussian() * f3 + 0.2F);
+                        entityitem.x = (double)((float)this.b.nextGaussian() * f3);
+                        world.d((Entity)entityitem);
                     }
                 }
             }
@@ -194,9 +192,9 @@ public class BlockDispenser extends BlockContainer {
 
     public static IPosition a(IBlockSource iblocksource) {
         EnumFacing enumfacing = b(iblocksource.h());
-        double d0 = iblocksource.a() + 0.7D * (double) enumfacing.c();
-        double d1 = iblocksource.b() + 0.7D * (double) enumfacing.d();
-        double d2 = iblocksource.c() + 0.7D * (double) enumfacing.e();
+        double d0 = iblocksource.a() + 0.7D * (double)enumfacing.c();
+        double d1 = iblocksource.b() + 0.7D * (double)enumfacing.d();
+        double d2 = iblocksource.c() + 0.7D * (double)enumfacing.e();
 
         return new PositionImpl(d0, d1, d2);
     }
@@ -210,6 +208,6 @@ public class BlockDispenser extends BlockContainer {
     }
 
     public int g(World world, int i0, int i1, int i2, int i3) {
-        return Container.b((IInventory) world.o(i0, i1, i2));
+        return Container.b((IInventory)world.o(i0, i1, i2));
     }
 }
