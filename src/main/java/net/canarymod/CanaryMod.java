@@ -22,6 +22,7 @@ import net.canarymod.user.OperatorsProvider;
 import net.canarymod.user.ReservelistProvider;
 import net.canarymod.user.UserAndGroupsProvider;
 import net.canarymod.user.WhitelistProvider;
+import net.canarymod.util.CanaryJsonNBTUtility;
 import net.canarymod.warp.WarpProvider;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.LoggerContext;
@@ -46,8 +47,9 @@ public class CanaryMod extends Canary {
         // This must be the first thing to call!
         DatabaseLoader.load();
         NativeTranslate.initialize(); // Intialize native translation bridge
-
         setLoggerLevelDynamic(); //Once we know if debug is enabled, you can change the level accordingly
+
+        this.jsonNBT = new CanaryJsonNBTUtility(); // Set up the Json to/from NBT utility
         this.motd = new MessageOfTheDay();
         // Initialize the subsystems that do not rely on others
         this.commandManager = new CommandManager();
@@ -63,8 +65,9 @@ public class CanaryMod extends Canary {
         this.channelManager = new CanaryChannelManager();
         // Initialize the plugin loader and scan for plugins
         this.pluginManager = new PluginManager();
-        this.manager().scanForPlugins();
         this.scoreboardManager = new CanaryScoreboardManager();
+
+        pluginManager.scanForPlugins();
     }
 
     /**
