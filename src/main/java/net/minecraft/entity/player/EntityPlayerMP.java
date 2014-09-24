@@ -74,6 +74,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class EntityPlayerMP extends EntityPlayer implements ICrafting {
 
@@ -1014,6 +1015,12 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
     }
 
     public void v() {
+        // CanaryMod: ReturnFromIdleHook
+        long timeidle = MinecraftServer.ar() - this.bX;
+        if (TimeUnit.MICROSECONDS.toSeconds(timeidle) > 30) {// let them idle at least 30 seconds
+            new ReturnFromIdleHook(this.getPlayer(), timeidle).call();
+        }
+        //
         this.bX = MinecraftServer.ar();
     }
 
