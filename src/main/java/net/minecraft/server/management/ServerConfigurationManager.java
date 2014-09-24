@@ -127,8 +127,7 @@ public abstract class ServerConfigurationManager {
             s1 = networkmanager.b().toString();
         }
 
-        // CanaryMod: Show displayname and official name
-        g.info(entityplayermp.getDisplayName() + "{" + entityplayermp.b_() + "}[" + s1 + "] logged in with entity id " + entityplayermp.y() + " at (" + entityplayermp.s + ", " + entityplayermp.t + ", " + entityplayermp.u + ")");
+        g.info(entityplayermp.b_() + "[" + s1 + "] logged in with entity id " + entityplayermp.y() + " at (" + entityplayermp.s + ", " + entityplayermp.t + ", " + entityplayermp.u + ")");
         // CanaryMod: Use world we got from players NBT data
         WorldServer worldserver = (WorldServer) w.getHandle();
         ChunkCoordinates chunkcoordinates = worldserver.K();
@@ -148,8 +147,13 @@ public abstract class ServerConfigurationManager {
         ((CanaryScoreboardManager)Canary.scoreboards()).updateClientAll(entityplayermp);
         // CanaryMod: End
         this.i.az();
-        // CanaryMod: Use display name
-        ChatComponentTranslation chatcomponenttranslation = new ChatComponentTranslation("multiplayer.player.joined", new Object[]{entityplayermp.getDisplayName()});
+        ChatComponentTranslation chatcomponenttranslation;
+        if (!entityplayermp.b_().equalsIgnoreCase(s0)) {
+            chatcomponenttranslation = new ChatComponentTranslation("multiplayer.player.joined.renamed", new Object[]{ entityplayermp.c_(), s0 });
+        }
+        else {
+            chatcomponenttranslation = new ChatComponentTranslation("multiplayer.player.joined", new Object[]{ entityplayermp.c_() });
+        }
         chatcomponenttranslation.b().a(EnumChatFormatting.YELLOW);
         // CanaryMod: End
         this.c(entityplayermp);
