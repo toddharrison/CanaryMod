@@ -2,8 +2,8 @@ package net.canarymod.util;
 
 import com.mojang.authlib.GameProfile;
 import net.canarymod.Canary;
+import net.canarymod.ToolBox;
 import net.canarymod.api.CanaryServer;
-import net.visualillusionsent.utils.PropertiesFile;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
@@ -15,8 +15,7 @@ import java.util.UUID;
 /**
  * @author Jason (darkdiplomat)
  */
-public class NMSToolBox {
-    private static final PropertiesFile userLookup = new PropertiesFile("uuidreverselookup.cfg");
+public class NMSToolBox extends ToolBox {
 
     /**
      * Converts a byte array of Block Ids into an array of native Blocks
@@ -40,20 +39,26 @@ public class NMSToolBox {
      *
      * @param uuid
      *
-     * @return
+     * @return user name associated with the UUID
      */
     public static String usernameFromUUID(UUID uuid) {
+        String uuidStr = uuid.toString();
         String name = null;
         GameProfile profile = ((CanaryServer) Canary.getServer()).gameprofileFromCache(uuid);
         if (profile != null) {
             return profile.getName();
         }
-        else if (userLookup.containsKey(uuid.toString())) {
-            return userLookup.getString(uuid.toString());
+
+        if (userLookup.containsKey(uuidStr)) {
+            if (userLookup.getComments(uuid.toString()).length > 0) {
+                if (!userLookupExpired(userLookup.getComments(uuidStr)[0].replace(";Verified: ", "").trim())) {
+                    return userLookup.getString(uuid.toString());
+                }
+            }
         }
 
         try {
-            URL url = new URL("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid.toString().replaceAll("\\-", ""));
+            URL url = new URL("https://sessionserver.mojang.com/session/minecraft/profile/" + uuidStr.replaceAll("\\-", ""));
             HttpURLConnection uc = (HttpURLConnection) url.openConnection();
 
             // Parse it
@@ -67,8 +72,12 @@ public class NMSToolBox {
         }
 
         if (name != null) {
-            userLookup.setString(uuid.toString(), name);
+            userLookup.setString(uuidStr, name);
+            userLookup.setComments(uuidStr, ";Verified: " + System.currentTimeMillis());
             userLookup.save();
+        }
+        else if (userLookup.containsKey(uuidStr)) {
+            return userLookup.getString(uuidStr); // Return last known even if expired
         }
 
         return name;

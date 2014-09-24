@@ -391,7 +391,27 @@ public class CanaryServer implements Server {
         for (Player player : getPlayerList()) {
             player.message(message);
         }
+        Canary.log.info(message);
+    }
 
+    @Override
+    public void broadcastMessageToOps(String message) {
+        for (Player player : getPlayerList()) {
+            if (Canary.ops().isOpped(player)) {
+                player.message(message);
+            }
+        }
+        Canary.log.info(message);
+    }
+
+    @Override
+    public void broadcastMessageToAdmins(String message) {
+        for (Player player : getPlayerList()) {
+            if (player.isAdmin()) {
+                player.message(message);
+            }
+        }
+        Canary.log.info(message);
     }
 
     @Override

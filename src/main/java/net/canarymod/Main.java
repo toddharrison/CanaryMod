@@ -9,9 +9,8 @@ import net.canarymod.serialize.ItemSerializer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.gui.MinecraftServerGui;
 
-import java.awt.GraphicsEnvironment;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.*;
+import java.awt.*;
 
 import static net.canarymod.Canary.log;
 
@@ -67,7 +66,7 @@ public class Main {
                     log.warn("Server is starting with no Console or GUI be warned!");
                 }
                 else { // No graphics environment and not allowed to be uncontrolled? KILL IT!
-                    log.fatal("Server can not start. No Console or GUI is available to control the server.");
+                    log.fatal("Server can not start. No Console or GUI is available to control the server. (If this is what you wanted, use the noControl argument [ie: ... -jar CanaryMod.jar noControl ...)");
                     System.exit(42);
                 }
             }
@@ -97,7 +96,7 @@ public class Main {
             mod.initMOTDListener();
         }
         catch (Throwable t) {
-            log.fatal("Error occurred durring start up, unable to continue... ", t);
+            log.fatal("Error occurred during start up, unable to continue... ", t);
             System.exit(42); //Just in case something did manage to start going
         }
     }
