@@ -7,6 +7,7 @@ import net.canarymod.ToolBox;
 import net.canarymod.api.entity.EntityType;
 import net.canarymod.api.entity.living.humanoid.CanaryHuman;
 import net.canarymod.api.entity.living.humanoid.CanaryPlayer;
+import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.inventory.*;
 import net.canarymod.api.nbt.CanaryCompoundTag;
 import net.canarymod.api.packet.CanaryPacket;
@@ -880,6 +881,16 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
     }
 
     public void bG() {
+        // CanaryMod: ToolBrokenHook
+        if (this.getCanaryHuman().isPlayer() && this.bF() != null) { // Just in case a NPC breaks a tool; and make sure there is an actual item
+            CanaryItem tool = this.bF().getCanaryItem();
+            tool.setSlot(this.bm.c);
+            ToolBrokenHook hook = (ToolBrokenHook)new ToolBrokenHook((Player)getCanaryHuman(), this.bF().getCanaryItem()).call();
+            if (hook.getTool().getAmount() > 0) {
+                return; // A Plugin may have adjusted the tool back to normal
+            }
+        }
+        //
         this.bm.a(this.bm.c, (ItemStack) null);
     }
 

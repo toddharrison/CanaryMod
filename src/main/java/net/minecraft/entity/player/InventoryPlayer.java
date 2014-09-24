@@ -1,5 +1,8 @@
 package net.minecraft.entity.player;
 
+import net.canarymod.api.entity.living.humanoid.Player;
+import net.canarymod.api.inventory.CanaryItem;
+import net.canarymod.hook.player.ArmorBrokenHook;
 import net.canarymod.hook.player.ItemPickupHook;
 import net.minecraft.block.Block;
 import net.minecraft.crash.CrashReport;
@@ -465,7 +468,14 @@ public class InventoryPlayer implements IInventory {
             if (this.b[i0] != null && this.b[i0].b() instanceof ItemArmor) {
                 this.b[i0].a((int) f0, (EntityLivingBase) this.d);
                 if (this.b[i0].b == 0) {
-                    this.b[i0] = null;
+                    // CanaryMod: ArmorBrokenHook
+                    CanaryItem armor = this.b[i0].getCanaryItem();
+                    armor.setSlot(i0 + this.a.length); // add the normal inventory amount to the slot so that it is correct
+                    ArmorBrokenHook hook = (ArmorBrokenHook)new ArmorBrokenHook((Player)this.d.getCanaryHuman(), armor).call();
+                    if (hook.getArmor().getAmount() <= 0) { // A Plugin may have adjusted the armor back to normal
+                        this.b[i0] = null;
+                    }
+                    //
                 }
             }
         }
