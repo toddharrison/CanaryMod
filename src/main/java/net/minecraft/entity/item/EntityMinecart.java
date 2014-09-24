@@ -313,7 +313,7 @@ public abstract class EntityMinecart extends Entity {
             // CanaryMod: VehicleMove
             Vector3D from = new Vector3D(this.p, this.q, this.r);
             Vector3D to = new Vector3D(this.s, this.t, this.u);
-            if (Vector3D.getDistance(from, to) > 1.0F) {
+            if (hasMovedOneBlockOrMore()) {
                 VehicleMoveHook vmh = (VehicleMoveHook) new VehicleMoveHook((Vehicle) this.entity, from, to).call();
                 if (vmh.isCanceled()) {
                     this.v = 0.0D;
