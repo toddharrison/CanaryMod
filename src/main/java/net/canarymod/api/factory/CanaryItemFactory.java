@@ -1,11 +1,10 @@
 package net.canarymod.api.factory;
 
-import net.canarymod.api.inventory.CanaryEnchantment;
-import net.canarymod.api.inventory.CanaryItem;
-import net.canarymod.api.inventory.Enchantment;
+import net.canarymod.Canary;
+import net.canarymod.api.inventory.*;
 import net.canarymod.api.inventory.Enchantment.Type;
-import net.canarymod.api.inventory.Item;
-import net.canarymod.api.inventory.ItemType;
+import net.canarymod.api.world.CanaryWorld;
+import net.minecraft.item.ItemMap;
 import net.visualillusionsent.utils.StringUtils;
 
 /**
@@ -130,6 +129,14 @@ public class CanaryItemFactory implements ItemFactory {
     public Enchantment newEnchantment(Type type, short level) {
         if (type != null) {
             return new CanaryEnchantment(type, level);
+        }
+        return null;
+    }
+
+    public MapData getMapData(Item item) {
+        if (item.getType() == ItemType.Map) {
+            return new CanaryMapData(((ItemMap) net.minecraft.item.Item.d(ItemType.Map.getId()))
+                    .a(((CanaryItem) item).getHandle(), ((CanaryWorld) Canary.getServer().getDefaultWorld()).getHandle()));
         }
         return null;
     }

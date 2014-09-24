@@ -124,6 +124,10 @@ public class MapData extends WorldSavedData {
     }
 
     private void a(int i0, World world, String s0, double d0, double d1, double d2) {
+        // CanaryMod: Check mapdata for mapUpdating and fix for multiworld causing overriding maps
+        if (!mapUpdating || !worldName.equals(world.getCanaryWorld().getFqName()) || isBroken) {
+            return;
+        }
         int i1 = 1 << this.d;
         float f0 = (float)(d0 - (double)this.a) / (float)i1;
         float f1 = (float)(d1 - (double)this.b) / (float)i1;
@@ -192,6 +196,10 @@ public class MapData extends WorldSavedData {
     }
 
     public MapData.MapInfo a(EntityPlayer entityplayer) {
+        // CanaryMod: Check mapdata for mapUpdating and fix for multiworld causing overriding maps
+        if (!playersUpdating || !worldName.equals(entityplayer.o.getCanaryWorld().getFqName()) || isBroken) {
+            return null;
+        }
         MapData.MapInfo mapdata_mapinfo = (MapData.MapInfo)this.i.get(entityplayer);
 
         if (mapdata_mapinfo == null) {

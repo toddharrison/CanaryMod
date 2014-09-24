@@ -19,11 +19,9 @@ import net.minecraft.world.World;
  */
 public class CanaryMapData implements MapData {
     private final net.minecraft.world.storage.MapData nmsMapData;
-    private final ItemStack nmsItemStack;
 
-    public CanaryMapData(net.minecraft.world.storage.MapData nmsMapData, ItemStack nmsItemStack) {
+    public CanaryMapData(net.minecraft.world.storage.MapData nmsMapData) {
         this.nmsMapData = nmsMapData;
-        this.nmsItemStack = nmsItemStack;
     }
 
     @Override
@@ -87,7 +85,7 @@ public class CanaryMapData implements MapData {
 
     @Override
     public void update() {
-        if (!getNative().isBroken) {
+        if (!getNative().isBroken && !getNative().i.isEmpty()) {
             EntityPlayer entityPlayer = (EntityPlayer)getNative().i.keySet().iterator().next(); // grab the first player
 
             if (entityPlayer != null) {
