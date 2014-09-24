@@ -153,8 +153,6 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
 
         this.g = true;
         if (!this.b.i) {
-            //CanaryMod: Don't idle-kick when only moving (this was missing here)
-            this.b.v();
             double d0;
 
             if (!this.r) {
@@ -176,6 +174,8 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer {
                     this.b.b(from.getX(), from.getY(), from.getZ()); // correct position server side to, or get BoUnCy
                     return;
                 }
+                //CanaryMod: Don't idle-kick when only moving
+                this.b.v();
             }
             //
 
