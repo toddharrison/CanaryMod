@@ -12,7 +12,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 /**
  * A class that handels the "@" attribute
  * 
- * @author Ehud  (EhudB)
+ * @author Ehud (EhudB)
  * @author Almog (Swift)
  */
 public class CanaryPlayerSelector implements PlayerSelector {
@@ -35,7 +35,7 @@ public class CanaryPlayerSelector implements PlayerSelector {
         else if (caller instanceof CanaryCommandBlockMinecart) {
             player = net.minecraft.command.PlayerSelector.a(((CanaryCommandBlockMinecart) caller).getLogic(), pattern);
         }
-        if(player != null)
+        if (player != null)
             return player.getPlayer();
         return null;
     }
@@ -46,15 +46,15 @@ public class CanaryPlayerSelector implements PlayerSelector {
     @Override
     public Player[] matchPlayers(MessageReceiver caller, String pattern) {
         if (caller instanceof CanaryServer) {
-           return this.toCanaryPlayers(net.minecraft.command.PlayerSelector.c(((CanaryServer) caller).getHandle(), pattern));
+            return this.toCanaryPlayers(net.minecraft.command.PlayerSelector.c(((CanaryServer) caller).getHandle(), pattern));
         }
         else if (caller instanceof CanaryPlayer) {
             return this.toCanaryPlayers(net.minecraft.command.PlayerSelector.c(((CanaryPlayer) caller).getHandle(), pattern));
         }
-        else if(caller instanceof CanaryCommandBlock){
+        else if (caller instanceof CanaryCommandBlock) {
             return this.toCanaryPlayers(net.minecraft.command.PlayerSelector.c(((CanaryCommandBlock) caller).getLogic(), pattern));
         }
-        else if(caller instanceof CanaryCommandBlockMinecart) {
+        else if (caller instanceof CanaryCommandBlockMinecart) {
             return this.toCanaryPlayers(net.minecraft.command.PlayerSelector.c(((CanaryCommandBlockMinecart) caller).getLogic(), pattern));
         }
         else
@@ -70,11 +70,14 @@ public class CanaryPlayerSelector implements PlayerSelector {
     }
 
     private Player[] toCanaryPlayers(EntityPlayerMP[] players) {
-        Player[] canaryPlayers = new Player[players.length];
-        for (int i = 0 ; i < players.length ; i++) {      
-            canaryPlayers[i] = players[i].getPlayer();
+        if (players != null) {
+            Player[] canaryPlayers = new Player[players.length];
+            for (int i = 0; i < players.length; i++) {
+                canaryPlayers[i] = players[i].getPlayer();
+            }
+            return canaryPlayers;
         }
-        return canaryPlayers;
+        return null;
     }
 
 }
