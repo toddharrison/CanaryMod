@@ -34,11 +34,13 @@ public class CommandTeleport extends CommandBase {
             throw new WrongUsageException("commands.tp.usage", new Object[0]);
         }
         else {
-            // CanaryMod: just rewite this stuff
-            EntityPlayerMP entityplayermp = d(icommandsender, astring[0]);
-
+            // CanaryMod: just rewrite this stuff
+            EntityPlayerMP entityplayermp;
             if (astring[0].matches("\\d+") || (astring.length < 3 && astring[0].equals(icommandsender.b_())) || (astring.length == 1)) {
                 entityplayermp = b(icommandsender);
+            }
+            else {
+                entityplayermp = d(icommandsender, astring[0]);
             }
 
             if (entityplayermp == null) {
@@ -56,13 +58,12 @@ public class CommandTeleport extends CommandBase {
                     throw new PlayerNotFoundException();
                 }
                 else if (entityplayermp == entityplayermp1) {
-                    Canary.log.debug("FUCKUP!");
                     return;
                 }
 
                 // CanaryMod: Allow interdimensional teleporting for those ignoring restrictions
-                boolean interdimensional = icommandsender instanceof EntityPlayerMP ? ((EntityPlayerMP) icommandsender).getPlayer().canIgnoreRestrictions() : true;
-                if (entityplayermp1.o != entityplayermp.o && interdimensional) {
+                boolean interdimensional = icommandsender instanceof EntityPlayerMP && ((EntityPlayerMP)icommandsender).getPlayer().canIgnoreRestrictions();
+                if (entityplayermp1.o != entityplayermp.o && !interdimensional) {
                     a(icommandsender, this, "commands.tp.notSameDimension", new Object[0]);
                     return;
                 }
