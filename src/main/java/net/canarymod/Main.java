@@ -36,6 +36,8 @@ public class Main {
      */
     public static void main(String[] args) {
         log.info("Starting: " + Canary.getImplementationTitle() + " " + Canary.getImplementationVersion());
+        log.info("Canary Path: " + Canary.getCanaryJarPath() + "& Working From: " + Canary.getWorkingPath());
+
         try {
             Class.forName("org.sqlite.JDBC");
         }
@@ -46,13 +48,13 @@ public class Main {
             MinecraftServer.setHeadless(true);
             boolean headless = GraphicsEnvironment.isHeadless();
             for (int index = 0; index < args.length; ++index) {
-                String key = args[index];
+                String key = args[index].toLowerCase().replaceAll("\\-", "");
                 String value = index == args.length - 1 ? null : args[index + 1];
                 // Replace the nogui option with gui option so the gui is off by default
-                if (key.equals("gui") || key.equals("--gui") || key.equals("-gui")) {
+                if (key.equals("gui")) {
                     MinecraftServer.setHeadless(false);
                 }
-                else if (key.equalsIgnoreCase("noControl") || key.equalsIgnoreCase("-noControl") || key.equalsIgnoreCase("--noControl")) {
+                else if (key.equals("nocontrol")) {
                     nocontrol = true;
                 }
             }
