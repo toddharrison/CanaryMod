@@ -36,7 +36,7 @@ public class Main {
      */
     public static void main(String[] args) {
         log.info("Starting: " + Canary.getImplementationTitle() + " " + Canary.getImplementationVersion());
-        log.info("Canary Path: " + Canary.getCanaryJarPath() + "& Working From: " + Canary.getWorkingPath());
+        log.info("Canary Path: " + Canary.getCanaryJarPath() + " & Working From: " + Canary.getWorkingPath());
 
         try {
             Class.forName("org.sqlite.JDBC");
