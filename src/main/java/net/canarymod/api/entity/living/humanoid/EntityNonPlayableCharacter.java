@@ -10,6 +10,7 @@ import net.canarymod.api.entity.living.humanoid.npchelpers.EntityNPCMoveHelper;
 import net.canarymod.api.entity.living.humanoid.npchelpers.PathNavigateNPC;
 import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.api.world.position.Location;
+import net.canarymod.util.NMSToolBox;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -37,7 +38,9 @@ public final class EntityNonPlayableCharacter extends EntityPlayer {
 
     private static GameProfile genFakeProfile(String name) {
         UUID five$SaysthisisntUniqueAtAll = UUID.randomUUID();
-        return new GameProfile(five$SaysthisisntUniqueAtAll, name);
+        GameProfile ofNPC = new GameProfile(five$SaysthisisntUniqueAtAll, name);
+        ofNPC.getProperties().put("textures", NMSToolBox.getSkinProperty(name));
+        return ofNPC;
     }
 
     public EntityNonPlayableCharacter(String name, Location location) {
@@ -97,7 +100,7 @@ public final class EntityNonPlayableCharacter extends EntityPlayer {
         }
         super.h();
     }
-    
+
     @Override
     protected void bn() {
         this.getPathNavigate().f();
@@ -190,9 +193,9 @@ public final class EntityNonPlayableCharacter extends EntityPlayer {
         if (!entity.K && !this.o.E) {
             super.a(entity, i0);
             if (entity instanceof EntityItem) {
-                new PickupItem(((EntityItem)entity).getEntityItem().getItem()).call(this.getNPC());
+                new PickupItem(((EntityItem) entity).getEntityItem().getItem()).call(this.getNPC());
             }
-            
+
         }
     }
 
@@ -237,7 +240,8 @@ public final class EntityNonPlayableCharacter extends EntityPlayer {
             EntityLivingBase entitylivingbase = (EntityLivingBase) entity;
 
             d2 = entitylivingbase.t + (double) entitylivingbase.g() - (this.t + (double) this.g());
-        } else {
+        }
+        else {
             d2 = (entity.C.b + entity.C.e) / 2.0D - (this.t + (double) this.g());
         }
 

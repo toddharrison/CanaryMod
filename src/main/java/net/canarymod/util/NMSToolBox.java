@@ -1,9 +1,13 @@
 package net.canarymod.util;
 
+import com.google.common.collect.Iterables;
 import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.properties.Property;
 import net.canarymod.Canary;
 import net.canarymod.ToolBox;
 import net.canarymod.api.CanaryServer;
+import net.minecraft.server.MinecraftServer;
+import net.visualillusionsent.utils.PropertiesFile;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
@@ -16,6 +20,7 @@ import java.util.UUID;
  * @author Jason (darkdiplomat)
  */
 public class NMSToolBox extends ToolBox {
+    private static final PropertiesFile skincache = new PropertiesFile("db/skin.cache");
 
     /**
      * Converts a byte array of Block Ids into an array of native Blocks
@@ -51,7 +56,8 @@ public class NMSToolBox extends ToolBox {
 
         if (userLookup.containsKey(uuidStr)) {
             if (userLookup.getComments(uuid.toString()).length > 0) {
-                if (!userLookupExpired(userLookup.getComments(uuidStr)[0].replace(";Verified: ", "").trim())) {
+                String timeStamp = userLookup.getComments(uuidStr)[0].replaceAll(";Verified", "").trim();
+                if (!userLookupExpired(timeStamp)) {
                     return userLookup.getString(uuid.toString());
                 }
             }
@@ -81,5 +87,41 @@ public class NMSToolBox extends ToolBox {
         }
 
         return name;
+    }
+
+    public static Property getSkinProperty(String name) {
+        if (skincache.containsKey(name)) {
+            String timeStamp = skincache.getComments(name)[0].replaceAll(";Verified", "").trim();
+            Canary.log.debug(timeStamp);
+            if (!userLookupExpired(timeStamp)) {
+                String[] storedProperty = restoreEscapedEqual(skincache.getString(name)).split(":");
+                Canary.log.debug(storedProperty.length);
+                return new Property("textures", storedProperty[0], storedProperty[1]);
+            }
+        }
+        UUID uuidOther = uuidFromUsername(name);
+        GameProfile profileOther = MinecraftServer.I().av().fillProfileProperties(new GameProfile(uuidOther, name), true);
+        Property property = Iterables.getFirst(profileOther.getProperties().get("textures"), null);
+
+        if (property != null) {
+            skincache.setStringArray(name, ":", new String[]{escapeEqual(property.getValue()), escapeEqual(property.getSignature())});
+            skincache.setComments(name, ";Verified " + System.currentTimeMillis());
+            skincache.save();
+        }
+        else if (skincache.containsKey(name)) {
+            // go ahead and return the old data
+            String[] storedProperty = skincache.getStringArray(name, ":");
+            return new Property("textures", storedProperty[0], storedProperty[1]);
+        }
+
+        return property;
+    }
+
+    private static String escapeEqual(String property) {
+        return property.replaceAll("=", "[]");
+    }
+
+    private static String restoreEscapedEqual(String property) {
+        return property.replaceAll("\\[]", "=");
     }
 }
