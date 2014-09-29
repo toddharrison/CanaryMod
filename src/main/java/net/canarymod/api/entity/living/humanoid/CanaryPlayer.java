@@ -13,6 +13,7 @@ import net.canarymod.api.entity.living.animal.CanaryHorse;
 import net.canarymod.api.inventory.*;
 import net.canarymod.api.packet.CanaryPacket;
 import net.canarymod.api.packet.Packet;
+import net.canarymod.api.statistics.*;
 import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.api.world.World;
 import net.canarymod.api.world.blocks.*;
@@ -1069,10 +1070,83 @@ public class CanaryPlayer extends CanaryHuman implements Player {
     public boolean isPlayerHidden(Player player, Player isHidden) {
         return this.getWorld().getEntityTracker().isPlayerHidden(player, this);
     }
-    
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setCompassTarget(int x, int y, int z) {
         this.sendPacket(new CanaryPacket(new net.minecraft.network.play.server.S05PacketSpawnPosition(x, y, z)));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setStat(Stat stat, int value) {
+        getHandle().w().a(getHandle(), ((CanaryStat) stat).getHandle(), value);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void increaseStat(Stat stat, int value) {
+        if (value < 0) return;
+        getHandle().a(((CanaryStat) stat).getHandle(), value);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void decreaseStat(Stat stat, int value) {
+        if (value < 0) return;
+        setStat(stat, getStat(stat) - value);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int getStat(Stat stat) {
+        return getHandle().w().a(((CanaryStat) stat).getHandle());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void awardAchievement(Achievement achievement) {
+        // Need to give all parent achievements
+        if (achievement.getParent() != null && !hasAchievement(achievement.getParent())) {
+            awardAchievement(achievement.getParent());
+        }
+        getHandle().w().b(getHandle(), ((CanaryAchievement) achievement).getHandle(), 1);
+        getHandle().w().b(getHandle());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void removeAchievement(Achievement achievement) {
+        // Need to remove any children achievements
+        for (Achievements achieve : Achievements.values()) {
+            Achievement child = achieve.getInstance();
+            if (child.getParent() == achievement && hasAchievement(child)) {
+                removeAchievement(child);
+            }
+        }
+        getHandle().w().a(getHandle(), ((CanaryAchievement) achievement).getHandle(), 0);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean hasAchievement(Achievement achievement) {
+        return getHandle().w().a(((CanaryAchievement) achievement).getHandle());
     }
 
     /**

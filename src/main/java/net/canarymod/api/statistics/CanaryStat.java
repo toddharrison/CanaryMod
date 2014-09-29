@@ -24,8 +24,8 @@ public class CanaryStat implements Stat {
      * {@inheritDoc}
      */
     @Override
-    public int getId() {
-        return 0;//statbase.e;
+    public String getId() {
+        return getHandle().e;
     }
 
     /**

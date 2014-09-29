@@ -10,6 +10,7 @@ public final class CanaryFactory implements Factory {
     private final PacketFactory pcktFactory = new CanaryPacketFactory();
     private final ChatComponentFactory chatCompFactory = new CanaryChatComponentFactory();
     private final AttributeFactory attributeFactory = new CanaryAttributeFactory();
+    private final StatisticsFactory statisticsFactory = new CanaryStatisticsFactory();
 
     @Override
     public ItemFactory getItemFactory() {
@@ -49,6 +50,11 @@ public final class CanaryFactory implements Factory {
     @Override
     public AttributeFactory getAttributeFactory() {
         return attributeFactory;
+    }
+
+    @Override
+    public StatisticsFactory getStatisticsFactory() {
+        return statisticsFactory;
     }
 
 }

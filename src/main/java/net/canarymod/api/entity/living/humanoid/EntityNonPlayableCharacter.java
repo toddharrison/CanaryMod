@@ -36,15 +36,14 @@ public final class EntityNonPlayableCharacter extends EntityPlayer {
     private EntityNPCLookHelper look_helper;
     private PathNavigateNPC path_navigate;
 
-    private static GameProfile genFakeProfile(String name) {
-        UUID five$SaysthisisntUniqueAtAll = UUID.randomUUID();
-        GameProfile ofNPC = new GameProfile(five$SaysthisisntUniqueAtAll, name);
-        ofNPC.getProperties().put("textures", NMSToolBox.getSkinProperty(name));
+    private static GameProfile genFakeProfile(UUID uuid, String name, String skinName) {
+        GameProfile ofNPC = new GameProfile(uuid, name);
+        ofNPC.getProperties().put("textures", NMSToolBox.getSkinProperty(skinName));
         return ofNPC;
     }
 
-    public EntityNonPlayableCharacter(String name, Location location) {
-        super(((CanaryWorld) location.getWorld()).getHandle(), genFakeProfile(name));
+    public EntityNonPlayableCharacter(UUID uuid, String name, String skinName, Location location) {
+        super(((CanaryWorld) location.getWorld()).getHandle(), genFakeProfile(uuid, name, skinName));
         World world = ((CanaryWorld) location.getWorld()).getHandle();
         this.move_helper = new EntityNPCMoveHelper(this);
         this.jump_helper = new EntityNPCJumpHelper(this);
@@ -61,6 +60,10 @@ public final class EntityNonPlayableCharacter extends EntityPlayer {
             this.b(this.s, this.t + 1.0D, this.u);
         }
         this.entity = new CanaryNonPlayableCharacter(this);
+    }
+
+    public EntityNonPlayableCharacter(String name, Location location) {
+        this(UUID.randomUUID(), name, name, location);
     }
 
     @Override

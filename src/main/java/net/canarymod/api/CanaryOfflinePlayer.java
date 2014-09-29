@@ -3,6 +3,7 @@ package net.canarymod.api;
 import net.canarymod.Canary;
 import net.canarymod.ToolBox;
 import net.canarymod.api.nbt.*;
+import net.canarymod.api.statistics.*;
 import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.api.world.DimensionType;
 import net.canarymod.api.world.UnknownWorldException;
@@ -12,9 +13,12 @@ import net.canarymod.api.world.position.Position;
 import net.canarymod.permissionsystem.PermissionProvider;
 import net.canarymod.user.Group;
 import net.canarymod.warp.Warp;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.stats.StatisticsFile;
 import net.minecraft.world.storage.ISaveHandler;
 import net.minecraft.world.storage.SaveHandler;
 
+import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -36,6 +40,7 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
     private String name;
     private boolean isMuted;
     private UUID uuid;
+    private StatisticsFile statisticsFile;
 
     public CanaryOfflinePlayer(String name, UUID uuid, CanaryCompoundTag tag) {
         this.data = tag;
@@ -53,6 +58,21 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
         }
         prefix = data[0];
         isMuted = Boolean.parseBoolean(data[2]);
+
+        // Statistics file
+        File file1 = new File(new File("worlds"), "stats");
+        File file2 = new File(file1, uuid.toString() + ".json");
+
+        if (!file2.exists()) {
+            File file3 = new File(file1, name + ".json");
+
+            if (file3.exists() && file3.isFile()) {
+                file3.renameTo(file2);
+            }
+        }
+
+        this.statisticsFile = new StatisticsFile(((CanaryServer) Canary.getServer()).getHandle(), file2);
+        this.statisticsFile.a();
     }
 
     /**
@@ -621,4 +641,75 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
             getNBT().put("Health", (short) ((int) Math.ceil((double) newHealth)));
         }
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setStat(Stat stat, int value) {
+        statisticsFile.a(null, ((CanaryStat) stat).getHandle(), value);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void increaseStat(Stat stat, int value) {
+        if (value < 0) return;
+        setStat(stat, getStat(stat) + value);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void decreaseStat(Stat stat, int value) {
+        if (value < 0) return;
+        setStat(stat, getStat(stat) - value);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int getStat(Stat stat) {
+        return statisticsFile.a(((CanaryStat) stat).getHandle());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void awardAchievement(Achievement achievement) {
+        // Need to give all parent achievements
+        if (achievement.getParent() != null && !hasAchievement(achievement.getParent())) {
+            awardAchievement(achievement.getParent());
+        }
+        statisticsFile.b(null, ((CanaryAchievement) achievement).getHandle(), 1);
+        statisticsFile.b((EntityPlayerMP) null);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void removeAchievement(Achievement achievement) {
+        // Need to remove any children achievements
+        for (Achievements achieve : Achievements.values()) {
+            Achievement child = achieve.getInstance();
+            if (child.getParent() == achievement && hasAchievement(child)) {
+                removeAchievement(child);
+            }
+        }
+        statisticsFile.a(null, ((CanaryAchievement) achievement).getHandle(), 0);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean hasAchievement(Achievement achievement) {
+        return statisticsFile.a(((CanaryAchievement) achievement).getHandle());
+    }
+
 }
