@@ -15,6 +15,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IChatComponent;
 
+import java.net.InetSocketAddress;
 import java.util.Arrays;
 
 public class NetHandlerStatusServer implements INetHandlerStatusServer {
@@ -42,7 +43,7 @@ public class NetHandlerStatusServer implements INetHandlerStatusServer {
     public void a(C00PacketServerQuery c00packetserverquery) {
         // CanaryMod: ServerListPingHook
         ServerStatusResponse ssr = this.a.ay();
-        ServerListPingHook hook = (ServerListPingHook) new ServerListPingHook(ssr.a().e(), ssr.b().b(), ssr.b().a(), ssr.d(), Arrays.asList(ssr.b().c())).call();
+        ServerListPingHook hook = (ServerListPingHook)new ServerListPingHook(((InetSocketAddress)this.b.b()).getAddress(), ssr.a().e(), ssr.b().b(), ssr.b().a(), ssr.d(), Arrays.asList(ssr.b().c())).call();
         if (hook.isCanceled()) {
             // Response Denied!
             return;
