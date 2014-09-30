@@ -17,7 +17,6 @@ import net.canarymod.api.inventory.Inventory;
 import net.canarymod.api.inventory.NativeCustomStorageInventory;
 import net.canarymod.api.nbt.CompoundTag;
 import net.canarymod.api.packet.CanaryPacket;
-import net.canarymod.api.statistics.CanaryStat;
 import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.api.world.blocks.CanaryAnvil;
 import net.canarymod.api.world.blocks.CanaryDoubleChest;
@@ -851,7 +850,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
     public void a(StatBase statbase, int i0) {
         if (statbase != null) {
             // CanaryMod: StatGained
-            StatGainedHook hook = (StatGainedHook) new StatGainedHook(getPlayer(), new CanaryStat(statbase)).call();
+            StatGainedHook hook = (StatGainedHook)new StatGainedHook(getPlayer(), statbase.getCanaryStat(), i0).call();
             if (hook.isCanceled()) {
                 return;
             }
