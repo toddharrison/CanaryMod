@@ -17,106 +17,111 @@ import java.util.Random;
 
 public abstract class BlockLeaves extends BlockLeavesBase {
 
-
-    int[] a;
-    protected IIcon[][] M = new IIcon[2][];
-
+    public static final PropertyBool a = PropertyBool.a("decayable");
+    public static final PropertyBool b = PropertyBool.a("check_decay");
+    int[] M;
+   
     public BlockLeaves() {
         super(Material.j, false);
         this.a(true);
         this.a(CreativeTabs.c);
         this.c(0.2F);
-        this.g(1);
+        this.e(1);
         this.a(h);
     }
 
-    public void a(World world, int i0, int i1, int i2, Block block, int i3) {
+    public void b(World world, BlockPos blockpos, IBlockState iblockstate) {
         byte b0 = 1;
-        int i4 = b0 + 1;
+        int i0 = b0 + 1;
+        int i1 = blockpos.n();
+        int i2 = blockpos.o();
+        int i3 = blockpos.p();
 
-        if (world.b(i0 - i4, i1 - i4, i2 - i4, i0 + i4, i1 + i4, i2 + i4)) {
-            for (int i5 = -b0; i5 <= b0; ++i5) {
-                for (int i6 = -b0; i6 <= b0; ++i6) {
-                    for (int i7 = -b0; i7 <= b0; ++i7) {
-                        if (world.a(i0 + i5, i1 + i6, i2 + i7).o() == Material.j) {
-                            int i8 = world.e(i0 + i5, i1 + i6, i2 + i7);
+        if (world.a(new BlockPos(i1 - i0, i2 - i0, i3 - i0), new BlockPos(i1 + i0, i2 + i0, i3 + i0))) {
+            for (int i4 = -b0; i4 <= b0; ++i4) {
+                for (int i5 = -b0; i5 <= b0; ++i5) {
+                    for (int i6 = -b0; i6 <= b0; ++i6) {
+                        BlockPos blockpos1 = blockpos.a(i4, i5, i6);
+                        IBlockState iblockstate1 = world.p(blockpos1);
 
-                            world.a(i0 + i5, i1 + i6, i2 + i7, i8 | 8, 4);
+                        if (iblockstate1.c().r() == Material.j && !((Boolean) iblockstate1.b(b)).booleanValue()) {
+                            world.a(blockpos1, iblockstate1.a(b, Boolean.valueOf(true)), 4);
                         }
                     }
                 }
             }
         }
+
     }
 
-    public void a(World world, int i0, int i1, int i2, Random random) {
-        if (!world.E) {
-            int i3 = world.e(i0, i1, i2);
-
-            if ((i3 & 8) != 0 && (i3 & 4) == 0) {
+    public void b(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {
+        if (!world.D) {
+            if (((Boolean) iblockstate.b(b)).booleanValue() && ((Boolean) iblockstate.b(a)).booleanValue()) {
                 byte b0 = 4;
-                int i4 = b0 + 1;
+                int i0 = b0 + 1;
+                int i1 = blockpos.n();
+                int i2 = blockpos.o();
+                int i3 = blockpos.p();
                 byte b1 = 32;
-                int i5 = b1 * b1;
-                int i6 = b1 / 2;
+                int i4 = b1 * b1;
+                int i5 = b1 / 2;
 
-                if (this.a == null) {
-                    this.a = new int[b1 * b1 * b1];
+                if (this.M == null) {
+                    this.M = new int[b1 * b1 * b1];
                 }
 
-                int i7;
+                int i6;
 
-                if (world.b(i0 - i4, i1 - i4, i2 - i4, i0 + i4, i1 + i4, i2 + i4)) {
+                if (world.a(new BlockPos(i1 - i0, i2 - i0, i3 - i0), new BlockPos(i1 + i0, i2 + i0, i3 + i0))) {
+                    int i7;
                     int i8;
                     int i9;
 
-                    for (i7 = -b0; i7 <= b0; ++i7) {
-                        for (i8 = -b0; i8 <= b0; ++i8) {
-                            for (i9 = -b0; i9 <= b0; ++i9) {
-                                Block block = world.a(i0 + i7, i1 + i8, i2 + i9);
+                    for (i6 = -b0; i6 <= b0; ++i6) {
+                        for (i7 = -b0; i7 <= b0; ++i7) {
+                            for (i8 = -b0; i8 <= b0; ++i8) {
+                                Block block = world.p(new BlockPos(i1 + i6, i2 + i7, i3 + i8)).c();
 
                                 if (block != Blocks.r && block != Blocks.s) {
-                                    if (block.o() == Material.j) {
-                                        this.a[(i7 + i6) * i5 + (i8 + i6) * b1 + i9 + i6] = -2;
+                                    if (block.r() == Material.j) {
+                                        this.M[(i6 + i5) * i4 + (i7 + i5) * b1 + i8 + i5] = -2;
+                                    } else {
+                                        this.M[(i6 + i5) * i4 + (i7 + i5) * b1 + i8 + i5] = -1;
                                     }
-                                    else {
-                                        this.a[(i7 + i6) * i5 + (i8 + i6) * b1 + i9 + i6] = -1;
-                                    }
-                                }
-                                else {
-                                    this.a[(i7 + i6) * i5 + (i8 + i6) * b1 + i9 + i6] = 0;
+                                } else {
+                                    this.M[(i6 + i5) * i4 + (i7 + i5) * b1 + i8 + i5] = 0;
                                 }
                             }
                         }
                     }
 
-                    for (i7 = 1; i7 <= 4; ++i7) {
-                        for (i8 = -b0; i8 <= b0; ++i8) {
-                            for (i9 = -b0; i9 <= b0; ++i9) {
-                                for (int i10 = -b0; i10 <= b0; ++i10) {
-                                    if (this.a[(i8 + i6) * i5 + (i9 + i6) * b1 + i10 + i6] == i7 - 1) {
-                                        if (this.a[(i8 + i6 - 1) * i5 + (i9 + i6) * b1 + i10 + i6] == -2) {
-                                            this.a[(i8 + i6 - 1) * i5 + (i9 + i6) * b1 + i10 + i6] = i7;
+                    for (i6 = 1; i6 <= 4; ++i6) {
+                        for (i7 = -b0; i7 <= b0; ++i7) {
+                            for (i8 = -b0; i8 <= b0; ++i8) {
+                                for (int i9 = -b0; i9 <= b0; ++i9) {
+                                    if (this.M[(i7 + i5) * i4 + (i8 + i5) * b1 + i9 + i5] == i6 - 1) {
+                                        if (this.M[(i7 + i5 - 1) * i4 + (i8 + i5) * b1 + i9 + i5] == -2) {
+                                            this.M[(i7 + i5 - 1) * i4 + (i8 + i5) * b1 + i9 + i5] = i6;
                                         }
 
-                                        if (this.a[(i8 + i6 + 1) * i5 + (i9 + i6) * b1 + i10 + i6] == -2) {
-                                            this.a[(i8 + i6 + 1) * i5 + (i9 + i6) * b1 + i10 + i6] = i7;
+                                        if (this.M[(i7 + i5 + 1) * i4 + (i8 + i5) * b1 + i9 + i5] == -2) {
+                                            this.M[(i7 + i5 + 1) * i4 + (i8 + i5) * b1 + i9 + i5] = i6;
                                         }
 
-                                        if (this.a[(i8 + i6) * i5 + (i9 + i6 - 1) * b1 + i10 + i6] == -2) {
-                                            this.a[(i8 + i6) * i5 + (i9 + i6 - 1) * b1 + i10 + i6] = i7;
+                                        if (this.M[(i7 + i5) * i4 + (i8 + i5 - 1) * b1 + i9 + i5] == -2) {
+                                            this.M[(i7 + i5) * i4 + (i8 + i5 - 1) * b1 + i9 + i5] = i6;
                                         }
 
-                                        if (this.a[(i8 + i6) * i5 + (i9 + i6 + 1) * b1 + i10 + i6] == -2) {
-                                            this.a[(i8 + i6) * i5 + (i9 + i6 + 1) * b1 + i10 + i6] = i7;
+                                        if (this.M[(i7 + i5) * i4 + (i8 + i5 + 1) * b1 + i9 + i5] == -2) {
+                                            this.M[(i7 + i5) * i4 + (i8 + i5 + 1) * b1 + i9 + i5] = i6;
                                         }
 
-                                        if (this.a[(i8 + i6) * i5 + (i9 + i6) * b1 + (i10 + i6 - 1)] == -2) {
-                                            this.a[(i8 + i6) * i5 + (i9 + i6) * b1 + (i10 + i6 - 1)] = i7;
+                                        if (this.M[(i7 + i5) * i4 + (i8 + i5) * b1 + (i9 + i5 - 1)] == -2) {
+                                            this.M[(i7 + i5) * i4 + (i8 + i5) * b1 + (i9 + i5 - 1)] = i6;
                                         }
 
-                                        if (this.a[(i8 + i6) * i5 + (i9 + i6) * b1 + i10 + i6 + 1] == -2) {
-                                            this.a[(i8 + i6) * i5 + (i9 + i6) * b1 + i10 + i6 + 1] = i7;
+                                        if (this.M[(i7 + i5) * i4 + (i8 + i5) * b1 + i9 + i5 + 1] == -2) {
+                                            this.M[(i7 + i5) * i4 + (i8 + i5) * b1 + i9 + i5 + 1] = i6;
                                         }
                                     }
                                 }
@@ -125,24 +130,24 @@ public abstract class BlockLeaves extends BlockLeavesBase {
                     }
                 }
 
-                i7 = this.a[i6 * i5 + i6 * b1 + i6];
-                if (i7 >= 0) {
-                    world.a(i0, i1, i2, i3 & -9, 4);
-                }
-                else {
-                    this.e(world, i0, i1, i2);
+                i6 = this.M[i5 * i4 + i5 * b1 + i5];
+                if (i6 >= 0) {
+                    world.a(blockpos, iblockstate.a(b, Boolean.valueOf(false)), 4);
+                } else {
+                    this.d(world, blockpos);
                 }
             }
+
         }
     }
 
-    private void e(World world, int i0, int i1, int i2) {
+    private void d(World world, BlockPos blockpos) {
         // CanaryMod: LeafDecay
         CanaryBlock leaves = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
         LeafDecayHook hook = (LeafDecayHook) new LeafDecayHook(leaves).call();
         if (!hook.isCanceled()) {
-            this.b(world, i0, i1, i2, world.e(i0, i1, i2), 0);
-            world.f(i0, i1, i2);
+            this.b(world, blockpos, world.p(blockpos), 0);
+        world.g(blockpos);
         }
         //
     }
@@ -151,68 +156,54 @@ public abstract class BlockLeaves extends BlockLeavesBase {
         return random.nextInt(20) == 0 ? 1 : 0;
     }
 
-    public Item a(int i0, Random random, int i1) {
+    public Item a(IBlockState iblockstate, Random random, int i0) {
         return Item.a(Blocks.g);
     }
 
-    public void a(World world, int i0, int i1, int i2, int i3, float f0, int i4) {
-        if (!world.E) {
-            int i5 = this.b(i3);
+    public void a(World world, BlockPos blockpos, IBlockState iblockstate, float f0, int i0) {
+        if (!world.D) {
+            int i1 = this.d(iblockstate);
 
-            if (i4 > 0) {
-                i5 -= 2 << i4;
-                if (i5 < 10) {
-                    i5 = 10;
+            if (i0 > 0) {
+                i1 -= 2 << i0;
+                if (i1 < 10) {
+                    i1 = 10;
                 }
             }
 
-            if (world.s.nextInt(i5) == 0) {
-                Item item = this.a(i3, world.s, i4);
+            if (world.s.nextInt(i1) == 0) {
+                Item item = this.a(iblockstate, world.s, i0);
 
-                this.a(world, i0, i1, i2, new ItemStack(item, 1, this.a(i3)));
+                a(world, blockpos, new ItemStack(item, 1, this.a(iblockstate)));
             }
 
-            i5 = 200;
-            if (i4 > 0) {
-                i5 -= 10 << i4;
-                if (i5 < 40) {
-                    i5 = 40;
+            i1 = 200;
+            if (i0 > 0) {
+                i1 -= 10 << i0;
+                if (i1 < 40) {
+                    i1 = 40;
                 }
             }
 
-            this.c(world, i0, i1, i2, i3, i5);
+            this.a(world, blockpos, iblockstate, i1);
         }
 
     }
 
-    protected void c(World world, int i0, int i1, int i2, int i3, int i4) {
-    }
+    protected void a(World world, BlockPos blockpos, IBlockState iblockstate, int i0) {}
 
-    protected int b(int i0) {
+    protected int d(IBlockState iblockstate) {
         return 20;
     }
 
-    public void a(World world, EntityPlayer entityplayer, int i0, int i1, int i2, int i3) {
-        if (!world.E && entityplayer.bF() != null && entityplayer.bF().b() == Items.aZ) {
-            entityplayer.a(StatList.C[Block.b((Block) this)], 1);
-            this.a(world, i0, i1, i2, new ItemStack(Item.a((Block) this), 1, i3 & 3));
-        }
-        else {
-            super.a(world, entityplayer, i0, i1, i2, i3);
-        }
-    }
-
-    public int a(int i0) {
-        return i0 & 3;
-    }
-
     public boolean c() {
-        return !this.P;
+        return !this.Q;
     }
 
-    protected ItemStack j(int i0) {
-        return new ItemStack(Item.a((Block) this), 1, i0 & 3);
+    public boolean u() {
+        return false;
     }
 
-    public abstract String[] e();
+    public abstract BlockPlanks.EnumType b(int i0);
+
 }

@@ -15,13 +15,23 @@ import java.util.Random;
 
 public class BlockTripWireHook extends Block {
 
+    public static final PropertyDirection a = PropertyDirection.a("facing", (Predicate) EnumFacing.Plane.HORIZONTAL);
+    public static final PropertyBool b = PropertyBool.a("powered");
+    public static final PropertyBool M = PropertyBool.a("attached");
+    public static final PropertyBool N = PropertyBool.a("suspended");
+   
     public BlockTripWireHook() {
         super(Material.q);
+        this.j(this.L.b().a(a, EnumFacing.NORTH).a(b, Boolean.valueOf(false)).a(M, Boolean.valueOf(false)).a(N, Boolean.valueOf(false)));
         this.a(CreativeTabs.d);
         this.a(true);
     }
 
-    public AxisAlignedBB a(World world, int i0, int i1, int i2) {
+    public IBlockState a(IBlockState iblockstate, IBlockAccess iblockaccess, BlockPos blockpos) {
+        return iblockstate.a(N, Boolean.valueOf(!World.a(iblockaccess, blockpos.b())));
+    }
+
+    public AxisAlignedBB a(World world, BlockPos blockpos, IBlockState iblockstate) {
         return null;
     }
 
@@ -33,81 +43,55 @@ public class BlockTripWireHook extends Block {
         return false;
     }
 
-    public int b() {
-        return 29;
+    public boolean a(World world, BlockPos blockpos, EnumFacing enumfacing) {
+        return enumfacing.k().c() && world.p(blockpos.a(enumfacing.d())).c().t();
     }
 
-    public int a(World world) {
-        return 10;
+    public boolean c(World world, BlockPos blockpos) {
+        Iterator iterator = EnumFacing.Plane.HORIZONTAL.iterator();
+
+        EnumFacing enumfacing;
+
+        do {
+            if (!iterator.hasNext()) {
+                return false;
+            }
+
+            enumfacing = (EnumFacing) iterator.next();
+        } while (!world.p(blockpos.a(enumfacing)).c().t());
+
+        return true;
     }
 
-    public boolean d(World world, int i0, int i1, int i2, int i3) {
-        return i3 == 2 && world.a(i0, i1, i2 + 1).r() ? true : (i3 == 3 && world.a(i0, i1, i2 - 1).r() ? true : (i3 == 4 && world.a(i0 + 1, i1, i2).r() ? true : i3 == 5 && world.a(i0 - 1, i1, i2).r()));
-    }
+    public IBlockState a(World world, BlockPos blockpos, EnumFacing enumfacing, float f0, float f1, float f2, int i0, EntityLivingBase entitylivingbase) {
+        IBlockState iblockstate = this.P().a(b, Boolean.valueOf(false)).a(M, Boolean.valueOf(false)).a(N, Boolean.valueOf(false));
 
-    public boolean c(World world, int i0, int i1, int i2) {
-        return world.a(i0 - 1, i1, i2).r() ? true : (world.a(i0 + 1, i1, i2).r() ? true : (world.a(i0, i1, i2 - 1).r() ? true : world.a(i0, i1, i2 + 1).r()));
-    }
-
-    public int a(World world, int i0, int i1, int i2, int i3, float f0, float f1, float f2, int i4) {
-        byte b0 = 0;
-
-        if (i3 == 2 && world.c(i0, i1, i2 + 1, true)) {
-            b0 = 2;
+        if (enumfacing.k().c()) {
+            iblockstate = iblockstate.a(a, enumfacing);
         }
 
-        if (i3 == 3 && world.c(i0, i1, i2 - 1, true)) {
-            b0 = 0;
-        }
-
-        if (i3 == 4 && world.c(i0 + 1, i1, i2, true)) {
-            b0 = 1;
-        }
-
-        if (i3 == 5 && world.c(i0 - 1, i1, i2, true)) {
-            b0 = 3;
-        }
-
-        return b0;
+        return iblockstate;
     }
 
-    public void e(World world, int i0, int i1, int i2, int i3) {
-        this.a(world, i0, i1, i2, false, i3, false, -1, 0);
+    public void a(World world, BlockPos blockpos, IBlockState iblockstate, EntityLivingBase entitylivingbase, ItemStack itemstack) {
+        this.a(world, blockpos, iblockstate, false, false, -1, (IBlockState) null);
     }
 
-    public void a(World world, int i0, int i1, int i2, Block block) {
+    public void a(World world, BlockPos blockpos, IBlockState iblockstate, Block block) {
         if (block != this) {
-            if (this.e(world, i0, i1, i2)) {
-                int i3 = world.e(i0, i1, i2);
-                int i4 = i3 & 3;
-                boolean flag0 = false;
+            if (this.e(world, blockpos, iblockstate)) {
+                EnumFacing enumfacing = (EnumFacing) iblockstate.b(a);
 
-                if (!world.a(i0 - 1, i1, i2).r() && i4 == 3) {
-                    flag0 = true;
-                }
-
-                if (!world.a(i0 + 1, i1, i2).r() && i4 == 1) {
-                    flag0 = true;
-                }
-
-                if (!world.a(i0, i1, i2 - 1).r() && i4 == 0) {
-                    flag0 = true;
-                }
-
-                if (!world.a(i0, i1, i2 + 1).r() && i4 == 2) {
-                    flag0 = true;
-                }
-
-                if (flag0) {
-                    this.b(world, i0, i1, i2, i3, 0);
-                    world.f(i0, i1, i2);
+                if (!world.p(blockpos.a(enumfacing.d())).c().t()) {
+                    this.b(world, blockpos, iblockstate, 0);
+                    world.g(blockpos);
                 }
             }
 
         }
     }
 
-    public void a(World world, int i0, int i1, int i2, boolean flag0, int i3, boolean flag1, int i4, int i5) {
+    public void a(World world, BlockPos blockpos, IBlockState iblockstate, boolean flag0, boolean flag1, int i0, IBlockState iblockstate1) {
         // CanaryMod: Block Physics
         BlockPhysicsHook blockPhysics = (BlockPhysicsHook) new BlockPhysicsHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), false).call();
         if (blockPhysics.isCanceled()) {
@@ -115,212 +99,220 @@ public class BlockTripWireHook extends Block {
         }
         //
 
-        int i6 = i3 & 3;
-        boolean flag2 = (i3 & 4) == 4;
-        boolean flag3 = (i3 & 8) == 8;
-        boolean flag4 = !flag0;
-        boolean flag5 = false;
-        boolean flag6 = !World.a((IBlockAccess) world, i0, i1 - 1, i2);
-        int i7 = Direction.a[i6];
-        int i8 = Direction.b[i6];
-        int i9 = 0;
-        int[] aint = new int[42];
+        EnumFacing enumfacing = (EnumFacing) iblockstate.b(a);
+        boolean flag2 = ((Boolean) iblockstate.b(M)).booleanValue();
+        boolean flag3 = ((Boolean) iblockstate.b(b)).booleanValue();
+        boolean flag4 = !World.a((IBlockAccess) world, blockpos.b());
+        boolean flag5 = !flag0;
+        boolean flag6 = false;
+        int i1 = 0;
+        IBlockState[] aiblockstate = new IBlockState[42];
 
-        int i10;
-        int i11;
-        int i12;
-        int i13;
+        BlockPos blockpos1;
 
-        for (i10 = 1; i10 < 42; ++i10) {
-            i11 = i0 + i7 * i10;
-            i12 = i2 + i8 * i10;
-            Block block = world.a(i11, i1, i12);
+        for (int i2 = 1; i2 < 42; ++i2) {
+            blockpos1 = blockpos.a(enumfacing, i2);
+            IBlockState iblockstate2 = world.p(blockpos1);
 
-            if (block == Blocks.bC) {
-                i13 = world.e(i11, i1, i12);
-                if ((i13 & 3) == Direction.f[i6]) {
-                    i9 = i10;
+            if (iblockstate2.c() == Blocks.bR) {
+                if (iblockstate2.b(a) == enumfacing.d()) {
+                    i1 = i2;
                 }
                 break;
             }
 
-            if (block != Blocks.bD && i10 != i4) {
-                aint[i10] = -1;
-                flag4 = false;
-            }
-            else {
-                i13 = i10 == i4 ? i5 : world.e(i11, i1, i12);
-                boolean flag7 = (i13 & 8) != 8;
-                boolean flag8 = (i13 & 1) == 1;
-                boolean flag9 = (i13 & 2) == 2;
+            if (iblockstate2.c() != Blocks.bS && i2 != i0) {
+                aiblockstate[i2] = null;
+                flag5 = false;
+            } else {
+                if (i2 == i0) {
+                    iblockstate2 = (IBlockState) Objects.firstNonNull(iblockstate1, iblockstate2);
+                }
 
-                flag4 &= flag9 == flag6;
-                flag5 |= flag7 && flag8;
-                aint[i10] = i13;
-                if (i10 == i4) {
-                    world.a(i0, i1, i2, this, this.a(world));
-                    flag4 &= flag7;
+                boolean flag7 = !((Boolean) iblockstate2.b(BlockTripWire.N)).booleanValue();
+                boolean flag8 = ((Boolean) iblockstate2.b(BlockTripWire.a)).booleanValue();
+                boolean flag9 = ((Boolean) iblockstate2.b(BlockTripWire.b)).booleanValue();
+
+                flag5 &= flag9 == flag4;
+                flag6 |= flag7 && flag8;
+                aiblockstate[i2] = iblockstate2;
+                if (i2 == i0) {
+                    world.a(blockpos, (Block) this, this.a(world));
+                    flag5 &= flag7;
                 }
             }
         }
 
-        flag4 &= i9 > 1;
-        flag5 &= flag4;
-        i10 = (flag4 ? 4 : 0) | (flag5 ? 8 : 0);
-        i3 = i6 | i10;
-        int i14;
+        flag5 &= i1 > 1;
+        flag6 &= flag5;
+        IBlockState iblockstate3 = this.P().a(M, Boolean.valueOf(flag5)).a(b, Boolean.valueOf(flag6));
 
-        if (i9 > 0) {
-            i11 = i0 + i7 * i9;
-            i12 = i2 + i8 * i9;
-            i14 = Direction.f[i6];
-            world.a(i11, i1, i12, i14 | i10, 3);
-            this.a(world, i11, i1, i12, i14);
-            this.a(world, i11, i1, i12, flag4, flag5, flag2, flag3);
+        if (i1 > 0) {
+            blockpos1 = blockpos.a(enumfacing, i1);
+            EnumFacing enumfacing1 = enumfacing.d();
+
+            world.a(blockpos1, iblockstate3.a(a, enumfacing1), 3);
+            this.b(world, blockpos1, enumfacing1);
+            this.a(world, blockpos1, flag5, flag6, flag2, flag3);
         }
 
-        this.a(world, i0, i1, i2, flag4, flag5, flag2, flag3);
+        this.a(world, blockpos, flag5, flag6, flag2, flag3);
         if (!flag0) {
-            world.a(i0, i1, i2, i3, 3);
+            world.a(blockpos, iblockstate3.a(a, enumfacing), 3);
             if (flag1) {
-                this.a(world, i0, i1, i2, i6);
+                this.b(world, blockpos, enumfacing);
             }
         }
 
-        if (flag2 != flag4) {
-            for (i11 = 1; i11 < i9; ++i11) {
-                i12 = i0 + i7 * i11;
-                i14 = i2 + i8 * i11;
-                i13 = aint[i11];
-                if (i13 >= 0) {
-                    if (flag4) {
-                        i13 |= 4;
-                    }
-                    else {
-                        i13 &= -5;
-                    }
+        if (flag2 != flag5) {
+            for (int i3 = 1; i3 < i1; ++i3) {
+                BlockPos blockpos2 = blockpos.a(enumfacing, i3);
+                IBlockState iblockstate4 = aiblockstate[i3];
 
-                    world.a(i12, i1, i14, i13, 3);
+                if (iblockstate4 != null && world.p(blockpos2).c() != Blocks.a) {
+                    world.a(blockpos2, iblockstate4.a(M, Boolean.valueOf(flag5)), 3);
                 }
             }
         }
 
     }
 
-    public void a(World world, int i0, int i1, int i2, Random random) {
-        this.a(world, i0, i1, i2, false, world.e(i0, i1, i2), true, -1, 0);
+    public void a(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {}
+
+    public void b(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {
+        this.a(world, blockpos, iblockstate, false, true, -1, (IBlockState) null);
     }
 
-    private void a(World world, int i0, int i1, int i2, boolean flag0, boolean flag1, boolean flag2, boolean flag3) {
+    private void a(World world, BlockPos blockpos, boolean flag0, boolean flag1, boolean flag2, boolean flag3) {
         if (flag1 && !flag3) {
-            world.a((double) i0 + 0.5D, (double) i1 + 0.1D, (double) i2 + 0.5D, "random.click", 0.4F, 0.6F);
-        }
-        else if (!flag1 && flag3) {
-            world.a((double) i0 + 0.5D, (double) i1 + 0.1D, (double) i2 + 0.5D, "random.click", 0.4F, 0.5F);
-        }
-        else if (flag0 && !flag2) {
-            world.a((double) i0 + 0.5D, (double) i1 + 0.1D, (double) i2 + 0.5D, "random.click", 0.4F, 0.7F);
-        }
-        else if (!flag0 && flag2) {
-            world.a((double) i0 + 0.5D, (double) i1 + 0.1D, (double) i2 + 0.5D, "random.bowhit", 0.4F, 1.2F / (world.s.nextFloat() * 0.2F + 0.9F));
+            world.a((double) blockpos.n() + 0.5D, (double) blockpos.o() + 0.1D, (double) blockpos.p() + 0.5D, "random.click", 0.4F, 0.6F);
+        } else if (!flag1 && flag3) {
+            world.a((double) blockpos.n() + 0.5D, (double) blockpos.o() + 0.1D, (double) blockpos.p() + 0.5D, "random.click", 0.4F, 0.5F);
+        } else if (flag0 && !flag2) {
+            world.a((double) blockpos.n() + 0.5D, (double) blockpos.o() + 0.1D, (double) blockpos.p() + 0.5D, "random.click", 0.4F, 0.7F);
+        } else if (!flag0 && flag2) {
+            world.a((double) blockpos.n() + 0.5D, (double) blockpos.o() + 0.1D, (double) blockpos.p() + 0.5D, "random.bowhit", 0.4F, 1.2F / (world.s.nextFloat() * 0.2F + 0.9F));
         }
 
     }
 
-    private void a(World world, int i0, int i1, int i2, int i3) {
-        world.d(i0, i1, i2, this);
-        if (i3 == 3) {
-            world.d(i0 - 1, i1, i2, this);
-        }
-        else if (i3 == 1) {
-            world.d(i0 + 1, i1, i2, this);
-        }
-        else if (i3 == 0) {
-            world.d(i0, i1, i2 - 1, this);
-        }
-        else if (i3 == 2) {
-            world.d(i0, i1, i2 + 1, this);
-        }
-
+    private void b(World world, BlockPos blockpos, EnumFacing enumfacing) {
+        world.c(blockpos, (Block) this);
+        world.c(blockpos.a(enumfacing.d()), (Block) this);
     }
 
-    private boolean e(World world, int i0, int i1, int i2) {
-        if (!this.c(world, i0, i1, i2)) {
-            this.b(world, i0, i1, i2, world.e(i0, i1, i2), 0);
-            world.f(i0, i1, i2);
+    private boolean e(World world, BlockPos blockpos, IBlockState iblockstate) {
+        if (!this.c(world, blockpos)) {
+            this.b(world, blockpos, iblockstate, 0);
+            world.g(blockpos);
             return false;
-        }
-        else {
+        } else {
             return true;
         }
     }
 
-    public void a(IBlockAccess iblockaccess, int i0, int i1, int i2) {
-        int i3 = iblockaccess.e(i0, i1, i2) & 3;
+    public void a(IBlockAccess iblockaccess, BlockPos blockpos) {
         float f0 = 0.1875F;
 
-        if (i3 == 3) {
-            this.a(0.0F, 0.2F, 0.5F - f0, f0 * 2.0F, 0.8F, 0.5F + f0);
-        }
-        else if (i3 == 1) {
-            this.a(1.0F - f0 * 2.0F, 0.2F, 0.5F - f0, 1.0F, 0.8F, 0.5F + f0);
-        }
-        else if (i3 == 0) {
-            this.a(0.5F - f0, 0.2F, 0.0F, 0.5F + f0, 0.8F, f0 * 2.0F);
-        }
-        else if (i3 == 2) {
-            this.a(0.5F - f0, 0.2F, 1.0F - f0 * 2.0F, 0.5F + f0, 0.8F, 1.0F);
+        switch (BlockTripWireHook.SwitchEnumFacing.a[((EnumFacing) iblockaccess.p(blockpos).b(a)).ordinal()]) {
+            case 1:
+                this.a(0.0F, 0.2F, 0.5F - f0, f0 * 2.0F, 0.8F, 0.5F + f0);
+                break;
+
+            case 2:
+                this.a(1.0F - f0 * 2.0F, 0.2F, 0.5F - f0, 1.0F, 0.8F, 0.5F + f0);
+                break;
+
+            case 3:
+                this.a(0.5F - f0, 0.2F, 0.0F, 0.5F + f0, 0.8F, f0 * 2.0F);
+                break;
+
+            case 4:
+                this.a(0.5F - f0, 0.2F, 1.0F - f0 * 2.0F, 0.5F + f0, 0.8F, 1.0F);
         }
 
     }
 
-    public void a(World world, int i0, int i1, int i2, Block block, int i3) {
-        boolean flag0 = (i3 & 4) == 4;
-        boolean flag1 = (i3 & 8) == 8;
+    public void b(World world, BlockPos blockpos, IBlockState iblockstate) {
+        boolean flag0 = ((Boolean) iblockstate.b(M)).booleanValue();
+        boolean flag1 = ((Boolean) iblockstate.b(b)).booleanValue();
 
         if (flag0 || flag1) {
-            this.a(world, i0, i1, i2, true, i3, false, -1, 0);
+            this.a(world, blockpos, iblockstate, true, false, -1, (IBlockState) null);
         }
 
         if (flag1) {
-            world.d(i0, i1, i2, this);
-            int i4 = i3 & 3;
-
-            if (i4 == 3) {
-                world.d(i0 - 1, i1, i2, this);
-            }
-            else if (i4 == 1) {
-                world.d(i0 + 1, i1, i2, this);
-            }
-            else if (i4 == 0) {
-                world.d(i0, i1, i2 - 1, this);
-            }
-            else if (i4 == 2) {
-                world.d(i0, i1, i2 + 1, this);
-            }
+            world.c(blockpos, (Block) this);
+            world.c(blockpos.a(((EnumFacing) iblockstate.b(a)).d()), (Block) this);
         }
 
-        super.a(world, i0, i1, i2, block, i3);
+        super.b(world, blockpos, iblockstate);
     }
 
-    public int b(IBlockAccess iblockaccess, int i0, int i1, int i2, int i3) {
-        return (iblockaccess.e(i0, i1, i2) & 8) == 8 ? 15 : 0;
+    public int a(IBlockAccess iblockaccess, BlockPos blockpos, IBlockState iblockstate, EnumFacing enumfacing) {
+        return ((Boolean) iblockstate.b(b)).booleanValue() ? 15 : 0;
     }
 
-    public int c(IBlockAccess iblockaccess, int i0, int i1, int i2, int i3) {
-        int i4 = iblockaccess.e(i0, i1, i2);
-
-        if ((i4 & 8) != 8) {
-            return 0;
-        }
-        else {
-            int i5 = i4 & 3;
-
-            return i5 == 2 && i3 == 2 ? 15 : (i5 == 0 && i3 == 3 ? 15 : (i5 == 1 && i3 == 4 ? 15 : (i5 == 3 && i3 == 5 ? 15 : 0)));
-        }
+    public int b(IBlockAccess iblockaccess, BlockPos blockpos, IBlockState iblockstate, EnumFacing enumfacing) {
+        return !((Boolean) iblockstate.b(b)).booleanValue() ? 0 : (iblockstate.b(a) == enumfacing ? 15 : 0);
     }
 
-    public boolean f() {
+    public boolean g() {
         return true;
+    }
+
+    public IBlockState a(int i0) {
+        return this.P().a(a, EnumFacing.b(i0 & 3)).a(b, Boolean.valueOf((i0 & 8) > 0)).a(M, Boolean.valueOf((i0 & 4) > 0));
+    }
+
+    public int c(IBlockState iblockstate) {
+        byte b0 = 0;
+        int i0 = b0 | ((EnumFacing) iblockstate.b(a)).b();
+
+        if (((Boolean) iblockstate.b(b)).booleanValue()) {
+            i0 |= 8;
+        }
+
+        if (((Boolean) iblockstate.b(M)).booleanValue()) {
+            i0 |= 4;
+        }
+
+        return i0;
+    }
+
+    protected BlockState e() {
+        return new BlockState(this, new IProperty[] { a, b, M, N});
+    }
+
+    static final class SwitchEnumFacing {
+
+        static final int[] a = new int[EnumFacing.values().length];
+      
+        static {
+            try {
+                a[EnumFacing.EAST.ordinal()] = 1;
+            } catch (NoSuchFieldError nosuchfielderror) {
+                ;
+            }
+
+            try {
+                a[EnumFacing.WEST.ordinal()] = 2;
+            } catch (NoSuchFieldError nosuchfielderror1) {
+                ;
+            }
+
+            try {
+                a[EnumFacing.SOUTH.ordinal()] = 3;
+            } catch (NoSuchFieldError nosuchfielderror2) {
+                ;
+            }
+
+            try {
+                a[EnumFacing.NORTH.ordinal()] = 4;
+            } catch (NoSuchFieldError nosuchfielderror3) {
+                ;
+            }
+
+        }
     }
 }

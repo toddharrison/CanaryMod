@@ -18,34 +18,32 @@ import java.util.Random;
 
 public class BlockTNT extends Block {
 
+    public static final PropertyBool a = PropertyBool.a("explode");
+   
     public BlockTNT() {
         super(Material.u);
+        this.j(this.L.b().a(a, Boolean.valueOf(false)));
         this.a(CreativeTabs.d);
     }
 
-    public void b(World world, int i0, int i1, int i2) {
-        super.b(world, i0, i1, i2);
-        if (world.v(i0, i1, i2)) {
-            // this.b(world, i0, i1, i2, 1);
-            this.a(world, i0, i1, i2, 1, null, ActivationCause.REDSTONE); // CanaryMod: REDSTONE cause
-            world.f(i0, i1, i2);
+    public void c(World world, BlockPos blockpos, IBlockState iblockstate) {
+        super.c(world, blockpos, iblockstate);
+        if (world.z(blockpos)) {
+            this.d(world, blockpos, iblockstate.a(a, Boolean.valueOf(true)));
+            world.g(blockpos);
+        }
+
+    }
+
+    public void a(World world, BlockPos blockpos, IBlockState iblockstate, Block block) {
+        if (world.z(blockpos)) {
+            this.d(world, blockpos, iblockstate.a(a, Boolean.valueOf(true)));
+            world.g(blockpos);
         }
     }
 
-    public void a(World world, int i0, int i1, int i2, Block block) {
-        if (world.v(i0, i1, i2)) {
-            // this.b(world, i0, i1, i2, 1);
-            this.a(world, i0, i1, i2, 1, null, ActivationCause.REDSTONE); // CanaryMod: REDSTONE cause
-            world.f(i0, i1, i2);
-        }
-    }
-
-    public int a(Random random) {
-        return 1;
-    }
-
-    public void a(World world, int i0, int i1, int i2, Explosion explosion) {
-        if (!world.E) {
+    public void a(World world, BlockPos blockpos, Explosion explosion) {
+        if (!world.D) {
             // CanaryMod: TNTActivateHook
             TNTActivateHook tah = (TNTActivateHook) new TNTActivateHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), null, ActivationCause.EXPLOSION).call();
             if (!tah.isCanceled()) {
@@ -53,7 +51,7 @@ public class BlockTNT extends Block {
 
                 entitytntprimed.a = world.s.nextInt(entitytntprimed.a / 4) + entitytntprimed.a / 8;
                 world.d((Entity) entitytntprimed);
-            }
+        }
             //
         }
     }

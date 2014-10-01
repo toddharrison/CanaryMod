@@ -15,35 +15,35 @@ import java.util.Random;
 
 public class BlockSapling extends BlockBush implements IGrowable {
 
-    public static final String[] a = new String[]{"oak", "spruce", "birch", "jungle", "acacia", "roofed_oak"};
-    private static final IIcon[] b = new IIcon[a.length];
-
+    public static final PropertyEnum a = PropertyEnum.a("type", BlockPlanks.EnumType.class);
+    public static final PropertyInteger b = PropertyInteger.a("stage", 0, 1);
+   
     protected BlockSapling() {
+        this.j(this.L.b().a(a, BlockPlanks.EnumType.OAK).a(b, Integer.valueOf(0)));
         float f0 = 0.4F;
 
         this.a(0.5F - f0, 0.0F, 0.5F - f0, 0.5F + f0, f0 * 2.0F, 0.5F + f0);
         this.a(CreativeTabs.c);
     }
 
-    public void a(World world, int i0, int i1, int i2, Random random) {
-        if (!world.E) {
-            super.a(world, i0, i1, i2, random);
-            if (world.k(i0, i1 + 1, i2) >= 9 && random.nextInt(7) == 0) {
-                this.c(world, i0, i1, i2, random);
+    public void b(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {
+        if (!world.D) {
+            super.b(world, blockpos, iblockstate, random);
+            if (world.l(blockpos.a()) >= 9 && random.nextInt(7) == 0) {
+                this.d(world, blockpos, iblockstate, random);
             }
+
         }
     }
 
-    public void c(World world, int i0, int i1, int i2, Random random) {
-        int i3 = world.e(i0, i1, i2);
-
-        if ((i3 & 8) == 0) {
+    public void d(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {
+        if (((Integer) iblockstate.b(b)).intValue() == 0) {
             // CanaryMod: BlockGrowHook
             CanaryBlock growth = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
             growth.setData((short) (i3 | 8));
             BlockGrowHook blockGrowHook = new BlockGrowHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), growth);
             if (!blockGrowHook.isCanceled()) {
-                world.a(i0, i1, i2, i3 | 8, 4);
+                world.a(blockpos, iblockstate.a(b), 4);
             }
             //
         }
@@ -51,29 +51,24 @@ public class BlockSapling extends BlockBush implements IGrowable {
             // CanaryMod: TreeGrow; If someone figures out how to get more information into this, let me know - darkdiplomat;
             TreeGrowHook hook = (TreeGrowHook) new TreeGrowHook(world.getCanaryWorld().getBlockAt(i0, i1, i2)).call();
             if (!hook.isCanceled()) {
-                this.d(world, i0, i1, i2, random);
+                this.e(world, blockpos, iblockstate, random);
             }
             //
         }
     }
 
-    public void d(World world, int i0, int i1, int i2, Random random) {
-        int i3 = world.e(i0, i1, i2) & 7;
+    public void e(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {
         Object object = random.nextInt(10) == 0 ? new WorldGenBigTree(true) : new WorldGenTrees(true);
-        int i4 = 0;
-        int i5 = 0;
+        int i0 = 0;
+        int i1 = 0;
         boolean flag0 = false;
 
-        switch (i3) {
-            case 0:
-            default:
-                break;
-
+        switch (BlockSapling.SwitchEnumType.a[((BlockPlanks.EnumType) iblockstate.b(a)).ordinal()]) {
             case 1:
                 label78:
-                for (i4 = 0; i4 >= -1; --i4) {
-                    for (i5 = 0; i5 >= -1; --i5) {
-                        if (this.a(world, i0 + i4, i1, i2 + i5, 1) && this.a(world, i0 + i4 + 1, i1, i2 + i5, 1) && this.a(world, i0 + i4, i1, i2 + i5 + 1, 1) && this.a(world, i0 + i4 + 1, i1, i2 + i5 + 1, 1)) {
+                for (i0 = 0; i0 >= -1; --i0) {
+                    for (i1 = 0; i1 >= -1; --i1) {
+                        if (this.a(world, blockpos.a(i0, 0, i1), BlockPlanks.EnumType.SPRUCE) && this.a(world, blockpos.a(i0 + 1, 0, i1), BlockPlanks.EnumType.SPRUCE) && this.a(world, blockpos.a(i0, 0, i1 + 1), BlockPlanks.EnumType.SPRUCE) && this.a(world, blockpos.a(i0 + 1, 0, i1 + 1), BlockPlanks.EnumType.SPRUCE)) {
                             object = new WorldGenMegaPineTree(false, random.nextBoolean());
                             flag0 = true;
                             break label78;
@@ -82,8 +77,8 @@ public class BlockSapling extends BlockBush implements IGrowable {
                 }
 
                 if (!flag0) {
-                    i5 = 0;
-                    i4 = 0;
+                    i1 = 0;
+                    i0 = 0;
                     object = new WorldGenTaiga2(true);
                 }
                 break;
@@ -94,10 +89,10 @@ public class BlockSapling extends BlockBush implements IGrowable {
 
             case 3:
                 label93:
-                for (i4 = 0; i4 >= -1; --i4) {
-                    for (i5 = 0; i5 >= -1; --i5) {
-                        if (this.a(world, i0 + i4, i1, i2 + i5, 3) && this.a(world, i0 + i4 + 1, i1, i2 + i5, 3) && this.a(world, i0 + i4, i1, i2 + i5 + 1, 3) && this.a(world, i0 + i4 + 1, i1, i2 + i5 + 1, 3)) {
-                            object = new WorldGenMegaJungle(true, 10, 20, 3, 3);
+                for (i0 = 0; i0 >= -1; --i0) {
+                    for (i1 = 0; i1 >= -1; --i1) {
+                        if (this.a(world, blockpos.a(i0, 0, i1), BlockPlanks.EnumType.JUNGLE) && this.a(world, blockpos.a(i0 + 1, 0, i1), BlockPlanks.EnumType.JUNGLE) && this.a(world, blockpos.a(i0, 0, i1 + 1), BlockPlanks.EnumType.JUNGLE) && this.a(world, blockpos.a(i0 + 1, 0, i1 + 1), BlockPlanks.EnumType.JUNGLE)) {
+                            object = new WorldGenMegaJungle(true, 10, 20, BlockPlanks.EnumType.JUNGLE.a(), BlockPlanks.EnumType.JUNGLE.a());
                             flag0 = true;
                             break label93;
                         }
@@ -105,9 +100,9 @@ public class BlockSapling extends BlockBush implements IGrowable {
                 }
 
                 if (!flag0) {
-                    i5 = 0;
-                    i4 = 0;
-                    object = new WorldGenTrees(true, 4 + random.nextInt(7), 3, 3, false);
+                    i1 = 0;
+                    i0 = 0;
+                    object = new WorldGenTrees(true, 4 + random.nextInt(7), BlockPlanks.EnumType.JUNGLE.a(), BlockPlanks.EnumType.JUNGLE.a(), false);
                 }
                 break;
 
@@ -117,9 +112,9 @@ public class BlockSapling extends BlockBush implements IGrowable {
 
             case 5:
                 label108:
-                for (i4 = 0; i4 >= -1; --i4) {
-                    for (i5 = 0; i5 >= -1; --i5) {
-                        if (this.a(world, i0 + i4, i1, i2 + i5, 5) && this.a(world, i0 + i4 + 1, i1, i2 + i5, 5) && this.a(world, i0 + i4, i1, i2 + i5 + 1, 5) && this.a(world, i0 + i4 + 1, i1, i2 + i5 + 1, 5)) {
+                for (i0 = 0; i0 >= -1; --i0) {
+                    for (i1 = 0; i1 >= -1; --i1) {
+                        if (this.a(world, blockpos.a(i0, 0, i1), BlockPlanks.EnumType.DARK_OAK) && this.a(world, blockpos.a(i0 + 1, 0, i1), BlockPlanks.EnumType.DARK_OAK) && this.a(world, blockpos.a(i0, 0, i1 + 1), BlockPlanks.EnumType.DARK_OAK) && this.a(world, blockpos.a(i0 + 1, 0, i1 + 1), BlockPlanks.EnumType.DARK_OAK)) {
                             object = new WorldGenCanopyTree(true);
                             flag0 = true;
                             break label108;
@@ -130,51 +125,113 @@ public class BlockSapling extends BlockBush implements IGrowable {
                 if (!flag0) {
                     return;
                 }
+
+            case 6:
         }
 
-        Block block = Blocks.a;
+        IBlockState iblockstate1 = Blocks.a.P();
 
         if (flag0) {
-            world.d(i0 + i4, i1, i2 + i5, block, 0, 4);
-            world.d(i0 + i4 + 1, i1, i2 + i5, block, 0, 4);
-            world.d(i0 + i4, i1, i2 + i5 + 1, block, 0, 4);
-            world.d(i0 + i4 + 1, i1, i2 + i5 + 1, block, 0, 4);
-        }
-        else {
-            world.d(i0, i1, i2, block, 0, 4);
+            world.a(blockpos.a(i0, 0, i1), iblockstate1, 4);
+            world.a(blockpos.a(i0 + 1, 0, i1), iblockstate1, 4);
+            world.a(blockpos.a(i0, 0, i1 + 1), iblockstate1, 4);
+            world.a(blockpos.a(i0 + 1, 0, i1 + 1), iblockstate1, 4);
+        } else {
+            world.a(blockpos, iblockstate1, 4);
         }
 
-        if (!((WorldGenerator) object).a(world, random, i0 + i4, i1, i2 + i5)) {
+        if (!((WorldGenerator) object).b(world, random, blockpos.a(i0, 0, i1))) {
             if (flag0) {
-                world.d(i0 + i4, i1, i2 + i5, this, i3, 4);
-                world.d(i0 + i4 + 1, i1, i2 + i5, this, i3, 4);
-                world.d(i0 + i4, i1, i2 + i5 + 1, this, i3, 4);
-                world.d(i0 + i4 + 1, i1, i2 + i5 + 1, this, i3, 4);
-            }
-            else {
-                world.d(i0, i1, i2, this, i3, 4);
+                world.a(blockpos.a(i0, 0, i1), iblockstate, 4);
+                world.a(blockpos.a(i0 + 1, 0, i1), iblockstate, 4);
+                world.a(blockpos.a(i0, 0, i1 + 1), iblockstate, 4);
+                world.a(blockpos.a(i0 + 1, 0, i1 + 1), iblockstate, 4);
+            } else {
+                world.a(blockpos, iblockstate, 4);
             }
         }
+
     }
 
-    public boolean a(World world, int i0, int i1, int i2, int i3) {
-        return world.a(i0, i1, i2) == this && (world.e(i0, i1, i2) & 7) == i3;
+    public boolean a(World world, BlockPos blockpos, BlockPlanks.EnumType blockplanks_enumtype) {
+        IBlockState iblockstate = world.p(blockpos);
+
+        return iblockstate.c() == this && iblockstate.b(a) == blockplanks_enumtype;
     }
 
-    public int a(int i0) {
-        return MathHelper.a(i0 & 7, 0, 5);
+    public int a(IBlockState iblockstate) {
+        return ((BlockPlanks.EnumType) iblockstate.b(a)).a();
     }
 
-    public boolean a(World world, int i0, int i1, int i2, boolean flag0) {
+    public boolean a(World world, BlockPos blockpos, IBlockState iblockstate, boolean flag0) {
         return true;
     }
 
-    public boolean a(World world, Random random, int i0, int i1, int i2) {
+    public boolean a(World world, Random random, BlockPos blockpos, IBlockState iblockstate) {
         return (double) world.s.nextFloat() < 0.45D;
     }
 
-    public void b(World world, Random random, int i0, int i1, int i2) {
-        this.c(world, i0, i1, i2, random);
+    public void b(World world, Random random, BlockPos blockpos, IBlockState iblockstate) {
+        this.d(world, blockpos, iblockstate, random);
     }
 
+    public IBlockState a(int i0) {
+        return this.P().a(a, BlockPlanks.EnumType.a(i0 & 7)).a(b, Integer.valueOf((i0 & 8) >> 3));
+    }
+
+    public int c(IBlockState iblockstate) {
+        byte b0 = 0;
+        int i0 = b0 | ((BlockPlanks.EnumType) iblockstate.b(a)).a();
+
+        i0 |= ((Integer) iblockstate.b(b)).intValue() << 3;
+        return i0;
+    }
+
+    protected BlockState e() {
+        return new BlockState(this, new IProperty[] { a, b});
+    }
+
+    static final class SwitchEnumType {
+
+        static final int[] a = new int[BlockPlanks.EnumType.values().length];
+      
+        static {
+            try {
+                a[BlockPlanks.EnumType.SPRUCE.ordinal()] = 1;
+            } catch (NoSuchFieldError nosuchfielderror) {
+                ;
+            }
+
+            try {
+                a[BlockPlanks.EnumType.BIRCH.ordinal()] = 2;
+            } catch (NoSuchFieldError nosuchfielderror1) {
+                ;
+            }
+
+            try {
+                a[BlockPlanks.EnumType.JUNGLE.ordinal()] = 3;
+            } catch (NoSuchFieldError nosuchfielderror2) {
+                ;
+            }
+
+            try {
+                a[BlockPlanks.EnumType.ACACIA.ordinal()] = 4;
+            } catch (NoSuchFieldError nosuchfielderror3) {
+                ;
+            }
+
+            try {
+                a[BlockPlanks.EnumType.DARK_OAK.ordinal()] = 5;
+            } catch (NoSuchFieldError nosuchfielderror4) {
+                ;
+            }
+
+            try {
+                a[BlockPlanks.EnumType.OAK.ordinal()] = 6;
+            } catch (NoSuchFieldError nosuchfielderror5) {
+                ;
+            }
+
+        }
+    }
 }

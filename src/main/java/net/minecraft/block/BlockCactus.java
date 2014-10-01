@@ -17,46 +17,53 @@ import java.util.Random;
 
 public class BlockCactus extends Block {
 
+    public static final PropertyInteger a = PropertyInteger.a("age", 0, 15);
+   
     protected BlockCactus() {
         super(Material.A);
+        this.j(this.L.b().a(a, Integer.valueOf(0)));
         this.a(true);
         this.a(CreativeTabs.c);
     }
 
-    public void a(World world, int i0, int i1, int i2, Random random) {
-        if (world.c(i0, i1 + 1, i2)) {
-            int i3;
+    public void b(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {
+        BlockPos blockpos1 = blockpos.a();
 
-            for (i3 = 1; world.a(i0, i1 - i3, i2) == this; ++i3) {
+        if (world.d(blockpos1)) {
+            int i0;
+
+            for (i0 = 1; world.p(blockpos.c(i0)).c() == this; ++i0) {
                 ;
             }
 
-            if (i3 < 3) {
-                int i4 = world.e(i0, i1, i2);
+            if (i0 < 3) {
+                int i1 = ((Integer) iblockstate.b(a)).intValue();
 
-                if (i4 == 15) {
+                if (i1 == 15) {
                     // CanaryMod: BlockGrow
                     CanaryBlock original = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
                     CanaryBlock growth = new CanaryBlock(BlockType.Cactus, i0, i1 + 1, i2, world.getCanaryWorld());
                     BlockGrowHook blockGrowHook = (BlockGrowHook) new BlockGrowHook(original, growth).call();
                     if (!blockGrowHook.isCanceled()) {
-                        world.b(i0, i1 + 1, i2, (Block) this);
-                        world.a(i0, i1, i2, 0, 4);
-                        this.a(world, i0, i1 + 1, i2, (Block) this);
+                        world.a(blockpos1, this.P());
+                        IBlockState iblockstate1 = iblockstate.a(a, Integer.valueOf(0));
+
+                        world.a(blockpos, iblockstate1, 4);
+                        this.a(world, blockpos1, iblockstate1, (Block) this);
                     }
                     //
+                } else {
+                    world.a(blockpos, iblockstate.a(a, Integer.valueOf(i1 + 1)), 4);
                 }
-                else {
-                    world.a(i0, i1, i2, i4 + 1, 4);
-                }
+
             }
         }
     }
 
-    public AxisAlignedBB a(World world, int i0, int i1, int i2) {
+    public AxisAlignedBB a(World world, BlockPos blockpos, IBlockState iblockstate) {
         float f0 = 0.0625F;
 
-        return AxisAlignedBB.a((double) ((float) i0 + f0), (double) i1, (double) ((float) i2 + f0), (double) ((float) (i0 + 1) - f0), (double) ((float) (i1 + 1) - f0), (double) ((float) (i2 + 1) - f0));
+        return new AxisAlignedBB((double) ((float) blockpos.n() + f0), (double) blockpos.o(), (double) ((float) blockpos.p() + f0), (double) ((float) (blockpos.n() + 1) - f0), (double) ((float) (blockpos.o() + 1) - f0), (double) ((float) (blockpos.p() + 1) - f0));
     }
 
     public boolean d() {
@@ -67,46 +74,52 @@ public class BlockCactus extends Block {
         return false;
     }
 
-    public int b() {
-        return 13;
+    public boolean c(World world, BlockPos blockpos) {
+        return super.c(world, blockpos) ? this.d(world, blockpos) : false;
     }
 
-    public boolean c(World world, int i0, int i1, int i2) {
-        return !super.c(world, i0, i1, i2) ? false : this.j(world, i0, i1, i2);
+    public void a(World world, BlockPos blockpos, IBlockState iblockstate, Block block) {
+        if (!this.d(world, blockpos)) {
+            world.b(blockpos, true);
+        }
+
     }
 
-    public void a(World world, int i0, int i1, int i2, Block block) {
-        if (!this.j(world, i0, i1, i2)) {
-            world.a(i0, i1, i2, true);
+    public boolean d(World world, BlockPos blockpos) {
+        Iterator iterator = EnumFacing.Plane.HORIZONTAL.iterator();
+
+        while (iterator.hasNext()) {
+            EnumFacing enumfacing = (EnumFacing) iterator.next();
+
+            if (world.p(blockpos.a(enumfacing)).c().r().a()) {
+                return false;
+            }
         }
+
+        Block block = world.p(blockpos.b()).c();
+
+        return block == Blocks.aK || block == Blocks.m;
     }
 
-    public boolean j(World world, int i0, int i1, int i2) {
-        if (world.a(i0 - 1, i1, i2).o().a()) {
-            return false;
-        }
-        else if (world.a(i0 + 1, i1, i2).o().a()) {
-            return false;
-        }
-        else if (world.a(i0, i1, i2 - 1).o().a()) {
-            return false;
-        }
-        else if (world.a(i0, i1, i2 + 1).o().a()) {
-            return false;
-        }
-        else {
-            Block block = world.a(i0, i1 - 1, i2);
-
-            return block == Blocks.aF || block == Blocks.m;
-        }
-    }
-
-    public void a(World world, int i0, int i1, int i2, Entity entity) {
+    public void a(World world, BlockPos blockpos, IBlockState iblockstate, Entity entity) {
         // CanaryMod: Damage (Craptus)
         DamageHook hook = (DamageHook) new DamageHook(null, entity.getCanaryEntity(), new CanaryDamageSource(DamageSource.g), 1.0F).call();
         if (!hook.isCanceled()) {
-            entity.a((((CanaryDamageSource) hook.getDamageSource()).getHandle()), hook.getDamageDealt());
+        entity.a(DamageSource.h, 1.0F);
         }
         //
     }
+
+    public IBlockState a(int i0) {
+        return this.P().a(a, Integer.valueOf(i0));
+    }
+
+    public int c(IBlockState iblockstate) {
+        return ((Integer) iblockstate.b(a)).intValue();
+    }
+
+    protected BlockState e() {
+        return new BlockState(this, new IProperty[] { a});
+    }
+
 }

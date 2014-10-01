@@ -17,25 +17,27 @@ public class BlockStaticLiquid extends BlockLiquid {
         if (material == Material.i) {
             this.a(true);
         }
+
     }
 
-    public void a(World world, int i0, int i1, int i2, Block block) {
-        super.a(world, i0, i1, i2, block);
-        if (world.a(i0, i1, i2) == this) {
-            this.n(world, i0, i1, i2);
+    public void a(World world, BlockPos blockpos, IBlockState iblockstate, Block block) {
+        if (!this.e(world, blockpos, iblockstate)) {
+            this.f(world, blockpos, iblockstate);
         }
+
     }
 
-    private void n(World world, int i0, int i1, int i2) {
-        int i3 = world.e(i0, i1, i2);
+    private void f(World world, BlockPos blockpos, IBlockState iblockstate) {
+        BlockDynamicLiquid blockdynamicliquid = a(this.J);
 
-        world.d(i0, i1, i2, Block.e(Block.b((Block) this) - 1), i3, 2);
-        world.a(i0, i1, i2, Block.e(Block.b((Block) this) - 1), this.a(world));
+        world.a(blockpos, blockdynamicliquid.P().a(b, iblockstate.b(b)), 2);
+        world.a(blockpos, (Block) blockdynamicliquid, this.a(world));
     }
 
-    public void a(World world, int i0, int i1, int i2, Random random) {
+    public void b(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {
         if (this.J == Material.i) {
-            int i3 = random.nextInt(3);
+            if (world.Q().b("doFireTick")) {
+                int i0 = random.nextInt(3);
 
             // CanaryMod: Ignition
             CanaryBlock ignited = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
@@ -47,41 +49,53 @@ public class BlockStaticLiquid extends BlockLiquid {
             }
             //
 
-            int i4;
+            int i0 = random.nextInt(3);
 
-            for (i4 = 0; i4 < i3; ++i4) {
-                i0 += random.nextInt(3) - 1;
-                ++i1;
-                i2 += random.nextInt(3) - 1;
-                Block block = world.a(i0, i1, i2);
+            if (i0 > 0) {
+                BlockPos blockpos1 = blockpos;
 
-                if (block.J == Material.a) {
-                    if (this.o(world, i0 - 1, i1, i2) || this.o(world, i0 + 1, i1, i2) || this.o(world, i0, i1, i2 - 1) || this.o(world, i0, i1, i2 + 1) || this.o(world, i0, i1 - 1, i2) || this.o(world, i0, i1 + 1, i2)) {
-                        world.b(i0, i1, i2, (Block) Blocks.ab);
+                for (int i1 = 0; i1 < i0; ++i1) {
+                    blockpos1 = blockpos1.a(random.nextInt(3) - 1, 1, random.nextInt(3) - 1);
+                    Block block = world.p(blockpos1).c();
+
+                    if (block.J == Material.a) {
+                        if (this.e(world, blockpos1)) {
+                            world.a(blockpos1, Blocks.ab.P());
+                            return;
+                        }
+                    } else if (block.J.c()) {
                         return;
                     }
                 }
-                else if (block.J.c()) {
-                    return;
-                }
-            }
+            } else {
+                for (int i2 = 0; i2 < 3; ++i2) {
+                    BlockPos blockpos2 = blockpos.a(random.nextInt(3) - 1, 0, random.nextInt(3) - 1);
 
-            if (i3 == 0) {
-                i4 = i0;
-                int i5 = i2;
-
-                for (int i6 = 0; i6 < 3; ++i6) {
-                    i0 = i4 + random.nextInt(3) - 1;
-                    i2 = i5 + random.nextInt(3) - 1;
-                    if (world.c(i0, i1 + 1, i2) && this.o(world, i0, i1, i2)) {
-                        world.b(i0, i1 + 1, i2, (Block) Blocks.ab);
+                    if (world.d(blockpos2.a()) && this.m(world, blockpos2)) {
+                        world.a(blockpos2.a(), Blocks.ab.P());
                     }
                 }
+
             }
         }
     }
 
-    private boolean o(World world, int i0, int i1, int i2) {
-        return world.a(i0, i1, i2).o().h();
+    protected boolean e(World world, BlockPos blockpos) {
+        EnumFacing[] aenumfacing = EnumFacing.values();
+        int i0 = aenumfacing.length;
+
+        for (int i1 = 0; i1 < i0; ++i1) {
+            EnumFacing enumfacing = aenumfacing[i1];
+
+            if (this.m(world, blockpos.a(enumfacing))) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean m(World world, BlockPos blockpos) {
+        return world.p(blockpos).c().r().h();
     }
 }

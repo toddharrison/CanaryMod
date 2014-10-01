@@ -16,11 +16,11 @@ public class BlockCompressedPowered extends BlockCompressed {
         this.a(CreativeTabs.d);
     }
 
-    public boolean f() {
+    public boolean g() {
         return true;
     }
 
-    public int b(IBlockAccess iblockaccess, int i0, int i1, int i2, int i3) {
+    public int a(IBlockAccess iblockaccess, BlockPos blockpos, IBlockState iblockstate, EnumFacing enumfacing) {
         return 15;
     }
 
