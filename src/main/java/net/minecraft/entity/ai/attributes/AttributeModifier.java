@@ -2,8 +2,12 @@ package net.minecraft.entity.ai.attributes;
 
 import net.canarymod.api.attributes.CanaryAttributeModifier;
 import org.apache.commons.lang3.Validate;
-
+import io.netty.util.internal.ThreadLocalRandom;
+import java.util.Random;
 import java.util.UUID;
+import net.minecraft.util.MathHelper;
+import org.apache.commons.lang3.Validate;
+
 
 public class AttributeModifier {
 
@@ -15,7 +19,7 @@ public class AttributeModifier {
     private CanaryAttributeModifier canaryAttributeModifier;
 
     public AttributeModifier(String s0, double d0, int i0) {
-        this(UUID.randomUUID(), s0, d0, i0);
+        this(MathHelper.a((Random) ThreadLocalRandom.current()), s0, d0, i0);
     }
 
     public AttributeModifier(UUID uuid, String s0, double d0, int i0) {
@@ -25,8 +29,10 @@ public class AttributeModifier {
         this.a = d0;
         this.b = i0;
         Validate.notEmpty(s0, "Modifier name cannot be empty", new Object[0]);
-        Validate.inclusiveBetween(Integer.valueOf(0), Integer.valueOf(2), Integer.valueOf(i0), "Invalid operation", new Object[0]);
+        Validate.inclusiveBetween(0L, 2L, (long) i0, "Invalid operation");
+        // CanaryMod: set our variables    
         this.canaryAttributeModifier = new CanaryAttributeModifier(this);
+        // End    
     }
 
     public UUID a() {

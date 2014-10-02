@@ -5,6 +5,8 @@ import net.canarymod.api.attributes.CanaryModifiedAttribute;
 
 import java.util.Collection;
 import java.util.UUID;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.IAttribute;
 
 
 public interface IAttributeInstance {
@@ -15,13 +17,17 @@ public interface IAttributeInstance {
 
     void a(double d0);
 
+    Collection a(int i0);
+
     Collection c();
+
+    boolean a(AttributeModifier attributemodifier);
 
     AttributeModifier a(UUID uuid);
 
-    void a(AttributeModifier attributemodifier);
-
     void b(AttributeModifier attributemodifier);
+
+    void c(AttributeModifier attributemodifier);
 
     double e();
 
