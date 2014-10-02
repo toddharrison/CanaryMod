@@ -33,8 +33,7 @@ public class CommandSaveOff extends CommandBase {
 
         if (flag0) {
             a(icommandsender, this, "commands.save.disabled", new Object[0]);
-        }
-        else {
+        } else {
             throw new CommandException("commands.save-off.alreadyOff", new Object[0]);
         }
     }

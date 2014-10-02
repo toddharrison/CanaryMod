@@ -3,7 +3,25 @@ package net.minecraft.command;
 
 import net.canarymod.Canary;
 import net.canarymod.chat.MessageReceiver;
-import net.minecraft.entity.player.EntityPlayerMP;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Map.Entry;
+import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
+import net.minecraft.command.CommandResultStats;
+import net.minecraft.command.ICommand;
+import net.minecraft.command.ICommandManager;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.command.PlayerSelector;
+import net.minecraft.command.WrongUsageException;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumChatFormatting;
 import org.apache.logging.log4j.LogManager;
@@ -16,9 +34,9 @@ import java.util.Map.Entry;
 public class CommandHandler implements ICommandManager {
 
     private static final Logger a = LogManager.getLogger();
-    private final Map b = new HashMap();
-    private final Set c = new HashSet();
-
+    private final Map b = Maps.newHashMap();
+    private final Set c = Sets.newHashSet();
+   
     public int a(ICommandSender icommandsender, String s0) {
         s0 = s0.trim();
         if (s0.startsWith("/")) {
@@ -35,84 +53,79 @@ public class CommandHandler implements ICommandManager {
 
         ChatComponentTranslation chatcomponenttranslation;
 
-        try {
-            if (icommand == null) {
-                throw new CommandNotFoundException();
-            }
+        if (icommand == null) {
+            chatcomponenttranslation = new ChatComponentTranslation("commands.generic.notFound", new Object[0]);
+            chatcomponenttranslation.b().a(EnumChatFormatting.RED);
+            icommandsender.a(chatcomponenttranslation);
+        } else if (icommand.a(icommandsender)) {
+            if (i0 > -1) {
+                List list = PlayerSelector.b(icommandsender, astring[i0], Entity.class);
+                String s2 = astring[i0];
 
-            if (icommand.a(icommandsender)) {
-                if (i0 > -1) {
-                    EntityPlayerMP[] aentityplayermp = PlayerSelector.c(icommandsender, astring[i0]);
-                    String s2 = astring[i0];
-                    EntityPlayerMP[] aentityplayermp1 = aentityplayermp;
-                    int i2 = aentityplayermp.length;
+                icommandsender.a(CommandResultStats.Type.AFFECTED_ENTITIES, list.size());
+                Iterator iterator = list.iterator();
 
-                    for (int i3 = 0; i3 < i2; ++i3) {
-                        EntityPlayerMP entityplayermp = aentityplayermp1[i3];
+                while (iterator.hasNext()) {
+                    Entity entity = (Entity) iterator.next();
 
-                        astring[i0] = entityplayermp.b_();
-
-                        try {
-                            icommand.b(icommandsender, astring);
-                            ++i1;
-                        }
-                        catch (CommandException commandexception) {
-                            ChatComponentTranslation chatcomponenttranslation1 = new ChatComponentTranslation(commandexception.getMessage(), commandexception.a());
-
-                            chatcomponenttranslation1.b().a(EnumChatFormatting.RED);
-                            icommandsender.a(chatcomponenttranslation1);
-                        }
+                    astring[i0] = entity.aJ().toString();
+                    if (this.a(icommandsender, astring, icommand, s0)) {
+                        ++i1;
                     }
-
-                    astring[i0] = s2;
                 }
-                else {
-                    icommand.b(icommandsender, astring);
+
+                astring[i0] = s2;
+            } else {
+                icommandsender.a(CommandResultStats.Type.AFFECTED_ENTITIES, 1);
+                if (this.a(icommandsender, astring, icommand, s0)) {
                     ++i1;
                 }
             }
-            else {
-                ChatComponentTranslation chatcomponenttranslation2 = new ChatComponentTranslation("commands.generic.permission", new Object[0]);
-
-                chatcomponenttranslation2.b().a(EnumChatFormatting.RED);
-                icommandsender.a(chatcomponenttranslation2);
-            }
-        }
-        catch (WrongUsageException wrongusageexception) {
-            chatcomponenttranslation = new ChatComponentTranslation("commands.generic.usage", new Object[]{new ChatComponentTranslation(wrongusageexception.getMessage(), wrongusageexception.a())});
+        } else {
+            chatcomponenttranslation = new ChatComponentTranslation("commands.generic.permission", new Object[0]);
             chatcomponenttranslation.b().a(EnumChatFormatting.RED);
             icommandsender.a(chatcomponenttranslation);
-        }
-        catch (CommandException commandexception1) {
-            chatcomponenttranslation = new ChatComponentTranslation(commandexception1.getMessage(), commandexception1.a());
-            chatcomponenttranslation.b().a(EnumChatFormatting.RED);
-            icommandsender.a(chatcomponenttranslation);
-        }
-        catch (Throwable throwable) {
-            chatcomponenttranslation = new ChatComponentTranslation("commands.generic.exception", new Object[0]);
-            chatcomponenttranslation.b().a(EnumChatFormatting.RED);
-            icommandsender.a(chatcomponenttranslation);
-            a.error("Couldn\'t process command", throwable);
         }
 
+        icommandsender.a(CommandResultStats.Type.SUCCESS_COUNT, i1);
         return i1;
     }
 
-    public ICommand a(ICommand icommand) {
-        List list = icommand.b();
+    protected boolean a(ICommandSender icommandsender, String[] astring, ICommand icommand, String s0) {
+        ChatComponentTranslation chatcomponenttranslation;
 
+        try {
+            icommand.a(icommandsender, astring);
+            return true;
+        } catch (WrongUsageException wrongusageexception) {
+            chatcomponenttranslation = new ChatComponentTranslation("commands.generic.usage", new Object[] { new ChatComponentTranslation(wrongusageexception.getMessage(), wrongusageexception.a())});
+            chatcomponenttranslation.b().a(EnumChatFormatting.RED);
+            icommandsender.a(chatcomponenttranslation);
+        } catch (CommandException commandexception) {
+            chatcomponenttranslation = new ChatComponentTranslation(commandexception.getMessage(), commandexception.a());
+            chatcomponenttranslation.b().a(EnumChatFormatting.RED);
+            icommandsender.a(chatcomponenttranslation);
+        } catch (Throwable throwable) {
+            chatcomponenttranslation = new ChatComponentTranslation("commands.generic.exception", new Object[0]);
+            chatcomponenttranslation.b().a(EnumChatFormatting.RED);
+            icommandsender.a(chatcomponenttranslation);
+            a.error("Couldn\'t process command: \'" + s0 + "\'", throwable);
+        }
+
+        return false;
+    }
+
+    public ICommand a(ICommand icommand) {
         this.b.put(icommand.c(), icommand);
         this.c.add(icommand);
-        if (list != null) {
-            Iterator iterator = list.iterator();
+        Iterator iterator = icommand.b().iterator();
 
-            while (iterator.hasNext()) {
-                String s0 = (String) iterator.next();
-                ICommand icommand1 = (ICommand) this.b.get(s0);
+        while (iterator.hasNext()) {
+            String s0 = (String) iterator.next();
+            ICommand icommand1 = (ICommand) this.b.get(s0);
 
-                if (icommand1 == null || !icommand1.c().equals(s0)) {
-                    this.b.put(s0, icommand);
-                }
+            if (icommand1 == null || !icommand1.c().equals(s0)) {
+                this.b.put(s0, icommand);
             }
         }
 
@@ -122,19 +135,16 @@ public class CommandHandler implements ICommandManager {
     private static String[] a(String[] astring) {
         String[] astring1 = new String[astring.length - 1];
 
-        for (int i0 = 1; i0 < astring.length; ++i0) {
-            astring1[i0 - 1] = astring[i0];
-        }
-
+        System.arraycopy(astring, 1, astring1, 0, astring.length - 1);
         return astring1;
     }
 
-    public List b(ICommandSender icommandsender, String s0) {
+    public List a(ICommandSender icommandsender, String s0, BlockPos blockpos) {
         String[] astring = s0.split(" ", -1);
         String s1 = astring[0];
 
         if (astring.length == 1) {
-            ArrayList arraylist = new ArrayList();
+            ArrayList arraylist = Lists.newArrayList();
             Iterator iterator = this.b.entrySet().iterator();
 
             //CanaryMod: Add possible Canary command matches
@@ -151,8 +161,7 @@ public class CommandHandler implements ICommandManager {
             }
 
             return arraylist;
-        }
-        else {
+        } else {
             if (astring.length > 1) {
                 // CanaryMod: Inject out commands then revert to vanilla commands
                 MessageReceiver msgrec = icommandsender instanceof EntityPlayerMP ? ((EntityPlayerMP) icommandsender).getPlayer() : Canary.getServer(); // I don't see a command block doing tab complete
@@ -164,8 +173,8 @@ public class CommandHandler implements ICommandManager {
 
                 ICommand icommand = (ICommand) this.b.get(s1);
 
-                if (icommand != null) {
-                    return icommand.a(icommandsender, a(astring));
+                if (icommand != null && icommand.a(icommandsender)) {
+                    return icommand.a(icommandsender, a(astring), blockpos);
                 }
             }
 
@@ -174,7 +183,7 @@ public class CommandHandler implements ICommandManager {
     }
 
     public List a(ICommandSender icommandsender) {
-        ArrayList arraylist = new ArrayList();
+        ArrayList arraylist = Lists.newArrayList();
         Iterator iterator = this.c.iterator();
 
         //CanaryMod: Add possible Canary command matches
@@ -200,10 +209,9 @@ public class CommandHandler implements ICommandManager {
     private int a(ICommand icommand, String[] astring) {
         if (icommand == null) {
             return -1;
-        }
-        else {
+        } else {
             for (int i0 = 0; i0 < astring.length; ++i0) {
-                if (icommand.a(astring, i0) && PlayerSelector.a(astring[i0])) {
+                if (icommand.b(astring, i0) && PlayerSelector.a(astring[i0])) {
                     return i0;
                 }
             }

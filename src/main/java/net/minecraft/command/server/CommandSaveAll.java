@@ -2,6 +2,7 @@ package net.minecraft.command.server;
 
 import net.canarymod.api.world.CanaryWorld;
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentTranslation;
@@ -19,8 +20,8 @@ public class CommandSaveAll extends CommandBase {
         return "commands.save.usage";
     }
 
-    public void b(ICommandSender icommandsender, String[] astring) {
-        MinecraftServer minecraftserver = MinecraftServer.I();
+    public void a(ICommandSender icommandsender, String[] astring) throws CommandException {
+        MinecraftServer minecraftserver = MinecraftServer.M();
 
         icommandsender.a(new ChatComponentTranslation("commands.save.start", new Object[0]));
         if (minecraftserver.ah() != null) {
@@ -52,7 +53,7 @@ public class CommandSaveAll extends CommandBase {
                     if (worldserver != null) {
                         flag0 = worldserver.c;
                         worldserver.c = false;
-                        worldserver.m();
+                        worldserver.n();
                         worldserver.c = flag0;
                     }
                 }
@@ -60,7 +61,7 @@ public class CommandSaveAll extends CommandBase {
                 icommandsender.a(new ChatComponentTranslation("commands.save.flushEnd", new Object[0]));
             }
         } catch (MinecraftException minecraftexception) {
-            a(icommandsender, this, "commands.save.failed", new Object[]{minecraftexception.getMessage()});
+            a(icommandsender, this, "commands.save.failed", new Object[] { minecraftexception.getMessage()});
             return;
         }
 

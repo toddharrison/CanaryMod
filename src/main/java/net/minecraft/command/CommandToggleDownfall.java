@@ -40,13 +40,9 @@ public class CommandToggleDownfall extends CommandBase {
 
     /* CanaryMod: Logic disabled and moved above
     protected void d() {
-        WorldInfo worldinfo = MinecraftServer.G().b[0].M();
+        WorldInfo worldinfo = MinecraftServer.M().c[0].P();
 
         worldinfo.b(!worldinfo.p());
     }
     */
-
-    public List a(ICommandSender icommandsender, String[] astring) {
-        return astring.length == 1 ? TabCompleteHelper.matchToLoadedWorldOfDimension(astring, DimensionType.NORMAL) : null;
-    }
 }

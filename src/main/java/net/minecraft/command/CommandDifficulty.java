@@ -3,7 +3,12 @@ package net.minecraft.command;
 import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.api.world.DimensionType;
 import net.canarymod.commandsys.TabCompleteHelper;
+import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.command.WrongUsageException;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.WorldServer;
@@ -25,8 +30,10 @@ public class CommandDifficulty extends CommandBase {
     }
 
     public void b(ICommandSender icommandsender, String[] astring) {
-        if (astring.length > 0) {
-            EnumDifficulty enumdifficulty = this.h(icommandsender, astring[0]);
+        if (astring.length <= 0) {
+            throw new WrongUsageException("commands.difficulty.usage", new Object[0]);
+        } else {
+            EnumDifficulty enumdifficulty = this.e(astring[0]);
 
             WorldServer worldserver = (WorldServer) icommandsender.d();
             if (astring.length > 1) { // Add an argument to allow picking a world
@@ -37,20 +44,16 @@ public class CommandDifficulty extends CommandBase {
                 }
                 worldserver = (WorldServer) ((CanaryWorld) MinecraftServer.I().worldManager.getWorld(astring[1], false)).getHandle();
             }
-            MinecraftServer.I().a(enumdifficulty, worldserver);
-            a(icommandsender, this, "commands.difficulty.success", new Object[]{new ChatComponentTranslation(enumdifficulty.b(), new Object[0])});
-        } else {
-            throw new WrongUsageException("commands.difficulty.usage", new Object[0]);
+            MinecraftServer.M().a(enumdifficulty, worldserver);
+            a(icommandsender, this, "commands.difficulty.success", new Object[] { new ChatComponentTranslation(enumdifficulty.b(), new Object[0])});
         }
     }
 
-    protected EnumDifficulty h(ICommandSender icommandsender, String s0) {
-        return !s0.equalsIgnoreCase("peaceful") && !s0.equalsIgnoreCase("p") ? (!s0.equalsIgnoreCase("easy") && !s0.equalsIgnoreCase("e") ? (!s0.equalsIgnoreCase("normal") && !s0.equalsIgnoreCase("n") ? (!s0.equalsIgnoreCase("hard") && !s0.equalsIgnoreCase("h") ? EnumDifficulty.a(a(icommandsender, s0, 0, 3)) : EnumDifficulty.HARD) : EnumDifficulty.NORMAL) : EnumDifficulty.EASY) : EnumDifficulty.PEACEFUL;
+    protected EnumDifficulty e(String s0) throws CommandException {
+        return !s0.equalsIgnoreCase("peaceful") && !s0.equalsIgnoreCase("p") ? (!s0.equalsIgnoreCase("easy") && !s0.equalsIgnoreCase("e") ? (!s0.equalsIgnoreCase("normal") && !s0.equalsIgnoreCase("n") ? (!s0.equalsIgnoreCase("hard") && !s0.equalsIgnoreCase("h") ? EnumDifficulty.a(a(s0, 0, 3)) : EnumDifficulty.HARD) : EnumDifficulty.NORMAL) : EnumDifficulty.EASY) : EnumDifficulty.PEACEFUL;
     }
 
-    public List a(ICommandSender icommandsender, String[] astring) {
-        return astring.length == 1 ? a(astring, new String[]{"peaceful", "easy", "normal", "hard"})
-                : astring.length == 2 ? TabCompleteHelper.matchToLoadedWorldOfDimension(astring, DimensionType.NORMAL) // Pass existing worlds to tab complete
-                : null;
+    public List a(ICommandSender icommandsender, String[] astring, BlockPos blockpos) {
+        return astring.length == 1 ? a(astring, new String[] { "peaceful", "easy", "normal", "hard"}) : null;
     }
 }

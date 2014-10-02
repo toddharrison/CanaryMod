@@ -1,19 +1,24 @@
 package net.minecraft.command.server;
 
+import java.util.EnumSet;
+import java.util.List;
 import net.canarymod.Canary;
 import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.api.world.UnknownWorldException;
 import net.canarymod.hook.player.TeleportHook;
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.PlayerNotFoundException;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.network.play.server.S08PacketPlayerPosLook;
 import net.minecraft.server.MinecraftServer;
-import net.visualillusionsent.utils.BooleanUtils;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.MathHelper;
 
-import java.util.List;
+import net.visualillusionsent.utils.BooleanUtils;
 
 public class CommandTeleport extends CommandBase {
 
@@ -29,18 +34,19 @@ public class CommandTeleport extends CommandBase {
         return "commands.tp.usage";
     }
 
-    public void b(ICommandSender icommandsender, String[] astring) {
+    public void a(ICommandSender icommandsender, String[] astring) throws CommandException {
         if (astring.length < 1) {
             throw new WrongUsageException("commands.tp.usage", new Object[0]);
-        }
-        else {
-            // CanaryMod: just rewrite this stuff
+        } else {
+            byte b0 = 0;
             EntityPlayerMP entityplayermp;
+            // CanaryMod: just rewrite this stuff
             if (astring[0].matches("\\d+") || (astring.length < 3 && astring[0].equals(icommandsender.b_())) || (astring.length == 1)) {
                 entityplayermp = b(icommandsender);
             }
             else {
                 entityplayermp = d(icommandsender, astring[0]);
+                b0 = 1;
             }
 
             if (entityplayermp == null) {
@@ -68,7 +74,7 @@ public class CommandTeleport extends CommandBase {
                     return;
                 }
 
-                entityplayermp.a((Entity) null);
+                ((Entity) entityplayermp).a((Entity) null);
                 // CanaryMod: Multiworld Fix and Teleportation Cause
                 entityplayermp.a.a(entityplayermp1.s, entityplayermp1.t, entityplayermp1.u, entityplayermp1.y, entityplayermp1.z, entityplayermp1.getCanaryWorld().getType().getId(), entityplayermp1.getCanaryWorld().getName(), TeleportHook.TeleportCause.COMMAND);
                 a(icommandsender, this, "commands.tp.success", new Object[]{entityplayermp.b_(), entityplayermp1.b_()});
@@ -115,11 +121,11 @@ public class CommandTeleport extends CommandBase {
         }
     }
 
-    public List a(ICommandSender icommandsender, String[] astring) {
-        return astring.length != 1 && astring.length != 2 ? null : a(astring, MinecraftServer.I().E());
+    public List a(ICommandSender icommandsender, String[] astring, BlockPos blockpos) {
+        return astring.length != 1 && astring.length != 2 ? null : a(astring, MinecraftServer.M().I());
     }
 
-    public boolean a(String[] astring, int i0) {
+    public boolean b(String[] astring, int i0) {
         return i0 == 0;
     }
 }

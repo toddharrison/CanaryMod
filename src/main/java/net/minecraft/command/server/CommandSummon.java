@@ -4,18 +4,21 @@ import net.canarymod.BlockIterator;
 import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.blocks.CanaryBlock;
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.IEntityLivingData;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.nbt.JsonToNBT;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTException;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.IChatComponent;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -34,11 +37,10 @@ public class CommandSummon extends CommandBase {
         return "commands.summon.usage";
     }
 
-    public void b(ICommandSender icommandsender, String[] astring) {
+    public void a(ICommandSender icommandsender, String[] astring) throws CommandException {
         if (astring.length < 1) {
             throw new WrongUsageException("commands.summon.usage", new Object[0]);
-        }
-        else {
+        } else {
             String s0 = astring[0];
             // CanaryMod: Inject some LineTracer
             CanaryBlock targetBlock = new CanaryBlock(BlockType.Air, 0, 0, 0, icommandsender.d().getCanaryWorld());
@@ -56,17 +58,20 @@ public class CommandSummon extends CommandBase {
             //
 
             if (astring.length >= 4) {
-                d0 = a(icommandsender, d0, astring[1]);
-                d1 = a(icommandsender, d1, astring[2]);
-                d2 = a(icommandsender, d2, astring[3]);
+                d0 = b(d0, astring[1], true);
+                d1 = b(d1, astring[2], false);
+                d2 = b(d2, astring[3], true);
+                blockpos = new BlockPos(d0, d1, d2);
             }
 
-            World world = icommandsender.d();
+            World world = icommandsender.e();
 
-            if (!world.d((int)d0, (int)d1, (int)d2)) {
-                a(icommandsender, this, "commands.summon.outOfWorld", new Object[0]);
-            }
-            else {
+            if (!world.e(blockpos)) {
+                throw new CommandException("commands.summon.outOfWorld", new Object[0]);
+            } else if ("LightningBolt".equals(s0)) {
+                world.c((Entity) (new EntityLightningBolt(world, d0, d1, d2)));
+                a(icommandsender, this, "commands.summon.success", new Object[0]);
+            } else {
                 NBTTagCompound nbttagcompound = new NBTTagCompound();
                 boolean flag0 = false;
 
@@ -74,32 +79,29 @@ public class CommandSummon extends CommandBase {
                     IChatComponent ichatcomponent = a(icommandsender, astring, 4);
 
                     try {
-                        NBTBase nbtbase = JsonToNBT.a(ichatcomponent.c());
-
-                        if (!(nbtbase instanceof NBTTagCompound)) {
-                            a(icommandsender, this, "commands.summon.tagError", new Object[]{ "Not a valid tag" });
-                            return;
-                        }
-
-                        nbttagcompound = (NBTTagCompound)nbtbase;
+                        nbttagcompound = JsonToNBT.a(ichatcomponent.c());
                         flag0 = true;
-                    }
-                    catch (NBTException nbtexception) {
-                        a(icommandsender, this, "commands.summon.tagError", new Object[]{ nbtexception.getMessage() });
-                        return;
+                    } catch (NBTException nbtexception) {
+                        throw new CommandException("commands.summon.tagError", new Object[] { nbtexception.getMessage()});
                     }
                 }
 
                 nbttagcompound.a("id", s0);
-                Entity entity = EntityList.a(nbttagcompound, world);
+
+                Entity entity;
+
+                try {
+                    entity = EntityList.a(nbttagcompound, world);
+                } catch (RuntimeException runtimeexception) {
+                    throw new CommandException("commands.summon.failed", new Object[0]);
+                }
 
                 if (entity == null) {
-                    a(icommandsender, this, "commands.summon.failed", new Object[0]);
-                }
-                else {
+                    throw new CommandException("commands.summon.failed", new Object[0]);
+                } else {
                     entity.b(d0, d1, d2, entity.y, entity.z);
                     if (!flag0 && entity instanceof EntityLiving) {
-                        ((EntityLiving)entity).a((IEntityLivingData)null);
+                        ((EntityLiving) entity).a(world.E(new BlockPos(entity)), (IEntityLivingData) null);
                     }
 
                     // CanaryMod: Actually check that it spawns
@@ -128,11 +130,7 @@ public class CommandSummon extends CommandBase {
         }
     }
 
-    public List a(ICommandSender icommandsender, String[] astring) {
-        return astring.length == 1 ? a(astring, this.d()) : null;
-    }
-
-    protected String[] d() {
-        return (String[])EntityList.b().toArray(new String[0]);
+    public List a(ICommandSender icommandsender, String[] astring, BlockPos blockpos) {
+        return astring.length == 1 ? a(astring, EntityList.b()) : (astring.length > 1 && astring.length <= 4 ? a(astring, 1, blockpos) : null);
     }
 }
