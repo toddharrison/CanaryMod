@@ -6,6 +6,7 @@ import net.canarymod.api.packet.BlockChangePacket;
 import net.canarymod.api.packet.CanaryBlockChangePacket;
 import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.api.world.World;
+import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.api.world.position.Location;
 import net.canarymod.api.world.position.Position;
 
@@ -52,7 +53,11 @@ public class CanaryBlock implements Block {
         this.z = z;
         this.world = world;
         this.type = type;
-        this.data = (short) data;
+        this.data = (short)data;
+    }
+
+    public CanaryBlock(BlockType type, int data, BlockPosition blockPosition, World world) {
+        this(type, data, blockPosition.getBlockX(), blockPosition.getBlockY(), blockPosition.getBlockZ(), world);
     }
 
     @Override
@@ -231,9 +236,9 @@ public class CanaryBlock implements Block {
 
     @Override
     public void dropBlockAsItem(boolean remove) {
-        net.minecraft.block.Block.b(getType().getMachineName()).a(((CanaryWorld) getWorld()).getHandle(), getX(), getY(), getZ(), getData(), 1.0F, 0);
+        net.minecraft.block.Block.b(getType().getMachineName()).a(((CanaryWorld)getWorld()).getHandle(), getX(), getY(), getZ(), getData(), 1.0F, 0);
         if (remove) {
-            this.setTypeId((short) 0);
+            this.setTypeId((short)0);
             this.update();
         }
     }
@@ -245,7 +250,7 @@ public class CanaryBlock implements Block {
 
     @Override
     public boolean rightClick(Player player) {
-        return net.minecraft.block.Block.b(getType().getMachineName()).a(((CanaryWorld) getWorld()).getHandle(), getX(), getY(), getZ(), player != null ? ((CanaryPlayer) player).getHandle() : null, 0, 0, 0, 0); // last four parameters aren't even used by lever or button
+        return net.minecraft.block.Block.b(getType().getMachineName()).a(((CanaryWorld)getWorld()).getHandle(), getX(), getY(), getZ(), player != null ? ((CanaryPlayer)player).getHandle() : null, 0, 0, 0, 0); // last four parameters aren't even used by lever or button
     }
 
     public void sendUpdateToPlayers(Player... players) {
@@ -280,7 +285,7 @@ public class CanaryBlock implements Block {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final CanaryBlock other = (CanaryBlock) obj;
+        final CanaryBlock other = (CanaryBlock)obj;
 
         if (!this.getWorld().equals(other.getWorld())) {
             return false;
