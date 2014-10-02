@@ -1,6 +1,5 @@
 package net.minecraft.stats;
 
-
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gson.JsonElement;
@@ -25,7 +24,6 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.util.*;
 import java.util.Map.Entry;
-
 
 public class StatisticsFile extends StatFileWriter {
 
@@ -54,7 +52,6 @@ public class StatisticsFile extends StatFileWriter {
                 b.error("Couldn\'t parse statistics file " + this.d, jsonparseexception);
             }
         }
-
     }
 
     public void b() {
@@ -64,7 +61,6 @@ public class StatisticsFile extends StatFileWriter {
         catch (IOException ioexception) {
             b.error("Couldn\'t save stats", ioexception);
         }
-
     }
 
     public void a(EntityPlayer entityplayer, StatBase statbase, int i0) {
@@ -74,11 +70,17 @@ public class StatisticsFile extends StatFileWriter {
         this.e.add(statbase);
         if (statbase.d() && i1 == 0 && i0 > 0) {
             this.g = true;
-            if (this.c.at() && entityplayer != null) { // CanaryMod: null check
-                this.c.ah().a((IChatComponent) (new ChatComponentTranslation("chat.type.achievement", new Object[]{entityplayer.c_(), statbase.j()})));
+            if (this.c.az() && entityplayer != null) { // CanaryMod: null check
+                this.c.an().a((IChatComponent)(new ChatComponentTranslation("chat.type.achievement", new Object[]{ entityplayer.e_(), statbase.j() })));
             }
         }
 
+        if (statbase.d() && i1 > 0 && i0 == 0) {
+            this.g = true;
+            if (this.c.az()) {
+                this.c.an().a((IChatComponent)(new ChatComponentTranslation("chat.type.achievement.taken", new Object[]{ entityplayer.e_(), statbase.j() })));
+            }
+        }
     }
 
     public Set c() {
@@ -101,17 +103,17 @@ public class StatisticsFile extends StatFileWriter {
             Iterator iterator = jsonobject.entrySet().iterator();
 
             while (iterator.hasNext()) {
-                Entry entry = (Entry) iterator.next();
-                StatBase statbase = StatList.a((String) entry.getKey());
+                Entry entry = (Entry)iterator.next();
+                StatBase statbase = StatList.a((String)entry.getKey());
 
                 if (statbase != null) {
                     TupleIntJsonSerializable tupleintjsonserializable = new TupleIntJsonSerializable();
 
-                    if (((JsonElement) entry.getValue()).isJsonPrimitive() && ((JsonElement) entry.getValue()).getAsJsonPrimitive().isNumber()) {
-                        tupleintjsonserializable.a(((JsonElement) entry.getValue()).getAsInt());
+                    if (((JsonElement)entry.getValue()).isJsonPrimitive() && ((JsonElement)entry.getValue()).getAsJsonPrimitive().isNumber()) {
+                        tupleintjsonserializable.a(((JsonElement)entry.getValue()).getAsInt());
                     }
-                    else if (((JsonElement) entry.getValue()).isJsonObject()) {
-                        JsonObject jsonobject1 = ((JsonElement) entry.getValue()).getAsJsonObject();
+                    else if (((JsonElement)entry.getValue()).isJsonObject()) {
+                        JsonObject jsonobject1 = ((JsonElement)entry.getValue()).getAsJsonObject();
 
                         if (jsonobject1.has("value") && jsonobject1.get("value").isJsonPrimitive() && jsonobject1.get("value").getAsJsonPrimitive().isNumber()) {
                             tupleintjsonserializable.a(jsonobject1.getAsJsonPrimitive("value").getAsInt());
@@ -120,7 +122,7 @@ public class StatisticsFile extends StatFileWriter {
                         if (jsonobject1.has("progress") && statbase.l() != null) {
                             try {
                                 Constructor constructor = statbase.l().getConstructor(new Class[0]);
-                                IJsonSerializable ijsonserializable = (IJsonSerializable) constructor.newInstance(new Object[0]);
+                                IJsonSerializable ijsonserializable = (IJsonSerializable)constructor.newInstance(new Object[0]);
 
                                 ijsonserializable.a(jsonobject1.get("progress"));
                                 tupleintjsonserializable.a(ijsonserializable);
@@ -134,7 +136,7 @@ public class StatisticsFile extends StatFileWriter {
                     hashmap.put(statbase, tupleintjsonserializable);
                 }
                 else {
-                    b.warn("Invalid statistic in " + this.d + ": Don\'t know what " + (String) entry.getKey() + " is");
+                    b.warn("Invalid statistic in " + this.d + ": Don\'t know what " + (String)entry.getKey() + " is");
                 }
             }
 
@@ -147,24 +149,24 @@ public class StatisticsFile extends StatFileWriter {
         Iterator iterator = map.entrySet().iterator();
 
         while (iterator.hasNext()) {
-            Entry entry = (Entry) iterator.next();
+            Entry entry = (Entry)iterator.next();
 
-            if (((TupleIntJsonSerializable) entry.getValue()).b() != null) {
+            if (((TupleIntJsonSerializable)entry.getValue()).b() != null) {
                 JsonObject jsonobject1 = new JsonObject();
 
-                jsonobject1.addProperty("value", Integer.valueOf(((TupleIntJsonSerializable) entry.getValue()).a()));
+                jsonobject1.addProperty("value", Integer.valueOf(((TupleIntJsonSerializable)entry.getValue()).a()));
 
                 try {
-                    jsonobject1.add("progress", ((TupleIntJsonSerializable) entry.getValue()).b().a());
+                    jsonobject1.add("progress", ((TupleIntJsonSerializable)entry.getValue()).b().a());
                 }
                 catch (Throwable throwable) {
-                    b.warn("Couldn\'t save statistic " + ((StatBase) entry.getKey()).e() + ": error serializing progress", throwable);
+                    b.warn("Couldn\'t save statistic " + ((StatBase)entry.getKey()).e() + ": error serializing progress", throwable);
                 }
 
-                jsonobject.add(((StatBase) entry.getKey()).e, jsonobject1);
+                jsonobject.add(((StatBase)entry.getKey()).e, jsonobject1);
             }
             else {
-                jsonobject.addProperty(((StatBase) entry.getKey()).e, Integer.valueOf(((TupleIntJsonSerializable) entry.getValue()).a()));
+                jsonobject.addProperty(((StatBase)entry.getKey()).e, Integer.valueOf(((TupleIntJsonSerializable)entry.getValue()).a()));
             }
         }
 
@@ -175,15 +177,14 @@ public class StatisticsFile extends StatFileWriter {
         Iterator iterator = this.a.keySet().iterator();
 
         while (iterator.hasNext()) {
-            StatBase statbase = (StatBase) iterator.next();
+            StatBase statbase = (StatBase)iterator.next();
 
             this.e.add(statbase);
         }
-
     }
 
     public void a(EntityPlayerMP entityplayermp) {
-        int i0 = this.c.al();
+        int i0 = this.c.ar();
         HashMap hashmap = Maps.newHashMap();
 
         if (this.g || i0 - this.f > 300) {
@@ -191,7 +192,7 @@ public class StatisticsFile extends StatFileWriter {
             Iterator iterator = this.c().iterator();
 
             while (iterator.hasNext()) {
-                StatBase statbase = (StatBase) iterator.next();
+                StatBase statbase = (StatBase)iterator.next();
 
                 hashmap.put(statbase, Integer.valueOf(this.a(statbase)));
             }
@@ -199,7 +200,7 @@ public class StatisticsFile extends StatFileWriter {
 
         // CanaryMod: null check
         if (entityplayermp != null) {
-            entityplayermp.a.a((Packet) (new S37PacketStatistics(hashmap)));
+            entityplayermp.a.a((Packet)(new S37PacketStatistics(hashmap)));
         }
     }
 
@@ -208,22 +209,21 @@ public class StatisticsFile extends StatFileWriter {
         Iterator iterator = AchievementList.e.iterator();
 
         while (iterator.hasNext()) {
-            Achievement achievement = (Achievement) iterator.next();
+            Achievement achievement = (Achievement)iterator.next();
 
             if (this.a(achievement)) {
-                hashmap.put(achievement, Integer.valueOf(this.a((StatBase) achievement)));
+                hashmap.put(achievement, Integer.valueOf(this.a((StatBase)achievement)));
                 this.e.remove(achievement);
             }
         }
 
         // CanaryMod: null check
         if (entityplayermp != null) {
-            entityplayermp.a.a((Packet) (new S37PacketStatistics(hashmap)));
+            entityplayermp.a.a((Packet)(new S37PacketStatistics(hashmap)));
         }
     }
 
     public boolean e() {
         return this.g;
     }
-
 }
