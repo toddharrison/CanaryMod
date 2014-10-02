@@ -2,9 +2,18 @@ package net.minecraft.entity.item;
 
 import net.canarymod.api.entity.vehicle.CanaryChestMinecart;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockChest;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.item.EntityMinecartContainer;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ContainerChest;
 import net.minecraft.item.Item;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 public class EntityMinecartChest extends EntityMinecartContainer {
@@ -24,19 +33,27 @@ public class EntityMinecartChest extends EntityMinecartContainer {
         this.a(Item.a((Block) Blocks.ae), 1, 0.0F);
     }
 
-    public int a() {
+    public int n_() {
         return 27;
     }
 
-    public int m() {
-        return 1;
+    public EntityMinecart.EnumMinecartType s() {
+        return EntityMinecart.EnumMinecartType.CHEST;
     }
 
-    public Block o() {
-        return Blocks.ae;
+    public IBlockState u() {
+        return Blocks.ae.P().a(BlockChest.a, EnumFacing.NORTH);
     }
 
-    public int s() {
+    public int w() {
         return 8;
+    }
+
+    public String k() {
+        return "minecraft:chest";
+    }
+
+    public Container a(InventoryPlayer inventoryplayer, EntityPlayer entityplayer) {
+        return new ContainerChest(inventoryplayer, this, entityplayer);
     }
 }
