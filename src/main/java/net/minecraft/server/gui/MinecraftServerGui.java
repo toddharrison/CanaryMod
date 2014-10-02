@@ -1,6 +1,5 @@
 package net.minecraft.server.gui;
 
-
 import com.mojang.util.QueueLogAppender;
 import net.canarymod.Canary;
 import net.canarymod.api.gui.GUIControl;
@@ -19,7 +18,6 @@ import javax.swing.text.Document;
 import java.awt.*;
 import java.awt.event.*;
 
-
 public class MinecraftServerGui extends JComponent implements GUIControl {
 
     private static final Font a = new Font("Monospaced", 0, 12);
@@ -33,7 +31,8 @@ public class MinecraftServerGui extends JComponent implements GUIControl {
     public static GUIControl a(final DedicatedServer dedicatedserver) { // Signature Changed to return GUIControl
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception interruptedexception) {
+        }
+        catch (Exception interruptedexception) {
             ;
         }
 
@@ -41,34 +40,36 @@ public class MinecraftServerGui extends JComponent implements GUIControl {
 
         jframe.add(minecraftservergui); // CanaryMod Replaced the variable with the one added
         jframe.pack();
-        jframe.setLocationRelativeTo((Component) null);
+        jframe.setLocationRelativeTo((Component)null);
         jframe.setVisible(true);
         jframe.addWindowListener(new WindowAdapter() {
 
-            public void windowClosing(WindowEvent windowevent) {
-                dedicatedserver.r();
+                                     public void windowClosing(WindowEvent windowevent) {
+                                         dedicatedserver.u();
 
-                while (!dedicatedserver.ap()) {
-                    try {
-                        Thread.sleep(100L);
-                    } catch (InterruptedException interruptedexception) {
-                        // CanaryMod Debug catcher thingy
-                        if (Configuration.getServerConfig().isDebugMode()) {
-                            interruptedexception.printStackTrace();
-                        }
-                    }
-                }
+                                         while (!dedicatedserver.am()) {
+                                             try {
+                                                 Thread.sleep(100L);
+                                             }
+                                             catch (InterruptedException interruptedexception) {
+                                                 // CanaryMod Debug catcher thingy
+                                                 if (Configuration.getServerConfig().isDebugMode()) {
+                                                     interruptedexception.printStackTrace();
+                                                 }
+                                             }
+                                         }
 
-                System.exit(0);
-            }
+                                         System.exit(0);
+                                     }
 
-            // CanaryMod
-            @Override
-            public void windowOpened(WindowEvent e) {
-                jframe.setIconImage(new ImageIcon(getClass().getResource("/assets/favicon.png")).getImage());
-            }
-            // End
-        });
+                                     // CanaryMod
+                                     @Override
+                                     public void windowOpened(WindowEvent e) {
+                                         jframe.setIconImage(new ImageIcon(getClass().getResource("/assets/favicon.png")).getImage());
+                                     }
+                                     // End
+                                 }
+                                );
         return minecraftservergui; // CanaryMod need to return the GUIControl
     }
 
@@ -80,11 +81,11 @@ public class MinecraftServerGui extends JComponent implements GUIControl {
         try {
             this.add(logAndChat, "Center"); // Change use of c() to static logAndChat value
             this.add(this.a(), "West");
-        } catch (Exception exception) {
+        }
+        catch (Exception exception) {
             b.error("Couldn\'t build server GUI", exception);
         }
         minecraftservergui = this;
-
     }
 
     private JComponent a() {
@@ -114,25 +115,27 @@ public class MinecraftServerGui extends JComponent implements GUIControl {
 
         jtextfield.addActionListener(new ActionListener() {
 
-            public void actionPerformed(ActionEvent s1) {
-                String s0 = jtextfield.getText().trim();
+                                         public void actionPerformed(ActionEvent s1) {
+                                             String s0 = jtextfield.getText().trim();
 
-                if (s0.length() > 0) {
-                    // CanaryMod replaced how commands are sent to the server
-                    // Not sure why this line was not ((DedicatedServer) MinecraftServer.G()).a(s0, (ICommandSender) MinecraftServer.G());
-                    // That would have removed the need for the storage of the object here and they do it for the the 2nd part why not the first lol
-                    // MinecraftServerGui.this.c.a(s0, (ICommandSender) MinecraftServer.G());
-                    Canary.getServer().consoleCommand(s0);
-                }
+                                             if (s0.length() > 0) {
+                                                 // CanaryMod replaced how commands are sent to the server
+                                                 // Not sure why this line was not ((DedicatedServer) MinecraftServer.G()).a(s0, (ICommandSender) MinecraftServer.G());
+                                                 // That would have removed the need for the storage of the object here and they do it for the the 2nd part why not the first lol
+                                                 // MinecraftServerGui.this.c.a(s0, (ICommandSender) MinecraftServer.G());
+                                                 Canary.getServer().consoleCommand(s0);
+                                             }
 
-                jtextfield.setText("");
-            }
-        });
+                                             jtextfield.setText("");
+                                         }
+                                     }
+                                    );
         jtextarea.addFocusListener(new FocusAdapter() {
 
-            public void focusGained(FocusEvent s1) {
-            }
-        });
+                                       public void focusGained(FocusEvent s1) {
+                                       }
+                                   }
+                                  );
         s1.add(jscrollpane, "Center");
         s1.add(jtextfield, "South");
         s1.setBorder(new TitledBorder(new EtchedBorder(), "Log and chat"));
@@ -144,9 +147,9 @@ public class MinecraftServerGui extends JComponent implements GUIControl {
                 while ((s1 = QueueLogAppender.getNextLogEvent("ServerGuiConsole")) != null) {
                     a(jtextarea, jscrollpane, s1);
                 }
-
             }
-        });
+        }
+        );
 
         thread.setDaemon(true);
         thread.start();
@@ -157,29 +160,31 @@ public class MinecraftServerGui extends JComponent implements GUIControl {
         if (!SwingUtilities.isEventDispatchThread()) {
             SwingUtilities.invokeLater(new Runnable() {
 
-                public void run() {
-                    a(jtextarea, jscrollpane, s0);
-                }
-            });
-        } else {
+                                           public void run() {
+                                               a(jtextarea, jscrollpane, s0);
+                                           }
+                                       }
+                                      );
+        }
+        else {
             Document document = jtextarea.getDocument();
             JScrollBar jscrollbar = jscrollpane.getVerticalScrollBar();
             boolean flag0 = false;
 
             if (jscrollpane.getViewport().getView() == jtextarea) {
-                flag0 = (double) jscrollbar.getValue() + jscrollbar.getSize().getHeight() + (double) (a.getSize() * 4) > (double) jscrollbar.getMaximum();
+                flag0 = (double)jscrollbar.getValue() + jscrollbar.getSize().getHeight() + (double)(a.getSize() * 4) > (double)jscrollbar.getMaximum();
             }
 
             try {
-                document.insertString(document.getLength(), s0, (AttributeSet) null);
-            } catch (BadLocationException badlocationexception) {
+                document.insertString(document.getLength(), s0, (AttributeSet)null);
+            }
+            catch (BadLocationException badlocationexception) {
                 ;
             }
 
             if (flag0) {
                 jscrollbar.setValue(Integer.MAX_VALUE);
             }
-
         }
     }
 
@@ -193,13 +198,14 @@ public class MinecraftServerGui extends JComponent implements GUIControl {
 
     @Override
     public void start() {
-        a((DedicatedServer) MinecraftServer.I());
+        a((DedicatedServer)MinecraftServer.I());
     }
 
     /**
      * Sets up the GUI with out starting it
      *
      * @param dedicatedserver
+     *
      * @return
      */
     public static final GUIControl preInit(DedicatedServer dedicatedserver) {
@@ -214,5 +220,4 @@ public class MinecraftServerGui extends JComponent implements GUIControl {
     public static String getLog() {
         return jtextarea.getText();
     }
-
 }

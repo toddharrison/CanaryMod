@@ -8,13 +8,22 @@ import net.canarymod.hook.player.BlockLeftClickHook;
 import net.canarymod.hook.player.GameModeChangeHook;
 import net.canarymod.hook.player.ItemUseHook;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockChest;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S23PacketBlockChange;
+import net.minecraft.network.play.server.S38PacketPlayerListItem;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityChest;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.world.ILockableContainer;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.WorldSettings;
@@ -26,20 +35,18 @@ public class ItemInWorldManager {
     private WorldSettings.GameType c;
     private boolean d;
     private int e;
-    private int f;
+    private BlockPos f;
     private int g;
-    private int h;
-    private int i;
-    private boolean j;
+    private boolean h;
+    private BlockPos i;
+    private int j;
     private int k;
-    private int l;
-    private int m;
-    private int n;
-    private int o;
 
     public ItemInWorldManager(World world) {
         this.c = WorldSettings.GameType.NOT_SET;
-        this.o = -1;
+        this.f = BlockPos.a;
+        this.i = BlockPos.a;
+        this.k = -1;
         this.a = world;
     }
 
@@ -53,12 +60,17 @@ public class ItemInWorldManager {
         }
         //
         this.c = worldsettings_gametype;
-        worldsettings_gametype.a(this.b.bE);
-        this.b.q();
+        worldsettings_gametype.a(this.b.by);
+        this.b.t();
+        this.b.b.an().a((Packet)(new S38PacketPlayerListItem(S38PacketPlayerListItem.Action.UPDATE_GAME_MODE, new EntityPlayerMP[]{ this.b })));
     }
 
     public WorldSettings.GameType b() {
         return this.c;
+    }
+
+    public boolean c() {
+        return this.c.e();
     }
 
     public boolean d() {
@@ -74,53 +86,53 @@ public class ItemInWorldManager {
     }
 
     public void a() {
-        ++this.i;
+        ++this.g;
         float f0;
         int i0;
 
-        if (this.j) {
-            int i1 = this.i - this.n;
-            Block block = this.a.a(this.k, this.l, this.m);
+        if (this.h) {
+            int i1 = this.g - this.j;
+            Block block = this.a.p(this.i).c();
 
-            if (block.o() == Material.a) {
-                this.j = false;
+            if (block.r() == Material.a) {
+                this.h = false;
             }
             else {
-                f0 = block.a(this.b, this.b.o, this.k, this.l, this.m) * (float) (i1 + 1);
+                f0 = block.a((EntityPlayer)this.b, this.b.o, this.i) * (float)(i1 + 1);
                 i0 = (int) (f0 * 10.0F);
-                if (i0 != this.o) {
-                    this.a.d(this.b.y(), this.k, this.l, this.m, i0);
-                    this.o = i0;
+                if (i0 != this.k) {
+                    this.a.c(this.b.F(), this.i, i0);
+                    this.k = i0;
                 }
 
                 if (f0 >= 1.0F) {
-                    this.j = false;
-                    this.b(this.k, this.l, this.m);
+                    this.h = false;
+                    this.b(this.i);
                 }
             }
         }
         else if (this.d) {
-            Block block1 = this.a.a(this.f, this.g, this.h);
+            Block block1 = this.a.p(this.f).c();
 
-            if (block1.o() == Material.a) {
-                this.a.d(this.b.y(), this.f, this.g, this.h, -1);
-                this.o = -1;
+            if (block1.r() == Material.a) {
+                this.a.c(this.b.F(), this.f, -1);
+                this.k = -1;
                 this.d = false;
             }
             else {
-                int i2 = this.i - this.e;
+                int i2 = this.g - this.e;
 
-                f0 = block1.a(this.b, this.b.o, this.f, this.g, this.h) * (float) (i2 + 1);
+                f0 = block1.a((EntityPlayer)this.b, this.b.o, this.i) * (float)(i2 + 1);
                 i0 = (int) (f0 * 10.0F);
-                if (i0 != this.o) {
-                    this.a.d(this.b.y(), this.f, this.g, this.h, i0);
-                    this.o = i0;
+                if (i0 != this.k) {
+                    this.a.c(this.b.F(), this.f, i0);
+                    this.k = i0;
                 }
             }
         }
     }
 
-    public void a(int i0, int i1, int i2, int i3) {
+    public void a(BlockPos blockpos, EnumFacing enumfacing) {
         // CanaryMod: BlockLeftClick
         net.canarymod.api.world.blocks.Block cblock = this.b.getCanaryWorld().getBlockAt(i0, i1, i2);
         BlockLeftClickHook blcHook = (BlockLeftClickHook) new BlockLeftClickHook(this.b.getPlayer(), cblock).call();
@@ -131,121 +143,147 @@ public class ItemInWorldManager {
             return;
         }
         //
-        if (!this.c.c() || this.b.d(i0, i1, i2)) {
-            if (this.d()) {
-                if (!this.a.a((EntityPlayer) null, i0, i1, i2, i3)) {
-                    this.b(i0, i1, i2);
+        if (this.d()) {
+            if (!this.a.a((EntityPlayer)null, blockpos, enumfacing)) {
+                this.b(blockpos);
+            }
+        }
+        else {
+            Block block = this.a.p(blockpos).c();
+
+            if (this.c.c()) {
+                if (this.c == WorldSettings.GameType.SPECTATOR) {
+                    return;
                 }
+
+                if (!this.b.cm()) {
+                    ItemStack itemstack = this.b.bY();
+
+                    if (itemstack == null) {
+                        return;
+                    }
+
+                    if (!itemstack.c(block)) {
+                        return;
+                    }
+                }
+            }
+
+            this.a.a((EntityPlayer)null, blockpos, enumfacing);
+            this.e = this.g;
+            float f0 = 1.0F;
+
+            if (block.r() != Material.a) {
+                block.a(this.a, blockpos, (EntityPlayer)this.b);
+                f0 = block.a((EntityPlayer)this.b, this.b.o, blockpos);
+            }
+
+            if (block.r() != Material.a && f0 >= 1.0F) {
+                this.b(blockpos);
             }
             else {
-                this.a.a((EntityPlayer) null, i0, i1, i2, i3);
-                this.e = this.i;
-                float f0 = 1.0F;
-                Block block = this.a.a(i0, i1, i2);
+                this.d = true;
+                this.f = blockpos;
+                int i0 = (int)(f0 * 10.0F);
 
-                if (block.o() != Material.a) {
-                    block.a(this.a, i0, i1, i2, (EntityPlayer) this.b);
-                    f0 = block.a(this.b, this.b.o, i0, i1, i2);
-                }
-
-                if (block.o() != Material.a && f0 >= 1.0F) {
-                    this.b(i0, i1, i2);
-                }
-                else {
-                    this.d = true;
-                    this.f = i0;
-                    this.g = i1;
-                    this.h = i2;
-                    int i4 = (int) (f0 * 10.0F);
-
-                    this.a.d(this.b.y(), i0, i1, i2, i4);
-                    this.o = i4;
-                }
+                this.a.c(this.b.F(), blockpos, i0);
+                this.k = i0;
             }
+
         }
     }
 
-    public void a(int i0, int i1, int i2) {
-        if (i0 == this.f && i1 == this.g && i2 == this.h) {
-            int i3 = this.i - this.e;
-            Block block = this.a.a(i0, i1, i2);
+    public void a(BlockPos blockpos) {
+        if (blockpos.equals(this.f)) {
+            int i0 = this.g - this.e;
+            Block block = this.a.p(blockpos).c();
 
-            if (block.o() != Material.a) {
-                float f0 = block.a(this.b, this.b.o, i0, i1, i2) * (float) (i3 + 1);
+            if (block.r() != Material.a) {
+                float f0 = block.a((EntityPlayer)this.b, this.b.o, blockpos) * (float)(i0 + 1);
 
                 if (f0 >= 0.7F) {
                     this.d = false;
-                    this.a.d(this.b.y(), i0, i1, i2, -1);
-                    this.b(i0, i1, i2);
+                    this.a.c(this.b.F(), blockpos, -1);
+                    this.b(blockpos);
                 }
-                else if (!this.j) {
+                else if (!this.h) {
                     this.d = false;
-                    this.j = true;
-                    this.k = i0;
-                    this.l = i1;
-                    this.m = i2;
-                    this.n = this.e;
+                    this.h = true;
+                    this.i = blockpos;
+                    this.j = this.e;
                 }
             }
         }
     }
 
-    public void c(int i0, int i1, int i2) { // Cancel
+    public void e() {
         this.d = false;
-        this.a.d(this.b.y(), this.f, this.g, this.h, -1);
+        this.a.c(this.b.F(), this.f, -1);
     }
 
-    private boolean d(int i0, int i1, int i2) {
+    private boolean c(BlockPos blockpos) {
+        IBlockState iblockstate = this.a.p(blockpos);
         // CanaryMod: BlockDestroyHook
         net.canarymod.api.world.blocks.Block cblock = this.b.getCanaryWorld().getBlockAt(i0, i1, i2);
         BlockDestroyHook hook = (BlockDestroyHook) new BlockDestroyHook(this.b.getPlayer(), cblock).call();
         if (hook.isCanceled()) {
-            this.c(i0, i1, i2);
+            this.e();
             return false;
         }
         //
-        Block block = this.a.a(i0, i1, i2);
-        int i3 = this.a.e(i0, i1, i2);
-
-        block.a(this.a, i0, i1, i2, i3, (EntityPlayer) this.b);
-        boolean flag0 = this.a.f(i0, i1, i2);
+        iblockstate.c().a(this.a, blockpos, iblockstate, (EntityPlayer)this.b);
+        boolean flag0 = this.a.g(blockpos);
 
         if (flag0) {
-            block.b(this.a, i0, i1, i2, i3);
+            iblockstate.c().d(this.a, blockpos, iblockstate);
         }
 
         return flag0;
     }
 
-    public boolean b(int i0, int i1, int i2) {
-        if (this.c.c() && !this.b.d(i0, i1, i2)) {
-            return false;
-        }
-        else if (this.c.d() && this.b.be() != null && this.b.be().b() instanceof ItemSword) {
+    public boolean b(BlockPos blockpos) {
+        if (this.c.d() && this.b.bz() != null && this.b.bz().b() instanceof ItemSword) {
             return false;
         }
         else {
-            Block block = this.a.a(i0, i1, i2);
-            int i3 = this.a.e(i0, i1, i2);
-            this.a.a(this.b, 2001, i0, i1, i2, Block.b(block) + (this.a.e(i0, i1, i2) << 12));
-            boolean flag0 = this.d(i0, i1, i2);
+            IBlockState iblockstate = this.a.p(blockpos);
+            TileEntity tileentity = this.a.s(blockpos);
+
+            if (this.c.c()) {
+                if (this.c == WorldSettings.GameType.SPECTATOR) {
+            return false;
+        }
+                if (!this.b.cm()) {
+                    ItemStack itemstack = this.b.bY();
+
+                    if (itemstack == null) {
+                        return false;
+                    }
+                    if (!itemstack.c(iblockstate.c())) {
+                        return false;
+                    }
+                }
+            }
+
+            this.a.a(this.b, 2001, blockpos, Block.f(iblockstate));
+            boolean flag0 = this.c(blockpos);
 
             if (this.d()) {
-                this.b.a.a((Packet) (new S23PacketBlockChange(i0, i1, i2, this.a)));
+                this.b.a.a((Packet)(new S23PacketBlockChange(this.a, blockpos)));
             }
             else {
-                ItemStack itemstack = this.b.bF();
-                boolean flag1 = this.b.a(block);
+                ItemStack itemstack1 = this.b.bY();
+                boolean flag1 = this.b.b(iblockstate.c());
 
-                if (itemstack != null) {
-                    itemstack.a(this.a, block, i0, i1, i2, this.b);
-                    if (itemstack.b == 0) {
-                        this.b.bG();
+                if (itemstack1 != null) {
+                    itemstack1.a(this.a, iblockstate.c(), blockpos, this.b);
+                    if (itemstack1.b == 0) {
+                        this.b.bZ();
                     }
                 }
 
                 if (flag0 && flag1) {
-                    block.a(this.a, this.b, i0, i1, i2, i3);
+                    iblockstate.c().a(this.a, (EntityPlayer)this.b, blockpos, iblockstate, tileentity);
                 }
             }
 
@@ -264,52 +302,86 @@ public class ItemInWorldManager {
     //
 
     public boolean a(EntityPlayer entityplayer, World world, ItemStack itemstack) {
-        int i0 = itemstack.b;
-        int i1 = itemstack.k();
-        ItemStack itemstack1 = itemstack.a(world, entityplayer);
-
-        if (itemstack1 == itemstack && (itemstack1 == null || itemstack1.b == i0 && itemstack1.n() <= 0 && itemstack1.k() == i1)) {
+        if (this.c == WorldSettings.GameType.SPECTATOR) {
             return false;
         }
         else {
-            entityplayer.bm.a[entityplayer.bm.c] = itemstack1;
-            if (this.d()) {
-                itemstack1.b = i0;
-                if (itemstack1.g()) {
-                    itemstack1.b(i1);
+        int i0 = itemstack.b;
+            int i1 = itemstack.i();
+            ItemStack itemstack1 = itemstack.a(world, entityplayer);
+
+            if (itemstack1 == itemstack && (itemstack1 == null || itemstack1.b == i0 && itemstack1.l() <= 0 && itemstack1.i() == i1)) {
+                return false;
+            }
+            else {
+                entityplayer.bg.a[entityplayer.bg.c] = itemstack1;
+                if (this.d()) {
+                    itemstack1.b = i0;
+                    if (itemstack1.e()) {
+                        itemstack1.b(i1);
+                    }
                 }
-            }
 
-            if (itemstack1.b == 0) {
-                entityplayer.bm.a[entityplayer.bm.c] = null;
-            }
+                if (itemstack1.b == 0) {
+                    entityplayer.bg.a[entityplayer.bg.c] = null;
+                }
 
-            if (!entityplayer.by()) {
-                ((EntityPlayerMP) entityplayer).a(entityplayer.bn);
-            }
+                if (!entityplayer.bR()) {
+                    ((EntityPlayerMP)entityplayer).a(entityplayer.bh);
+                }
 
-            return true;
+                return true;
+            }
         }
     }
 
-    public boolean a(EntityPlayer entityplayer, World world, ItemStack itemstack, int i0, int i1, int i2, int i3, float f0, float f1, float f2) {
-        if ((!entityplayer.an() || entityplayer.be() == null) && world.a(i0, i1, i2).a(world, i0, i1, i2, entityplayer, i3, f0, f1, f2)) {
+    public boolean a(EntityPlayer entityplayer, World world, ItemStack itemstack, BlockPos blockpos, EnumFacing enumfacing, float f0, float f1, float f2) {
+        if (this.c == WorldSettings.GameType.SPECTATOR) {
+            TileEntity tileentity = world.s(blockpos);
+
+            if (tileentity instanceof ILockableContainer) {
+                Block block = world.p(blockpos).c();
+                ILockableContainer ilockablecontainer = (ILockableContainer)tileentity;
+
+                if (ilockablecontainer instanceof TileEntityChest && block instanceof BlockChest) {
+                    ilockablecontainer = ((BlockChest)block).d(world, blockpos);
+                }
+
+                if (ilockablecontainer != null) {
+                    entityplayer.a((IInventory)ilockablecontainer);
             return true;
         }
-        else if (itemstack == null) {
+            }
+            else if (tileentity instanceof IInventory) {
+                entityplayer.a((IInventory)tileentity);
+                return true;
+            }
             return false;
         }
-        else if (this.d()) {
-            int i4 = itemstack.k();
-            int i5 = itemstack.b;
-            boolean flag0 = itemstack.a(entityplayer, world, i0, i1, i2, i3, f0, f1, f2);
-
-            itemstack.b(i4);
-            itemstack.b = i5;
-            return flag0;
-        }
         else {
-            return itemstack.a(entityplayer, world, i0, i1, i2, i3, f0, f1, f2);
+            if (!entityplayer.aw() || entityplayer.bz() == null) {
+                IBlockState iblockstate = world.p(blockpos);
+
+                if (iblockstate.c().a(world, blockpos, iblockstate, entityplayer, enumfacing, f0, f1, f2)) {
+                    return true;
+        }
+            }
+
+            if (itemstack == null) {
+                return false;
+            }
+            else if (this.d()) {
+                int i0 = itemstack.i();
+                int i1 = itemstack.b;
+                boolean flag0 = itemstack.a(entityplayer, world, blockpos, enumfacing, f0, f1, f2);
+
+                itemstack.b(i0);
+                itemstack.b = i1;
+            return flag0;
+            }
+            else {
+                return itemstack.a(entityplayer, world, blockpos, enumfacing, f0, f1, f2);
+            }
         }
     }
 

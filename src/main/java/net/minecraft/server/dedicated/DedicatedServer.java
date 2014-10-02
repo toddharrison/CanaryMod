@@ -25,7 +25,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.ServerEula;
 import net.minecraft.server.gui.MinecraftServerGui;
 import net.minecraft.server.management.ServerConfigurationManager;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.CryptManager;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.EnumDifficulty;
@@ -49,15 +49,15 @@ import java.util.concurrent.Callable;
 
 public class DedicatedServer extends MinecraftServer implements IServer {
 
-    private static final Logger i = LogManager.getLogger();
-    private final List<ServerCommand> j = Collections.synchronizedList(new ArrayList<ServerCommand>());
-    private RConThreadQuery k;
-    private RConThreadMain l;
-    // CanaryMod - Removed private PropertyManager m;
-    private ServerEula n;
-    // CanaryMod - Removed private boolean o;
-    // CanaryMod - Removed private WorldSettings.GameType p;
-    private boolean q;
+    private static final Logger j = LogManager.getLogger();
+    private final List<ServerCommand> k = Collections.synchronizedList(new ArrayList<ServerCommand>());
+    private RConThreadQuery l;
+    private RConThreadMain m;
+    // CanaryMod - Removed private PropertyManager n;
+    private ServerEula o;
+    // CanaryMod - Removed private boolean p;
+    // CanaryMod - Removed private WorldSettings.GameType q;
+    private boolean r;
 
     private ConsoleReader reader;
 
@@ -65,10 +65,12 @@ public class DedicatedServer extends MinecraftServer implements IServer {
         if (!"jline.UnsupportedTerminal".equals(System.getProperty("jline.terminal"))) {
             try {
                 reader = new ConsoleReader("Minecraft", System.in, System.out, null);
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 try {
                     reader = new ConsoleReader("Minecraft", System.in, System.out, new UnsupportedTerminal());
-                } catch (IOException ex) {
+                }
+                catch (IOException ex) {
                     i.fatal("Could not initialize ConsoleReader", ex);
                 }
             }
@@ -76,7 +78,7 @@ public class DedicatedServer extends MinecraftServer implements IServer {
     }
 
     public DedicatedServer(File file1) {
-        super(file1, Proxy.NO_PROXY);
+        super(file1, Proxy.NO_PROXY, a);
         Thread thread = new Thread("Server Infinisleeper") {
 
             {
@@ -90,7 +92,8 @@ public class DedicatedServer extends MinecraftServer implements IServer {
                         while (true) {
                             Thread.sleep(2147483647L);
                         }
-                    } catch (InterruptedException interruptedexception) {
+                    }
+                    catch (InterruptedException interruptedexception) {
                         ;
                     }
                 }
@@ -98,7 +101,7 @@ public class DedicatedServer extends MinecraftServer implements IServer {
         };
     }
 
-    protected boolean e() throws IOException {
+    protected boolean i() throws IOException {
         Thread bufferedreader = new Thread("Server console handler") {
 
             public void run() {
@@ -111,40 +114,43 @@ public class DedicatedServer extends MinecraftServer implements IServer {
                         reader.setPrompt("> ");
                         reader.setHandleUserInterrupt(true);
                         reader.addCompleter(new Completer() {
-                            @Override
-                            public int complete(String buffer, int cursor, List<CharSequence> candidates) {
-                                String toComplete = buffer.substring(0, cursor);
-                                String[] args = toComplete.split("\\s+");
+                                                @Override
+                                                public int complete(String buffer, int cursor, List<CharSequence> candidates) {
+                                                    String toComplete = buffer.substring(0, cursor);
+                                                    String[] args = toComplete.split("\\s+");
 
-                                List<String> completions = Canary.commands().tabComplete(Canary.getServer(), args[0], args);
-                                if (completions == null) {
-                                    return -1;
-                                }
+                                                    List<String> completions = Canary.commands().tabComplete(Canary.getServer(), args[0], args);
+                                                    if (completions == null) {
+                                                        return -1;
+                                                    }
 
-                                candidates.addAll(completions);
-                                return candidates.size() > 0 ? toComplete.lastIndexOf(' ') + 1 : -1;
-                            }
-                        });
+                                                    candidates.addAll(completions);
+                                                    return candidates.size() > 0 ? toComplete.lastIndexOf(' ') + 1 : -1;
+                                                }
+                                            }
+                                           );
 
                         try {
-                            while (!DedicatedServer.this.ag() && DedicatedServer.this.q() && (i0 = reader.readLine()) != null) {
+                            while (!DedicatedServer.this.am() && DedicatedServer.this.t() && (i0 = reader.readLine()) != null) {
                                 Canary.getServer().consoleCommand(i0);
                             }
-                        } catch (UserInterruptException e) {
-                            reader.shutdown();
-                            Canary.commands().parseCommand(Canary.getServer(), "stop", new String[]{"stop", "Ctrl-C", "at", "console"});
                         }
-                    } else {
+                        catch (UserInterruptException e) {
+                            reader.shutdown();
+                            Canary.commands().parseCommand(Canary.getServer(), "stop", new String[]{ "stop", "Ctrl-C", "at", "console" });
+                        }
+                    }
+                    else {
                         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
-                        while (!DedicatedServer.this.ag() && DedicatedServer.this.q() && (i0 = reader.readLine()) != null) {
+                        while (!DedicatedServer.this.am() && DedicatedServer.this.t() && (i0 = reader.readLine()) != null) {
                             Canary.getServer().consoleCommand(i0);
                         }
                     }
-                } catch (IOException i1) {
-                    DedicatedServer.i.error("Exception handling console input", i1);
                 }
-
+                catch (IOException i1) {
+                    DedicatedServer.j.error("Exception handling console input", i1);
+                }
             }
         };
 
@@ -159,7 +165,7 @@ public class DedicatedServer extends MinecraftServer implements IServer {
         }
         global.addHandler(new ForwardLogHandler());
 
-        final org.apache.logging.log4j.core.Logger logger = (org.apache.logging.log4j.core.Logger) LogManager.getRootLogger();
+        final org.apache.logging.log4j.core.Logger logger = (org.apache.logging.log4j.core.Logger)LogManager.getRootLogger();
         for (org.apache.logging.log4j.core.Appender appender : logger.getAppenders().values()) {
             if (appender instanceof org.apache.logging.log4j.core.appender.ConsoleAppender) {
                 logger.removeAppender(appender);
@@ -169,210 +175,241 @@ public class DedicatedServer extends MinecraftServer implements IServer {
         new SysOutWriterThread(System.out, this.reader).start();
         // CanaryMod end
 
-        i.info("Starting minecraft server version 1.7.10");
+        j.info("Starting minecraft server version 1.8");
         if (Runtime.getRuntime().maxMemory() / 1024L / 1024L < 512L) {
-            i.warn("To start the server with more ram, launch it as \"java -Xmx1024M -Xms1024M -jar minecraft_server.jar\"");
+            j.warn("To start the server with more ram, launch it as \"java -Xmx1024M -Xms1024M -jar minecraft_server.jar\"");
         }
 
-        i.info("Loading properties");
+        j.info("Loading properties");
         // this.l = new PropertyManager(new File("server.properties")); //CanaryMod - Removed
         // CanaryMod use our config
         ServerConfiguration cfg = Configuration.getServerConfig();
-        this.n = new ServerEula(new File("eula.txt"));
-        if (!this.n.a()) {
-            i.info("You need to agree to the EULA in order to run the server. Go to eula.txt for more info.");
-            this.n.b();
+        this.o = new ServerEula(new File("eula.txt"));
+        if (!this.o.a()) {
+            j.info("You need to agree to the EULA in order to run the server. Go to eula.txt for more info.");
+            this.o.b();
             return false;
-        } else {
-            if (this.N()) {
+        }
+        else {
+            if (this.S()) {
                 this.c("127.0.0.1");
-            } else {
+            }
+            else {
                 this.d(cfg.isOnlineMode());
                 this.c(cfg.getBindIp());
             }
             // CanaryMod: Removed world-dependent settings
-            this.n(cfg.getMotd());
-            this.m(cfg.getTexturePack());
+            this.m(cfg.getMotd());
+            this.a_(cfg.getTexturePack());
             this.d(cfg.getPlayerIdleTimeout());
             InetAddress inetaddress = null;
 
-            if (this.p().length() > 0) {
-                inetaddress = InetAddress.getByName(this.p());
+            if (this.s().length() > 0) {
+                inetaddress = InetAddress.getByName(this.s());
             }
 
-            if (this.L() < 0) {
+            if (this.Q() < 0) {
                 this.b(cfg.getPort());
             }
 
-            i.info("Generating keypair");
+            j.info("Generating keypair");
             this.a(CryptManager.b());
-            i.info("Starting Minecraft server on " + (this.p().length() == 0 ? "*" : this.p()) + ":" + this.L());
+            j.info("Starting Minecraft server on " + (this.s().length() == 0 ? "*" : this.s()) + ":" + this.Q());
 
             try {
-                this.ai().a(inetaddress, this.L());
-            } catch (IOException ioexception1) {
-                i.warn("**** FAILED TO BIND TO PORT!");
-                i.warn("The exception was: {}", new Object[]{ioexception1.toString()});
-                i.warn("Perhaps a server is already running on that port?");
+                this.ao().a(inetaddress, this.Q());
+            }
+            catch (IOException ioexception1) {
+                j.warn("**** FAILED TO BIND TO PORT!");
+                j.warn("The exception was: {}", new Object[]{ ioexception1.toString() });
+                j.warn("Perhaps a server is already running on that port?");
                 return false;
             }
 
-            if (!this.Y()) {
-                i.warn("**** SERVER IS RUNNING IN OFFLINE/INSECURE MODE!");
-                i.warn("The server will make no attempt to authenticate usernames. Beware.");
-                i.warn("While this makes the game possible to play without internet access, it also opens up the ability for hackers to connect with any username they choose.");
-                i.warn("To change this, set \"online-mode\" to \"true\" in the server.properties file.");
+            if (!this.ae()) {
+                j.warn("**** SERVER IS RUNNING IN OFFLINE/INSECURE MODE!");
+                j.warn("The server will make no attempt to authenticate usernames. Beware.");
+                j.warn("While this makes the game possible to play without internet access, it also opens up the ability for hackers to connect with any username they choose.");
+                j.warn("To change this, set \"online-mode\" to \"true\" in the server.properties file.");
             }
 
-            if (this.aE()) {
-                this.ax().c();
+            if (this.aP()) {
+                this.aD().c();
             }
 
             /* CanaryMod: Convert unnessary
-            if (!PreYggdrasilConverter.a(this.m)) {
+            if (!PreYggdrasilConverter.a(this.n)) {
                 return false;
             } else {
             */
-                this.a((ServerConfigurationManager) (new DedicatedPlayerList(this)));
-                long i1 = System.nanoTime();
+            this.a((ServerConfigurationManager)(new DedicatedPlayerList(this)));
+            long i1 = System.nanoTime();
 
-                if (this.O() == null) {
-                    this.k(Configuration.getServerConfig().getDefaultWorldName()); // CanaryMod use our world config
-                }
-                // CanaryMod use or configurations instead of native ones
-                WorldConfiguration worldcfg = Configuration.getWorldConfig(this.O() + "_NORMAL");
+            if (this.T() == null) {
+                this.k(Configuration.getServerConfig().getDefaultWorldName()); // CanaryMod use our world config
+            }
+            // CanaryMod use or configurations instead of native ones
+            WorldConfiguration worldcfg = Configuration.getWorldConfig(this.O() + "_NORMAL");
 
-                String s1 = worldcfg.getWorldSeed(); // this.m.a("level-seed", "");
-                String s2 = worldcfg.getWorldType().toString(); // this.m.a("level-type", "DEFAULT");
-                String s3 = worldcfg.getGeneratorSettings(); // this.m.a("generator-settings", "");
-                long i2 = (new Random()).nextLong();
+            String s1 = worldcfg.getWorldSeed(); // this.n.a("level-seed", "");
+            String s2 = worldcfg.getWorldType().toString(); // this.n.a("level-type", "DEFAULT");
+            String s3 = worldcfg.getGeneratorSettings(); // this.n.a("generator-settings", "");
+            long i2 = (new Random()).nextLong();
 
-                if (s1.length() > 0) {
-                    try {
-                        long i3 = Long.parseLong(s1);
+            if (s1.length() > 0) {
+                try {
+                    long i3 = Long.parseLong(s1);
 
-                        if (i3 != 0L) {
-                            i2 = i3;
-                        }
-                    } catch (NumberFormatException numberformatexception) {
-                        i2 = (long) s1.hashCode();
+                    if (i3 != 0L) {
+                        i2 = i3;
                     }
                 }
-
-                WorldType worldtype = WorldType.a(s2);
-
-                if (worldtype == null) {
-                    worldtype = WorldType.b;
+                catch (NumberFormatException numberformatexception) {
+                    i2 = (long)s1.hashCode();
                 }
+            }
 
-                this.at();
-                this.ad();
-                this.l();
-                this.W();
-                this.c(worldcfg.getMaxBuildHeight());
-                this.c((this.af() + 8) / 16 << 4);
-                this.c(MathHelper.a(this.af(), 64, 256));
-                worldcfg.getFile().setInt("max-build-height", this.af());
-                // CanaryMod enable plugins here, before the first world is loaded.
-                // At this point all bootstrapping should be done and systems should be running
-                Canary.enablePlugins();
+            WorldType worldtype = WorldType.a(s2);
 
-                if (!MinecraftServer.isHeadless()) {
-                    // CanaryMod moved GUI start to after plugins enable
-                    this.aD();
+            if (worldtype == null) {
+                worldtype = WorldType.b;
+            }
+
+            this.az();
+            this.aj();
+            this.p();
+            this.ac();
+            this.aI();
+            this.c(worldcfg.getMaxBuildHeight());
+            this.c((this.al() + 8) / 16 << 4);
+            this.c(MathHelper.a(this.al(), 64, 256));
+            worldcfg.getFile().setInt("max-build-height", this.al());
+            // CanaryMod enable plugins here, before the first world is loaded.
+            // At this point all bootstrapping should be done and systems should be running
+            Canary.enablePlugins();
+
+            if (!MinecraftServer.isHeadless()) {
+                // CanaryMod moved GUI start to after plugins enable
+                this.aO();
+            }
+
+            // CanaryMod changed call to initWorld
+            this.initWorld(this.T(), i2, worldtype, net.canarymod.api.world.DimensionType.NORMAL, s3);
+            //Load up start-up auto-load enabled worlds
+            for (String name : Canary.getServer().getWorldManager().getExistingWorlds()) {
+                WorldConfiguration wCfg = Configuration.getWorldConfig(name);
+                if (wCfg.startupAutoLoadEnabled()) {
+                    this.initWorld(name.replaceAll("_(NORMAL|NETHER|END)", ""), wCfg.getWorldSeed().matches("\\d+") ? Long.valueOf(wCfg.getWorldSeed()) : wCfg.getWorldSeed().hashCode(), WorldType.a(wCfg.getWorldType().toString()), net.canarymod.api.world.DimensionType.fromName(name.replaceAll("^.+_(.+)$", "$1")), wCfg.getGeneratorSettings());
                 }
+            }
+            //
+            long i4 = System.nanoTime() - i1;
+            String s4 = String.format("%.3fs", new Object[]{ Double.valueOf((double)i4 / 1.0E9D) });
 
-                // CanaryMod changed call to initWorld
-                this.initWorld(this.O(), i2, worldtype, net.canarymod.api.world.DimensionType.NORMAL, s3);
-                //Load up start-up auto-load enabled worlds
-                for (String name : Canary.getServer().getWorldManager().getExistingWorlds()) {
-                    WorldConfiguration wCfg = Configuration.getWorldConfig(name);
-                    if (wCfg.startupAutoLoadEnabled()) {
-                        this.initWorld(name.replaceAll("_(NORMAL|NETHER|END)", ""), wCfg.getWorldSeed().matches("\\d+") ? Long.valueOf(wCfg.getWorldSeed()) : wCfg.getWorldSeed().hashCode(), WorldType.a(wCfg.getWorldType().toString()), net.canarymod.api.world.DimensionType.fromName(name.replaceAll("^.+_(.+)$", "$1")), wCfg.getGeneratorSettings());
-                    }
-                }
-                //
-                long i4 = System.nanoTime() - i1;
-                String s4 = String.format("%.3fs", new Object[]{Double.valueOf((double) i4 / 1.0E9D)});
+            j.info("Done (" + s4 + ")! For help, type \"help\" or \"?\"");
+            if (cfg.isQueryEnabled()) {
+                j.info("Starting GS4 status listener");
+                this.l = new RConThreadQuery(this);
+                this.l.a();
+            }
 
-                i.info("Done (" + s4 + ")! For help, type \"help\" or \"?\"");
-                if (cfg.isQueryEnabled()) {
-                    i.info("Starting GS4 status listener");
-                    this.k = new RConThreadQuery(this);
-                    this.k.a();
-                }
+            if (cfg.isRconEnabled()) {
+                j.info("Starting remote control listener");
+                this.m = new RConThreadMain(this);
+                this.m.a();
+            }
 
-                if (cfg.isRconEnabled()) {
-                    i.info("Starting remote control listener");
-                    this.l = new RConThreadMain(this);
-                    this.l.a();
-                }
+            if (this.aQ() > 0L) {
+                Thread thread1 = new Thread(new ServerHangWatchdog(this));
 
-                return true;
+                thread1.setName("Server Watchdog");
+                thread1.setDaemon(true);
+                thread1.start();
+            }
+
+            return true;
             /*
             }
             */
         }
     }
 
+    public void a(WorldSettings.GameType worldsettings_gametype) {
+        //super.a(worldsettings_gametype);
+        //this.q = worldsettings_gametype;
+        Canary.log.warn("Nope @ DedicatedServer#a(WorldSettings.GameType:330")
+    }
+
     @Deprecated //CanaryMod: deprecate method
-    public boolean h() {
+    public boolean l() {
         throw new UnsupportedOperationException("Generate-structures setting has been moved to a per-world configuration!");
     }
 
     @Deprecated //CanaryMod: deprecate method
-    public WorldSettings.GameType i() {
+    public WorldSettings.GameType m() {
         throw new UnsupportedOperationException("GameType setting has been moved to a per-world configuration!");
     }
 
     @Deprecated //CanaryMod: deprecate method
-    public EnumDifficulty j() {
+    public EnumDifficulty n() {
         throw new UnsupportedOperationException("Difficulty setting has been moved to a per-world configuration!");
     }
 
     @Deprecated //CanaryMod: deprecate method
-    public boolean k() {
+    public boolean o() {
         throw new UnsupportedOperationException("Hardcoremode setting has been moved to a per-world configuration!");
     }
 
     protected void a(CrashReport crashreport) {
+        while (this.t()) {
+            this.aM();
+
+            try {
+                Thread.sleep(10L);
+            }
+            catch (InterruptedException interruptedexception) {
+                ;
+            }
+        }
     }
 
     public CrashReport b(CrashReport crashreport) {
         crashreport = super.b(crashreport);
         crashreport.g().a("Is Modded", new Callable() {
 
-            public String call() {
-                String s0 = DedicatedServer.this.getServerModName();
+                              public String call() {
+                                  String s0 = DedicatedServer.this.getServerModName();
 
-                return !s0.equals("vanilla") ? "Definitely; Server brand changed to \'" + s0 + "\'" : "Unknown (can\'t tell)";
-            }
-        });
+                                  return !s0.equals("vanilla") ? "Definitely; Server brand changed to \'" + s0 + "\'" : "Unknown (can\'t tell)";
+                              }
+                          }
+                         );
         crashreport.g().a("Type", new Callable() {
 
-            public String call() {
-                return "Dedicated Server (map_server.txt)";
-            }
-        });
+                              public String call() {
+                                  return "Dedicated Server (map_server.txt)";
+                              }
+                          }
+                         );
         return crashreport;
     }
 
-    protected void t() {
+    protected void x() {
         System.exit(0);
     }
 
-    public void v() { // CanaryMod: protected => public
-        super.v();
-        this.aB();
+    public void z() { // CanaryMod: protected => public
+        super.z();
+        this.aM();
     }
 
     @Deprecated //CanaryMod: deprecate method
-    public boolean w() {
+    public boolean A() {
         throw new UnsupportedOperationException("allow-nether has been moved to a per-world config");
     }
 
     @Deprecated //CanaryMod: deprecate method
-    public boolean Q() {
+    public boolean V() {
         throw new UnsupportedOperationException("spawn-monsters has been moved to a per-world config");
     }
 
@@ -382,32 +419,32 @@ public class DedicatedServer extends MinecraftServer implements IServer {
         super.a(playerusagesnooper);
     }
 
-    public boolean W() {
+    public boolean ac() {
         // CanaryMod moved to config/server.cfg
         return Configuration.getServerConfig().isSnooperEnabled();
     }
 
     public void a(String s0, ICommandSender icommandsender) {
-        this.j.add(new ServerCommand(s0, icommandsender));
+        this.k.add(new ServerCommand(s0, icommandsender));
     }
 
-    public void aB() {
-        while (!this.j.isEmpty()) {
-            ServerCommand servercommand = this.j.remove(0);
+    public void aM() {
+        while (!this.k.isEmpty()) {
+            ServerCommand servercommand = this.k.remove(0);
             // CanaryMod intercept command queue for our own commands
             String[] split = servercommand.a.split(" ");
             if (!Canary.commands().parseCommand(getServer(), split[0], split)) {
-                this.J().a(servercommand.b, servercommand.a);
+                this.O().a(servercommand.b, servercommand.a);
             }
         }
     }
 
-    public boolean X() {
+    public boolean ad() {
         return true;
     }
 
-    public DedicatedPlayerList aC() {
-        return (DedicatedPlayerList) super.ah();
+    public DedicatedPlayerList aN() {
+        return (DedicatedPlayerList)super.an();
     }
 
     @Deprecated //CanaryMod: deprecate method
@@ -440,67 +477,73 @@ public class DedicatedServer extends MinecraftServer implements IServer {
         throw new UnsupportedOperationException("Cannot finish this request. DedicatedServer.b_() is deprecated");
     }
 
-    public void aD() {
+    public void aO() {
         try {
-            ServerGuiStartHook guiHook = (ServerGuiStartHook) new ServerGuiStartHook(MinecraftServerGui.preInit(this)).call(); // CanaryMod: PreInitialize the GUI without starting it
+            ServerGuiStartHook guiHook = (ServerGuiStartHook)new ServerGuiStartHook(MinecraftServerGui.preInit(this)).call(); // CanaryMod: PreInitialize the GUI without starting it
             if (guiHook.getGui() != null) {
-                ((CanaryServer) Canary.getServer()).setCurrentGUI(guiHook.getGui());
-            } else {
-                ((CanaryServer) Canary.getServer()).setCurrentGUI(MinecraftServerGui.a(this));
+                ((CanaryServer)Canary.getServer()).setCurrentGUI(guiHook.getGui());
+            }
+            else {
+                ((CanaryServer)Canary.getServer()).setCurrentGUI(MinecraftServerGui.a(this));
             }
             Canary.getServer().getCurrentGUI().start();
             this.q = true;
             MinecraftServer.setHeadless(false);
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             // Gui Failure detected
             if (Main.canRunUncontrolled() || System.console() != null) { //If we can run uncontrolled, then just send a warning
                 Canary.log.warn("GUI failed to start.", ex);
-            } else { //Can't run uncontrolled, error out and kill ourselves for being failures...
+            }
+            else { //Can't run uncontrolled, error out and kill ourselves for being failures...
                 Canary.log.fatal("GUI failed to start and no console availible to control the server... Exiting...", ex);
                 System.exit(42);
             }
         }
     }
 
-    public boolean ak() {
-        return this.q;
+    public boolean aq() {
+        return this.r;
     }
 
     public String a(WorldSettings.GameType worldsettings_gametype, boolean flag0) {
         return "";
     }
 
-    public boolean ad() {
+    public boolean aj() {
         // CanaryMod moved to config/server.cfg
         return Configuration.getServerConfig().isCommandBlockEnabled();
     }
 
     @Deprecated //CanaryMod: deprecate method
-    public int ao() {
+    public int au() {
         throw new UnsupportedOperationException("spawn-protection has been moved to a per-world config!");
     }
 
-    public boolean a(World world, int i0, int i1, int i2, EntityPlayer entityplayer) {
+    public boolean a(World world, BlockPos blockpos, EntityPlayer entityplayer) {
         WorldConfiguration cfg = Configuration.getWorldConfig(world.getCanaryWorld().getFqName());
-        if (world.t.i != 0) {
+        if (world.t.q() != 0) {
             return false;
             // } else if (this.ax().i().isEmpty()) { // CanaryMod: Empty Ops list shouldn't break spawn protections...
             // return false;
-        } else if (this.aC().g(entityplayer.bJ())) {
+        }
+        else if (this.aN().g(entityplayer.cc())) {
             return false;
-        } else if (cfg.getSpawnProtectionSize() <= 0) {
+        }
+        else if (cfg.getSpawnProtectionSize() <= 0) {
             return false;
-        } else {
-            ChunkCoordinates chunkcoordinates = world.K();
-            int i3 = MathHelper.a(i0 - chunkcoordinates.a);
-            int i4 = MathHelper.a(i2 - chunkcoordinates.c);
-            int i5 = Math.max(i3, i4);
+        }
+        else {
+            BlockPos blockpos1 = world.M();
+            int i0 = MathHelper.a(blockpos.n() - blockpos1.n());
+            int i1 = MathHelper.a(blockpos.p() - blockpos1.p());
+            int i2 = Math.max(i0, i1);
 
-            return i5 <= cfg.getSpawnProtectionSize();
+            return i2 <= cfg.getSpawnProtectionSize();
         }
     }
 
-    public int l() {
+    public int p() {
         // return this.p.a("op-permission-level", 4);
         return 4; //CanaryMod: Always return Op Level 4, per-player permissions handles the rest
     }
@@ -514,19 +557,31 @@ public class DedicatedServer extends MinecraftServer implements IServer {
         //this.a();
     }
 
-    public boolean m() {
-        //return this.m.a("broadcast-rcon-to-ops", true);
-        return true; // TODO NEED SETTING
+    public int aG() {
+        int i0 = Configuration.getServerConfig().getDefaultMaxWorldSize(); //this.n.a("max-world-size", super.aG());
+
+        if (i0 < 1) {
+            i0 = 1;
+        }
+        else if (i0 > super.aG()) {
+            i0 = super.aG();
+        }
+
+        return i0;
     }
 
-
-    public boolean at() {
+    public boolean az() {
         // CanaryMod: Config override
         //return this.l.a("announce-player-achievements", true);
         return Configuration.getServerConfig().getAnnounceAchievements();
     }
 
-    protected boolean aE() throws IOException {
+    public int aI() {
+        //return this.n.a("network-compression-threshold", super.aI());
+        return Configuration.getServerConfig().getNetworkCompressionThreshold();
+    }
+
+    protected boolean aP() throws IOException {
         /* CanaryMod: Vanilla Files Update disabled
         boolean flag0 = false;
 
@@ -590,16 +645,21 @@ public class DedicatedServer extends MinecraftServer implements IServer {
         return true;
     }
 
-    private void aG() {
+    private void aS() {
         try {
             Thread.sleep(5000L);
-        } catch (InterruptedException interruptedexception) {
+        }
+        catch (InterruptedException interruptedexception) {
             ;
         }
     }
 
-    public ServerConfigurationManager ah() {
-        return this.aC();
+    public long aQ() {
+        return Configuration.getServerConfig().getMaxTickTime()//this.n.a("max-tick-time", TimeUnit.MINUTES.toMillis(1L));
+    }
+
+    public ServerConfigurationManager an() {
+        return this.aN();
     }
 
     @Override

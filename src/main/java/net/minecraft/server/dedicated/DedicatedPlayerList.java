@@ -17,16 +17,14 @@ import org.apache.logging.log4j.Logger;
 
 public class DedicatedPlayerList extends ServerConfigurationManager {
 
-    // CanaryMod removed whitelist
-    // CanaryMod: removed ops
-    private static final Logger g = LogManager.getLogger();
+    private static final Logger h = LogManager.getLogger();
 
     public DedicatedPlayerList(DedicatedServer dedicatedserver) {
         super(dedicatedserver);
         // CanaryMod removed whitelist settings
         // CanaryMod: removed ops
         this.a(Configuration.getServerConfig().getViewDistance());
-        this.f = Configuration.getServerConfig().getMaxPlayers();
+        this.g = Configuration.getServerConfig().getMaxPlayers();
         // CanaryMod removed references to NMS ban system
         // this.t();
         // this.v();
@@ -75,7 +73,7 @@ public class DedicatedPlayerList extends ServerConfigurationManager {
     }
 
     @Deprecated
-    private void v() {
+    private void w() {
         throw new UnsupportedOperationException("Vanilla BanList is disabled! Use Canary.bans() instead.");
         /* CanaryMod: disabled
         try {
@@ -88,7 +86,7 @@ public class DedicatedPlayerList extends ServerConfigurationManager {
     }
 
     @Deprecated
-    private void w() {
+    private void x() {
         throw new UnsupportedOperationException("Vanilla BanList is disabled! Use Canary.bans() instead.");
         /* CanaryMod: disabled
         try {
@@ -101,7 +99,7 @@ public class DedicatedPlayerList extends ServerConfigurationManager {
     }
 
     @Deprecated
-    private void x() {
+    private void y() {
         throw new UnsupportedOperationException("Vanilla BanList is disabled! Use Canary.bans() instead.");
         /* CanaryMod: disabled
         try {
@@ -115,7 +113,7 @@ public class DedicatedPlayerList extends ServerConfigurationManager {
     }
 
     @Deprecated
-    private void y() {
+    private void z() {
         throw new UnsupportedOperationException("Vanilla BanList is disabled! Use Canary.bans() instead.");
         /* CanaryMod: disabled
         try {
@@ -128,7 +126,7 @@ public class DedicatedPlayerList extends ServerConfigurationManager {
     }
 
     @Deprecated
-    private void z() {
+    private void A() {
         throw new UnsupportedOperationException("Vanilla OperatorsList is disabled! Use Canary.ops() instead.");
         /* CanaryMod: disabled
         try {
@@ -141,7 +139,7 @@ public class DedicatedPlayerList extends ServerConfigurationManager {
     }
 
     @Deprecated
-    private void A() {
+    private void B() {
         throw new UnsupportedOperationException("Vanilla OperatorsList is disabled! Use Canary.ops() instead.");
         /* CanaryMod: disabled
         try {
@@ -154,7 +152,7 @@ public class DedicatedPlayerList extends ServerConfigurationManager {
     }
 
     @Deprecated
-    private void B() {
+    private void C() {
         throw new UnsupportedOperationException("Vanilla WhiteList is disabled! Use Canary.whitelist() instead.");
         /* CanaryMod: disabled
         try {
@@ -166,7 +164,7 @@ public class DedicatedPlayerList extends ServerConfigurationManager {
         */
     }
 
-    private void C() {
+    private void D() {
         throw new UnsupportedOperationException("Vanilla WhiteList is disabled! Use Canary.whitelist() instead.");
         /* CanaryMod: disabled
         try {
@@ -179,11 +177,11 @@ public class DedicatedPlayerList extends ServerConfigurationManager {
     }
 
     public boolean e(GameProfile gameprofile) {
-        return !this.r() || Canary.ops().isOpped(gameprofile.getId().toString());
+        return !this.s() || Canary.ops().isOpped(gameprofile.getId().toString());
     }
 
     public DedicatedServer b() {
-        return (DedicatedServer) super.c();
+        return (DedicatedServer)super.c();
     }
 
     public MinecraftServer c() {
