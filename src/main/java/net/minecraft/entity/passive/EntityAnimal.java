@@ -2,19 +2,18 @@ package net.minecraft.entity.passive;
 
 import net.canarymod.api.entity.EntityType;
 import net.canarymod.api.entity.living.animal.CanaryAnimal;
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.attributes.IAttributeInstance;
+import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.stats.AchievementList;
-import net.minecraft.stats.StatBase;
-import net.minecraft.stats.StatList;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
@@ -22,12 +21,13 @@ import java.util.List;
 
 public abstract class EntityAnimal extends EntityAgeable implements IAnimals {
 
-    private int bp;
-    private int bq;
-    private EntityPlayer br;
-
+    protected Block bl;
+    private int bk;
+    private EntityPlayer bm;
+   
     public EntityAnimal(World world) {
         super(world);
+        this.bl = Blocks.c;
 
         //CanaryMod: Genericly wrapped animal
         this.entity = new CanaryAnimal(this) {
@@ -49,263 +49,130 @@ public abstract class EntityAnimal extends EntityAgeable implements IAnimals {
         };
     }
 
-    protected void bp() {
-        if (this.d() != 0) {
-            this.bp = 0;
+    protected void E() {
+        if (this.l() != 0) {
+            this.bk = 0;
         }
 
-        super.bp();
+        super.E();
     }
 
-    public void e() {
-        super.e();
-        if (this.d() != 0) {
-            this.bp = 0;
+    public void m() {
+        super.m();
+        if (this.l() != 0) {
+            this.bk = 0;
         }
 
-        if (this.bp > 0) {
-            --this.bp;
-            String s0 = "heart";
+        if (this.bk > 0) {
+            --this.bk;
+            if (this.bk % 10 == 0) {
+                double d0 = this.V.nextGaussian() * 0.02D;
+                double d1 = this.V.nextGaussian() * 0.02D;
+                double d2 = this.V.nextGaussian() * 0.02D;
 
-            if (this.bp % 10 == 0) {
-                double d0 = this.Z.nextGaussian() * 0.02D;
-                double d1 = this.Z.nextGaussian() * 0.02D;
-                double d2 = this.Z.nextGaussian() * 0.02D;
-
-                this.o.a(s0, this.s + (double) (this.Z.nextFloat() * this.M * 2.0F) - (double) this.M, this.t + 0.5D + (double) (this.Z.nextFloat() * this.N), this.u + (double) (this.Z.nextFloat() * this.M * 2.0F) - (double) this.M, d0, d1, d2);
+                this.o.a(EnumParticleTypes.HEART, this.s + (double) (this.V.nextFloat() * this.J * 2.0F) - (double) this.J, this.t + 0.5D + (double) (this.V.nextFloat() * this.K), this.u + (double) (this.V.nextFloat() * this.J * 2.0F) - (double) this.J, d0, d1, d2, new int[0]);
             }
-        } else {
-            this.bq = 0;
-        }
-
-    }
-
-    protected void a(Entity entity, float f0) {
-        if (entity instanceof EntityPlayer) {
-            if (f0 < 3.0F) {
-                double d0 = entity.s - this.s;
-                double d1 = entity.u - this.u;
-
-                this.y = (float) (Math.atan2(d1, d0) * 180.0D / 3.1415927410125732D) - 90.0F;
-                this.bn = true;
-            }
-
-            EntityPlayer entityplayer = (EntityPlayer) entity;
-
-            if (entityplayer.bF() == null || !this.c(entityplayer.bF())) {
-                this.bm = null;
-            }
-        } else if (entity instanceof EntityAnimal) {
-            EntityAnimal entityanimal = (EntityAnimal) entity;
-
-            if (this.d() > 0 && entityanimal.d() < 0) {
-                if ((double) f0 < 2.5D) {
-                    this.bn = true;
-                }
-            } else if (this.bp > 0 && entityanimal.bp > 0) {
-                if (entityanimal.bm == null) {
-                    entityanimal.bm = this;
-                }
-
-                if (entityanimal.bm == this && (double) f0 < 3.5D) {
-                    ++entityanimal.bp;
-                    ++this.bp;
-                    ++this.bq;
-                    if (this.bq % 4 == 0) {
-                        this.o.a("heart", this.s + (double) (this.Z.nextFloat() * this.M * 2.0F) - (double) this.M, this.t + 0.5D + (double) (this.Z.nextFloat() * this.N), this.u + (double) (this.Z.nextFloat() * this.M * 2.0F) - (double) this.M, 0.0D, 0.0D, 0.0D);
-                    }
-
-                    if (this.bq == 60) {
-                        this.b((EntityAnimal) entity);
-                    }
-                } else {
-                    this.bq = 0;
-                }
-            } else {
-                this.bq = 0;
-                this.bm = null;
-            }
-        }
-
-    }
-
-    private void b(EntityAnimal entityanimal) {
-        EntityAgeable entityageable = this.a((EntityAgeable) entityanimal);
-
-        if (entityageable != null) {
-            if (this.br == null && entityanimal.cd() != null) {
-                this.br = entityanimal.cd();
-            }
-
-            if (this.br != null) {
-                this.br.a(StatList.x);
-                if (this instanceof EntityCow) {
-                    this.br.a((StatBase) AchievementList.H);
-                }
-            }
-
-            this.c(6000);
-            entityanimal.c(6000);
-            this.bp = 0;
-            this.bq = 0;
-            this.bm = null;
-            entityanimal.bm = null;
-            entityanimal.bq = 0;
-            entityanimal.bp = 0;
-            entityageable.c(-24000);
-            entityageable.b(this.s, this.t, this.u, this.y, this.z);
-
-            for (int i0 = 0; i0 < 7; ++i0) {
-                double d0 = this.Z.nextGaussian() * 0.02D;
-                double d1 = this.Z.nextGaussian() * 0.02D;
-                double d2 = this.Z.nextGaussian() * 0.02D;
-
-                this.o.a("heart", this.s + (double) (this.Z.nextFloat() * this.M * 2.0F) - (double) this.M, this.t + 0.5D + (double) (this.Z.nextFloat() * this.N), this.u + (double) (this.Z.nextFloat() * this.M * 2.0F) - (double) this.M, d0, d1, d2);
-            }
-
-            this.o.d((Entity) entityageable);
         }
 
     }
 
     public boolean a(DamageSource damagesource, float f0) {
-        if (this.aw()) {
+        if (this.b(damagesource)) {
             return false;
         } else {
-            this.bo = 60;
-            if (!this.bk()) {
-                IAttributeInstance iattributeinstance = this.a(SharedMonsterAttributes.d);
-
-                if (iattributeinstance.a(h) == null) {
-                    iattributeinstance.a(i);
-                }
-            }
-
-            this.bm = null;
-            this.bp = 0;
+            this.bk = 0;
             return super.a(damagesource, f0);
         }
     }
 
-    public float a(int i0, int i1, int i2) {
-        return this.o.a(i0, i1 - 1, i2) == Blocks.c ? 10.0F : this.o.n(i0, i1, i2) - 0.5F;
+    public float a(BlockPos blockpos) {
+        return this.o.p(blockpos.b()).c() == Blocks.c ? 10.0F : this.o.o(blockpos) - 0.5F;
     }
 
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.a("InLove", this.bp);
+        nbttagcompound.a("InLove", this.bk);
     }
 
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
-        this.bp = nbttagcompound.f("InLove");
+        this.bk = nbttagcompound.f("InLove");
     }
 
-    protected Entity bR() {
-        if (this.bo > 0) {
-            return null;
-        } else {
-            float f0 = 8.0F;
-            List list;
-            int i0;
-            EntityAnimal entityanimal;
-
-            if (this.bp > 0) {
-                list = this.o.a(this.getClass(), this.C.b((double) f0, (double) f0, (double) f0));
-
-                for (i0 = 0; i0 < list.size(); ++i0) {
-                    entityanimal = (EntityAnimal) list.get(i0);
-                    if (entityanimal != this && entityanimal.bp > 0) {
-                        return entityanimal;
-                    }
-                }
-            } else if (this.d() == 0) {
-                list = this.o.a(EntityPlayer.class, this.C.b((double) f0, (double) f0, (double) f0));
-
-                for (i0 = 0; i0 < list.size(); ++i0) {
-                    EntityPlayer entityplayer = (EntityPlayer) list.get(i0);
-
-                    if (entityplayer.bF() != null && this.c(entityplayer.bF())) {
-                        return entityplayer;
-                    }
-                }
-            } else if (this.d() > 0) {
-                list = this.o.a(this.getClass(), this.C.b((double) f0, (double) f0, (double) f0));
-
-                for (i0 = 0; i0 < list.size(); ++i0) {
-                    entityanimal = (EntityAnimal) list.get(i0);
-                    if (entityanimal != this && entityanimal.d() < 0) {
-                        return entityanimal;
-                    }
-                }
-            }
-
-            return null;
-        }
-    }
-
-    public boolean by() {
+    public boolean bQ() {
         int i0 = MathHelper.c(this.s);
-        int i1 = MathHelper.c(this.C.b);
+        int i1 = MathHelper.c(this.aQ().b);
         int i2 = MathHelper.c(this.u);
+        BlockPos blockpos = new BlockPos(i0, i1, i2);
 
-        return this.o.a(i0, i1 - 1, i2) == Blocks.c && this.o.j(i0, i1, i2) > 8 && super.by();
+        return this.o.p(blockpos.b()).c() == this.bl && this.o.k(blockpos) > 8 && super.bQ();
     }
 
-    public int q() {
+    public int w() {
         return 120;
     }
 
-    protected boolean v() {
+    protected boolean C() {
         return false;
     }
 
-    protected int e(EntityPlayer entityplayer) {
+    protected int b(EntityPlayer entityplayer) {
         return 1 + this.o.s.nextInt(3);
     }
 
-    public boolean c(ItemStack itemstack) {
-        return itemstack.b() == Items.O;
+    public boolean d(ItemStack itemstack) {
+        return itemstack == null ? false : itemstack.b() == Items.O;
     }
 
     public boolean a(EntityPlayer entityplayer) {
-        ItemStack itemstack = entityplayer.bm.h();
+        ItemStack itemstack = entityplayer.bg.h();
 
-        if (itemstack != null && this.c(itemstack) && this.d() == 0 && this.bp <= 0) {
-            if (!entityplayer.bE.d) {
-                --itemstack.b;
-                if (itemstack.b <= 0) {
-                    entityplayer.bm.a(entityplayer.bm.c, (ItemStack) null);
-                }
+        if (itemstack != null) {
+            if (this.d(itemstack) && this.l() == 0 && this.bk <= 0) {
+                this.a(entityplayer, itemstack);
+                this.c(entityplayer);
+                return true;
             }
 
-            this.f(entityplayer);
-            return true;
-        } else {
-            return super.a(entityplayer);
+            if (this.i_() && this.d(itemstack)) {
+                this.a(entityplayer, itemstack);
+                this.a((int) ((float) (-this.l() / 20) * 0.1F), true);
+                return true;
+            }
         }
+
+        return super.a(entityplayer);
     }
 
-    public void f(EntityPlayer entityplayer) {
-        this.bp = 600;
-        this.br = entityplayer;
-        this.bm = null;
-        this.o.a(this, (byte) 18);
+    protected void a(EntityPlayer entityplayer, ItemStack itemstack) {
+        if (!entityplayer.by.d) {
+            --itemstack.b;
+            if (itemstack.b <= 0) {
+                entityplayer.bg.a(entityplayer.bg.c, (ItemStack) null);
+            }
+        }
+
     }
 
-    public EntityPlayer cd() {
-        return this.br;
+    public void c(EntityPlayer entityplayer) {
+        this.bk = 600;
+        this.bm = entityplayer;
+        this.o.a((Entity) this, (byte) 18);
     }
 
-    public boolean ce() {
-        return this.bp > 0;
+    public EntityPlayer co() {
+        return this.bm;
     }
 
-    public void cf() {
-        this.bp = 0;
+    public boolean cp() {
+        return this.bk > 0;
+    }
+
+    public void cq() {
+        this.bk = 0;
     }
 
     public boolean a(EntityAnimal entityanimal) {
-        return entityanimal == this ? false : (entityanimal.getClass() != this.getClass() ? false : this.ce() && entityanimal.ce());
+        return entityanimal == this ? false : (entityanimal.getClass() != this.getClass() ? false : this.cp() && entityanimal.cp());
     }
 }

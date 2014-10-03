@@ -5,49 +5,58 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
+
 
 public class EntityMooshroom extends EntityCow {
 
     public EntityMooshroom(World world) {
         super(world);
         this.a(0.9F, 1.3F);
+        this.bl = Blocks.bw;
         this.entity = new CanaryMooshroom(this); // CanaryMod: Wrap Entity
     }
 
     public boolean a(EntityPlayer entityplayer) {
-        ItemStack itemstack = entityplayer.bm.h();
+        ItemStack itemstack = entityplayer.bg.h();
 
-        if (itemstack != null && itemstack.b() == Items.z && this.d() >= 0) {
+        if (itemstack != null && itemstack.b() == Items.z && this.l() >= 0) {
             if (itemstack.b == 1) {
-                entityplayer.bm.a(entityplayer.bm.c, new ItemStack(Items.A));
+                entityplayer.bg.a(entityplayer.bg.c, new ItemStack(Items.A));
                 return true;
             }
 
-            if (entityplayer.bm.a(new ItemStack(Items.A)) && !entityplayer.bE.d) {
-                entityplayer.bm.a(entityplayer.bm.c, 1);
+            if (entityplayer.bg.a(new ItemStack(Items.A)) && !entityplayer.by.d) {
+                entityplayer.bg.a(entityplayer.bg.c, 1);
                 return true;
             }
         }
 
-        if (itemstack != null && itemstack.b() == Items.aZ && this.d() >= 0) {
-            this.B();
-            this.o.a("largeexplode", this.s, this.t + (double) (this.N / 2.0F), this.u, 0.0D, 0.0D, 0.0D);
-            if (!this.o.E) {
+        if (itemstack != null && itemstack.b() == Items.be && this.l() >= 0) {
+            this.J();
+            this.o.a(EnumParticleTypes.EXPLOSION_LARGE, this.s, this.t + (double) (this.K / 2.0F), this.u, 0.0D, 0.0D, 0.0D, new int[0]);
+            if (!this.o.D) {
                 EntityCow entitycow = new EntityCow(this.o);
 
                 entitycow.b(this.s, this.t, this.u, this.y, this.z);
-                entitycow.g(this.aS());
-                entitycow.aM = this.aM;
+                entitycow.h(this.bm());
+                entitycow.aG = this.aG;
+                if (this.k_()) {
+                    entitycow.a(this.aL());
+                }
+
                 this.o.d((Entity) entitycow);
 
                 for (int i0 = 0; i0 < 5; ++i0) {
-                    this.o.d((Entity) (new EntityItem(this.o, this.s, this.t + (double) this.N, this.u, new ItemStack(Blocks.Q))));
+                    this.o.d((Entity) (new EntityItem(this.o, this.s, this.t + (double) this.K, this.u, new ItemStack(Blocks.Q))));
                 }
+
                 itemstack.a(1, (EntityLivingBase) entityplayer);
                 this.a("mob.sheep.shear", 1.0F, 1.0F);
             }
