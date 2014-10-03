@@ -3,101 +3,109 @@ package net.minecraft.entity.monster;
 import net.canarymod.api.entity.living.monster.CanaryMagmaCube;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
+
 
 public class EntityMagmaCube extends EntitySlime {
 
     public EntityMagmaCube(World world) {
         super(world);
-        this.ae = true;
+        this.ab = true;
         this.entity = new CanaryMagmaCube(this); // CanaryMod: Wrap Entity
     }
 
-    protected void aD() {
-        super.aD();
+    protected void aW() {
+        super.aW();
         this.a(SharedMonsterAttributes.d).a(0.20000000298023224D);
     }
 
-    public boolean by() {
-        return this.o.r != EnumDifficulty.PEACEFUL && this.o.b(this.C) && this.o.a((Entity) this, this.C).isEmpty() && !this.o.d(this.C);
+    public boolean bQ() {
+        return this.o.aa() != EnumDifficulty.PEACEFUL;
     }
 
-    public int aV() {
-        return this.bX() * 3;
+    public boolean bR() {
+        return this.o.a(this.aQ(), (Entity) this) && this.o.a((Entity) this, this.aQ()).isEmpty() && !this.o.d(this.aQ());
     }
 
-    public float d(float f0) {
+    public int bq() {
+        return this.ck() * 3;
+    }
+
+    public float c(float f0) {
         return 1.0F;
     }
 
-    protected String bP() {
-        return "flame";
+    protected EnumParticleTypes n() {
+        return EnumParticleTypes.FLAME;
     }
 
-    protected EntitySlime bQ() {
+    protected EntitySlime cd() {
         return new EntityMagmaCube(this.o);
     }
 
-    protected Item u() {
-        return Items.bs;
+    protected Item A() {
+        return Items.bE;
     }
 
     protected void b(boolean flag0, int i0) {
-        Item item = this.u();
+        Item item = this.A();
 
-        if (item != null && this.bX() > 1) {
-            int i1 = this.Z.nextInt(4) - 2;
+        if (item != null && this.ck() > 1) {
+            int i1 = this.V.nextInt(4) - 2;
 
             if (i0 > 0) {
-                i1 += this.Z.nextInt(i0 + 1);
+                i1 += this.V.nextInt(i0 + 1);
             }
 
             for (int i2 = 0; i2 < i1; ++i2) {
                 this.a(item, 1);
             }
         }
+
     }
 
-    public boolean al() {
+    public boolean au() {
         return false;
     }
 
-    protected int bR() {
-        return super.bR() * 4;
+    protected int ce() {
+        return super.ce() * 4;
     }
 
-    protected void bS() {
-        this.h *= 0.9F;
+    protected void cf() {
+        this.a *= 0.9F;
     }
 
-    protected void bj() {
-        this.w = (double) (0.42F + (float) this.bX() * 0.1F);
-        this.al = true;
+    protected void bE() {
+        this.w = (double) (0.42F + (float) this.ck() * 0.1F);
+        this.ai = true;
     }
 
-    protected void b(float f0) {
+    protected void bG() {
+        this.w = (double) (0.22F + (float) this.ck() * 0.05F);
+        this.ai = true;
     }
 
-    protected boolean bT() {
+    public void e(float f0, float f1) {}
+
+    protected boolean cg() {
         return true;
     }
 
-    protected int bU() {
-        return super.bU() + 2;
+    protected int ch() {
+        return super.ch() + 2;
     }
 
-    protected String bV() {
-        return this.bX() > 1 ? "mob.magmacube.big" : "mob.magmacube.small";
+    protected String ci() {
+        return this.ck() > 1 ? "mob.magmacube.big" : "mob.magmacube.small";
     }
 
-    public boolean P() {
-        return false;
-    }
-
-    protected boolean bW() {
+    protected boolean cj() {
         return true;
     }
 }

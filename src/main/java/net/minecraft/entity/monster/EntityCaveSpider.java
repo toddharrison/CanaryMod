@@ -5,10 +5,13 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.monster.EntitySpider;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
+
 
 public class EntityCaveSpider extends EntitySpider {
 
@@ -18,19 +21,19 @@ public class EntityCaveSpider extends EntitySpider {
         this.entity = new CanaryCaveSpider(this); // CanaryMod: Wrap Entity
     }
 
-    protected void aD() {
-        super.aD();
+    protected void aW() {
+        super.aW();
         this.a(SharedMonsterAttributes.a).a(12.0D);
     }
 
-    public boolean n(Entity entity) {
-        if (super.n(entity)) {
+    public boolean r(Entity entity) {
+        if (super.r(entity)) {
             if (entity instanceof EntityLivingBase) {
                 byte b0 = 0;
 
-                if (this.o.r == EnumDifficulty.NORMAL) {
+                if (this.o.aa() == EnumDifficulty.NORMAL) {
                     b0 = 7;
-                } else if (this.o.r == EnumDifficulty.HARD) {
+                } else if (this.o.aa() == EnumDifficulty.HARD) {
                     b0 = 15;
                 }
 
@@ -45,7 +48,11 @@ public class EntityCaveSpider extends EntitySpider {
         }
     }
 
-    public IEntityLivingData a(IEntityLivingData ientitylivingdata) {
+    public IEntityLivingData a(DifficultyInstance difficultyinstance, IEntityLivingData ientitylivingdata) {
         return ientitylivingdata;
+    }
+
+    public float aR() {
+        return 0.45F;
     }
 }

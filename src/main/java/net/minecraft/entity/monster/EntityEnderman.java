@@ -6,231 +6,186 @@ import net.canarymod.hook.entity.EndermanDropBlockHook;
 import net.canarymod.hook.entity.EndermanPickupBlockHook;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.EntityAIAttackOnCollide;
+import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.ai.EntityAIHurtByTarget;
+import net.minecraft.entity.ai.EntityAILookIdle;
+import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
+import net.minecraft.entity.ai.EntityAISwimming;
+import net.minecraft.entity.ai.EntityAIWander;
+import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
+import net.minecraft.entity.monster.EntityEndermite;
+import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.*;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSource;
+import net.minecraft.util.EntityDamageSourceIndirect;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
-import java.util.Arrays;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Sets;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
 import java.util.UUID;
 
 public class EntityEnderman extends EntityMob {
 
-    private static final UUID bp = UUID.fromString("020E0DFB-87AE-4653-9556-831010E291A0");
-    private static final AttributeModifier bq = (new AttributeModifier(bp, "Attacking speed boost", 6.199999809265137D, 0)).a(false);
-    // private static boolean[] br = new boolean[256]; //CanaryMod: disabled
-    private int bs;
-    private int bt;
-    private Entity bu;
-    private boolean bv;
-
+    private static final UUID b = UUID.fromString("020E0DFB-87AE-4653-9556-831010E291A0");
+    private static final AttributeModifier c = (new AttributeModifier(b, "Attacking speed boost", 0.15000000596046448D, 0)).a(false);
+    private static final Set bk = Sets.newIdentityHashSet();
+    private boolean bl;
+   
     public EntityEnderman(World world) {
         super(world);
         this.a(0.6F, 2.9F);
-        this.W = 1.0F;
+        this.S = 1.0F;
+        this.i.a(0, new EntityAISwimming(this));
+        this.i.a(2, new EntityAIAttackOnCollide(this, 1.0D, false));
+        this.i.a(7, new EntityAIWander(this, 1.0D));
+        this.i.a(8, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
+        this.i.a(8, new EntityAILookIdle(this));
+        this.i.a(10, new EntityEnderman.AIPlaceBlock());
+        this.i.a(11, new EntityEnderman.AITakeBlock());
+        this.bg.a(1, new EntityAIHurtByTarget(this, false, new Class[0]));
+        this.bg.a(2, new EntityEnderman.AIFindPlayer());
+        this.bg.a(3, new EntityAINearestAttackableTarget(this, EntityEndermite.class, 10, true, false, new Predicate() {
+
+            public boolean a(EntityEndermite p_a_1_) {
+                return p_a_1_.n();
+            }
+
+            public boolean apply(Object p_apply_1_) {
+                return this.a((EntityEndermite) p_apply_1_);
+            }
+        }));
         this.entity = new CanaryEnderman(this); // CanaryMod: Wrap Entity
     }
 
-    protected void aD() {
-        super.aD();
+    protected void aW() {
+        super.aW();
         this.a(SharedMonsterAttributes.a).a(40.0D);
         this.a(SharedMonsterAttributes.d).a(0.30000001192092896D);
         this.a(SharedMonsterAttributes.e).a(7.0D);
+        this.a(SharedMonsterAttributes.b).a(64.0D);
     }
 
-    protected void c() {
-        super.c();
-        this.af.a(16, new Byte((byte) 0));
-        this.af.a(17, new Byte((byte) 0));
-        this.af.a(18, new Byte((byte) 0));
+    protected void h() {
+        super.h();
+        this.ac.a(16, new Short((short) 0));
+        this.ac.a(17, new Byte((byte) 0));
+        this.ac.a(18, new Byte((byte) 0));
     }
 
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.a("carried", (short) Block.b(this.cb()));
-        nbttagcompound.a("carriedData", (short) this.cc());
+        IBlockState iblockstate = this.ck();
+
+        nbttagcompound.a("carried", (short) Block.a(iblockstate.c()));
+        nbttagcompound.a("carriedData", (short) iblockstate.c().c(iblockstate));
     }
 
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
-        this.a(Block.e(nbttagcompound.e("carried")));
-        this.a(nbttagcompound.e("carriedData"));
-    }
+        IBlockState iblockstate;
 
-    protected Entity bR() {
-        EntityPlayer entityplayer = this.o.b(this, 64.0D);
-
-        if (entityplayer != null) {
-            if (this.f(entityplayer)) {
-                this.bv = true;
-                if (this.bt == 0) {
-                    this.o.a(entityplayer.s, entityplayer.t, entityplayer.u, "mob.endermen.stare", 1.0F, 1.0F);
-                }
-
-                if (this.bt++ == 5) {
-                    this.bt = 0;
-                    this.a(true);
-                    return entityplayer;
-                }
-            } else {
-                this.bt = 0;
-            }
+        if (nbttagcompound.b("carried", 8)) {
+            iblockstate = Block.b(nbttagcompound.j("carried")).a(nbttagcompound.e("carriedData") & '\uffff');
+        } else {
+            iblockstate = Block.c(nbttagcompound.e("carried")).a(nbttagcompound.e("carriedData") & '\uffff');
         }
 
-        return null;
+        this.a(iblockstate);
     }
 
-    private boolean f(EntityPlayer entityplayer) {
-        ItemStack itemstack = entityplayer.bm.b[3];
+    private boolean c(EntityPlayer entityplayer) {
+        ItemStack itemstack = entityplayer.bg.b[3];
 
-        if (itemstack != null && itemstack.b() == Item.a(Blocks.aK)) {
+        if (itemstack != null && itemstack.b() == Item.a(Blocks.aU)) {
             return false;
         } else {
-            Vec3 vec3 = entityplayer.j(1.0F).a();
-            Vec3 vec31 = Vec3.a(this.s - entityplayer.s, this.C.b + (double) (this.N / 2.0F) - (entityplayer.t + (double) entityplayer.g()), this.u - entityplayer.u);
+            Vec3 vec3 = entityplayer.d(1.0F).a();
+            Vec3 vec31 = new Vec3(this.s - entityplayer.s, this.aQ().b + (double) (this.K / 2.0F) - (entityplayer.t + (double) entityplayer.aR()), this.u - entityplayer.u);
             double d0 = vec31.b();
 
             vec31 = vec31.a();
             double d1 = vec3.b(vec31);
 
-            return d1 > 1.0D - 0.025D / d0 && entityplayer.p(this);
+            return d1 > 1.0D - 0.025D / d0 ? entityplayer.t(this) : false;
         }
     }
 
-    public void e() {
-        if (this.L()) {
-            this.a(DamageSource.e, 1.0F);
-        }
-
-        if (this.bu != this.bm) {
-            IAttributeInstance iattributeinstance = this.a(SharedMonsterAttributes.d);
-
-            iattributeinstance.b(bq);
-            if (this.bm != null) {
-                iattributeinstance.a(bq);
-            }
-        }
-
-        this.bu = this.bm;
-        int i0;
-
-        if (!this.o.E && this.o.O().b("mobGriefing")) {
-            int i1;
-            int i2;
-            Block block;
-
-            if (this.cb().o() == Material.a) {
-                if (this.Z.nextInt(20) == 0) {
-                    i0 = MathHelper.c(this.s - 2.0D + this.Z.nextDouble() * 4.0D);
-                    i1 = MathHelper.c(this.t + this.Z.nextDouble() * 3.0D);
-                    i2 = MathHelper.c(this.u - 2.0D + this.Z.nextDouble() * 4.0D);
-                    block = this.o.a(i0, i1, i2);
-                    // CanaryMod: Replace checking static array with checking the world config list for Ender Blocks
-                    if (Arrays.asList(Configuration.getWorldConfig(getCanaryWorld().getFqName()).getEnderBlocks()).contains(Block.b(block))) {
-                        // CanaryMod: call EndermanPickupBlockHook
-                        EndermanPickupBlockHook hook = (EndermanPickupBlockHook) new EndermanPickupBlockHook((CanaryEnderman) entity, entity.getWorld().getBlockAt(i0, i1, i2)).call();
-                        if (!hook.isCanceled()) {
-                            this.a(block);
-                            this.a(this.o.e(i0, i1, i2));
-                            this.o.b(i0, i1, i2, Blocks.a);
-                        }
-                        //
-                    }
-                }
-            } else if (this.Z.nextInt(2000) == 0) {
-                i0 = MathHelper.c(this.s - 1.0D + this.Z.nextDouble() * 2.0D);
-                i1 = MathHelper.c(this.t + this.Z.nextDouble() * 2.0D);
-                i2 = MathHelper.c(this.u - 1.0D + this.Z.nextDouble() * 2.0D);
-                block = this.o.a(i0, i1, i2);
-                Block block1 = this.o.a(i0, i1 - 1, i2);
-
-                if (block.o() == Material.a && block1.o() != Material.a && block1.d()) {
-                    // CanaryMod: call EndermanDropBlockHook
-                    EndermanDropBlockHook hook = (EndermanDropBlockHook) new EndermanDropBlockHook((CanaryEnderman) entity, entity.getWorld().getBlockAt(i0, i1, i2)).call();
-                    if (!hook.isCanceled()) {
-                        this.o.d(i0, i1, i2, this.cb(), this.cc(), 3);
-                        this.a(Blocks.a);
-                    }
-                    //
-                }
-            }
-        }
-
-        for (i0 = 0; i0 < 2; ++i0) {
-            this.o.a("portal", this.s + (this.Z.nextDouble() - 0.5D) * (double) this.M, this.t + this.Z.nextDouble() * (double) this.N - 0.25D, this.u + (this.Z.nextDouble() - 0.5D) * (double) this.M, (this.Z.nextDouble() - 0.5D) * 2.0D, -this.Z.nextDouble(), (this.Z.nextDouble() - 0.5D) * 2.0D);
-        }
-
-        if (this.o.w() && !this.o.E) {
-            float f0 = this.d(1.0F);
-
-            if (f0 > 0.5F && this.o.i(MathHelper.c(this.s), MathHelper.c(this.t), MathHelper.c(this.u)) && this.Z.nextFloat() * 30.0F < (f0 - 0.4F) * 2.0F) {
-                this.bm = null;
-                this.a(false);
-                this.bv = false;
-                this.bZ();
-            }
-        }
-
-        if (this.L() || this.al()) {
-            this.bm = null;
-            this.a(false);
-            this.bv = false;
-            this.bZ();
-        }
-
-        if (this.cd() && !this.bv && this.Z.nextInt(100) == 0) {
-            this.a(false);
-        }
-
-        this.bc = false;
-        if (this.bm != null) {
-            this.a(this.bm, 100.0F, 100.0F);
-        }
-
-        if (!this.o.E && this.Z()) {
-            if (this.bm != null) {
-                if (this.bm instanceof EntityPlayer && this.f((EntityPlayer) this.bm)) {
-                    if (this.bm.f((Entity) this) < 16.0D) {
-                        this.bZ();
-                    }
-
-                    this.bs = 0;
-                } else if (this.bm.f((Entity) this) > 256.0D && this.bs++ >= 30 && this.c(this.bm)) {
-                    this.bs = 0;
-                }
-            } else {
-                this.a(false);
-                this.bs = 0;
-            }
-        }
-
-        super.e();
+    public float aR() {
+        return 2.55F;
     }
 
-    public boolean bZ() { // CanaryMod: protected -> public
-        double d0 = this.s + (this.Z.nextDouble() - 0.5D) * 64.0D;
-        double d1 = this.t + (double) (this.Z.nextInt(64) - 32);
-        double d2 = this.u + (this.Z.nextDouble() - 0.5D) * 64.0D;
+    public void m() {
+        if (this.o.D) {
+            for (int i0 = 0; i0 < 2; ++i0) {
+                this.o.a(EnumParticleTypes.PORTAL, this.s + (this.V.nextDouble() - 0.5D) * (double) this.J, this.t + this.V.nextDouble() * (double) this.K - 0.25D, this.u + (this.V.nextDouble() - 0.5D) * (double) this.J, (this.V.nextDouble() - 0.5D) * 2.0D, -this.V.nextDouble(), (this.V.nextDouble() - 0.5D) * 2.0D, new int[0]);
+            }
+        }
+
+        this.aW = false;
+        super.m();
+    }
+
+    protected void E() {
+        if (this.U()) {
+            this.a(DamageSource.f, 1.0F);
+        }
+
+        if (this.cm() && !this.bl && this.V.nextInt(100) == 0) {
+            this.a(false);
+        }
+
+        if (this.o.w()) {
+            float f0 = this.c(1.0F);
+
+            if (f0 > 0.5F && this.o.i(new BlockPos(this)) && this.V.nextFloat() * 30.0F < (f0 - 0.4F) * 2.0F) {
+                this.d((EntityLivingBase) null);
+                this.a(false);
+                this.bl = false;
+                this.n();
+            }
+        }
+
+        super.E();
+    }
+
+    public boolean n() { // CanaryMod: protected -> public
+        double d0 = this.s + (this.V.nextDouble() - 0.5D) * 64.0D;
+        double d1 = this.t + (double) (this.V.nextInt(64) - 32);
+        double d2 = this.u + (this.V.nextDouble() - 0.5D) * 64.0D;
 
         return this.k(d0, d1, d2);
     }
 
-    protected boolean c(Entity entity) {
-        Vec3 vec3 = Vec3.a(this.s - entity.s, this.C.b + (double) (this.N / 2.0F) - entity.t + (double) entity.g(), this.u - entity.u);
+    protected boolean b(Entity entity) {
+        Vec3 vec3 = new Vec3(this.s - entity.s, this.aQ().b + (double) (this.K / 2.0F) - entity.t + (double) entity.aR(), this.u - entity.u);
 
         vec3 = vec3.a();
         double d0 = 16.0D;
-        double d1 = this.s + (this.Z.nextDouble() - 0.5D) * 8.0D - vec3.a * d0;
-        double d2 = this.t + (double) (this.Z.nextInt(16) - 8) - vec3.b * d0;
-        double d3 = this.u + (this.Z.nextDouble() - 0.5D) * 8.0D - vec3.c * d0;
+        double d1 = this.s + (this.V.nextDouble() - 0.5D) * 8.0D - vec3.a * d0;
+        double d2 = this.t + (double) (this.V.nextInt(16) - 8) - vec3.b * d0;
+        double d3 = this.u + (this.V.nextDouble() - 0.5D) * 8.0D - vec3.c * d0;
 
         return this.k(d1, d2, d3);
     }
@@ -244,27 +199,26 @@ public class EntityEnderman extends EntityMob {
         this.t = d1;
         this.u = d2;
         boolean flag0 = false;
-        int i0 = MathHelper.c(this.s);
-        int i1 = MathHelper.c(this.t);
-        int i2 = MathHelper.c(this.u);
+        BlockPos blockpos = new BlockPos(this.s, this.t, this.u);
 
-        if (this.o.d(i0, i1, i2)) {
+        if (this.o.e(blockpos)) {
             boolean flag1 = false;
 
-            while (!flag1 && i1 > 0) {
-                Block block = this.o.a(i0, i1 - 1, i2);
+            while (!flag1 && blockpos.o() > 0) {
+                BlockPos blockpos1 = blockpos.b();
+                Block block = this.o.p(blockpos1).c();
 
-                if (block.o().c()) {
+                if (block.r().c()) {
                     flag1 = true;
                 } else {
                     --this.t;
-                    --i1;
+                    blockpos = blockpos1;
                 }
             }
 
             if (flag1) {
-                this.b(this.s, this.t, this.u);
-                if (this.o.a((Entity) this, this.C).isEmpty() && !this.o.d(this.C)) {
+                super.a(this.s, this.t, this.u);
+                if (this.o.a((Entity) this, this.aQ()).isEmpty() && !this.o.d(this.aQ())) {
                     flag0 = true;
                 }
             }
@@ -276,16 +230,16 @@ public class EntityEnderman extends EntityMob {
         } else {
             short short1 = 128;
 
-            for (int i3 = 0; i3 < short1; ++i3) {
-                double d6 = (double) i3 / ((double) short1 - 1.0D);
-                float f0 = (this.Z.nextFloat() - 0.5F) * 0.2F;
-                float f1 = (this.Z.nextFloat() - 0.5F) * 0.2F;
-                float f2 = (this.Z.nextFloat() - 0.5F) * 0.2F;
-                double d7 = d3 + (this.s - d3) * d6 + (this.Z.nextDouble() - 0.5D) * (double) this.M * 2.0D;
-                double d8 = d4 + (this.t - d4) * d6 + this.Z.nextDouble() * (double) this.N;
-                double d9 = d5 + (this.u - d5) * d6 + (this.Z.nextDouble() - 0.5D) * (double) this.M * 2.0D;
+            for (int i0 = 0; i0 < short1; ++i0) {
+                double d6 = (double) i0 / ((double) short1 - 1.0D);
+                float f0 = (this.V.nextFloat() - 0.5F) * 0.2F;
+                float f1 = (this.V.nextFloat() - 0.5F) * 0.2F;
+                float f2 = (this.V.nextFloat() - 0.5F) * 0.2F;
+                double d7 = d3 + (this.s - d3) * d6 + (this.V.nextDouble() - 0.5D) * (double) this.J * 2.0D;
+                double d8 = d4 + (this.t - d4) * d6 + this.V.nextDouble() * (double) this.K;
+                double d9 = d5 + (this.u - d5) * d6 + (this.V.nextDouble() - 0.5D) * (double) this.J * 2.0D;
 
-                this.o.a("portal", d7, d8, d9, (double) f0, (double) f1, (double) f2);
+                this.o.a(EnumParticleTypes.PORTAL, d7, d8, d9, (double) f0, (double) f1, (double) f2, new int[0]);
             }
 
             this.o.a(d3, d4, d5, "mob.endermen.portal", 1.0F, 1.0F);
@@ -294,27 +248,27 @@ public class EntityEnderman extends EntityMob {
         }
     }
 
-    protected String t() {
-        return this.cd() ? "mob.endermen.scream" : "mob.endermen.idle";
+    protected String z() {
+        return this.cm() ? "mob.endermen.scream" : "mob.endermen.idle";
     }
 
-    protected String aT() {
+    protected String bn() {
         return "mob.endermen.hit";
     }
 
-    protected String aU() {
+    protected String bo() {
         return "mob.endermen.death";
     }
 
-    protected Item u() {
-        return Items.bi;
+    protected Item A() {
+        return Items.bu;
     }
 
     protected void b(boolean flag0, int i0) {
-        Item item = this.u();
+        Item item = this.A();
 
         if (item != null) {
-            int i1 = this.Z.nextInt(2 + i0);
+            int i1 = this.V.nextInt(2 + i0);
 
             for (int i2 = 0; i2 < i1; ++i2) {
                 this.a(item, 1);
@@ -322,71 +276,228 @@ public class EntityEnderman extends EntityMob {
         }
     }
 
-    public void a(Block block) {
-        this.af.b(16, Byte.valueOf((byte) (Block.b(block) & 255)));
+    public void a(IBlockState iblockstate) {
+        this.ac.b(16, Short.valueOf((short) (Block.f(iblockstate) & '\uffff')));
     }
 
-    public Block cb() {
-        return Block.e(this.af.a(16));
-    }
-
-    public void a(int i0) {
-        this.af.b(17, Byte.valueOf((byte) (i0 & 255)));
-    }
-
-    public int cc() {
-        return this.af.a(17);
+    public IBlockState ck() {
+        return Block.d(this.ac.b(16) & '\uffff');
     }
 
     public boolean a(DamageSource damagesource, float f0) {
-        if (this.aw()) {
+        if (this.b(damagesource)) {
             return false;
         } else {
-            this.a(true);
-            if (damagesource instanceof EntityDamageSource && damagesource.j() instanceof EntityPlayer) {
-                this.bv = true;
-            }
+            if (damagesource.j() == null || !(damagesource.j() instanceof EntityEndermite)) {
+                if (!this.o.D) {
+                    this.a(true);
+                }
 
-            if (damagesource instanceof EntityDamageSourceIndirect) {
-                this.bv = false;
-
-                for (int i0 = 0; i0 < 64; ++i0) {
-                    if (this.bZ()) {
-                        return true;
+                if (damagesource instanceof EntityDamageSource && damagesource.j() instanceof EntityPlayer) {
+                    if (damagesource.j() instanceof EntityPlayerMP && ((EntityPlayerMP) damagesource.j()).c.d()) {
+                        this.a(false);
+                    } else {
+                        this.bl = true;
                     }
                 }
 
-                return false;
-            } else {
-                return super.a(damagesource, f0);
+                if (damagesource instanceof EntityDamageSourceIndirect) {
+                    this.bl = false;
+
+                    for (int i0 = 0; i0 < 64; ++i0) {
+                        if (this.n()) {
+                            return true;
+                        }
+                    }
+
+                    return false;
+                }
             }
+
+            boolean flag0 = super.a(damagesource, f0);
+
+            if (damagesource.e() && this.V.nextInt(10) != 0) {
+                this.n();
+            }
+
+            return flag0;
         }
     }
 
-    public boolean cd() {
-        return this.af.a(18) > 0;
+    public boolean cm() {
+        return this.ac.a(18) > 0;
     }
 
     public void a(boolean flag0) {
-        this.af.b(18, Byte.valueOf((byte) (flag0 ? 1 : 0)));
+        this.ac.b(18, Byte.valueOf((byte) (flag0 ? 1 : 0)));
+    }
+/* CanaryMod: Disable all default allowed pick ups
+        
+    static {
+        bk.add(Blocks.c);
+        bk.add(Blocks.d);
+        bk.add(Blocks.m);
+        bk.add(Blocks.n);
+        bk.add(Blocks.N);
+        bk.add(Blocks.O);
+        bk.add(Blocks.P);
+        bk.add(Blocks.Q);
+        bk.add(Blocks.W);
+        bk.add(Blocks.aK);
+        bk.add(Blocks.aL);
+        bk.add(Blocks.aU);
+        bk.add(Blocks.bk);
+        bk.add(Blocks.bw);
+    }
+ END */
+
+    class AIFindPlayer extends EntityAINearestAttackableTarget {
+
+        private EntityPlayer g;
+        private int h;
+        private int i;
+        private EntityEnderman j = EntityEnderman.this;
+      
+        public AIFindPlayer() {
+            super(EntityEnderman.this, EntityPlayer.class, true);
+        }
+
+        public boolean a() {
+            double iattributeinstance1 = this.f();
+            List list = this.e.o.a(EntityPlayer.class, this.e.aQ().b(iattributeinstance1, 4.0D, iattributeinstance1), this.c);
+
+            Collections.sort(list, this.b);
+            if (list.isEmpty()) {
+                return false;
+            } else {
+                this.g = (EntityPlayer) list.get(0);
+                return true;
+            }
+        }
+
+        public void c() {
+            this.h = 5;
+            this.i = 0;
+        }
+
+        public void d() {
+            this.g = null;
+            this.j.a(false);
+            IAttributeInstance iattributeinstance1 = this.j.a(SharedMonsterAttributes.d);
+
+            iattributeinstance1.c(EntityEnderman.c);
+            super.d();
+        }
+
+        public boolean b() {
+            if (this.g != null) {
+                if (!this.j.c(this.g)) {
+                    return false;
+                } else {
+                    this.j.bl = true;
+                    this.j.a(this.g, 10.0F, 10.0F);
+                    return true;
+                }
+            } else {
+                return super.b();
+            }
+        }
+
+        public void e() {
+            if (this.g != null) {
+                if (--this.h <= 0) {
+                    this.d = this.g;
+                    this.g = null;
+                    super.c();
+                    this.j.a("mob.endermen.stare", 1.0F, 1.0F);
+                    this.j.a(true);
+                    IAttributeInstance iattributeinstance1 = this.j.a(SharedMonsterAttributes.d);
+
+                    iattributeinstance1.b(EntityEnderman.c);
+                }
+            } else {
+                if (this.d != null) {
+                    if (this.d instanceof EntityPlayer && this.j.c((EntityPlayer) this.d)) {
+                        if (this.d.h(this.j) < 16.0D) {
+                            this.j.n();
+                        }
+
+                        this.i = 0;
+                    } else if (this.d.h(this.j) > 256.0D && this.i++ >= 30 && this.j.b((Entity) this.d)) {
+                        this.i = 0;
+                    }
+                }
+
+                super.e();
+            }
+
+        }
     }
 
-/* CanaryMod: Disable all default allowed pick ups
-        static {
-            // br[Block.z.cF] = true;
-            // br[Block.A.cF] = true;
-            // br[Block.J.cF] = true;
-            // br[Block.K.cF] = true;
-            // br[Block.ai.cF] = true;
-            // br[Block.aj.cF] = true;
-            // br[Block.ak.cF] = true;
-            // br[Block.al.cF] = true;
-            // br[Block.ar.cF] = true;
-            // br[Block.ba.cF] = true;
-            // br[Block.bb.cF] = true;
-            // br[Block.bf.cF] = true;
-            // br[Block.bw.cF] = true;
-            // br[Block.bD.cF] = true;
-        } 
-*/
+
+    class AIPlaceBlock extends EntityAIBase {
+
+        private EntityEnderman a = EntityEnderman.this;
+      
+        public boolean a() {
+            return !this.a.o.Q().b("mobGriefing") ? false : (this.a.ck().c().r() == Material.a ? false : this.a.bb().nextInt(2000) == 0);
+        }
+
+        public void e() {
+            Random random = this.a.bb();
+            World world = this.a.o;
+            int i0 = MathHelper.c(this.a.s - 1.0D + random.nextDouble() * 2.0D);
+            int i1 = MathHelper.c(this.a.t + random.nextDouble() * 2.0D);
+            int i2 = MathHelper.c(this.a.u - 1.0D + random.nextDouble() * 2.0D);
+            BlockPos blockpos = new BlockPos(i0, i1, i2);
+            Block block = world.p(blockpos).c();
+            Block block1 = world.p(blockpos.b()).c();
+
+            if (this.a(world, blockpos, this.a.ck().c(), block, block1)) {
+                // CanaryMod: call EndermanDropBlockHook
+                EndermanDropBlockHook hook = (EndermanDropBlockHook) new EndermanDropBlockHook((CanaryEnderman) entity, entity.getWorld().getBlockAt(i0, i1, i2)).call();
+                if (!hook.isCanceled()) {                
+                    world.a(blockpos, this.a.ck(), 3);
+                    this.a.a(Blocks.a.P());
+                }
+                //
+            }
+
+        }
+
+        private boolean a(World p_a_1_, BlockPos p_a_2_, Block p_a_3_, Block p_a_4_, Block p_a_5_) {
+            return !p_a_3_.c(p_a_1_, p_a_2_) ? false : (p_a_4_.r() != Material.a ? false : (p_a_5_.r() == Material.a ? false : p_a_5_.d()));
+        }
+    }
+
+
+    class AITakeBlock extends EntityAIBase {
+
+        private EntityEnderman a = EntityEnderman.this;
+      
+        public boolean a() {
+            return !this.a.o.Q().b("mobGriefing") ? false : (this.a.ck().c().r() != Material.a ? false : this.a.bb().nextInt(20) == 0);
+        }
+
+        public void e() {
+            Random random = this.a.bb();
+            World world = this.a.o;
+            int i0 = MathHelper.c(this.a.s - 2.0D + random.nextDouble() * 4.0D);
+            int i1 = MathHelper.c(this.a.t + random.nextDouble() * 3.0D);
+            int i2 = MathHelper.c(this.a.u - 2.0D + random.nextDouble() * 4.0D);
+            BlockPos blockpos = new BlockPos(i0, i1, i2);
+            IBlockState iblockstate = world.p(blockpos);
+            Block block = iblockstate.c();
+
+             // CanaryMod: Replace checking static array with checking the world config list for Ender Blocks
+            if (Arrays.asList(Configuration.getWorldConfig(getCanaryWorld().getFqName()).getEnderBlocks()).contains(Block.b(block))) {
+                // CanaryMod: call EndermanPickupBlockHook
+                EndermanPickupBlockHook hook = (EndermanPickupBlockHook) new EndermanPickupBlockHook((CanaryEnderman) entity, entity.getWorld().getBlockAt(i0, i1, i2)).call();
+                if (!hook.isCanceled()) {
+                    this.a.a(iblockstate);
+                    world.a(blockpos, Blocks.a.P());
+                }
+            }
+        }
+    }
 }

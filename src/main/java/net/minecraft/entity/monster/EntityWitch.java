@@ -6,9 +6,16 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.*;
+import net.minecraft.entity.ai.EntityAIArrowAttack;
+import net.minecraft.entity.ai.EntityAIHurtByTarget;
+import net.minecraft.entity.ai.EntityAILookIdle;
+import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
+import net.minecraft.entity.ai.EntityAISwimming;
+import net.minecraft.entity.ai.EntityAIWander;
+import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
+import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityPotion;
 import net.minecraft.init.Items;
@@ -26,68 +33,66 @@ import java.util.UUID;
 
 public class EntityWitch extends EntityMob implements IRangedAttackMob {
 
-    private static final UUID bp = UUID.fromString("5CD17E52-A79A-43D3-A529-90FDE04B181E");
-    private static final AttributeModifier bq = (new AttributeModifier(bp, "Drinking speed penalty", -0.25D, 0)).a(false);
-    private static final Item[] br = new Item[]{Items.aO, Items.aT, Items.ax, Items.bp, Items.bo, Items.H, Items.y, Items.y};
-    private int bs;
-
+    private static final UUID b = UUID.fromString("5CD17E52-A79A-43D3-A529-90FDE04B181E");
+    private static final AttributeModifier c = (new AttributeModifier(b, "Drinking speed penalty", -0.25D, 0)).a(false);
+    private static final Item[] bk = new Item[] { Items.aT, Items.aY, Items.aC, Items.bB, Items.bA, Items.H, Items.y, Items.y};
+    private int bl;
+   
     public EntityWitch(World world) {
         super(world);
-        this.c.a(1, new EntityAISwimming(this));
-        this.c.a(2, new EntityAIArrowAttack(this, 1.0D, 60, 10.0F));
-        this.c.a(2, new EntityAIWander(this, 1.0D));
-        this.c.a(3, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
-        this.c.a(3, new EntityAILookIdle(this));
-        this.d.a(1, new EntityAIHurtByTarget(this, false));
-        this.d.a(2, new EntityAINearestAttackableTarget(this, EntityPlayer.class, 0, true));
+        this.a(0.6F, 1.95F);
+        this.i.a(1, new EntityAISwimming(this));
+        this.i.a(2, new EntityAIArrowAttack(this, 1.0D, 60, 10.0F));
+        this.i.a(2, new EntityAIWander(this, 1.0D));
+        this.i.a(2, this.a);
+        this.i.a(3, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
+        this.i.a(3, new EntityAILookIdle(this));
+        this.bg.a(1, new EntityAIHurtByTarget(this, false, new Class[0]));
+        this.bg.a(2, new EntityAINearestAttackableTarget(this, EntityPlayer.class, true));
         this.entity = new CanaryWitch(this); // CanaryMod: Wrap Entity
     }
 
-    protected void c() {
-        super.c();
-        this.z().a(21, Byte.valueOf((byte) 0));
+    protected void h() {
+        super.h();
+        this.H().a(21, Byte.valueOf((byte) 0));
     }
 
-    protected String t() {
-        return "mob.witch.idle";
+    protected String z() {
+        return null;
     }
 
-    protected String aT() {
-        return "mob.witch.hurt";
+    protected String bn() {
+        return null;
     }
 
-    protected String aU() {
-        return "mob.witch.death";
+    protected String bo() {
+        return null;
     }
 
     public void a(boolean flag0) {
-        this.z().b(21, Byte.valueOf((byte) (flag0 ? 1 : 0)));
+        this.H().b(21, Byte.valueOf((byte) (flag0 ? 1 : 0)));
     }
 
-    public boolean bZ() {
-        return this.z().a(21) == 1;
+    public boolean n() {
+        return this.H().a(21) == 1;
     }
 
-    protected void aD() {
-        super.aD();
+    protected void aW() {
+        super.aW();
         this.a(SharedMonsterAttributes.a).a(26.0D);
         this.a(SharedMonsterAttributes.d).a(0.25D);
     }
 
-    public boolean bk() {
-        return true;
-    }
-
-    public void e() {
-        if (!this.o.E) {
-            if (this.bZ()) {
-                if (this.bs-- <= 0) {
+    public void m() {
+        if (!this.o.D) {
+            if (this.n()) {
+                if (this.bl-- <= 0) {
                     this.a(false);
-                    ItemStack itemstack = this.be();
+                    ItemStack itemstack = this.bz();
 
                     this.c(0, (ItemStack) null);
-                    if (itemstack != null && itemstack.b() == Items.bn) {
-                        List list = Items.bn.g(itemstack);
+                    if (itemstack != null && itemstack.b() == Items.bz) {
+                        List list = Items.bz.h(itemstack);
 
                         if (list != null) {
                             Iterator iterator = list.iterator();
@@ -100,40 +105,40 @@ public class EntityWitch extends EntityMob implements IRangedAttackMob {
                         }
                     }
 
-                    this.a(SharedMonsterAttributes.d).b(bq);
+                    this.a(SharedMonsterAttributes.d).c(c);
                 }
             } else {
                 short short1 = -1;
 
-                if (this.Z.nextFloat() < 0.15F && this.a(Material.h) && !this.a(Potion.o)) {
+                if (this.V.nextFloat() < 0.15F && this.a(Material.h) && !this.a(Potion.o)) {
                     short1 = 8237;
-                } else if (this.Z.nextFloat() < 0.15F && this.al() && !this.a(Potion.n)) {
+                } else if (this.V.nextFloat() < 0.15F && this.au() && !this.a(Potion.n)) {
                     short1 = 16307;
-                } else if (this.Z.nextFloat() < 0.05F && this.aS() < this.aY()) {
+                } else if (this.V.nextFloat() < 0.05F && this.bm() < this.bt()) {
                     short1 = 16341;
-                } else if (this.Z.nextFloat() < 0.25F && this.o() != null && !this.a(Potion.c) && this.o().f(this) > 121.0D) {
+                } else if (this.V.nextFloat() < 0.25F && this.u() != null && !this.a(Potion.c) && this.u().h(this) > 121.0D) {
                     short1 = 16274;
-                } else if (this.Z.nextFloat() < 0.25F && this.o() != null && !this.a(Potion.c) && this.o().f(this) > 121.0D) {
+                } else if (this.V.nextFloat() < 0.25F && this.u() != null && !this.a(Potion.c) && this.u().h(this) > 121.0D) {
                     short1 = 16274;
                 }
 
                 if (short1 > -1) {
-                    this.c(0, new ItemStack(Items.bn, 1, short1));
-                    this.bs = this.be().n();
+                    this.c(0, new ItemStack(Items.bz, 1, short1));
+                    this.bl = this.bz().l();
                     this.a(true);
                     IAttributeInstance iattributeinstance = this.a(SharedMonsterAttributes.d);
 
-                    iattributeinstance.b(bq);
-                    iattributeinstance.a(bq);
+                    iattributeinstance.c(c);
+                    iattributeinstance.b(c);
                 }
             }
 
-            if (this.Z.nextFloat() < 7.5E-4F) {
-                this.o.a(this, (byte) 15);
+            if (this.V.nextFloat() < 7.5E-4F) {
+                this.o.a((Entity) this, (byte) 15);
             }
         }
 
-        super.e();
+        super.m();
     }
 
     protected float c(DamageSource damagesource, float f0) {
@@ -150,42 +155,49 @@ public class EntityWitch extends EntityMob implements IRangedAttackMob {
     }
 
     protected void b(boolean flag0, int i0) {
-        int i1 = this.Z.nextInt(3) + 1;
+        int i1 = this.V.nextInt(3) + 1;
 
         for (int i2 = 0; i2 < i1; ++i2) {
-            int i3 = this.Z.nextInt(3);
-            Item item = br[this.Z.nextInt(br.length)];
+            int i3 = this.V.nextInt(3);
+            Item item = bk[this.V.nextInt(bk.length)];
 
             if (i0 > 0) {
-                i3 += this.Z.nextInt(i0 + 1);
+                i3 += this.V.nextInt(i0 + 1);
             }
 
             for (int i4 = 0; i4 < i3; ++i4) {
                 this.a(item, 1);
             }
         }
+
     }
 
     public void a(EntityLivingBase entitylivingbase, float f0) {
-        if (!this.bZ()) {
+        if (!this.n()) {
             EntityPotion entitypotion = new EntityPotion(this.o, this, 32732);
+            double d0 = entitylivingbase.t + (double) entitylivingbase.aR() - 1.100000023841858D;
 
             entitypotion.z -= -20.0F;
-            double d0 = entitylivingbase.s + entitylivingbase.v - this.s;
-            double d1 = entitylivingbase.t + (double) entitylivingbase.g() - 1.100000023841858D - this.t;
-            double d2 = entitylivingbase.u + entitylivingbase.x - this.u;
-            float f1 = MathHelper.a(d0 * d0 + d2 * d2);
+            double d1 = entitylivingbase.s + entitylivingbase.v - this.s;
+            double d2 = d0 - this.t;
+            double d3 = entitylivingbase.u + entitylivingbase.x - this.u;
+            float f1 = MathHelper.a(d1 * d1 + d3 * d3);
 
             if (f1 >= 8.0F && !entitylivingbase.a(Potion.d)) {
                 entitypotion.a(32698);
-            } else if (entitylivingbase.aS() >= 8.0F && !entitylivingbase.a(Potion.u)) {
+            } else if (entitylivingbase.bm() >= 8.0F && !entitylivingbase.a(Potion.u)) {
                 entitypotion.a(32660);
-            } else if (f1 <= 3.0F && !entitylivingbase.a(Potion.t) && this.Z.nextFloat() < 0.25F) {
+            } else if (f1 <= 3.0F && !entitylivingbase.a(Potion.t) && this.V.nextFloat() < 0.25F) {
                 entitypotion.a(32696);
             }
 
-            entitypotion.c(d0, d1 + (double) (f1 * 0.2F), d2, 0.75F, 8.0F);
+            entitypotion.c(d1, d2 + (double) (f1 * 0.2F), d3, 0.75F, 8.0F);
             this.o.d((Entity) entitypotion);
         }
     }
+
+    public float aR() {
+        return 1.62F;
+    }
+
 }
