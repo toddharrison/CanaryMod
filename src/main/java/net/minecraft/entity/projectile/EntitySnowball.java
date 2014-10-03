@@ -5,9 +5,12 @@ import net.canarymod.hook.entity.ProjectileHitHook;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityBlaze;
+import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+
 
 public class EntitySnowball extends EntityThrowable {
 
@@ -30,22 +33,21 @@ public class EntitySnowball extends EntityThrowable {
         // CanaryMod: ProjectileHit
         ProjectileHitHook hook = (ProjectileHitHook) new ProjectileHitHook(this.getCanaryEntity(), movingobjectposition == null || movingobjectposition.g == null ? null : movingobjectposition.g.getCanaryEntity()).call();
         if (!hook.isCanceled()) { //
-            if (movingobjectposition.g != null) {
+            if (movingobjectposition.d != null) {
                 byte b0 = 0;
 
-                if (movingobjectposition.g instanceof EntityBlaze) {
+                if (movingobjectposition.d instanceof EntityBlaze) {
                     b0 = 3;
                 }
 
-                movingobjectposition.g.a(DamageSource.a((Entity) this, this.j()), (float) b0);
+                movingobjectposition.d.a(DamageSource.a((Entity) this, this.n()), (float) b0);
             }
 
             for (int i0 = 0; i0 < 8; ++i0) {
-                this.o.a("snowballpoof", this.s, this.t, this.u, 0.0D, 0.0D, 0.0D);
+                this.o.a(EnumParticleTypes.SNOWBALL, this.s, this.t, this.u, 0.0D, 0.0D, 0.0D, new int[0]);
             }
-
-            if (!this.o.E) {
-                this.B();
+            if (!this.o.D) {
+                this.J();
             }
         }
     }

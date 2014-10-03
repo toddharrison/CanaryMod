@@ -2,6 +2,7 @@ package net.minecraft.entity.projectile;
 
 import net.canarymod.api.entity.throwable.CanaryEntityPotion;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
@@ -9,6 +10,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
@@ -18,7 +20,7 @@ import java.util.List;
 public class EntityPotion extends EntityThrowable {
 
     private ItemStack c;
-
+   
     public EntityPotion(World world) {
         super(world);
         // CanaryMod
@@ -28,7 +30,7 @@ public class EntityPotion extends EntityThrowable {
     }
 
     public EntityPotion(World world, EntityLivingBase entitylivingbase, int i0) {
-        this(world, entitylivingbase, new ItemStack(Items.bn, 1, i0));
+        this(world, entitylivingbase, new ItemStack(Items.bz, 1, i0));
     }
 
     public EntityPotion(World world, EntityLivingBase entitylivingbase, ItemStack itemstack) {
@@ -50,54 +52,54 @@ public class EntityPotion extends EntityThrowable {
     }
 
     // CanaryMod: remove unneeded method override
-    // protected float i() {
+    // protected float m() {
     // return 0.05F;
     // }
     //
 
-    protected float e() {
+    protected float j() {
         return 0.5F;
     }
 
-    protected float f() {
+    protected float l() {
         return -20.0F;
     }
 
     public void a(int i0) {
         if (this.c == null) {
-            this.c = new ItemStack(Items.bn, 1, 0);
+            this.c = new ItemStack(Items.bz, 1, 0);
         }
 
         this.c.b(i0);
     }
 
-    public int k() {
+    public int o() {
         if (this.c == null) {
-            this.c = new ItemStack(Items.bn, 1, 0);
+            this.c = new ItemStack(Items.bz, 1, 0);
         }
 
-        return this.c.k();
+        return this.c.i();
     }
 
     protected void a(MovingObjectPosition movingobjectposition) {
-        if (!this.o.E) {
-            List list = Items.bn.g(this.c);
+        if (!this.o.D) {
+            List list = Items.bz.h(this.c);
 
             if (list != null && !list.isEmpty()) {
-                AxisAlignedBB axisalignedbb = this.C.b(4.0D, 2.0D, 4.0D);
+                AxisAlignedBB axisalignedbb = this.aQ().b(4.0D, 2.0D, 4.0D);
                 List list1 = this.o.a(EntityLivingBase.class, axisalignedbb);
 
-                if (list1 != null && !list1.isEmpty()) {
+                if (!list1.isEmpty()) {
                     Iterator iterator = list1.iterator();
 
                     while (iterator.hasNext()) {
                         EntityLivingBase entitylivingbase = (EntityLivingBase) iterator.next();
-                        double d0 = this.f(entitylivingbase);
+                        double d0 = this.h(entitylivingbase);
 
                         if (d0 < 16.0D) {
                             double d1 = 1.0D - Math.sqrt(d0) / 4.0D;
 
-                            if (entitylivingbase == movingobjectposition.g) {
+                            if (entitylivingbase == movingobjectposition.d) {
                                 d1 = 1.0D;
                             }
 
@@ -108,7 +110,7 @@ public class EntityPotion extends EntityThrowable {
                                 int i0 = potioneffect.a();
 
                                 if (Potion.a[i0].b()) {
-                                    Potion.a[i0].a(this.j(), entitylivingbase, potioneffect.c(), d1);
+                                    Potion.a[i0].a(this, this.n(), entitylivingbase, potioneffect.c(), d1);
                                 } else {
                                     int i1 = (int) (d1 * (double) potioneffect.b() + 0.5D);
 
@@ -122,9 +124,10 @@ public class EntityPotion extends EntityThrowable {
                 }
             }
 
-            this.o.c(2002, (int) Math.round(this.s), (int) Math.round(this.t), (int) Math.round(this.u), this.k());
-            this.B();
+            this.o.b(2002, new BlockPos(this), this.o());
+            this.J();
         }
+
     }
 
     public void a(NBTTagCompound nbttagcompound) {
@@ -136,8 +139,9 @@ public class EntityPotion extends EntityThrowable {
         }
 
         if (this.c == null) {
-            this.B();
+            this.J();
         }
+
     }
 
     public void b(NBTTagCompound nbttagcompound) {
@@ -145,5 +149,6 @@ public class EntityPotion extends EntityThrowable {
         if (this.c != null) {
             nbttagcompound.a("Potion", (NBTBase) this.c.b(new NBTTagCompound()));
         }
+
     }
 }
