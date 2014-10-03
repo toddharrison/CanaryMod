@@ -15,6 +15,39 @@ import java.awt.*;
 import static net.canarymod.Canary.log;
 
 public class Main {
+    static JDialog dialog;
+
+    static {
+        // For our jar double-clickers add a message about the libraries loading when the user has a graphics environment and the console isn't present
+        if (!GraphicsEnvironment.isHeadless() && System.console() == null) {
+            java.net.URL imgURL = Main.class.getResource("/assets/favicon.png");
+            Icon icon = null;
+            if (imgURL != null) {
+                icon = new ImageIcon(imgURL, "DA BIRD");
+            }
+
+            final JDialog temp = new JDialog();
+            final Icon iconF = icon;
+            SwingUtilities.invokeLater(new Runnable() {
+                                           public void run() {
+                                               try {
+                                                   final JOptionPane optionPane = new JOptionPane("Please wait while the libraries initialize....", JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, iconF, new Object[]{ }, null);
+                                                   temp.setTitle("CanaryMod");
+                                                   temp.setModal(true);
+                                                   temp.setContentPane(optionPane);
+                                                   temp.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+                                                   temp.pack();
+                                                   temp.setVisible(true);
+                                               }
+                                               catch (Exception ignored) {
+                                               }
+                                           }
+                                       }
+                                      );
+            dialog = temp;
+        }
+    }
+
     private static CanaryMod mod;
     private static boolean nocontrol;
 
@@ -82,6 +115,12 @@ public class Main {
             }
 
             initBird(); // Initialize the Bird
+            if (dialog != null) {
+                // kill dialog
+                dialog.setVisible(false);
+                dialog.dispose();
+                dialog = null;
+            }
             MinecraftServer.main(args); // Boot up the native server
 
             // They need the server to be set
