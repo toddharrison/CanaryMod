@@ -3,10 +3,11 @@ package net.minecraft.server.network;
 import com.google.gson.Gson;
 import com.mojang.authlib.properties.Property;
 import com.mojang.util.UUIDTypeAdapter;
-import io.netty.util.concurrent.GenericFutureListener;
 import net.canarymod.config.Configuration;
 import net.minecraft.network.EnumConnectionState;
+import net.minecraft.network.INetHandler;
 import net.minecraft.network.NetworkManager;
+import net.minecraft.network.Packet;
 import net.minecraft.network.handshake.INetHandlerHandshakeServer;
 import net.minecraft.network.handshake.client.C00Handshake;
 import net.minecraft.network.login.server.S00PacketDisconnect;
@@ -26,28 +27,29 @@ public class NetHandlerHandshakeTCP implements INetHandlerHandshakeServer {
     }
 
     public void a(C00Handshake c00handshake) {
-        switch (SwitchEnumConnectionState.a[c00handshake.c().ordinal()]) {
+        switch (NetHandlerHandshakeTCP.SwitchEnumConnectionState.a[c00handshake.a().ordinal()]) {
             case 1:
                 this.b.a(EnumConnectionState.LOGIN);
+                ChatComponentText chatcomponenttext;
 
-                if (c00handshake.d() > 5) {
-                    ChatComponentText chatcomponenttext = new ChatComponentText("Outdated server! I'm still on 1.7.10");
-                    this.b.a(new S00PacketDisconnect(chatcomponenttext), new GenericFutureListener[0]);
-                    this.b.a(chatcomponenttext);
+                if (c00handshake.b() > 47) {
+                    chatcomponenttext = new ChatComponentText("Outdated server! I\'m still on 1.8");
+                    this.b.a((Packet)(new S00PacketDisconnect(chatcomponenttext)));
+                    this.b.a((IChatComponent)chatcomponenttext);
                 }
-                else if (c00handshake.d() < 5) {
-                    ChatComponentText chatcomponenttext = new ChatComponentText("Outdated client! Please use 1.7.10");
-                    this.b.a(new S00PacketDisconnect(chatcomponenttext), new GenericFutureListener[0]);
-                    this.b.a(chatcomponenttext);
+                else if (c00handshake.b() < 47) {
+                    chatcomponenttext = new ChatComponentText("Outdated client! Please use 1.8");
+                    this.b.a((Packet)(new S00PacketDisconnect(chatcomponenttext)));
+                    this.b.a((IChatComponent)chatcomponenttext);
                 }
                 else {
-                    this.b.a(new NetHandlerLoginServer(this.a, this.b));
+                    this.b.a((INetHandler)(new NetHandlerLoginServer(this.a, this.b)));
                     // CanaryMod Start - Bungeecord!
                     if (Configuration.getServerConfig().getBungeecordSupport()) {
                         String[] split = c00handshake.b.split("\00");
                         if (split.length >= 3) {
                             c00handshake.b = split[0];
-                            b.n = new InetSocketAddress(split[1], ((InetSocketAddress)b.n).getPort());
+                            b.j = new InetSocketAddress(split[1], ((InetSocketAddress)b.j).getPort());
                             b.spoofedUUID = UUIDTypeAdapter.fromString(split[2]);
 
                             if (split.length == 4) {
@@ -55,8 +57,8 @@ public class NetHandlerHandshakeTCP implements INetHandlerHandshakeServer {
                             }
                         }
                         else {
-                            ChatComponentText chatcomponenttext = new ChatComponentText("If you wish to use IP forwarding, please enable it in your BungeeCord config as well!");
-                            this.b.a(new S00PacketDisconnect(chatcomponenttext), new GenericFutureListener[0]);
+                            chatcomponenttext = new ChatComponentText("If you wish to use IP forwarding, please enable it in your BungeeCord config as well!");
+                            this.b.a(new S00PacketDisconnect(chatcomponenttext));
                             this.b.a(chatcomponenttext);
                             return;
                         }
@@ -66,26 +68,18 @@ public class NetHandlerHandshakeTCP implements INetHandlerHandshakeServer {
                 break;
             case 2:
                 this.b.a(EnumConnectionState.STATUS);
-                this.b.a(new NetHandlerStatusServer(this.a, this.b));
+                this.b.a((INetHandler)(new NetHandlerStatusServer(this.a, this.b)));
                 break;
             default:
-                throw new UnsupportedOperationException("Invalid intention " + c00handshake.c());
+                throw new UnsupportedOperationException("Invalid intention " + c00handshake.a());
         }
     }
 
     public void a(IChatComponent ichatcomponent) {
     }
 
-    public void a(EnumConnectionState enumconnectionstate, EnumConnectionState enumconnectionstate1) {
-        if ((enumconnectionstate1 != EnumConnectionState.LOGIN) && (enumconnectionstate1 != EnumConnectionState.STATUS)) {
-            throw new UnsupportedOperationException("Invalid state " + enumconnectionstate1);
-        }
-    }
-
-    public void a() {
-    }
-
     static final class SwitchEnumConnectionState {
+
         static final int[] a = new int[EnumConnectionState.values().length];
 
         static {
@@ -93,11 +87,14 @@ public class NetHandlerHandshakeTCP implements INetHandlerHandshakeServer {
                 a[EnumConnectionState.LOGIN.ordinal()] = 1;
             }
             catch (NoSuchFieldError nosuchfielderror) {
+                ;
             }
+
             try {
                 a[EnumConnectionState.STATUS.ordinal()] = 2;
             }
             catch (NoSuchFieldError nosuchfielderror1) {
+                ;
             }
         }
     }

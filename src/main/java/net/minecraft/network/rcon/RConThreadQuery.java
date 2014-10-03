@@ -1,15 +1,17 @@
 package net.minecraft.network.rcon;
 
-
+import com.google.common.collect.Maps;
 import net.canarymod.config.Configuration;
 import net.canarymod.config.ServerConfiguration;
 import net.minecraft.server.MinecraftServer;
 
 import java.io.IOException;
 import java.net.*;
-import java.util.*;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Map.Entry;
-
+import java.util.Random;
 
 public class RConThreadQuery extends RConThreadBase {
 
@@ -64,9 +66,9 @@ public class RConThreadQuery extends RConThreadBase {
             iserver.a();
         }
 
-        this.q = new HashMap();
+        this.q = Maps.newHashMap();
         this.v = new RConOutputStream(1460);
-        this.t = new HashMap();
+        this.t = Maps.newHashMap();
         this.u = (new Date()).getTime();
     }
 
@@ -95,14 +97,14 @@ public class RConThreadQuery extends RConThreadBase {
                     else {
                         RConOutputStream rconoutputstream = new RConOutputStream(1460);
 
-                        rconoutputstream.a((int) 0);
+                        rconoutputstream.a((int)0);
                         rconoutputstream.a(this.a(datagrampacket.getSocketAddress()));
                         rconoutputstream.a(this.l);
                         rconoutputstream.a("SMP");
                         rconoutputstream.a(this.m);
                         rconoutputstream.a(Integer.toString(this.d()));
                         rconoutputstream.a(Integer.toString(this.k));
-                        rconoutputstream.a((short) this.j);
+                        rconoutputstream.a((short)this.j);
                         rconoutputstream.a(this.r);
                         this.a(rconoutputstream.a(), datagrampacket);
                         this.a("Status [" + socketaddress + "]");
@@ -124,7 +126,7 @@ public class RConThreadQuery extends RConThreadBase {
     }
 
     private byte[] b(DatagramPacket datagrampacket) throws IOException {
-        long i0 = MinecraftServer.ar();
+        long i0 = MinecraftServer.ax();
 
         if (i0 < this.w + 5000L) {
             byte[] abyte = this.v.a();
@@ -139,11 +141,11 @@ public class RConThreadQuery extends RConThreadBase {
         else {
             this.w = i0;
             this.v.b();
-            this.v.a((int) 0);
+            this.v.a((int)0);
             this.v.a(this.a(datagrampacket.getSocketAddress()));
             this.v.a("splitnum");
-            this.v.a((int) 128);
-            this.v.a((int) 0);
+            this.v.a((int)128);
+            this.v.a((int)0);
             this.v.a("hostname");
             this.v.a(this.l);
             this.v.a("gametype");
@@ -151,9 +153,9 @@ public class RConThreadQuery extends RConThreadBase {
             this.v.a("game_id");
             this.v.a("MINECRAFT");
             this.v.a("version");
-            this.v.a(this.b.B());
+            this.v.a(this.b.F());
             this.v.a("plugins");
-            this.v.a(this.b.G());
+            this.v.a(this.b.K());
             this.v.a("map");
             this.v.a(this.m);
             this.v.a("numplayers");
@@ -164,11 +166,11 @@ public class RConThreadQuery extends RConThreadBase {
             this.v.a("" + this.j);
             this.v.a("hostip");
             this.v.a(this.r);
-            this.v.a((int) 0);
-            this.v.a((int) 1);
+            this.v.a((int)0);
+            this.v.a((int)1);
             this.v.a("player_");
-            this.v.a((int) 0);
-            String[] astring = this.b.E();
+            this.v.a((int)0);
+            String[] astring = this.b.I();
             String[] astring1 = astring;
             int i1 = astring.length;
 
@@ -178,13 +180,13 @@ public class RConThreadQuery extends RConThreadBase {
                 this.v.a(s0);
             }
 
-            this.v.a((int) 0);
+            this.v.a((int)0);
             return this.v.a();
         }
     }
 
     private byte[] a(SocketAddress socketaddress) {
-        return ((RConThreadQuery.Auth) this.t.get(socketaddress)).c();
+        return ((RConThreadQuery.Auth)this.t.get(socketaddress)).c();
     }
 
     private Boolean c(DatagramPacket datagrampacket) {
@@ -196,7 +198,7 @@ public class RConThreadQuery extends RConThreadBase {
         else {
             byte[] abyte = datagrampacket.getData();
 
-            return ((RConThreadQuery.Auth) this.t.get(socketaddress)).a() != RConUtils.c(abyte, 7, datagrampacket.getLength()) ? Boolean.valueOf(false) : Boolean.valueOf(true);
+            return ((RConThreadQuery.Auth)this.t.get(socketaddress)).a() != RConUtils.c(abyte, 7, datagrampacket.getLength()) ? Boolean.valueOf(false) : Boolean.valueOf(true);
         }
     }
 
@@ -209,27 +211,26 @@ public class RConThreadQuery extends RConThreadBase {
 
     private void f() {
         if (this.a) {
-            long i0 = MinecraftServer.ar();
+            long i0 = MinecraftServer.ax();
 
             if (i0 >= this.h + 30000L) {
                 this.h = i0;
                 Iterator iterator = this.t.entrySet().iterator();
 
                 while (iterator.hasNext()) {
-                    Entry entry = (Entry) iterator.next();
+                    Entry entry = (Entry)iterator.next();
 
-                    if (((RConThreadQuery.Auth) entry.getValue()).a(i0).booleanValue()) {
+                    if (((RConThreadQuery.Auth)entry.getValue()).a(i0).booleanValue()) {
                         iterator.remove();
                     }
                 }
-
             }
         }
     }
 
     public void run() {
         this.b("Query running on " + this.s + ":" + this.i);
-        this.h = MinecraftServer.ar();
+        this.h = MinecraftServer.ax();
         this.p = new DatagramPacket(this.o, this.o.length);
 
         try {
@@ -246,14 +247,13 @@ public class RConThreadQuery extends RConThreadBase {
                     ;
                 }
                 catch (IOException ioexception) {
-                    this.a((Exception) ioexception);
+                    this.a((Exception)ioexception);
                 }
             }
         }
         finally {
             this.e();
         }
-
     }
 
     public void a() {
@@ -262,7 +262,6 @@ public class RConThreadQuery extends RConThreadBase {
                 if (this.g()) {
                     super.a();
                 }
-
             }
             else {
                 this.c("Invalid query port " + this.i + " found in \'" + this.b.b() + "\' (queries disabled)");
@@ -277,7 +276,6 @@ public class RConThreadQuery extends RConThreadBase {
                 this.d("Failed to recover from buggy JRE, shutting down!");
                 this.a = false;
             }
-
         }
     }
 
@@ -319,7 +317,7 @@ public class RConThreadQuery extends RConThreadBase {
             this.d[3] = abyte[6];
             this.f = new String(this.d);
             this.c = (new Random()).nextInt(16777216);
-            this.e = String.format("\t%s%d\u0000", new Object[]{this.f, Integer.valueOf(this.c)}).getBytes();
+            this.e = String.format("\t%s%d\u0000", new Object[]{ this.f, Integer.valueOf(this.c) }).getBytes();
         }
 
         public Boolean a(long i0) {
