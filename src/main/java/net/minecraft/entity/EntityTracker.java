@@ -20,8 +20,9 @@ import net.minecraft.world.chunk.Chunk;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.Callable;
@@ -30,7 +31,7 @@ public class EntityTracker {
 
     private static final Logger a = LogManager.getLogger();
     private final WorldServer b;
-    private Set c = new HashSet();
+    private Set c = Sets.newHashSet();
     private IntHashMap d = new IntHashMap();
     private int e;
 
@@ -38,7 +39,7 @@ public class EntityTracker {
 
     public EntityTracker(WorldServer worldserver) {
         this.b = worldserver;
-        this.e = worldserver.q().ah().d();
+        this.e = worldserver.r().an().d();
         canaryTracker = new CanaryEntityTracker(this, worldserver.getCanaryWorld());
     }
 
@@ -89,23 +90,24 @@ public class EntityTracker {
             this.a(entity, 80, 3, false);
         } else if (entity instanceof EntityBat) {
             this.a(entity, 80, 3, false);
-        } else if (entity instanceof IAnimals) {
-            this.a(entity, 80, 3, true);
         } else if (entity instanceof EntityDragon) {
             this.a(entity, 160, 3, true);
+        } else if (entity instanceof IAnimals) {
+            this.a(entity, 80, 3, true);
         } else if (entity instanceof EntityTNTPrimed) {
             this.a(entity, 160, 10, true);
         } else if (entity instanceof EntityFallingBlock) {
             this.a(entity, 160, 20, true);
         } else if (entity instanceof EntityHanging) {
             this.a(entity, 160, Integer.MAX_VALUE, false);
+        } else if (entity instanceof EntityArmorStand) {
+            this.a(entity, 160, 3, true);
         } else if (entity instanceof EntityXPOrb) {
             this.a(entity, 160, 20, true);
         } else if (entity instanceof EntityEnderCrystal) {
             this.a(entity, 256, Integer.MAX_VALUE, false);
-        } else if (entity instanceof EntityNonPlayableCharacter) { // CanaryMod: NPC
-            this.a(entity, 512, 2);
         }
+
     }
 
     public void a(Entity entity, int i0, int i1) {
@@ -118,14 +120,14 @@ public class EntityTracker {
         }
 
         try {
-            if (this.d.b(entity.y())) {
+            if (this.d.b(entity.F())) {
                 throw new IllegalStateException("Entity is already tracked!");
             }
 
             EntityTrackerEntry entitytrackerentry = new EntityTrackerEntry(entity, i0, i1, flag0);
 
             this.c.add(entitytrackerentry);
-            this.d.a(entity.y(), entitytrackerentry);
+            this.d.a(entity.F(), entitytrackerentry);
 
             // CanaryMod: update hidden player tracking state
             if (entity instanceof EntityPlayerMP) {
@@ -133,7 +135,7 @@ public class EntityTracker {
                 canaryTracker.forceHiddenPlayerUpdate(entityplayermp.getPlayer());
             }
             // CanaryMod: end
-            entitytrackerentry.b(this.b.h);
+            entitytrackerentry.b(this.b.j);
         } catch (Throwable s01) {
             CrashReport crashreport = CrashReport.a(s01, "Adding entity to track");
             CrashReportCategory crashreportcategory = crashreport.a("Entity To Track");
@@ -162,6 +164,7 @@ public class EntityTracker {
                 a.error("\"Silently\" catching entity tracking error.", reportedexception);
             }
         }
+
     }
 
     public void b(Entity entity) {
@@ -178,22 +181,23 @@ public class EntityTracker {
             }
         }
 
-        EntityTrackerEntry entitytrackerentry1 = (EntityTrackerEntry) this.d.d(entity.y());
+        EntityTrackerEntry entitytrackerentry1 = (EntityTrackerEntry) this.d.d(entity.F());
 
         if (entitytrackerentry1 != null) {
             this.c.remove(entitytrackerentry1);
             entitytrackerentry1.a();
         }
+
     }
 
     public void a() {
-        ArrayList arraylist = new ArrayList();
+        ArrayList arraylist = Lists.newArrayList();
         Iterator iterator = this.c.iterator();
 
         while (iterator.hasNext()) {
             EntityTrackerEntry entitytrackerentry = (EntityTrackerEntry) iterator.next();
 
-            entitytrackerentry.a(this.b.h);
+            entitytrackerentry.a(this.b.j);
             if (entitytrackerentry.n && entitytrackerentry.a instanceof EntityPlayerMP) {
                 arraylist.add((EntityPlayerMP) entitytrackerentry.a);
             }
@@ -211,22 +215,7 @@ public class EntityTracker {
                 }
             }
         }
-    }
 
-    public void a(Entity entity, Packet packet) {
-        EntityTrackerEntry entitytrackerentry = (EntityTrackerEntry) this.d.a(entity.y());
-
-        if (entitytrackerentry != null) {
-            entitytrackerentry.a(packet);
-        }
-    }
-
-    public void b(Entity entity, Packet packet) {
-        EntityTrackerEntry entitytrackerentry = (EntityTrackerEntry) this.d.a(entity.y());
-
-        if (entitytrackerentry != null) {
-            entitytrackerentry.b(packet);
-        }
     }
 
     public void a(EntityPlayerMP entityplayermp) {
@@ -235,8 +224,42 @@ public class EntityTracker {
         while (iterator.hasNext()) {
             EntityTrackerEntry entitytrackerentry = (EntityTrackerEntry) iterator.next();
 
-            entitytrackerentry.c(entityplayermp);
+            if (entitytrackerentry.a == entityplayermp) {
+                entitytrackerentry.b(this.b.j);
+            } else {
+                entitytrackerentry.b(entityplayermp);
+            }
         }
+
+    }
+
+    public void a(Entity entity, Packet packet) {
+        EntityTrackerEntry entitytrackerentry = (EntityTrackerEntry) this.d.a(entity.F());
+
+        if (entitytrackerentry != null) {
+            entitytrackerentry.a(packet);
+        }
+
+    }
+
+    public void b(Entity entity, Packet packet) {
+        EntityTrackerEntry entitytrackerentry = (EntityTrackerEntry) this.d.a(entity.F());
+
+        if (entitytrackerentry != null) {
+            entitytrackerentry.b(packet);
+        }
+
+    }
+
+    public void b(EntityPlayerMP entityplayermp) {
+        Iterator iterator = this.c.iterator();
+
+        while (iterator.hasNext()) {
+            EntityTrackerEntry entitytrackerentry = (EntityTrackerEntry) iterator.next();
+
+            entitytrackerentry.d(entityplayermp);
+        }
+
     }
 
     public void a(EntityPlayerMP entityplayermp, Chunk chunk) {
@@ -245,7 +268,7 @@ public class EntityTracker {
         while (iterator.hasNext()) {
             EntityTrackerEntry entitytrackerentry = (EntityTrackerEntry) iterator.next();
 
-            if (entitytrackerentry.a != entityplayermp && entitytrackerentry.a.ah == chunk.g && entitytrackerentry.a.aj == chunk.h) {
+            if (entitytrackerentry.a != entityplayermp && entitytrackerentry.a.ae == chunk.a && entitytrackerentry.a.ag == chunk.b) {
                 entitytrackerentry.b(entityplayermp);
             }
         }

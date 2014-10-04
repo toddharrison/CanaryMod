@@ -2,165 +2,122 @@ package net.minecraft.entity;
 
 import net.canarymod.api.entity.hanging.HangingEntity;
 import net.canarymod.hook.entity.HangingEntityDestroyHook;
-import net.minecraft.block.material.Material;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockRedstoneDiode;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.entity.player.EntityPlayerMP;import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.Direction;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
+import org.apache.commons.lang3.Validate;
 
 import java.util.Iterator;
 import java.util.List;
 
 public abstract class EntityHanging extends Entity {
 
-    private int e;
-    public int a;
-    public int b;
-    public int c;
-    public int d;
-
+    private int c;
+    protected BlockPos a;
+    public EnumFacing b;
+   
     public EntityHanging(World world) {
         super(world);
-        this.L = 0.0F;
         this.a(0.5F, 0.5F);
     }
 
-    public EntityHanging(World world, int i0, int i1, int i2, int i3) {
+    public EntityHanging(World world, BlockPos blockpos) {
         this(world);
-        this.b = i0;
-        this.c = i1;
-        this.d = i2;
+        this.a = blockpos;
     }
 
-    protected void c() {
+    protected void h() {}
+
+    protected void a(EnumFacing enumfacing) {
+        Validate.notNull(enumfacing);
+        Validate.isTrue(enumfacing.k().c());
+        this.b = enumfacing;
+        this.A = this.y = (float) (this.b.b() * 90);
+        this.o();
     }
 
-    public void a(int i0) {
-        this.a = i0;
-        this.A = this.y = (float) (i0 * 90);
-        float f0 = (float) this.f();
-        float f1 = (float) this.i();
-        float f2 = (float) this.f();
+    private void o() {
+        if (this.b != null) {
+            double d0 = (double) this.a.n() + 0.5D;
+            double d1 = (double) this.a.o() + 0.5D;
+            double d2 = (double) this.a.p() + 0.5D;
+            double d3 = 0.46875D;
+            double d4 = this.a(this.l());
+            double d5 = this.a(this.m());
 
-        if (i0 != 2 && i0 != 0) {
-            f0 = 0.5F;
-        } else {
-            f2 = 0.5F;
-            this.y = this.A = (float) (Direction.f[i0] * 90);
+            d0 -= (double) this.b.g() * 0.46875D;
+            d2 -= (double) this.b.i() * 0.46875D;
+            d1 += d5;
+            EnumFacing enumfacing = this.b.f();
+
+            d0 += d4 * (double) enumfacing.g();
+            d2 += d4 * (double) enumfacing.i();
+            this.s = d0;
+            this.t = d1;
+            this.u = d2;
+            double d6 = (double) this.l();
+            double d7 = (double) this.m();
+            double d8 = (double) this.l();
+
+            if (this.b.k() == EnumFacing.Axis.Z) {
+                d8 = 1.0D;
+            } else {
+                d6 = 1.0D;
+            }
+
+            d6 /= 32.0D;
+            d7 /= 32.0D;
+            d8 /= 32.0D;
+            this.a(new AxisAlignedBB(d0 - d6, d1 - d7, d2 - d8, d0 + d6, d1 + d7, d2 + d8));
         }
-
-        f0 /= 32.0F;
-        f1 /= 32.0F;
-        f2 /= 32.0F;
-        float f3 = (float) this.b + 0.5F;
-        float f4 = (float) this.c + 0.5F;
-        float f5 = (float) this.d + 0.5F;
-        float f6 = 0.5625F;
-
-        if (i0 == 2) {
-            f5 -= f6;
-        }
-
-        if (i0 == 1) {
-            f3 -= f6;
-        }
-
-        if (i0 == 0) {
-            f5 += f6;
-        }
-
-        if (i0 == 3) {
-            f3 += f6;
-        }
-
-        if (i0 == 2) {
-            f3 -= this.c(this.f());
-        }
-
-        if (i0 == 1) {
-            f5 += this.c(this.f());
-        }
-
-        if (i0 == 0) {
-            f3 += this.c(this.f());
-        }
-
-        if (i0 == 3) {
-            f5 -= this.c(this.f());
-        }
-
-        f4 += this.c(this.i());
-        this.b((double) f3, (double) f4, (double) f5);
-        float f7 = -0.03125F;
-
-        this.C.b((double) (f3 - f0 - f7), (double) (f4 - f1 - f7), (double) (f5 - f2 - f7), (double) (f3 + f0 + f7), (double) (f4 + f1 + f7), (double) (f5 + f2 + f7));
     }
 
-    private float c(int i0) {
-        return i0 == 32 ? 0.5F : (i0 == 64 ? 0.5F : 0.0F);
+    private double a(int i0) {
+        return i0 % 32 == 0 ? 0.5D : 0.0D;
     }
 
-    public void h() {
+    public void s_() {
         this.p = this.s;
         this.q = this.t;
         this.r = this.u;
-        if (this.e++ == 100 && !this.o.E) {
-            this.e = 0;
-            if (!this.K && !this.e()) {
-                this.B();
+        if (this.c++ == 100 && !this.o.D) {
+            this.c = 0;
+            if (!this.I && !this.j()) {
+                this.J();
                 this.b((Entity) null);
             }
         }
+
     }
 
-    public boolean e() {
-        if (!this.o.a((Entity) this, this.C).isEmpty()) {
+    public boolean j() {
+        if (!this.o.a((Entity) this, this.aQ()).isEmpty()) {
             return false;
         } else {
-            int i0 = Math.max(1, this.f() / 16);
-            int i1 = Math.max(1, this.i() / 16);
-            int i2 = this.b;
-            int i3 = this.c;
-            int i4 = this.d;
+            int i0 = Math.max(1, this.l() / 16);
+            int i1 = Math.max(1, this.m() / 16);
+            BlockPos blockpos = this.a.a(this.b.d());
+            EnumFacing enumfacing = this.b.f();
 
-            if (this.a == 2) {
-                i2 = MathHelper.c(this.s - (double) ((float) this.f() / 32.0F));
-            }
+            for (int i2 = 0; i2 < i0; ++i2) {
+                for (int i3 = 0; i3 < i1; ++i3) {
+                    BlockPos blockpos1 = blockpos.a(enumfacing, i2).b(i3);
+                    Block block = this.o.p(blockpos1).c();
 
-            if (this.a == 1) {
-                i4 = MathHelper.c(this.u - (double) ((float) this.f() / 32.0F));
-            }
-
-            if (this.a == 0) {
-                i2 = MathHelper.c(this.s - (double) ((float) this.f() / 32.0F));
-            }
-
-            if (this.a == 3) {
-                i4 = MathHelper.c(this.u - (double) ((float) this.f() / 32.0F));
-            }
-
-            i3 = MathHelper.c(this.t - (double) ((float) this.i() / 32.0F));
-
-            for (int i5 = 0; i5 < i0; ++i5) {
-                for (int i6 = 0; i6 < i1; ++i6) {
-                    Material material;
-
-                    if (this.a != 2 && this.a != 0) {
-                        material = this.o.a(this.b, i3 + i6, i4 + i5).o();
-                    } else {
-                        material = this.o.a(i2 + i5, i3 + i6, this.d).o();
-                    }
-
-                    if (!material.a()) {
+                    if (!block.r().a() && !BlockRedstoneDiode.d(block)) {
                         return false;
                     }
                 }
             }
 
-            List list = this.o.b((Entity) this, this.C);
+            List list = this.o.b((Entity) this, this.aQ());
             Iterator iterator = list.iterator();
 
             Entity entity;
@@ -171,30 +128,29 @@ public abstract class EntityHanging extends Entity {
                 }
 
                 entity = (Entity) iterator.next();
-            }
-            while (!(entity instanceof EntityHanging));
+            } while (!(entity instanceof EntityHanging));
 
             return false;
         }
     }
 
-    public boolean R() {
+    public boolean ad() {
         return true;
     }
 
-    public boolean j(Entity entity) {
+    public boolean l(Entity entity) {
         return entity instanceof EntityPlayer ? this.a(DamageSource.a((EntityPlayer) entity), 0.0F) : false;
     }
 
-    public void i(int i0) {
-        this.o.X();
+    public EnumFacing aO() {
+        return this.b;
     }
 
     public boolean a(DamageSource damagesource, float f0) {
-        if (this.aw()) {
+        if (this.b(damagesource)) {
             return false;
         } else {
-            if (!this.K && !this.o.E) {
+            if (!this.I && !this.o.D) {
                 EntityPlayer entityplayer = null;
 
                 if (damagesource.i() instanceof EntityPlayer) {
@@ -210,8 +166,8 @@ public abstract class EntityHanging extends Entity {
                     //
                 }
 
-                this.B();
-                this.Q();
+                this.J();
+                this.ac();
                 this.b(damagesource.j());
             }
 
@@ -220,78 +176,70 @@ public abstract class EntityHanging extends Entity {
     }
 
     public void d(double d0, double d1, double d2) {
-        if (!this.o.E && !this.K && d0 * d0 + d1 * d1 + d2 * d2 > 0.0D) {
-            this.B();
+        if (!this.o.D && !this.I && d0 * d0 + d1 * d1 + d2 * d2 > 0.0D) {
+            this.J();
             this.b((Entity) null);
         }
+
     }
 
     public void g(double d0, double d1, double d2) {
-        if (!this.o.E && !this.K && d0 * d0 + d1 * d1 + d2 * d2 > 0.0D) {
-            this.B();
+        if (!this.o.D && !this.I && d0 * d0 + d1 * d1 + d2 * d2 > 0.0D) {
+            this.J();
             this.b((Entity) null);
         }
+
     }
 
     public void b(NBTTagCompound nbttagcompound) {
-        nbttagcompound.a("Direction", (byte) this.a);
-        nbttagcompound.a("TileX", this.b);
-        nbttagcompound.a("TileY", this.c);
-        nbttagcompound.a("TileZ", this.d);
-        switch (this.a) {
-            case 0:
-                nbttagcompound.a("Dir", (byte) 2);
-                break;
-
-            case 1:
-                nbttagcompound.a("Dir", (byte) 1);
-                break;
-
-            case 2:
-                nbttagcompound.a("Dir", (byte) 0);
-                break;
-
-            case 3:
-                nbttagcompound.a("Dir", (byte) 3);
-        }
+        nbttagcompound.a("Facing", (byte) this.b.b());
+        nbttagcompound.a("TileX", this.n().n());
+        nbttagcompound.a("TileY", this.n().o());
+        nbttagcompound.a("TileZ", this.n().p());
     }
 
     public void a(NBTTagCompound nbttagcompound) {
+        this.a = new BlockPos(nbttagcompound.f("TileX"), nbttagcompound.f("TileY"), nbttagcompound.f("TileZ"));
+        EnumFacing enumfacing;
+
         if (nbttagcompound.b("Direction", 99)) {
-            this.a = nbttagcompound.d("Direction");
+            enumfacing = EnumFacing.b(nbttagcompound.d("Direction"));
+            this.a = this.a.a(enumfacing);
+        } else if (nbttagcompound.b("Facing", 99)) {
+            enumfacing = EnumFacing.b(nbttagcompound.d("Facing"));
         } else {
-            switch (nbttagcompound.d("Dir")) {
-                case 0:
-                    this.a = 2;
-                    break;
-
-                case 1:
-                    this.a = 1;
-                    break;
-
-                case 2:
-                    this.a = 0;
-                    break;
-
-                case 3:
-                    this.a = 3;
-            }
+            enumfacing = EnumFacing.b(nbttagcompound.d("Dir"));
         }
 
-        this.b = nbttagcompound.f("TileX");
-        this.c = nbttagcompound.f("TileY");
-        this.d = nbttagcompound.f("TileZ");
-        this.a(this.a);
+        this.a(enumfacing);
     }
 
-    public abstract int f();
+    public abstract int l();
 
-    public abstract int i();
+    public abstract int m();
 
     public abstract void b(Entity entity);
 
-    protected boolean V() {
+    protected boolean af() {
         return false;
+    }
+
+    public void b(double d0, double d1, double d2) {
+        this.s = d0;
+        this.t = d1;
+        this.u = d2;
+        BlockPos blockpos = this.a;
+
+        this.a = new BlockPos(d0, d1, d2);
+        if (!this.a.equals(blockpos)) {
+            this.o();
+            this.ai = true;
+        }
+
+    }
+
+    public BlockPos n() {
+        return this.a;
     }
 
     // CanaryMod

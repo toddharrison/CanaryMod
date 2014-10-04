@@ -49,6 +49,7 @@ public class PlayerCapabilities {
                 this.e = nbttagcompound1.n("mayBuild");
             }
         }
+
     }
 
     public float a() {
