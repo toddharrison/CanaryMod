@@ -403,8 +403,16 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
      * {@inheritDoc}
      */
     @Override
+    public boolean isOperator() {
+        return Canary.ops().isOpped(this);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public boolean isAdmin() {
-        return hasPermission("canary.super.administrator") || Canary.ops().isOpped(getName());
+        return isOperator() || hasPermission("canary.super.administrator");
     }
 
     /**
@@ -412,7 +420,7 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
      */
     @Override
     public boolean canBuild() {
-        return hasPermission("canary.world.build") || isAdmin();
+        return isAdmin() || hasPermission("canary.world.build");
     }
 
     /**
@@ -428,7 +436,7 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
      */
     @Override
     public boolean canIgnoreRestrictions() {
-        return hasPermission("canary.super.ignoreRestrictions");
+        return isAdmin() || hasPermission("canary.super.ignoreRestrictions");
     }
 
     /**

@@ -321,14 +321,12 @@ public class CanaryPlayer extends CanaryHuman implements Player {
      */
     @Override
     public boolean hasPermission(String permission) {
-        if (Canary.ops().isOpped(getName())) {
+        if (isOperator()) {
             return true;
         }
         PermissionCheckHook hook = new PermissionCheckHook(permission, this, false);
-        Canary.log.debug("Checking path: " + permission);
         // If player has the permission set, use its personal permissions
         if (permissions.pathExists(permission)) {
-            Canary.log.debug("path exists");
             hook.setResult(permissions.queryPermission(permission));
             Canary.hooks().callHook(hook);
             return hook.getResult();
@@ -361,7 +359,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
      */
     @Override
     public boolean safeHasPermission(String permission) {
-        if (Canary.ops().isOpped(getName())) {
+        if (isOperator()) {
             return true;
         }
         // If player has the permission set, use its personal permissions
@@ -389,8 +387,16 @@ public class CanaryPlayer extends CanaryHuman implements Player {
      * {@inheritDoc}
      */
     @Override
+    public boolean isOperator() {
+        return Canary.ops().isOpped(this);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public boolean isAdmin() {
-        return hasPermission("canary.super.administrator") || Canary.ops().isOpped(getName());
+        return isOperator() || hasPermission("canary.super.administrator");
     }
 
     /**
@@ -398,7 +404,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
      */
     @Override
     public boolean canBuild() {
-        return hasPermission("canary.world.build") || hasPermission("canary.vanilla.op") || isAdmin();
+        return isAdmin() || hasPermission("canary.world.build");
     }
 
     /**
@@ -414,7 +420,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
      */
     @Override
     public boolean canIgnoreRestrictions() {
-        return hasPermission("canary.super.ignoreRestrictions");
+        return isAdmin() || hasPermission("canary.super.ignoreRestrictions");
     }
 
     /**
