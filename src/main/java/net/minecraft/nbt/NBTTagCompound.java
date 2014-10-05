@@ -9,7 +9,6 @@ import org.apache.logging.log4j.Logger;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -19,7 +18,7 @@ import java.util.concurrent.Callable;
 public class NBTTagCompound extends NBTBase {
 
     private static final Logger b = LogManager.getLogger();
-    private Map c = new HashMap();
+    private Map c = Maps.newHashMap();
 
     void a(DataOutput dataoutput) throws IOException {
         Iterator iterator = this.c.keySet().iterator();
@@ -37,7 +36,8 @@ public class NBTTagCompound extends NBTBase {
     void a(DataInput datainput, int i0, NBTSizeTracker nbtsizetracker) throws IOException {
         if (i0 > 512) {
             throw new RuntimeException("Tried to read NBT tag with too high complexity, depth > 512");
-        } else {
+        }
+        else {
             this.c.clear();
 
             byte b0;
@@ -123,85 +123,107 @@ public class NBTTagCompound extends NBTBase {
     public boolean b(String s0, int i0) {
         byte b0 = this.b(s0);
 
-        return b0 == i0 ? true : (i0 != 99 ? false : b0 == 1 || b0 == 2 || b0 == 3 || b0 == 4 || b0 == 5 || b0 == 6);
+        if (b0 == i0) {
+            return true;
+        }
+        else if (i0 != 99) {
+            if (b0 > 0) {
+                ;
+            }
+
+            return false;
+        }
+        else {
+            return b0 == 1 || b0 == 2 || b0 == 3 || b0 == 4 || b0 == 5 || b0 == 6;
+        }
     }
 
     public byte d(String s0) {
         try {
-            return !this.c.containsKey(s0) ? 0 : ((NBTBase.NBTPrimitive) this.c.get(s0)).f();
-        } catch (ClassCastException classcastexception) {
+            return !this.b(s0, 99) ? 0 : ((NBTBase.NBTPrimitive) this.c.get(s0)).f();
+        }
+        catch (ClassCastException classcastexception) {
             return (byte) 0;
         }
     }
 
     public short e(String s0) {
         try {
-            return !this.c.containsKey(s0) ? 0 : ((NBTBase.NBTPrimitive) this.c.get(s0)).e();
-        } catch (ClassCastException classcastexception) {
+            return !this.b(s0, 99) ? 0 : ((NBTBase.NBTPrimitive) this.c.get(s0)).e();
+        }
+        catch (ClassCastException classcastexception) {
             return (short) 0;
         }
     }
 
     public int f(String s0) {
         try {
-            return !this.c.containsKey(s0) ? 0 : ((NBTBase.NBTPrimitive) this.c.get(s0)).d();
-        } catch (ClassCastException classcastexception) {
+            return !this.b(s0, 99) ? 0 : ((NBTBase.NBTPrimitive) this.c.get(s0)).d();
+        }
+        catch (ClassCastException classcastexception) {
             return 0;
         }
     }
 
     public long g(String s0) {
         try {
-            return !this.c.containsKey(s0) ? 0L : ((NBTBase.NBTPrimitive) this.c.get(s0)).c();
-        } catch (ClassCastException classcastexception) {
+            return !this.b(s0, 99) ? 0L : ((NBTBase.NBTPrimitive) this.c.get(s0)).c();
+        }
+        catch (ClassCastException classcastexception) {
             return 0L;
         }
     }
 
     public float h(String s0) {
         try {
-            return !this.c.containsKey(s0) ? 0.0F : ((NBTPrimitive) this.c.get(s0)).h();
-        } catch (ClassCastException classcastexception) {
+            return !this.b(s0, 99) ? 0.0F : ((NBTBase.NBTPrimitive) this.c.get(s0)).h();
+        }
+        catch (ClassCastException classcastexception) {
             return 0.0F;
         }
     }
 
     public double i(String s0) {
         try {
-            return !this.c.containsKey(s0) ? 0.0D : ((NBTPrimitive) this.c.get(s0)).g();
-        } catch (ClassCastException classcastexception) {
+            return !this.b(s0, 99) ? 0.0D : ((NBTBase.NBTPrimitive) this.c.get(s0)).g();
+        }
+        catch (ClassCastException classcastexception) {
             return 0.0D;
         }
     }
 
     public String j(String s0) {
         try {
-            return !this.c.containsKey(s0) ? "" : ((NBTBase) this.c.get(s0)).a_();
-        } catch (ClassCastException classcastexception) {
+            return !this.b(s0, 8) ? "" : ((NBTBase) this.c.get(s0)).a_();
+        }
+        catch (ClassCastException classcastexception) {
             return "";
         }
     }
 
     public byte[] k(String s0) {
         try {
-            return !this.c.containsKey(s0) ? new byte[0] : ((NBTTagByteArray) this.c.get(s0)).c();
-        } catch (ClassCastException classcastexception) {
+            return !this.b(s0, 7) ? new byte[0] : ((NBTTagByteArray) this.c.get(s0)).c();
+        }
+        catch (ClassCastException classcastexception) {
             throw new ReportedException(this.a(s0, 7, classcastexception));
         }
     }
 
     public int[] l(String s0) {
         try {
-            return !this.c.containsKey(s0) ? new int[0] : ((NBTTagIntArray) this.c.get(s0)).c();
-        } catch (ClassCastException classcastexception) {
+            return !this.b(s0, 11) ? new int[0] : ((NBTTagIntArray) this.c.get(s0)).c();
+        }
+        catch (ClassCastException classcastexception) {
             throw new ReportedException(this.a(s0, 11, classcastexception));
         }
     }
 
     public NBTTagCompound m(String s0) {
         try {
-            return !this.c.containsKey(s0) ? new NBTTagCompound() : (NBTTagCompound) this.c.get(s0);
-        } catch (ClassCastException classcastexception) {
+            return !this.b(s0, 10) ? new NBTTagCompound() : (NBTTagCompound) this.c.get(s0);
+        }
+        catch (ClassCastException classcastexception) {
             throw new ReportedException(this.a(s0, 10, classcastexception));
         }
     }
@@ -210,12 +232,14 @@ public class NBTTagCompound extends NBTBase {
         try {
             if (this.b(s0) != 9) {
                 return new NBTTagList();
-            } else {
+            }
+            else {
                 NBTTagList nbttaglist = (NBTTagList) this.c.get(s0);
 
-                return nbttaglist.c() > 0 && nbttaglist.d() != i0 ? new NBTTagList() : nbttaglist;
+                return nbttaglist.c() > 0 && nbttaglist.f() != i0 ? new NBTTagList() : nbttaglist;
             }
-        } catch (ClassCastException classcastexception) {
+        }
+        catch (ClassCastException classcastexception) {
             throw new ReportedException(this.a(s0, 9, classcastexception));
         }
     }
@@ -226,7 +250,8 @@ public class NBTTagCompound extends NBTBase {
             NBTTagList nbttaglist = (NBTTagList) this.c.get(s0);
 
             return nbttaglist;
-        } catch (ClassCastException classcastexception) {
+        }
+        catch (ClassCastException classcastexception) {
             throw new ReportedException(this.a(s0, 9, classcastexception));
         }
     }
@@ -251,7 +276,7 @@ public class NBTTagCompound extends NBTBase {
         return s0 + "}";
     }
 
-    public boolean d() {
+    public boolean c_() {
         return this.c.isEmpty();
     }
 
@@ -293,7 +318,8 @@ public class NBTTagCompound extends NBTBase {
             NBTTagCompound nbttagcompound = (NBTTagCompound) object;
 
             return this.c.entrySet().equals(nbttagcompound.c.entrySet());
-        } else {
+        }
+        else {
             return false;
         }
     }
@@ -324,7 +350,8 @@ public class NBTTagCompound extends NBTBase {
         try {
             nbtbase.a(datainput, i0, nbtsizetracker);
             return nbtbase;
-        } catch (IOException ioexception) {
+        }
+        catch (IOException ioexception) {
             CrashReport crashreport = CrashReport.a(ioexception, "Loading NBT data");
             CrashReportCategory crashreportcategory = crashreport.a("NBT Tag");
 
@@ -332,6 +359,30 @@ public class NBTTagCompound extends NBTBase {
             crashreportcategory.a("Tag type", (Object) Byte.valueOf(b0));
             throw new ReportedException(crashreport);
         }
+    }
+
+    public void a(NBTTagCompound nbttagcompound) {
+        Iterator iterator = nbttagcompound.c.keySet().iterator();
+
+        while (iterator.hasNext()) {
+            String s0 = (String) iterator.next();
+            NBTBase nbtbase = (NBTBase) nbttagcompound.c.get(s0);
+
+            if (nbtbase.a() == 10) {
+                if (this.b(s0, 10)) {
+                    NBTTagCompound nbttagcompound1 = this.m(s0);
+
+                    nbttagcompound1.a((NBTTagCompound) nbtbase);
+                }
+                else {
+                    this.a(s0, nbtbase.b());
+                }
+            }
+            else {
+                this.a(s0, nbtbase.b());
+            }
+        }
+
     }
 
 }
