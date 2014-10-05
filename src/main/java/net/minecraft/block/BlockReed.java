@@ -16,7 +16,7 @@ import java.util.Random;
 public class BlockReed extends Block {
 
     public static final PropertyInteger a = PropertyInteger.a("age", 0, 15);
-   
+
     protected BlockReed() {
         super(Material.k);
         this.j(this.L.b().a(a, Integer.valueOf(0)));
@@ -73,9 +73,11 @@ public class BlockReed extends Block {
 
         if (block == this) {
             return true;
-        } else if (block != Blocks.c && block != Blocks.d && block != Blocks.m) {
+        }
+        else if (block != Blocks.c && block != Blocks.d && block != Blocks.m) {
             return false;
-        } else {
+        }
+        else {
             Iterator iterator = EnumFacing.Plane.HORIZONTAL.iterator();
 
             EnumFacing enumfacing;
@@ -99,7 +101,8 @@ public class BlockReed extends Block {
     protected final boolean e(World world, BlockPos blockpos, IBlockState iblockstate) {
         if (this.d(world, blockpos)) {
             return true;
-        } else {
+        }
+        else {
             this.b(world, blockpos, iblockstate, 0);
             world.g(blockpos);
             return false;
@@ -135,7 +138,7 @@ public class BlockReed extends Block {
     }
 
     protected BlockState e() {
-        return new BlockState(this, new IProperty[] { a});
+        return new BlockState(this, new IProperty[]{a});
     }
 
 }

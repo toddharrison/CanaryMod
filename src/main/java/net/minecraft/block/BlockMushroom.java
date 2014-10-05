@@ -73,7 +73,8 @@ public class BlockMushroom extends BlockBush implements IGrowable {
             IBlockState iblockstate1 = world.p(blockpos.b());
 
             return iblockstate1.c() == Blocks.bw ? true : (iblockstate1.c() == Blocks.d && iblockstate1.b(BlockDirt.a) == BlockDirt.DirtType.PODZOL ? true : world.k(blockpos) < 13 && this.c(iblockstate1.c()));
-        } else {
+        }
+        else {
             return false;
         }
     }
@@ -84,13 +85,15 @@ public class BlockMushroom extends BlockBush implements IGrowable {
 
         if (this == Blocks.P) {
             worldgenbigmushroom = new WorldGenBigMushroom(0);
-        } else if (this == Blocks.Q) {
+        }
+        else if (this == Blocks.Q) {
             worldgenbigmushroom = new WorldGenBigMushroom(1);
         }
 
         if (worldgenbigmushroom != null && worldgenbigmushroom.b(world, random, blockpos)) {
             return true;
-        } else {
+        }
+        else {
             world.a(blockpos, iblockstate, 3);
             return false;
         }

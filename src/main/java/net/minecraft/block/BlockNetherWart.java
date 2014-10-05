@@ -16,7 +16,7 @@ import java.util.Random;
 public class BlockNetherWart extends BlockBush {
 
     public static final PropertyInteger a = PropertyInteger.a("age", 0, 3);
-   
+
     protected BlockNetherWart() {
         this.j(this.L.b().a(a, Integer.valueOf(0)));
         this.a(true);
@@ -88,7 +88,7 @@ public class BlockNetherWart extends BlockBush {
     }
 
     protected BlockState e() {
-        return new BlockState(this, new IProperty[] { a});
+        return new BlockState(this, new IProperty[]{a});
     }
 
 }

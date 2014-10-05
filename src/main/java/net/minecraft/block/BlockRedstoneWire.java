@@ -8,13 +8,10 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.Direction;
-import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
@@ -27,7 +24,7 @@ public class BlockRedstoneWire extends Block {
     public static final PropertyInteger O = PropertyInteger.a("power", 0, 15);
     private boolean P = true;
     private final Set Q = Sets.newHashSet();
-   
+
     public BlockRedstoneWire() {
         super(Material.q);
         this.j(this.L.b().a(a, BlockRedstoneWire.EnumAttachPosition.NONE).a(b, BlockRedstoneWire.EnumAttachPosition.NONE).a(M, BlockRedstoneWire.EnumAttachPosition.NONE).a(N, BlockRedstoneWire.EnumAttachPosition.NONE).a(O, Integer.valueOf(0)));
@@ -50,7 +47,8 @@ public class BlockRedstoneWire extends Block {
             Block block1 = iblockaccess.p(blockpos.a()).c();
 
             return !block1.s() && block.s() && d(iblockaccess.p(blockpos1.a())) ? BlockRedstoneWire.EnumAttachPosition.UP : BlockRedstoneWire.EnumAttachPosition.NONE;
-        } else {
+        }
+        else {
             return BlockRedstoneWire.EnumAttachPosition.SIDE;
         }
     }
@@ -117,16 +115,19 @@ public class BlockRedstoneWire extends Block {
                 if (flag0 && blockpos.o() >= blockpos1.o()) {
                     i3 = this.a(world, blockpos2.a(), i3);
                 }
-            } else if (!world.p(blockpos2).c().t() && flag0 && blockpos.o() <= blockpos1.o()) {
+            }
+            else if (!world.p(blockpos2).c().t() && flag0 && blockpos.o() <= blockpos1.o()) {
                 i3 = this.a(world, blockpos2.b(), i3);
             }
         }
 
         if (i3 > i1) {
             i1 = i3 - 1;
-        } else if (i1 > 0) {
+        }
+        else if (i1 > 0) {
             --i1;
-        } else {
+        }
+        else {
             i1 = 0;
         }
 
@@ -205,7 +206,8 @@ public class BlockRedstoneWire extends Block {
 
                 if (world.p(blockpos1).c().t()) {
                     this.d(world, blockpos1.a());
-                } else {
+                }
+                else {
                     this.d(world, blockpos1.b());
                 }
             }
@@ -249,7 +251,8 @@ public class BlockRedstoneWire extends Block {
 
                 if (world.p(blockpos1).c().t()) {
                     this.d(world, blockpos1.a());
-                } else {
+                }
+                else {
                     this.d(world, blockpos1.b());
                 }
             }
@@ -260,7 +263,8 @@ public class BlockRedstoneWire extends Block {
     private int a(World world, BlockPos blockpos, int i0) {
         if (world.p(blockpos).c() != this) {
             return i0;
-        } else {
+        }
+        else {
             int i1 = ((Integer) world.p(blockpos).b(O)).intValue();
 
             return i1 > i0 ? i1 : i0;
@@ -271,7 +275,8 @@ public class BlockRedstoneWire extends Block {
         if (!world.D) {
             if (this.c(world, blockpos)) {
                 this.e(world, blockpos, iblockstate);
-            } else {
+            }
+            else {
                 this.b(world, blockpos, iblockstate, 0);
                 world.g(blockpos);
             }
@@ -290,14 +295,17 @@ public class BlockRedstoneWire extends Block {
     public int a(IBlockAccess iblockaccess, BlockPos blockpos, IBlockState iblockstate, EnumFacing enumfacing) {
         if (!this.P) {
             return 0;
-        } else {
+        }
+        else {
             int i0 = ((Integer) iblockstate.b(O)).intValue();
 
             if (i0 == 0) {
                 return 0;
-            } else if (enumfacing == EnumFacing.UP) {
+            }
+            else if (enumfacing == EnumFacing.UP) {
                 return i0;
-            } else {
+            }
+            else {
                 EnumSet enumset = EnumSet.noneOf(EnumFacing.class);
                 Iterator iterator = EnumFacing.Plane.HORIZONTAL.iterator();
 
@@ -311,9 +319,11 @@ public class BlockRedstoneWire extends Block {
 
                 if (enumfacing.k().c() && enumset.isEmpty()) {
                     return i0;
-                } else if (enumset.contains(enumfacing) && !enumset.contains(enumfacing.f()) && !enumset.contains(enumfacing.e())) {
+                }
+                else if (enumset.contains(enumfacing) && !enumset.contains(enumfacing.f()) && !enumset.contains(enumfacing.e())) {
                     return i0;
-                } else {
+                }
+                else {
                     return 0;
                 }
             }
@@ -343,11 +353,13 @@ public class BlockRedstoneWire extends Block {
 
         if (block == Blocks.af) {
             return true;
-        } else if (Blocks.bb.e(block)) {
+        }
+        else if (Blocks.bb.e(block)) {
             EnumFacing enumfacing1 = (EnumFacing) iblockstate.b(BlockRedstoneRepeater.N);
 
             return enumfacing1 == enumfacing || enumfacing1.d() == enumfacing;
-        } else {
+        }
+        else {
             return block.g() && enumfacing != null;
         }
     }
@@ -365,7 +377,7 @@ public class BlockRedstoneWire extends Block {
     }
 
     protected BlockState e() {
-        return new BlockState(this, new IProperty[] { a, b, M, N, O});
+        return new BlockState(this, new IProperty[]{a, b, M, N, O});
     }
 
     static enum EnumAttachPosition implements IStringSerializable {
@@ -373,8 +385,8 @@ public class BlockRedstoneWire extends Block {
         UP("UP", 0, "up"), SIDE("SIDE", 1, "side"), NONE("NONE", 2, "none");
         private final String d;
 
-        private static final BlockRedstoneWire.EnumAttachPosition[] $VALUES = new BlockRedstoneWire.EnumAttachPosition[] { UP, SIDE, NONE};
-      
+        private static final BlockRedstoneWire.EnumAttachPosition[] $VALUES = new BlockRedstoneWire.EnumAttachPosition[]{UP, SIDE, NONE};
+
         private EnumAttachPosition(String p_i45689_1_, int p_i45689_2_, String p_i45689_3_) {
             this.d = p_i45689_3_;
         }

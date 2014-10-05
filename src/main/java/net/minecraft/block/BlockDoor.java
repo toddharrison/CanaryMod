@@ -1,14 +1,21 @@
 package net.minecraft.block;
 
 
+import com.google.common.base.Predicate;
+import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.world.BlockPhysicsHook;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.*;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -22,7 +29,7 @@ public class BlockDoor extends Block {
     public static final PropertyEnum M = PropertyEnum.a("hinge", BlockDoor.EnumHingePosition.class);
     public static final PropertyBool N = PropertyBool.a("powered");
     public static final PropertyEnum O = PropertyEnum.a("half", BlockDoor.EnumDoorHalf.class);
-   
+
     protected BlockDoor(Material material) {
         super(material);
         this.j(this.L.b().a(a, EnumFacing.NORTH).a(b, Boolean.valueOf(false)).a(M, BlockDoor.EnumHingePosition.LEFT).a(N, Boolean.valueOf(false)).a(O, BlockDoor.EnumDoorHalf.LOWER));
@@ -61,35 +68,46 @@ public class BlockDoor extends Block {
             if (enumfacing == EnumFacing.EAST) {
                 if (!flag1) {
                     this.a(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, f0);
-                } else {
+                }
+                else {
                     this.a(0.0F, 0.0F, 1.0F - f0, 1.0F, 1.0F, 1.0F);
                 }
-            } else if (enumfacing == EnumFacing.SOUTH) {
+            }
+            else if (enumfacing == EnumFacing.SOUTH) {
                 if (!flag1) {
                     this.a(1.0F - f0, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
-                } else {
+                }
+                else {
                     this.a(0.0F, 0.0F, 0.0F, f0, 1.0F, 1.0F);
                 }
-            } else if (enumfacing == EnumFacing.WEST) {
+            }
+            else if (enumfacing == EnumFacing.WEST) {
                 if (!flag1) {
                     this.a(0.0F, 0.0F, 1.0F - f0, 1.0F, 1.0F, 1.0F);
-                } else {
+                }
+                else {
                     this.a(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, f0);
                 }
-            } else if (enumfacing == EnumFacing.NORTH) {
+            }
+            else if (enumfacing == EnumFacing.NORTH) {
                 if (!flag1) {
                     this.a(0.0F, 0.0F, 0.0F, f0, 1.0F, 1.0F);
-                } else {
+                }
+                else {
                     this.a(1.0F - f0, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
                 }
             }
-        } else if (enumfacing == EnumFacing.EAST) {
+        }
+        else if (enumfacing == EnumFacing.EAST) {
             this.a(0.0F, 0.0F, 0.0F, f0, 1.0F, 1.0F);
-        } else if (enumfacing == EnumFacing.SOUTH) {
+        }
+        else if (enumfacing == EnumFacing.SOUTH) {
             this.a(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, f0);
-        } else if (enumfacing == EnumFacing.WEST) {
+        }
+        else if (enumfacing == EnumFacing.WEST) {
             this.a(1.0F - f0, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
-        } else if (enumfacing == EnumFacing.NORTH) {
+        }
+        else if (enumfacing == EnumFacing.NORTH) {
             this.a(0.0F, 0.0F, 1.0F - f0, 1.0F, 1.0F, 1.0F);
         }
 
@@ -101,7 +119,7 @@ public class BlockDoor extends Block {
         }
         else {
             // CanaryMod: Block Physics
-            BlockPhysicsHook blockPhysics = (BlockPhysicsHook) new BlockPhysicsHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), false).call();
+            BlockPhysicsHook blockPhysics = (BlockPhysicsHook) new BlockPhysicsHook(world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos)), false).call();
             if (blockPhysics.isCanceled()) {
                 return true;
             }
@@ -112,7 +130,8 @@ public class BlockDoor extends Block {
 
             if (iblockstate1.c() != this) {
                 return false;
-            } else {
+            }
+            else {
                 iblockstate = iblockstate1.a(b);
                 world.a(blockpos1, iblockstate, 2);
                 world.b(blockpos1, blockpos);
@@ -127,7 +146,7 @@ public class BlockDoor extends Block {
 
         if (iblockstate.c() == this) {
             // CanaryMod: Block Physics
-            BlockPhysicsHook blockPhysics = (BlockPhysicsHook) new BlockPhysicsHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), false).call();
+            BlockPhysicsHook blockPhysics = (BlockPhysicsHook) new BlockPhysicsHook(world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos)), false).call();
             if (blockPhysics.isCanceled()) {
                 return;
             }
@@ -141,7 +160,7 @@ public class BlockDoor extends Block {
                 world.b(blockpos1, blockpos);
                 world.a((EntityPlayer) null, flag0 ? 1003 : 1006, blockpos, 0);
             }
-            
+
         }
     }
 
@@ -152,10 +171,12 @@ public class BlockDoor extends Block {
 
             if (iblockstate1.c() != this) {
                 world.g(blockpos);
-            } else if (block != this) {
+            }
+            else if (block != this) {
                 this.a(world, blockpos1, iblockstate1, block);
             }
-        } else {
+        }
+        else {
             boolean flag0 = false;
             BlockPos blockpos2 = blockpos.a();
             IBlockState iblockstate2 = world.p(blockpos2);
@@ -177,7 +198,8 @@ public class BlockDoor extends Block {
                 if (!world.D) {
                     this.b(world, blockpos, iblockstate, 0);
                 }
-            } else {
+            }
+            else {
                 boolean flag1 = world.z(blockpos) || world.z(blockpos2);
 
                 if ((flag1 || block.g()) && block != this && flag1 != ((Boolean) iblockstate2.b(N)).booleanValue()) {
@@ -247,7 +269,8 @@ public class BlockDoor extends Block {
             if (iblockstate1.c() == this) {
                 iblockstate = iblockstate.a(M, iblockstate1.b(M)).a(N, iblockstate1.b(N));
             }
-        } else {
+        }
+        else {
             iblockstate1 = iblockaccess.p(blockpos.b());
             if (iblockstate1.c() == this) {
                 iblockstate = iblockstate.a(a, iblockstate1.b(a)).a(b, iblockstate1.b(b));
@@ -274,7 +297,8 @@ public class BlockDoor extends Block {
             if (((Boolean) iblockstate.b(N)).booleanValue()) {
                 i0 |= 2;
             }
-        } else {
+        }
+        else {
             i0 = b0 | ((EnumFacing) iblockstate.b(a)).e().b();
             if (((Boolean) iblockstate.b(b)).booleanValue()) {
                 i0 |= 4;
@@ -313,16 +337,17 @@ public class BlockDoor extends Block {
     }
 
     protected BlockState e() {
-        return new BlockState(this, new IProperty[] { O, a, b, M, N});
+        return new BlockState(this, new IProperty[]{O, a, b, M, N});
     }
 
     public static enum EnumDoorHalf implements IStringSerializable {
 
         UPPER("UPPER", 0), LOWER("LOWER", 1);
 
-        private static final BlockDoor.EnumDoorHalf[] $VALUES = new BlockDoor.EnumDoorHalf[] { UPPER, LOWER};
-      
-        private EnumDoorHalf(String p_i45726_1_, int p_i45726_2_) {}
+        private static final BlockDoor.EnumDoorHalf[] $VALUES = new BlockDoor.EnumDoorHalf[]{UPPER, LOWER};
+
+        private EnumDoorHalf(String p_i45726_1_, int p_i45726_2_) {
+        }
 
         public String toString() {
             return this.l();
@@ -339,9 +364,10 @@ public class BlockDoor extends Block {
 
         LEFT("LEFT", 0), RIGHT("RIGHT", 1);
 
-        private static final BlockDoor.EnumHingePosition[] $VALUES = new BlockDoor.EnumHingePosition[] { LEFT, RIGHT};
-      
-        private EnumHingePosition(String p_i45725_1_, int p_i45725_2_) {}
+        private static final BlockDoor.EnumHingePosition[] $VALUES = new BlockDoor.EnumHingePosition[]{LEFT, RIGHT};
+
+        private EnumHingePosition(String p_i45725_1_, int p_i45725_2_) {
+        }
 
         public String toString() {
             return this.l();

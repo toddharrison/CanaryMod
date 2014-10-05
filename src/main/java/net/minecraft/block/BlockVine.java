@@ -26,12 +26,12 @@ public class BlockVine extends Block {
     public static final PropertyBool M = PropertyBool.a("east");
     public static final PropertyBool N = PropertyBool.a("south");
     public static final PropertyBool O = PropertyBool.a("west");
-    public static final PropertyBool[] P = new PropertyBool[] { a, b, N, O, M};
+    public static final PropertyBool[] P = new PropertyBool[]{a, b, N, O, M};
     public static final int Q = b(EnumFacing.SOUTH);
     public static final int R = b(EnumFacing.NORTH);
     public static final int S = b(EnumFacing.EAST);
     public static final int T = b(EnumFacing.WEST);
-   
+
     public BlockVine() {
         super(Material.l);
         this.j(this.L.b().a(a, Boolean.valueOf(false)).a(b, Boolean.valueOf(false)).a(M, Boolean.valueOf(false)).a(N, Boolean.valueOf(false)).a(O, Boolean.valueOf(false)));
@@ -164,7 +164,8 @@ public class BlockVine extends Block {
 
         if (d(iblockstate) == 0) {
             return false;
-        } else {
+        }
+        else {
             if (iblockstate1 != iblockstate) {
                 world.a(blockpos, iblockstate, 2);
             }
@@ -223,7 +224,8 @@ public class BlockVine extends Block {
                         }
 
                     }
-                } else {
+                }
+                else {
                     BlockPos blockpos1;
 
                     if (enumfacing.k().c() && !((Boolean) iblockstate.b(a(enumfacing))).booleanValue()) {
@@ -252,7 +254,8 @@ public class BlockVine extends Block {
                                         world.a(blockpos1, this.P().a(a(enumfacing1), Boolean.valueOf(true)), 2);
                                     }
                                     //
-                                } else if (flag2 && this.c(world.p(blockpos3).c())) {
+                                }
+                                else if (flag2 && this.c(world.p(blockpos3).c())) {
                                     // CanaryMod: set data, call hook
                                     growth.setData((short) (1 << i9));
                                     blockGrowHook.call();
@@ -260,7 +263,8 @@ public class BlockVine extends Block {
                                         world.a(blockpos1, this.P().a(a(enumfacing2), Boolean.valueOf(true)), 2);
                                     }
                                     //
-                                } else if (flag1 && world.d(blockpos2) && this.c(world.p(blockpos.a(enumfacing1)).c())) {
+                                }
+                                else if (flag1 && world.d(blockpos2) && this.c(world.p(blockpos.a(enumfacing1)).c())) {
                                     // CanaryMod: set data, call hook
                                     growth.setData((short) (1 << (i6 + 2 & 3)));
                                     blockGrowHook.call();
@@ -268,7 +272,8 @@ public class BlockVine extends Block {
                                         world.a(blockpos2, this.P().a(a(enumfacing.d()), Boolean.valueOf(true)), 2);
                                     }
                                     //
-                                } else if (flag2 && world.d(blockpos3) && this.c(world.p(blockpos.a(enumfacing2)).c())) {
+                                }
+                                else if (flag2 && world.d(blockpos3) && this.c(world.p(blockpos.a(enumfacing2)).c())) {
                                     // CanaryMod: set data, call hook
                                     growth.setData((short) (1 << (i6 + 2 & 3)));
                                     blockGrowHook.call();
@@ -276,7 +281,8 @@ public class BlockVine extends Block {
                                         world.a(blockpos3, this.P().a(a(enumfacing.d()), Boolean.valueOf(true)), 2);
                                     }
                                     //
-                                } else if (this.c(world.p(blockpos1.a()).c())) {
+                                }
+                                else if (this.c(world.p(blockpos1.a()).c())) {
                                     // CanaryMod: call hook
                                     blockGrowHook.call();
                                     if (!blockGrowHook.isCanceled()) {
@@ -284,56 +290,59 @@ public class BlockVine extends Block {
                                     }
                                     //
                                 }
-                            } else if (block.J.k() && block.d()) {
+                            }
+                            else if (block.J.k() && block.d()) {
                                 world.a(blockpos, iblockstate.a(a(enumfacing), Boolean.valueOf(true)), 2);
                             }
-                        } else {
-                        if (blockpos.o() > 1) {
-                            blockpos1 = blockpos.b();
-                            IBlockState iblockstate2 = world.p(blockpos1);
-                            Block block1 = iblockstate2.c();
-                            IBlockState iblockstate3;
-                            Iterator iterator1;
-                            EnumFacing enumfacing3;
+                        }
+                        else {
+                            if (blockpos.o() > 1) {
+                                blockpos1 = blockpos.b();
+                                IBlockState iblockstate2 = world.p(blockpos1);
+                                Block block1 = iblockstate2.c();
+                                IBlockState iblockstate3;
+                                Iterator iterator1;
+                                EnumFacing enumfacing3;
 
-                            if (block1.J == Material.a) {
-                                iblockstate3 = iblockstate;
-                                iterator1 = EnumFacing.Plane.HORIZONTAL.iterator();
+                                if (block1.J == Material.a) {
+                                    iblockstate3 = iblockstate;
+                                    iterator1 = EnumFacing.Plane.HORIZONTAL.iterator();
 
-                                while (iterator1.hasNext()) {
-                                    enumfacing3 = (EnumFacing) iterator1.next();
-                                    if (random.nextBoolean()) {
-                                        iblockstate3 = iblockstate3.a(a(enumfacing3), Boolean.valueOf(false));
+                                    while (iterator1.hasNext()) {
+                                        enumfacing3 = (EnumFacing) iterator1.next();
+                                        if (random.nextBoolean()) {
+                                            iblockstate3 = iblockstate3.a(a(enumfacing3), Boolean.valueOf(false));
+                                        }
+                                    }
+
+                                    if (((Boolean) iblockstate3.b(b)).booleanValue() || ((Boolean) iblockstate3.b(M)).booleanValue() || ((Boolean) iblockstate3.b(N)).booleanValue() || ((Boolean) iblockstate3.b(O)).booleanValue()) {
+                                        world.a(blockpos1, iblockstate3, 2);
                                     }
                                 }
+                                else if (block1 == this) {
+                                    iblockstate3 = iblockstate2;
+                                    iterator1 = EnumFacing.Plane.HORIZONTAL.iterator();
 
-                                if (((Boolean) iblockstate3.b(b)).booleanValue() || ((Boolean) iblockstate3.b(M)).booleanValue() || ((Boolean) iblockstate3.b(N)).booleanValue() || ((Boolean) iblockstate3.b(O)).booleanValue()) {
-                                    world.a(blockpos1, iblockstate3, 2);
-                                }
-                            } else if (block1 == this) {
-                                iblockstate3 = iblockstate2;
-                                iterator1 = EnumFacing.Plane.HORIZONTAL.iterator();
+                                    while (iterator1.hasNext()) {
+                                        enumfacing3 = (EnumFacing) iterator1.next();
+                                        PropertyBool propertybool = a(enumfacing3);
 
-                                while (iterator1.hasNext()) {
-                                    enumfacing3 = (EnumFacing) iterator1.next();
-                                    PropertyBool propertybool = a(enumfacing3);
-
-                                    if (random.nextBoolean() || !((Boolean) iblockstate.b(propertybool)).booleanValue()) {
-                                        iblockstate3 = iblockstate3.a(propertybool, Boolean.valueOf(false));
+                                        if (random.nextBoolean() || !((Boolean) iblockstate.b(propertybool)).booleanValue()) {
+                                            iblockstate3 = iblockstate3.a(propertybool, Boolean.valueOf(false));
+                                        }
                                     }
-                                }
 
-                                if (((Boolean) iblockstate3.b(b)).booleanValue() || ((Boolean) iblockstate3.b(M)).booleanValue() || ((Boolean) iblockstate3.b(N)).booleanValue() || ((Boolean) iblockstate3.b(O)).booleanValue()) {
-                                    world.a(blockpos1, iblockstate3, 2);
+                                    if (((Boolean) iblockstate3.b(b)).booleanValue() || ((Boolean) iblockstate3.b(M)).booleanValue() || ((Boolean) iblockstate3.b(N)).booleanValue() || ((Boolean) iblockstate3.b(O)).booleanValue()) {
+                                        world.a(blockpos1, iblockstate3, 2);
+                                    }
                                 }
                             }
-                        }
 
+                        }
                     }
                 }
             }
         }
-    }
 
     private static int b(EnumFacing enumfacing) {
         return 1 << enumfacing.b();

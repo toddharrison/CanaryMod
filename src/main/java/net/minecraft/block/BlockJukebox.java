@@ -1,6 +1,5 @@
 package net.minecraft.block;
 
-import net.canarymod.api.world.blocks.CanaryJukebox;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -27,13 +26,14 @@ public class BlockJukebox extends BlockContainer {
             iblockstate = iblockstate.a(a, Boolean.valueOf(false));
             world.a(blockpos, iblockstate, 2);
             return true;
-        } else {
-            return false;
         }
         else {
+            return false;
+        }
+        else{
             this.e(world, i0, i1, i2);
             return true;
-        } else {
+        }else{
             return false;
         }
     }
@@ -121,18 +121,19 @@ public class BlockJukebox extends BlockContainer {
     }
 
     protected BlockState e() {
-        return new BlockState(this, new IProperty[] { a});
+        return new BlockState(this, new IProperty[]{a});
     }
 
     public static class TileEntityJukebox extends TileEntity {
 
         private ItemStack a;
-      
+
         public void a(NBTTagCompound p_a_1_) {
             super.a(p_a_1_);
             if (p_a_1_.b("RecordItem", 10)) {
                 this.a(ItemStack.a(p_a_1_.m("RecordItem")));
-            } else if (p_a_1_.f("Record") > 0) {
+            }
+            else if (p_a_1_.f("Record") > 0) {
                 this.a(new ItemStack(Item.b(p_a_1_.f("Record")), 1, 0));
             }
 

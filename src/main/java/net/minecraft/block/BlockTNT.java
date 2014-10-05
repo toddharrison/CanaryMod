@@ -14,12 +14,10 @@ import net.minecraft.init.Items;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
-import java.util.Random;
-
 public class BlockTNT extends Block {
 
     public static final PropertyBool a = PropertyBool.a("explode");
-   
+
     public BlockTNT() {
         super(Material.u);
         this.j(this.L.b().a(a, Boolean.valueOf(false)));
@@ -51,7 +49,7 @@ public class BlockTNT extends Block {
 
                 entitytntprimed.a = world.s.nextInt(entitytntprimed.a / 4) + entitytntprimed.a / 8;
                 world.d((Entity) entitytntprimed);
-        }
+            }
             //
         }
     }

@@ -1,14 +1,22 @@
 package net.minecraft.block;
 
-import net.canarymod.api.world.blocks.CanaryBlock;
+import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.world.BlockPhysicsHook;
 import net.canarymod.hook.world.RedstoneChangeHook;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -20,7 +28,7 @@ public abstract class BlockButton extends Block {
     public static final PropertyDirection a = PropertyDirection.a("facing");
     public static final PropertyBool b = PropertyBool.a("powered");
     private final boolean M;
-   
+
     protected BlockButton(boolean flag0) {
         super(Material.q);
         this.j(this.L.b().a(a, EnumFacing.NORTH).a(b, Boolean.valueOf(false)));
@@ -85,7 +93,8 @@ public abstract class BlockButton extends Block {
             this.b(world, blockpos, iblockstate, 0);
             world.g(blockpos);
             return false;
-        } else {
+        }
+        else {
             return true;
         }
     }
@@ -132,7 +141,7 @@ public abstract class BlockButton extends Block {
 
     public boolean a(World world, BlockPos blockpos, IBlockState iblockstate, EntityPlayer entityplayer, EnumFacing enumfacing, float f0, float f1, float f2) {
         // CanaryMod: Block Physics
-        BlockPhysicsHook blockPhysics = (BlockPhysicsHook) new BlockPhysicsHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), false).call();
+        BlockPhysicsHook blockPhysics = (BlockPhysicsHook) new BlockPhysicsHook(world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos)), false).call();
         if (blockPhysics.isCanceled()) {
             return false;
         }
@@ -143,11 +152,12 @@ public abstract class BlockButton extends Block {
         }
 
         // CanaryMod: RedstoneChange; Button On via Click
-        RedstoneChangeHook hook = (RedstoneChangeHook) new RedstoneChangeHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), 0, 15).call();
+        RedstoneChangeHook hook = (RedstoneChangeHook) new RedstoneChangeHook(world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos)), 0, 15).call();
         if (hook.isCanceled()) {
             return false;
             //
-        } else {
+        }
+        else {
             world.a(blockpos, iblockstate.a(b, Boolean.valueOf(true)), 3);
             world.b(blockpos, blockpos);
             world.a((double) blockpos.n() + 0.5D, (double) blockpos.o() + 0.5D, (double) blockpos.p() + 0.5D, "random.click", 0.3F, 0.6F);
@@ -160,7 +170,7 @@ public abstract class BlockButton extends Block {
     public void b(World world, BlockPos blockpos, IBlockState iblockstate) {
         if (((Boolean) iblockstate.b(b)).booleanValue()) {
             // CanaryMod: RedstoneChangeHook (Button broke)
-            new RedstoneChangeHook(new CanaryBlock((short) Block.b(this), (short) i3, blockpos.n(), blockpos.o(), blockpos.p(), world.getCanaryWorld()), 15, 0).call();
+            new RedstoneChangeHook(world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos)), 15, 0).call();
             //
 
             this.b(world, blockpos, (EnumFacing) iblockstate.b(a));
@@ -181,7 +191,8 @@ public abstract class BlockButton extends Block {
         return true;
     }
 
-    public void a(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {}
+    public void a(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {
+    }
 
     public void b(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {
         if (!world.D) {
@@ -191,13 +202,13 @@ public abstract class BlockButton extends Block {
                 }
                 else {
                     // CanaryMod: Block Physics
-                    BlockPhysicsHook blockPhysics = (BlockPhysicsHook) new BlockPhysicsHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), false).call();
+                    BlockPhysicsHook blockPhysics = (BlockPhysicsHook) new BlockPhysicsHook(world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos)), false).call();
                     if (blockPhysics.isCanceled()) {
                         return;
                     }
                     //
                     // CanaryMod: RedstoneChange; Stone Button off
-                    RedstoneChangeHook hook = (RedstoneChangeHook) new RedstoneChangeHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), 15, 0).call();
+                    RedstoneChangeHook hook = (RedstoneChangeHook) new RedstoneChangeHook(world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos)), 15, 0).call();
                     if (hook.isCanceled()) {
                         return;
                     }
@@ -238,17 +249,17 @@ public abstract class BlockButton extends Block {
 
         if (flag0 && !flag1) {
             // CanaryMod: Block Physics
-            BlockPhysicsHook blockPhysics = (BlockPhysicsHook) new BlockPhysicsHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), false).call();
+            BlockPhysicsHook blockPhysics = (BlockPhysicsHook) new BlockPhysicsHook(world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos)), false).call();
             if (blockPhysics.isCanceled()) {
-                world.a(i0, i1, i2, this, this.a(world));  // Reschedule
+                world.a(blockpos, this, this.a(world));  // Reschedule
                 return;
             }
             //
 
             // CanaryMod: RedstoneChange; Wood Button off
-            RedstoneChangeHook hook = (RedstoneChangeHook) new RedstoneChangeHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), 15, 0).call();
+            RedstoneChangeHook hook = (RedstoneChangeHook) new RedstoneChangeHook(world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos)), 15, 0).call();
             if (hook.isCanceled()) {
-                world.a(i0, i1, i2, this, this.a(world));  // Reschedule
+                world.a(blockpos, this, this.a(world));  // Reschedule
                 return;
             }
             //
@@ -260,9 +271,9 @@ public abstract class BlockButton extends Block {
 
         if (flag1 && !flag0) {
             // CanaryMod: RedstoneChange; Wood Button on
-            RedstoneChangeHook hook = (RedstoneChangeHook) new RedstoneChangeHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), 0, 15).call();
+            RedstoneChangeHook hook = (RedstoneChangeHook) new RedstoneChangeHook(world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos)), 0, 15).call();
             if (hook.isCanceled()) {
-                world.a(i0, i1, i2, this, this.a(world)); // Reschedule
+                world.a(blockpos, this, this.a(world)); // Reschedule
                 return;
             }
             //
@@ -352,47 +363,53 @@ public abstract class BlockButton extends Block {
     }
 
     protected BlockState e() {
-        return new BlockState(this, new IProperty[] { a, b});
+        return new BlockState(this, new IProperty[]{a, b});
     }
 
     static final class SwitchEnumFacing {
 
         static final int[] a = new int[EnumFacing.values().length];
-      
+
         static {
             try {
                 a[EnumFacing.EAST.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror) {
+            }
+            catch (NoSuchFieldError nosuchfielderror) {
                 ;
             }
 
             try {
                 a[EnumFacing.WEST.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror1) {
+            }
+            catch (NoSuchFieldError nosuchfielderror1) {
                 ;
             }
 
             try {
                 a[EnumFacing.SOUTH.ordinal()] = 3;
-            } catch (NoSuchFieldError nosuchfielderror2) {
+            }
+            catch (NoSuchFieldError nosuchfielderror2) {
                 ;
             }
 
             try {
                 a[EnumFacing.NORTH.ordinal()] = 4;
-            } catch (NoSuchFieldError nosuchfielderror3) {
+            }
+            catch (NoSuchFieldError nosuchfielderror3) {
                 ;
             }
 
             try {
                 a[EnumFacing.UP.ordinal()] = 5;
-            } catch (NoSuchFieldError nosuchfielderror4) {
+            }
+            catch (NoSuchFieldError nosuchfielderror4) {
                 ;
             }
 
             try {
                 a[EnumFacing.DOWN.ordinal()] = 6;
-            } catch (NoSuchFieldError nosuchfielderror5) {
+            }
+            catch (NoSuchFieldError nosuchfielderror5) {
                 ;
             }
 

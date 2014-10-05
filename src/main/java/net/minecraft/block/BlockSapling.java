@@ -5,8 +5,6 @@ import net.canarymod.hook.world.BlockGrowHook;
 import net.canarymod.hook.world.TreeGrowHook;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.*;
 
@@ -17,7 +15,7 @@ public class BlockSapling extends BlockBush implements IGrowable {
 
     public static final PropertyEnum a = PropertyEnum.a("type", BlockPlanks.EnumType.class);
     public static final PropertyInteger b = PropertyInteger.a("stage", 0, 1);
-   
+
     protected BlockSapling() {
         this.j(this.L.b().a(a, BlockPlanks.EnumType.OAK).a(b, Integer.valueOf(0)));
         float f0 = 0.4F;
@@ -136,7 +134,8 @@ public class BlockSapling extends BlockBush implements IGrowable {
             world.a(blockpos.a(i0 + 1, 0, i1), iblockstate1, 4);
             world.a(blockpos.a(i0, 0, i1 + 1), iblockstate1, 4);
             world.a(blockpos.a(i0 + 1, 0, i1 + 1), iblockstate1, 4);
-        } else {
+        }
+        else {
             world.a(blockpos, iblockstate1, 4);
         }
 
@@ -146,7 +145,8 @@ public class BlockSapling extends BlockBush implements IGrowable {
                 world.a(blockpos.a(i0 + 1, 0, i1), iblockstate, 4);
                 world.a(blockpos.a(i0, 0, i1 + 1), iblockstate, 4);
                 world.a(blockpos.a(i0 + 1, 0, i1 + 1), iblockstate, 4);
-            } else {
+            }
+            else {
                 world.a(blockpos, iblockstate, 4);
             }
         }
@@ -188,47 +188,53 @@ public class BlockSapling extends BlockBush implements IGrowable {
     }
 
     protected BlockState e() {
-        return new BlockState(this, new IProperty[] { a, b});
+        return new BlockState(this, new IProperty[]{a, b});
     }
 
     static final class SwitchEnumType {
 
         static final int[] a = new int[BlockPlanks.EnumType.values().length];
-      
+
         static {
             try {
                 a[BlockPlanks.EnumType.SPRUCE.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror) {
+            }
+            catch (NoSuchFieldError nosuchfielderror) {
                 ;
             }
 
             try {
                 a[BlockPlanks.EnumType.BIRCH.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror1) {
+            }
+            catch (NoSuchFieldError nosuchfielderror1) {
                 ;
             }
 
             try {
                 a[BlockPlanks.EnumType.JUNGLE.ordinal()] = 3;
-            } catch (NoSuchFieldError nosuchfielderror2) {
+            }
+            catch (NoSuchFieldError nosuchfielderror2) {
                 ;
             }
 
             try {
                 a[BlockPlanks.EnumType.ACACIA.ordinal()] = 4;
-            } catch (NoSuchFieldError nosuchfielderror3) {
+            }
+            catch (NoSuchFieldError nosuchfielderror3) {
                 ;
             }
 
             try {
                 a[BlockPlanks.EnumType.DARK_OAK.ordinal()] = 5;
-            } catch (NoSuchFieldError nosuchfielderror4) {
+            }
+            catch (NoSuchFieldError nosuchfielderror4) {
                 ;
             }
 
             try {
                 a[BlockPlanks.EnumType.OAK.ordinal()] = 6;
-            } catch (NoSuchFieldError nosuchfielderror5) {
+            }
+            catch (NoSuchFieldError nosuchfielderror5) {
                 ;
             }
 

@@ -1,24 +1,32 @@
 package net.minecraft.block;
 
 
+import com.google.common.base.Predicate;
+import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.world.RedstoneChangeHook;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.inventory.InventoryLargeChest;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.ILockableContainer;
 import net.minecraft.world.World;
 
 import java.util.Iterator;
@@ -54,13 +62,17 @@ public class BlockChest extends BlockContainer {
     public void a(IBlockAccess iblockaccess, BlockPos blockpos) {
         if (iblockaccess.p(blockpos.c()).c() == this) {
             this.a(0.0625F, 0.0F, 0.0F, 0.9375F, 0.875F, 0.9375F);
-        } else if (iblockaccess.p(blockpos.d()).c() == this) {
+        }
+        else if (iblockaccess.p(blockpos.d()).c() == this) {
             this.a(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 1.0F);
-        } else if (iblockaccess.p(blockpos.e()).c() == this) {
+        }
+        else if (iblockaccess.p(blockpos.e()).c() == this) {
             this.a(0.0F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
-        } else if (iblockaccess.p(blockpos.f()).c() == this) {
+        }
+        else if (iblockaccess.p(blockpos.f()).c() == this) {
             this.a(0.0625F, 0.0F, 0.0625F, 1.0F, 0.875F, 0.9375F);
-        } else {
+        }
+        else {
             this.a(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
         }
     }
@@ -100,18 +112,22 @@ public class BlockChest extends BlockContainer {
 
         if (!flag0 && !flag1 && !flag2 && !flag3) {
             world.a(blockpos, iblockstate, 3);
-        } else if (enumfacing.k() == EnumFacing.Axis.X && (flag0 || flag1)) {
+        }
+        else if (enumfacing.k() == EnumFacing.Axis.X && (flag0 || flag1)) {
             if (flag0) {
                 world.a(blockpos1, iblockstate, 3);
-            } else {
+            }
+            else {
                 world.a(blockpos2, iblockstate, 3);
             }
 
             world.a(blockpos, iblockstate, 3);
-        } else if (enumfacing.k() == EnumFacing.Axis.Z && (flag2 || flag3)) {
+        }
+        else if (enumfacing.k() == EnumFacing.Axis.Z && (flag2 || flag3)) {
             if (flag2) {
                 world.a(blockpos3, iblockstate, 3);
-            } else {
+            }
+            else {
                 world.a(blockpos4, iblockstate, 3);
             }
 
@@ -131,7 +147,8 @@ public class BlockChest extends BlockContainer {
     public IBlockState e(World world, BlockPos blockpos, IBlockState iblockstate) {
         if (world.D) {
             return iblockstate;
-        } else {
+        }
+        else {
             IBlockState iblockstate1 = world.p(blockpos.c());
             IBlockState iblockstate2 = world.p(blockpos.d());
             IBlockState iblockstate3 = world.p(blockpos.e());
@@ -156,7 +173,8 @@ public class BlockChest extends BlockContainer {
 
                     if (block2 == this) {
                         enumfacing1 = (EnumFacing) iblockstate3.b(a);
-                    } else {
+                    }
+                    else {
                         enumfacing1 = (EnumFacing) iblockstate4.b(a);
                     }
 
@@ -175,7 +193,8 @@ public class BlockChest extends BlockContainer {
                         enumfacing = EnumFacing.NORTH;
                     }
                 }
-            } else {
+            }
+            else {
                 BlockPos blockpos2 = block == this ? blockpos.c() : blockpos.d();
                 IBlockState iblockstate7 = world.p(blockpos2.e());
                 IBlockState iblockstate8 = world.p(blockpos2.f());
@@ -185,7 +204,8 @@ public class BlockChest extends BlockContainer {
 
                 if (block == this) {
                     enumfacing2 = (EnumFacing) iblockstate1.b(a);
-                } else {
+                }
+                else {
                     enumfacing2 = (EnumFacing) iblockstate2.b(a);
                 }
 
@@ -235,7 +255,8 @@ public class BlockChest extends BlockContainer {
 
         if (enumfacing != null) {
             return iblockstate.a(a, enumfacing.d());
-        } else {
+        }
+        else {
             EnumFacing enumfacing2 = (EnumFacing) iblockstate.b(a);
 
             if (world.p(blockpos.a(enumfacing2)).c().m()) {
@@ -299,7 +320,8 @@ public class BlockChest extends BlockContainer {
     private boolean e(World world, BlockPos blockpos) {
         if (world.p(blockpos).c() != this) {
             return false;
-        } else {
+        }
+        else {
             Iterator iterator = EnumFacing.Plane.HORIZONTAL.iterator();
 
             EnumFacing enumfacing;
@@ -340,7 +362,8 @@ public class BlockChest extends BlockContainer {
     public boolean a(World world, BlockPos blockpos, IBlockState iblockstate, EntityPlayer entityplayer, EnumFacing enumfacing, float f0, float f1, float f2) {
         if (world.D) {
             return true;
-        } else {
+        }
+        else {
             ILockableContainer ilockablecontainer = this.d(world, blockpos);
 
             if (ilockablecontainer != null) {
@@ -356,12 +379,14 @@ public class BlockChest extends BlockContainer {
 
         if (!(tileentity instanceof TileEntityChest)) {
             return null;
-        } else {
+        }
+        else {
             Object object = (TileEntityChest) tileentity;
 
             if (this.m(world, blockpos)) {
                 return null;
-            } else {
+            }
+            else {
                 Iterator iterator = EnumFacing.Plane.HORIZONTAL.iterator();
 
                 while (iterator.hasNext()) {
@@ -379,7 +404,8 @@ public class BlockChest extends BlockContainer {
                         if (tileentity1 instanceof TileEntityChest) {
                             if (enumfacing != EnumFacing.WEST && enumfacing != EnumFacing.NORTH) {
                                 object = new InventoryLargeChest("container.chestDouble", (ILockableContainer) object, (TileEntityChest) tileentity1);
-                            } else {
+                            }
+                            else {
                                 object = new InventoryLargeChest("container.chestDouble", (TileEntityChest) tileentity1, (ILockableContainer) object);
                             }
                         }
@@ -402,7 +428,8 @@ public class BlockChest extends BlockContainer {
     public int a(IBlockAccess iblockaccess, BlockPos blockpos, IBlockState iblockstate, EnumFacing enumfacing) {
         if (!this.g()) {
             return 0;
-        } else {
+        }
+        else {
             int i0 = 0;
             TileEntity tileentity = iblockaccess.s(blockpos);
 
@@ -412,7 +439,7 @@ public class BlockChest extends BlockContainer {
             // CanaryMod: RedstoneChange
             int newLvl = MathHelper.a(i0, 0, 15);
             if (newLvl != oldLvl) {
-                RedstoneChangeHook hook = (RedstoneChangeHook) new RedstoneChangeHook(((World) iblockaccess).getCanaryWorld().getBlockAt(i0, i1, i2), oldLvl, newLvl).call();
+                RedstoneChangeHook hook = (RedstoneChangeHook) new RedstoneChangeHook(((World) iblockaccess).getCanaryWorld().getBlockAt(new BlockPosition(blockpos)), oldLvl, newLvl).call();
                 if (hook.isCanceled()) {
                     return oldLvl;
                 }
@@ -475,7 +502,7 @@ public class BlockChest extends BlockContainer {
     }
 
     protected BlockState e() {
-        return new BlockState(this, new IProperty[] { a});
+        return new BlockState(this, new IProperty[]{a});
     }
 
 }

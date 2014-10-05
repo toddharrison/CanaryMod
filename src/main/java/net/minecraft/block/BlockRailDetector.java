@@ -27,7 +27,7 @@ public class BlockRailDetector extends BlockRailBase {
         }
     });
     public static final PropertyBool M = PropertyBool.a("powered");
-   
+
     public BlockRailDetector() {
         super(true);
         this.j(this.L.b().a(M, Boolean.valueOf(false)).a(b, BlockRailBase.EnumRailDirection.NORTH_SOUTH));
@@ -50,7 +50,8 @@ public class BlockRailDetector extends BlockRailBase {
         }
     }
 
-    public void a(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {}
+    public void a(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {
+    }
 
     public void b(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {
         if (!world.D && ((Boolean) iblockstate.b(M)).booleanValue()) {
@@ -87,7 +88,7 @@ public class BlockRailDetector extends BlockRailBase {
             world.c(blockpos.b(), (Block) this);
             world.b(blockpos, blockpos);
         }
-        
+
         if (!flag1 && flag0) {
             // CanaryMod: RedstoneChange; Rails off
             RedstoneChangeHook hook = (RedstoneChangeHook) new RedstoneChangeHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), 15, 0).call();
@@ -129,7 +130,7 @@ public class BlockRailDetector extends BlockRailBase {
                 return ((EntityMinecartCommandBlock) list.get(0)).j().j();
             }
 
-            List list1 = this.a(world, blockpos, EntityMinecart.class, new Predicate[] { IEntitySelector.c});
+            List list1 = this.a(world, blockpos, EntityMinecart.class, new Predicate[]{IEntitySelector.c});
 
             if (!list1.isEmpty()) {
                 return Container.b((IInventory) list1.get(0));
@@ -167,7 +168,7 @@ public class BlockRailDetector extends BlockRailBase {
     }
 
     protected BlockState e() {
-        return new BlockState(this, new IProperty[] { b, M});
+        return new BlockState(this, new IProperty[]{b, M});
     }
 
 }

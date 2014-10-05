@@ -1,12 +1,15 @@
 package net.minecraft.block;
 
 
+import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.world.BlockPhysicsHook;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.Random;
@@ -27,7 +30,7 @@ public class BlockFalling extends Block {
     public void c(World world, BlockPos blockpos, IBlockState iblockstate) {
         // CanaryMod: BlockPhysics
         if (world.getCanaryWorld() != null) {
-            BlockPhysicsHook hook = (BlockPhysicsHook) new BlockPhysicsHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), true).call();
+            BlockPhysicsHook hook = (BlockPhysicsHook) new BlockPhysicsHook(world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos)), true).call();
             if (hook.isCanceled()) {
                 return;
             }
@@ -38,7 +41,7 @@ public class BlockFalling extends Block {
 
     public void a(World world, BlockPos blockpos, IBlockState iblockstate, Block block) {
         // CanaryMod: BlockPhysics
-        BlockPhysicsHook hook = (BlockPhysicsHook) new BlockPhysicsHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), false).call();
+        BlockPhysicsHook hook = (BlockPhysicsHook) new BlockPhysicsHook(world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos)), false).call();
         if (hook.isCanceled()) {
             return;
         }
@@ -64,7 +67,8 @@ public class BlockFalling extends Block {
                     this.a(entityfallingblock);
                     world.d((Entity) entityfallingblock);
                 }
-            } else {
+            }
+            else {
                 world.g(blockpos);
 
                 BlockPos blockpos1;
@@ -81,7 +85,8 @@ public class BlockFalling extends Block {
         }
     }
 
-    protected void a(EntityFallingBlock entityfallingblock) {}
+    protected void a(EntityFallingBlock entityfallingblock) {
+    }
 
     public int a(World world) {
         return 2;
@@ -94,5 +99,6 @@ public class BlockFalling extends Block {
         return block == Blocks.ab || material == Material.a || material == Material.h || material == Material.i;
     }
 
-    public void a_(World world, BlockPos blockpos) {}
+    public void a_(World world, BlockPos blockpos) {
+    }
 }

@@ -7,7 +7,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemMonsterPlacer;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.Direction;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -16,8 +15,8 @@ import java.util.Random;
 
 public class BlockPortal extends BlockBreakable {
 
-    public static final PropertyEnum a = PropertyEnum.a("axis", EnumFacing.Axis.class, (Enum[]) (new EnumFacing.Axis[] { EnumFacing.Axis.X, EnumFacing.Axis.Z}));
-   
+    public static final PropertyEnum a = PropertyEnum.a("axis", EnumFacing.Axis.class, (Enum[]) (new EnumFacing.Axis[]{EnumFacing.Axis.X, EnumFacing.Axis.Z}));
+
     public BlockPortal() {
         super(Material.E, false);
         this.j(this.L.b().a(a, EnumFacing.Axis.X));
@@ -109,7 +108,8 @@ public class BlockPortal extends BlockBreakable {
             if (!blockportal_size.b() || blockportal_size.e < blockportal_size.h * blockportal_size.g) {
                 world.a(blockpos, Blocks.a.P());
             }
-        } else if (enumfacing_axis == EnumFacing.Axis.Z) {
+        }
+        else if (enumfacing_axis == EnumFacing.Axis.Z) {
             blockportal_size = new BlockPortal.Size(world, blockpos, EnumFacing.Axis.Z);
             if (!blockportal_size.b() || blockportal_size.e < blockportal_size.h * blockportal_size.g) {
                 world.a(blockpos, Blocks.a.P());
@@ -138,7 +138,7 @@ public class BlockPortal extends BlockBreakable {
     }
 
     protected BlockState e() {
-        return new BlockState(this, new IProperty[] { a});
+        return new BlockState(this, new IProperty[]{a});
     }
 
     public static class Size {
@@ -152,14 +152,15 @@ public class BlockPortal extends BlockBreakable {
         private BlockPos f;
         private int g;
         private int h;
-      
+
         public Size(World p_i45694_1_, BlockPos p_i45694_2_, EnumFacing.Axis p_i45694_3_) {
             this.a = p_i45694_1_;
             this.b = p_i45694_3_;
             if (p_i45694_3_ == EnumFacing.Axis.X) {
                 this.d = EnumFacing.EAST;
                 this.c = EnumFacing.WEST;
-            } else {
+            }
+            else {
                 this.d = EnumFacing.NORTH;
                 this.c = EnumFacing.SOUTH;
             }
@@ -223,7 +224,8 @@ public class BlockPortal extends BlockBreakable {
                         if (i4 != Blocks.Z) {
                             break label56;
                         }
-                    } else if (i3 == this.h - 1) {
+                    }
+                    else if (i3 == this.h - 1) {
                         i4 = this.a.p(blockpos3.a(this.c)).c();
                         if (i4 != Blocks.Z) {
                             break label56;
@@ -241,7 +243,8 @@ public class BlockPortal extends BlockBreakable {
 
             if (this.g <= 21 && this.g >= 3) {
                 return this.g;
-            } else {
+            }
+            else {
                 this.f = null;
                 this.h = 0;
                 this.g = 0;

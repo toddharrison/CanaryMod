@@ -10,7 +10,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityComparator;
-import net.minecraft.util.Direction;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -20,7 +19,7 @@ public class BlockRedstoneComparator extends BlockRedstoneDiode implements ITile
 
     public static final PropertyBool a = PropertyBool.a("powered");
     public static final PropertyEnum b = PropertyEnum.a("mode", Mode.class);
-   
+
     public BlockRedstoneComparator(boolean flag0) {
         super(flag0);
         this.j(this.L.b().a(N, EnumFacing.NORTH).a(a, Boolean.valueOf(false)).a(b, Mode.COMPARE));
@@ -62,7 +61,7 @@ public class BlockRedstoneComparator extends BlockRedstoneDiode implements ITile
     }
 
     private int j(World world, BlockPos blockpos, IBlockState iblockstate) {
-        return iblockstate.b(b) == Mode.SUBTRACT ? Math.max(this.f(world, blockpos, iblockstate) - this.c((IBlockAccess)world, blockpos, iblockstate), 0) : this.f(world, blockpos, iblockstate);
+        return iblockstate.b(b) == Mode.SUBTRACT ? Math.max(this.f(world, blockpos, iblockstate) - this.c((IBlockAccess) world, blockpos, iblockstate), 0) : this.f(world, blockpos, iblockstate);
     }
 
     protected boolean e(World world, BlockPos blockpos, IBlockState iblockstate) {
@@ -70,10 +69,12 @@ public class BlockRedstoneComparator extends BlockRedstoneDiode implements ITile
 
         if (i0 >= 15) {
             return true;
-        } else if (i0 == 0) {
+        }
+        else if (i0 == 0) {
             return false;
-        } else {
-            int i1 = this.c((IBlockAccess)world, blockpos, iblockstate);
+        }
+        else {
+            int i1 = this.c((IBlockAccess) world, blockpos, iblockstate);
 
             return i1 == 0 ? true : i0 >= i1;
         }
@@ -87,12 +88,14 @@ public class BlockRedstoneComparator extends BlockRedstoneDiode implements ITile
 
         if (block.N()) {
             i0 = block.l(world, blockpos1);
-        } else if (i0 < 15 && block.t()) {
+        }
+        else if (i0 < 15 && block.t()) {
             blockpos1 = blockpos1.a(enumfacing);
             block = world.p(blockpos1).c();
             if (block.N()) {
                 i0 = block.l(world, blockpos1);
-            } else if (block.r() == Material.a) {
+            }
+            else if (block.r() == Material.a) {
                 EntityItemFrame entityitemframe = this.a(world, enumfacing, blockpos1);
 
                 if (entityitemframe != null) {
@@ -119,7 +122,9 @@ public class BlockRedstoneComparator extends BlockRedstoneDiode implements ITile
         return list.size() == 1 ? (EntityItemFrame) list.get(0) : null;
     }
 
-    ppublic boolean a(World world, BlockPos blockpos, IBlockState iblockstate, EntityPlayer entityplayer, EnumFacing enumfacing, float f0, float f1, float f2) {
+    ppublic
+
+    boolean a(World world, BlockPos blockpos, IBlockState iblockstate, EntityPlayer entityplayer, EnumFacing enumfacing, float f0, float f1, float f2) {
         // CanaryMod: Block Physics
         BlockPhysicsHook blockPhysics = (BlockPhysicsHook) new BlockPhysicsHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), false).call();
         if (blockPhysics.isCanceled()) {
@@ -128,7 +133,8 @@ public class BlockRedstoneComparator extends BlockRedstoneDiode implements ITile
         //
         if (!entityplayer.by.e) {
             return false;
-        } else {
+        }
+        else {
             iblockstate = iblockstate.a(b);
             world.a((double) blockpos.n() + 0.5D, (double) blockpos.o() + 0.5D, (double) blockpos.p() + 0.5D, "random.click", 0.3F, iblockstate.b(b) == Mode.SUBTRACT ? 0.55F : 0.5F);
             world.a(blockpos, iblockstate, 2);
@@ -146,7 +152,8 @@ public class BlockRedstoneComparator extends BlockRedstoneDiode implements ITile
             if (i0 != i1 || this.l(iblockstate) != this.e(world, blockpos, iblockstate)) {
                 if (this.i(world, blockpos, iblockstate)) {
                     world.a(blockpos, this, 2, -1);
-                } else {
+                }
+                else {
                     world.a(blockpos, this, 2, 0);
                 }
             }
@@ -164,7 +171,7 @@ public class BlockRedstoneComparator extends BlockRedstoneDiode implements ITile
 
             i1 = tileentitycomparator.b();
             tileentitycomparator.a(i0);
-        }        
+        }
 
         if (i1 != i0 || iblockstate.b(b) == Mode.COMPARE) {
             // CanaryMod: RedstoneChange; Comparator change
@@ -175,7 +182,8 @@ public class BlockRedstoneComparator extends BlockRedstoneDiode implements ITile
             //
             if (flag1 && !flag0) {
                 world.a(blockpos, iblockstate.a(a, Boolean.valueOf(false)), 2);
-            } else if (!flag1 && flag0) {
+            }
+            else if (!flag1 && flag0) {
                 world.a(blockpos, iblockstate.a(a, Boolean.valueOf(true)), 2);
             }
 
@@ -240,7 +248,7 @@ public class BlockRedstoneComparator extends BlockRedstoneDiode implements ITile
     }
 
     protected BlockState e() {
-        return new BlockState(this, new IProperty[] { N, b, a});
+        return new BlockState(this, new IProperty[]{N, b, a});
     }
 
     public IBlockState a(World world, BlockPos blockpos, EnumFacing enumfacing, float f0, float f1, float f2, int i0, EntityLivingBase entitylivingbase) {
@@ -252,8 +260,8 @@ public class BlockRedstoneComparator extends BlockRedstoneDiode implements ITile
         COMPARE("COMPARE", 0, "compare"), SUBTRACT("SUBTRACT", 1, "subtract");
         private final String c;
 
-        private static final Mode[] $VALUES = new Mode[] { COMPARE, SUBTRACT};
-      
+        private static final Mode[] $VALUES = new Mode[]{COMPARE, SUBTRACT};
+
         private Mode(String p_i45731_1_, int p_i45731_2_, String p_i45731_3_) {
             this.c = p_i45731_3_;
         }

@@ -17,7 +17,7 @@ public class BlockRedstoneRepeater extends BlockRedstoneDiode {
 
     public static final PropertyBool a = PropertyBool.a("locked");
     public static final PropertyInteger b = PropertyInteger.a("delay", 1, 4);
-   
+
     protected BlockRedstoneRepeater(boolean flag0) {
         super(flag0);
         this.j(this.L.b().a(N, EnumFacing.NORTH).a(b, Integer.valueOf(1)).a(a, Boolean.valueOf(false)));
@@ -38,7 +38,8 @@ public class BlockRedstoneRepeater extends BlockRedstoneDiode {
 
         if (!entityplayer.by.e) {
             return false;
-        } else {
+        }
+        else {
             world.a(blockpos, iblockstate.a(b), 3);
             return true;
         }
@@ -99,6 +100,6 @@ public class BlockRedstoneRepeater extends BlockRedstoneDiode {
     }
 
     protected BlockState e() {
-        return new BlockState(this, new IProperty[] { N, b, a});
+        return new BlockState(this, new IProperty[]{N, b, a});
     }
 }

@@ -5,8 +5,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -15,7 +13,7 @@ import java.util.Random;
 public abstract class BlockRedstoneDiode extends BlockDirectional {
 
     protected final boolean M;
-   
+
     protected BlockRedstoneDiode(boolean flag0) {
         super(Material.q);
         this.M = flag0;
@@ -34,10 +32,11 @@ public abstract class BlockRedstoneDiode extends BlockDirectional {
         return !World.a((IBlockAccess) world, i0, i1 - 1, i2) ? false : super.j(world, i0, i1, i2);
     }
 
-    public void a(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {}
+    public void a(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {
+    }
 
     public void b(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {
-        if (!this.b((IBlockAccess)world, blockpos, iblockstate)) {
+        if (!this.b((IBlockAccess) world, blockpos, iblockstate)) {
             boolean flag0 = this.e(world, blockpos, iblockstate);
 
             if (this.M && !flag0) {
@@ -80,7 +79,8 @@ public abstract class BlockRedstoneDiode extends BlockDirectional {
     public void a(World world, BlockPos blockpos, IBlockState iblockstate, Block block) {
         if (this.d(world, blockpos)) {
             this.g(world, blockpos, iblockstate);
-        } else {
+        }
+        else {
             this.b(world, blockpos, iblockstate, 0);
             world.g(blockpos);
             EnumFacing[] aenumfacing = EnumFacing.values();
@@ -96,7 +96,7 @@ public abstract class BlockRedstoneDiode extends BlockDirectional {
     }
 
     protected void g(World world, BlockPos blockpos, IBlockState iblockstate) {
-        if (!this.b((IBlockAccess)world, blockpos, iblockstate)) {
+        if (!this.b((IBlockAccess) world, blockpos, iblockstate)) {
             boolean flag0 = this.e(world, blockpos, iblockstate);
 
             if ((this.M && !flag0 || !this.M && flag0) && !world.a(blockpos, (Block) this)) {
@@ -104,7 +104,8 @@ public abstract class BlockRedstoneDiode extends BlockDirectional {
 
                 if (this.i(world, blockpos, iblockstate)) {
                     b0 = -3;
-                } else if (this.M) {
+                }
+                else if (this.M) {
                     b0 = -2;
                 }
 
@@ -129,7 +130,8 @@ public abstract class BlockRedstoneDiode extends BlockDirectional {
 
         if (i0 >= 15) {
             return i0;
-        } else {
+        }
+        else {
             IBlockState iblockstate1 = world.p(blockpos1);
 
             return Math.max(i0, iblockstate1.c() == Blocks.af ? ((Integer) iblockstate1.b(BlockRedstoneWire.O)).intValue() : 0);

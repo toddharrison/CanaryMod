@@ -6,7 +6,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.Direction;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -19,7 +18,7 @@ public class BlockTripWireHook extends Block {
     public static final PropertyBool b = PropertyBool.a("powered");
     public static final PropertyBool M = PropertyBool.a("attached");
     public static final PropertyBool N = PropertyBool.a("suspended");
-   
+
     public BlockTripWireHook() {
         super(Material.q);
         this.j(this.L.b().a(a, EnumFacing.NORTH).a(b, Boolean.valueOf(false)).a(M, Boolean.valueOf(false)).a(N, Boolean.valueOf(false)));
@@ -124,7 +123,8 @@ public class BlockTripWireHook extends Block {
             if (iblockstate2.c() != Blocks.bS && i2 != i0) {
                 aiblockstate[i2] = null;
                 flag5 = false;
-            } else {
+            }
+            else {
                 if (i2 == i0) {
                     iblockstate2 = (IBlockState) Objects.firstNonNull(iblockstate1, iblockstate2);
                 }
@@ -177,7 +177,8 @@ public class BlockTripWireHook extends Block {
 
     }
 
-    public void a(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {}
+    public void a(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {
+    }
 
     public void b(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {
         this.a(world, blockpos, iblockstate, false, true, -1, (IBlockState) null);
@@ -186,11 +187,14 @@ public class BlockTripWireHook extends Block {
     private void a(World world, BlockPos blockpos, boolean flag0, boolean flag1, boolean flag2, boolean flag3) {
         if (flag1 && !flag3) {
             world.a((double) blockpos.n() + 0.5D, (double) blockpos.o() + 0.1D, (double) blockpos.p() + 0.5D, "random.click", 0.4F, 0.6F);
-        } else if (!flag1 && flag3) {
+        }
+        else if (!flag1 && flag3) {
             world.a((double) blockpos.n() + 0.5D, (double) blockpos.o() + 0.1D, (double) blockpos.p() + 0.5D, "random.click", 0.4F, 0.5F);
-        } else if (flag0 && !flag2) {
+        }
+        else if (flag0 && !flag2) {
             world.a((double) blockpos.n() + 0.5D, (double) blockpos.o() + 0.1D, (double) blockpos.p() + 0.5D, "random.click", 0.4F, 0.7F);
-        } else if (!flag0 && flag2) {
+        }
+        else if (!flag0 && flag2) {
             world.a((double) blockpos.n() + 0.5D, (double) blockpos.o() + 0.1D, (double) blockpos.p() + 0.5D, "random.bowhit", 0.4F, 1.2F / (world.s.nextFloat() * 0.2F + 0.9F));
         }
 
@@ -206,7 +210,8 @@ public class BlockTripWireHook extends Block {
             this.b(world, blockpos, iblockstate, 0);
             world.g(blockpos);
             return false;
-        } else {
+        }
+        else {
             return true;
         }
     }
@@ -281,35 +286,39 @@ public class BlockTripWireHook extends Block {
     }
 
     protected BlockState e() {
-        return new BlockState(this, new IProperty[] { a, b, M, N});
+        return new BlockState(this, new IProperty[]{a, b, M, N});
     }
 
     static final class SwitchEnumFacing {
 
         static final int[] a = new int[EnumFacing.values().length];
-      
+
         static {
             try {
                 a[EnumFacing.EAST.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror) {
+            }
+            catch (NoSuchFieldError nosuchfielderror) {
                 ;
             }
 
             try {
                 a[EnumFacing.WEST.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror1) {
+            }
+            catch (NoSuchFieldError nosuchfielderror1) {
                 ;
             }
 
             try {
                 a[EnumFacing.SOUTH.ordinal()] = 3;
-            } catch (NoSuchFieldError nosuchfielderror2) {
+            }
+            catch (NoSuchFieldError nosuchfielderror2) {
                 ;
             }
 
             try {
                 a[EnumFacing.NORTH.ordinal()] = 4;
-            } catch (NoSuchFieldError nosuchfielderror3) {
+            }
+            catch (NoSuchFieldError nosuchfielderror3) {
                 ;
             }
 

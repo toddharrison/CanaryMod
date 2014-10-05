@@ -1,5 +1,6 @@
 package net.minecraft.block;
 
+import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.world.BlockDropXpHook;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -391,7 +392,7 @@ public class Block {
     protected void b(World world, BlockPos blockpos, int i0) {
         if (!world.D) {
             // CanaryMod: BlockDropXpHook
-            net.canarymod.api.world.blocks.Block block = world.getCanaryWorld().getBlockAt(blockpos.n(), blockpos.o(), blockpos.p());
+            net.canarymod.api.world.blocks.Block block = world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos));
             BlockDropXpHook hook = (BlockDropXpHook) new BlockDropXpHook(block, i0).call();
             if (hook.isCanceled()) {
                 return;
@@ -1016,10 +1017,10 @@ public class Block {
         public final float b;
         public final float c;
 
-        public SoundType(String p_i45393_1_, float p_i45393_2_, float p_i45393_3_) {
-            this.a = p_i45393_1_;
-            this.b = p_i45393_2_;
-            this.c = p_i45393_3_;
+        public SoundType(String s0, float f0, float f1) {
+            this.a = s0;
+            this.b = f0;
+            this.c = f1;
         }
 
         public float d() {

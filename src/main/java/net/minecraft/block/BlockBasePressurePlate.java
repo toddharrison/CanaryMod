@@ -1,12 +1,15 @@
 package net.minecraft.block;
 
-import net.canarymod.api.world.blocks.CanaryBlock;
+import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.world.BlockPhysicsHook;
 import net.canarymod.hook.world.RedstoneChangeHook;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -30,7 +33,8 @@ public abstract class BlockBasePressurePlate extends Block {
 
         if (flag0) {
             this.a(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.03125F, 0.9375F);
-        } else {
+        }
+        else {
             this.a(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.0625F, 0.9375F);
         }
 
@@ -71,7 +75,8 @@ public abstract class BlockBasePressurePlate extends Block {
         return World.a((IBlockAccess) world, blockpos) || world.p(blockpos).c() instanceof BlockFence;
     }
 
-    public void a(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {}
+    public void a(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {
+    }
 
     public void b(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {
         if (!world.D) {
@@ -101,22 +106,22 @@ public abstract class BlockBasePressurePlate extends Block {
         // CanaryMod: RedstoneChange
         if (i0 != i1) {
             // CanaryMod: Block Physics
-            BlockPhysicsHook blockPhysics = (BlockPhysicsHook) new BlockPhysicsHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), false).call();
+            BlockPhysicsHook blockPhysics = (BlockPhysicsHook) new BlockPhysicsHook(world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos)), false).call();
             if (blockPhysics.isCanceled()) {
-                world.a(i0, i1, i2, this, this.a(world));  // Reschedule
+                world.a(blockpos, this, this.a(world));  // Reschedule
                 return;
             }
             //
 
-            RedstoneChangeHook hook = (RedstoneChangeHook) new RedstoneChangeHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), i3, i4).call();
+            RedstoneChangeHook hook = (RedstoneChangeHook) new RedstoneChangeHook(world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos)), i0, i1).call();
             if (hook.isCanceled()) {
                 i1 = hook.getOldLevel();
             }
         }
         //
 
-        boolean flag0 = i3 > 0;
-        boolean flag1 = i4 > 0;
+        boolean flag0 = i0 > 0;
+        boolean flag1 = i1 > 0;
 
         if (i0 != i1) {
             iblockstate = this.a(iblockstate, i1);
@@ -127,7 +132,8 @@ public abstract class BlockBasePressurePlate extends Block {
 
         if (!flag1 && flag0) {
             world.a((double) blockpos.n() + 0.5D, (double) blockpos.o() + 0.1D, (double) blockpos.p() + 0.5D, "random.click", 0.3F, 0.5F);
-        } else if (flag1 && !flag0) {
+        }
+        else if (flag1 && !flag0) {
             world.a((double) blockpos.n() + 0.5D, (double) blockpos.o() + 0.1D, (double) blockpos.p() + 0.5D, "random.click", 0.3F, 0.6F);
         }
 
@@ -145,7 +151,7 @@ public abstract class BlockBasePressurePlate extends Block {
 
     public void b(World world, BlockPos blockpos, IBlockState iblockstate) {
         // CanaryMod: Block Physics
-        BlockPhysicsHook blockPhysics = (BlockPhysicsHook) new BlockPhysicsHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), false).call();
+        BlockPhysicsHook blockPhysics = (BlockPhysicsHook) new BlockPhysicsHook(world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos)), false).call();
         if (blockPhysics.isCanceled()) {
             return;
         }
@@ -154,7 +160,7 @@ public abstract class BlockBasePressurePlate extends Block {
         // CanaryMod: RedstoneChange
         int oldLvl = this.e(iblockstate);
         if (oldLvl > 0) {
-            new RedstoneChangeHook(new CanaryBlock((short) Block.b(this), (short) i3, i0, i1, i2, world.getCanaryWorld()), oldLvl, 0).call();
+            new RedstoneChangeHook(world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos)), oldLvl, 0).call();
             this.d(world, blockpos);
         }
         //

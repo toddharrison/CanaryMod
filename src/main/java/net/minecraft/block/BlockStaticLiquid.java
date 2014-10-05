@@ -39,46 +39,48 @@ public class BlockStaticLiquid extends BlockLiquid {
             if (world.Q().b("doFireTick")) {
                 int i0 = random.nextInt(3);
 
-            // CanaryMod: Ignition
-            CanaryBlock ignited = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
+                // CanaryMod: Ignition
+                CanaryBlock ignited = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
 
-            ignited.setStatus((byte) 1); // Lava Status 1
-            IgnitionHook hook = (IgnitionHook) new IgnitionHook(ignited, null, null, IgnitionCause.LAVA).call();
-            if (hook.isCanceled()) {
-                return;
-            }
-            //
+                ignited.setStatus((byte) 1); // Lava Status 1
+                IgnitionHook hook = (IgnitionHook) new IgnitionHook(ignited, null, null, IgnitionCause.LAVA).call();
+                if (hook.isCanceled()) {
+                    return;
+                }
+                //
 
-            int i0 = random.nextInt(3);
+                int i0 = random.nextInt(3);
 
-            if (i0 > 0) {
-                BlockPos blockpos1 = blockpos;
+                if (i0 > 0) {
+                    BlockPos blockpos1 = blockpos;
 
-                for (int i1 = 0; i1 < i0; ++i1) {
-                    blockpos1 = blockpos1.a(random.nextInt(3) - 1, 1, random.nextInt(3) - 1);
-                    Block block = world.p(blockpos1).c();
+                    for (int i1 = 0; i1 < i0; ++i1) {
+                        blockpos1 = blockpos1.a(random.nextInt(3) - 1, 1, random.nextInt(3) - 1);
+                        Block block = world.p(blockpos1).c();
 
-                    if (block.J == Material.a) {
-                        if (this.e(world, blockpos1)) {
-                            world.a(blockpos1, Blocks.ab.P());
+                        if (block.J == Material.a) {
+                            if (this.e(world, blockpos1)) {
+                                world.a(blockpos1, Blocks.ab.P());
+                                return;
+                            }
+                        }
+                        else if (block.J.c()) {
                             return;
                         }
-                    } else if (block.J.c()) {
-                        return;
                     }
                 }
-            } else {
-                for (int i2 = 0; i2 < 3; ++i2) {
-                    BlockPos blockpos2 = blockpos.a(random.nextInt(3) - 1, 0, random.nextInt(3) - 1);
+                else {
+                    for (int i2 = 0; i2 < 3; ++i2) {
+                        BlockPos blockpos2 = blockpos.a(random.nextInt(3) - 1, 0, random.nextInt(3) - 1);
 
-                    if (world.d(blockpos2.a()) && this.m(world, blockpos2)) {
-                        world.a(blockpos2.a(), Blocks.ab.P());
+                        if (world.d(blockpos2.a()) && this.m(world, blockpos2)) {
+                            world.a(blockpos2.a(), Blocks.ab.P());
+                        }
                     }
-                }
 
+                }
             }
         }
-    }
 
     protected boolean e(World world, BlockPos blockpos) {
         EnumFacing[] aenumfacing = EnumFacing.values();

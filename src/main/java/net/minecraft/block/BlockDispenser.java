@@ -2,20 +2,23 @@ package net.minecraft.block;
 
 import net.canarymod.hook.world.DispenseHook;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.dispenser.*;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityDispenser;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IRegistry;
 import net.minecraft.util.RegistryDefaulted;
 import net.minecraft.world.World;
 
@@ -27,7 +30,7 @@ public class BlockDispenser extends BlockContainer {
     public static final PropertyBool b = PropertyBool.a("triggered");
     public static final RegistryDefaulted M = new RegistryDefaulted(new BehaviorDefaultDispenseItem());
     protected Random N = new Random();
-   
+
     protected BlockDispenser() {
         super(Material.e);
         this.j(this.L.b().a(a, EnumFacing.NORTH).a(b, Boolean.valueOf(false)));
@@ -51,15 +54,18 @@ public class BlockDispenser extends BlockContainer {
 
             if (enumfacing == EnumFacing.NORTH && flag0 && !flag1) {
                 enumfacing = EnumFacing.SOUTH;
-            } else if (enumfacing == EnumFacing.SOUTH && flag1 && !flag0) {
+            }
+            else if (enumfacing == EnumFacing.SOUTH && flag1 && !flag0) {
                 enumfacing = EnumFacing.NORTH;
-            } else {
+            }
+            else {
                 boolean flag2 = world.p(blockpos.e()).c().m();
                 boolean flag3 = world.p(blockpos.f()).c().m();
 
                 if (enumfacing == EnumFacing.WEST && flag2 && !flag3) {
                     enumfacing = EnumFacing.EAST;
-                } else if (enumfacing == EnumFacing.EAST && flag3 && !flag2) {
+                }
+                else if (enumfacing == EnumFacing.EAST && flag3 && !flag2) {
                     enumfacing = EnumFacing.WEST;
                 }
             }
@@ -71,7 +77,8 @@ public class BlockDispenser extends BlockContainer {
     public boolean a(World world, BlockPos blockpos, IBlockState iblockstate, EntityPlayer entityplayer, EnumFacing enumfacing, float f0, float f1, float f2) {
         if (world.D) {
             return true;
-        } else {
+        }
+        else {
             TileEntity tileentity = world.s(blockpos);
 
             if (tileentity instanceof TileEntityDispenser) {
@@ -89,9 +96,9 @@ public class BlockDispenser extends BlockContainer {
         if (tileentitydispenser != null) {
             int i0 = tileentitydispenser.m();
 
-            if (i3 < 0) {
+            if (i0 < 0) {
                 // CanaryMod: Dispense Smoke
-                DispenseHook hook = (DispenseHook)new DispenseHook(tileentitydispenser.getCanaryDispenser(), null).call();
+                DispenseHook hook = (DispenseHook) new DispenseHook(tileentitydispenser.getCanaryDispenser(), null).call();
                 if (!hook.isCanceled()) {
                     world.b(1001, blockpos, 0);
                 }
@@ -122,7 +129,8 @@ public class BlockDispenser extends BlockContainer {
         if (flag0 && !flag1) {
             world.a(blockpos, (Block) this, this.a(world));
             world.a(blockpos, iblockstate.a(b, Boolean.valueOf(true)), 4);
-        } else if (!flag0 && flag1) {
+        }
+        else if (!flag0 && flag1) {
             world.a(blockpos, iblockstate.a(b, Boolean.valueOf(false)), 4);
         }
 
@@ -207,7 +215,7 @@ public class BlockDispenser extends BlockContainer {
     }
 
     protected BlockState e() {
-        return new BlockState(this, new IProperty[] { a, b});
+        return new BlockState(this, new IProperty[]{a, b});
     }
 
 }

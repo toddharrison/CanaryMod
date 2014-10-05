@@ -1,16 +1,25 @@
 package net.minecraft.block;
 
+import com.google.common.collect.Maps;
 import net.canarymod.api.world.blocks.CanaryBlock;
 import net.canarymod.hook.world.IgnitionHook;
 import net.canarymod.hook.world.IgnitionHook.IgnitionCause;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.properties.PropertyInteger;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProviderEnd;
 
+import java.util.Map;
 import java.util.Random;
 
 public class BlockFire extends Block {
@@ -25,7 +34,7 @@ public class BlockFire extends Block {
     public static final PropertyInteger R = PropertyInteger.a("upper", 0, 2);
     private final Map S = Maps.newIdentityHashMap();
     private final Map T = Maps.newIdentityHashMap();
-   
+
     public IBlockState a(IBlockState iblockstate, IBlockAccess iblockaccess, BlockPos blockpos) {
         int i0 = blockpos.n();
         int i1 = blockpos.o();
@@ -41,7 +50,8 @@ public class BlockFire extends Block {
             }
 
             return iblockstate.a(N, Boolean.valueOf(this.e(iblockaccess, blockpos.c()))).a(O, Boolean.valueOf(this.e(iblockaccess, blockpos.f()))).a(P, Boolean.valueOf(this.e(iblockaccess, blockpos.d()))).a(Q, Boolean.valueOf(this.e(iblockaccess, blockpos.e()))).a(R, Integer.valueOf(i3)).a(b, Boolean.valueOf(flag1)).a(M, Boolean.valueOf(flag0));
-        } else {
+        }
+        else {
             return this.P();
         }
     }
@@ -130,7 +140,8 @@ public class BlockFire extends Block {
 
             if (!flag0 && world.S() && this.d(world, blockpos)) {
                 world.g(blockpos);
-            } else {
+            }
+            else {
                 int i0 = ((Integer) iblockstate.b(a)).intValue();
 
                 if (i0 < 15) {
@@ -195,24 +206,23 @@ public class BlockFire extends Block {
                                             i7 = 15;
                                         }
 
-                                            // CanaryMod: Ignition
-                                            CanaryBlock ignited = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
+                                        // CanaryMod: Ignition
+                                        CanaryBlock ignited = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
 
-                                            ignited.setStatus((byte) 3); // Spread Status 3
-                                            IgnitionHook hook = (IgnitionHook) new IgnitionHook(ignited, null, null, IgnitionCause.FIRE_SPREAD).call();
-                                            if (!hook.isCanceled()) {
-                                                world.a(blockpos1, iblockstate.a(a, Integer.valueOf(i7)), 3);
-                                    }
-                                            //
+                                        ignited.setStatus((byte) 3); // Spread Status 3
+                                        IgnitionHook hook = (IgnitionHook) new IgnitionHook(ignited, null, null, IgnitionCause.FIRE_SPREAD).call();
+                                        if (!hook.isCanceled()) {
+                                            world.a(blockpos1, iblockstate.a(a, Integer.valueOf(i7)), 3);
                                         }
+                                        //
                                     }
                                 }
                             }
                         }
                     }
                 }
-
             }
+
         }
     }
 
@@ -294,7 +304,8 @@ public class BlockFire extends Block {
     private int m(World world, BlockPos blockpos) {
         if (!world.d(blockpos)) {
             return 0;
-        } else {
+        }
+        else {
             int i0 = 0;
             EnumFacing[] aenumfacing = EnumFacing.values();
             int i1 = aenumfacing.length;
@@ -332,7 +343,8 @@ public class BlockFire extends Block {
         if (world.t.q() > 0 || !Blocks.aY.d(world, blockpos)) {
             if (!World.a((IBlockAccess) world, blockpos.b()) && !this.e(world, blockpos)) {
                 world.g(blockpos);
-            } else {
+            }
+            else {
                 world.a(blockpos, (Block) this, this.a(world) + world.s.nextInt(10));
             }
         }
@@ -351,7 +363,7 @@ public class BlockFire extends Block {
     }
 
     protected BlockState e() {
-        return new BlockState(this, new IProperty[] { a, N, O, P, Q, R, b, M});
+        return new BlockState(this, new IProperty[]{a, N, O, P, Q, R, b, M});
     }
 
 }

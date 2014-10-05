@@ -4,13 +4,9 @@ import net.canarymod.api.world.blocks.CanaryBlock;
 import net.canarymod.hook.world.LeafDecayHook;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.stats.StatList;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
 import java.util.Random;
@@ -20,7 +16,7 @@ public abstract class BlockLeaves extends BlockLeavesBase {
     public static final PropertyBool a = PropertyBool.a("decayable");
     public static final PropertyBool b = PropertyBool.a("check_decay");
     int[] M;
-   
+
     public BlockLeaves() {
         super(Material.j, false);
         this.a(true);
@@ -85,10 +81,12 @@ public abstract class BlockLeaves extends BlockLeavesBase {
                                 if (block != Blocks.r && block != Blocks.s) {
                                     if (block.r() == Material.j) {
                                         this.M[(i6 + i5) * i4 + (i7 + i5) * b1 + i8 + i5] = -2;
-                                    } else {
+                                    }
+                                    else {
                                         this.M[(i6 + i5) * i4 + (i7 + i5) * b1 + i8 + i5] = -1;
                                     }
-                                } else {
+                                }
+                                else {
                                     this.M[(i6 + i5) * i4 + (i7 + i5) * b1 + i8 + i5] = 0;
                                 }
                             }
@@ -133,7 +131,8 @@ public abstract class BlockLeaves extends BlockLeavesBase {
                 i6 = this.M[i5 * i4 + i5 * b1 + i5];
                 if (i6 >= 0) {
                     world.a(blockpos, iblockstate.a(b, Boolean.valueOf(false)), 4);
-                } else {
+                }
+                else {
                     this.d(world, blockpos);
                 }
             }
@@ -147,7 +146,7 @@ public abstract class BlockLeaves extends BlockLeavesBase {
         LeafDecayHook hook = (LeafDecayHook) new LeafDecayHook(leaves).call();
         if (!hook.isCanceled()) {
             this.b(world, blockpos, world.p(blockpos), 0);
-        world.g(blockpos);
+            world.g(blockpos);
         }
         //
     }
@@ -190,7 +189,8 @@ public abstract class BlockLeaves extends BlockLeavesBase {
 
     }
 
-    protected void a(World world, BlockPos blockpos, IBlockState iblockstate, int i0) {}
+    protected void a(World world, BlockPos blockpos, IBlockState iblockstate, int i0) {
+    }
 
     protected int d(IBlockState iblockstate) {
         return 20;

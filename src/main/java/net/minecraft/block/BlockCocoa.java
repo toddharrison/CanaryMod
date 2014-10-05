@@ -2,15 +2,21 @@ package net.minecraft.block;
 
 
 import net.canarymod.api.world.blocks.CanaryBlock;
+import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.world.BlockGrowHook;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyInteger;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.Direction;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -20,7 +26,7 @@ import java.util.Random;
 public class BlockCocoa extends BlockDirectional implements IGrowable {
 
     public static final PropertyInteger a = PropertyInteger.a("age", 0, 2);
-   
+
     public BlockCocoa() {
         super(Material.k);
         this.j(this.L.b().a(N, EnumFacing.NORTH).a(a, Integer.valueOf(0)));
@@ -30,15 +36,17 @@ public class BlockCocoa extends BlockDirectional implements IGrowable {
     public void b(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {
         if (!this.e(world, blockpos, iblockstate)) {
             this.f(world, blockpos, iblockstate);
-        } else if (world.s.nextInt(5) == 0) {
+        }
+        else if (world.s.nextInt(5) == 0) {
             int i0 = ((Integer) iblockstate.b(a)).intValue();
 
             if (i0 < 2) {
                 ++i0;
                 // CanaryMod: BlockGrow
-                CanaryBlock original = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
-                CanaryBlock growth = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
-                growth.setData((short) (i0 << 2 | l(i3)));
+                BlockPosition cbp = new BlockPosition(blockpos);
+                CanaryBlock original = (CanaryBlock) world.getCanaryWorld().getBlockAt(cbp);
+                CanaryBlock growth = (CanaryBlock) world.getCanaryWorld().getBlockAt(cbp);
+                //growth.setData((short) (i0 << 2 | l(i3))); // FIXME
                 BlockGrowHook blockGrowHook = (BlockGrowHook) new BlockGrowHook(original, growth).call();
                 if (!blockGrowHook.isCanceled()) {
                     world.a(blockpos, iblockstate.a(a, Integer.valueOf(i0 + 1)), 2);
@@ -165,35 +173,39 @@ public class BlockCocoa extends BlockDirectional implements IGrowable {
     }
 
     protected BlockState e() {
-        return new BlockState(this, new IProperty[] { N, a});
+        return new BlockState(this, new IProperty[]{N, a});
     }
 
     static final class SwitchEnumFacing {
 
         static final int[] a = new int[EnumFacing.values().length];
-      
+
         static {
             try {
                 a[EnumFacing.SOUTH.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror) {
+            }
+            catch (NoSuchFieldError nosuchfielderror) {
                 ;
             }
 
             try {
                 a[EnumFacing.NORTH.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror1) {
+            }
+            catch (NoSuchFieldError nosuchfielderror1) {
                 ;
             }
 
             try {
                 a[EnumFacing.WEST.ordinal()] = 3;
-            } catch (NoSuchFieldError nosuchfielderror2) {
+            }
+            catch (NoSuchFieldError nosuchfielderror2) {
                 ;
             }
 
             try {
                 a[EnumFacing.EAST.ordinal()] = 4;
-            } catch (NoSuchFieldError nosuchfielderror3) {
+            }
+            catch (NoSuchFieldError nosuchfielderror3) {
                 ;
             }
 

@@ -30,7 +30,7 @@ public class BlockStem extends BlockBush implements IGrowable {
         }
     });
     private final Block M;
-   
+
     protected BlockStem(Block block) {
         this.j(this.L.b().a(a, Integer.valueOf(0)).a(b, EnumFacing.UP));
         this.M = block;
@@ -180,7 +180,7 @@ public class BlockStem extends BlockBush implements IGrowable {
     }
 
     protected BlockState e() {
-        return new BlockState(this, new IProperty[] { a, b});
+        return new BlockState(this, new IProperty[]{a, b});
     }
 
 }

@@ -2,18 +2,26 @@ package net.minecraft.block;
 
 import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.blocks.CanaryBlock;
+import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.world.FlowHook;
 import net.canarymod.hook.world.LiquidDestroyHook;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import java.util.EnumSet;
+import java.util.Iterator;
 import java.util.Random;
+import java.util.Set;
 
 public class BlockDynamicLiquid extends BlockLiquid {
 
     int a;
-   
+
     protected BlockDynamicLiquid(Material material) {
         super(material);
     }
@@ -23,9 +31,9 @@ public class BlockDynamicLiquid extends BlockLiquid {
     }
 
     public void b(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {
-        
+
         // CanaryMod: Flow from
-        CanaryBlock from = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
+        CanaryBlock from = (CanaryBlock) world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos));
         //
 
         int i0 = ((Integer) iblockstate.b(b)).intValue();
@@ -55,11 +63,12 @@ public class BlockDynamicLiquid extends BlockLiquid {
                 i4 = -1;
             }
 
-            if (this.e((IBlockAccess)world, blockpos.a()) >= 0) {
-                i2 = this.e((IBlockAccess)world, blockpos.a());
+            if (this.e((IBlockAccess) world, blockpos.a()) >= 0) {
+                i2 = this.e((IBlockAccess) world, blockpos.a());
                 if (i2 >= 8) {
                     i4 = i2;
-                } else {
+                }
+                else {
                     i4 = i2 + 8;
                 }
             }
@@ -69,7 +78,8 @@ public class BlockDynamicLiquid extends BlockLiquid {
 
                 if (iblockstate1.c().r().a()) {
                     i4 = 0;
-                } else if (iblockstate1.c().r() == this.J && ((Integer) iblockstate1.b(b)).intValue() == 0) {
+                }
+                else if (iblockstate1.c().r() == this.J && ((Integer) iblockstate1.b(b)).intValue() == 0) {
                     i4 = 0;
                 }
             }
@@ -80,18 +90,21 @@ public class BlockDynamicLiquid extends BlockLiquid {
 
             if (i4 == i0) {
                 this.f(world, blockpos, iblockstate);
-            } else {
+            }
+            else {
                 i0 = i4;
                 if (i4 < 0) {
                     world.g(blockpos);
-                } else {
+                }
+                else {
                     iblockstate = iblockstate.a(b, Integer.valueOf(i4));
                     world.a(blockpos, iblockstate, 2);
                     world.a(blockpos, (Block) this, i1);
                     world.c(blockpos, (Block) this);
                 }
             }
-        } else {
+        }
+        else {
             this.f(world, blockpos, iblockstate);
         }
 
@@ -110,44 +123,47 @@ public class BlockDynamicLiquid extends BlockLiquid {
             if (!hook.isCanceled()) {
                 if (i0 >= 8) {
                     this.a(world, blockpos.b(), iblockstate2, i0);
-            } else {
-                this.a(world, blockpos.b(), iblockstate2, i0 + 8);
-            }
-            //
-        } else if (i0 >= 0 && (i0 == 0 || this.g(world, blockpos.b(), iblockstate2))) {
-            Set set = this.e(world, blockpos);
-
-            i2 = i0 + b0;
-            if (i0 >= 8) {
-                i2 = 1;
-            }
-
-            if (i2 >= 8) {
-                return;
-            }
-
-         Iterator iterator1 = set.iterator();
-
-            while (iterator1.hasNext()) {
-                EnumFacing enumfacing1 = (EnumFacing) iterator1.next();
-
-                // CanaryMod: Flow
-                CanaryBlock to = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2 + 1);
-                FlowHook hook = (FlowHook) new FlowHook(from, to).call();
-                if (!hook.isCanceled()) {
-                    this.a(world, blockpos.a(enumfacing1), world.p(blockpos.a(enumfacing1)), i2);
+                }
+                else {
+                    this.a(world, blockpos.b(), iblockstate2, i0 + 8);
                 }
                 //
             }
+            else if (i0 >= 0 && (i0 == 0 || this.g(world, blockpos.b(), iblockstate2))) {
+                Set set = this.e(world, blockpos);
+
+                i2 = i0 + b0;
+                if (i0 >= 8) {
+                    i2 = 1;
+                }
+
+                if (i2 >= 8) {
+                    return;
+                }
+
+                Iterator iterator1 = set.iterator();
+
+                while (iterator1.hasNext()) {
+                    EnumFacing enumfacing1 = (EnumFacing) iterator1.next();
+
+                    // CanaryMod: Flow
+                    CanaryBlock to = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2 + 1);
+                    FlowHook hook = (FlowHook) new FlowHook(from, to).call();
+                    if (!hook.isCanceled()) {
+                        this.a(world, blockpos.a(enumfacing1), world.p(blockpos.a(enumfacing1)), i2);
+                    }
+                    //
+                }
+            }
         }
-    }
 
     private void a(World world, BlockPos blockpos, IBlockState iblockstate, int i0) {
         if (this.h(world, blockpos, iblockstate)) {
             if (iblockstate.c() != Blocks.a) {
                 if (this.J == Material.i) {
                     this.d(world, blockpos);
-                } else {
+                }
+                else {
                     iblockstate.c().b(world, blockpos, iblockstate, 0);
                 }
             }
@@ -202,7 +218,8 @@ public class BlockDynamicLiquid extends BlockLiquid {
 
                 if (this.g(world, blockpos1.b(), world.p(blockpos1.b()))) {
                     i1 = this.a(world, blockpos1, 1, enumfacing.d());
-                } else {
+                }
+                else {
                     i1 = 0;
                 }
 
@@ -227,11 +244,12 @@ public class BlockDynamicLiquid extends BlockLiquid {
     }
 
     protected int a(World world, BlockPos blockpos, int i0) {
-        int i1 = this.e((IBlockAccess)world, blockpos);
+        int i1 = this.e((IBlockAccess) world, blockpos);
 
         if (i1 < 0) {
             return i0;
-        } else {
+        }
+        else {
             if (i1 == 0) {
                 ++this.a;
             }
@@ -246,7 +264,7 @@ public class BlockDynamicLiquid extends BlockLiquid {
 
     private boolean h(World world, BlockPos blockpos, IBlockState iblockstate) {
         // CanaryMod: LiquidDestroy
-        CanaryBlock dest = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
+        CanaryBlock dest = (CanaryBlock) world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos));
         BlockType liquid = this.J == Material.i ? BlockType.LavaFlowing : BlockType.WaterFlowing;
         LiquidDestroyHook hook = (LiquidDestroyHook) new LiquidDestroyHook(liquid, dest).call();
         if (hook.isForceDestroy()) {

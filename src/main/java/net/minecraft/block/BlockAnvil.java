@@ -1,14 +1,27 @@
 package net.minecraft.block;
 
+
+import com.google.common.base.Predicate;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.properties.PropertyInteger;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.MathHelper;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ContainerRepair;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IChatComponent;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IInteractionObject;
 import net.minecraft.world.World;
 
 
@@ -16,7 +29,7 @@ public class BlockAnvil extends BlockFalling {
 
     public static final PropertyDirection a = PropertyDirection.a("facing", (Predicate) EnumFacing.Plane.HORIZONTAL);
     public static final PropertyInteger b = PropertyInteger.a("damage", 0, 2);
-   
+
     protected BlockAnvil() {
         super(Material.g);
         this.j(this.L.b().a(a, EnumFacing.NORTH).a(b, Integer.valueOf(0)));
@@ -55,7 +68,8 @@ public class BlockAnvil extends BlockFalling {
 
         if (enumfacing.k() == EnumFacing.Axis.X) {
             this.a(0.0F, 0.0F, 0.125F, 1.0F, 1.0F, 0.875F);
-        } else {
+        }
+        else {
             this.a(0.125F, 0.0F, 0.0F, 0.875F, 1.0F, 1.0F);
         }
 
@@ -68,13 +82,6 @@ public class BlockAnvil extends BlockFalling {
     public void a_(World world, BlockPos blockpos) {
         world.b(1022, blockpos, 0);
     }
-
-    // CanaryMod start: fix hitbox
-    @Override // TODO WTF IS THIS?
-    public AxisAlignedBB a(World world, BlockPos blockpos) {
-        this.a((IBlockAccess) world, blockpos);
-        return super.a(world, blockpos);
-    } // CanaryMod end
 
     public IBlockState a(int i0) {
         return this.P().a(a, EnumFacing.b(i0 & 3)).a(b, Integer.valueOf((i0 & 15) >> 2));
@@ -89,14 +96,14 @@ public class BlockAnvil extends BlockFalling {
     }
 
     protected BlockState e() {
-        return new BlockState(this, new IProperty[] { a, b});
+        return new BlockState(this, new IProperty[]{a, b});
     }
 
     public static class Anvil implements IInteractionObject {
 
         private final World a;
         private final BlockPos b;
-      
+
         public Anvil(World p_i45741_1_, BlockPos p_i45741_2_) {
             this.a = p_i45741_1_;
             this.b = p_i45741_2_;
