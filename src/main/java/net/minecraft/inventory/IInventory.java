@@ -3,31 +3,36 @@ package net.minecraft.inventory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
-public interface IInventory {
 
-    int a();
+public interface IInventory extends IWorldNameable {
+
+    int n_();
 
     ItemStack a(int i0);
 
     ItemStack a(int i0, int i1);
 
-    ItemStack a_(int i0);
+    ItemStack b(int i0);
 
     void a(int i0, ItemStack itemstack);
 
-    String b();
+    int p_();
 
-    boolean k_();
-
-    int d();
-
-    void e();
+    void o_();
 
     boolean a(EntityPlayer entityplayer);
 
-    void f();
+    void b(EntityPlayer entityplayer);
 
-    void l_();
+    void c(EntityPlayer entityplayer);
 
     boolean b(int i0, ItemStack itemstack);
+
+    int a_(int i0);
+
+    void b(int i0, int i1);
+
+    int g();
+
+    void l();
 }

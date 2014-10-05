@@ -10,9 +10,9 @@ import net.minecraft.world.World;
 
 public class ContainerMerchant extends Container {
 
+    private final World g;
     private IMerchant a;
     private InventoryMerchant f;
-    private final World g;
 
     public ContainerMerchant(InventoryPlayer inventoryplayer, IMerchant imerchant, World world) {
         this.a = imerchant;
@@ -33,6 +33,7 @@ public class ContainerMerchant extends Container {
         for (i0 = 0; i0 < 9; ++i0) {
             this.a(new Slot(inventoryplayer, i0, 8 + i0 * 18, 142));
         }
+
     }
 
     public InventoryMerchant e() {
@@ -52,12 +53,12 @@ public class ContainerMerchant extends Container {
         super.a(iinventory);
     }
 
-    public void e(int i0) {
-        this.f.c(i0);
+    public void d(int i0) {
+        this.f.d(i0);
     }
 
     public boolean a(EntityPlayer entityplayer) {
-        return this.a.b() == entityplayer;
+        return this.a.u_() == entityplayer;
     }
 
     public ItemStack b(EntityPlayer entityplayer, int i0) {
@@ -67,7 +68,7 @@ public class ContainerMerchant extends Container {
         if (slot != null && slot.e()) {
             ItemStack itemstack1 = slot.d();
 
-            itemstack = itemstack1.m();
+            itemstack = itemstack1.k();
             if (i0 == 2) {
                 if (!this.a(itemstack1, 3, 39, true)) {
                     return null;
@@ -90,7 +91,7 @@ public class ContainerMerchant extends Container {
             }
 
             if (itemstack1.b == 0) {
-                slot.c((ItemStack) null);
+                slot.d((ItemStack) null);
             }
             else {
                 slot.f();
@@ -110,17 +111,18 @@ public class ContainerMerchant extends Container {
         super.b(entityplayer);
         this.a.a_((EntityPlayer) null);
         super.b(entityplayer);
-        if (!this.g.E) {
-            ItemStack itemstack = this.f.a_(0);
+        if (!this.g.D) {
+            ItemStack itemstack = this.f.b(0);
 
             if (itemstack != null) {
                 entityplayer.a(itemstack, false);
             }
 
-            itemstack = this.f.a_(1);
+            itemstack = this.f.b(1);
             if (itemstack != null) {
                 entityplayer.a(itemstack, false);
             }
+
         }
     }
 }

@@ -10,16 +10,17 @@ import net.minecraft.tileentity.TileEntityFurnace;
 
 public class ContainerFurnace extends Container {
 
-    private TileEntityFurnace a;
+    private final IInventory a;
     private int f;
     private int g;
     private int h;
+    private int i;
 
-    public ContainerFurnace(InventoryPlayer inventoryplayer, TileEntityFurnace tileentityfurnace) {
-        this.a = tileentityfurnace;
-        this.a(new Slot(tileentityfurnace, 0, 56, 17));
-        this.a(new Slot(tileentityfurnace, 1, 56, 53));
-        this.a((Slot) (new SlotFurnace(inventoryplayer.d, tileentityfurnace, 2, 116, 35)));
+    public ContainerFurnace(InventoryPlayer inventoryplayer, IInventory iinventory) {
+        this.a = iinventory;
+        this.a(new Slot(iinventory, 0, 56, 17));
+        this.a((Slot) (new SlotFurnaceFuel(iinventory, 1, 56, 53)));
+        this.a((Slot) (new SlotFurnaceOutput(inventoryplayer.d, iinventory, 2, 116, 35)));
 
         int i0;
 
@@ -38,9 +39,7 @@ public class ContainerFurnace extends Container {
 
     public void a(ICrafting icrafting) {
         super.a(icrafting);
-        icrafting.a(this, 0, this.a.j);
-        icrafting.a(this, 1, this.a.a);
-        icrafting.a(this, 2, this.a.i);
+        icrafting.a(this, this.a);
     }
 
     public void b() {
@@ -49,22 +48,27 @@ public class ContainerFurnace extends Container {
         for (int i0 = 0; i0 < this.e.size(); ++i0) {
             ICrafting icrafting = (ICrafting) this.e.get(i0);
 
-            if (this.f != this.a.j) {
-                icrafting.a(this, 0, this.a.j);
+            if (this.f != this.a.a_(2)) {
+                icrafting.a(this, 2, this.a.a_(2));
             }
 
-            if (this.g != this.a.a) {
-                icrafting.a(this, 1, this.a.a);
+            if (this.h != this.a.a_(0)) {
+                icrafting.a(this, 0, this.a.a_(0));
             }
 
-            if (this.h != this.a.i) {
-                icrafting.a(this, 2, this.a.i);
+            if (this.i != this.a.a_(1)) {
+                icrafting.a(this, 1, this.a.a_(1));
+            }
+
+            if (this.g != this.a.a_(3)) {
+                icrafting.a(this, 3, this.a.a_(3));
             }
         }
 
-        this.f = this.a.j;
-        this.g = this.a.a;
-        this.h = this.a.i;
+        this.f = this.a.a_(2);
+        this.h = this.a.a_(0);
+        this.i = this.a.a_(1);
+        this.g = this.a.a_(3);
     }
 
     public boolean a(EntityPlayer entityplayer) {
@@ -78,7 +82,7 @@ public class ContainerFurnace extends Container {
         if (slot != null && slot.e()) {
             ItemStack itemstack1 = slot.d();
 
-            itemstack = itemstack1.m();
+            itemstack = itemstack1.k();
             if (i0 == 2) {
                 if (!this.a(itemstack1, 3, 39, true)) {
                     return null;
@@ -92,7 +96,7 @@ public class ContainerFurnace extends Container {
                         return null;
                     }
                 }
-                else if (TileEntityFurnace.b(itemstack1)) {
+                else if (TileEntityFurnace.c(itemstack1)) {
                     if (!this.a(itemstack1, 1, 2, false)) {
                         return null;
                     }
@@ -111,7 +115,7 @@ public class ContainerFurnace extends Container {
             }
 
             if (itemstack1.b == 0) {
-                slot.c((ItemStack) null);
+                slot.d((ItemStack) null);
             }
             else {
                 slot.f();

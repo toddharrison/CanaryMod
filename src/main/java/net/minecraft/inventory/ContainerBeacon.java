@@ -8,15 +8,12 @@ import net.minecraft.tileentity.TileEntityBeacon;
 
 public class ContainerBeacon extends Container {
 
-    private TileEntityBeacon a;
-    private final BeaconSlot f;
-    private int g;
-    private int h;
-    private int i;
+    private final ContainerBeacon.BeaconSlot f;
+    private IInventory a;
 
-    public ContainerBeacon(InventoryPlayer inventoryplayer, TileEntityBeacon tileentitybeacon) {
-        this.a = tileentitybeacon;
-        this.a((Slot) (this.f = new BeaconSlot(tileentitybeacon, 0, 136, 110)));
+    public ContainerBeacon(IInventory iinventory, IInventory iinventory1) {
+        this.a = iinventory1;
+        this.a((Slot) (this.f = new ContainerBeacon.BeaconSlot(iinventory1, 0, 136, 110)));
         byte b0 = 36;
         short short1 = 137;
 
@@ -24,29 +21,22 @@ public class ContainerBeacon extends Container {
 
         for (i0 = 0; i0 < 3; ++i0) {
             for (int i1 = 0; i1 < 9; ++i1) {
-                this.a(new Slot(inventoryplayer, i1 + i0 * 9 + 9, b0 + i1 * 18, short1 + i0 * 18));
+                this.a(new Slot(iinventory, i1 + i0 * 9 + 9, b0 + i1 * 18, short1 + i0 * 18));
             }
         }
 
         for (i0 = 0; i0 < 9; ++i0) {
-            this.a(new Slot(inventoryplayer, i0, b0 + i0 * 18, 58 + short1));
+            this.a(new Slot(iinventory, i0, b0 + i0 * 18, 58 + short1));
         }
-
-        this.g = tileentitybeacon.l();
-        this.h = tileentitybeacon.j();
-        this.i = tileentitybeacon.k();
-
         this.inventory = a.getCanaryBeacon(); // CanaryMod: Set inventory instance
     }
 
     public void a(ICrafting icrafting) {
         super.a(icrafting);
-        icrafting.a(this, 0, this.g);
-        icrafting.a(this, 1, this.h);
-        icrafting.a(this, 2, this.i);
+        icrafting.a(this, this.a);
     }
 
-    public TileEntityBeacon e() {
+    public IInventory e() {
         return this.a;
     }
 
@@ -61,7 +51,7 @@ public class ContainerBeacon extends Container {
         if (slot != null && slot.e()) {
             ItemStack itemstack1 = slot.d();
 
-            itemstack = itemstack1.m();
+            itemstack = itemstack1.k();
             if (i0 == 0) {
                 if (!this.a(itemstack1, 1, 37, true)) {
                     return null;
@@ -89,7 +79,7 @@ public class ContainerBeacon extends Container {
             }
 
             if (itemstack1.b == 0) {
-                slot.c((ItemStack) null);
+                slot.d((ItemStack) null);
             }
             else {
                 slot.f();
@@ -112,7 +102,7 @@ public class ContainerBeacon extends Container {
         }
 
         public boolean a(ItemStack itemstack) {
-            return itemstack == null ? false : itemstack.b() == Items.bC || itemstack.b() == Items.i || itemstack.b() == Items.k || itemstack.b() == Items.j;
+            return itemstack == null ? false : itemstack.b() == Items.bO || itemstack.b() == Items.i || itemstack.b() == Items.k || itemstack.b() == Items.j;
         }
 
         public int a() {
