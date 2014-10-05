@@ -31,7 +31,7 @@ public class EntitySnowball extends EntityThrowable {
 
     protected void a(MovingObjectPosition movingobjectposition) {
         // CanaryMod: ProjectileHit
-        ProjectileHitHook hook = (ProjectileHitHook) new ProjectileHitHook(this.getCanaryEntity(), movingobjectposition == null || movingobjectposition.g == null ? null : movingobjectposition.g.getCanaryEntity()).call();
+        ProjectileHitHook hook = (ProjectileHitHook) new ProjectileHitHook(this.getCanaryEntity(), movingobjectposition == null || movingobjectposition.d == null ? null : movingobjectposition.d.getCanaryEntity()).call();
         if (!hook.isCanceled()) { //
             if (movingobjectposition.d != null) {
                 byte b0 = 0;

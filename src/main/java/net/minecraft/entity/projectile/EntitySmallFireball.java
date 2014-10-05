@@ -2,6 +2,7 @@ package net.minecraft.entity.projectile;
 
 import net.canarymod.api.entity.CanarySmallFireball;
 import net.canarymod.api.world.blocks.CanaryBlock;
+import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.entity.ProjectileHitHook;
 import net.canarymod.hook.world.IgnitionHook;
 import net.canarymod.hook.world.IgnitionHook.IgnitionCause;
@@ -39,7 +40,7 @@ public class EntitySmallFireball extends EntityFireball {
     protected void a(MovingObjectPosition movingobjectposition) {
         if (!this.o.D) {
             // CanaryMod: ProjectileHit
-            ProjectileHitHook hook = (ProjectileHitHook) new ProjectileHitHook(this.getCanaryEntity(), movingobjectposition == null || movingobjectposition.g == null ? null : movingobjectposition.g.getCanaryEntity()).call();
+            ProjectileHitHook hook = (ProjectileHitHook) new ProjectileHitHook(this.getCanaryEntity(), movingobjectposition == null || movingobjectposition.d == null ? null : movingobjectposition.d.getCanaryEntity()).call();
             if (!hook.isCanceled()) { //
                 boolean flag0;
 
@@ -62,7 +63,7 @@ public class EntitySmallFireball extends EntityFireball {
 
                         if (this.o.d(blockpos)) {
                             // CanaryMod: IgnitionHook
-                            CanaryBlock block = (CanaryBlock) this.o.getCanaryWorld().getBlockAt(i0, i1 - 1, i2);
+                            CanaryBlock block = (CanaryBlock) this.o.getCanaryWorld().getBlockAt(new BlockPosition(blockpos));
                             block.setStatus((byte) 7); // 7 fireball hit
                             IgnitionHook ignitionHook = (IgnitionHook) new IgnitionHook(block, null, null, IgnitionCause.FIREBALL_HIT).call();
                             if (!ignitionHook.isCanceled()) {

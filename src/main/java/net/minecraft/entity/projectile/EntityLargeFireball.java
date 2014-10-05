@@ -26,7 +26,7 @@ public class EntityLargeFireball extends EntityFireball {
     protected void a(MovingObjectPosition movingobjectposition) {
         if (!this.o.D) {
             // CanaryMod: ProjectileHitHook
-            ProjectileHitHook hook = (ProjectileHitHook) new ProjectileHitHook(this.getCanaryEntity(), movingobjectposition == null || movingobjectposition.g == null ? null : movingobjectposition.g.getCanaryEntity()).call();
+            ProjectileHitHook hook = (ProjectileHitHook) new ProjectileHitHook(this.getCanaryEntity(), movingobjectposition == null || movingobjectposition.d == null ? null : movingobjectposition.d.getCanaryEntity()).call();
             if (!hook.isCanceled()) { //
                 if (movingobjectposition.d != null) {
                     movingobjectposition.d.a(DamageSource.a((EntityFireball) this, this.a), 6.0F);

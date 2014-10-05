@@ -4,6 +4,7 @@ import net.canarymod.api.entity.CanaryArrow;
 import net.canarymod.hook.entity.ProjectileHitHook;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -16,14 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S2BPacketChangeGameState;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.*;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -98,7 +92,7 @@ public class EntityArrow extends Entity implements IProjectile {
         this.entity = new CanaryArrow(this); // CanaryMod: Wrap Entity
 
         this.a(0.5F, 0.5F);
-        this.b(entitylivingbase.s, entitylivingbase.t + (double) entitylivingbase.g(), entitylivingbase.u, entitylivingbase.y, entitylivingbase.z);
+        this.b(entitylivingbase.s, entitylivingbase.t + (double) entitylivingbase.aR(), entitylivingbase.u, entitylivingbase.y, entitylivingbase.z);
         this.s -= (double) (MathHelper.b(this.y / 180.0F * 3.1415927F) * 0.16F);
         this.t -= 0.10000000149011612D;
         this.u -= (double) (MathHelper.a(this.y / 180.0F * 3.1415927F) * 0.16F);
@@ -234,7 +228,7 @@ public class EntityArrow extends Entity implements IProjectile {
 
             if (movingobjectposition != null) {
                 // CanaryMod: ProjectileHit
-                ProjectileHitHook hook = (ProjectileHitHook) new ProjectileHitHook(this.getCanaryEntity(), movingobjectposition.g == null ? null : movingobjectposition.g.getCanaryEntity()).call();
+                ProjectileHitHook hook = (ProjectileHitHook) new ProjectileHitHook(this.getCanaryEntity(), movingobjectposition.d == null ? null : movingobjectposition.d.getCanaryEntity()).call();
                 if (!hook.isCanceled() && movingobjectposition.d != null) { //
                     f2 = MathHelper.a(this.v * this.v + this.w * this.w + this.x * this.x);
                     int i2 = MathHelper.f((double) f2 * this.ar);

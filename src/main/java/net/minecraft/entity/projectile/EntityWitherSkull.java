@@ -50,13 +50,13 @@ public class EntityWitherSkull extends EntityFireball {
     }
 
     protected void a(MovingObjectPosition movingobjectposition) {
-        if (!this.o.E) {
+        if (!this.o.D) {
             // CanaryMod: ProjectileHit
-            ProjectileHitHook hook = (ProjectileHitHook) new ProjectileHitHook(this.getCanaryEntity(), movingobjectposition == null || movingobjectposition.g == null ? null : movingobjectposition.g.getCanaryEntity()).call();
+            ProjectileHitHook hook = (ProjectileHitHook) new ProjectileHitHook(this.getCanaryEntity(), movingobjectposition == null || movingobjectposition.d == null ? null : movingobjectposition.d.getCanaryEntity()).call();
             if (!hook.isCanceled()) { //
                 if (movingobjectposition.d != null) {
                     if (this.a != null) {
-                        if (movingobjectposition.d.ai(DamageSource.a(this.a), 8.0F) && !movingobjectposition.g.Z()) {
+                        if (movingobjectposition.d.a(DamageSource.a(this.a), 8.0F) && !movingobjectposition.d.ai()) {
                             this.a.g(5.0F);
                         }
                     } else {
