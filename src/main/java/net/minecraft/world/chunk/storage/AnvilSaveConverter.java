@@ -50,9 +50,9 @@ public class AnvilSaveConverter extends SaveFormatOld {
 
     public boolean a(String s0, IProgressUpdate iprogressupdate) {
         iprogressupdate.a(0);
-        ArrayList arraylist = new ArrayList();
-        ArrayList arraylist1 = new ArrayList();
-        ArrayList arraylist2 = new ArrayList();
+        ArrayList arraylist = Lists.newArrayList();
+        ArrayList arraylist1 = Lists.newArrayList();
+        ArrayList arraylist2 = Lists.newArrayList();
         File file1 = new File(this.a, s0);
         File file2 = new File(file1, "DIM-1");
         File file3 = new File(file1, "DIM1");
@@ -74,17 +74,17 @@ public class AnvilSaveConverter extends SaveFormatOld {
         Object object = null;
 
         if (worldinfo.u() == WorldType.c) {
-            object = new WorldChunkManagerHell(BiomeGenBase.p, 0.5F);
+            object = new WorldChunkManagerHell(BiomeGenBase.q, 0.5F);
         }
         else {
-            object = new WorldChunkManager(worldinfo.b(), worldinfo.u());
+            object = new WorldChunkManager(worldinfo.b(), worldinfo.u(), worldinfo.B());
         }
 
         this.a(new File(file1, "region"), (Iterable) arraylist, (WorldChunkManager) object, 0, i0, iprogressupdate);
-        this.a(new File(file2, "region"), (Iterable) arraylist1, new WorldChunkManagerHell(BiomeGenBase.w, 0.0F), arraylist.size(), i0, iprogressupdate);
-        this.a(new File(file3, "region"), (Iterable) arraylist2, new WorldChunkManagerHell(BiomeGenBase.x, 0.0F), arraylist.size() + arraylist1.size(), i0, iprogressupdate);
+        this.a(new File(file2, "region"), (Iterable) arraylist1, new WorldChunkManagerHell(BiomeGenBase.x, 0.0F), arraylist.size(), i0, iprogressupdate);
+        this.a(new File(file3, "region"), (Iterable) arraylist2, new WorldChunkManagerHell(BiomeGenBase.y, 0.0F), arraylist.size() + arraylist1.size(), i0, iprogressupdate);
         worldinfo.e(19133);
-        if (worldinfo.u() == WorldType.f) {
+        if (worldinfo.u() == WorldType.h) {
             worldinfo.a(WorldType.b);
         }
 
