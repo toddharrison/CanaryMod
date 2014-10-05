@@ -6,6 +6,7 @@ import com.google.common.collect.Sets;
 import net.canarymod.api.CanaryDamageSource;
 import net.canarymod.api.entity.Explosive;
 import net.canarymod.api.world.blocks.CanaryBlock;
+import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.entity.DamageHook;
 import net.canarymod.hook.world.ExplosionHook;
 import net.canarymod.hook.world.IgnitionHook;
@@ -54,7 +55,7 @@ public class Explosion {
         boolean flag0 = true;
 
         // CanaryMod: Ground Zero
-        CanaryBlock gzero = (CanaryBlock) this.k.getCanaryWorld().getBlockAt((int) Math.floor(c), (int) Math.floor(d), (int) Math.floor(e));
+        CanaryBlock gzero = (CanaryBlock) this.d.getCanaryWorld().getBlockAt((int) Math.floor(e), (int) Math.floor(f), (int) Math.floor(g));
         //
 
         int i0;
@@ -106,17 +107,17 @@ public class Explosion {
             // CanaryMod: Add affected blocks into a List of Blocks.
             List<net.canarymod.api.world.blocks.Block> blkAff = new ArrayList<net.canarymod.api.world.blocks.Block>(hashset.size());
 
-            for (ChunkPosition ocp : (HashSet<ChunkPosition>) hashset) {
-                blkAff.add(this.k.getCanaryWorld().getBlockAt(ocp.a, ocp.b, ocp.c));
+            for (BlockPos blockpos : (HashSet<BlockPos>) hashset) {
+                blkAff.add(this.d.getCanaryWorld().getBlockAt(new BlockPosition(blockpos)));
             }
             // Explosion call
-            ExplosionHook exp = (ExplosionHook) new ExplosionHook(gzero, this.f != null ? this.f.getCanaryEntity() : null, blkAff).call();
+            ExplosionHook exp = (ExplosionHook) new ExplosionHook(gzero, this.h != null ? this.h.getCanaryEntity() : null, blkAff).call();
             // if cancelled, don't populate this.j at all.
             if (!exp.isCanceled()) {
                 // Repopulate hashset according to blocksAffected.
                 hashset.clear();
                 for (net.canarymod.api.world.blocks.Block affected : exp.getAffectedBlocks()) {
-                    hashset.add(new ChunkPosition(affected.getX(), affected.getY(), affected.getZ()));
+                    hashset.add(new BlockPos(affected.getX(), affected.getY(), affected.getZ()));
                 }
                 this.j.addAll(hashset);
             }
@@ -153,11 +154,11 @@ public class Explosion {
                         double d13 = (1.0D - d7) * d12;
                         // Check entity if instance of Explosive and can damage entities
                         //        null     or                non-Explosive                     or                      Explosive can damage entities
-                        if (this.f == null || !(this.f.getCanaryEntity() instanceof Explosive) || ((Explosive) this.f.getCanaryEntity()).canDamageEntities()) {
+                        if (this.h == null || !(this.h.getCanaryEntity() instanceof Explosive) || ((Explosive) this.h.getCanaryEntity()).canDamageEntities()) {
                             // CanaryMod Damage hook: Explosions
                             float damage = (float) ((int) ((d10 * d10 + d10) / 2.0D * 8.0D * (double) this.g + 1.0D));
                             CanaryDamageSource source = DamageSource.a(this).getCanaryDamageSource();
-                            DamageHook dmg = (DamageHook) new DamageHook(this.f != null ? this.f.getCanaryEntity() : null, entity.getCanaryEntity(), source, damage).call();
+                            DamageHook dmg = (DamageHook) new DamageHook(this.h != null ? this.h.getCanaryEntity() : null, entity.getCanaryEntity(), source, damage).call();
                             if (!dmg.isCanceled()) {
                                 entity.a((((CanaryDamageSource) dmg.getDamageSource()).getHandle()), damage);
                             }
@@ -237,7 +238,7 @@ public class Explosion {
                 blockpos = (BlockPos) iterator.next();
                 if (this.d.p(blockpos).c().r() == Material.a && this.d.p(blockpos.b()).c().m() && this.c.nextInt(3) == 0) {
                     // CanaryMod ignition from EntityLargeFireball
-                    CanaryBlock cBlock = (CanaryBlock) this.k.getCanaryWorld().getBlockAt(blockpos.n(), blockpos.o() - 1, blockpos.p());
+                    CanaryBlock cBlock = (CanaryBlock) this.d.getCanaryWorld().getBlockAt(blockpos.n(), blockpos.o() - 1, blockpos.p());
                     cBlock.setStatus((byte) 7); // 7 fireball hit
                     IgnitionHook ignitionHook = (IgnitionHook) new IgnitionHook(cBlock, null, null, IgnitionCause.FIREBALL_HIT).call();
                     if (!ignitionHook.isCanceled()) {

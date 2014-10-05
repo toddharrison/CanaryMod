@@ -1,5 +1,6 @@
 package net.minecraft.world;
 
+import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -77,7 +78,7 @@ public class WorldServer extends World implements IThreadListener {
 
     public WorldServer(MinecraftServer minecraftserver, ISaveHandler isavehandler, WorldInfo worldinfo, int i0, Profiler profiler) {
         // TODO: WorldProvider: Needs changing so it would get any WorldProvider. Might need to make a mapping/register
-        super(isavehandler, worldinfo, WorldProvider.a(i0), profiler, false);
+        super(isavehandler, worldinfo, WorldProvider.a(i0), profiler, false, net.canarymod.api.world.DimensionType.fromId(i0));
         this.I = minecraftserver;
         this.J = new EntityTracker(this);
         this.K = new PlayerManager(this);
@@ -89,7 +90,7 @@ public class WorldServer extends World implements IThreadListener {
         this.af().a(minecraftserver.aG());
 
         // CanaryMod: overide scoreboard data
-        this.D = ((CanaryScoreboard) Canary.scoreboards().getScoreboard()).getHandle();
+        this.C = ((CanaryScoreboard) Canary.scoreboards().getScoreboard()).getHandle();
     }
 
     public World b() {
@@ -970,7 +971,7 @@ public class WorldServer extends World implements IThreadListener {
     }
 
     public CanaryEntityTracker getEntityTracker() {
-        return K.getCanaryEntityTracker();
+        return J.getCanaryEntityTracker();
     }
 
     /**
@@ -979,6 +980,6 @@ public class WorldServer extends World implements IThreadListener {
      * @return
      */
     public CanaryPlayerManager getPlayerManager() {
-        return L.getPlayerManager();
+        return K.getPlayerManager();
     }
 }

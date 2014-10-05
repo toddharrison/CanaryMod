@@ -42,7 +42,7 @@ public class Chunk {
     private final int[] j;
     public final int a;
     public final int b;
-    private boolean k;
+    public boolean k; // CanaryMod private => public
     private final Map l;
     private final ClassInheratanceMultiMap[] m;
     private boolean n;
@@ -296,9 +296,9 @@ public class Chunk {
                     for (i7 = i3; i7 < i4; ++i7) {
                         // CanaryMod start: Catch corrupt index info
                         if (i7 >> 4 < 0 || i7 >> 4 >= 16) {
-                            t.warn("Invalid chunk info array index: " + (i7 >> 4));
-                            t.warn("x: " + i3 + ", z: " + i4);
-                            t.warn("Chunk location: " + i5 + ", " + i6);
+                            c.warn("Invalid chunk info array index: " + (i7 >> 4));
+                            c.warn("x: " + i3 + ", z: " + i4);
+                            c.warn("Chunk location: " + i5 + ", " + i6);
                             i7 = 0;
                         }
                         // CanaryMod end

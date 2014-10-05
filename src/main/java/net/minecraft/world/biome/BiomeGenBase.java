@@ -526,15 +526,15 @@ public abstract class BiomeGenBase {
      * Convenience Methods
      */
     public void setCanSnow(boolean bool) {
-        this.aw = bool;
-    }
-
-    public void setCanRain(boolean bool) {
         this.ax = bool;
     }
 
+    public void setCanRain(boolean bool) {
+        this.ay = bool;
+    }
+
     public boolean canRain() {
-        return this.ax;
+        return this.ay;
     }
 
     public void setTemperatureAndPrecipitation(float temp, float precipitation) {

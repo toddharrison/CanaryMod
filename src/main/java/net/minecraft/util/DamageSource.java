@@ -195,7 +195,7 @@ public class DamageSource {
      * @param f
      */
     public void setHungerDamage(float f) {
-        this.s = f;
+        this.t = f;
     }
 
     /**
@@ -204,9 +204,9 @@ public class DamageSource {
      * @param b
      */
     public void setUnblockable(boolean b) {
-        this.p = b;
+        this.q = b;
         if (b == true) {
-            this.s = 0.0f;
+            this.t = 0.0f;
         }
     }
 }

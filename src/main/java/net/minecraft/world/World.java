@@ -6,12 +6,10 @@ import com.google.common.collect.Sets;
 import net.canarymod.api.entity.living.humanoid.CanaryHuman;
 import net.canarymod.api.entity.vehicle.CanaryVehicle;
 import net.canarymod.api.world.CanaryWorld;
-import net.canarymod.api.world.blocks.CanaryBlock;
 import net.canarymod.config.Configuration;
 import net.canarymod.config.WorldConfiguration;
 import net.canarymod.hook.entity.EntitySpawnHook;
 import net.canarymod.hook.entity.VehicleCollisionHook;
-import net.canarymod.hook.world.BlockUpdateHook;
 import net.canarymod.hook.world.WeatherChangeHook;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
@@ -111,7 +109,7 @@ public abstract class World implements IBlockAccess {
         this.M = worldprovider.r();
 
         // CanaryMod set dimension type in world provider
-        canaryDimension = new CanaryWorld(s0, (WorldServer) this, type);
+        canaryDimension = new CanaryWorld(worldinfo.k(), (WorldServer) this, type);
         this.t.setCanaryDimensionType(type);
     }
 
@@ -251,6 +249,7 @@ public abstract class World implements IBlockAccess {
             Block block = iblockstate.c();
             IBlockState iblockstate1 = chunk.a(blockpos, iblockstate);
 
+            /* FIXME
             // CanaryMod: BlockUpdate
                 boolean flag0 = chunk.a(i0 & 15, i1, i2 & 15, block, i3);
                 CanaryBlock cblock;
@@ -262,7 +261,7 @@ public abstract class World implements IBlockAccess {
                     }
                     //
                 }
-
+            */
             if (iblockstate1 == null) {
                 return false;
             }

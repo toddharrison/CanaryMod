@@ -3,10 +3,8 @@ package net.minecraft.world.gen;
 import com.google.common.collect.Lists;
 import net.canarymod.api.world.CanaryChunkProviderServer;
 import net.canarymod.hook.world.ChunkCreatedHook;
-import net.canarymod.hook.world.ChunkCreationHook;
 import net.canarymod.hook.world.ChunkLoadedHook;
 import net.canarymod.hook.world.ChunkUnloadHook;
-import net.canarymod.util.NMSToolBox;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.entity.EnumCreatureType;
@@ -104,6 +102,7 @@ public class ChunkProviderServer implements IChunkProvider {
             chunk = this.e(i0, i1);
             boolean newchunk = chunk == null; // CanaryMod: Tracking on new chunks
             if (chunk == null) {
+                /* FIXME
                 // CanaryMod: ChunkCreation
                 ChunkCreationHook hook = (ChunkCreationHook) new ChunkCreationHook(i0, i1, i.getCanaryWorld()).call();
                 int[] blocks = hook.getBlockData();
@@ -116,7 +115,8 @@ public class ChunkProviderServer implements IChunkProvider {
                     }
                 }
                 //
-                else if (this.e == null) {
+                else */
+                if (this.e == null) {
                     chunk = this.d;
                 }
                 else {
@@ -146,6 +146,7 @@ public class ChunkProviderServer implements IChunkProvider {
                 // CanaryMod: ChunkLoaded
                 new ChunkLoadedHook(chunk.getCanaryChunk(), i.getCanaryWorld(), newchunk).call();
                 //
+
                 if (chunk.k && this.a(i0 + 1, i1 + 1) && this.a(i0, i1 + 1) && this.a(i0 + 1, i1)) {
                     this.a(this, i0, i1);
                 }

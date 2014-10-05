@@ -378,7 +378,7 @@ public class WorldInfo {
 
     public void c(long i0) {
         // CanaryMod: TimeChangeHook
-        CanaryWorld world = (CanaryWorld) Canary.getServer().getWorldManager().getWorld(this.m, net.canarymod.api.world.DimensionType.fromId(this.l), false);
+        CanaryWorld world = (CanaryWorld) Canary.getServer().getWorldManager().getWorld(this.n, net.canarymod.api.world.DimensionType.fromId(this.m), false);
         TimeChangeHook hook = (TimeChangeHook) new TimeChangeHook(world, i0).call();
         if (hook.isCanceled()) {
             return;
