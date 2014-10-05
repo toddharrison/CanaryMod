@@ -21,6 +21,9 @@ public class Score {
     private final ScoreObjective c;
     private final String d;
     private int e;
+    private boolean f;
+    private boolean g;
+
 
     private CanaryScore score = new CanaryScore(this); // CanaryMod: set our variable
 
@@ -28,6 +31,7 @@ public class Score {
         this.b = scoreboard;
         this.c = scoreobjective;
         this.d = s0;
+        this.g = true;
     }
 
     public void a(int i0) {
@@ -65,7 +69,8 @@ public class Score {
         int i1 = this.e;
 
         this.e = i0;
-        if (i1 != i0) {
+        if (i1 != i0 || this.g) {
+            this.g = false;
             this.f().a(this);
         }
     }
@@ -80,6 +85,14 @@ public class Score {
 
     public Scoreboard f() {
         return this.b;
+    }
+
+    public boolean g() {
+        return this.f;
+    }
+
+    public void a(boolean flag0) {
+        this.f = flag0;
     }
 
     public void a(List list) {

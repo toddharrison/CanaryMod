@@ -20,7 +20,7 @@ public class ScoreHealthCriteria extends ScoreDummyCriteria {
 
         EntityPlayer entityplayer;
 
-        for (Iterator iterator = list.iterator(); iterator.hasNext(); f0 += entityplayer.aS() + entityplayer.bs()) {
+        for (Iterator iterator = list.iterator(); iterator.hasNext(); f0 += entityplayer.bm() + entityplayer.bM()) {
             entityplayer = (EntityPlayer) iterator.next();
         }
 
@@ -33,5 +33,9 @@ public class ScoreHealthCriteria extends ScoreDummyCriteria {
 
     public boolean b() {
         return true;
+    }
+
+    public IScoreObjectiveCriteria.EnumRenderType c() {
+        return IScoreObjectiveCriteria.EnumRenderType.HEARTS;
     }
 }
