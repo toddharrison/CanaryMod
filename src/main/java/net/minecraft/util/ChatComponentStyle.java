@@ -80,31 +80,31 @@ public abstract class ChatComponentStyle implements IChatComponent {
     }
 
     public static Iterator a(Iterable iterable) {
-        Iterator object1 = Iterators.concat(Iterators.transform(iterable.iterator(), new Function() {
+        Iterator iterator = Iterators.concat(Iterators.transform(iterable.iterator(), new Function() {
 
-            public Iterator apply(IChatComponent object1) {
-                return object1.iterator();
+            public Iterator apply(IChatComponent ichatcomponent) {
+                return ichatcomponent.iterator();
             }
 
-            public Object apply(Object object1) {
-                return this.apply((IChatComponent) object1);
+            public Object apply(Object object) {
+                return this.apply((IChatComponent) object);
             }
         }));
 
-        object1 = Iterators.transform(object1, new Function() {
+        iterator = Iterators.transform(iterator, new Function() {
 
-            public IChatComponent apply(IChatComponent object1) {
-                IChatComponent ichatcomponent2 = object1.f();
+            public IChatComponent apply(IChatComponent ichatcomponent) {
+                IChatComponent ichatcomponent2 = ichatcomponent.f();
 
-                ichatcomponent2.a(ichatcomponent2.b().m());
+                ichatcomponent2.a(ichatcomponent2.b().n());
                 return ichatcomponent2;
             }
 
-            public Object apply(Object object1) {
-                return this.apply((IChatComponent) object1);
+            public Object apply(Object object) {
+                return this.apply((IChatComponent) object);
             }
         });
-        return object1;
+        return iterator;
     }
 
     public boolean equals(Object object) {

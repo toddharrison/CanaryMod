@@ -27,7 +27,7 @@ public class ChatComponentText extends ChatComponentStyle {
     public ChatComponentText h() {
         ChatComponentText chatcomponenttext = new ChatComponentText(this.b);
 
-        chatcomponenttext.a(this.b().l());
+        chatcomponenttext.a(this.b().m());
         Iterator iterator = this.a().iterator();
 
         while (iterator.hasNext()) {

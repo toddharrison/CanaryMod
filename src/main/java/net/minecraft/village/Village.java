@@ -6,18 +6,16 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.TreeMap;
@@ -25,16 +23,16 @@ import java.util.TreeMap;
 public class Village {
 
     private World a;
-    private final List b = new ArrayList();
-    private final ChunkCoordinates c = new ChunkCoordinates(0, 0, 0);
-    private final ChunkCoordinates d = new ChunkCoordinates(0, 0, 0);
+    private final List b = Lists.newArrayList();
+    private BlockPos c;
+    private BlockPos d;
     private int e;
     private int f;
     private int g;
     private int h;
     public int i; // CanaryMod: private => public
-    private TreeMap j = new TreeMap();
-    private List k = new ArrayList();
+    private TreeMap j;
+    private List k;
     public int l; // CanaryMod: private => public
 
     // CanaryMod
@@ -43,10 +41,18 @@ public class Village {
     //
 
     public Village() {
+        this.c = BlockPos.a;
+        this.d = BlockPos.a;
+        this.j = new TreeMap();
+        this.k = Lists.newArrayList();
         this.ville = new CanaryVillage(this); // CanaryMod: Wrap Village
     }
 
     public Village(World world) {
+        this.c = BlockPos.a;
+        this.d = BlockPos.a;
+        this.j = new TreeMap();
+        this.k = Lists.newArrayList();
         this.a = world;
         this.ville = new CanaryVillage(this); // CanaryMod: Wrap Village
     }
@@ -70,7 +76,7 @@ public class Village {
         int i1 = this.h / 10;
 
         if (this.l < i1 && this.b.size() > 20 && this.a.s.nextInt(7000) == 0) {
-            Vec3 vec3 = this.a(MathHelper.d((float) this.d.a), MathHelper.d((float) this.d.b), MathHelper.d((float) this.d.c), 2, 4, 2);
+            Vec3 vec3 = this.a(this.d, 2, 4, 2);
 
             if (vec3 != null) {
                 EntityIronGolem entityirongolem = new EntityIronGolem(this.a);
@@ -82,32 +88,30 @@ public class Village {
         }
     }
 
-    private Vec3 a(int i0, int i1, int i2, int i3, int i4, int i5) {
-        for (int i6 = 0; i6 < 10; ++i6) {
-            int i7 = i0 + this.a.s.nextInt(16) - 8;
-            int i8 = i1 + this.a.s.nextInt(6) - 3;
-            int i9 = i2 + this.a.s.nextInt(16) - 8;
+    private Vec3 a(BlockPos blockpos, int i0, int i1, int i2) {
+        for (int i3 = 0; i3 < 10; ++i3) {
+            BlockPos blockpos1 = blockpos.a(this.a.s.nextInt(16) - 8, this.a.s.nextInt(6) - 3, this.a.s.nextInt(16) - 8);
 
-            if (this.a(i7, i8, i9) && this.b(i7, i8, i9, i3, i4, i5)) {
-                return Vec3.a((double) i7, (double) i8, (double) i9);
+            if (this.a(blockpos1) && this.a(new BlockPos(i0, i1, i2), blockpos1)) {
+                return new Vec3((double) blockpos1.n(), (double) blockpos1.o(), (double) blockpos1.p());
             }
         }
 
         return null;
     }
 
-    private boolean b(int i0, int i1, int i2, int i3, int i4, int i5) {
-        if (!World.a((IBlockAccess) this.a, i0, i1 - 1, i2)) {
+    private boolean a(BlockPos blockpos, BlockPos blockpos1) {
+        if (!World.a((IBlockAccess) this.a, blockpos1.b())) {
             return false;
         }
         else {
-            int i6 = i0 - i3 / 2;
-            int i7 = i2 - i5 / 2;
+            int i0 = blockpos1.n() - blockpos.n() / 2;
+            int i1 = blockpos1.p() - blockpos.p() / 2;
 
-            for (int i8 = i6; i8 < i6 + i3; ++i8) {
-                for (int i9 = i1; i9 < i1 + i4; ++i9) {
-                    for (int i10 = i7; i10 < i7 + i5; ++i10) {
-                        if (this.a.a(i8, i9, i10).r()) {
+            for (int i2 = i0; i2 < i0 + blockpos.n(); ++i2) {
+                for (int i3 = blockpos1.o(); i3 < blockpos1.o() + blockpos.o(); ++i3) {
+                    for (int i4 = i1; i4 < i1 + blockpos.p(); ++i4) {
+                        if (this.a.p(new BlockPos(i2, i3, i4)).c().t()) {
                             return false;
                         }
                     }
@@ -119,13 +123,13 @@ public class Village {
     }
 
     private void j() {
-        List list = this.a.a(EntityIronGolem.class, AxisAlignedBB.a((double) (this.d.a - this.e), (double) (this.d.b - 4), (double) (this.d.c - this.e), (double) (this.d.a + this.e), (double) (this.d.b + 4), (double) (this.d.c + this.e)));
+        List list = this.a.a(EntityIronGolem.class, new AxisAlignedBB((double) (this.d.n() - this.e), (double) (this.d.o() - 4), (double) (this.d.p() - this.e), (double) (this.d.n() + this.e), (double) (this.d.o() + 4), (double) (this.d.p() + this.e)));
 
         this.l = list.size();
     }
 
     private void k() {
-        List list = this.a.a(EntityVillager.class, AxisAlignedBB.a((double) (this.d.a - this.e), (double) (this.d.b - 4), (double) (this.d.c - this.e), (double) (this.d.a + this.e), (double) (this.d.b + 4), (double) (this.d.c + this.e)));
+        List list = this.a.a(EntityVillager.class, new AxisAlignedBB((double) (this.d.n() - this.e), (double) (this.d.o() - 4), (double) (this.d.p() - this.e), (double) (this.d.n() + this.e), (double) (this.d.o() + 4), (double) (this.d.p() + this.e)));
 
         this.h = list.size();
         if (this.h == 0) {
@@ -133,7 +137,7 @@ public class Village {
         }
     }
 
-    public ChunkCoordinates a() {
+    public BlockPos a() {
         return this.d;
     }
 
@@ -153,59 +157,59 @@ public class Village {
         return this.h;
     }
 
-    public boolean a(int i0, int i1, int i2) {
-        return this.d.e(i0, i1, i2) < (float) (this.e * this.e);
+    public boolean a(BlockPos blockpos) {
+        return this.d.i(blockpos) < (double) (this.e * this.e);
     }
 
     public List f() {
         return this.b;
     }
 
-    public VillageDoorInfo b(int i0, int i1, int i2) {
+    public VillageDoorInfo b(BlockPos blockpos) {
         VillageDoorInfo villagedoorinfo = null;
-        int i3 = Integer.MAX_VALUE;
+        int i0 = Integer.MAX_VALUE;
         Iterator iterator = this.b.iterator();
 
         while (iterator.hasNext()) {
             VillageDoorInfo villagedoorinfo1 = (VillageDoorInfo) iterator.next();
-            int i4 = villagedoorinfo1.b(i0, i1, i2);
+            int i1 = villagedoorinfo1.a(blockpos);
 
-            if (i4 < i3) {
+            if (i1 < i0) {
                 villagedoorinfo = villagedoorinfo1;
-                i3 = i4;
+                i0 = i1;
             }
         }
 
         return villagedoorinfo;
     }
 
-    public VillageDoorInfo c(int i0, int i1, int i2) {
+    public VillageDoorInfo c(BlockPos blockpos) {
         VillageDoorInfo villagedoorinfo = null;
-        int i3 = Integer.MAX_VALUE;
+        int i0 = Integer.MAX_VALUE;
         Iterator iterator = this.b.iterator();
 
         while (iterator.hasNext()) {
             VillageDoorInfo villagedoorinfo1 = (VillageDoorInfo) iterator.next();
-            int i4 = villagedoorinfo1.b(i0, i1, i2);
+            int i1 = villagedoorinfo1.a(blockpos);
 
-            if (i4 > 256) {
-                i4 *= 1000;
+            if (i1 > 256) {
+                i1 *= 1000;
             }
             else {
-                i4 = villagedoorinfo1.f();
+                i1 = villagedoorinfo1.c();
             }
 
-            if (i4 < i3) {
+            if (i1 < i0) {
                 villagedoorinfo = villagedoorinfo1;
-                i3 = i4;
+                i0 = i1;
             }
         }
 
         return villagedoorinfo;
     }
 
-    public VillageDoorInfo e(int i0, int i1, int i2) {
-        if (this.d.e(i0, i1, i2) > (float) (this.e * this.e)) {
+    public VillageDoorInfo e(BlockPos blockpos) {
+        if (this.d.i(blockpos) > (double) (this.e * this.e)) {
             return null;
         }
         else {
@@ -219,7 +223,8 @@ public class Village {
                 }
 
                 villagedoorinfo = (VillageDoorInfo) iterator.next();
-            } while (villagedoorinfo.a != i0 || villagedoorinfo.c != i2 || Math.abs(villagedoorinfo.b - i1) > 1);
+            }
+            while (villagedoorinfo.d().n() != blockpos.n() || villagedoorinfo.d().p() != blockpos.p() || Math.abs(villagedoorinfo.d().o() - blockpos.o()) > 1);
 
             return villagedoorinfo;
         }
@@ -227,11 +232,9 @@ public class Village {
 
     public void a(VillageDoorInfo villagedoorinfo) {
         this.b.add(villagedoorinfo);
-        this.c.a += villagedoorinfo.a;
-        this.c.b += villagedoorinfo.b;
-        this.c.c += villagedoorinfo.c;
+        this.c = this.c.a((Vec3i) villagedoorinfo.d());
         this.n();
-        this.f = villagedoorinfo.f;
+        this.f = villagedoorinfo.h();
     }
 
     public boolean g() {
@@ -241,15 +244,15 @@ public class Village {
     public void a(EntityLivingBase entitylivingbase) {
         Iterator iterator = this.k.iterator();
 
-        VillageAgressor village_villageagressor;
+        Village.VillageAgressor village_villageagressor;
 
         do {
             if (!iterator.hasNext()) {
-                this.k.add(new VillageAgressor(entitylivingbase, this.g));
+                this.k.add(new Village.VillageAgressor(entitylivingbase, this.g));
                 return;
             }
 
-            village_villageagressor = (VillageAgressor) iterator.next();
+            village_villageagressor = (Village.VillageAgressor) iterator.next();
         } while (village_villageagressor.a != entitylivingbase);
 
         village_villageagressor.b = this.g;
@@ -257,11 +260,11 @@ public class Village {
 
     public EntityLivingBase b(EntityLivingBase entitylivingbase) {
         double d0 = Double.MAX_VALUE;
-        VillageAgressor village_villageagressor = null;
+        Village.VillageAgressor village_villageagressor = null;
 
         for (int i0 = 0; i0 < this.k.size(); ++i0) {
-            VillageAgressor village_villageagressor1 = (VillageAgressor) this.k.get(i0);
-            double d1 = village_villageagressor1.a.f(entitylivingbase);
+            Village.VillageAgressor village_villageagressor1 = (Village.VillageAgressor) this.k.get(i0);
+            double d1 = village_villageagressor1.a.h(entitylivingbase);
 
             if (d1 <= d0) {
                 village_villageagressor = village_villageagressor1;
@@ -284,7 +287,7 @@ public class Village {
                 EntityPlayer entityplayer1 = this.a.a(s0);
 
                 if (entityplayer1 != null) {
-                    double d1 = entityplayer1.f(entitylivingbase);
+                    double d1 = entityplayer1.h(entitylivingbase);
 
                     if (d1 <= d0) {
                         entityplayer = entityplayer1;
@@ -301,9 +304,9 @@ public class Village {
         Iterator iterator = this.k.iterator();
 
         while (iterator.hasNext()) {
-            VillageAgressor village_villageagressor = (VillageAgressor) iterator.next();
+            Village.VillageAgressor village_villageagressor = (Village.VillageAgressor) iterator.next();
 
-            if (!village_villageagressor.a.Z() || Math.abs(this.g - village_villageagressor.b) > 300) {
+            if (!village_villageagressor.a.ai() || Math.abs(this.g - village_villageagressor.b) > 300) {
                 iterator.remove();
             }
         }
@@ -318,15 +321,13 @@ public class Village {
             VillageDoorInfo villagedoorinfo = (VillageDoorInfo) iterator.next();
 
             if (flag1) {
-                villagedoorinfo.d();
+                villagedoorinfo.a();
             }
 
-            if (!this.f(villagedoorinfo.a, villagedoorinfo.b, villagedoorinfo.c) || Math.abs(this.g - villagedoorinfo.f) > 1200) {
-                this.c.a -= villagedoorinfo.a;
-                this.c.b -= villagedoorinfo.b;
-                this.c.c -= villagedoorinfo.c;
+            if (!this.f(villagedoorinfo.d()) || Math.abs(this.g - villagedoorinfo.h()) > 1200) {
+                this.c = this.c.a((Vec3i) villagedoorinfo.d().a(-1));
                 flag0 = true;
-                villagedoorinfo.g = true;
+                villagedoorinfo.a(true);
                 iterator.remove();
             }
         }
@@ -336,24 +337,26 @@ public class Village {
         }
     }
 
-    private boolean f(int i0, int i1, int i2) {
-        return this.a.a(i0, i1, i2) == Blocks.ao;
+    private boolean f(BlockPos blockpos) {
+        Block block = this.a.p(blockpos).c();
+
+        return block instanceof BlockDoor ? block.r() == Material.d : false;
     }
 
     private void n() {
         int i0 = this.b.size();
 
         if (i0 == 0) {
-            this.d.b(0, 0, 0);
+            this.d = new BlockPos(0, 0, 0);
             this.e = 0;
         }
         else {
-            this.d.b(this.c.a / i0, this.c.b / i0, this.c.c / i0);
+            this.d = new BlockPos(this.c.n() / i0, this.c.o() / i0, this.c.p() / i0);
             int i1 = 0;
 
             VillageDoorInfo villagedoorinfo;
 
-            for (Iterator iterator = this.b.iterator(); iterator.hasNext(); i1 = Math.max(villagedoorinfo.b(this.d.a, this.d.b, this.d.c), i1)) {
+            for (Iterator iterator = this.b.iterator(); iterator.hasNext(); i1 = Math.max(villagedoorinfo.a(this.d), i1)) {
                 villagedoorinfo = (VillageDoorInfo) iterator.next();
             }
 
@@ -386,17 +389,13 @@ public class Village {
         this.f = nbttagcompound.f("Stable");
         this.g = nbttagcompound.f("Tick");
         this.i = nbttagcompound.f("MTick");
-        this.d.a = nbttagcompound.f("CX");
-        this.d.b = nbttagcompound.f("CY");
-        this.d.c = nbttagcompound.f("CZ");
-        this.c.a = nbttagcompound.f("ACX");
-        this.c.b = nbttagcompound.f("ACY");
-        this.c.c = nbttagcompound.f("ACZ");
+        this.d = new BlockPos(nbttagcompound.f("CX"), nbttagcompound.f("CY"), nbttagcompound.f("CZ"));
+        this.c = new BlockPos(nbttagcompound.f("ACX"), nbttagcompound.f("ACY"), nbttagcompound.f("ACZ"));
         NBTTagList nbttaglist = nbttagcompound.c("Doors", 10);
 
         for (int i0 = 0; i0 < nbttaglist.c(); ++i0) {
             NBTTagCompound nbttagcompound1 = nbttaglist.b(i0);
-            VillageDoorInfo villagedoorinfo = new VillageDoorInfo(nbttagcompound1.f("X"), nbttagcompound1.f("Y"), nbttagcompound1.f("Z"), nbttagcompound1.f("IDX"), nbttagcompound1.f("IDZ"), nbttagcompound1.f("TS"));
+            VillageDoorInfo villagedoorinfo = new VillageDoorInfo(new BlockPos(nbttagcompound1.f("X"), nbttagcompound1.f("Y"), nbttagcompound1.f("Z")), nbttagcompound1.f("IDX"), nbttagcompound1.f("IDZ"), nbttagcompound1.f("TS"));
 
             this.b.add(villagedoorinfo);
         }
@@ -417,12 +416,12 @@ public class Village {
         nbttagcompound.a("Stable", this.f);
         nbttagcompound.a("Tick", this.g);
         nbttagcompound.a("MTick", this.i);
-        nbttagcompound.a("CX", this.d.a);
-        nbttagcompound.a("CY", this.d.b);
-        nbttagcompound.a("CZ", this.d.c);
-        nbttagcompound.a("ACX", this.c.a);
-        nbttagcompound.a("ACY", this.c.b);
-        nbttagcompound.a("ACZ", this.c.c);
+        nbttagcompound.a("CX", this.d.n());
+        nbttagcompound.a("CY", this.d.o());
+        nbttagcompound.a("CZ", this.d.p());
+        nbttagcompound.a("ACX", this.c.n());
+        nbttagcompound.a("ACY", this.c.o());
+        nbttagcompound.a("ACZ", this.c.p());
         NBTTagList nbttaglist = new NBTTagList();
         Iterator iterator = this.b.iterator();
 
@@ -430,12 +429,12 @@ public class Village {
             VillageDoorInfo villagedoorinfo = (VillageDoorInfo) iterator.next();
             NBTTagCompound nbttagcompound1 = new NBTTagCompound();
 
-            nbttagcompound1.a("X", villagedoorinfo.a);
-            nbttagcompound1.a("Y", villagedoorinfo.b);
-            nbttagcompound1.a("Z", villagedoorinfo.c);
-            nbttagcompound1.a("IDX", villagedoorinfo.d);
-            nbttagcompound1.a("IDZ", villagedoorinfo.e);
-            nbttagcompound1.a("TS", villagedoorinfo.f);
+            nbttagcompound1.a("X", villagedoorinfo.d().n());
+            nbttagcompound1.a("Y", villagedoorinfo.d().o());
+            nbttagcompound1.a("Z", villagedoorinfo.d().p());
+            nbttagcompound1.a("IDX", villagedoorinfo.f());
+            nbttagcompound1.a("IDZ", villagedoorinfo.g());
+            nbttagcompound1.a("TS", villagedoorinfo.h());
             nbttaglist.a((NBTBase) nbttagcompound1);
         }
 

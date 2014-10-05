@@ -15,16 +15,23 @@ public class MerchantRecipe {
     //
     private int d;
     private int e;
+    private boolean f;
 
     public MerchantRecipe(NBTTagCompound nbttagcompound) {
         this.a(nbttagcompound);
     }
 
     public MerchantRecipe(ItemStack itemstack, ItemStack itemstack1, ItemStack itemstack2) {
+        this(itemstack, itemstack1, itemstack2, 0, 7);
+    }
+
+    public MerchantRecipe(ItemStack itemstack, ItemStack itemstack1, ItemStack itemstack2, int i0, int i1) {
         this.a = itemstack;
         this.b = itemstack1;
         this.c = itemstack2;
-        this.e = 7;
+        this.d = i0;
+        this.e = i1;
+        this.f = true;
     }
 
     public MerchantRecipe(ItemStack itemstack, ItemStack itemstack1) {
@@ -51,15 +58,15 @@ public class MerchantRecipe {
         return this.c;
     }
 
-    public boolean a(MerchantRecipe merchantrecipe) {
-        return this.a.b() == merchantrecipe.a.b() && this.c.b() == merchantrecipe.c.b() ? this.b == null && merchantrecipe.b == null || this.b != null && merchantrecipe.b != null && this.b.b() == merchantrecipe.b.b() : false;
+    public int e() {
+        return this.d;
     }
 
-    public boolean b(MerchantRecipe merchantrecipe) {
-        return this.a(merchantrecipe) && (this.a.b < merchantrecipe.a.b || this.b != null && this.b.b < merchantrecipe.b.b);
+    public int f() {
+        return this.e;
     }
 
-    public void f() {
+    public void g() {
         ++this.d;
     }
 
@@ -67,8 +74,12 @@ public class MerchantRecipe {
         this.e += i0;
     }
 
-    public boolean g() {
+    public boolean h() {
         return this.d >= this.e;
+    }
+
+    public boolean j() {
+        return this.f;
     }
 
     public void a(NBTTagCompound nbttagcompound) {
@@ -92,9 +103,17 @@ public class MerchantRecipe {
         else {
             this.e = 7;
         }
+
+        if (nbttagcompound.b("rewardExp", 1)) {
+            this.f = nbttagcompound.n("rewardExp");
+        }
+        else {
+            this.f = true;
+        }
+
     }
 
-    public NBTTagCompound i() {
+    public NBTTagCompound k() {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
 
         nbttagcompound.a("buy", (NBTBase) this.a.b(new NBTTagCompound()));
@@ -105,6 +124,7 @@ public class MerchantRecipe {
 
         nbttagcompound.a("uses", this.d);
         nbttagcompound.a("maxUses", this.e);
+        nbttagcompound.a("rewardExp", this.f);
         return nbttagcompound;
     }
 }
