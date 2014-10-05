@@ -25,9 +25,9 @@ import net.minecraft.util.MathHelper;
 
 public class TileEntityFurnace extends TileEntityLockable implements IUpdatePlayerListBox, ISidedInventory {
 
-    private static final int[] a = new int[]{ 0 };
-    private static final int[] f = new int[]{ 2, 1 };
-    private static final int[] g = new int[]{ 1 };
+    private static final int[] a = new int[]{0};
+    private static final int[] f = new int[]{2, 1};
+    private static final int[] g = new int[]{1};
     public ItemStack[] h = new ItemStack[3]; // CanaryMod: private => public
     private int i;
     private int j;
@@ -134,22 +134,22 @@ public class TileEntityFurnace extends TileEntityLockable implements IUpdatePlay
 
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.a("BurnTime", (short)this.i);
-        nbttagcompound.a("CookTime", (short)this.k);
-        nbttagcompound.a("CookTimeTotal", (short)this.l);
+        nbttagcompound.a("BurnTime", (short) this.i);
+        nbttagcompound.a("CookTime", (short) this.k);
+        nbttagcompound.a("CookTimeTotal", (short) this.l);
         NBTTagList nbttaglist = new NBTTagList();
 
         for (int i0 = 0; i0 < this.h.length; ++i0) {
             if (this.h[i0] != null) {
                 NBTTagCompound nbttagcompound1 = new NBTTagCompound();
 
-                nbttagcompound1.a("Slot", (byte)i0);
+                nbttagcompound1.a("Slot", (byte) i0);
                 this.h[i0].b(nbttagcompound1);
-                nbttaglist.a((NBTBase)nbttagcompound1);
+                nbttaglist.a((NBTBase) nbttagcompound1);
             }
         }
 
-        nbttagcompound.a("Items", (NBTBase)nbttaglist);
+        nbttagcompound.a("Items", (NBTBase) nbttaglist);
         if (this.k_()) {
             nbttagcompound.a("CustomName", this.m);
         }
@@ -196,7 +196,7 @@ public class TileEntityFurnace extends TileEntityLockable implements IUpdatePlay
                 // CanaryMod: SmeltBegin
                 SmeltBeginHook sbh = null;
                 if (this.j == 0 && this.m() && this.o()) { // Check that this is the start of a smelting process and that smelting can begin
-                    sbh = (SmeltBeginHook)new SmeltBeginHook(this.getCanaryFurnace(), this.n[0].getCanaryItem()).call();
+                    sbh = (SmeltBeginHook) new SmeltBeginHook(this.getCanaryFurnace(), this.h[0].getCanaryItem()).call();
                 }
                 //
 
@@ -244,7 +244,7 @@ public class TileEntityFurnace extends TileEntityLockable implements IUpdatePlay
         if (this.o()) {
             ItemStack itemstack = FurnaceRecipes.a().a(this.h[0]);
             // CanaryMod: Smelt
-            SmeltHook hook = (SmeltHook)new SmeltHook(getCanaryFurnace(), this.n[0].getCanaryItem(), itemstack.getCanaryItem()).call();
+            SmeltHook hook = (SmeltHook) new SmeltHook(getCanaryFurnace(), this.h[0].getCanaryItem(), itemstack.getCanaryItem()).call();
             if (hook.isCanceled()) {
                 return;
             }
@@ -291,7 +291,7 @@ public class TileEntityFurnace extends TileEntityLockable implements IUpdatePlay
                 }
             }
 
-            return item instanceof ItemTool && ((ItemTool)item).h().equals("WOOD") ? 200 : (item instanceof ItemSword && ((ItemSword)item).h().equals("WOOD") ? 200 : (item instanceof ItemHoe && ((ItemHoe)item).g().equals("WOOD") ? 200 : (item == Items.y ? 100 : (item == Items.h ? 1600 : (item == Items.ay ? 20000 : (item == Item.a(Blocks.g) ? 100 : (item == Items.bv ? 2400 : 0)))))));
+            return item instanceof ItemTool && ((ItemTool) item).h().equals("WOOD") ? 200 : (item instanceof ItemSword && ((ItemSword) item).h().equals("WOOD") ? 200 : (item instanceof ItemHoe && ((ItemHoe) item).g().equals("WOOD") ? 200 : (item == Items.y ? 100 : (item == Items.h ? 1600 : (item == Items.ay ? 20000 : (item == Item.a(Blocks.g) ? 100 : (item == Items.bv ? 2400 : 0)))))));
         }
     }
 
@@ -305,7 +305,7 @@ public class TileEntityFurnace extends TileEntityLockable implements IUpdatePlay
             return true;
         }
         //
-        return this.b.s(this.c) != this ? false : entityplayer.e((double)this.c.n() + 0.5D, (double)this.c.o() + 0.5D, (double)this.c.p() + 0.5D) <= 64.0D;
+        return this.b.s(this.c) != this ? false : entityplayer.e((double) this.c.n() + 0.5D, (double) this.c.o() + 0.5D, (double) this.c.p() + 0.5D) <= 64.0D;
     }
 
     public void b(EntityPlayer entityplayer) {
@@ -396,6 +396,6 @@ public class TileEntityFurnace extends TileEntityLockable implements IUpdatePlay
 
     // CanaryMod
     public CanaryFurnace getCanaryFurnace() {
-        return (CanaryFurnace)complexBlock;
+        return (CanaryFurnace) complexBlock;
     }
 }

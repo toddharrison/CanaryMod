@@ -21,7 +21,7 @@ import java.util.UUID;
 
 public class TileEntitySign extends TileEntity {
 
-    public final IChatComponent[] a = new IChatComponent[]{ new ChatComponentText(""), new ChatComponentText(""), new ChatComponentText(""), new ChatComponentText("") };
+    public final IChatComponent[] a = new IChatComponent[]{new ChatComponentText(""), new ChatComponentText(""), new ChatComponentText(""), new ChatComponentText("")};
     public int f = -1;
     public boolean g = true; // CanaryMod: private => public; editable
     private EntityPlayer h;
@@ -40,7 +40,7 @@ public class TileEntitySign extends TileEntity {
             nbttagcompound.a("Text" + (i0 + 1), s0);
         }
 
-        nbttagcompound.a("Owner", this.h != null ? h.bJ().getId().toString() : ""); // CanaryMod: check for an owner name
+        nbttagcompound.a("Owner", this.h != null ? h.aJ().toString() : ""); // CanaryMod: check for an owner name
         this.i.b(nbttagcompound);
     }
 
@@ -69,7 +69,7 @@ public class TileEntitySign extends TileEntity {
             }
 
             public Vec3 d() {
-                return new Vec3((double)TileEntitySign.this.c.n() + 0.5D, (double)TileEntitySign.this.c.o() + 0.5D, (double)TileEntitySign.this.c.p() + 0.5D);
+                return new Vec3((double) TileEntitySign.this.c.n() + 0.5D, (double) TileEntitySign.this.c.o() + 0.5D, (double) TileEntitySign.this.c.p() + 0.5D);
             }
 
             public World e() {
@@ -95,7 +95,7 @@ public class TileEntitySign extends TileEntity {
                 IChatComponent ichatcomponent = IChatComponent.Serializer.a(s0);
 
                 try {
-                    this.a[i0] = ChatComponentProcessor.a(icommandsender, ichatcomponent, (Entity)null);
+                    this.a[i0] = ChatComponentProcessor.a(icommandsender, ichatcomponent, (Entity) null);
                 }
                 catch (CommandException commandexception) {
                     this.a[i0] = ichatcomponent;
@@ -125,17 +125,17 @@ public class TileEntitySign extends TileEntity {
         this.h = entityplayer;
     }
 
-    public EntityPlayer b() {
+    public EntityPlayer c() {
         // CanaryMod: Set Player owner if not already set and if they are available to be set
         if (this.h == null) {
             if (this.owner_name.isEmpty()) {
                 return null;
             }
             if (ToolBox.isUUID(owner_name)) {
-                this.h = MinecraftServer.I().ah().f(new GameProfile(UUID.fromString(owner_name), null));
+                this.h = MinecraftServer.M().an().f(new GameProfile(UUID.fromString(owner_name), null));
             }
             else {
-                this.h = MinecraftServer.I().ah().f(new GameProfile(UUID.fromString(ToolBox.usernameToUUID(owner_name)), owner_name));
+                this.h = MinecraftServer.M().an().f(new GameProfile(UUID.fromString(ToolBox.usernameToUUID(owner_name)), owner_name));
             }
         }
         //
@@ -165,7 +165,7 @@ public class TileEntitySign extends TileEntity {
             }
 
             public Vec3 d() {
-                return new Vec3((double)TileEntitySign.this.c.n() + 0.5D, (double)TileEntitySign.this.c.o() + 0.5D, (double)TileEntitySign.this.c.p() + 0.5D);
+                return new Vec3((double) TileEntitySign.this.c.n() + 0.5D, (double) TileEntitySign.this.c.o() + 0.5D, (double) TileEntitySign.this.c.p() + 0.5D);
             }
 
             public World e() {
@@ -206,7 +206,7 @@ public class TileEntitySign extends TileEntity {
 
     // CanaryMod
     public CanarySign getCanarySign() {
-        return (CanarySign)complexBlock;
+        return (CanarySign) complexBlock;
     }
 
     public String getOwnerName() {

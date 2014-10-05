@@ -70,7 +70,7 @@ public abstract class TileEntity {
     }
 
     public void b(NBTTagCompound nbttagcompound) {
-        String s0 = (String)g.get(this.getClass());
+        String s0 = (String) g.get(this.getClass());
 
         if (s0 == null) {
             throw new RuntimeException(this.getClass() + " is missing a mapping! This is a bug!");
@@ -90,10 +90,10 @@ public abstract class TileEntity {
         TileEntity tileentity = null;
 
         try {
-            Class oclass0 = (Class)f.get(nbttagcompound.j("id"));
+            Class oclass0 = (Class) f.get(nbttagcompound.j("id"));
 
             if (oclass0 != null) {
-                tileentity = (TileEntity)oclass0.newInstance();
+                tileentity = (TileEntity) oclass0.newInstance();
             }
         }
         catch (Exception exception) {
@@ -172,44 +172,41 @@ public abstract class TileEntity {
     public void a(CrashReportCategory crashreportcategory) {
         crashreportcategory.a("Name", new Callable() {
 
-                                  public String call() {
-                                      return (String)TileEntity.g.get(TileEntity.this.getClass()) + " // " + TileEntity.this.getClass().getCanonicalName();
-                                  }
-                              }
-                             );
+            public String call() {
+                return (String) TileEntity.g.get(TileEntity.this.getClass()) + " // " + TileEntity.this.getClass().getCanonicalName();
+            }
+        });
         if (this.b != null) {
             CrashReportCategory.a(crashreportcategory, this.c, this.w(), this.u());
             crashreportcategory.a("Actual block type", new Callable() {
 
-                                      public String call() {
-                                          int iblockstate = Block.a(TileEntity.this.b.p(TileEntity.this.c).c());
+                public String call() {
+                    int iblockstate = Block.a(TileEntity.this.b.p(TileEntity.this.c).c());
 
-                                          try {
-                                              return String.format("ID #%d (%s // %s)", new Object[]{ Integer.valueOf(i1), Block.e(i1).a(), Block.e(i1).getClass().getCanonicalName() });
-                                          }
-                                          catch (Throwable s0) {
-                                              return "ID #" + i1;
-                                          }
-                                      }
-                                  }
-                                 );
+                    try {
+                        return String.format("ID #%d (%s // %s)", new Object[]{Integer.valueOf(iblockstate), Block.c(iblockstate).a(), Block.c(iblockstate).getClass().getCanonicalName()});
+                    }
+                    catch (Throwable s0) {
+                        return "ID #" + iblockstate;
+                    }
+                }
+            });
             crashreportcategory.a("Actual block data value", new Callable() {
 
-                                      public String call() {
-                                          IBlockState iblockstate = TileEntity.this.b.p(TileEntity.this.c);
-                                          int i1 = iblockstate.c().c(iblockstate);
+                public String call() {
+                    IBlockState iblockstate = TileEntity.this.b.p(TileEntity.this.c);
+                    int i1 = iblockstate.c().c(iblockstate);
 
-                                          if (i1 < 0) {
-                                              return "Unknown? (Got " + i1 + ")";
-                                          }
-                                          else {
-                                              String s0 = String.format("%4s", new Object[]{ Integer.toBinaryString(i1) }).replace(" ", "0");
+                    if (i1 < 0) {
+                        return "Unknown? (Got " + i1 + ")";
+                    }
+                    else {
+                        String s0 = String.format("%4s", new Object[]{Integer.toBinaryString(i1)}).replace(" ", "0");
 
-                                              return String.format("%1$d / 0x%1$X / 0b%2$s", new Object[]{ Integer.valueOf(i1), s0 });
-                                          }
-                                      }
-                                  }
-                                 );
+                        return String.format("%1$d / 0x%1$X / 0b%2$s", new Object[]{Integer.valueOf(i1), s0});
+                    }
+                }
+            });
         }
     }
 
