@@ -4,8 +4,14 @@ import net.canarymod.Canary;
 import net.canarymod.api.CanaryServer;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.config.Configuration;
+import net.canarymod.config.WorldConfiguration;
+import net.canarymod.hook.system.LoadWorldHook;
 import net.canarymod.hook.system.UnloadWorldHook;
-import net.minecraft.world.WorldServer;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.world.*;
+import net.minecraft.world.chunk.storage.AnvilSaveHandler;
+import net.minecraft.world.storage.WorldInfo;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -180,6 +186,43 @@ public class CanaryWorldManager implements WorldManager {
     }
 
     @Override
+    public boolean createWorld(WorldConfiguration configuration) {
+        MinecraftServer mcserver = ((CanaryServer) Canary.getServer()).getHandle();
+        String worldFqName = configuration.getFile().getFileName().replace(".cfg", "");
+        DimensionType dimType = DimensionType.fromName(worldFqName.replaceAll(".+_", ""));
+        AnvilSaveHandler isavehandler = new AnvilSaveHandler(new File("worlds/"), worldFqName, true, dimType);
+        WorldInfo worldinfo = isavehandler.d();
+        WorldSettings worldsettings;
+        WorldServer world;
+
+        long seed = configuration.getWorldSeed().matches("\\d+") ? Long.valueOf(configuration.getWorldSeed()) : configuration.getWorldSeed().hashCode();
+        worldsettings = new WorldSettings(seed, WorldSettings.GameType.a(configuration.getGameMode().getId()), configuration.generatesStructures(), false, net.minecraft.world.WorldType.a(configuration.getWorldType().toString()));
+        worldsettings.a(configuration.getGeneratorSettings());
+
+        if (dimType == DimensionType.NORMAL) {
+            world = new WorldServer(mcserver, isavehandler, configuration.getWorldName(), dimType.getId(), worldsettings, mcserver.b);
+        }
+        else {
+            world = new WorldServerMulti(mcserver, isavehandler, configuration.getWorldName(), dimType.getId(), worldsettings, (WorldServer) ((CanaryWorld) getWorld(configuration.getWorldName(), net.canarymod.api.world.DimensionType.NORMAL, true)).getHandle(), mcserver.b);
+        }
+
+        world.a((IWorldAccess) (new net.minecraft.world.WorldManager(mcserver, world)));
+        world.N().a(WorldSettings.GameType.a(configuration.getGameMode().getId()));
+        mcserver.u.a(new WorldServer[]{world}); // Init player data files
+        world.r = EnumDifficulty.a(configuration.getDifficulty().getId()); // Set difficulty directly based on WorldConfiguration setting
+        // Recreating generate terrain
+        ChunkCoordinates chunkcoordinates = world.K();
+        for (int i2 = -192; i2 <= 192 && mcserver.q(); i2 += 16) {
+            for (int i3 = -192; i3 <= 192 && mcserver.q(); i3 += 16) {
+                world.b.c(chunkcoordinates.a + i2 >> 4, chunkcoordinates.c + i3 >> 4);
+            }
+        }
+        addWorld(world.getCanaryWorld());
+        new LoadWorldHook(world.getCanaryWorld()).call();
+        return true;
+    }
+
+    @Override
     public World loadWorld(String name, DimensionType type) {
         //TODO: Instead should we throw an exception to avoid loading trash worlds?
         if (!worldIsLoaded(name + "_" + type.getName())) {
@@ -306,4 +349,6 @@ public class CanaryWorldManager implements WorldManager {
         }
         return worlds.toArray(new String[worlds.size()]);
     }
+
+
 }
