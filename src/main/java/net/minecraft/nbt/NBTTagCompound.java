@@ -1,5 +1,6 @@
 package net.minecraft.nbt;
 
+import com.google.common.collect.Maps;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.util.ReportedException;
