@@ -25,12 +25,26 @@ public class ShapelessRecipes implements IRecipe {
         return this.a;
     }
 
-    public boolean a(InventoryCrafting inventorycrafting, World world) {
-        ArrayList arraylist = new ArrayList(this.b);
+    public ItemStack[] b(InventoryCrafting inventorycrafting) {
+        ItemStack[] aitemstack = new ItemStack[inventorycrafting.n_()];
 
-        for (int i0 = 0; i0 < 3; ++i0) {
-            for (int i1 = 0; i1 < 3; ++i1) {
-                ItemStack itemstack = inventorycrafting.b(i1, i0);
+        for (int i0 = 0; i0 < aitemstack.length; ++i0) {
+            ItemStack itemstack = inventorycrafting.a(i0);
+
+            if (itemstack != null && itemstack.b().r()) {
+                aitemstack[i0] = new ItemStack(itemstack.b().q());
+            }
+        }
+
+        return aitemstack;
+    }
+
+    public boolean a(InventoryCrafting inventorycrafting, World world) {
+        ArrayList arraylist = Lists.newArrayList(this.b);
+
+        for (int i0 = 0; i0 < inventorycrafting.h(); ++i0) {
+            for (int i1 = 0; i1 < inventorycrafting.i(); ++i1) {
+                ItemStack itemstack = inventorycrafting.c(i1, i0);
 
                 if (itemstack != null) {
                     boolean flag0 = false;
@@ -39,7 +53,7 @@ public class ShapelessRecipes implements IRecipe {
                     while (iterator.hasNext()) {
                         ItemStack itemstack1 = (ItemStack) iterator.next();
 
-                        if (itemstack.b() == itemstack1.b() && (itemstack1.k() == 32767 || itemstack.k() == itemstack1.k())) {
+                        if (itemstack.b() == itemstack1.b() && (itemstack1.i() == 32767 || itemstack.i() == itemstack1.i())) {
                             flag0 = true;
                             arraylist.remove(itemstack1);
                             break;
@@ -57,7 +71,7 @@ public class ShapelessRecipes implements IRecipe {
     }
 
     public ItemStack a(InventoryCrafting inventorycrafting) {
-        return this.a.m();
+        return this.a.k();
     }
 
     public int a() {

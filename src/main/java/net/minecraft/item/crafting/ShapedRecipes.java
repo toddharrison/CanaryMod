@@ -8,10 +8,10 @@ import net.minecraft.world.World;
 
 public class ShapedRecipes implements IRecipe {
 
-    private int a;
-    private int b;
-    private ItemStack[] c;
-    private ItemStack d;
+    private final int a;
+    private final int b;
+    private final ItemStack[] c;
+    private final ItemStack d;
     private boolean e;
     private final CanaryShapedRecipe canary_recipe; // CanaryMod: recipe instance
 
@@ -25,6 +25,20 @@ public class ShapedRecipes implements IRecipe {
 
     public ItemStack b() {
         return this.d;
+    }
+
+    public ItemStack[] b(InventoryCrafting inventorycrafting) {
+        ItemStack[] aitemstack = new ItemStack[inventorycrafting.n_()];
+
+        for (int i0 = 0; i0 < aitemstack.length; ++i0) {
+            ItemStack itemstack = inventorycrafting.a(i0);
+
+            if (itemstack != null && itemstack.b().r()) {
+                aitemstack[i0] = new ItemStack(itemstack.b().q());
+            }
+        }
+
+        return aitemstack;
     }
 
     public boolean a(InventoryCrafting inventorycrafting, World world) {
@@ -59,7 +73,7 @@ public class ShapedRecipes implements IRecipe {
                     }
                 }
 
-                ItemStack itemstack1 = inventorycrafting.b(i2, i3);
+                ItemStack itemstack1 = inventorycrafting.c(i2, i3);
 
                 if (itemstack1 != null || itemstack != null) {
                     if (itemstack1 == null && itemstack != null || itemstack1 != null && itemstack == null) {
@@ -70,7 +84,7 @@ public class ShapedRecipes implements IRecipe {
                         return false;
                     }
 
-                    if (itemstack.k() != 32767 && itemstack.k() != itemstack1.k()) {
+                    if (itemstack.i() != 32767 && itemstack.i() != itemstack1.i()) {
                         return false;
                     }
                 }
@@ -81,14 +95,14 @@ public class ShapedRecipes implements IRecipe {
     }
 
     public ItemStack a(InventoryCrafting inventorycrafting) {
-        ItemStack itemstack = this.b().m();
+        ItemStack itemstack = this.b().k();
 
         if (this.e) {
-            for (int i0 = 0; i0 < inventorycrafting.a(); ++i0) {
+            for (int i0 = 0; i0 < inventorycrafting.n_(); ++i0) {
                 ItemStack itemstack1 = inventorycrafting.a(i0);
 
-                if (itemstack1 != null && itemstack1.p()) {
-                    itemstack.d((NBTTagCompound) itemstack1.d.b());
+                if (itemstack1 != null && itemstack1.n()) {
+                    itemstack.d((NBTTagCompound) itemstack1.o().b());
                 }
             }
         }
