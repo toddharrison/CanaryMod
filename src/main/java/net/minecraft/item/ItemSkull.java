@@ -2,7 +2,9 @@ package net.minecraft.item;
 
 import com.mojang.authlib.GameProfile;
 import net.canarymod.api.world.blocks.BlockFace;
+import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.blocks.CanaryBlock;
+import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.player.BlockPlaceHook;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSkull;
@@ -45,7 +47,7 @@ public class ItemSkull extends Item {
             boolean flag0 = block.f(world, blockpos);
 
             // CanaryMod: BlockPlaceHook
-            CanaryBlock clicked = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
+            CanaryBlock clicked = (CanaryBlock) world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos));
             clicked.setFaceClicked(BlockFace.fromByte((byte) i3));
             //
 
@@ -65,7 +67,7 @@ public class ItemSkull extends Item {
             }
             else {
                 if (!world.D) {
-                    // CanaryBlock placed = new CanaryBlock((short) 144, (short) itemstack.getCanaryItem().getDamage(), i0, i1, i2, world.getCanaryWorld());
+                    CanaryBlock placed = new CanaryBlock(BlockType.SkeletonHead, (short) itemstack.getCanaryItem().getDamage(), new BlockPosition(blockpos), world.getCanaryWorld());
                     BlockPlaceHook hook = (BlockPlaceHook) new BlockPlaceHook(((EntityPlayerMP) entityplayer).getPlayer(), clicked, placed).call();
                     if (hook.isCanceled()) {
                         return false;

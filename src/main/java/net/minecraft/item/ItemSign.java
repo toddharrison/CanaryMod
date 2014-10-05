@@ -3,6 +3,7 @@ package net.minecraft.item;
 import net.canarymod.api.world.blocks.BlockFace;
 import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.blocks.CanaryBlock;
+import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.player.BlockPlaceHook;
 import net.minecraft.block.BlockStandingSign;
 import net.minecraft.block.BlockWallSign;
@@ -34,8 +35,8 @@ public class ItemSign extends Item {
         else {
             blockpos = blockpos.a(enumfacing);
             // CanaryMod: BlockPlaceHook
-            CanaryBlock clicked = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
-            clicked.setFaceClicked(BlockFace.fromByte((byte) i3));
+            CanaryBlock clicked = (CanaryBlock) world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos));
+            clicked.setFaceClicked(BlockFace.fromByte((byte) enumfacing.a()));
             //
 
             if (!entityplayer.a(blockpos, enumfacing, itemstack)) {
@@ -49,7 +50,7 @@ public class ItemSign extends Item {
             }
             else {
                 // Create and call
-                CanaryBlock placed = new CanaryBlock(i3 == 1 ? BlockType.SignPost : BlockType.WallSign, i0, i1, i2, world.getCanaryWorld());
+                CanaryBlock placed = new CanaryBlock(i3 == 1 ? BlockType.SignPost : BlockType.WallSign, new BlockPosition(blockpos), world.getCanaryWorld());
                 BlockPlaceHook hook = (BlockPlaceHook) new BlockPlaceHook(((EntityPlayerMP) entityplayer).getPlayer(), clicked, placed).call();
                 if (hook.isCanceled()) {
                     return false;

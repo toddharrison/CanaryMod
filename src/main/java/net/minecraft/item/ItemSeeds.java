@@ -2,6 +2,7 @@ package net.minecraft.item;
 
 import net.canarymod.api.world.blocks.BlockFace;
 import net.canarymod.api.world.blocks.CanaryBlock;
+import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.player.BlockPlaceHook;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
@@ -29,24 +30,23 @@ public class ItemSeeds extends Item {
         else if (!entityplayer.a(blockpos.a(enumfacing), enumfacing, itemstack)) {
             return false;
         }
-        else if (entityplayer.a(i0, i1, i2, i3, itemstack) && entityplayer.a(i0, i1 + 1, i2, i3, itemstack)) {
-            if (world.a(i0, i1, i2) == this.b && world.c(i0, i1 + 1, i2)) {
-
-                // CanaryMod: BlockPlaceHook
-                CanaryBlock clicked = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
-                clicked.setFaceClicked(BlockFace.fromByte((byte) 1)); // Should be 1
-                CanaryBlock placed = new CanaryBlock((short) Block.b(this.a), (short) 0, i0, i1 + 1, i2, world.getCanaryWorld());
-                BlockPlaceHook hook = (BlockPlaceHook) new BlockPlaceHook(((EntityPlayerMP) entityplayer).getPlayer(), clicked, placed).call();
-                if (hook.isCanceled()) {
-                    return false;
-                }
-                //
-
-                world.a(blockpos.a(), this.a.P());
-                --itemstack.b;
-                return true;
+        else if (world.p(blockpos).c() == this.b && world.d(blockpos.a())) {
+            // CanaryMod: BlockPlaceHook
+            CanaryBlock clicked = (CanaryBlock) world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos));
+            clicked.setFaceClicked(BlockFace.fromByte((byte) 1)); // Should be 1
+            CanaryBlock placed = new CanaryBlock((short) Block.a(this.a), (short) 0, i0, i1 + 1, i2, world.getCanaryWorld());
+            BlockPlaceHook hook = (BlockPlaceHook) new BlockPlaceHook(((EntityPlayerMP) entityplayer).getPlayer(), clicked, placed).call();
+            if (hook.isCanceled()) {
+                return false;
             }
+            //
+
+            world.a(blockpos.a(), this.a.P());
+            --itemstack.b;
+            return true;
         }
-        return false;
+        else {
+            return false;
+        }
     }
 }

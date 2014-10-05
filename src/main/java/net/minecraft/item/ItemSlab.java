@@ -2,12 +2,14 @@ package net.minecraft.item;
 
 import net.canarymod.api.world.blocks.BlockFace;
 import net.canarymod.api.world.blocks.CanaryBlock;
+import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.player.BlockPlaceHook;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
@@ -73,10 +75,10 @@ public class ItemSlab extends ItemBlock {
                 return true;
             }
             else {
-                boolean ret = this.a(itemstack, entityplayer, world, i0, i1, i2, i3); // Moved up to call hook before the return
+                boolean ret = this.a(itemstack, entityplayer, world, blockpos, i3); // Moved up to call hook before the return
 
                 this.handled = hook != null; // Let super know we got this shit
-                return (!(hook != null && hook.isCanceled())) && (ret || super.a(itemstack, entityplayer, world, i0, i1, i2, i3, f0, f1, f2));
+                return (!(hook != null && hook.isCanceled())) && (ret || super.a(itemstack, entityplayer, world, blockpos, i3, f0, f1, f2));
             }
         }
     }
@@ -84,7 +86,7 @@ public class ItemSlab extends ItemBlock {
     private boolean a(ItemStack itemstack, World world, BlockPos blockpos, Object object) {
         IBlockState iblockstate = world.p(blockpos);
         // CanaryMod: BlockPlaceHook
-        CanaryBlock clicked = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
+        CanaryBlock clicked = (CanaryBlock) world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos));
         clicked.setFaceClicked(BlockFace.fromByte((byte) i3));
         //
 
@@ -95,7 +97,7 @@ public class ItemSlab extends ItemBlock {
                 IBlockState iblockstate1 = this.c.P().a(this.b.l(), comparable);
 
                 // Call hook
-                CanaryBlock placed = new CanaryBlock((short) i4, (short) i5, i0, i1, i2, world.getCanaryWorld());
+                CanaryBlock placed = new CanaryBlock((short) i4, (short) i5, new BlockPosition(blockpos), world.getCanaryWorld());
                 hook = (BlockPlaceHook) new BlockPlaceHook(((EntityPlayerMP) entityplayer).getPlayer(), clicked, placed).call();
                 if (hook.isCanceled()) {
                     return false;
