@@ -1,7 +1,9 @@
 package net.minecraft.world;
 
 import com.google.common.collect.Lists;
-import java.util.*;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+import com.google.common.util.concurrent.ListenableFuture;
 import net.canarymod.Canary;
 import net.canarymod.api.CanaryEntityTracker;
 import net.canarymod.api.CanaryPlayerManager;
@@ -10,9 +12,11 @@ import net.canarymod.hook.world.WeatherChangeHook;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEventData;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EntityTracker;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.effect.EntityLightningBolt;
@@ -30,6 +34,8 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.PlayerManager;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
+import net.minecraft.village.VillageCollection;
+import net.minecraft.village.VillageSiege;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.biome.WorldChunkManager;
 import net.minecraft.world.chunk.Chunk;
@@ -38,139 +44,194 @@ import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 import net.minecraft.world.chunk.storage.IChunkLoader;
 import net.minecraft.world.gen.ChunkProviderServer;
 import net.minecraft.world.gen.feature.WorldGeneratorBonusChest;
+import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.storage.ISaveHandler;
+import net.minecraft.world.storage.MapStorage;
+import net.minecraft.world.storage.WorldInfo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class WorldServer extends World {
+import java.util.*;
+
+
+public class WorldServer extends World implements IThreadListener {
 
     private static final Logger a = LogManager.getLogger();
-    private final MinecraftServer J;
-    private final EntityTracker K;
-    private final PlayerManager L;
-    private Set M;
-    private TreeSet N;
+    private final MinecraftServer I;
+    private final EntityTracker J;
+    private final PlayerManager K;
+    private final Set L = Sets.newHashSet();
+    private final TreeSet M = new TreeSet();
+    private final Map N = Maps.newHashMap();
     public ChunkProviderServer b;
     public boolean c;
     private boolean O;
     private int P;
     private final Teleporter Q;
     private final SpawnerAnimals R = new SpawnerAnimals();
-    private ServerBlockEventList[] S = new ServerBlockEventList[]{new ServerBlockEventList(null), new ServerBlockEventList(null)};
+    protected final VillageSiege d = new VillageSiege(this);
+    private WorldServer.ServerBlockEventList[] S = new WorldServer.ServerBlockEventList[]{new WorldServer.ServerBlockEventList(null), new WorldServer.ServerBlockEventList(null)};
     private int T;
-    private static final WeightedRandomChestContent[] U = new WeightedRandomChestContent[]{new WeightedRandomChestContent(Items.y, 0, 1, 3, 10), new WeightedRandomChestContent(Item.a(Blocks.f), 0, 1, 3, 10), new WeightedRandomChestContent(Item.a(Blocks.r), 0, 1, 3, 10), new WeightedRandomChestContent(Items.t, 0, 1, 1, 3), new WeightedRandomChestContent(Items.p, 0, 1, 1, 5), new WeightedRandomChestContent(Items.s, 0, 1, 1, 3), new WeightedRandomChestContent(Items.o, 0, 1, 1, 5), new WeightedRandomChestContent(Items.e, 0, 2, 3, 5), new WeightedRandomChestContent(Items.P, 0, 2, 3, 3), new WeightedRandomChestContent(Item.a(Blocks.s), 0, 1, 3, 10)};
-    private List V = new ArrayList();
-    private IntHashMap W;
+    private static final List U = Lists.newArrayList(new WeightedRandomChestContent[]{new WeightedRandomChestContent(Items.y, 0, 1, 3, 10), new WeightedRandomChestContent(Item.a(Blocks.f), 0, 1, 3, 10), new WeightedRandomChestContent(Item.a(Blocks.r), 0, 1, 3, 10), new WeightedRandomChestContent(Items.t, 0, 1, 1, 3), new WeightedRandomChestContent(Items.p, 0, 1, 1, 5), new WeightedRandomChestContent(Items.s, 0, 1, 1, 3), new WeightedRandomChestContent(Items.o, 0, 1, 1, 5), new WeightedRandomChestContent(Items.e, 0, 2, 3, 5), new WeightedRandomChestContent(Items.P, 0, 2, 3, 3), new WeightedRandomChestContent(Item.a(Blocks.s), 0, 1, 3, 10)});
+    private List V = Lists.newArrayList();
 
-    public WorldServer(MinecraftServer minecraftserver, ISaveHandler isavehandler, String s0, int i0, WorldSettings worldsettings, Profiler profiler) {
+    public WorldServer(MinecraftServer minecraftserver, ISaveHandler isavehandler, WorldInfo worldinfo, int i0, Profiler profiler) {
         // TODO: WorldProvider: Needs changing so it would get any WorldProvider. Might need to make a mapping/register
-        super(isavehandler, s0, worldsettings, WorldProvider.a(i0), profiler, net.canarymod.api.world.DimensionType.fromId(i0));
-        this.J = minecraftserver;
-        this.K = new EntityTracker(this);
-        // CanaryMod: Use our view-distance handling
-        this.L = new PlayerManager(this);
-        if (this.W == null) {
-            this.W = new IntHashMap();
-        }
-
-        if (this.M == null) {
-            this.M = new HashSet();
-        }
-
-        if (this.N == null) {
-            this.N = new TreeSet();
-        }
-
+        super(isavehandler, worldinfo, WorldProvider.a(i0), profiler, false);
+        this.I = minecraftserver;
+        this.J = new EntityTracker(this);
+        this.K = new PlayerManager(this);
+        this.t.a(this);
+        this.v = this.k();
         this.Q = new Teleporter(this);
-        
+        this.B();
+        this.C();
+        this.af().a(minecraftserver.aG());
+
         // CanaryMod: overide scoreboard data
-        this.D = ((CanaryScoreboard)Canary.scoreboards().getScoreboard()).getHandle();
+        this.D = ((CanaryScoreboard) Canary.scoreboards().getScoreboard()).getHandle();
     }
 
-    @Override
-    public void b() {
-        super.b();
-        if (this.N().t() && this.r != EnumDifficulty.HARD) {
-            this.r = EnumDifficulty.HARD;
+    public World b() {
+        this.z = new MapStorage(this.w);
+        String s0 = VillageCollection.a(this.t);
+        VillageCollection villagecollection = (VillageCollection) this.z.a(VillageCollection.class, s0);
+
+        if (villagecollection == null) {
+            this.A = new VillageCollection(this);
+            this.z.a(s0, (WorldSavedData) this.A);
+        }
+        else {
+            this.A = villagecollection;
+            this.A.a((World) this);
         }
 
-        this.t.e.b();
-        if (this.e()) {
-            if (this.O().b("doDaylightCycle")) {
-                long i0 = this.x.g() + 24000L;
-                this.x.c(i0 - i0 % 24000L);
-                this.d();
-            }
+        this.C = new ServerScoreboard(this.I);
+        ScoreboardSaveData scoreboardsavedata = (ScoreboardSaveData) this.z.a(ScoreboardSaveData.class, "scoreboard");
+
+        if (scoreboardsavedata == null) {
+            scoreboardsavedata = new ScoreboardSaveData();
+            this.z.a("scoreboard", (WorldSavedData) scoreboardsavedata);
         }
 
-        this.C.a("mobSpawner");
-        if (this.O().b("doMobSpawning")) {
-            this.R.a(this, this.G, this.H, this.x.f() % 400L == 0L);
+        scoreboardsavedata.a(this.C);
+        ((ServerScoreboard) this.C).a(scoreboardsavedata);
+        this.af().c(this.x.C(), this.x.D());
+        this.af().c(this.x.I());
+        this.af().b(this.x.H());
+        this.af().c(this.x.J());
+        this.af().b(this.x.K());
+        if (this.x.F() > 0L) {
+            this.af().a(this.x.E(), this.x.G(), this.x.F());
+        }
+        else {
+            this.af().a(this.x.E());
         }
 
-        this.C.c("chunkSource");
-        this.v.d();
-        int i1 = this.a(1.0F);
-
-        if (i1 != this.j) {
-            this.j = i1;
-        }
-
-        this.x.b(this.x.f() + 1L);
-        if (this.O().b("doDaylightCycle")) {
-            this.x.c(this.x.g() + 1L);
-        }
-        this.C.c("tickPending");
-        this.a(false);
-        this.C.c("tickBlocks");
-        this.g();
-        this.C.c("chunkMap");
-        this.L.b();
-        this.C.c("village");
-        this.A.a();
-        this.B.a();
-        this.C.c("portalForcer");
-        this.Q.a(this.I());
-        this.C.b();
-        this.Z();
-    }
-
-    public BiomeGenBase.SpawnListEntry a(EnumCreatureType enumcreaturetype, int i0, int i1, int i2) {
-        List list = this.L().a(enumcreaturetype, i0, i1, i2);
-
-        return list != null && !list.isEmpty() ? (BiomeGenBase.SpawnListEntry) WeightedRandom.a(this.s, (Collection) list) : null;
+        return this;
     }
 
     public void c() {
-        this.O = !this.h.isEmpty();
-        Iterator iterator = this.h.iterator();
-
-        while (iterator.hasNext()) {
-            EntityPlayer entityplayer = (EntityPlayer) iterator.next();
-
-            if (!entityplayer.bm()) {
-                this.O = false;
-                break;
-            }
+        super.c();
+        if (this.P().t() && this.aa() != EnumDifficulty.HARD) {
+            this.P().a(EnumDifficulty.HARD);
         }
+
+        this.t.m().b();
+        if (this.f()) {
+            if (this.Q().b("doDaylightCycle")) {
+                long i0 = this.x.g() + 24000L;
+
+                this.x.c(i0 - i0 % 24000L);
+            }
+
+            this.e();
+        }
+
+        this.B.a("mobSpawner");
+        if (this.Q().b("doMobSpawning") && this.x.u() != WorldType.g) {
+            this.R.a(this, this.F, this.G, this.x.f() % 400L == 0L);
+        }
+
+        this.B.c("chunkSource");
+        this.v.d();
+        int i1 = this.a(1.0F);
+
+        if (i1 != this.ab()) {
+            this.b(i1);
+        }
+
+        this.x.b(this.x.f() + 1L);
+        if (this.Q().b("doDaylightCycle")) {
+            this.x.c(this.x.g() + 1L);
+        }
+
+        this.B.c("tickPending");
+        this.a(false);
+        this.B.c("tickBlocks");
+        this.h();
+        this.B.c("chunkMap");
+        this.K.b();
+        this.B.c("village");
+        this.A.a();
+        this.d.a();
+        this.B.c("portalForcer");
+        this.Q.a(this.K());
+        this.B.b();
+        this.ak();
     }
 
-    protected void d() {
+    public BiomeGenBase.SpawnListEntry a(EnumCreatureType enumcreaturetype, BlockPos blockpos) {
+        List list = this.N().a(enumcreaturetype, blockpos);
+
+        return list != null && !list.isEmpty() ? (BiomeGenBase.SpawnListEntry) WeightedRandom.a(this.s, list) : null;
+    }
+
+    public boolean a(EnumCreatureType enumcreaturetype, BiomeGenBase.SpawnListEntry biomegenbase_spawnlistentry, BlockPos blockpos) {
+        List list = this.N().a(enumcreaturetype, blockpos);
+
+        return list != null && !list.isEmpty() ? list.contains(biomegenbase_spawnlistentry) : false;
+    }
+
+    public void d() {
         this.O = false;
-        Iterator iterator = this.h.iterator();
+        if (!this.j.isEmpty()) {
+            int i0 = 0;
+            int i1 = 0;
+            Iterator iterator = this.j.iterator();
+
+            while (iterator.hasNext()) {
+                EntityPlayer entityplayer = (EntityPlayer) iterator.next();
+
+                if (entityplayer.v()) {
+                    ++i0;
+                }
+                else if (entityplayer.bI()) {
+                    ++i1;
+                }
+            }
+
+            this.O = i1 > 0 && i1 >= this.j.size() - i0;
+        }
+
+    }
+
+    protected void e() {
+        this.O = false;
+        Iterator iterator = this.j.iterator();
 
         while (iterator.hasNext()) {
             EntityPlayer entityplayer = (EntityPlayer) iterator.next();
 
-            if (entityplayer.bm()) {
+            if (entityplayer.bI()) {
                 entityplayer.a(false, false, true);
             }
         }
 
-        this.Y();
+        this.ag();
     }
 
-    private void Y() {
+    private void ag() {
         // CanaryMod: WeatherChange
         WeatherChangeHook hook = (WeatherChangeHook) new WeatherChangeHook(getCanaryWorld(), false, false).call();
         if (!hook.isCanceled()) {
@@ -185,9 +246,9 @@ public class WorldServer extends World {
         //
     }
 
-    public boolean e() {
-        if (this.O && !this.E) {
-            Iterator iterator = this.h.iterator();
+    public boolean f() {
+        if (this.O && !this.D) {
+            Iterator iterator = this.j.iterator();
 
             EntityPlayer entityplayer;
 
@@ -197,259 +258,290 @@ public class WorldServer extends World {
                 }
 
                 entityplayer = (EntityPlayer) iterator.next();
-            }
-            while (entityplayer.bL());
+            } while (!entityplayer.v() && entityplayer.ce());
 
             return false;
-        } else {
+        }
+        else {
             return false;
         }
     }
 
-    protected void g() {
-        super.g();
-        int i0 = 0;
-        int i1 = 0;
-        Iterator iterator = this.F.iterator();
+    protected void h() {
+        super.h();
+        if (this.x.u() == WorldType.g) {
+            Iterator i11 = this.E.iterator();
 
-        while (iterator.hasNext()) {
-            ChunkCoordIntPair chunkcoordintpair = (ChunkCoordIntPair) iterator.next();
-            int i2 = chunkcoordintpair.a * 16;
-            int i3 = chunkcoordintpair.b * 16;
+            while (i11.hasNext()) {
+                ChunkCoordIntPair i12 = (ChunkCoordIntPair) i11.next();
 
-            this.C.a("getChunk");
-            Chunk chunk = this.e(chunkcoordintpair.a, chunkcoordintpair.b);
-
-            this.a(i2, i3, chunk);
-            this.C.c("tickChunk");
-            chunk.b(false);
-            this.C.c("thunder");
-            int i4;
-            int i5;
-            int i6;
-            int i7;
-
-            if (this.s.nextInt(100000) == 0 && this.Q() && this.P()) {
-                this.k = this.k * 3 + 1013904223;
-                i4 = this.k >> 2;
-                i5 = i2 + (i4 & 15);
-                i6 = i3 + (i4 >> 8 & 15);
-                i7 = this.h(i5, i6);
-                if (this.y(i5, i7, i6)) {
-                    this.c(new EntityLightningBolt(this, (double) i5, (double) i7, (double) i6));
-                }
+                this.a(i12.a, i12.b).b(false);
             }
 
-            this.C.c("iceandsnow");
-            if (this.s.nextInt(16) == 0) {
-                this.k = this.k * 3 + 1013904223;
-                i4 = this.k >> 2;
-                i5 = i4 & 15;
-                i6 = i4 >> 8 & 15;
-                i7 = this.h(i5 + i2, i6 + i3);
-                if (this.s(i5 + i2, i7 - 1, i6 + i3)) {
-                    this.b(i5 + i2, i7 - 1, i6 + i3, Blocks.aD);
-                }
+        }
+        else {
+            int i0 = 0;
+            int i1 = 0;
 
-                if (this.Q() && this.e(i5 + i2, i7, i6 + i3, true)) {
-                    this.b(i5 + i2, i7, i6 + i3, Blocks.aC);
-                }
+            for (Iterator iterator1 = this.E.iterator(); iterator1.hasNext(); this.B.b()) {
+                ChunkCoordIntPair chunkcoordintpair1 = (ChunkCoordIntPair) iterator1.next();
+                int i2 = chunkcoordintpair1.a * 16;
+                int i3 = chunkcoordintpair1.b * 16;
 
-                if (this.Q()) {
-                    BiomeGenBase biomegenbase = this.a(i5 + i2, i6 + i3);
+                this.B.a("getChunk");
+                Chunk chunk = this.a(chunkcoordintpair1.a, chunkcoordintpair1.b);
 
-                    if (biomegenbase.e()) {
-                        this.a(i5 + i2, i7 - 1, i6 + i3).l(this, i5 + i2, i7 - 1, i6 + i3);
+                this.a(i2, i3, chunk);
+                this.B.c("tickChunk");
+                chunk.b(false);
+                this.B.c("thunder");
+                int i4;
+                BlockPos blockpos;
+
+                if (this.s.nextInt(100000) == 0 && this.S() && this.R()) {
+                    this.m = this.m * 3 + 1013904223;
+                    i4 = this.m >> 2;
+                    blockpos = this.a(new BlockPos(i2 + (i4 & 15), 0, i3 + (i4 >> 8 & 15)));
+                    if (this.C(blockpos)) {
+                        this.c(new EntityLightningBolt(this, (double) blockpos.n(), (double) blockpos.o(), (double) blockpos.p()));
                     }
                 }
-            }
 
-            this.C.c("tickBlocks");
-            ExtendedBlockStorage[] aextendedblockstorage = chunk.i();
+                this.B.c("iceandsnow");
+                if (this.s.nextInt(16) == 0) {
+                    this.m = this.m * 3 + 1013904223;
+                    i4 = this.m >> 2;
+                    blockpos = this.q(new BlockPos(i2 + (i4 & 15), 0, i3 + (i4 >> 8 & 15)));
+                    BlockPos blockpos1 = blockpos.b();
 
-            i5 = aextendedblockstorage.length;
+                    if (this.w(blockpos1)) {
+                        this.a(blockpos1, Blocks.aI.P());
+                    }
 
-            for (i6 = 0; i6 < i5; ++i6) {
-                ExtendedBlockStorage extendedblockstorage = aextendedblockstorage[i6];
+                    if (this.S() && this.f(blockpos, true)) {
+                        this.a(blockpos, Blocks.aH.P());
+                    }
 
-                if (extendedblockstorage != null && extendedblockstorage.b()) {
-                    for (int i8 = 0; i8 < 3; ++i8) {
-                        this.k = this.k * 3 + 1013904223;
-                        int i9 = this.k >> 2;
-                        int i10 = i9 & 15;
-                        int i11 = i9 >> 8 & 15;
-                        int i12 = i9 >> 16 & 15;
+                    if (this.S() && this.b(blockpos1).e()) {
+                        this.p(blockpos1).c().k(this, blockpos1);
+                    }
+                }
 
-                        ++i1;
-                        Block block = extendedblockstorage.a(i10, i12, i11);
+                this.B.c("tickBlocks");
+                i4 = this.Q().c("randomTickSpeed");
+                if (i4 > 0) {
+                    ExtendedBlockStorage[] aextendedblockstorage = chunk.h();
+                    int i5 = aextendedblockstorage.length;
 
-                        if (block.t()) {
-                            ++i0;
-                            block.a(this, i10 + i2, i12 + extendedblockstorage.d(), i11 + i3, this.s);
+                    for (int i6 = 0; i6 < i5; ++i6) {
+                        ExtendedBlockStorage extendedblockstorage = aextendedblockstorage[i6];
+
+                        if (extendedblockstorage != null && extendedblockstorage.b()) {
+                            for (int i7 = 0; i7 < i4; ++i7) {
+                                this.m = this.m * 3 + 1013904223;
+                                int i8 = this.m >> 2;
+                                int i9 = i8 & 15;
+                                int i10 = i8 >> 8 & 15;
+                                int i11 = i8 >> 16 & 15;
+
+                                ++i1;
+                                BlockPos blockpos2 = new BlockPos(i9 + i2, i11 + extendedblockstorage.d(), i10 + i3);
+                                IBlockState iblockstate = extendedblockstorage.a(i9, i11, i10);
+                                Block block = iblockstate.c();
+
+                                if (block.w()) {
+                                    ++i0;
+                                    block.a((World) this, blockpos2, iblockstate, this.s);
+                                }
+                            }
                         }
                     }
                 }
             }
-
-            this.C.b();
         }
     }
 
-    public boolean a(int i0, int i1, int i2, Block block) {
-        NextTickListEntry nextticklistentry = new NextTickListEntry(i0, i1, i2, block);
+    protected BlockPos a(BlockPos blockpos) {
+        BlockPos blockpos1 = this.q(blockpos);
+        AxisAlignedBB axisalignedbb = (new AxisAlignedBB(blockpos1, new BlockPos(blockpos1.n(), this.U(), blockpos1.p()))).b(3.0D, 3.0D, 3.0D);
+        List list = this.a(EntityLivingBase.class, axisalignedbb, new Predicate() {
+
+            public boolean a(EntityLivingBase blockpos) {
+                return blockpos != null && blockpos.ai() && WorldServer.this.i(blockpos.c());
+            }
+
+            public boolean apply(Object p_apply_1_) {
+                return this.a((EntityLivingBase) p_apply_1_);
+            }
+        });
+
+        return !list.isEmpty() ? ((EntityLivingBase) list.get(this.s.nextInt(list.size()))).c() : blockpos1;
+    }
+
+    public boolean a(BlockPos blockpos, Block block) {
+        NextTickListEntry nextticklistentry = new NextTickListEntry(blockpos, block);
 
         return this.V.contains(nextticklistentry);
     }
 
-    public void a(int i0, int i1, int i2, Block block, int i3) {
-        this.a(i0, i1, i2, block, i3, 0);
+    public void a(BlockPos blockpos, Block block, int i0) {
+        this.a(blockpos, block, i0, 0);
     }
 
-    public void a(int i0, int i1, int i2, Block block, int i3, int i4) {
-        NextTickListEntry nextticklistentry = new NextTickListEntry(i0, i1, i2, block);
+    public void a(BlockPos blockpos, Block block, int i0, int i1) {
+        NextTickListEntry nextticklistentry = new NextTickListEntry(blockpos, block);
         byte b0 = 0;
 
-        if (this.d && block.o() != Material.a) {
-            if (block.L()) {
+        if (this.e && block.r() != Material.a) {
+            if (block.M()) {
                 b0 = 8;
-                if (this.b(nextticklistentry.a - b0, nextticklistentry.b - b0, nextticklistentry.c - b0, nextticklistentry.a + b0, nextticklistentry.b + b0, nextticklistentry.c + b0)) {
-                    Block block1 = this.a(nextticklistentry.a, nextticklistentry.b, nextticklistentry.c);
+                if (this.a(nextticklistentry.a.a(-b0, -b0, -b0), nextticklistentry.a.a(b0, b0, b0))) {
+                    IBlockState iblockstate = this.p(nextticklistentry.a);
 
-                    if (block1.o() != Material.a && block1 == nextticklistentry.a()) {
-                        block1.a(this, nextticklistentry.a, nextticklistentry.b, nextticklistentry.c, this.s);
+                    if (iblockstate.c().r() != Material.a && iblockstate.c() == nextticklistentry.a()) {
+                        iblockstate.c().b((World) this, nextticklistentry.a, iblockstate, this.s);
                     }
                 }
 
                 return;
             }
 
-            i3 = 1;
+            i0 = 1;
         }
 
-        if (this.b(i0 - b0, i1 - b0, i2 - b0, i0 + b0, i1 + b0, i2 + b0)) {
-            if (block.o() != Material.a) {
-                nextticklistentry.a((long) i3 + this.x.f());
-                nextticklistentry.a(i4);
+        if (this.a(blockpos.a(-b0, -b0, -b0), blockpos.a(b0, b0, b0))) {
+            if (block.r() != Material.a) {
+                nextticklistentry.a((long) i0 + this.x.f());
+                nextticklistentry.a(i1);
             }
 
-            if (!this.M.contains(nextticklistentry)) {
+            if (!this.L.contains(nextticklistentry)) {
+                this.L.add(nextticklistentry);
                 this.M.add(nextticklistentry);
-                this.N.add(nextticklistentry);
             }
         }
+
     }
 
-    public void b(int i0, int i1, int i2, Block block, int i3, int i4) {
-        NextTickListEntry nextticklistentry = new NextTickListEntry(i0, i1, i2, block);
+    public void b(BlockPos blockpos, Block block, int i0, int i1) {
+        NextTickListEntry nextticklistentry = new NextTickListEntry(blockpos, block);
 
-        nextticklistentry.a(i4);
-        if (block.o() != Material.a) {
-            nextticklistentry.a((long) i3 + this.x.f());
+        nextticklistentry.a(i1);
+        if (block.r() != Material.a) {
+            nextticklistentry.a((long) i0 + this.x.f());
         }
 
-        if (!this.M.contains(nextticklistentry)) {
+        if (!this.L.contains(nextticklistentry)) {
+            this.L.add(nextticklistentry);
             this.M.add(nextticklistentry);
-            this.N.add(nextticklistentry);
-        }
-    }
-
-    public void h() {
-        if (this.h.isEmpty()) {
-            if (this.P++ >= 1200) {
-                return;
-            }
-        } else {
-            this.i();
         }
 
-        super.h();
     }
 
     public void i() {
+        if (this.j.isEmpty()) {
+            if (this.P++ >= 1200) {
+                return;
+            }
+        }
+        else {
+            this.j();
+        }
+
+        super.i();
+    }
+
+    public void j() {
         this.P = 0;
     }
 
     public boolean a(boolean flag0) {
-        int i0 = this.N.size();
+        if (this.x.u() == WorldType.g) {
+            return false;
+        }
+        else {
+            int i0 = this.M.size();
 
-        if (i0 != this.M.size()) {
-            throw new IllegalStateException("TickNextTick list out of synch");
-        } else {
-            if (i0 > 1000) {
-                i0 = 1000;
+            if (i0 != this.L.size()) {
+                throw new IllegalStateException("TickNextTick list out of synch");
             }
-
-            this.C.a("cleaning");
-
-            NextTickListEntry nextticklistentry;
-
-            for (int i1 = 0; i1 < i0; ++i1) {
-                nextticklistentry = (NextTickListEntry) this.N.first();
-                if (!flag0 && nextticklistentry.d > this.x.f()) {
-                    break;
+            else {
+                if (i0 > 1000) {
+                    i0 = 1000;
                 }
 
-                this.N.remove(nextticklistentry);
-                this.M.remove(nextticklistentry);
-                this.V.add(nextticklistentry);
-            }
+                this.B.a("cleaning");
 
-            this.C.b();
-            this.C.a("ticking");
-            Iterator iterator = this.V.iterator();
+                NextTickListEntry nextticklistentry;
 
-            while (iterator.hasNext()) {
-                nextticklistentry = (NextTickListEntry) iterator.next();
-                iterator.remove();
-                byte b0 = 0;
+                for (int i1 = 0; i1 < i0; ++i1) {
+                    nextticklistentry = (NextTickListEntry) this.M.first();
+                    if (!flag0 && nextticklistentry.b > this.x.f()) {
+                        break;
+                    }
 
-                if (this.b(nextticklistentry.a - b0, nextticklistentry.b - b0, nextticklistentry.c - b0, nextticklistentry.a + b0, nextticklistentry.b + b0, nextticklistentry.c + b0)) {
-                    Block block = this.a(nextticklistentry.a, nextticklistentry.b, nextticklistentry.c);
+                    this.M.remove(nextticklistentry);
+                    this.L.remove(nextticklistentry);
+                    this.V.add(nextticklistentry);
+                }
 
-                    if (block.o() != Material.a && Block.a(block, nextticklistentry.a())) {
-                        try {
-                            block.a(this, nextticklistentry.a, nextticklistentry.b, nextticklistentry.c, this.s);
-                        } catch (Throwable throwable) {
-                            CrashReport crashreport = CrashReport.a(throwable, "Exception while ticking a block");
-                            CrashReportCategory crashreportcategory = crashreport.a("Block being ticked");
+                this.B.b();
+                this.B.a("ticking");
+                Iterator iterator = this.V.iterator();
 
-                            int i2;
+                while (iterator.hasNext()) {
+                    nextticklistentry = (NextTickListEntry) iterator.next();
+                    iterator.remove();
+                    byte b0 = 0;
 
+                    if (this.a(nextticklistentry.a.a(-b0, -b0, -b0), nextticklistentry.a.a(b0, b0, b0))) {
+                        IBlockState iblockstate = this.p(nextticklistentry.a);
+
+                        if (iblockstate.c().r() != Material.a && Block.a(iblockstate.c(), nextticklistentry.a())) {
                             try {
-                                i2 = this.e(nextticklistentry.a, nextticklistentry.b, nextticklistentry.c);
-                            } catch (Throwable throwable1) {
-                                i2 = -1;
+                                iblockstate.c().b((World) this, nextticklistentry.a, iblockstate, this.s);
                             }
+                            catch (Throwable throwable) {
+                                CrashReport crashreport = CrashReport.a(throwable, "Exception while ticking a block");
+                                CrashReportCategory crashreportcategory = crashreport.a("Block being ticked");
 
-                            CrashReportCategory.a(crashreportcategory, nextticklistentry.a, nextticklistentry.b, nextticklistentry.c, block, i2);
-                            throw new ReportedException(crashreport);
+                                CrashReportCategory.a(crashreportcategory, nextticklistentry.a, iblockstate);
+                                throw new ReportedException(crashreport);
+                            }
                         }
                     }
-                } else {
-                    this.a(nextticklistentry.a, nextticklistentry.b, nextticklistentry.c, nextticklistentry.a(), 0);
+                    else {
+                        this.a(nextticklistentry.a, nextticklistentry.a(), 0);
+                    }
                 }
-            }
 
-            this.C.b();
-            this.V.clear();
-            return !this.N.isEmpty();
+                this.B.b();
+                this.V.clear();
+                return !this.M.isEmpty();
+            }
         }
     }
 
     public List a(Chunk chunk, boolean flag0) {
-        ArrayList arraylist = null;
-        ChunkCoordIntPair chunkcoordintpair = chunk.l();
+        ChunkCoordIntPair chunkcoordintpair = chunk.j();
         int i0 = (chunkcoordintpair.a << 4) - 2;
         int i1 = i0 + 16 + 2;
         int i2 = (chunkcoordintpair.b << 4) - 2;
         int i3 = i2 + 16 + 2;
 
-        for (int i4 = 0; i4 < 2; ++i4) {
+        return this.a(new StructureBoundingBox(i0, 0, i2, i1, 256, i3), flag0);
+    }
+
+    public List a(StructureBoundingBox structureboundingbox, boolean flag0) {
+        ArrayList arraylist = null;
+
+        for (int i0 = 0; i0 < 2; ++i0) {
             Iterator iterator;
 
-            if (i4 == 0) {
-                iterator = this.N.iterator();
-            } else {
+            if (i0 == 0) {
+                iterator = this.M.iterator();
+            }
+            else {
                 iterator = this.V.iterator();
                 if (!this.V.isEmpty()) {
                     a.debug("toBeTicked = " + this.V.size());
@@ -458,15 +550,16 @@ public class WorldServer extends World {
 
             while (iterator.hasNext()) {
                 NextTickListEntry nextticklistentry = (NextTickListEntry) iterator.next();
+                BlockPos blockpos = nextticklistentry.a;
 
-                if (nextticklistentry.a >= i0 && nextticklistentry.a < i1 && nextticklistentry.c >= i2 && nextticklistentry.c < i3) {
+                if (blockpos.n() >= structureboundingbox.a && blockpos.n() < structureboundingbox.d && blockpos.p() >= structureboundingbox.c && blockpos.p() < structureboundingbox.f) {
                     if (flag0) {
-                        this.M.remove(nextticklistentry);
+                        this.L.remove(nextticklistentry);
                         iterator.remove();
                     }
 
                     if (arraylist == null) {
-                        arraylist = new ArrayList();
+                        arraylist = Lists.newArrayList();
                     }
 
                     arraylist.add(nextticklistentry);
@@ -480,22 +573,26 @@ public class WorldServer extends World {
     public void a(Entity entity, boolean flag0) {
         /* CanaryMod: Spawning checks per world, see World#canSpawn */
         if (!canSpawn(entity)) {
-            entity.B();
+            entity.J();
         }
 
 /* REMOVED
-        if (!this.J.Z() && (entity instanceof EntityAnimal || entity instanceof EntityWaterMob)) {
-            entity.B();
-        }
-
-        if (!this.J.Y() && entity instanceof INpc) {
-            entity.B();
+        if (!this.ai() && (entity instanceof EntityAnimal || entity instanceof EntityWaterMob)) {
+            entity.J();
         }
 */
         super.a(entity, flag0);
     }
 
-    protected IChunkProvider j() {
+    private boolean ah() {
+        return this.I.ag();
+    }
+
+    private boolean ai() {
+        return this.I.af();
+    }
+
+    protected IChunkProvider k() {
         IChunkLoader ichunkloader = this.w.a(this.t);
 
         this.b = new ChunkProviderServer(this, ichunkloader, this.t.c());
@@ -503,12 +600,13 @@ public class WorldServer extends World {
     }
 
     public List a(int i0, int i1, int i2, int i3, int i4, int i5) {
-        ArrayList arraylist = new ArrayList();
+        ArrayList arraylist = Lists.newArrayList();
 
-        for (int i6 = 0; i6 < this.g.size(); ++i6) {
-            TileEntity tileentity = (TileEntity) this.g.get(i6);
+        for (int i6 = 0; i6 < this.h.size(); ++i6) {
+            TileEntity tileentity = (TileEntity) this.h.get(i6);
+            BlockPos blockpos = tileentity.v();
 
-            if (tileentity.c >= i0 && tileentity.d >= i1 && tileentity.e >= i2 && tileentity.c < i3 && tileentity.d < i4 && tileentity.e < i5) {
+            if (blockpos.n() >= i0 && blockpos.o() >= i1 && blockpos.p() >= i2 && blockpos.n() < i3 && blockpos.o() < i4 && blockpos.p() < i5) {
                 arraylist.add(tileentity);
             }
         }
@@ -516,44 +614,73 @@ public class WorldServer extends World {
         return arraylist;
     }
 
-    public boolean a(EntityPlayer entityplayer, int i0, int i1, int i2) {
-        return !this.J.a(this, i0, i1, i2, entityplayer);
+    public boolean a(EntityPlayer entityplayer, BlockPos blockpos) {
+        return !this.I.a((World) this, blockpos, entityplayer) && this.af().a(blockpos);
     }
 
-    protected void a(WorldSettings worldsettings) {
-        if (this.W == null) {
-            this.W = new IntHashMap();
-        }
+    public void a(WorldSettings worldsettings) {
+        if (!this.x.w()) {
+            try {
+                this.b(worldsettings);
+                if (this.x.u() == WorldType.g) {
+                    this.aj();
+                }
 
-        if (this.M == null) {
-            this.M = new HashSet();
-        }
+                super.a(worldsettings);
+            }
+            catch (Throwable throwable) {
+                CrashReport crashreport = CrashReport.a(throwable, "Exception initializing level");
 
-        if (this.N == null) {
-            this.N = new TreeSet();
-        }
+                try {
+                    this.a(crashreport);
+                }
+                catch (Throwable throwable1) {
+                    ;
+                }
 
-        this.b(worldsettings);
-        super.a(worldsettings);
+                throw new ReportedException(crashreport);
+            }
+
+            this.x.d(true);
+        }
     }
 
-    protected void b(WorldSettings worldsettings) {
+    private void aj() {
+        this.x.f(false);
+        this.x.c(true);
+        this.x.b(false);
+        this.x.a(false);
+        this.x.i(1000000000);
+        this.x.c(6000L);
+        this.x.a(WorldSettings.GameType.SPECTATOR);
+        this.x.g(false);
+        this.x.a(EnumDifficulty.PEACEFUL);
+        this.x.e(true);
+        this.Q().a("doDaylightCycle", "false");
+    }
+
+    private void b(WorldSettings worldsettings) {
         if (!this.t.e()) {
-            this.x.a(0, this.t.i(), 0);
-        } else {
+            this.x.a(BlockPos.a.b(this.t.i()));
+        }
+        else if (this.x.u() == WorldType.g) {
+            this.x.a(BlockPos.a.a());
+        }
+        else {
             this.y = true;
-            WorldChunkManager worldchunkmanager = this.t.e;
+            WorldChunkManager worldchunkmanager = this.t.m();
             List list = worldchunkmanager.a();
-            Random random = new Random(this.H());
-            ChunkPosition chunkposition = worldchunkmanager.a(0, 0, 256, list, random);
+            Random random = new Random(this.J());
+            BlockPos blockpos = worldchunkmanager.a(0, 0, 256, list, random);
             int i0 = 0;
             int i1 = this.t.i();
             int i2 = 0;
 
-            if (chunkposition != null) {
-                i0 = chunkposition.a;
-                i2 = chunkposition.c;
-            } else {
+            if (blockpos != null) {
+                i0 = blockpos.n();
+                i2 = blockpos.p();
+            }
+            else {
                 a.warn("Unable to find spawn biome");
             }
 
@@ -568,34 +695,35 @@ public class WorldServer extends World {
                 }
             }
 
-            this.x.a(i0, i1, i2);
+            this.x.a(new BlockPos(i0, i1, i2));
             this.y = false;
             if (worldsettings.c()) {
-                this.k();
+                this.l();
             }
+
         }
     }
 
-    protected void k() {
+    protected void l() {
         WorldGeneratorBonusChest worldgeneratorbonuschest = new WorldGeneratorBonusChest(U, 10);
 
         for (int i0 = 0; i0 < 10; ++i0) {
             int i1 = this.x.c() + this.s.nextInt(6) - this.s.nextInt(6);
             int i2 = this.x.e() + this.s.nextInt(6) - this.s.nextInt(6);
-            int i3 = this.i(i1, i2) + 1;
+            BlockPos blockpos = this.r(new BlockPos(i1, 0, i2)).a();
 
-            if (worldgeneratorbonuschest.a(this, this.s, i1, i3, i2)) {
+            if (worldgeneratorbonuschest.b(this, this.s, blockpos)) {
                 break;
             }
         }
+
     }
 
-    public ChunkCoordinates l() {
+    public BlockPos m() {
         return this.t.h();
     }
 
     public void a(boolean flag0, IProgressUpdate iprogressupdate) throws MinecraftException {
-        // CanaryMod assume every world is able to save
         if (this.v.e()) {
             if (iprogressupdate != null) {
                 iprogressupdate.a("Saving level");
@@ -607,28 +735,38 @@ public class WorldServer extends World {
             }
 
             this.v.a(flag0, iprogressupdate);
-            ArrayList arraylist = Lists.newArrayList(this.b.a());
-            Iterator iterator = arraylist.iterator();
+            List list = this.b.a();
+            Iterator iterator = list.iterator();
 
             while (iterator.hasNext()) {
                 Chunk chunk = (Chunk) iterator.next();
 
-                if (chunk != null && !this.L.a(chunk.g, chunk.h)) {
-                    this.b.b(chunk.g, chunk.h);
+                if (!this.K.a(chunk.a, chunk.b)) {
+                    this.b.b(chunk.a, chunk.b);
                 }
             }
+
         }
     }
 
-    public void m() {
+    public void n() {
         if (this.v.e()) {
             this.v.c();
         }
     }
 
     protected void a() throws MinecraftException {
-        this.G();
-        this.w.a(this.x, this.J.ah().t());
+        this.I();
+        this.x.a(this.af().h());
+        this.x.d(this.af().f());
+        this.x.c(this.af().g());
+        this.x.e(this.af().m());
+        this.x.f(this.af().n());
+        this.x.j(this.af().q());
+        this.x.k(this.af().p());
+        this.x.b(this.af().j());
+        this.x.e(this.af().i());
+        this.w.a(this.x, this.I.an().u());
         this.z.a();
         // CanaryMod: save Scoreboard Data
         Canary.scoreboards().saveAllScoreboards();
@@ -636,71 +774,70 @@ public class WorldServer extends World {
 
     protected void a(Entity entity) {
         super.a(entity);
-        this.W.a(entity.y(), entity);
-        Entity[] aentity = entity.at();
+        this.l.a(entity.F(), entity);
+        this.N.put(entity.aJ(), entity);
+        Entity[] aentity = entity.aC();
 
         if (aentity != null) {
             for (int i0 = 0; i0 < aentity.length; ++i0) {
-                this.W.a(aentity[i0].y(), aentity[i0]);
+                this.l.a(aentity[i0].F(), aentity[i0]);
             }
         }
+
     }
 
     protected void b(Entity entity) {
         super.b(entity);
-        this.W.d(entity.y());
-        Entity[] aentity = entity.at();
+        this.l.d(entity.F());
+        this.N.remove(entity.aJ());
+        Entity[] aentity = entity.aC();
 
         if (aentity != null) {
             for (int i0 = 0; i0 < aentity.length; ++i0) {
-                this.W.d(aentity[i0].y());
+                this.l.d(aentity[i0].F());
             }
         }
-    }
 
-    public Entity a(int i0) {
-        return (Entity) this.W.a(i0);
     }
 
     public boolean c(Entity entity) {
         if (super.c(entity)) {
-            this.J.ah().a(entity.s, entity.t, entity.u, 512.0D, this.t.i, new S2CPacketSpawnGlobalEntity(entity));
+            this.I.an().a(entity.s, entity.t, entity.u, 512.0D, this.t.q(), new S2CPacketSpawnGlobalEntity(entity));
             return true;
-        } else {
+        }
+        else {
             return false;
         }
     }
 
     public void a(Entity entity, byte b0) {
-        this.r().b(entity, new S19PacketEntityStatus(entity, b0));
+        this.s().b(entity, new S19PacketEntityStatus(entity, b0));
     }
 
     public Explosion a(Entity entity, double d0, double d1, double d2, float f0, boolean flag0, boolean flag1) {
-        Explosion explosion = new Explosion(this, entity, d0, d1, d2, f0);
+        Explosion explosion = new Explosion(this, entity, d0, d1, d2, f0, flag0, flag1);
 
-        explosion.a = flag0;
-        explosion.b = flag1;
         explosion.a();
         explosion.a(false);
         if (!flag1) {
-            explosion.h.clear();
+            explosion.d();
         }
 
-        Iterator iterator = this.h.iterator();
+        Iterator iterator = this.j.iterator();
 
         while (iterator.hasNext()) {
             EntityPlayer entityplayer = (EntityPlayer) iterator.next();
 
             if (entityplayer.e(d0, d1, d2) < 4096.0D) {
-                ((EntityPlayerMP) entityplayer).a.a((Packet) (new S27PacketExplosion(d0, d1, d2, f0, explosion.h, (Vec3) explosion.b().get(entityplayer))));
+                ((EntityPlayerMP) entityplayer).a.a((Packet) (new S27PacketExplosion(d0, d1, d2, f0, explosion.e(), (Vec3) explosion.b().get(entityplayer))));
             }
         }
 
         return explosion;
     }
 
-    public void c(int i0, int i1, int i2, Block block, int i3, int i4) {
-        BlockEventData blockeventdata = new BlockEventData(i0, i1, i2, block, i3, i4);
+    public void c(BlockPos blockpos, Block block, int i0, int i1) {
+        BlockEventData blockeventdata = new BlockEventData(blockpos, block, i0, i1);
         Iterator iterator = this.S[this.T].iterator();
 
         BlockEventData blockeventdata1;
@@ -712,12 +849,11 @@ public class WorldServer extends World {
             }
 
             blockeventdata1 = (BlockEventData) iterator.next();
-        }
-        while (!blockeventdata1.equals(blockeventdata));
+        } while (!blockeventdata1.equals(blockeventdata));
 
     }
 
-    private void Z() {
+    private void ak() {
         while (!this.S[this.T].isEmpty()) {
             int i0 = this.T;
 
@@ -728,83 +864,99 @@ public class WorldServer extends World {
                 BlockEventData blockeventdata = (BlockEventData) iterator.next();
 
                 if (this.a(blockeventdata)) {
-                    this.J.ah().a((double) blockeventdata.a(), (double) blockeventdata.b(), (double) blockeventdata.c(), 64.0D, this.t.i, new S24PacketBlockAction(blockeventdata.a(), blockeventdata.b(), blockeventdata.c(), blockeventdata.f(), blockeventdata.d(), blockeventdata.e()));
+                    this.I.an().a((double) blockeventdata.a().n(), (double) blockeventdata.a().o(), (double) blockeventdata.a().p(), 64.0D, this.t.q(), new S24PacketBlockAction(blockeventdata.a(), blockeventdata.d(), blockeventdata.b(), blockeventdata.c()));
                 }
             }
 
             this.S[i0].clear();
         }
+
     }
 
     private boolean a(BlockEventData blockeventdata) {
-        Block block = this.a(blockeventdata.a(), blockeventdata.b(), blockeventdata.c());
+        IBlockState iblockstate = this.p(blockeventdata.a());
 
-        return block == blockeventdata.f() ? block.a(this, blockeventdata.a(), blockeventdata.b(), blockeventdata.c(), blockeventdata.d(), blockeventdata.e()) : false;
+        return iblockstate.c() == blockeventdata.d() ? iblockstate.c().a(this, blockeventdata.a(), iblockstate, blockeventdata.b(), blockeventdata.c()) : false;
     }
 
-    public void n() {
+    public void o() {
         this.w.a();
     }
 
-    protected void o() {
-        boolean flag0 = this.Q();
+    protected void p() {
+        boolean flag0 = this.S();
 
-        super.o();
-        if (this.m != this.n) {
-            // CanaryMod: method change
-            this.J.ah().sendPacketToDimension((Packet) (new S2BPacketChangeGameState(7, this.n)), getCanaryWorld().getName(), this.t.i);
-        }
+        super.p();
         if (this.o != this.p) {
             // CanaryMod: method change
-            this.J.ah().sendPacketToDimension((Packet) (new S2BPacketChangeGameState(8, this.p)), getCanaryWorld().getName(), this.t.i);
+            this.I.an().sendPacketToDimension((Packet) (new S2BPacketChangeGameState(7, this.p)), getCanaryWorld().getName(), this.t.q());
         }
-        if (flag0 != this.Q()) {
+        if (this.q != this.r) {
+            // CanaryMod: method change
+            this.I.an().sendPacketToDimension((Packet) (new S2BPacketChangeGameState(8, this.r)), getCanaryWorld().getName(), this.t.q());
+        }
+        if (flag0 != this.S()) {
             if (flag0) {
-                this.J.ah().a((Packet) (new S2BPacketChangeGameState(2, 0.0F)));
-            } else {
-                this.J.ah().a((Packet) (new S2BPacketChangeGameState(1, 0.0F)));
+                this.I.an().a((Packet) (new S2BPacketChangeGameState(2, 0.0F)));
             }
-            this.J.ah().a((Packet) (new S2BPacketChangeGameState(7, this.n)));
-            this.J.ah().a((Packet) (new S2BPacketChangeGameState(8, this.p)));
+            else {
+                this.I.an().a((Packet) (new S2BPacketChangeGameState(1, 0.0F)));
+            }
+
+            this.I.an().a((Packet) (new S2BPacketChangeGameState(7, this.p)));
+            this.I.an().a((Packet) (new S2BPacketChangeGameState(8, this.r)));
         }
     }
 
-    protected int p() {
-        return this.J.ah().s();
+    protected int q() {
+        return this.I.an().t();
     }
 
-    public MinecraftServer q() {
+    public MinecraftServer r() {
+        return this.I;
+    }
+
+    public EntityTracker s() {
         return this.J;
     }
 
-    public EntityTracker r() {
-        return this.K;
-    }
-
     public PlayerManager t() {
-        return this.L;
+        return this.K;
     }
 
     public Teleporter u() {
         return this.Q;
     }
 
-    public void a(String s0, double d0, double d1, double d2, int i0, double d3, double d4, double d5, double d6) {
-        S2APacketParticles s2apacketparticles = new S2APacketParticles(s0, (float) d0, (float) d1, (float) d2, (float) d3, (float) d4, (float) d5, (float) d6, i0);
+    public void a(EnumParticleTypes enumparticletypes, double d0, double d1, double d2, int i0, double d3, double d4, double d5, double d6, int... aint) {
+        this.a(enumparticletypes, false, d0, d1, d2, i0, d3, d4, d5, d6, aint);
+    }
 
-        for (int i1 = 0; i1 < this.h.size(); ++i1) {
-            EntityPlayerMP entityplayermp = (EntityPlayerMP) this.h.get(i1);
-            ChunkCoordinates chunkcoordinates = entityplayermp.f_();
-            double d7 = d0 - (double) chunkcoordinates.a;
-            double d8 = d1 - (double) chunkcoordinates.b;
-            double d9 = d2 - (double) chunkcoordinates.c;
-            double d10 = d7 * d7 + d8 * d8 + d9 * d9;
+    public void a(EnumParticleTypes enumparticletypes, boolean flag0, double d0, double d1, double d2, int i0, double d3, double d4, double d5, double d6, int... aint) {
+        S2APacketParticles s2apacketparticles = new S2APacketParticles(enumparticletypes, flag0, (float) d0, (float) d1, (float) d2, (float) d3, (float) d4, (float) d5, (float) d6, i0, aint);
 
-            if (d10 <= 256.0D) {
+        for (int i1 = 0; i1 < this.j.size(); ++i1) {
+            EntityPlayerMP entityplayermp = (EntityPlayerMP) this.j.get(i1);
+            BlockPos blockpos = entityplayermp.c();
+            double d7 = blockpos.c(d0, d1, d2);
+
+            if (d7 <= 256.0D || flag0 && d7 <= 65536.0D) {
                 entityplayermp.a.a((Packet) s2apacketparticles);
             }
         }
 
+    }
+
+    public Entity a(UUID uuid) {
+        return (Entity) this.N.get(uuid);
+    }
+
+    public ListenableFuture a(Runnable runnable) {
+        return this.I.a(runnable);
+    }
+
+    public boolean aH() {
+        return this.I.aH();
     }
 
     static class ServerBlockEventList extends ArrayList {

@@ -3,6 +3,9 @@ package net.minecraft.block;
 import net.canarymod.hook.world.BlockDropXpHook;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -11,9 +14,10 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
-import net.minecraft.tileentity.TileEntitySign;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
@@ -22,6 +26,7 @@ import net.minecraft.world.World;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+
 
 public class Block {
 
@@ -101,7 +106,7 @@ public class Block {
     protected final BlockState L;
     private IBlockState M;
     private String N;
-   
+
     public static int a(Block block) {
         return c.b(block);
     }
@@ -130,10 +135,12 @@ public class Block {
 
         if (c.d(resourcelocation)) {
             return (Block) c.a(resourcelocation);
-        } else {
+        }
+        else {
             try {
                 return (Block) c.a(Integer.parseInt(s0));
-            } catch (NumberFormatException numberformatexception) {
+            }
+            catch (NumberFormatException numberformatexception) {
                 return null;
             }
         }
@@ -170,7 +177,8 @@ public class Block {
     public int c(IBlockState iblockstate) {
         if (iblockstate != null && !iblockstate.a().isEmpty()) {
             throw new IllegalArgumentException("Don\'t know how to convert " + iblockstate + " back into data...");
-        } else {
+        }
+        else {
             return 0;
         }
     }
@@ -313,19 +321,24 @@ public class Block {
         this.b(world, blockpos, iblockstate, random);
     }
 
-    public void b(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {}
+    public void b(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {
+    }
 
-    public void d(World world, BlockPos blockpos, IBlockState iblockstate) {}
+    public void d(World world, BlockPos blockpos, IBlockState iblockstate) {
+    }
 
-    public void a(World world, BlockPos blockpos, IBlockState iblockstate, Block block) {}
+    public void a(World world, BlockPos blockpos, IBlockState iblockstate, Block block) {
+    }
 
     public int a(World world) {
         return 10;
     }
 
-    public void c(World world, BlockPos blockpos, IBlockState iblockstate) {}
+    public void c(World world, BlockPos blockpos, IBlockState iblockstate) {
+    }
 
-    public void b(World world, BlockPos blockpos, IBlockState iblockstate) {}
+    public void b(World world, BlockPos blockpos, IBlockState iblockstate) {
+    }
 
     public int a(Random random) {
         return 1;
@@ -467,7 +480,8 @@ public class Block {
 
         if (vec38 == null) {
             return null;
-        } else {
+        }
+        else {
             EnumFacing enumfacing = null;
 
             if (vec38 == vec32) {
@@ -510,7 +524,8 @@ public class Block {
         return vec3 == null ? false : vec3.a >= this.B && vec3.a <= this.E && vec3.b >= this.C && vec3.b <= this.F;
     }
 
-    public void a(World world, BlockPos blockpos, Explosion explosion) {}
+    public void a(World world, BlockPos blockpos, Explosion explosion) {
+    }
 
     public boolean a(World world, BlockPos blockpos, EnumFacing enumfacing, ItemStack itemstack) {
         return this.a(world, blockpos, enumfacing);
@@ -528,19 +543,22 @@ public class Block {
         return false;
     }
 
-    public void a(World world, BlockPos blockpos, Entity entity) {}
+    public void a(World world, BlockPos blockpos, Entity entity) {
+    }
 
     public IBlockState a(World world, BlockPos blockpos, EnumFacing enumfacing, float f0, float f1, float f2, int i0, EntityLivingBase entitylivingbase) {
         return this.a(i0);
     }
 
-    public void a(World world, BlockPos blockpos, EntityPlayer entityplayer) {}
+    public void a(World world, BlockPos blockpos, EntityPlayer entityplayer) {
+    }
 
     public Vec3 a(World world, BlockPos blockpos, Entity entity, Vec3 vec3) {
         return vec3;
     }
 
-    public void a(IBlockAccess iblockaccess, BlockPos blockpos) {}
+    public void a(IBlockAccess iblockaccess, BlockPos blockpos) {
+    }
 
     public final double z() {
         return this.B;
@@ -574,13 +592,15 @@ public class Block {
         return false;
     }
 
-    public void a(World world, BlockPos blockpos, IBlockState iblockstate, Entity entity) {}
+    public void a(World world, BlockPos blockpos, IBlockState iblockstate, Entity entity) {
+    }
 
     public int b(IBlockAccess iblockaccess, BlockPos blockpos, IBlockState iblockstate, EnumFacing enumfacing) {
         return 0;
     }
 
-    public void h() {}
+    public void h() {
+    }
 
     public void a(World world, EntityPlayer entityplayer, BlockPos blockpos, IBlockState iblockstate, TileEntity tileentity) {
         entityplayer.b(StatList.H[a(this)]);
@@ -591,7 +611,8 @@ public class Block {
             if (itemstack != null) {
                 a(world, blockpos, itemstack);
             }
-        } else {
+        }
+        else {
             int i0 = EnchantmentHelper.f(entityplayer);
 
             this.b(world, blockpos, iblockstate, i0);
@@ -618,7 +639,8 @@ public class Block {
         return this.a(random);
     }
 
-    public void a(World world, BlockPos blockpos, IBlockState iblockstate, EntityLivingBase entitylivingbase, ItemStack itemstack) {}
+    public void a(World world, BlockPos blockpos, IBlockState iblockstate, EntityLivingBase entitylivingbase, ItemStack itemstack) {
+    }
 
     public Block c(String s0) {
         this.N = s0;
@@ -667,9 +689,11 @@ public class Block {
         return this;
     }
 
-    public void a(World world, BlockPos blockpos, IBlockState iblockstate, EntityPlayer entityplayer) {}
+    public void a(World world, BlockPos blockpos, IBlockState iblockstate, EntityPlayer entityplayer) {
+    }
 
-    public void k(World world, BlockPos blockpos) {}
+    public void k(World world, BlockPos blockpos) {
+    }
 
     public boolean M() {
         return true;
@@ -945,7 +969,8 @@ public class Block {
             block13 = (Block) iterator.next();
             if (block13.J == Material.a) {
                 block13.v = false;
-            } else {
+            }
+            else {
                 boolean flag0 = false;
                 boolean flag1 = block13 instanceof BlockStairs;
                 boolean flag2 = block13 instanceof BlockSlab;
@@ -990,7 +1015,7 @@ public class Block {
         public final String a;
         public final float b;
         public final float c;
-      
+
         public SoundType(String p_i45393_1_, float p_i45393_2_, float p_i45393_3_) {
             this.a = p_i45393_1_;
             this.b = p_i45393_2_;

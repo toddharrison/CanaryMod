@@ -1,5 +1,8 @@
 package net.minecraft.world;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import net.canarymod.api.CanaryDamageSource;
 import net.canarymod.api.entity.Explosive;
 import net.canarymod.api.world.blocks.CanaryBlock;
@@ -9,47 +12,46 @@ import net.canarymod.hook.world.IgnitionHook;
 import net.canarymod.hook.world.IgnitionHook.IgnitionCause;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentProtection;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.*;
 
 import java.util.*;
 
 public class Explosion {
 
-    public boolean a;
-    public boolean b = true;
-    private int i = 16;
-    private Random j = new Random();
-    private World k;
-    public double c;
-    public double d;
-    public double e;
-    public Entity f;
-    public float g;
-    public List h = new ArrayList();
-    private Map l = new HashMap();
+    private final boolean a;
+    private final boolean b;
+    private final Random c = new Random();
+    private final World d;
+    private final double e;
+    private final double f;
+    private final double g;
+    private final Entity h;
+    private final float i;
+    private final List j = Lists.newArrayList();
+    private final Map k = Maps.newHashMap();
 
-    public Explosion(World world, Entity entity, double d0, double d1, double d2, float f0) {
-        this.k = world;
-        this.f = entity;
-        this.g = f0;
-        this.c = d0;
-        this.d = d1;
-        this.e = d2;
+    public Explosion(World world, Entity entity, double d0, double d1, double d2, float f0, boolean flag0, boolean flag1) {
+        this.d = world;
+        this.h = entity;
+        this.i = f0;
+        this.e = d0;
+        this.f = d1;
+        this.g = d2;
+        this.a = flag0;
+        this.b = flag1;
     }
 
     @SuppressWarnings("unchecked")
     public void a() {
-        float f0 = this.g;
-        HashSet hashset = new HashSet();
+        HashSet hashset = Sets.newHashSet();
+        boolean flag0 = true;
 
         // CanaryMod: Ground Zero
         CanaryBlock gzero = (CanaryBlock) this.k.getCanaryWorld().getBlockAt((int) Math.floor(c), (int) Math.floor(d), (int) Math.floor(e));
@@ -57,48 +59,41 @@ public class Explosion {
 
         int i0;
         int i1;
-        int i2;
-        double d0;
-        double d1;
-        double d2;
 
-        for (i0 = 0; i0 < this.i; ++i0) {
-            for (i1 = 0; i1 < this.i; ++i1) {
-                for (i2 = 0; i2 < this.i; ++i2) {
-                    if (i0 == 0 || i0 == this.i - 1 || i1 == 0 || i1 == this.i - 1 || i2 == 0 || i2 == this.i - 1) {
-                        double d3 = (double) ((float) i0 / ((float) this.i - 1.0F) * 2.0F - 1.0F);
-                        double d4 = (double) ((float) i1 / ((float) this.i - 1.0F) * 2.0F - 1.0F);
-                        double d5 = (double) ((float) i2 / ((float) this.i - 1.0F) * 2.0F - 1.0F);
-                        double d6 = Math.sqrt(d3 * d3 + d4 * d4 + d5 * d5);
+        for (int i2 = 0; i2 < 16; ++i2) {
+            for (i0 = 0; i0 < 16; ++i0) {
+                for (i1 = 0; i1 < 16; ++i1) {
+                    if (i2 == 0 || i2 == 15 || i0 == 0 || i0 == 15 || i1 == 0 || i1 == 15) {
+                        double d0 = (double) ((float) i2 / 15.0F * 2.0F - 1.0F);
+                        double d1 = (double) ((float) i0 / 15.0F * 2.0F - 1.0F);
+                        double d2 = (double) ((float) i1 / 15.0F * 2.0F - 1.0F);
+                        double d3 = Math.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
 
-                        d3 /= d6;
-                        d4 /= d6;
-                        d5 /= d6;
-                        float f1 = this.g * (0.7F + this.k.s.nextFloat() * 0.6F);
+                        d0 /= d3;
+                        d1 /= d3;
+                        d2 /= d3;
+                        float f0 = this.i * (0.7F + this.d.s.nextFloat() * 0.6F);
+                        double d4 = this.e;
+                        double d5 = this.f;
+                        double d6 = this.g;
 
-                        d0 = this.c;
-                        d1 = this.d;
-                        d2 = this.e;
+                        for (float f1 = 0.3F; f0 > 0.0F; f0 -= 0.22500001F) {
+                            BlockPos blockpos = new BlockPos(d4, d5, d6);
+                            IBlockState iblockstate = this.d.p(blockpos);
 
-                        for (float f2 = 0.3F; f1 > 0.0F; f1 -= f2 * 0.75F) {
-                            int i3 = MathHelper.c(d0);
-                            int i4 = MathHelper.c(d1);
-                            int i5 = MathHelper.c(d2);
-                            Block block = this.k.a(i3, i4, i5);
+                            if (iblockstate.c().r() != Material.a) {
+                                float f2 = this.h != null ? this.h.a(this, this.d, blockpos, iblockstate) : iblockstate.c().a((Entity) null);
 
-                            if (block.o() != Material.a) {
-                                float f3 = this.f != null ? this.f.a(this, this.k, i3, i4, i5, block) : block.a(this.f);
-
-                                f1 -= (f3 + 0.3F) * f2;
+                                f0 -= (f2 + 0.3F) * 0.3F;
                             }
 
-                            if (f1 > 0.0F && (this.f == null || this.f.a(this, this.k, i3, i4, i5, block, f1))) {
-                                hashset.add(new ChunkPosition(i3, i4, i5));
+                            if (f0 > 0.0F && (this.h == null || this.h.a(this, this.d, blockpos, iblockstate, f0))) {
+                                hashset.add(blockpos);
                             }
 
-                            d0 += d3 * (double) f2;
-                            d1 += d4 * (double) f2;
-                            d2 += d5 * (double) f2;
+                            d4 += d0 * 0.30000001192092896D;
+                            d5 += d1 * 0.30000001192092896D;
+                            d6 += d2 * 0.30000001192092896D;
                         }
                     }
                 }
@@ -107,7 +102,7 @@ public class Explosion {
 
         // Check entity if instance of Explosive and can damage world
         //        null     or                non-Explosive                     or                      Explosive can damage world
-        if (this.f == null || !(this.f.getCanaryEntity() instanceof Explosive) || ((Explosive) this.f.getCanaryEntity()).canDamageWorld()) {
+        if (this.h == null || !(this.h.getCanaryEntity() instanceof Explosive) || ((Explosive) this.h.getCanaryEntity()).canDamageWorld()) {
             // CanaryMod: Add affected blocks into a List of Blocks.
             List<net.canarymod.api.world.blocks.Block> blkAff = new ArrayList<net.canarymod.api.world.blocks.Block>(hashset.size());
 
@@ -116,149 +111,137 @@ public class Explosion {
             }
             // Explosion call
             ExplosionHook exp = (ExplosionHook) new ExplosionHook(gzero, this.f != null ? this.f.getCanaryEntity() : null, blkAff).call();
-            // if cancelled, don't populate this.h at all.
+            // if cancelled, don't populate this.j at all.
             if (!exp.isCanceled()) {
                 // Repopulate hashset according to blocksAffected.
                 hashset.clear();
                 for (net.canarymod.api.world.blocks.Block affected : exp.getAffectedBlocks()) {
                     hashset.add(new ChunkPosition(affected.getX(), affected.getY(), affected.getZ()));
                 }
-                this.h.addAll(hashset);
+                this.j.addAll(hashset);
             }
         }
         //
-        this.g *= 2.0F;
-        i0 = MathHelper.c(this.c - (double) this.g - 1.0D);
-        i1 = MathHelper.c(this.c + (double) this.g + 1.0D);
-        i2 = MathHelper.c(this.d - (double) this.g - 1.0D);
-        int i6 = MathHelper.c(this.d + (double) this.g + 1.0D);
-        int i7 = MathHelper.c(this.e - (double) this.g - 1.0D);
-        int i8 = MathHelper.c(this.e + (double) this.g + 1.0D);
-        List list = this.k.b(this.f, AxisAlignedBB.a((double) i0, (double) i2, (double) i7, (double) i1, (double) i6, (double) i8));
-        Vec3 vec3 = Vec3.a(this.c, this.d, this.e);
+        float f3 = this.i * 2.0F;
 
-        for (int i9 = 0; i9 < list.size(); ++i9) {
-            Entity entity = (Entity) list.get(i9);
-            double d7 = entity.f(this.c, this.d, this.e) / (double) this.g;
+        i0 = MathHelper.c(this.e - (double) f3 - 1.0D);
+        i1 = MathHelper.c(this.e + (double) f3 + 1.0D);
+        int i3 = MathHelper.c(this.f - (double) f3 - 1.0D);
+        int i4 = MathHelper.c(this.f + (double) f3 + 1.0D);
+        int i5 = MathHelper.c(this.g - (double) f3 - 1.0D);
+        int i6 = MathHelper.c(this.g + (double) f3 + 1.0D);
+        List list = this.d.b(this.h, new AxisAlignedBB((double) i0, (double) i3, (double) i5, (double) i1, (double) i4, (double) i6));
+        Vec3 vec3 = new Vec3(this.e, this.f, this.g);
 
-            if (d7 <= 1.0D) {
-                d0 = entity.s - this.c;
-                d1 = entity.t + (double) entity.g() - this.d;
-                d2 = entity.u - this.e;
-                double d8 = (double) MathHelper.a(d0 * d0 + d1 * d1 + d2 * d2);
+        for (int i7 = 0; i7 < list.size(); ++i7) {
+            Entity entity = (Entity) list.get(i7);
 
-                if (d8 != 0.0D) {
-                    d0 /= d8;
-                    d1 /= d8;
-                    d2 /= d8;
-                    double d9 = (double) this.k.a(vec3, entity.C);
-                    double d10 = (1.0D - d7) * d9;
+            if (!entity.aV()) {
+                double d7 = entity.f(this.e, this.f, this.g) / (double) f3;
 
-                    // Check entity if instance of Explosive and can damage entities
-                    //        null     or                non-Explosive                     or                      Explosive can damage entities
-                    if (this.f == null || !(this.f.getCanaryEntity() instanceof Explosive) || ((Explosive) this.f.getCanaryEntity()).canDamageEntities()) {
-                        // CanaryMod Damage hook: Explosions
-                        float damage = (float) ((int) ((d10 * d10 + d10) / 2.0D * 8.0D * (double) this.g + 1.0D));
-                        CanaryDamageSource source = DamageSource.a(this).getCanaryDamageSource();
-                        DamageHook dmg = (DamageHook) new DamageHook(this.f != null ? this.f.getCanaryEntity() : null, entity.getCanaryEntity(), source, damage).call();
-                        if (!dmg.isCanceled()) {
-                            entity.a((((CanaryDamageSource) dmg.getDamageSource()).getHandle()), damage);
+                if (d7 <= 1.0D) {
+                    double d8 = entity.s - this.e;
+                    double d9 = entity.t + (double) entity.aR() - this.f;
+                    double d10 = entity.u - this.g;
+                    double d11 = (double) MathHelper.a(d8 * d8 + d9 * d9 + d10 * d10);
+
+                    if (d11 != 0.0D) {
+                        d8 /= d11;
+                        d9 /= d11;
+                        d10 /= d11;
+                        double d12 = (double) this.d.a(vec3, entity.aQ());
+                        double d13 = (1.0D - d7) * d12;
+                        // Check entity if instance of Explosive and can damage entities
+                        //        null     or                non-Explosive                     or                      Explosive can damage entities
+                        if (this.f == null || !(this.f.getCanaryEntity() instanceof Explosive) || ((Explosive) this.f.getCanaryEntity()).canDamageEntities()) {
+                            // CanaryMod Damage hook: Explosions
+                            float damage = (float) ((int) ((d10 * d10 + d10) / 2.0D * 8.0D * (double) this.g + 1.0D));
+                            CanaryDamageSource source = DamageSource.a(this).getCanaryDamageSource();
+                            DamageHook dmg = (DamageHook) new DamageHook(this.f != null ? this.f.getCanaryEntity() : null, entity.getCanaryEntity(), source, damage).call();
+                            if (!dmg.isCanceled()) {
+                                entity.a((((CanaryDamageSource) dmg.getDamageSource()).getHandle()), damage);
+                            }
+                            //
                         }
-                        //
-                    }
 
-                    double d11 = EnchantmentProtection.a(entity, d10);
+                        double d14 = EnchantmentProtection.a(entity, d13);
 
-                    entity.v += d0 * d11;
-                    entity.w += d1 * d11;
-                    entity.x += d2 * d11;
-                    if (entity instanceof EntityPlayer) {
-                        this.l.put((EntityPlayer) entity, Vec3.a(d0 * d10, d1 * d10, d2 * d10));
+                        entity.v += d8 * d14;
+                        entity.w += d9 * d14;
+                        entity.x += d10 * d14;
+                        if (entity instanceof EntityPlayer) {
+                            this.k.put((EntityPlayer) entity, new Vec3(d8 * d13, d9 * d13, d10 * d13));
+                        }
                     }
                 }
             }
         }
-
-        this.g = f0;
     }
 
     public void a(boolean flag0) {
-        this.k.a(this.c, this.d, this.e, "random.explode", 4.0F, (1.0F + (this.k.s.nextFloat() - this.k.s.nextFloat()) * 0.2F) * 0.7F);
-        if (this.g >= 2.0F && this.b) {
-            this.k.a("hugeexplosion", this.c, this.d, this.e, 1.0D, 0.0D, 0.0D);
+        this.d.a(this.e, this.f, this.g, "random.explode", 4.0F, (1.0F + (this.d.s.nextFloat() - this.d.s.nextFloat()) * 0.2F) * 0.7F);
+        if (this.i >= 2.0F && this.b) {
+            this.d.a(EnumParticleTypes.EXPLOSION_HUGE, this.e, this.f, this.g, 1.0D, 0.0D, 0.0D, new int[0]);
         }
         else {
-            this.k.a("largeexplode", this.c, this.d, this.e, 1.0D, 0.0D, 0.0D);
+            this.d.a(EnumParticleTypes.EXPLOSION_LARGE, this.e, this.f, this.g, 1.0D, 0.0D, 0.0D, new int[0]);
         }
 
         Iterator iterator;
-        ChunkPosition chunkposition;
-        int i0;
-        int i1;
-        int i2;
-        Block block;
+        BlockPos blockpos;
 
         if (this.b) {
-            iterator = this.h.iterator();
+            iterator = this.j.iterator();
 
             while (iterator.hasNext()) {
-                chunkposition = (ChunkPosition) iterator.next();
-                i0 = chunkposition.a;
-                i1 = chunkposition.b;
-                i2 = chunkposition.c;
-                block = this.k.a(i0, i1, i2);
+                blockpos = (BlockPos) iterator.next();
+                Block block = this.d.p(blockpos).c();
+
                 if (flag0) {
-                    double d0 = (double) ((float) i0 + this.k.s.nextFloat());
-                    double d1 = (double) ((float) i1 + this.k.s.nextFloat());
-                    double d2 = (double) ((float) i2 + this.k.s.nextFloat());
-                    double d3 = d0 - this.c;
-                    double d4 = d1 - this.d;
-                    double d5 = d2 - this.e;
+                    double d0 = (double) ((float) blockpos.n() + this.d.s.nextFloat());
+                    double d1 = (double) ((float) blockpos.o() + this.d.s.nextFloat());
+                    double d2 = (double) ((float) blockpos.p() + this.d.s.nextFloat());
+                    double d3 = d0 - this.e;
+                    double d4 = d1 - this.f;
+                    double d5 = d2 - this.g;
                     double d6 = (double) MathHelper.a(d3 * d3 + d4 * d4 + d5 * d5);
 
                     d3 /= d6;
                     d4 /= d6;
                     d5 /= d6;
-                    double d7 = 0.5D / (d6 / (double) this.g + 0.1D);
+                    double d7 = 0.5D / (d6 / (double) this.i + 0.1D);
 
-                    d7 *= (double) (this.k.s.nextFloat() * this.k.s.nextFloat() + 0.3F);
+                    d7 *= (double) (this.d.s.nextFloat() * this.d.s.nextFloat() + 0.3F);
                     d3 *= d7;
                     d4 *= d7;
                     d5 *= d7;
-                    this.k.a("explode", (d0 + this.c * 1.0D) / 2.0D, (d1 + this.d * 1.0D) / 2.0D, (d2 + this.e * 1.0D) / 2.0D, d3, d4, d5);
-                    this.k.a("smoke", d0, d1, d2, d3, d4, d5);
+                    this.d.a(EnumParticleTypes.EXPLOSION_NORMAL, (d0 + this.e * 1.0D) / 2.0D, (d1 + this.f * 1.0D) / 2.0D, (d2 + this.g * 1.0D) / 2.0D, d3, d4, d5, new int[0]);
+                    this.d.a(EnumParticleTypes.SMOKE_NORMAL, d0, d1, d2, d3, d4, d5, new int[0]);
                 }
 
-                if (block.o() != Material.a) {
-
+                if (block.r() != Material.a) {
                     if (block.a(this)) {
-                        block.a(this.k, i0, i1, i2, this.k.e(i0, i1, i2), 1.0F / this.g, 0);
+                        block.a(this.d, blockpos, this.d.p(blockpos), 1.0F / this.i, 0);
                     }
 
-                    this.k.d(i0, i1, i2, Blocks.a, 0, 3);
-                    block.a(this.k, i0, i1, i2, this);
+                    this.d.a(blockpos, Blocks.a.P(), 3);
+                    block.a(this.d, blockpos, this);
                 }
             }
         }
 
         if (this.a) {
-            iterator = this.h.iterator();
+            iterator = this.j.iterator();
 
             while (iterator.hasNext()) {
-                chunkposition = (ChunkPosition) iterator.next();
-                i0 = chunkposition.a;
-                i1 = chunkposition.b;
-                i2 = chunkposition.c;
-                block = this.k.a(i0, i1, i2);
-                Block block1 = this.k.a(i0, i1 - 1, i2);
-
-                if (block.o() == Material.a && block1.j() && this.j.nextInt(3) == 0) {
+                blockpos = (BlockPos) iterator.next();
+                if (this.d.p(blockpos).c().r() == Material.a && this.d.p(blockpos.b()).c().m() && this.c.nextInt(3) == 0) {
                     // CanaryMod ignition from EntityLargeFireball
-                    CanaryBlock cBlock = (CanaryBlock) this.k.getCanaryWorld().getBlockAt(i0, i1 - 1, i2);
+                    CanaryBlock cBlock = (CanaryBlock) this.k.getCanaryWorld().getBlockAt(blockpos.n(), blockpos.o() - 1, blockpos.p());
                     cBlock.setStatus((byte) 7); // 7 fireball hit
                     IgnitionHook ignitionHook = (IgnitionHook) new IgnitionHook(cBlock, null, null, IgnitionCause.FIREBALL_HIT).call();
                     if (!ignitionHook.isCanceled()) {
-                        this.k.b(i0, i1, i2, (Block) Blocks.ab);
+                        this.d.a(blockpos, Blocks.ab.P());
                     }
                     // CanaryMod end
                 }
@@ -267,10 +250,18 @@ public class Explosion {
     }
 
     public Map b() {
-        return this.l;
+        return this.k;
     }
 
     public EntityLivingBase c() {
-        return this.f == null ? null : (this.f instanceof EntityTNTPrimed ? ((EntityTNTPrimed) this.f).e() : (this.f instanceof EntityLivingBase ? (EntityLivingBase) this.f : null));
+        return this.h == null ? null : (this.h instanceof EntityTNTPrimed ? ((EntityTNTPrimed) this.h).j() : (this.h instanceof EntityLivingBase ? (EntityLivingBase) this.h : null));
+    }
+
+    public void d() {
+        this.j.clear();
+    }
+
+    public List e() {
+        return this.j;
     }
 }

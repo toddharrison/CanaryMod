@@ -2,8 +2,16 @@ package net.minecraft.block;
 
 
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IStringSerializable;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -13,40 +21,45 @@ import java.util.Random;
 
 public abstract class BlockSlab extends Block {
 
-    protected final boolean a;
+    public static final PropertyEnum a = PropertyEnum.a("half", BlockSlab.EnumBlockHalf.class);
 
-    public BlockSlab(boolean flag0, Material material) {
+    public BlockSlab(Material material) {
         super(material);
-        this.a = flag0;
-        if (flag0) {
-            this.q = true;
+        if (this.j()) {
+            this.r = true;
         }
         else {
             this.a(0.0F, 0.0F, 0.0F, 1.0F, 0.5F, 1.0F);
         }
 
-        this.g(255);
+        this.e(255);
     }
 
-    public void a(IBlockAccess iblockaccess, int i0, int i1, int i2) {
-        if (this.a) {
+    protected boolean G() {
+        return false;
+    }
+
+    public void a(IBlockAccess iblockaccess, BlockPos blockpos) {
+        if (this.j()) {
             this.a(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
         }
         else {
-            boolean flag0 = (iblockaccess.e(i0, i1, i2) & 8) != 0;
+            IBlockState iblockstate = iblockaccess.p(blockpos);
 
-            if (flag0) {
-                this.a(0.0F, 0.5F, 0.0F, 1.0F, 1.0F, 1.0F);
+            if (iblockstate.c() == this) {
+                if (iblockstate.b(a) == BlockSlab.EnumBlockHalf.TOP) {
+                    this.a(0.0F, 0.5F, 0.0F, 1.0F, 1.0F, 1.0F);
+                }
+                else {
+                    this.a(0.0F, 0.0F, 0.0F, 1.0F, 0.5F, 1.0F);
+                }
             }
-            else {
-                this.a(0.0F, 0.0F, 0.0F, 1.0F, 0.5F, 1.0F);
-            }
+
         }
-
     }
 
-    public void g() {
-        if (this.a) {
+    public void h() {
+        if (this.j()) {
             this.a(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
         }
         else {
@@ -55,34 +68,59 @@ public abstract class BlockSlab extends Block {
 
     }
 
-    public void a(World world, int i0, int i1, int i2, AxisAlignedBB axisalignedbb, List list, Entity entity) {
-        this.a((IBlockAccess) world, i0, i1, i2); //CanaryMod: cast to IBlockAccess to fix underside bounding box
-        super.a(world, i0, i1, i2, axisalignedbb, list, entity);
+    public void a(World world, BlockPos blockpos, IBlockState iblockstate, AxisAlignedBB axisalignedbb, List list, Entity entity) {
+        this.a((IBlockAccess) world, blockpos); // CanaryMod: cast fix
+        super.a(world, blockpos, iblockstate, axisalignedbb, list, entity);
     }
 
     public boolean c() {
-        return this.a;
+        return this.j();
     }
 
-    public int a(World world, int i0, int i1, int i2, int i3, float f0, float f1, float f2, int i4) {
-        return this.a ? i4 : (i3 != 0 && (i3 == 1 || (double) f1 <= 0.5D) ? i4 : i4 | 8);
+    public IBlockState a(World world, BlockPos blockpos, EnumFacing enumfacing, float f0, float f1, float f2, int i0, EntityLivingBase entitylivingbase) {
+        IBlockState iblockstate = super.a(world, blockpos, enumfacing, f0, f1, f2, i0, entitylivingbase).a(a, BlockSlab.EnumBlockHalf.BOTTOM);
+
+        return this.j() ? iblockstate : (enumfacing != EnumFacing.DOWN && (enumfacing == EnumFacing.UP || (double) f1 <= 0.5D) ? iblockstate : iblockstate.a(a, BlockSlab.EnumBlockHalf.TOP));
     }
 
     public int a(Random random) {
-        return this.a ? 2 : 1;
-    }
-
-    public int a(int i0) {
-        return i0 & 7;
+        return this.j() ? 2 : 1;
     }
 
     public boolean d() {
-        return this.a;
+        return this.j();
     }
 
     public abstract String b(int i0);
 
-    public int k(World world, int i0, int i1, int i2) {
-        return super.k(world, i0, i1, i2) & 7;
+    public int j(World world, BlockPos blockpos) {
+        return super.j(world, blockpos) & 7;
+    }
+
+    public abstract boolean j();
+
+    public abstract IProperty l();
+
+    public abstract Object a(ItemStack itemstack);
+
+    public static enum EnumBlockHalf implements IStringSerializable {
+
+        TOP("TOP", 0, "top"), BOTTOM("BOTTOM", 1, "bottom");
+        private final String c;
+
+        private static final BlockSlab.EnumBlockHalf[] $VALUES = new BlockSlab.EnumBlockHalf[]{TOP, BOTTOM};
+
+        private EnumBlockHalf(String p_i45713_1_, int p_i45713_2_, String p_i45713_3_) {
+            this.c = p_i45713_3_;
+        }
+
+        public String toString() {
+            return this.c;
+        }
+
+        public String l() {
+            return this.c;
+        }
+
     }
 }
