@@ -104,7 +104,7 @@ public class ClickEvent {
         //
 
         public static Action a(String aclickevent_action) {
-            return f.get(aclickevent_action.toLowerCase());
+            return g.get(aclickevent_action.toLowerCase());
         }
 
         static {
