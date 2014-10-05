@@ -1,6 +1,7 @@
 package net.minecraft.entity.player;
 
 import com.google.common.base.Charsets;
+import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
 import net.canarymod.Canary;
 import net.canarymod.ToolBox;
@@ -30,9 +31,6 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.passive.EntityPig;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.entity.player.PlayerCapabilities;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.entity.projectile.EntityFishHook;
 import net.minecraft.event.ClickEvent;
@@ -51,27 +49,15 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S12PacketEntityVelocity;
 import net.minecraft.potion.Potion;
-import net.minecraft.scoreboard.IScoreObjectiveCriteria;
-import net.minecraft.scoreboard.Score;
-import net.minecraft.scoreboard.ScoreObjective;
-import net.minecraft.scoreboard.ScorePlayerTeam;
-import net.minecraft.scoreboard.Scoreboard;
-import net.minecraft.scoreboard.Team;
+import net.minecraft.scoreboard.*;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.stats.AchievementList;
 import net.minecraft.stats.StatBase;
 import net.minecraft.stats.StatList;
-import net.minecraft.tileentity.*;
+import net.minecraft.tileentity.TileEntitySign;
 import net.minecraft.util.*;
-import net.minecraft.world.EnumDifficulty;
-import net.minecraft.world.IInteractionObject;
-import net.minecraft.world.LockCode;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldSettings;
+import net.minecraft.world.*;
 
-import com.google.common.base.Charsets;
-import com.google.common.collect.Lists;
-import com.mojang.authlib.GameProfile;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -930,7 +916,6 @@ public abstract class EntityPlayer extends EntityLivingBase {
                         itemstack.b = itemstack1.b;
                     }
                 }
-            }
 
                 return true;
             }
@@ -1140,10 +1125,6 @@ public abstract class EntityPlayer extends EntityLivingBase {
                     f1 = 0.9F;
                     break;
 
-                case 1:
-                    f1 = 0.9F;
-                    break;
-
                 case 2:
                     f1 = 0.1F;
                     break;
@@ -1232,10 +1213,6 @@ public abstract class EntityPlayer extends EntityLivingBase {
 
     private boolean p() {
         return this.o.p(this.bv).c() == Blocks.C;
-    }
-
-    public boolean bm() {
-        return this.bA;
     }
 
     public static BlockPos a(World world, BlockPos blockpos, boolean flag0) {
@@ -1706,19 +1683,22 @@ public abstract class EntityPlayer extends EntityLivingBase {
                         if (EntityLiving.c(itemstack) != i2) {
                             return false;
                         }
-                    } else if (i2 != 4 || itemstack.b() != Items.bX && !(itemstack.b() instanceof ItemBlock)) {
+                    }
+                    else if (i2 != 4 || itemstack.b() != Items.bX && !(itemstack.b() instanceof ItemBlock)) {
                         return false;
                     }
                 }
 
                 this.bg.a(i1 + this.bg.a.length, itemstack);
                 return true;
-            } else {
+            }
+            else {
                 i2 = i0 - 200;
                 if (i2 >= 0 && i2 < this.a.n_()) {
                     this.a.a(i2, itemstack);
                     return true;
-                } else {
+                }
+                else {
                     return false;
                 }
             }
@@ -1760,6 +1740,54 @@ public abstract class EntityPlayer extends EntityLivingBase {
         }
     }
 
+    public static enum EnumStatus {
+
+        OK("OK", 0), NOT_POSSIBLE_HERE("NOT_POSSIBLE_HERE", 1), NOT_POSSIBLE_NOW("NOT_POSSIBLE_NOW", 2), TOO_FAR_AWAY("TOO_FAR_AWAY", 3), OTHER_PROBLEM("OTHER_PROBLEM", 4), NOT_SAFE("NOT_SAFE", 5);
+
+        private static final EntityPlayer.EnumStatus[] $VALUES = new EntityPlayer.EnumStatus[] { OK, NOT_POSSIBLE_HERE, NOT_POSSIBLE_NOW, TOO_FAR_AWAY, OTHER_PROBLEM, NOT_SAFE};
+      
+        private EnumStatus(String p_i1751_1_, int p_i1751_2_) {}
+
+    }
+
+
+    static final class SwitchEnumFacing {
+
+        static final int[] a = new int[EnumFacing.values().length];
+
+        static {
+            try {
+                a[EnumFacing.SOUTH.ordinal()] = 1;
+            }
+            catch (NoSuchFieldError nosuchfielderror) {
+                ;
+            }
+
+            try {
+                a[EnumFacing.NORTH.ordinal()] = 2;
+            }
+            catch (NoSuchFieldError nosuchfielderror1) {
+                ;
+            }
+
+            try {
+                a[EnumFacing.WEST.ordinal()] = 3;
+            }
+            catch (NoSuchFieldError nosuchfielderror2) {
+                ;
+            }
+
+            try {
+                a[EnumFacing.EAST.ordinal()] = 4;
+            }
+            catch (NoSuchFieldError nosuchfielderror3) {
+                ;
+            }
+
+        }
+
+    }
+
     // CanaryMod
     // Start: Custom XP methods
     public void addXP(int amount) {
@@ -1781,47 +1809,8 @@ public abstract class EntityPlayer extends EntityLivingBase {
         }
         updateXP();
     }
-    public static enum EnumStatus {
-
-        OK("OK", 0), NOT_POSSIBLE_HERE("NOT_POSSIBLE_HERE", 1), NOT_POSSIBLE_NOW("NOT_POSSIBLE_NOW", 2), TOO_FAR_AWAY("TOO_FAR_AWAY", 3), OTHER_PROBLEM("OTHER_PROBLEM", 4), NOT_SAFE("NOT_SAFE", 5);
-
-        private static final EntityPlayer.EnumStatus[] $VALUES = new EntityPlayer.EnumStatus[] { OK, NOT_POSSIBLE_HERE, NOT_POSSIBLE_NOW, TOO_FAR_AWAY, OTHER_PROBLEM, NOT_SAFE};
-      
-        private EnumStatus(String p_i1751_1_, int p_i1751_2_) {}
-
-    }
 
 
-    static final class SwitchEnumFacing {
-
-        static final int[] a = new int[EnumFacing.values().length];
-      
-        static {
-            try {
-                a[EnumFacing.SOUTH.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror) {
-                ;
-            }
-
-            try {
-                a[EnumFacing.NORTH.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror1) {
-                ;
-            }
-
-            try {
-                a[EnumFacing.WEST.ordinal()] = 3;
-            } catch (NoSuchFieldError nosuchfielderror2) {
-                ;
-            }
-
-            try {
-                a[EnumFacing.EAST.ordinal()] = 4;
-            } catch (NoSuchFieldError nosuchfielderror3) {
-                ;
-            }
-
-        }
     public void setXP(int i) {
         if (i < this.bz) {
             this.removeXP(this.bz - i);

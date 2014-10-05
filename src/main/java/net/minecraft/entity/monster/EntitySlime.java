@@ -2,19 +2,12 @@ package net.minecraft.entity.monster;
 
 import net.canarymod.api.entity.living.monster.CanarySlime;
 import net.canarymod.api.entity.living.monster.Slime;
-import net.canarymod.hook.entity.MobTargetHook;
 import net.canarymod.hook.entity.SlimeSplitHook;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.IEntityLivingData;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAIFindEntityNearest;
 import net.minecraft.entity.ai.EntityAIFindEntityNearestPlayer;
 import net.minecraft.entity.ai.EntityMoveHelper;
-import net.minecraft.entity.monster.EntityIronGolem;
-import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -40,7 +33,7 @@ public class EntitySlime extends EntityLiving implements IMob {
     public float b;
     public float c;
     private boolean bi;
-   
+
     public EntitySlime(World world) {
         super(world);
         this.f = new EntitySlime.SlimeMoveHelper();
@@ -127,7 +120,8 @@ public class EntitySlime extends EntityLiving implements IMob {
             }
 
             this.a = -0.5F;
-        } else if (!this.C && this.bi) {
+        }
+        else if (!this.C && this.bi) {
             this.a = 1.0F;
         }
 
@@ -158,7 +152,6 @@ public class EntitySlime extends EntityLiving implements IMob {
                 this.X();
             }
         }
-    }
 
         super.i(i0);
     }
@@ -169,6 +162,7 @@ public class EntitySlime extends EntityLiving implements IMob {
         if (!this.o.D && i0 > 1 && this.bm() <= 0.0F) {
             int i1 = 2 + this.V.nextInt(3);
 
+            List<Slime> slimes = new ArrayList<Slime>();
             for (int i2 = 0; i2 < i1; ++i2) {
                 float f0 = ((float) (i2 % 2) - 0.5F) * (float) i0 / 4.0F;
                 float f1 = ((float) (i2 / 2) - 0.5F) * (float) i0 / 4.0F;
@@ -254,7 +248,8 @@ public class EntitySlime extends EntityLiving implements IMob {
 
         if (this.o.P().u() == WorldType.c && this.V.nextInt(4) != 1) {
             return false;
-        } else {
+        }
+        else {
             if (this.o.aa() != EnumDifficulty.PEACEFUL) {
                 BiomeGenBase biomegenbase = this.o.b(new BlockPos(MathHelper.c(this.s), 0, MathHelper.c(this.u)));
 
@@ -309,7 +304,7 @@ public class EntitySlime extends EntityLiving implements IMob {
 
         private EntitySlime a = EntitySlime.this;
         private int b;
-      
+
         public AISlimeAttack() {
             this.a(2);
         }
@@ -343,7 +338,7 @@ public class EntitySlime extends EntityLiving implements IMob {
         private EntitySlime a = EntitySlime.this;
         private float b;
         private int c;
-      
+
         public AISlimeFaceRandom() {
             this.a(2);
         }
@@ -366,7 +361,7 @@ public class EntitySlime extends EntityLiving implements IMob {
     class AISlimeFloat extends EntityAIBase {
 
         private EntitySlime a = EntitySlime.this;
-      
+
         public AISlimeFloat() {
             this.a(5);
             ((PathNavigateGround) EntitySlime.this.s()).d(true);
@@ -389,7 +384,7 @@ public class EntitySlime extends EntityLiving implements IMob {
     class AISlimeHop extends EntityAIBase {
 
         private EntitySlime a = EntitySlime.this;
-      
+
         public AISlimeHop() {
             this.a(5);
         }
@@ -410,7 +405,7 @@ public class EntitySlime extends EntityLiving implements IMob {
         private int h;
         private EntitySlime i = EntitySlime.this;
         private boolean j;
-      
+
         public SlimeMoveHelper() {
             super(EntitySlime.this);
         }
@@ -431,7 +426,8 @@ public class EntitySlime extends EntityLiving implements IMob {
             this.a.aG = this.a.y;
             if (!this.f) {
                 this.a.m(0.0F);
-            } else {
+            }
+            else {
                 this.f = false;
                 if (this.a.C) {
                     this.a.j((float) (this.e * this.a.a(SharedMonsterAttributes.d).e()));
@@ -445,11 +441,13 @@ public class EntitySlime extends EntityLiving implements IMob {
                         if (this.i.cl()) {
                             this.i.a(this.i.ci(), this.i.bA(), ((this.i.bb().nextFloat() - this.i.bb().nextFloat()) * 0.2F + 1.0F) * 0.8F);
                         }
-                    } else {
+                    }
+                    else {
                         this.i.aX = this.i.aY = 0.0F;
                         this.a.j(0.0F);
                     }
-                } else {
+                }
+                else {
                     this.a.j((float) (this.e * this.a.a(SharedMonsterAttributes.d).e()));
                 }
 

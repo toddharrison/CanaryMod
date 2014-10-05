@@ -1,21 +1,30 @@
 package net.minecraft.block;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.blocks.CanaryBlock;
+import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.world.RedstoneChangeHook;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 public class BlockRedstoneTorch extends BlockTorch {
 
     private static Map b = Maps.newHashMap();
-    private final boolean M;
-   
+    private boolean M; // CanaryMod: remove final
+
     private boolean a(World world, BlockPos blockpos, boolean flag0) {
         if (!b.containsKey(world)) {
             b.put(world, Lists.newArrayList());
@@ -53,10 +62,10 @@ public class BlockRedstoneTorch extends BlockTorch {
         return 2;
     }
 
-    public void b(World world, int i0, int i1, int i2) {
+    public void c(World world, BlockPos blockpos, IBlockState iblockstate) {
         if (this.M) {
             // CanaryMod: RedstoneChange; Torch put in
-            RedstoneChangeHook hook = (RedstoneChangeHook) new RedstoneChangeHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), 0, 15).call();
+            RedstoneChangeHook hook = (RedstoneChangeHook) new RedstoneChangeHook(world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos)), 0, 15).call();
             if (hook.isCanceled()) {
                 this.M = false;
                 return;
@@ -77,7 +86,7 @@ public class BlockRedstoneTorch extends BlockTorch {
     public void b(World world, BlockPos blockpos, IBlockState iblockstate) {
         if (this.M) {
             // CanaryMod: RedstoneChange; Torch broke
-            new RedstoneChangeHook(new CanaryBlock(BlockType.RedstoneLampOn.getId(), (short) 2, i0, i1, i2, world.getCanaryWorld()), 15, 0).call();
+            new RedstoneChangeHook(new CanaryBlock(BlockType.RedstoneLampOn, (short) 2, new BlockPosition(blockpos), world.getCanaryWorld()), 15, 0).call();
             //
             EnumFacing[] aenumfacing = EnumFacing.values();
             int i0 = aenumfacing.length;
@@ -100,7 +109,8 @@ public class BlockRedstoneTorch extends BlockTorch {
         return world.b(blockpos.a(enumfacing), enumfacing);
     }
 
-    public void a(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {}
+    public void a(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {
+    }
 
     public void b(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {
         boolean flag0 = this.g(world, blockpos, iblockstate);
@@ -134,7 +144,7 @@ public class BlockRedstoneTorch extends BlockTorch {
                 }
             }
         }
-        } else if (!flag0 && !this.a(world, blockpos, false)) {
+        else if (!flag0 && !this.a(world, blockpos, false)) {
             // CanaryMod: RedstoneChange; Torch on
             RedstoneChangeHook hook = (RedstoneChangeHook) new RedstoneChangeHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), 15, 0).call();
             if (hook.isCanceled()) {
@@ -175,7 +185,7 @@ public class BlockRedstoneTorch extends BlockTorch {
 
         BlockPos a;
         long b;
-      
+
         public Toggle(BlockPos p_i45688_1_, long p_i45688_2_) {
             this.a = p_i45688_1_;
             this.b = p_i45688_2_;

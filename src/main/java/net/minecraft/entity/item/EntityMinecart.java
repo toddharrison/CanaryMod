@@ -1,5 +1,6 @@
 package net.minecraft.entity.item;
 
+import com.google.common.collect.Maps;
 import net.canarymod.Canary;
 import net.canarymod.api.CanaryDamageSource;
 import net.canarymod.api.entity.living.EntityLiving;
@@ -16,33 +17,17 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EntityMinecartCommandBlock;
 import net.minecraft.entity.ai.EntityMinecartMobSpawner;
-import net.minecraft.entity.item.EntityMinecartChest;
-import net.minecraft.entity.item.EntityMinecartEmpty;
-import net.minecraft.entity.item.EntityMinecartFurnace;
-import net.minecraft.entity.item.EntityMinecartHopper;
-import net.minecraft.entity.item.EntityMinecartTNT;
 import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.IChatComponent;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.*;
 import net.minecraft.world.IWorldNameable;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
-import java.util.List;
-import com.google.common.collect.Maps;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -50,14 +35,14 @@ public abstract class EntityMinecart extends Entity implements IWorldNameable {
 
     private boolean a;
     private String b;
-    private static final int[][][] c = new int[][][] { { { 0, 0, -1}, { 0, 0, 1}}, { { -1, 0, 0}, { 1, 0, 0}}, { { -1, -1, 0}, { 1, 0, 0}}, { { -1, 0, 0}, { 1, -1, 0}}, { { 0, 0, -1}, { 0, -1, 1}}, { { 0, -1, -1}, { 0, 0, 1}}, { { 0, 0, 1}, { 1, 0, 0}}, { { 0, 0, 1}, { -1, 0, 0}}, { { 0, 0, -1}, { -1, 0, 0}}, { { 0, 0, -1}, { 1, 0, 0}}};
+    private static final int[][][] c = new int[][][]{{{0, 0, -1}, {0, 0, 1}}, {{-1, 0, 0}, {1, 0, 0}}, {{-1, -1, 0}, {1, 0, 0}}, {{-1, 0, 0}, {1, -1, 0}}, {{0, 0, -1}, {0, -1, 1}}, {{0, -1, -1}, {0, 0, 1}}, {{0, 0, 1}, {1, 0, 0}}, {{0, 0, 1}, {-1, 0, 0}}, {{0, 0, -1}, {-1, 0, 0}}, {{0, 0, -1}, {1, 0, 0}}};
     private int d;
     private double e;
     private double f;
     private double g;
     private double h;
     private double i;
-   
+
     public EntityMinecart(World world) {
         super(world);
         this.k = true;
@@ -133,7 +118,8 @@ public abstract class EntityMinecart extends Entity implements IWorldNameable {
         if (!this.o.D && !this.I) {
             if (this.b(damagesource)) {
                 return false;
-            } else {
+            }
+            else {
                 // CanaryMod: VehicleDamage
                 net.canarymod.api.entity.Entity attk = null;
 
@@ -147,7 +133,7 @@ public abstract class EntityMinecart extends Entity implements IWorldNameable {
                 f0 = hook.getDamageDealt();
                 //
 
-               this.k(-this.r());
+                this.k(-this.r());
                 this.j(10);
                 this.ac();
                 this.a(this.p() + f0 * 10.0F);
@@ -160,14 +146,16 @@ public abstract class EntityMinecart extends Entity implements IWorldNameable {
 
                     if (flag0 && !this.k_()) {
                         this.J();
-                    } else {
+                    }
+                    else {
                         this.a(damagesource);
                     }
                 }
 
                 return true;
             }
-        } else {
+        }
+        else {
             return true;
         }
     }
@@ -224,7 +212,8 @@ public abstract class EntityMinecart extends Entity implements IWorldNameable {
 
                         if (this.o.t.q() == -1) {
                             b0 = 0;
-                        } else {
+                        }
+                        else {
                             b0 = -1;
                         }
 
@@ -233,7 +222,8 @@ public abstract class EntityMinecart extends Entity implements IWorldNameable {
 
                     this.ak = false;
                 }
-            } else {
+            }
+            else {
                 if (this.al > 0) {
                     this.al -= 4;
                 }
@@ -262,12 +252,14 @@ public abstract class EntityMinecart extends Entity implements IWorldNameable {
                 --this.d;
                 this.b(d0, d1, d2);
                 this.b(this.y, this.z);
-            } else {
+            }
+            else {
                 this.b(this.s, this.t, this.u);
                 this.b(this.y, this.z);
             }
 
-        } else {
+        }
+        else {
             float prevRot = this.y, prevPit = this.z;
             double ppX = this.p, ppY = this.q, ppZ = this.r;
             this.p = this.s;
@@ -286,6 +278,7 @@ public abstract class EntityMinecart extends Entity implements IWorldNameable {
             BlockPos blockpos = new BlockPos(i1, i0, i2);
             IBlockState iblockstate = this.o.p(blockpos);
 
+            if (BlockRailBase.d(iblockstate)) {
                 this.a(blockpos, iblockstate);
                 if (iblockstate.c() == Blocks.cs) {
                     // CanaryMod: MinecartActivate
@@ -297,7 +290,8 @@ public abstract class EntityMinecart extends Entity implements IWorldNameable {
                     }
                     //
                 }
-            } else {
+            }
+            else {
                 this.n();
             }
 
@@ -366,7 +360,8 @@ public abstract class EntityMinecart extends Entity implements IWorldNameable {
         return 0.4D;
     }
 
-    public void a(int i0, int i1, int i2, boolean flag0) {}
+    public void a(int i0, int i1, int i2, boolean flag0) {
+    }
 
     protected void n() {
         double d0 = this.m();
@@ -470,7 +465,8 @@ public abstract class EntityMinecart extends Entity implements IWorldNameable {
                 this.v *= 0.0D;
                 this.w *= 0.0D;
                 this.x *= 0.0D;
-            } else {
+            }
+            else {
                 this.v *= 0.5D;
                 this.w *= 0.0D;
                 this.x *= 0.5D;
@@ -491,10 +487,12 @@ public abstract class EntityMinecart extends Entity implements IWorldNameable {
         if (d1 == 0.0D) {
             this.s = (double) blockpos.n() + 0.5D;
             d6 = this.u - (double) blockpos.p();
-        } else if (d2 == 0.0D) {
+        }
+        else if (d2 == 0.0D) {
             this.u = (double) blockpos.p() + 0.5D;
             d6 = this.s - (double) blockpos.n();
-        } else {
+        }
+        else {
             d11 = this.s - d7;
             d12 = this.u - d8;
             d6 = (d11 * d1 + d12 * d2) * 2.0D;
@@ -517,7 +515,8 @@ public abstract class EntityMinecart extends Entity implements IWorldNameable {
         this.d(d11, 0.0D, d12);
         if (aint[0][1] != 0 && MathHelper.c(this.s) - blockpos.n() == aint[0][0] && MathHelper.c(this.u) - blockpos.p() == aint[0][2]) {
             this.b(this.s, this.t + (double) aint[0][1], this.u);
-        } else if (aint[1][1] != 0 && MathHelper.c(this.s) - blockpos.n() == aint[1][0] && MathHelper.c(this.u) - blockpos.p() == aint[1][2]) {
+        }
+        else if (aint[1][1] != 0 && MathHelper.c(this.s) - blockpos.n() == aint[1][0] && MathHelper.c(this.u) - blockpos.p() == aint[1][2]) {
             this.b(this.s, this.t + (double) aint[1][1], this.u);
         }
 
@@ -553,16 +552,20 @@ public abstract class EntityMinecart extends Entity implements IWorldNameable {
 
                 this.v += this.v / d15 * d16;
                 this.x += this.x / d15 * d16;
-            } else if (blockrailbase_enumraildirection == BlockRailBase.EnumRailDirection.EAST_WEST) {
+            }
+            else if (blockrailbase_enumraildirection == BlockRailBase.EnumRailDirection.EAST_WEST) {
                 if (this.o.p(blockpos.e()).c().t()) {
                     this.v = 0.02D;
-                } else if (this.o.p(blockpos.f()).c().t()) {
+                }
+                else if (this.o.p(blockpos.f()).c().t()) {
                     this.v = -0.02D;
                 }
-            } else if (blockrailbase_enumraildirection == BlockRailBase.EnumRailDirection.NORTH_SOUTH) {
+            }
+            else if (blockrailbase_enumraildirection == BlockRailBase.EnumRailDirection.NORTH_SOUTH) {
                 if (this.o.p(blockpos.c()).c().t()) {
                     this.x = 0.02D;
-                } else if (this.o.p(blockpos.d()).c().t()) {
+                }
+                else if (this.o.p(blockpos.d()).c().t()) {
                     this.x = -0.02D;
                 }
             }
@@ -575,7 +578,8 @@ public abstract class EntityMinecart extends Entity implements IWorldNameable {
             this.v *= 0.996999979019165D;
             this.w *= 0.0D;
             this.x *= 0.996999979019165D;
-        } else {
+        }
+        else {
             this.v *= 0.9599999785423279D;
             this.w *= 0.0D;
             this.x *= 0.9599999785423279D;
@@ -621,10 +625,12 @@ public abstract class EntityMinecart extends Entity implements IWorldNameable {
             if (d10 == 0.0D) {
                 d0 = (double) i0 + 0.5D;
                 d3 = d2 - (double) i2;
-            } else if (d12 == 0.0D) {
+            }
+            else if (d12 == 0.0D) {
                 d2 = (double) i2 + 0.5D;
                 d3 = d0 - (double) i0;
-            } else {
+            }
+            else {
                 double d13 = d0 - d4;
                 double d14 = d2 - d6;
 
@@ -643,7 +649,8 @@ public abstract class EntityMinecart extends Entity implements IWorldNameable {
             }
 
             return new Vec3(d0, d1, d2);
-        } else {
+        }
+        else {
             return null;
         }
     }
@@ -657,14 +664,17 @@ public abstract class EntityMinecart extends Entity implements IWorldNameable {
                 block = Block.b(nbttagcompound.j("DisplayTile"));
                 if (block == null) {
                     this.a(Blocks.a.P());
-                } else {
+                }
+                else {
                     this.a(block.a(i0));
                 }
-            } else {
+            }
+            else {
                 block = Block.c(nbttagcompound.f("DisplayTile"));
                 if (block == null) {
                     this.a(Blocks.a.P());
-                } else {
+                }
+                else {
                     this.a(block.a(i0));
                 }
             }
@@ -694,7 +704,7 @@ public abstract class EntityMinecart extends Entity implements IWorldNameable {
         }
     }
 
-    public void g(Entity entity) {
+    public void i(Entity entity) {
         if (!this.o.D) {
             if (!entity.T && !this.T) {
                 if (entity != this.l) {
@@ -748,44 +758,47 @@ public abstract class EntityMinecart extends Entity implements IWorldNameable {
                                 Vec3 vec31 = (new Vec3((double) MathHelper.b(this.y * 3.1415927F / 180.0F), 0.0D, (double) MathHelper.a(this.y * 3.1415927F / 180.0F))).a();
                                 double d6 = Math.abs(vec3.b(vec31));
 
-                            if (d6 < 0.800000011920929D) {
-                                return;
-                            }
+                                if (d6 < 0.800000011920929D) {
+                                    return;
+                                }
 
-                            double d7 = entity.v + this.v;
-                            double d8 = entity.x + this.x;
+                                double d7 = entity.v + this.v;
+                                double d8 = entity.x + this.x;
 
-                            if (((EntityMinecart) entity).m() == 2 && this.m() != 2) {
-                                this.v *= 0.20000000298023224D;
-                                this.x *= 0.20000000298023224D;
-                                this.g(entity.v - d0, 0.0D, entity.x - d1);
-                                entity.v *= 0.949999988079071D;
-                                entity.x *= 0.949999988079071D;
-                            } else if (((EntityMinecart) entity).m() != 2 && this.m() == 2) {
-                                entity.v *= 0.20000000298023224D;
-                                entity.x *= 0.20000000298023224D;
-                                entity.g(this.v + d0, 0.0D, this.x + d1);
-                                this.v *= 0.949999988079071D;
-                                this.x *= 0.949999988079071D;
-                            } else {
-                                d7 /= 2.0D;
-                                d8 /= 2.0D;
-                                this.v *= 0.20000000298023224D;
-                                this.x *= 0.20000000298023224D;
-                                this.g(d7 - d0, 0.0D, d8 - d1);
-                                entity.v *= 0.20000000298023224D;
-                                entity.x *= 0.20000000298023224D;
-                                entity.g(d7 + d0, 0.0D, d8 + d1);
+                                if (((EntityMinecart) entity).s() == EntityMinecart.EnumMinecartType.FURNACE && this.s() != EntityMinecart.EnumMinecartType.FURNACE) {
+                                    this.v *= 0.20000000298023224D;
+                                    this.x *= 0.20000000298023224D;
+                                    this.g(entity.v - d0, 0.0D, entity.x - d1);
+                                    entity.v *= 0.949999988079071D;
+                                    entity.x *= 0.949999988079071D;
+                                }
+                                else if (((EntityMinecart) entity).s() != EntityMinecart.EnumMinecartType.FURNACE && this.s() == EntityMinecart.EnumMinecartType.FURNACE) {
+                                    entity.v *= 0.20000000298023224D;
+                                    entity.x *= 0.20000000298023224D;
+                                    entity.g(this.v + d0, 0.0D, this.x + d1);
+                                    this.v *= 0.949999988079071D;
+                                    this.x *= 0.949999988079071D;
+                                }
+                                else {
+                                    d7 /= 2.0D;
+                                    d8 /= 2.0D;
+                                    this.v *= 0.20000000298023224D;
+                                    this.x *= 0.20000000298023224D;
+                                    this.g(d7 - d0, 0.0D, d8 - d1);
+                                    entity.v *= 0.20000000298023224D;
+                                    entity.x *= 0.20000000298023224D;
+                                    entity.g(d7 + d0, 0.0D, d8 + d1);
+                                }
                             }
-                        } else {
-                            this.g(-d0, 0.0D, -d1);
-                            entity.g(d0 / 4.0D, 0.0D, d1 / 4.0D);
+                            else {
+                                this.g(-d0, 0.0D, -d1);
+                                entity.g(d0 / 4.0D, 0.0D, d1 / 4.0D);
+                            }
                         }
                     }
                 }
             }
         }
-    }
 
     public void a(float f0) {
         this.ac.b(19, Float.valueOf(f0));
@@ -870,7 +883,8 @@ public abstract class EntityMinecart extends Entity implements IWorldNameable {
             chatcomponenttext.b().a(this.aP());
             chatcomponenttext.b().a(this.aJ().toString());
             return chatcomponenttext;
-        } else {
+        }
+        else {
             ChatComponentTranslation chatcomponenttranslation = new ChatComponentTranslation(this.d_(), new Object[0]);
 
             chatcomponenttranslation.b().a(this.aP());
@@ -886,8 +900,8 @@ public abstract class EntityMinecart extends Entity implements IWorldNameable {
         private final int i;
         private final String j;
 
-        private static final EntityMinecart.EnumMinecartType[] $VALUES = new EntityMinecart.EnumMinecartType[] { RIDEABLE, CHEST, FURNACE, TNT, SPAWNER, HOPPER, COMMAND_BLOCK};
-      
+        private static final EntityMinecart.EnumMinecartType[] $VALUES = new EntityMinecart.EnumMinecartType[]{RIDEABLE, CHEST, FURNACE, TNT, SPAWNER, HOPPER, COMMAND_BLOCK};
+
         private EnumMinecartType(String p_i45847_1_, int p_i45847_2_, int p_i45847_3_, String p_i45847_4_) {
             this.i = p_i45847_3_;
             this.j = p_i45847_4_;
@@ -926,29 +940,33 @@ public abstract class EntityMinecart extends Entity implements IWorldNameable {
         static final int[] a;
 
         static final int[] b = new int[BlockRailBase.EnumRailDirection.values().length];
-      
+
         static {
             try {
                 b[BlockRailBase.EnumRailDirection.ASCENDING_EAST.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror90) {
+            }
+            catch (NoSuchFieldError nosuchfielderror90) {
                 ;
             }
 
             try {
                 b[BlockRailBase.EnumRailDirection.ASCENDING_WEST.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror1) {
+            }
+            catch (NoSuchFieldError nosuchfielderror1) {
                 ;
             }
 
             try {
                 b[BlockRailBase.EnumRailDirection.ASCENDING_NORTH.ordinal()] = 3;
-            } catch (NoSuchFieldError nosuchfielderror2) {
+            }
+            catch (NoSuchFieldError nosuchfielderror2) {
                 ;
             }
 
             try {
                 b[BlockRailBase.EnumRailDirection.ASCENDING_SOUTH.ordinal()] = 4;
-            } catch (NoSuchFieldError nosuchfielderror3) {
+            }
+            catch (NoSuchFieldError nosuchfielderror3) {
                 ;
             }
 
@@ -956,37 +974,43 @@ public abstract class EntityMinecart extends Entity implements IWorldNameable {
 
             try {
                 a[EntityMinecart.EnumMinecartType.CHEST.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror4) {
+            }
+            catch (NoSuchFieldError nosuchfielderror4) {
                 ;
             }
 
             try {
                 a[EntityMinecart.EnumMinecartType.FURNACE.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror5) {
+            }
+            catch (NoSuchFieldError nosuchfielderror5) {
                 ;
             }
 
             try {
                 a[EntityMinecart.EnumMinecartType.TNT.ordinal()] = 3;
-            } catch (NoSuchFieldError nosuchfielderror6) {
+            }
+            catch (NoSuchFieldError nosuchfielderror6) {
                 ;
             }
 
             try {
                 a[EntityMinecart.EnumMinecartType.SPAWNER.ordinal()] = 4;
-            } catch (NoSuchFieldError nosuchfielderror7) {
+            }
+            catch (NoSuchFieldError nosuchfielderror7) {
                 ;
             }
 
             try {
                 a[EntityMinecart.EnumMinecartType.HOPPER.ordinal()] = 5;
-            } catch (NoSuchFieldError nosuchfielderror8) {
+            }
+            catch (NoSuchFieldError nosuchfielderror8) {
                 ;
             }
 
             try {
                 a[EntityMinecart.EnumMinecartType.COMMAND_BLOCK.ordinal()] = 6;
-            } catch (NoSuchFieldError nosuchfielderror9) {
+            }
+            catch (NoSuchFieldError nosuchfielderror9) {
                 ;
             }
 
