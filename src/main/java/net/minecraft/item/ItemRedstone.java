@@ -17,43 +17,15 @@ public class ItemRedstone extends Item {
         this.a(CreativeTabs.d);
     }
 
-    public boolean a(ItemStack itemstack, EntityPlayer entityplayer, World world, int i0, int i1, int i2, int i3, float f0, float f1, float f2) {
+    public boolean a(ItemStack itemstack, EntityPlayer entityplayer, World world, BlockPos blockpos, EnumFacing enumfacing, float f0, float f1, float f2) {
+        boolean flag0 = world.p(blockpos).c().f(world, blockpos);
+        BlockPos blockpos1 = flag0 ? blockpos : blockpos.a(enumfacing);
         // CanaryMod: BlockPlaceHook
         CanaryBlock clicked = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
         clicked.setFaceClicked(BlockFace.fromByte((byte) i3));
         //
 
-        if (world.a(i0, i1, i2) != Blocks.aC) {
-            if (i3 == 0) {
-                --i1;
-            }
-
-            if (i3 == 1) {
-                ++i1;
-            }
-
-            if (i3 == 2) {
-                --i2;
-            }
-
-            if (i3 == 3) {
-                ++i2;
-            }
-
-            if (i3 == 4) {
-                --i0;
-            }
-
-            if (i3 == 5) {
-                ++i0;
-            }
-
-            if (!world.c(i0, i1, i2)) {
-                return false;
-            }
-        }
-
-        if (!entityplayer.a(i0, i1, i2, i3, itemstack)) {
+        if (!entityplayer.a(blockpos1, enumfacing, itemstack)) {
             return false;
         }
         else {
@@ -65,12 +37,20 @@ public class ItemRedstone extends Item {
                 return false;
             }
             //
-            if (Blocks.af.c(world, i0, i1, i2)) {
-                --itemstack.b;
-                world.b(i0, i1, i2, (Block) Blocks.af);
-            }
 
-            return true;
+            Block block = world.p(blockpos1).c();
+
+            if (!world.a(block, blockpos1, false, enumfacing, (Entity) null, itemstack)) {
+                return false;
+            }
+            else if (Blocks.af.c(world, blockpos1)) {
+                --itemstack.b;
+                world.a(blockpos1, Blocks.af.P());
+                return true;
+            }
+            else {
+                return false;
+            }
         }
     }
 }

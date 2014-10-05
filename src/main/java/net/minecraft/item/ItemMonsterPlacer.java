@@ -3,16 +3,18 @@ package net.minecraft.item;
 import net.canarymod.api.world.blocks.BlockFace;
 import net.canarymod.api.world.blocks.CanaryBlock;
 import net.canarymod.hook.player.ItemUseHook;
-import net.minecraft.block.Block;
+import net.minecraft.block.BlockFence;
 import net.minecraft.block.BlockLiquid;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.*;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.Facing;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.StatCollector;
+import net.minecraft.init.Blocks;
+import net.minecraft.stats.StatList;
+import net.minecraft.tileentity.MobSpawnerBaseLogic;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityMobSpawner;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
 
 public class ItemMonsterPlacer extends Item {
@@ -22,9 +24,9 @@ public class ItemMonsterPlacer extends Item {
         this.a(CreativeTabs.f);
     }
 
-    public String n(ItemStack itemstack) {
+    public String a(ItemStack itemstack) {
         String s0 = ("" + StatCollector.a(this.a() + ".name")).trim();
-        String s1 = EntityList.b(itemstack.k());
+        String s1 = EntityList.b(itemstack.i());
 
         if (s1 != null) {
             s0 = s0 + " " + StatCollector.a("entity." + s1 + ".name");
@@ -33,9 +35,12 @@ public class ItemMonsterPlacer extends Item {
         return s0;
     }
 
-    public boolean a(ItemStack itemstack, EntityPlayer entityplayer, World world, int i0, int i1, int i2, int i3, float f0, float f1, float f2) {
-        if (world.E) {
+    public boolean a(ItemStack itemstack, EntityPlayer entityplayer, World world, BlockPos blockpos, EnumFacing enumfacing, float f0, float f1, float f2) {
+        if (world.D) {
             return true;
+        }
+        else if (!entityplayer.a(blockpos.a(enumfacing), enumfacing, itemstack)) {
+            return false;
         }
         else {
             // CanaryMod: ItemUse
@@ -48,25 +53,40 @@ public class ItemMonsterPlacer extends Item {
             }
             //
 
-            Block block = world.a(i0, i1, i2);
+            IBlockState iblockstate = world.p(blockpos);
 
-            i0 += Facing.b[i3];
-            i1 += Facing.c[i3];
-            i2 += Facing.d[i3];
+            if (iblockstate.c() == Blocks.ac) {
+                TileEntity tileentity = world.s(blockpos);
+
+                if (tileentity instanceof TileEntityMobSpawner) {
+                    MobSpawnerBaseLogic mobspawnerbaselogic = ((TileEntityMobSpawner) tileentity).b();
+
+                    mobspawnerbaselogic.a(EntityList.b(itemstack.i()));
+                    tileentity.o_();
+                    world.h(blockpos);
+                    if (!entityplayer.by.d) {
+                        --itemstack.b;
+                    }
+
+                    return true;
+                }
+            }
+
+            blockpos = blockpos.a(enumfacing);
             double d0 = 0.0D;
 
-            if (i3 == 1 && block.b() == 11) {
+            if (enumfacing == EnumFacing.UP && iblockstate instanceof BlockFence) {
                 d0 = 0.5D;
             }
 
-            Entity entity = a(world, itemstack.k(), (double) i0 + 0.5D, (double) i1 + d0, (double) i2 + 0.5D);
+            Entity entity = a(world, itemstack.i(), (double) blockpos.n() + 0.5D, (double) blockpos.o() + d0, (double) blockpos.p() + 0.5D);
 
             if (entity != null) {
-                if (entity instanceof EntityLivingBase && itemstack.u()) {
-                    ((EntityLiving) entity).a(itemstack.s());
+                if (entity instanceof EntityLivingBase && itemstack.s()) {
+                    entity.a(itemstack.q());
                 }
 
-                if (!entityplayer.bE.d) {
+                if (!entityplayer.by.d) {
                     --itemstack.b;
                 }
             }
@@ -76,7 +96,7 @@ public class ItemMonsterPlacer extends Item {
     }
 
     public ItemStack a(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-        if (world.E) {
+        if (world.D) {
             return itemstack;
         }
         else {
@@ -87,29 +107,29 @@ public class ItemMonsterPlacer extends Item {
             }
             else {
                 if (movingobjectposition.a == MovingObjectPosition.MovingObjectType.BLOCK) {
-                    int i0 = movingobjectposition.b;
-                    int i1 = movingobjectposition.c;
-                    int i2 = movingobjectposition.d;
+                    BlockPos blockpos = movingobjectposition.a();
 
-                    if (!world.a(entityplayer, i0, i1, i2)) {
+                    if (!world.a(entityplayer, blockpos)) {
                         return itemstack;
                     }
 
-                    if (!entityplayer.a(i0, i1, i2, movingobjectposition.e, itemstack)) {
+                    if (!entityplayer.a(blockpos, movingobjectposition.b, itemstack)) {
                         return itemstack;
                     }
 
-                    if (world.a(i0, i1, i2) instanceof BlockLiquid) {
-                        Entity entity = a(world, itemstack.k(), (double) i0, (double) i1, (double) i2);
+                    if (world.p(blockpos).c() instanceof BlockLiquid) {
+                        Entity entity = a(world, itemstack.i(), (double) blockpos.n() + 0.5D, (double) blockpos.o() + 0.5D, (double) blockpos.p() + 0.5D);
 
                         if (entity != null) {
-                            if (entity instanceof EntityLivingBase && itemstack.u()) {
-                                ((EntityLiving) entity).a(itemstack.s());
+                            if (entity instanceof EntityLivingBase && itemstack.s()) {
+                                ((EntityLiving) entity).a(itemstack.q());
                             }
 
-                            if (!entityplayer.bE.d) {
+                            if (!entityplayer.by.d) {
                                 --itemstack.b;
                             }
+
+                            entityplayer.b(StatList.J[Item.b((Item) this)]);
                         }
                     }
                 }
@@ -132,17 +152,17 @@ public class ItemMonsterPlacer extends Item {
 
             for (int i1 = 0; i1 < 1; ++i1) {
                 entity = EntityList.a(i0, world);
-                if (entity != null && entity instanceof EntityLivingBase) {
+                if (entity instanceof EntityLivingBase) {
                     EntityLiving entityliving = (EntityLiving) entity;
 
                     entity.b(d0, d1, d2, MathHelper.g(world.s.nextFloat() * 360.0F), 0.0F);
-                    entityliving.aO = entityliving.y;
-                    entityliving.aM = entityliving.y;
-                    entityliving.a((IEntityLivingData) null);
+                    entityliving.aI = entityliving.y;
+                    entityliving.aG = entityliving.y;
+                    entityliving.a(world.E(new BlockPos(entityliving)), (IEntityLivingData) null);
                     if (spawn) { // CanaryMod check if spawn is allowed
                         world.d(entity);
                     }
-                    entityliving.r();
+                    entityliving.x();
                 }
             }
 

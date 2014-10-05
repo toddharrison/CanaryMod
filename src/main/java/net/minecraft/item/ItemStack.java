@@ -19,8 +19,7 @@ import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.stats.StatList;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
 
 import java.text.DecimalFormat;
@@ -31,10 +30,14 @@ public final class ItemStack {
     public static final DecimalFormat a = new DecimalFormat("#.###");
     public int b;
     public int c;
-    private Item e;
-    public NBTTagCompound d;
+    private Item d;
+    private NBTTagCompound e;
     private int f;
     private EntityItemFrame g;
+    private Block h;
+    private boolean i;
+    private Block j;
+    private boolean k;
 
     public ItemStack(Block block) {
         this(block, 1);
@@ -57,7 +60,11 @@ public final class ItemStack {
     }
 
     public ItemStack(Item item, int i0, int i1) {
-        this.e = item;
+        this.h = null;
+        this.i = false;
+        this.j = null;
+        this.k = false;
+        this.d = item;
         this.b = i0;
         this.f = i1;
         if (this.f < 0) {
@@ -73,13 +80,17 @@ public final class ItemStack {
     }
 
     private ItemStack() {
+        this.h = null;
+        this.i = false;
+        this.j = null;
+        this.k = false;
     }
 
     public ItemStack a(int i0) {
-        ItemStack itemstack = new ItemStack(this.e, i0, this.f);
+        ItemStack itemstack = new ItemStack(this.d, i0, this.f);
 
-        if (this.d != null) {
-            itemstack.d = (NBTTagCompound) this.d.b();
+        if (this.e != null) {
+            itemstack.e = (NBTTagCompound) this.e.b();
         }
 
         this.b -= i0;
@@ -87,14 +98,14 @@ public final class ItemStack {
     }
 
     public Item b() {
-        return this.e;
+        return this.d;
     }
 
-    public boolean a(EntityPlayer entityplayer, World world, int i0, int i1, int i2, int i3, float f0, float f1, float f2) {
-        boolean flag0 = this.b().a(this, entityplayer, world, i0, i1, i2, i3, f0, f1, f2);
+    public boolean a(EntityPlayer entityplayer, World world, BlockPos blockpos, EnumFacing enumfacing, float f0, float f1, float f2) {
+        boolean flag0 = this.b().a(this, entityplayer, world, blockpos, enumfacing, f0, f1, f2);
 
         if (flag0) {
-            entityplayer.a(StatList.E[Item.b(this.e)], 1);
+            entityplayer.b(StatList.J[Item.b(this.d)]);
         }
 
         return flag0;
@@ -113,18 +124,26 @@ public final class ItemStack {
     }
 
     public NBTTagCompound b(NBTTagCompound nbttagcompound) {
-        nbttagcompound.a("id", (short) Item.b(this.e));
+        ResourceLocation resourcelocation = (ResourceLocation) Item.e.c(this.d);
+
+        nbttagcompound.a("id", resourcelocation == null ? "minecraft:air" : resourcelocation.toString());
         nbttagcompound.a("Count", (byte) this.b);
         nbttagcompound.a("Damage", (short) this.f);
-        if (this.d != null) {
-            nbttagcompound.a("tag", (NBTBase) this.d);
+        if (this.e != null) {
+            nbttagcompound.a("tag", (NBTBase) this.e);
         }
 
         return nbttagcompound;
     }
 
     public void c(NBTTagCompound nbttagcompound) {
-        this.e = Item.d(nbttagcompound.e("id"));
+        if (nbttagcompound.b("id", 8)) {
+            this.d = Item.d(nbttagcompound.j("id"));
+        }
+        else {
+            this.d = Item.b(nbttagcompound.e("id"));
+        }
+
         this.b = nbttagcompound.d("Count");
         this.f = nbttagcompound.e("Damage");
         if (this.f < 0) {
@@ -132,35 +151,39 @@ public final class ItemStack {
         }
 
         if (nbttagcompound.b("tag", 10)) {
-            this.d = nbttagcompound.m("tag");
+            this.e = nbttagcompound.m("tag");
+            if (this.d != null) {
+                this.d.a(this.e);
+            }
         }
+
     }
 
-    public int e() {
-        return this.b().m();
+    public int c() {
+        return this.b().j();
+    }
+
+    public boolean d() {
+        return this.c() > 1 && (!this.e() || !this.g());
+    }
+
+    public boolean e() {
+        return this.d == null ? false : (this.d.l() <= 0 ? false : !this.n() || !this.o().n("Unbreakable"));
     }
 
     public boolean f() {
-        return this.e() > 1 && (!this.g() || !this.i());
+        return this.d.k();
     }
 
     public boolean g() {
-        return this.e.o() <= 0 ? false : !this.p() || !this.q().n("Unbreakable");
+        return this.e() && this.f > 0;
     }
 
-    public boolean h() {
-        return this.e.n();
-    }
-
-    public boolean i() {
-        return this.g() && this.f > 0;
-    }
-
-    public int j() {
+    public int h() {
         return this.f;
     }
 
-    public int k() {
+    public int i() {
         return this.f;
     }
 
@@ -169,14 +192,15 @@ public final class ItemStack {
         if (this.f < 0) {
             this.f = 0;
         }
+
     }
 
-    public int l() {
-        return this.e.o();
+    public int j() {
+        return this.d.l();
     }
 
     public boolean a(int i0, Random random) {
-        if (!this.g()) {
+        if (!this.e()) {
             return false;
         }
         else {
@@ -197,22 +221,22 @@ public final class ItemStack {
             }
 
             this.f += i0;
-            return this.f > this.l();
+            return this.f > this.j();
         }
     }
 
     public void a(int i0, EntityLivingBase entitylivingbase) {
-        if (!(entitylivingbase instanceof EntityPlayer) || !((EntityPlayer) entitylivingbase).bE.d) {
-            if (this.g()) {
-                if (this.a(i0, entitylivingbase.aI())) {
-                    entitylivingbase.a(this);
+        if (!(entitylivingbase instanceof EntityPlayer) || !((EntityPlayer) entitylivingbase).by.d) {
+            if (this.e()) {
+                if (this.a(i0, entitylivingbase.bb())) {
+                    entitylivingbase.b(this);
                     --this.b;
                     if (entitylivingbase instanceof EntityPlayer) {
                         EntityPlayer entityplayer = (EntityPlayer) entitylivingbase;
 
-                        entityplayer.a(StatList.F[Item.b(this.e)], 1);
+                        entityplayer.b(StatList.K[Item.b(this.d)]);
                         if (this.b == 0 && this.b() instanceof ItemBow) {
-                            entityplayer.bG();
+                            entityplayer.bZ();
                         }
                     }
 
@@ -222,46 +246,49 @@ public final class ItemStack {
 
                     this.f = 0;
                 }
+
             }
         }
     }
 
     public void a(EntityLivingBase entitylivingbase, EntityPlayer entityplayer) {
-        boolean flag0 = this.e.a(this, entitylivingbase, (EntityLivingBase) entityplayer);
+        boolean flag0 = this.d.a(this, entitylivingbase, (EntityLivingBase) entityplayer);
 
         if (flag0) {
-            entityplayer.a(StatList.E[Item.b(this.e)], 1);
+            entityplayer.b(StatList.J[Item.b(this.d)]);
         }
+
     }
 
-    public void a(World world, Block block, int i0, int i1, int i2, EntityPlayer entityplayer) {
-        boolean flag0 = this.e.a(this, world, block, i0, i1, i2, entityplayer);
+    public void a(World world, Block block, BlockPos blockpos, EntityPlayer entityplayer) {
+        boolean flag0 = this.d.a(this, world, block, blockpos, entityplayer);
 
         if (flag0) {
-            entityplayer.a(StatList.E[Item.b(this.e)], 1);
+            entityplayer.b(StatList.J[Item.b(this.d)]);
         }
+
     }
 
     public boolean b(Block block) {
-        return this.e.b(block);
+        return this.d.b(block);
     }
 
     public boolean a(EntityPlayer entityplayer, EntityLivingBase entitylivingbase) {
-        return this.e.a(this, entityplayer, entitylivingbase);
+        return this.d.a(this, entityplayer, entitylivingbase);
     }
 
-    public ItemStack m() {
-        ItemStack itemstack = new ItemStack(this.e, this.b, this.f);
+    public ItemStack k() {
+        ItemStack itemstack = new ItemStack(this.d, this.b, this.f);
 
-        if (this.d != null) {
-            itemstack.d = (NBTTagCompound) this.d.b();
+        if (this.e != null) {
+            itemstack.e = (NBTTagCompound) this.e.b();
         }
 
         return itemstack;
     }
 
     public static boolean a(ItemStack itemstack, ItemStack itemstack1) {
-        return itemstack == null && itemstack1 == null ? true : (itemstack != null && itemstack1 != null ? (itemstack.d == null && itemstack1.d != null ? false : itemstack.d == null || itemstack.d.equals(itemstack1.d)) : false);
+        return itemstack == null && itemstack1 == null ? true : (itemstack != null && itemstack1 != null ? (itemstack.e == null && itemstack1.e != null ? false : itemstack.e == null || itemstack.e.equals(itemstack1.e)) : false);
     }
 
     public static boolean b(ItemStack itemstack, ItemStack itemstack1) {
@@ -269,23 +296,27 @@ public final class ItemStack {
     }
 
     private boolean d(ItemStack itemstack) {
-        return this.b != itemstack.b ? false : (this.e != itemstack.e ? false : (this.f != itemstack.f ? false : (this.d == null && itemstack.d != null ? false : this.d == null || this.d.equals(itemstack.d))));
+        return this.b != itemstack.b ? false : (this.d != itemstack.d ? false : (this.f != itemstack.f ? false : (this.e == null && itemstack.e != null ? false : this.e == null || this.e.equals(itemstack.e))));
+    }
+
+    public static boolean c(ItemStack itemstack, ItemStack itemstack1) {
+        return itemstack == null && itemstack1 == null ? true : (itemstack != null && itemstack1 != null ? itemstack.a(itemstack1) : false);
     }
 
     public boolean a(ItemStack itemstack) {
-        return this.e == itemstack.e && this.f == itemstack.f;
+        return itemstack != null && this.d == itemstack.d && this.f == itemstack.f;
     }
 
     public String a() {
-        return this.e.a(this);
+        return this.d.e_(this);
     }
 
     public static ItemStack b(ItemStack itemstack) {
-        return itemstack == null ? null : itemstack.m();
+        return itemstack == null ? null : itemstack.k();
     }
 
     public String toString() {
-        return this.b + "x" + this.e.a() + "@" + this.f;
+        return this.b + "x" + this.d.a() + "@" + this.f;
     }
 
     public void a(World world, Entity entity, int i0, boolean flag0) {
@@ -293,47 +324,62 @@ public final class ItemStack {
             --this.c;
         }
 
-        this.e.a(this, world, entity, i0, flag0);
+        this.d.a(this, world, entity, i0, flag0);
     }
 
     public void a(World world, EntityPlayer entityplayer, int i0) {
-        entityplayer.a(StatList.D[Item.b(this.e)], i0);
-        this.e.d(this, world, entityplayer);
+        entityplayer.a(StatList.I[Item.b(this.d)], i0);
+        this.d.d(this, world, entityplayer);
     }
 
-    public int n() {
-        return this.b().d_(this);
-    }
-
-    public EnumAction o() {
+    public int l() {
         return this.b().d(this);
+    }
+
+    public EnumAction m() {
+        return this.b().e(this);
     }
 
     public void b(World world, EntityPlayer entityplayer, int i0) {
         this.b().a(this, world, entityplayer, i0);
     }
 
-    public boolean p() {
-        return this.d != null;
+    public boolean n() {
+        return this.e != null;
     }
 
-    public NBTTagCompound q() {
-        return this.d;
+    public NBTTagCompound o() {
+        return this.e;
     }
 
-    public NBTTagList r() {
-        return this.d == null ? null : this.d.c("ench", 10);
+    public NBTTagCompound a(String s0, boolean flag0) {
+        if (this.e != null && this.e.b(s0, 10)) {
+            return this.e.m(s0);
+        }
+        else if (flag0) {
+            NBTTagCompound nbttagcompound = new NBTTagCompound();
+
+            this.a(s0, (NBTBase) nbttagcompound);
+            return nbttagcompound;
+        }
+        else {
+            return null;
+        }
+    }
+
+    public NBTTagList p() {
+        return this.e == null ? null : this.e.c("ench", 10);
     }
 
     public void d(NBTTagCompound nbttagcompound) {
-        this.d = nbttagcompound;
+        this.e = nbttagcompound;
     }
 
-    public String s() {
-        String s0 = this.b().n(this);
+    public String q() {
+        String s0 = this.b().a(this);
 
-        if (this.d != null && this.d.b("display", 10)) {
-            NBTTagCompound nbttagcompound = this.d.m("display");
+        if (this.e != null && this.e.b("display", 10)) {
+            NBTTagCompound nbttagcompound = this.e.m("display");
 
             if (nbttagcompound.b("Name", 8)) {
                 s0 = nbttagcompound.j("Name");
@@ -344,56 +390,57 @@ public final class ItemStack {
     }
 
     public ItemStack c(String s0) {
-        if (this.d == null) {
-            this.d = new NBTTagCompound();
+        if (this.e == null) {
+            this.e = new NBTTagCompound();
         }
 
-        if (!this.d.b("display", 10)) {
-            this.d.a("display", (NBTBase) (new NBTTagCompound()));
+        if (!this.e.b("display", 10)) {
+            this.e.a("display", (NBTBase) (new NBTTagCompound()));
         }
 
-        this.d.m("display").a("Name", s0);
+        this.e.m("display").a("Name", s0);
         return this;
     }
 
-    public void t() {
-        if (this.d != null) {
-            if (this.d.b("display", 10)) {
-                NBTTagCompound nbttagcompound = this.d.m("display");
+    public void r() {
+        if (this.e != null) {
+            if (this.e.b("display", 10)) {
+                NBTTagCompound nbttagcompound = this.e.m("display");
 
                 nbttagcompound.o("Name");
-                if (nbttagcompound.d()) {
-                    this.d.o("display");
-                    if (this.d.d()) {
+                if (nbttagcompound.c_()) {
+                    this.e.o("display");
+                    if (this.e.c_()) {
                         this.d((NBTTagCompound) null);
                     }
                 }
+
             }
         }
     }
 
-    public boolean u() {
-        return this.d == null ? false : (!this.d.b("display", 10) ? false : this.d.m("display").b("Name", 8));
+    public boolean s() {
+        return this.e == null ? false : (!this.e.b("display", 10) ? false : this.e.m("display").b("Name", 8));
     }
 
-    public EnumRarity w() {
-        return this.b().f(this);
+    public EnumRarity u() {
+        return this.b().g(this);
     }
 
-    public boolean x() {
-        return !this.b().e_(this) ? false : !this.y();
+    public boolean v() {
+        return !this.b().f_(this) ? false : !this.w();
     }
 
     public void a(Enchantment enchantment, int i0) {
-        if (this.d == null) {
+        if (this.e == null) {
             this.d(new NBTTagCompound());
         }
 
-        if (!this.d.b("ench", 9)) {
-            this.d.a("ench", (NBTBase) (new NBTTagList()));
+        if (!this.e.b("ench", 9)) {
+            this.e.a("ench", (NBTBase) (new NBTTagList()));
         }
 
-        NBTTagList nbttaglist = this.d.c("ench", 10);
+        NBTTagList nbttaglist = this.e.c("ench", 10);
         NBTTagCompound nbttagcompound = new NBTTagCompound();
 
         nbttagcompound.a("id", (short) enchantment.B);
@@ -401,23 +448,23 @@ public final class ItemStack {
         nbttaglist.a((NBTBase) nbttagcompound);
     }
 
-    public boolean y() {
-        return this.d != null && this.d.b("ench", 9);
+    public boolean w() {
+        return this.e != null && this.e.b("ench", 9);
     }
 
     public void a(String s0, NBTBase nbtbase) {
-        if (this.d == null) {
+        if (this.e == null) {
             this.d(new NBTTagCompound());
         }
 
-        this.d.a(s0, nbtbase);
+        this.e.a(s0, nbtbase);
     }
 
-    public boolean z() {
-        return this.b().v();
+    public boolean x() {
+        return this.b().s();
     }
 
-    public boolean A() {
+    public boolean y() {
         return this.g != null;
     }
 
@@ -425,61 +472,115 @@ public final class ItemStack {
         this.g = entityitemframe;
     }
 
-    public EntityItemFrame B() {
+    public EntityItemFrame z() {
         return this.g;
     }
 
-    public int C() {
-        return this.p() && this.d.b("RepairCost", 3) ? this.d.f("RepairCost") : 0;
+    public int A() {
+        return this.n() && this.e.b("RepairCost", 3) ? this.e.f("RepairCost") : 0;
     }
 
     public void c(int i0) {
-        if (!this.p()) {
-            this.d = new NBTTagCompound();
+        if (!this.n()) {
+            this.e = new NBTTagCompound();
         }
 
-        this.d.a("RepairCost", i0);
+        this.e.a("RepairCost", i0);
     }
 
-    public Multimap D() {
+    public Multimap B() {
         Object object;
 
-        if (this.p() && this.d.b("AttributeModifiers", 9)) {
+        if (this.n() && this.e.b("AttributeModifiers", 9)) {
             object = HashMultimap.create();
-            NBTTagList nbttaglist = this.d.c("AttributeModifiers", 10);
+            NBTTagList nbttaglist = this.e.c("AttributeModifiers", 10);
 
             for (int i0 = 0; i0 < nbttaglist.c(); ++i0) {
                 NBTTagCompound nbttagcompound = nbttaglist.b(i0);
                 AttributeModifier attributemodifier = SharedMonsterAttributes.a(nbttagcompound);
 
-                if (attributemodifier.a().getLeastSignificantBits() != 0L && attributemodifier.a().getMostSignificantBits() != 0L) {
+                if (attributemodifier != null && attributemodifier.a().getLeastSignificantBits() != 0L && attributemodifier.a().getMostSignificantBits() != 0L) {
                     ((Multimap) object).put(nbttagcompound.j("AttributeName"), attributemodifier);
                 }
             }
         }
         else {
-            object = this.b().k();
+            object = this.b().i();
         }
 
         return (Multimap) object;
     }
 
     public void a(Item item) {
-        this.e = item;
+        this.d = item;
     }
 
-    public IChatComponent E() {
-        IChatComponent ichatcomponent = (new ChatComponentText("[")).a(this.s()).a("]");
+    public IChatComponent C() {
+        ChatComponentText chatcomponenttext = new ChatComponentText(this.q());
 
-        if (this.e != null) {
+        if (this.s()) {
+            chatcomponenttext.b().b(Boolean.valueOf(true));
+        }
+
+        IChatComponent ichatcomponent = (new ChatComponentText("[")).a(chatcomponenttext).a("]");
+
+        if (this.d != null) {
             NBTTagCompound nbttagcompound = new NBTTagCompound();
 
             this.b(nbttagcompound);
             ichatcomponent.b().a(new HoverEvent(HoverEvent.Action.SHOW_ITEM, new ChatComponentText(nbttagcompound.toString())));
-            ichatcomponent.b().a(this.w().e);
+            ichatcomponent.b().a(this.u().e);
         }
 
         return ichatcomponent;
+    }
+
+    public boolean c(Block block) {
+        if (block == this.h) {
+            return this.i;
+        }
+        else {
+            this.h = block;
+            if (this.n() && this.e.b("CanDestroy", 9)) {
+                NBTTagList nbttaglist = this.e.c("CanDestroy", 8);
+
+                for (int i0 = 0; i0 < nbttaglist.c(); ++i0) {
+                    Block block1 = Block.b(nbttaglist.f(i0));
+
+                    if (block1 == block) {
+                        this.i = true;
+                        return true;
+                    }
+                }
+            }
+
+            this.i = false;
+            return false;
+        }
+    }
+
+    public boolean d(Block block) {
+        if (block == this.j) {
+            return this.k;
+        }
+        else {
+            this.j = block;
+            if (this.n() && this.e.b("CanPlaceOn", 9)) {
+                NBTTagList nbttaglist = this.e.c("CanPlaceOn", 8);
+
+                for (int i0 = 0; i0 < nbttaglist.c(); ++i0) {
+                    Block block1 = Block.b(nbttaglist.f(i0));
+
+                    if (block1 == block) {
+                        this.k = true;
+                        return true;
+                    }
+                }
+            }
+
+            this.k = false;
+            return false;
+        }
     }
 
     // CanaryMod

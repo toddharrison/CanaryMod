@@ -5,12 +5,13 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
+import net.minecraft.stats.StatList;
 import net.minecraft.world.World;
 
 public class ItemBucketMilk extends Item {
 
     public ItemBucketMilk() {
-        this.e(1);
+        this.c(1);
         this.a(CreativeTabs.f);
     }
 
@@ -21,30 +22,31 @@ public class ItemBucketMilk extends Item {
             return itemstack;
         }
         // For those Lactose intolerant
-        entityplayer.bQ().a(hook.getLevelGain(), hook.getSaturationGain());
+        entityplayer.ck().a(hook.getLevelGain(), hook.getSaturationGain());
         //
 
-        if (!entityplayer.bE.d) {
+        if (!entityplayer.by.d) {
             --itemstack.b;
         }
 
-        if (!world.E) {
-            entityplayer.aP();
+        if (!world.D) {
+            entityplayer.bj();
         }
 
-        return itemstack.b <= 0 ? new ItemStack(Items.ar) : itemstack;
+        entityplayer.b(StatList.J[Item.b((Item) this)]);
+        return itemstack.b <= 0 ? new ItemStack(Items.aw) : itemstack;
     }
 
-    public int d_(ItemStack itemstack) {
+    public int d(ItemStack itemstack) {
         return 32;
     }
 
-    public EnumAction d(ItemStack itemstack) {
-        return EnumAction.drink;
+    public EnumAction e(ItemStack itemstack) {
+        return EnumAction.DRINK;
     }
 
     public ItemStack a(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-        entityplayer.a(itemstack, this.d_(itemstack));
+        entityplayer.a(itemstack, this.d(itemstack));
         return itemstack;
     }
 }

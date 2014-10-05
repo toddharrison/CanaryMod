@@ -5,13 +5,16 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Multisets;
 import net.canarymod.api.inventory.CanaryMapData;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockDirt;
+import net.minecraft.block.BlockStone;
 import net.minecraft.block.material.MapColor;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S34PacketMaps;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
@@ -25,7 +28,7 @@ public class ItemMap extends ItemMapBase {
     }
 
     public MapData a(ItemStack itemstack, World world) {
-        String s0 = "map_" + itemstack.k();
+        String s0 = "map_" + itemstack.i();
         world = CanaryMapData.getMapWorld(itemstack, world); // CanaryMod: correct world
         if (world == null) {
             // Bail!
@@ -35,20 +38,17 @@ public class ItemMap extends ItemMapBase {
             return brokenMap;
         }
 
-        MapData mapdata = (MapData)world.a(MapData.class, s0);
+        MapData mapdata = (MapData) world.a(MapData.class, s0);
 
-        if (mapdata == null && !world.E) {
+        if (mapdata == null && !world.D) {
             itemstack.b(world.b("map"));
-            s0 = "map_" + itemstack.k();
+            s0 = "map_" + itemstack.i();
             mapdata = new MapData(s0);
-            mapdata.d = 3;
-            int i0 = 128 * (1 << mapdata.d);
-
-            mapdata.a = Math.round((float)world.N().c() / (float)i0) * i0;
-            mapdata.b = Math.round((float)(world.N().e() / i0)) * i0;
-            mapdata.c = (byte)world.t.i;
+            mapdata.e = 3;
+            mapdata.a((double) world.P().c(), (double) world.P().e(), mapdata.e);
+            mapdata.d = (byte) world.t.q();
             mapdata.c();
-            world.a(s0, (WorldSavedData)mapdata);
+            world.a(s0, (WorldSavedData) mapdata);
         }
 
         if (mapdata != null && mapdata.worldName.isEmpty()) {
@@ -63,93 +63,89 @@ public class ItemMap extends ItemMapBase {
             return;
         }
         //
-        if (world.t.i == mapdata.c && entity instanceof EntityPlayer) {
-            int i0 = 1 << mapdata.d;
-            int i1 = mapdata.a;
-            int i2 = mapdata.b;
-            int i3 = MathHelper.c(entity.s - (double)i1) / i0 + 64;
-            int i4 = MathHelper.c(entity.u - (double)i2) / i0 + 64;
+        if (world.t.q() == mapdata.d && entity instanceof EntityPlayer) {
+            int i0 = 1 << mapdata.e;
+            int i1 = mapdata.b;
+            int i2 = mapdata.c;
+            int i3 = MathHelper.c(entity.s - (double) i1) / i0 + 64;
+            int i4 = MathHelper.c(entity.u - (double) i2) / i0 + 64;
             int i5 = 128 / i0;
 
-            if (world.t.g) {
+            if (world.t.o()) {
                 i5 /= 2;
             }
 
-            MapData.MapInfo mapdata_mapinfo = mapdata.a((EntityPlayer)entity);
+            MapData.MapInfo mapdata_mapinfo = mapdata.a((EntityPlayer) entity);
 
-            ++mapdata_mapinfo.d;
+            ++mapdata_mapinfo.b;
+            boolean flag0 = false;
 
             for (int i6 = i3 - i5 + 1; i6 < i3 + i5; ++i6) {
-                if ((i6 & 15) == (mapdata_mapinfo.d & 15)) {
-                    int i7 = 255;
-                    int i8 = 0;
+                if ((i6 & 15) == (mapdata_mapinfo.b & 15) || flag0) {
+                    flag0 = false;
                     double d0 = 0.0D;
 
-                    for (int i9 = i4 - i5 - 1; i9 < i4 + i5; ++i9) {
-                        if (i6 >= 0 && i9 >= -1 && i6 < 128 && i9 < 128) {
-                            int i10 = i6 - i3;
-                            int i11 = i9 - i4;
-                            boolean flag0 = i10 * i10 + i11 * i11 > (i5 - 2) * (i5 - 2);
-                            int i12 = (i1 / i0 + i6 - 64) * i0;
-                            int i13 = (i2 / i0 + i9 - 64) * i0;
+                    for (int i7 = i4 - i5 - 1; i7 < i4 + i5; ++i7) {
+                        if (i6 >= 0 && i7 >= -1 && i6 < 128 && i7 < 128) {
+                            int i8 = i6 - i3;
+                            int i9 = i7 - i4;
+                            boolean flag1 = i8 * i8 + i9 * i9 > (i5 - 2) * (i5 - 2);
+                            int i10 = (i1 / i0 + i6 - 64) * i0;
+                            int i11 = (i2 / i0 + i7 - 64) * i0;
                             HashMultiset hashmultiset = HashMultiset.create();
-                            Chunk chunk = world.d(i12, i13);
+                            Chunk chunk = world.f(new BlockPos(i10, 0, i11));
 
-                            if (!chunk.g()) {
-                                int i14 = i12 & 15;
-                                int i15 = i13 & 15;
-                                int i16 = 0;
+                            if (!chunk.f()) {
+                                int i12 = i10 & 15;
+                                int i13 = i11 & 15;
+                                int i14 = 0;
                                 double d1 = 0.0D;
-                                int i17;
+                                int i15;
 
-                                if (world.t.g) {
-                                    i17 = i12 + i13 * 231871;
-                                    i17 = i17 * i17 * 31287121 + i17 * 11;
-                                    if ((i17 >> 20 & 1) == 0) {
-                                        hashmultiset.add(Blocks.d.f(0), 10);
+                                if (world.t.o()) {
+                                    i15 = i10 + i11 * 231871;
+                                    i15 = i15 * i15 * 31287121 + i15 * 11;
+                                    if ((i15 >> 20 & 1) == 0) {
+                                        hashmultiset.add(Blocks.d.g(Blocks.d.P().a(BlockDirt.a, BlockDirt.DirtType.DIRT)), 10);
                                     }
                                     else {
-                                        hashmultiset.add(Blocks.b.f(0), 100);
+                                        hashmultiset.add(Blocks.b.g(Blocks.b.P().a(BlockStone.a, BlockStone.EnumType.STONE)), 100);
                                     }
 
                                     d1 = 100.0D;
                                 }
                                 else {
-                                    for (i17 = 0; i17 < i0; ++i17) {
-                                        for (int i18 = 0; i18 < i0; ++i18) {
-                                            int i19 = chunk.b(i17 + i14, i18 + i15) + 1;
-                                            Block block = Blocks.a;
-                                            int i20 = 0;
+                                    for (i15 = 0; i15 < i0; ++i15) {
+                                        for (int i16 = 0; i16 < i0; ++i16) {
+                                            int i17 = chunk.b(i15 + i12, i16 + i13) + 1;
+                                            IBlockState iblockstate = Blocks.a.P();
 
-                                            if (i19 > 1) {
+                                            if (i17 > 1) {
                                                 do {
-                                                    --i19;
-                                                    block = chunk.a(i17 + i14, i19, i18 + i15);
-                                                    i20 = chunk.c(i17 + i14, i19, i18 + i15);
-                                                }
-                                                while (block.f(i20) == MapColor.b && i19 > 0);
+                                                    --i17;
+                                                    iblockstate = chunk.g(new BlockPos(i15 + i12, i17, i16 + i13));
+                                                } while (iblockstate.c().g(iblockstate) == MapColor.b && i17 > 0);
 
-                                                if (i19 > 0 && block.o().d()) {
-                                                    int i21 = i19 - 1;
+                                                if (i17 > 0 && iblockstate.c().r().d()) {
+                                                    int i18 = i17 - 1;
 
-                                                    Block block1;
+                                                    Block block;
 
                                                     do {
-                                                        block1 = chunk.a(i17 + i14, i21--, i18 + i15);
-                                                        ++i16;
-                                                    }
-                                                    while (i21 > 0 && block1.o().d());
+                                                        block = chunk.a(i15 + i12, i18--, i16 + i13);
+                                                        ++i14;
+                                                    } while (i18 > 0 && block.r().d());
                                                 }
                                             }
 
-                                            d1 += (double)i19 / (double)(i0 * i0);
-                                            hashmultiset.add(block.f(i20));
+                                            d1 += (double) i17 / (double) (i0 * i0);
+                                            hashmultiset.add(iblockstate.c().g(iblockstate));
                                         }
                                     }
                                 }
 
-                                i16 /= i0 * i0;
-                                double d2 = (d1 - d0) * 4.0D / (double)(i0 + 4) + ((double)(i6 + i9 & 1) - 0.5D) * 0.4D;
+                                i14 /= i0 * i0;
+                                double d2 = (d1 - d0) * 4.0D / (double) (i0 + 4) + ((double) (i6 + i7 & 1) - 0.5D) * 0.4D;
                                 byte b0 = 1;
 
                                 if (d2 > 0.6D) {
@@ -160,10 +156,10 @@ public class ItemMap extends ItemMapBase {
                                     b0 = 0;
                                 }
 
-                                MapColor mapcolor = (MapColor)Iterables.getFirst(Multisets.copyHighestCountFirst(hashmultiset), MapColor.b);
+                                MapColor mapcolor = (MapColor) Iterables.getFirst(Multisets.copyHighestCountFirst(hashmultiset), MapColor.b);
 
                                 if (mapcolor == MapColor.n) {
-                                    d2 = (double)i16 * 0.1D + (double)(i6 + i9 & 1) * 0.2D;
+                                    d2 = (double) i14 * 0.1D + (double) (i6 + i7 & 1) * 0.2D;
                                     b0 = 1;
                                     if (d2 < 0.5D) {
                                         b0 = 2;
@@ -175,36 +171,28 @@ public class ItemMap extends ItemMapBase {
                                 }
 
                                 d0 = d1;
-                                if (i9 >= 0 && i10 * i10 + i11 * i11 < i5 * i5 && (!flag0 || (i6 + i9 & 1) != 0)) {
-                                    byte b1 = mapdata.e[i6 + i9 * 128];
-                                    byte b2 = (byte)(mapcolor.M * 4 + b0);
+                                if (i7 >= 0 && i8 * i8 + i9 * i9 < i5 * i5 && (!flag1 || (i6 + i7 & 1) != 0)) {
+                                    byte b1 = mapdata.f[i6 + i7 * 128];
+                                    byte b2 = (byte) (mapcolor.M * 4 + b0);
 
                                     if (b1 != b2) {
-                                        if (i7 > i9) {
-                                            i7 = i9;
-                                        }
-
-                                        if (i8 < i9) {
-                                            i8 = i9;
-                                        }
-
-                                        mapdata.e[i6 + i9 * 128] = b2;
+                                        mapdata.f[i6 + i7 * 128] = b2;
+                                        mapdata.a(i6, i7);
+                                        flag0 = true;
                                     }
                                 }
                             }
                         }
                     }
-
-                    if (i7 <= i8) {
-                        mapdata.a(i6, i7, i8);
-                    }
                 }
             }
+
         }
     }
 
+
     public void a(ItemStack itemstack, World world, Entity entity, int i0, boolean flag0) {
-        if (!world.E) {
+        if (!world.D) {
             MapData mapdata = this.a(itemstack, world);
 
             // CanaryMod: Check mapdata for mapUpdating and fix for multiworld causing overriding maps
@@ -214,7 +202,7 @@ public class ItemMap extends ItemMapBase {
             //
 
             if (entity instanceof EntityPlayer) {
-                EntityPlayer entityplayer = (EntityPlayer)entity;
+                EntityPlayer entityplayer = (EntityPlayer) entity;
 
                 mapdata.a(entityplayer, itemstack);
             }
@@ -226,28 +214,25 @@ public class ItemMap extends ItemMapBase {
     }
 
     public Packet c(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-        byte[] abyte = this.a(itemstack, world).a(itemstack, world, entityplayer);
-
-        return abyte == null ? null : new S34PacketMaps(itemstack.k(), abyte);
+        return this.a(itemstack, world).a(itemstack, world, entityplayer);
     }
 
     public void d(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-        if (itemstack.p() && itemstack.q().n("map_is_scaling")) {
-            MapData mapdata = Items.aY.a(itemstack, world);
+        if (itemstack.n() && itemstack.o().n("map_is_scaling")) {
+            MapData mapdata = Items.bd.a(itemstack, world);
 
             itemstack.b(world.b("map"));
-            MapData mapdata1 = new MapData("map_" + itemstack.k());
+            MapData mapdata1 = new MapData("map_" + itemstack.i());
 
-            mapdata1.d = (byte)(mapdata.d + 1);
-            if (mapdata1.d > 4) {
-                mapdata1.d = 4;
+            mapdata1.e = (byte) (mapdata.e + 1);
+            if (mapdata1.e > 4) {
+                mapdata1.e = 4;
             }
 
-            mapdata1.a = mapdata.a;
-            mapdata1.b = mapdata.b;
-            mapdata1.c = mapdata.c;
+            mapdata1.a((double) mapdata.b, (double) mapdata.c, mapdata1.e);
+            mapdata1.d = mapdata.d;
             mapdata1.c();
-            world.a("map_" + itemstack.k(), (WorldSavedData)mapdata1);
+            world.a("map_" + itemstack.i(), (WorldSavedData) mapdata1);
         }
     }
 }

@@ -4,10 +4,17 @@ import net.canarymod.api.world.blocks.BlockFace;
 import net.canarymod.api.world.blocks.CanaryBlock;
 import net.canarymod.hook.player.BlockPlaceHook;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockSnow;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 public class ItemBlock extends Item {
@@ -24,55 +31,35 @@ public class ItemBlock extends Item {
         return this;
     }
 
-    public boolean a(ItemStack itemstack, EntityPlayer entityplayer, World world, int i0, int i1, int i2, int i3, float f0, float f1, float f2) {
-        Block block = world.a(i0, i1, i2);
+    public boolean a(ItemStack itemstack, EntityPlayer entityplayer, World world, BlockPos blockpos, EnumFacing enumfacing, float f0, float f1, float f2) {
+        IBlockState iblockstate = world.p(blockpos);
+        Block block = iblockstate.c();
 
         // CanaryMod: BlockPlaceHook
         CanaryBlock clicked = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
         clicked.setFaceClicked(BlockFace.fromByte((byte) i3));
         //
 
-        if (block == Blocks.aC && (world.e(i0, i1, i2) & 7) < 1) {
-            i3 = 1;
+        if (block == Blocks.aH && ((Integer) iblockstate.b(BlockSnow.a)).intValue() < 1) {
+            enumfacing = EnumFacing.UP;
         }
-        else if (block != Blocks.bd && block != Blocks.H && block != Blocks.I) {
-            if (i3 == 0) {
-                --i1;
-            }
-
-            if (i3 == 1) {
-                ++i1;
-            }
-
-            if (i3 == 2) {
-                --i2;
-            }
-
-            if (i3 == 3) {
-                ++i2;
-            }
-
-            if (i3 == 4) {
-                --i0;
-            }
-
-            if (i3 == 5) {
-                ++i0;
-            }
+        else if (!block.f(world, blockpos)) {
+            blockpos = blockpos.a(enumfacing);
         }
 
         if (itemstack.b == 0) {
             return false;
         }
-        else if (!entityplayer.a(i0, i1, i2, i3, itemstack)) {
+        else if (!entityplayer.a(blockpos, enumfacing, itemstack)) {
             return false;
         }
-        else if (i1 == 255 && this.a.o().a()) {
+        else if (blockpos.o() == 255 && this.a.r().a()) {
             return false;
         }
-        else if (world.a(this.a, i0, i1, i2, false, i3, entityplayer, itemstack)) {
-            int i4 = this.a(itemstack.k());
-            int i5 = this.a.a(world, i0, i1, i2, i3, f0, f1, f2, i4);
+        else if (world.a(this.a, blockpos, false, enumfacing, (Entity) null, itemstack)) {
+            int i0 = this.a(itemstack.i());
+            IBlockState iblockstate1 = this.a.a(world, blockpos, enumfacing, f0, f1, f2, i0, entityplayer);
+
             if (!handled) { // if ItemSlab didn't call BlockPlace
                 // set placed
                 CanaryBlock placed = new CanaryBlock((short) Block.b(this.a), (short) i5, i0, i1, i2, world.getCanaryWorld());
@@ -84,13 +71,14 @@ public class ItemBlock extends Item {
                 //
             }
 
-            if (world.d(i0, i1, i2, this.a, i5, 3)) {
-                if (world.a(i0, i1, i2) == this.a) {
-                    this.a.a(world, i0, i1, i2, (EntityLivingBase) entityplayer, itemstack);
-                    this.a.e(world, i0, i1, i2, i5);
+            if (world.a(blockpos, iblockstate1, 3)) {
+                iblockstate1 = world.p(blockpos);
+                if (iblockstate1.c() == this.a) {
+                    a(world, blockpos, itemstack);
+                    this.a.a(world, blockpos, iblockstate1, (EntityLivingBase) entityplayer, itemstack);
                 }
 
-                world.a((double) ((float) i0 + 0.5F), (double) ((float) i1 + 0.5F), (double) ((float) i2 + 0.5F), this.a.H.b(), (this.a.H.c() + 1.0F) / 2.0F, this.a.H.d() * 0.8F);
+                world.a((double) ((float) blockpos.n() + 0.5F), (double) ((float) blockpos.o() + 0.5F), (double) ((float) blockpos.p() + 0.5F), this.a.H.b(), (this.a.H.d() + 1.0F) / 2.0F, this.a.H.e() * 0.8F);
                 --itemstack.b;
             }
 
@@ -101,12 +89,42 @@ public class ItemBlock extends Item {
         }
     }
 
-    public String a(ItemStack itemstack) {
+    public static boolean a(World world, BlockPos blockpos, ItemStack itemstack) {
+        if (itemstack.n() && itemstack.o().b("BlockEntityTag", 10)) {
+            TileEntity tileentity = world.s(blockpos);
+
+            if (tileentity != null) {
+                NBTTagCompound nbttagcompound = new NBTTagCompound();
+                NBTTagCompound nbttagcompound1 = (NBTTagCompound) nbttagcompound.b();
+
+                tileentity.b(nbttagcompound);
+                NBTTagCompound nbttagcompound2 = (NBTTagCompound) itemstack.o().a("BlockEntityTag");
+
+                nbttagcompound.a(nbttagcompound2);
+                nbttagcompound.a("x", blockpos.n());
+                nbttagcompound.a("y", blockpos.o());
+                nbttagcompound.a("z", blockpos.p());
+                if (!nbttagcompound.equals(nbttagcompound1)) {
+                    tileentity.a(nbttagcompound);
+                    tileentity.o_();
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public String e_(ItemStack itemstack) {
         return this.a.a();
     }
 
     public String a() {
         return this.a.a();
+    }
+
+    public Block d() {
+        return this.a;
     }
 
     public Item c(String s0) {

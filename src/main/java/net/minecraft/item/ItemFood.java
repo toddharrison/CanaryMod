@@ -8,6 +8,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.stats.StatList;
 import net.minecraft.world.World;
 
 public class ItemFood extends Item {
@@ -16,11 +17,11 @@ public class ItemFood extends Item {
     private final int b;
     private final float c;
     private final boolean d;
-    private boolean m;
+    private boolean k;
+    private int l;
+    private int m;
     private int n;
-    private int o;
-    private int p;
-    private float q;
+    private float o;
 
     public ItemFood(int i0, float f0, boolean flag0) {
         this.a = 32;
@@ -54,7 +55,7 @@ public class ItemFood extends Item {
         EatHook hook = (EatHook) new EatHook(((EntityPlayerMP) entityplayer).getPlayer(), itemstack.getCanaryItem(), this.b, this.c, effects).call();
         if (!hook.isCanceled()) {
             --itemstack.b;
-            entityplayer.bQ().a(hook.getLevelGain(), hook.getSaturationGain());
+            entityplayer.ck().a(hook.getLevelGain(), hook.getSaturationGain());
             world.a((Entity) entityplayer, "random.burp", 0.5F, world.s.nextFloat() * 0.1F + 0.9F);
             // this.c(itemstack, world, entityplayer); moved above and below
             if (hook.getPotionEffects() != null) {
@@ -64,55 +65,58 @@ public class ItemFood extends Item {
                     }
                 }
             }
+            entityplayer.b(StatList.J[Item.b((Item) this)]);
         }
         //
+
         return itemstack;
     }
 
     protected void c(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-        if (!world.E && this.n > 0 && world.s.nextFloat() < this.q) {
-            entityplayer.c(new PotionEffect(this.n, this.o * 20, this.p));
+        if (!world.D && this.l > 0 && world.s.nextFloat() < this.o) {
+            entityplayer.c(new PotionEffect(this.l, this.m * 20, this.n));
         }
+
     }
 
-    public int d_(ItemStack itemstack) {
+    public int d(ItemStack itemstack) {
         return 32;
     }
 
-    public EnumAction d(ItemStack itemstack) {
-        return EnumAction.eat;
+    public EnumAction e(ItemStack itemstack) {
+        return EnumAction.EAT;
     }
 
     public ItemStack a(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-        if (entityplayer.g(this.m)) {
-            entityplayer.a(itemstack, this.d_(itemstack));
+        if (entityplayer.j(this.k)) {
+            entityplayer.a(itemstack, this.d(itemstack));
         }
 
         return itemstack;
     }
 
-    public int g(ItemStack itemstack) {
+    public int h(ItemStack itemstack) {
         return this.b;
     }
 
-    public float h(ItemStack itemstack) {
+    public float i(ItemStack itemstack) {
         return this.c;
     }
 
-    public boolean i() {
+    public boolean g() {
         return this.d;
     }
 
     public ItemFood a(int i0, int i1, int i2, float f0) {
-        this.n = i0;
-        this.o = i1;
-        this.p = i2;
-        this.q = f0;
+        this.l = i0;
+        this.m = i1;
+        this.n = i2;
+        this.o = f0;
         return this;
     }
 
-    public ItemFood j() {
-        this.m = true;
+    public ItemFood h() {
+        this.k = true;
         return this;
     }
 }

@@ -7,6 +7,8 @@ import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 public class ItemSeeds extends Item {
@@ -20,8 +22,11 @@ public class ItemSeeds extends Item {
         this.a(CreativeTabs.l);
     }
 
-    public boolean a(ItemStack itemstack, EntityPlayer entityplayer, World world, int i0, int i1, int i2, int i3, float f0, float f1, float f2) {
-        if (i3 != 1) {
+    public boolean a(ItemStack itemstack, EntityPlayer entityplayer, World world, BlockPos blockpos, EnumFacing enumfacing, float f0, float f1, float f2) {
+        if (enumfacing != EnumFacing.UP) {
+            return false;
+        }
+        else if (!entityplayer.a(blockpos.a(enumfacing), enumfacing, itemstack)) {
             return false;
         }
         else if (entityplayer.a(i0, i1, i2, i3, itemstack) && entityplayer.a(i0, i1 + 1, i2, i3, itemstack)) {
@@ -37,16 +42,11 @@ public class ItemSeeds extends Item {
                 }
                 //
 
-                world.b(i0, i1 + 1, i2, this.a);
+                world.a(blockpos.a(), this.a.P());
                 --itemstack.b;
                 return true;
             }
-            else {
-                return false;
-            }
         }
-        else {
-            return false;
-        }
+        return false;
     }
 }

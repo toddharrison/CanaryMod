@@ -4,12 +4,16 @@ import net.canarymod.api.world.blocks.BlockFace;
 import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.blocks.CanaryBlock;
 import net.canarymod.hook.player.BlockPlaceHook;
+import net.minecraft.block.BlockStandingSign;
+import net.minecraft.block.BlockWallSign;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntitySign;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
@@ -20,46 +24,27 @@ public class ItemSign extends Item {
         this.a(CreativeTabs.c);
     }
 
-    public boolean a(ItemStack itemstack, EntityPlayer entityplayer, World world, int i0, int i1, int i2, int i3, float f0, float f1, float f2) {
-        if (i3 == 0) {
+    public boolean a(ItemStack itemstack, EntityPlayer entityplayer, World world, BlockPos blockpos, EnumFacing enumfacing, float f0, float f1, float f2) {
+        if (enumfacing == EnumFacing.DOWN) {
             return false;
         }
-        else if (!world.a(i0, i1, i2).o().a()) {
+        else if (!world.p(blockpos).c().r().a()) {
             return false;
         }
         else {
+            blockpos = blockpos.a(enumfacing);
             // CanaryMod: BlockPlaceHook
             CanaryBlock clicked = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
             clicked.setFaceClicked(BlockFace.fromByte((byte) i3));
             //
 
-            if (i3 == 1) {
-                ++i1;
-            }
-
-            if (i3 == 2) {
-                --i2;
-            }
-
-            if (i3 == 3) {
-                ++i2;
-            }
-
-            if (i3 == 4) {
-                --i0;
-            }
-
-            if (i3 == 5) {
-                ++i0;
-            }
-
-            if (!entityplayer.a(i0, i1, i2, i3, itemstack)) {
+            if (!entityplayer.a(blockpos, enumfacing, itemstack)) {
                 return false;
             }
-            else if (!Blocks.an.c(world, i0, i1, i2)) {
+            else if (!Blocks.an.c(world, blockpos)) {
                 return false;
             }
-            else if (world.E) {
+            else if (world.D) {
                 return true;
             }
             else {
@@ -71,20 +56,20 @@ public class ItemSign extends Item {
                 }
                 //
 
-                if (i3 == 1) {
-                    int i4 = MathHelper.c((double) ((entityplayer.y + 180.0F) * 16.0F / 360.0F) + 0.5D) & 15;
+                if (enumfacing == EnumFacing.UP) {
+                    int i0 = MathHelper.c((double) ((entityplayer.y + 180.0F) * 16.0F / 360.0F) + 0.5D) & 15;
 
-                    world.d(i0, i1, i2, Blocks.an, i4, 3);
+                    world.a(blockpos, Blocks.an.P().a(BlockStandingSign.a, Integer.valueOf(i0)), 3);
                 }
                 else {
-                    world.d(i0, i1, i2, Blocks.as, i3, 3);
+                    world.a(blockpos, Blocks.ax.P().a(BlockWallSign.a, enumfacing), 3);
                 }
 
                 --itemstack.b;
-                TileEntitySign tileentitysign = (TileEntitySign) world.o(i0, i1, i2);
+                TileEntity tileentity = world.s(blockpos);
 
-                if (tileentitysign != null) {
-                    entityplayer.a((TileEntity) tileentitysign);
+                if (tileentity instanceof TileEntitySign && !ItemBlock.a(world, blockpos, itemstack)) {
+                    entityplayer.a((TileEntitySign) tileentity);
                 }
 
                 return true;
