@@ -32,15 +32,14 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSettings;
 import net.minecraft.world.WorldType;
+import net.visualillusionsent.utils.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.InetAddress;
 import java.net.Proxy;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -200,7 +199,32 @@ public class DedicatedServer extends MinecraftServer implements IServer {
             }
             // CanaryMod: Removed world-dependent settings
             this.m(cfg.getMotd());
-            this.a_(cfg.getTexturePack());
+
+            // CanaryMod: sha1 sum the resource pack
+            String rpack = cfg.getTexturePack();
+            String rpackhash = "";
+            InputStream rpackin = null;
+            try {
+                if (!rpack.isEmpty()) {
+                    URL url = new URL(cfg.getTexturePack());
+                    rpackin = url.openStream();
+                    rpackhash = new String(FileUtils.sha1sum(rpackin));
+                }
+                else {
+                    rpack = "";
+                }
+            }
+            catch (Exception ex) {
+                Canary.log.warn("There was an issue with retrieving the sha1 hash of your Resource Pack, please verify the Resource Pack setting and restart the server to enable it");
+            }
+            finally {
+                if (rpackin != null) {
+                    rpackin.close();
+                }
+            }
+            this.a_(rpack, rpackhash);
+            //
+
             this.d(cfg.getPlayerIdleTimeout());
             InetAddress inetaddress = null;
 
@@ -294,12 +318,13 @@ public class DedicatedServer extends MinecraftServer implements IServer {
             }
 
             // CanaryMod changed call to initWorld
-            this.initWorld(this.T(), i2, worldtype, net.canarymod.api.world.DimensionType.NORMAL, s3);
+            this.initWorld(this.T(), this.T(), i2, worldtype, net.canarymod.api.world.DimensionType.NORMAL, s3);
             //Load up start-up auto-load enabled worlds
             for (String name : Canary.getServer().getWorldManager().getExistingWorlds()) {
                 WorldConfiguration wCfg = Configuration.getWorldConfig(name);
                 if (wCfg.startupAutoLoadEnabled()) {
-                    this.initWorld(name.replaceAll("_(NORMAL|NETHER|END)", ""), wCfg.getWorldSeed().matches("\\d+") ? Long.valueOf(wCfg.getWorldSeed()) : wCfg.getWorldSeed().hashCode(), WorldType.a(wCfg.getWorldType().toString()), net.canarymod.api.world.DimensionType.fromName(name.replaceAll("^.+_(.+)$", "$1")), wCfg.getGeneratorSettings());
+                    String nameAdj = name.replaceAll("_(NORMAL|NETHER|END)", "");
+                    this.initWorld(nameAdj, nameAdj, wCfg.getWorldSeed().matches("\\d+") ? Long.valueOf(wCfg.getWorldSeed()) : wCfg.getWorldSeed().hashCode(), WorldType.a(wCfg.getWorldType().toString()), net.canarymod.api.world.DimensionType.fromName(name.replaceAll("^.+_(.+)$", "$1")), wCfg.getGeneratorSettings());
                 }
             }
             //
@@ -337,7 +362,7 @@ public class DedicatedServer extends MinecraftServer implements IServer {
     public void a(WorldSettings.GameType worldsettings_gametype) {
         //super.a(worldsettings_gametype);
         //this.q = worldsettings_gametype;
-        Canary.log.warn("Nope @ DedicatedServer#a(WorldSettings.GameType:330")
+        Canary.log.warn("GameType should only be changed using the World configurations");
     }
 
     @Deprecated //CanaryMod: deprecate method
