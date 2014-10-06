@@ -1,6 +1,7 @@
 package net.minecraft.item;
 
 import net.canarymod.api.world.blocks.BlockFace;
+import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.blocks.CanaryBlock;
 import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.player.BlockPlaceHook;
@@ -32,9 +33,13 @@ public class ItemSeeds extends Item {
         }
         else if (world.p(blockpos).c() == this.b && world.d(blockpos.a())) {
             // CanaryMod: BlockPlaceHook
-            CanaryBlock clicked = (CanaryBlock) world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos));
-            clicked.setFaceClicked(BlockFace.fromByte((byte) 1)); // Should be 1
-            CanaryBlock placed = new CanaryBlock((short) Block.a(this.a), (short) 0, i0, i1 + 1, i2, world.getCanaryWorld());
+            BlockPosition cbp = new BlockPosition(blockpos);
+            CanaryBlock clicked = (CanaryBlock) world.getCanaryWorld().getBlockAt(cbp);
+            BlockFace cbf = BlockFace.fromByte((byte) 1); // Its always UP
+            clicked.setFaceClicked(cbf); // Set face clicked
+            cbp = cbp.clone(); // clone the original BlockPosition
+            cbp.transform(cbf); // Adjust BlockPostiion according to clicked face
+            CanaryBlock placed = new CanaryBlock(BlockType.fromId((short) Block.a(this.a)), (short) 0, cbp, world.getCanaryWorld());
             BlockPlaceHook hook = (BlockPlaceHook) new BlockPlaceHook(((EntityPlayerMP) entityplayer).getPlayer(), clicked, placed).call();
             if (hook.isCanceled()) {
                 return false;
