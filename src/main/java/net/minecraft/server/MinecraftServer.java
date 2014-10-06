@@ -192,7 +192,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
     }
 
     // Used to initialize the "master" worlds
-    protected void initWorld(String name, String s1, long seed, WorldType nmsWt, net.canarymod.api.world.DimensionType dimType, String generatorSettings) {
+    protected void initWorld(String name, String also_name, long seed, WorldType nmsWt, net.canarymod.api.world.DimensionType dimType, String generatorSettings) {
         this.a(name); // Anvil Converter
         this.b("menu.loadingLevel");
         File worldFolder = new File("worlds/" + name);
@@ -218,19 +218,19 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
             // CanaryMod those are flatworld settings, and they are likely unset
             if (generatorSettings != null) {
                 worldsettings.a(generatorSettings);
-                worldinfo = new WorldInfo(worldsettings, s1);
-            }
-            else {
-                worldinfo.a(s1);
-                worldsettings = new WorldSettings(worldinfo);
             }
             //
+            worldinfo = new WorldInfo(worldsettings, name);
         }
         else {
-            // CanaryMod: Force game type from config
-            worldinfo.a(WorldSettings.GameType.a(config.getGameMode().getId()));
+            worldinfo.a(name);
             worldsettings = new WorldSettings(worldinfo);
         }
+
+        // CanaryMod: Force game type from config
+        worldinfo.a(WorldSettings.GameType.a(config.getGameMode().getId()));
+        // Set difficulty
+        worldinfo.a(EnumDifficulty.a(config.getDifficulty().getId()));
 
         if (this.M) {
             worldsettings.a();
@@ -255,8 +255,6 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 
         this.v.a(new WorldServer[]{ world }); // Init player data files
 
-        // this.a(this.j()); // If we call this then worlds can't do custom difficulty, plus it doesn't work
-        worldinfo.a(EnumDifficulty.a(config.getDifficulty().getId())); // Set difficulty directly based on WorldConfiguration setting
         this.k(world); // Generate terrain
         worldManager.addWorld(world.getCanaryWorld());
         new LoadWorldHook(world.getCanaryWorld()).call();
@@ -370,7 +368,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
             if (this.v != null) {
                 log.info("Saving players");
                 this.v.k();
-                this.v.v("Server shutdown");
+                this.v.v(stopMsg);
             }
 
             log.info("Saving worlds");
