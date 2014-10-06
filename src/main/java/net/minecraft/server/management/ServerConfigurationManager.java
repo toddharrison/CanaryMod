@@ -9,7 +9,6 @@ import net.canarymod.Canary;
 import net.canarymod.ToolBox;
 import net.canarymod.Translator;
 import net.canarymod.api.CanaryConfigurationManager;
-import net.canarymod.api.PlayerListEntry;
 import net.canarymod.api.entity.living.humanoid.CanaryPlayer;
 import net.canarymod.api.nbt.CanaryCompoundTag;
 import net.canarymod.api.packet.CanaryPacket;
@@ -175,7 +174,7 @@ public abstract class ServerConfigurationManager {
             this.a((IChatComponent)chatcomponenttranslation);
         }
         // CanaryMod end
-        nethandlerplayserver.a(entityplayermp.s, entityplayermp.t, entityplayermp.u, entityplayermp.y, entityplayermp.z, entityplayermp.ap, w.getName(), TeleportHook.TeleportCause.RESPAWN);
+        nethandlerplayserver.a(entityplayermp.s, entityplayermp.t, entityplayermp.u, entityplayermp.y, entityplayermp.z, entityplayermp.am, w.getName(), TeleportHook.TeleportCause.RESPAWN);
         this.b(entityplayermp, worldserver);
         if (this.j.aa().length() > 0) {
             entityplayermp.a(this.j.aa(), this.j.ab());
@@ -286,7 +285,7 @@ public abstract class ServerConfigurationManager {
     }
 
     public NBTTagCompound a(EntityPlayerMP entityplayermp) {
-        NBTTagCompound nbttagcompound = entityplayermp.getCanaryWorld().getHandle().N().i();
+        NBTTagCompound nbttagcompound = entityplayermp.getCanaryWorld().getHandle().P().i();
         NBTTagCompound nbttagcompound1;
 
         if (entityplayermp.d_().equals(this.j.R()) && nbttagcompound != null) {
@@ -330,42 +329,19 @@ public abstract class ServerConfigurationManager {
     }
 
     public void c(EntityPlayerMP entityplayermp) {
-        // CanaryMod: PlayerListEntry  (online players receiving connecting player's info for first time)
-        if (Configuration.getServerConfig().isPlayerListEnabled()) {
-            PlayerListEntry plentry = entityplayermp.getPlayer().getPlayerListEntry(true);
-            plentry.setPing(1000); // Set the ping for the initial connection
-            // Get PlayerListEntry
-            for (int i0 = 0; i0 < this.e.size(); ++i0) {
-                EntityPlayerMP entityplayermp1 = (EntityPlayerMP)this.e.get(i0);
-                // Clone the entry so that each receiver will start with the given data
-                PlayerListEntry clone = plentry.clone();
-                // Call PlayerListEntryHook
-                new PlayerListEntryHook(clone, entityplayermp1.getPlayer()).call();
-                // Send Packet
-                entityplayermp1.a.a(new S38PacketPlayerListItem(clone.getName(), clone.isShown(), 1000)); //Ping Ignored
-            }
-        }
-        //
         this.e.add(entityplayermp);
+        this.f.put(entityplayermp.aJ(), entityplayermp);
+        this.a((Packet)(new S38PacketPlayerListItem(S38PacketPlayerListItem.Action.ADD_PLAYER, entityplayermp)));
+        WorldServer worldserver = (WorldServer)entityplayermp.getCanaryWorld().getHandle(); // CanaryMod: fix //this.j.a(entityplayermp.am);
 
-        // CanaryMod: Directly use playerworld instead
-        WorldServer worldserver = (WorldServer)entityplayermp.getCanaryWorld().getHandle(); // this.e.a(entityplayermp.ar);
         worldserver.d(entityplayermp);
         this.a(entityplayermp, (WorldServer)null);
 
-        // CanaryMod: PlayerListEntry (Connecting player receiving online players)
-        if (Configuration.getServerConfig().isPlayerListEnabled()) {
-            // Get PlayerListEntry
-            for (int i0 = 0; i0 < this.e.size(); ++i0) {
-                EntityPlayerMP entityplayermp1 = (EntityPlayerMP)this.e.get(i0);
-                PlayerListEntry plentry = entityplayermp1.getPlayer().getPlayerListEntry(true);
-                // Call PlayerListEntryHook
-                new PlayerListEntryHook(plentry, entityplayermp.getPlayer()).call();
-                // Send Packet
-                entityplayermp.a.a(new S38PacketPlayerListItem(plentry.getName(), plentry.isShown(), plentry.getPing()));
-            }
+        for (int i0 = 0; i0 < this.e.size(); ++i0) {
+            EntityPlayerMP entityplayermp1 = (EntityPlayerMP)this.e.get(i0);
+
+            entityplayermp.a.a((Packet)(new S38PacketPlayerListItem(S38PacketPlayerListItem.Action.ADD_PLAYER, entityplayermp1)));
         }
-        //
     }
 
     public void d(EntityPlayerMP entityplayermp) {
@@ -388,21 +364,7 @@ public abstract class ServerConfigurationManager {
         this.f.remove(entityplayermp.aJ());
         this.o.remove(entityplayermp.aJ());
 
-        // CanaryMod: PlayerListEntry
-        if (Configuration.getServerConfig().isPlayerListEnabled()) {
-            PlayerListEntry plentry = entityplayermp.getPlayer().getPlayerListEntry(false);
-            plentry.setPing(9999); // Set the ping for the initial connection
-            for (int i0 = 0; i0 < this.e.size(); ++i0) {
-                EntityPlayerMP entityplayermp1 = (EntityPlayerMP)this.e.get(i0);
-                // Get the PlayerListEntry
-                PlayerListEntry clone = plentry.clone();
-                // Call PlayerListEntryHook
-                new PlayerListEntryHook(clone, entityplayermp1.getPlayer()).call();
-                // Send Packet
-                entityplayermp1.a.a(new S38PacketPlayerListItem(clone.getName(), clone.isShown(), clone.getPing()));
-            }
-        }
-        //
+        this.a((Packet)(new S38PacketPlayerListItem(S38PacketPlayerListItem.Action.REMOVE_PLAYER, new EntityPlayerMP[]{ entityplayermp })));
     }
 
     public String a(SocketAddress socketaddress, GameProfile gameprofile) {
@@ -615,13 +577,13 @@ public abstract class ServerConfigurationManager {
         }
 
         //sending 2 respawn packets seems to force the client to clear its chunk cache. Removes ghosting blocks
-        entityplayermp1.a.a((new S07PacketRespawn(entityplayermp1.ap, entityplayermp1.o.r, entityplayermp1.o.N().u(), entityplayermp1.c.b())));
-        entityplayermp1.a.a((new S07PacketRespawn(entityplayermp1.ap, entityplayermp1.o.r, entityplayermp1.o.N().u(), entityplayermp1.c.b())));
+        entityplayermp1.a.a((new S07PacketRespawn(entityplayermp1.am, entityplayermp1.o.aa(), entityplayermp1.o.P().u(), entityplayermp1.c.b())));
+        entityplayermp1.a.a((new S07PacketRespawn(entityplayermp1.am, entityplayermp1.o.aa(), entityplayermp1.o.P().u(), entityplayermp1.c.b())));
 
-        entityplayermp1.a.a(entityplayermp1.s, entityplayermp1.t, entityplayermp1.u, entityplayermp1.y, entityplayermp1.z, entityplayermp1.ap, worldserver.getCanaryWorld().getName(), TeleportHook.TeleportCause.RESPAWN);
+        entityplayermp1.a.a(entityplayermp1.s, entityplayermp1.t, entityplayermp1.u, entityplayermp1.y, entityplayermp1.z, entityplayermp1.am, worldserver.getCanaryWorld().getName(), TeleportHook.TeleportCause.RESPAWN);
         // ChanaryMod: Changed to use Player Coordinates instead of the give chunk coords \/
-        entityplayermp1.a.a((new S05PacketSpawnPosition((int)entityplayermp1.s, (int)entityplayermp1.t, (int)entityplayermp1.u)));
-        entityplayermp1.a.a((new S1FPacketSetExperience(entityplayermp1.bH, entityplayermp1.bG, entityplayermp1.bF)));
+        entityplayermp1.a.a((new S05PacketSpawnPosition(new BlockPos(entityplayermp1.s, entityplayermp1.t, entityplayermp1.u))));
+        entityplayermp1.a.a((new S1FPacketSetExperience(entityplayermp1.bB, entityplayermp1.bA, entityplayermp1.bz)));
         this.b(entityplayermp1, worldserver);
         worldserver.t().a(entityplayermp1);
         worldserver.d(entityplayermp1); //Tracks new entity
@@ -648,10 +610,10 @@ public abstract class ServerConfigurationManager {
 
     // XXX IMPORTANT, HERE IS DIMENSION SWITCHING GOING ON!
     public void a(EntityPlayerMP entityplayermp, String worldName, int i0) {
-        int i1 = entityplayermp.aq;
+        int i1 = entityplayermp.am;
         WorldServer worldserver = (WorldServer)entityplayermp.getCanaryWorld().getHandle();
 
-        entityplayermp.aq = i0;
+        entityplayermp.am = i0;
         net.canarymod.api.world.DimensionType type = net.canarymod.api.world.DimensionType.fromId(i0);
         WorldServer worldserver1 = (WorldServer)((CanaryWorld)Canary.getServer().getWorldManager().getWorld(worldName, type, true)).getHandle();
 
@@ -660,7 +622,7 @@ public abstract class ServerConfigurationManager {
 
         /* Force a Dimension's Default GameMode */
         if (Configuration.getWorldConfig(worldserver1.getCanaryWorld().getFqName()).forceDefaultGamemodeDimensional()) {
-            entityplayermp.c.a(worldserver1.N().r());
+            entityplayermp.c.a(worldserver1.P().r());
         }
         entityplayermp.a.a((Packet)(new S07PacketRespawn(entityplayermp.am, entityplayermp.o.aa(), entityplayermp.o.P().u(), entityplayermp.c.b())));
         worldserver.f(entityplayermp);
@@ -668,7 +630,7 @@ public abstract class ServerConfigurationManager {
         this.a(entityplayermp, i1, worldserver, worldserver1);
         this.a(entityplayermp, worldserver);
         // TP player to position
-        entityplayermp.a.a(entityplayermp.s, entityplayermp.t, entityplayermp.u, entityplayermp.y, entityplayermp.z);
+        entityplayermp.a.a(entityplayermp.s, entityplayermp.t, entityplayermp.u, entityplayermp.y, entityplayermp.z, i0, worldserver.getCanaryWorld().getName(), TeleportHook.TeleportCause.PORTAL);
         entityplayermp.c.a(worldserver1);
         this.b(entityplayermp, worldserver1);
         this.f(entityplayermp);
@@ -750,24 +712,6 @@ public abstract class ServerConfigurationManager {
                 this.a((Packet)(new S38PacketPlayerListItem(S38PacketPlayerListItem.Action.UPDATE_LATENCY, this.e)));
                 this.u = 0;
             }
-
-            // CanaryMod: PlayerListEntry
-            if (Configuration.getServerConfig().isPlayerListEnabled() && this.t < this.e.size()) {
-                EntityPlayerMP entityplayermp = (EntityPlayerMP)this.e.get(this.t);
-
-                // Get PlayerListEntry
-                PlayerListEntry plentry = entityplayermp.getPlayer().getPlayerListEntry(true);
-                for (int i0 = 0; i0 < this.e.size(); ++i0) {
-                    EntityPlayerMP entityplayermp1 = (EntityPlayerMP)this.e.get(i0);
-                    // Clone the entry so that each receiver will start with the given data
-                    PlayerListEntry clone = plentry.clone();
-                    // Call PlayerListEntryHook
-                    new PlayerListEntryHook(clone, entityplayermp1.getPlayer()).call();
-                    // Send Packet
-                    entityplayermp1.a.a(new S38PacketPlayerListItem(clone.getName(), clone.isShown(), clone.getPing()));
-                }
-            }
-            //
         }
     }
 

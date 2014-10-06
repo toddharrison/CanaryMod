@@ -358,7 +358,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, IUpdatePlaye
 
     // CanaryMod: Add dimension world teleportCause
     public void a(double d0, double d1, double d2, float f0, float f1, int dimension, String world, TeleportHook.TeleportCause cause) {
-        this.a(d0, d1, d2, f0, f1, Collections.emptySet());
+        this.a(d0, d1, d2, f0, f1, Collections.emptySet(), dimension, world, cause);
     }
 
     // CanaryMod: Add dimension world teleportCause
