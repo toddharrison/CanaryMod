@@ -9,9 +9,9 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.network.play.server.S2FPacketSetSlot;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
-
 
 public class ContainerWorkbench extends Container {
 
@@ -19,12 +19,11 @@ public class ContainerWorkbench extends Container {
     public IInventory f = new InventoryCraftResult();
     public World g; // CanaryMod: private -> public
     public BlockPos h; // CanaryMod: private -> public
- 
 
     public ContainerWorkbench(InventoryPlayer inventoryplayer, World world, BlockPos blockpos) {
         this.g = world;
         this.h = blockpos;
-        this.a((Slot) (new SlotCrafting(inventoryplayer.d, this.a, this.f, 0, 124, 35)));
+        this.a((Slot)(new SlotCrafting(inventoryplayer.d, this.a, this.f, 0, 124, 35)));
 
         int i0;
         int i1;
@@ -46,7 +45,7 @@ public class ContainerWorkbench extends Container {
         }
 
         this.inventory = new CanaryWorkbench(this); // CanaryMod: Set inventory instance
-        this.a((IInventory) this.a);
+        this.a((IInventory)this.a);
     }
 
     public void a(IInventory iinventory) {
@@ -58,15 +57,15 @@ public class ContainerWorkbench extends Container {
         }
 
         // CanaryMod: Send custom recipe results to client
-        EntityPlayerMP player = (EntityPlayerMP) this.e.get(0);
+        EntityPlayerMP player = (EntityPlayerMP)this.e.get(0);
 
         // call CraftHook
-        CraftHook hook = (CraftHook) new CraftHook(player.getPlayer(), (CanaryWorkbench) inventory, result == null ? null : result.getCanaryItem()).call();
+        CraftHook hook = (CraftHook)new CraftHook(player.getPlayer(), (CanaryWorkbench)inventory, result == null ? null : result.getCanaryItem()).call();
         if (hook.isCanceled()) {
             result = null;
         }
         else {
-            result = hook.getRecipeResult() == null ? null : ((CanaryItem) hook.getRecipeResult()).getHandle();
+            result = hook.getRecipeResult() == null ? null : ((CanaryItem)hook.getRecipeResult()).getHandle();
         }
 
         // Set custom result
@@ -86,7 +85,6 @@ public class ContainerWorkbench extends Container {
                     entityplayer.a(itemstack, false);
                 }
             }
-
         }
     }
 
@@ -97,12 +95,12 @@ public class ContainerWorkbench extends Container {
         }
         //
 
-        return this.g.p(this.h).c() != Blocks.ai ? false : entityplayer.e((double) this.h.n() + 0.5D, (double) this.h.o() + 0.5D, (double) this.h.p() + 0.5D) <= 64.0D;
+        return this.g.p(this.h).c() != Blocks.ai ? false : entityplayer.e((double)this.h.n() + 0.5D, (double)this.h.o() + 0.5D, (double)this.h.p() + 0.5D) <= 64.0D;
     }
 
     public ItemStack b(EntityPlayer entityplayer, int i0) {
         ItemStack itemstack = null;
-        Slot slot = (Slot) this.c.get(i0);
+        Slot slot = (Slot)this.c.get(i0);
 
         if (slot != null && slot.e()) {
             ItemStack itemstack1 = slot.d();
@@ -130,7 +128,7 @@ public class ContainerWorkbench extends Container {
             }
 
             if (itemstack1.b == 0) {
-                slot.d((ItemStack) null);
+                slot.d((ItemStack)null);
             }
             else {
                 slot.f();

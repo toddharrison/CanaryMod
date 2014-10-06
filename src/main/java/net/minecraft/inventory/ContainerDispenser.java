@@ -1,10 +1,8 @@
 package net.minecraft.inventory;
 
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityDispenser;
-
 
 public class ContainerDispenser extends Container {
 
@@ -32,7 +30,7 @@ public class ContainerDispenser extends Container {
             this.a(new Slot(iinventory, i0, 8 + i0 * 18, 142));
         }
 
-        this.inventory = a.getCanaryDispenser(); // CanaryMod: Set inventory instance
+        this.inventory = ((TileEntityDispenser)a).getCanaryDispenser(); // CanaryMod: Set inventory instance
     }
 
     public boolean a(EntityPlayer entityplayer) {
@@ -41,7 +39,7 @@ public class ContainerDispenser extends Container {
 
     public ItemStack b(EntityPlayer entityplayer, int i0) {
         ItemStack itemstack = null;
-        Slot slot = (Slot) this.c.get(i0);
+        Slot slot = (Slot)this.c.get(i0);
 
         if (slot != null && slot.e()) {
             ItemStack itemstack1 = slot.d();
@@ -57,7 +55,7 @@ public class ContainerDispenser extends Container {
             }
 
             if (itemstack1.b == 0) {
-                slot.d((ItemStack) null);
+                slot.d((ItemStack)null);
             }
             else {
                 slot.f();

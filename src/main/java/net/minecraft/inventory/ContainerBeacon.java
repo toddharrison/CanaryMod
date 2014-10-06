@@ -1,7 +1,6 @@
 package net.minecraft.inventory;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityBeacon;
@@ -13,7 +12,7 @@ public class ContainerBeacon extends Container {
 
     public ContainerBeacon(IInventory iinventory, IInventory iinventory1) {
         this.a = iinventory1;
-        this.a((Slot) (this.f = new ContainerBeacon.BeaconSlot(iinventory1, 0, 136, 110)));
+        this.a((Slot)(this.f = new ContainerBeacon.BeaconSlot(iinventory1, 0, 136, 110)));
         byte b0 = 36;
         short short1 = 137;
 
@@ -28,7 +27,7 @@ public class ContainerBeacon extends Container {
         for (i0 = 0; i0 < 9; ++i0) {
             this.a(new Slot(iinventory, i0, b0 + i0 * 18, 58 + short1));
         }
-        this.inventory = a.getCanaryBeacon(); // CanaryMod: Set inventory instance
+        this.inventory = ((TileEntityBeacon)a).getCanaryBeacon(); // CanaryMod: Set inventory instance
     }
 
     public void a(ICrafting icrafting) {
@@ -46,7 +45,7 @@ public class ContainerBeacon extends Container {
 
     public ItemStack b(EntityPlayer entityplayer, int i0) {
         ItemStack itemstack = null;
-        Slot slot = (Slot) this.c.get(i0);
+        Slot slot = (Slot)this.c.get(i0);
 
         if (slot != null && slot.e()) {
             ItemStack itemstack1 = slot.d();
@@ -79,7 +78,7 @@ public class ContainerBeacon extends Container {
             }
 
             if (itemstack1.b == 0) {
-                slot.d((ItemStack) null);
+                slot.d((ItemStack)null);
             }
             else {
                 slot.f();

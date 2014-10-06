@@ -1,6 +1,5 @@
 package net.minecraft.inventory;
 
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Items;
@@ -17,10 +16,10 @@ public class ContainerBrewingStand extends Container {
 
     public ContainerBrewingStand(InventoryPlayer inventoryplayer, IInventory iinventory) {
         this.a = iinventory;
-        this.a((Slot) (new ContainerBrewingStand.Potion(inventoryplayer.d, iinventory, 0, 56, 46)));
-        this.a((Slot) (new ContainerBrewingStand.Potion(inventoryplayer.d, iinventory, 1, 79, 53)));
-        this.a((Slot) (new ContainerBrewingStand.Potion(inventoryplayer.d, iinventory, 2, 102, 46)));
-        this.f = this.a((Slot) (new ContainerBrewingStand.Ingredient(iinventory, 3, 79, 17)));
+        this.a((Slot)(new ContainerBrewingStand.Potion(inventoryplayer.d, iinventory, 0, 56, 46)));
+        this.a((Slot)(new ContainerBrewingStand.Potion(inventoryplayer.d, iinventory, 1, 79, 53)));
+        this.a((Slot)(new ContainerBrewingStand.Potion(inventoryplayer.d, iinventory, 2, 102, 46)));
+        this.f = this.a((Slot)(new ContainerBrewingStand.Ingredient(iinventory, 3, 79, 17)));
 
         int i0;
 
@@ -34,7 +33,7 @@ public class ContainerBrewingStand extends Container {
             this.a(new Slot(inventoryplayer, i0, 8 + i0 * 18, 142));
         }
 
-        this.inventory = a.getCanaryBrewingStand(); // CanaryMod: Set inventory instance
+        this.inventory = ((TileEntityBrewingStand)a).getCanaryBrewingStand(); // CanaryMod: Set inventory instance
     }
 
     public void a(ICrafting icrafting) {
@@ -46,7 +45,7 @@ public class ContainerBrewingStand extends Container {
         super.b();
 
         for (int i0 = 0; i0 < this.e.size(); ++i0) {
-            ICrafting icrafting = (ICrafting) this.e.get(i0);
+            ICrafting icrafting = (ICrafting)this.e.get(i0);
 
             if (this.g != this.a.a_(0)) {
                 icrafting.a(this, 0, this.a.a_(0));
@@ -62,7 +61,7 @@ public class ContainerBrewingStand extends Container {
 
     public ItemStack b(EntityPlayer entityplayer, int i0) {
         ItemStack itemstack = null;
-        Slot slot = (Slot) this.c.get(i0);
+        Slot slot = (Slot)this.c.get(i0);
 
         if (slot != null && slot.e()) {
             ItemStack itemstack1 = slot.d();
@@ -102,7 +101,7 @@ public class ContainerBrewingStand extends Container {
             }
 
             if (itemstack1.b == 0) {
-                slot.d((ItemStack) null);
+                slot.d((ItemStack)null);
             }
             else {
                 slot.f();
@@ -141,7 +140,7 @@ public class ContainerBrewingStand extends Container {
 
         public void a(EntityPlayer p_a_1_, ItemStack p_a_2_) {
             if (p_a_2_.b() == Items.bz && p_a_2_.i() > 0) {
-                this.a.b((StatBase) AchievementList.B);
+                this.a.b((StatBase)AchievementList.B);
             }
 
             super.a(p_a_1_, p_a_2_);

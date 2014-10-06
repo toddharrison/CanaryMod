@@ -1,6 +1,7 @@
 package net.minecraft.inventory;
 
 import net.canarymod.api.inventory.Inventory;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -21,16 +22,18 @@ public class ContainerHorseInventory extends Container {
 
         this.a(new Slot(iinventory1, 0, 8, 18) {
 
-            public boolean a(ItemStack p_a_1_) {
-                return super.a(p_a_1_) && p_a_1_.b() == Items.aA && !this.e();
-            }
-        });
+                   public boolean a(ItemStack p_a_1_) {
+                       return super.a(p_a_1_) && p_a_1_.b() == Items.aA && !this.e();
+                   }
+               }
+              );
         this.a(new Slot(iinventory1, 1, 8, 36) {
 
-            public boolean a(ItemStack p_a_1_) {
-                return super.a(p_a_1_) && entityhorse.cM() && EntityHorse.a(p_a_1_.b());
-            }
-        });
+                   public boolean a(ItemStack p_a_1_) {
+                       return super.a(p_a_1_) && entityhorse.cM() && EntityHorse.a(p_a_1_.b());
+                   }
+               }
+              );
         int i1;
         int i2;
 
@@ -51,16 +54,15 @@ public class ContainerHorseInventory extends Container {
         for (i1 = 0; i1 < 9; ++i1) {
             this.a(new Slot(iinventory, i1, 8 + i1 * 18, 160 + i0));
         }
-
     }
 
     public boolean a(EntityPlayer entityplayer) {
-        return this.a.a(entityplayer) && this.f.ai() && this.f.g((Entity) entityplayer) < 8.0F;
+        return this.a.a(entityplayer) && this.f.ai() && this.f.g((Entity)entityplayer) < 8.0F;
     }
 
     public ItemStack b(EntityPlayer entityplayer, int i0) {
         ItemStack itemstack = null;
-        Slot slot = (Slot) this.c.get(i0);
+        Slot slot = (Slot)this.c.get(i0);
 
         if (slot != null && slot.e()) {
             ItemStack itemstack1 = slot.d();
@@ -86,7 +88,7 @@ public class ContainerHorseInventory extends Container {
             }
 
             if (itemstack1.b == 0) {
-                slot.d((ItemStack) null);
+                slot.d((ItemStack)null);
             }
             else {
                 slot.f();

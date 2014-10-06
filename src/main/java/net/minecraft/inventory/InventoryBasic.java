@@ -1,5 +1,6 @@
 package net.minecraft.inventory;
 
+import com.google.common.collect.Lists;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentText;
@@ -137,7 +138,7 @@ public class InventoryBasic implements IInventory {
     }
 
     public IChatComponent e_() {
-        return (IChatComponent) (this.k_() ? new ChatComponentText(this.d_()) : new ChatComponentTranslation(this.d_(), new Object[0]));
+        return (IChatComponent)(this.k_() ? new ChatComponentText(this.d_()) : new ChatComponentTranslation(this.d_(), new Object[0]));
     }
 
     public int p_() {
@@ -147,10 +148,9 @@ public class InventoryBasic implements IInventory {
     public void o_() {
         if (this.d != null) {
             for (int i0 = 0; i0 < this.d.size(); ++i0) {
-                ((IInvBasic) this.d.get(i0)).a(this);
+                ((IInvBasic)this.d.get(i0)).a(this);
             }
         }
-
     }
 
     public boolean a(EntityPlayer entityplayer) {
@@ -182,7 +182,6 @@ public class InventoryBasic implements IInventory {
         for (int i0 = 0; i0 < this.c.length; ++i0) {
             this.c[i0] = null;
         }
-
     }
 
     public void setName(String value) {

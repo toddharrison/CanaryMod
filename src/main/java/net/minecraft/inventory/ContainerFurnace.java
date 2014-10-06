@@ -1,12 +1,10 @@
 package net.minecraft.inventory;
 
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.tileentity.TileEntityFurnace;
-
 
 public class ContainerFurnace extends Container {
 
@@ -19,8 +17,8 @@ public class ContainerFurnace extends Container {
     public ContainerFurnace(InventoryPlayer inventoryplayer, IInventory iinventory) {
         this.a = iinventory;
         this.a(new Slot(iinventory, 0, 56, 17));
-        this.a((Slot) (new SlotFurnaceFuel(iinventory, 1, 56, 53)));
-        this.a((Slot) (new SlotFurnaceOutput(inventoryplayer.d, iinventory, 2, 116, 35)));
+        this.a((Slot)(new SlotFurnaceFuel(iinventory, 1, 56, 53)));
+        this.a((Slot)(new SlotFurnaceOutput(inventoryplayer.d, iinventory, 2, 116, 35)));
 
         int i0;
 
@@ -34,7 +32,7 @@ public class ContainerFurnace extends Container {
             this.a(new Slot(inventoryplayer, i0, 8 + i0 * 18, 142));
         }
 
-        this.inventory = a.getCanaryFurnace(); // CanaryMod: Set inventory instance
+        this.inventory = ((TileEntityFurnace)a).getCanaryFurnace(); // CanaryMod: Set inventory instance
     }
 
     public void a(ICrafting icrafting) {
@@ -46,7 +44,7 @@ public class ContainerFurnace extends Container {
         super.b();
 
         for (int i0 = 0; i0 < this.e.size(); ++i0) {
-            ICrafting icrafting = (ICrafting) this.e.get(i0);
+            ICrafting icrafting = (ICrafting)this.e.get(i0);
 
             if (this.f != this.a.a_(2)) {
                 icrafting.a(this, 2, this.a.a_(2));
@@ -77,7 +75,7 @@ public class ContainerFurnace extends Container {
 
     public ItemStack b(EntityPlayer entityplayer, int i0) {
         ItemStack itemstack = null;
-        Slot slot = (Slot) this.c.get(i0);
+        Slot slot = (Slot)this.c.get(i0);
 
         if (slot != null && slot.e()) {
             ItemStack itemstack1 = slot.d();
@@ -115,7 +113,7 @@ public class ContainerFurnace extends Container {
             }
 
             if (itemstack1.b == 0) {
-                slot.d((ItemStack) null);
+                slot.d((ItemStack)null);
             }
             else {
                 slot.f();

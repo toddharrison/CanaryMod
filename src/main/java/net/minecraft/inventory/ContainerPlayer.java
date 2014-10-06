@@ -13,7 +13,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
-
+import net.minecraft.network.play.server.S2FPacketSetSlot;
 
 public class ContainerPlayer extends Container {
 
@@ -25,7 +25,7 @@ public class ContainerPlayer extends Container {
     public ContainerPlayer(final InventoryPlayer inventoryplayer, boolean flag0, EntityPlayer entityplayer) {
         this.g = flag0;
         this.h = entityplayer;
-        this.a((Slot) (new SlotCrafting(inventoryplayer.d, this.a, this.f, 0, 144, 36)));
+        this.a((Slot)(new SlotCrafting(inventoryplayer.d, this.a, this.f, 0, 144, 36)));
 
         int i0;
         int i1;
@@ -40,14 +40,15 @@ public class ContainerPlayer extends Container {
             final int i00 = i0;
             this.a(new Slot(inventoryplayer, inventoryplayer.n_() - 1 - i0, 8, 8 + i0 * 18) {
 
-                public int a() {
-                    return 1;
-                }
+                       public int a() {
+                           return 1;
+                       }
 
-                public boolean a(ItemStack p_a_1_) {
-                    return p_a_1_ == null ? false : (p_a_1_.b() instanceof ItemArmor ? ((ItemArmor) p_a_1_.b()).b == i00 : (p_a_1_.b() != Item.a(Blocks.aU) && p_a_1_.b() != Items.bX ? false : i00 == 0));
-                }
-            });
+                       public boolean a(ItemStack p_a_1_) {
+                           return p_a_1_ == null ? false : (p_a_1_.b() instanceof ItemArmor ? ((ItemArmor)p_a_1_.b()).b == i00 : (p_a_1_.b() != Item.a(Blocks.aU) && p_a_1_.b() != Items.bX ? false : i00 == 0));
+                       }
+                   }
+                  );
         }
 
         for (i0 = 0; i0 < 3; ++i0) {
@@ -62,25 +63,25 @@ public class ContainerPlayer extends Container {
 
         this.inventory = this.h.getPlayerInventory(); // CanaryMod: Set inventory instance
 
-        this.a((IInventory) this.a);
+        this.a((IInventory)this.a);
     }
 
     public void a(IInventory iinventory) {
-        this.f.a(0, CraftingManager.a().a(this.a, this.h.o));
+        ItemStack result = CraftingManager.a().a(this.a, this.h.o);
 
         // CanaryMod: Send custom recipe results to client
         if (this.h.getCanaryEntity() instanceof CanaryPlayer) {
-            CraftHook hook = (CraftHook) new CraftHook(((EntityPlayerMP) this.h).getPlayer(), new CanaryPlayerCraftingMatrix(this.a), result == null ? null : result.getCanaryItem()).call();
+            CraftHook hook = (CraftHook)new CraftHook(((EntityPlayerMP)this.h).getPlayer(), new CanaryPlayerCraftingMatrix(this.a), result == null ? null : result.getCanaryItem()).call();
             if (hook.isCanceled()) {
                 result = null;
             }
             else {
-                result = hook.getRecipeResult() == null ? null : ((CanaryItem) hook.getRecipeResult()).getHandle();
+                result = hook.getRecipeResult() == null ? null : ((CanaryItem)hook.getRecipeResult()).getHandle();
             }
             // Set custom result
             this.f.a(0, result);
             // And send player custom result
-            ((EntityPlayerMP) this.h).a.a(new S2FPacketSetSlot(this.d, 0, result));
+            ((EntityPlayerMP)this.h).a.a(new S2FPacketSetSlot(this.d, 0, result));
             //
         }
     }
@@ -96,7 +97,7 @@ public class ContainerPlayer extends Container {
             }
         }
 
-        this.f.a(0, (ItemStack) null);
+        this.f.a(0, (ItemStack)null);
     }
 
     public boolean a(EntityPlayer entityplayer) {
@@ -105,7 +106,7 @@ public class ContainerPlayer extends Container {
 
     public ItemStack b(EntityPlayer entityplayer, int i0) {
         ItemStack itemstack = null;
-        Slot slot = (Slot) this.c.get(i0);
+        Slot slot = (Slot)this.c.get(i0);
 
         if (slot != null && slot.e()) {
             ItemStack itemstack1 = slot.d();
@@ -128,8 +129,8 @@ public class ContainerPlayer extends Container {
                     return null;
                 }
             }
-            else if (itemstack.b() instanceof ItemArmor && !((Slot) this.c.get(5 + ((ItemArmor) itemstack.b()).b)).e()) {
-                int i1 = 5 + ((ItemArmor) itemstack.b()).b;
+            else if (itemstack.b() instanceof ItemArmor && !((Slot)this.c.get(5 + ((ItemArmor)itemstack.b()).b)).e()) {
+                int i1 = 5 + ((ItemArmor)itemstack.b()).b;
 
                 if (!this.a(itemstack1, i1, i1 + 1, false)) {
                     return null;
@@ -150,7 +151,7 @@ public class ContainerPlayer extends Container {
             }
 
             if (itemstack1.b == 0) {
-                slot.d((ItemStack) null);
+                slot.d((ItemStack)null);
             }
             else {
                 slot.f();
