@@ -2,12 +2,10 @@ package net.minecraft.dispenser;
 
 import net.canarymod.hook.world.DispenseHook;
 import net.minecraft.block.BlockDispenser;
-import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
-import net.minecraft.dispenser.IBlockSource;
-import net.minecraft.dispenser.IPosition;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.IProjectile;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntityDispenser;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
@@ -22,7 +20,7 @@ public abstract class BehaviorProjectileDispense extends BehaviorDefaultDispense
 
         iprojectile.c((double) enumfacing.g(), (double) ((float) enumfacing.h() + 0.1F), (double) enumfacing.i(), this.b(), this.a());
         // CanaryMod: Dispense
-        DispenseHook hook = (DispenseHook) new DispenseHook(((TileEntityDispenser) iblocksource.j()).getCanaryDispenser(), ((Entity) iprojectile).getCanaryEntity()).call();
+        DispenseHook hook = (DispenseHook) new DispenseHook(((TileEntityDispenser) iblocksource.h()).getCanaryDispenser(), ((Entity) iprojectile).getCanaryEntity()).call();
         if (!hook.isCanceled()) {
             world.d((Entity) iprojectile);
             itemstack.a(1);

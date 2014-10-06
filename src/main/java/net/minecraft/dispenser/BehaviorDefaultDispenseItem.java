@@ -2,12 +2,10 @@ package net.minecraft.dispenser;
 
 import net.canarymod.hook.world.DispenseHook;
 import net.minecraft.block.BlockDispenser;
-import net.minecraft.dispenser.IBehaviorDispenseItem;
-import net.minecraft.dispenser.IBlockSource;
-import net.minecraft.dispenser.IPosition;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntityDispenser;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
@@ -25,16 +23,15 @@ public class BehaviorDefaultDispenseItem implements IBehaviorDispenseItem {
     protected ItemStack b(IBlockSource iblocksource, ItemStack itemstack) {
         EnumFacing enumfacing = BlockDispenser.b(iblocksource.f());
         IPosition iposition = BlockDispenser.a(iblocksource);
-        ItemStack itemstack1 = itemstack.a(1);
 
         // CanaryMod: Dispense
         EntityItem temp = new EntityItem(iblocksource.i(), iposition.a(), iposition.b() - 0.3D, iposition.c(), itemstack);
-        DispenseHook hook = (DispenseHook) new DispenseHook(((TileEntityDispenser) iblocksource.j()).getCanaryDispenser(), temp.getCanaryEntity()).call();
+        DispenseHook hook = (DispenseHook) new DispenseHook(((TileEntityDispenser) iblocksource.h()).getCanaryDispenser(), temp.getCanaryEntity()).call();
         if (!hook.isCanceled()) {
             ItemStack itemstack1 = itemstack.a(1);
             a(iblocksource.i(), itemstack1, 6, enumfacing, iposition);
         }
-        temp.B(); // Clear the temp EntityItem
+        temp.J(); // Clear the temp EntityItem
         //
         return itemstack;
     }
