@@ -4,9 +4,9 @@ import net.canarymod.api.entity.hanging.HangingEntity;
 import net.canarymod.hook.entity.HangingEntityDestroyHook;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRedstoneDiode;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
@@ -244,11 +244,11 @@ public abstract class EntityHanging extends Entity {
 
     // CanaryMod
     public int getTickCounter() {
-        return this.e;
+        return this.i;
     }
 
     public void setTicks(int ticks) {
-        this.e = ticks;
+        this.i = ticks;
     }
     //
 }

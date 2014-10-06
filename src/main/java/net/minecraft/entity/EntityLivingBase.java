@@ -1,5 +1,6 @@
 package net.minecraft.entity;
 
+import com.google.common.collect.Maps;
 import net.canarymod.api.CanaryDamageSource;
 import net.canarymod.api.entity.living.CanaryLivingBase;
 import net.canarymod.api.potion.CanaryPotionEffect;
@@ -11,18 +12,9 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityTracker;
-import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.BaseAttributeMap;
-import net.minecraft.entity.ai.attributes.IAttribute;
-import net.minecraft.entity.ai.attributes.IAttributeInstance;
-import net.minecraft.entity.ai.attributes.ServersideAttributeMap;
+import net.minecraft.entity.ai.attributes.*;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
-import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -31,11 +23,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagFloat;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.nbt.NBTTagShort;
+import net.minecraft.nbt.*;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S04PacketEntityEquipment;
 import net.minecraft.network.play.server.S0BPacketAnimation;
@@ -185,6 +173,7 @@ public abstract class EntityLivingBase extends Entity {
                     this.a((((CanaryDamageSource) hook.getDamageSource()).getHandle()), hook.getDamageDealt());
                 }
                 //
+            }
             else if (flag0 && !this.o.af().a(this.aQ())) {
                 double d0 = this.o.af().a((Entity) this) + this.o.af().m();
 
@@ -678,7 +667,7 @@ public abstract class EntityLivingBase extends Entity {
                         return false;
                     }
 
-                    hook.setDamageDealt((f0 - this.bb));
+                    hook.setDamageDealt((f0 - this.aV));
                     if (attacker != null) {
                         hook.call();
                     }
@@ -1231,7 +1220,6 @@ public abstract class EntityLivingBase extends Entity {
                         this.w = 0.0D;
                     }
                 }
-            }
 
                 this.d(this.v, this.w, this.x);
                 if (this.D && this.j_()) {
@@ -1641,7 +1629,7 @@ public abstract class EntityLivingBase extends Entity {
 
     //CanaryMod
     public void removeAllPotionEffects() {
-        Iterator iterator = this.f.values().iterator();
+        Iterator iterator = this.g.values().iterator();
         while (iterator.hasNext()) {
             PotionEffect potioneffect = (PotionEffect) iterator.next();
             this.b(potioneffect);

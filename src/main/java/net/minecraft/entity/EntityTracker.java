@@ -1,7 +1,8 @@
 package net.minecraft.entity;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import net.canarymod.api.CanaryEntityTracker;
-import net.canarymod.api.entity.living.humanoid.EntityNonPlayableCharacter;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.entity.boss.EntityDragon;
@@ -20,8 +21,6 @@ import net.minecraft.world.chunk.Chunk;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
@@ -156,7 +155,7 @@ public class EntityTracker {
             entity.a(crashreportcategory);
             CrashReportCategory crashreportcategory1 = crashreport.a("Entity That Is Already Tracked");
 
-            ((EntityTrackerEntry) this.d.a(entity.y())).a.a(crashreportcategory1);
+            ((EntityTrackerEntry) this.d.a(entity.F())).a.a(crashreportcategory1);
 
             try {
                 throw new ReportedException(crashreport);

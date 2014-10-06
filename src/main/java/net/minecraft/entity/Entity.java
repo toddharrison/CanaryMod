@@ -14,11 +14,7 @@ import net.canarymod.api.world.position.Vector3D;
 import net.canarymod.config.Configuration;
 import net.canarymod.hook.CancelableHook;
 import net.canarymod.hook.entity.*;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockFence;
-import net.minecraft.block.BlockFenceGate;
-import net.minecraft.block.BlockLiquid;
-import net.minecraft.block.BlockWall;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.command.CommandResultStats;
@@ -27,9 +23,6 @@ import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnchantmentProtection;
-import net.minecraft.entity.DataWatcher;
-import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.passive.EntityHorse;
@@ -40,23 +33,9 @@ import net.minecraft.event.HoverEvent;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagDouble;
-import net.minecraft.nbt.NBTTagFloat;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.*;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.IChatComponent;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.ReportedException;
-import net.minecraft.util.StatCollector;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.*;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -91,7 +70,7 @@ public abstract class Entity implements ICommandSender {
     public float z; // Pitch
     public float A; // previous Yaw
     public float B; // previous Pitch
-    public final AxisAlignedBB f;
+    private AxisAlignedBB f;
     public boolean C; // On Ground
     public boolean D;
     public boolean E;
@@ -1707,7 +1686,7 @@ public abstract class Entity implements ICommandSender {
             Location goingTo = this.simulatePortalUse(i0, worldserver1);
             CancelableHook hook = (CancelableHook) new DimensionSwitchHook(this.getCanaryEntity(), this.getCanaryEntity().getLocation(), goingTo).call();
             if (hook.isCanceled()) {
-                this.o.C.b(); //Profiler
+                this.o.B.b(); //Profiler
                 return;
             }//
 
@@ -1995,16 +1974,16 @@ public abstract class Entity implements ICommandSender {
             x *= adjust;
             z *= adjust;
         } else {
-            ChunkCoordinates ochunkcoordinates;
+            BlockPos blockpos;
 
             if (dimensionTo == 1) {
-                ochunkcoordinates = oworldserverTo.K();
+                blockpos = oworldserverTo.M();
             } else {
-                ochunkcoordinates = oworldserverTo.l();
+                blockpos = oworldserverTo.M();
             }
-            x = (double) ochunkcoordinates.a;
-            y = (double) ochunkcoordinates.b;
-            z = (double) ochunkcoordinates.c;
+            x = (double) blockpos.n();
+            y = (double) blockpos.o();
+            z = (double) blockpos.p();
             rotX = 90.0F;
             rotY = 0.0F;
         }
