@@ -36,11 +36,11 @@ public class RConThreadQuery extends RConThreadBase {
     public RConThreadQuery(IServer iserver) {
         super(iserver, "Query Listener");
         this.i = serverConfig.getQueryPort();
-        this.s = iserver.y();
-        this.j = iserver.z();
-        this.l = iserver.A();
-        this.k = iserver.D();
-        this.m = iserver.O();
+        this.s = iserver.C();
+        this.j = iserver.D();
+        this.l = iserver.E();
+        this.k = iserver.H();
+        this.m = iserver.T();
         this.w = 0L;
         this.r = "0.0.0.0";
         if (0 != this.s.length() && !this.r.equals(this.s)) {
