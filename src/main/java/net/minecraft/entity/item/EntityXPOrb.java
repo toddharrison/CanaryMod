@@ -19,7 +19,7 @@ public class EntityXPOrb extends Entity {
     private int e;
     private EntityPlayer f;
     private int g;
-   
+
     public EntityXPOrb(World world, double d0, double d1, double d2, int i0) {
         super(world);
         this.a(0.5F, 0.5F);
@@ -32,17 +32,22 @@ public class EntityXPOrb extends Entity {
         this.entity = new CanaryXPOrb(this); // CanaryMod: Wrap Entity
     }
 
-    protected boolean r_() {
-        return false;
-    }
-
     public EntityXPOrb(World world) {
         super(world);
         this.a(0.25F, 0.25F);
         this.entity = new CanaryXPOrb(this); // CanaryMod: Wrap Entity
     }
 
-    protected void h() {}
+    public static int a(int i0) {
+        return i0 >= 2477 ? 2477 : (i0 >= 1237 ? 1237 : (i0 >= 617 ? 617 : (i0 >= 307 ? 307 : (i0 >= 149 ? 149 : (i0 >= 73 ? 73 : (i0 >= 37 ? 37 : (i0 >= 17 ? 17 : (i0 >= 7 ? 7 : (i0 >= 3 ? 3 : 1)))))))));
+    }
+
+    protected boolean r_() {
+        return false;
+    }
+
+    protected void h() {
+    }
 
     public void s_() {
         super.s_();
@@ -124,7 +129,8 @@ public class EntityXPOrb extends Entity {
     public boolean a(DamageSource damagesource, float f0) {
         if (this.b(damagesource)) {
             return false;
-        } else {
+        }
+        else {
             this.ac();
             this.d = (int) ((float) this.d - f0);
             if (this.d <= 0) {
@@ -162,10 +168,6 @@ public class EntityXPOrb extends Entity {
 
     public int j() {
         return this.e;
-    }
-
-    public static int a(int i0) {
-        return i0 >= 2477 ? 2477 : (i0 >= 1237 ? 1237 : (i0 >= 617 ? 617 : (i0 >= 307 ? 307 : (i0 >= 149 ? 149 : (i0 >= 73 ? 73 : (i0 >= 37 ? 37 : (i0 >= 17 ? 17 : (i0 >= 7 ? 7 : (i0 >= 3 ? 3 : 1)))))))));
     }
 
     public boolean aE() {

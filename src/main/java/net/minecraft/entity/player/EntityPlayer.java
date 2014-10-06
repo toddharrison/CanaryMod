@@ -12,6 +12,7 @@ import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.inventory.*;
 import net.canarymod.api.nbt.CanaryCompoundTag;
 import net.canarymod.api.packet.CanaryPacket;
+import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.api.world.position.Location;
 import net.canarymod.hook.player.*;
 import net.minecraft.block.Block;
@@ -40,23 +41,24 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ContainerPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryEnderChest;
-import net.minecraft.item.EnumAction;
+import net.minecraft.item.*;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.S06PacketUpdateHealth;
 import net.minecraft.network.play.server.S12PacketEntityVelocity;
+import net.minecraft.network.play.server.S1FPacketSetExperience;
 import net.minecraft.potion.Potion;
 import net.minecraft.scoreboard.*;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.stats.AchievementList;
 import net.minecraft.stats.StatBase;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntitySign;
 import net.minecraft.util.*;
 import net.minecraft.world.*;
+import net.visualillusionsent.utils.DateUtils;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -616,7 +618,7 @@ public abstract class EntityPlayer extends EntityLivingBase {
             if (this instanceof EntityPlayerMP) { // NO NPCs
                 ItemDropHook hook = (ItemDropHook)new ItemDropHook(((EntityPlayerMP)this).getPlayer(), (net.canarymod.api.entity.EntityItem)entityitem.getCanaryEntity()).call();
                 if (!hook.isCanceled()) {
-                    CanaryItem droppedItem = entityitem.f().getCanaryItem();
+                    CanaryItem droppedItem = entityitem.l().getCanaryItem();
 
                     if (droppedItem.getAmount() < 0) {
                         droppedItem.setAmount(1);
@@ -944,8 +946,8 @@ public abstract class EntityPlayer extends EntityLivingBase {
     public void bZ() {
         // CanaryMod: ToolBrokenHook
         if (this.getCanaryHuman().isPlayer() && this.bY() != null) { // Just in case a NPC breaks a tool; and make sure there is an actual item
-            CanaryItem tool = this.bF().getCanaryItem();
-            tool.setSlot(this.bm.c);
+            CanaryItem tool = this.bY().getCanaryItem();
+            tool.setSlot(this.bi.d);
             ToolBrokenHook hook = (ToolBrokenHook)new ToolBrokenHook((Player)getCanaryHuman(), this.bY().getCanaryItem()).call();
             if (hook.getTool().getAmount() > 0) {
                 return; // A Plugin may have adjusted the tool back to normal
@@ -1124,7 +1126,7 @@ public abstract class EntityPlayer extends EntityLivingBase {
 
         // CanaryMod: BedEnterHook
         if (this.getCanaryEntity() instanceof CanaryPlayer) {
-            BedEnterHook beh = (BedEnterHook)new BedEnterHook(((EntityPlayerMP)this).getPlayer(), this.o.getCanaryWorld().getBlockAt(i0, i1, i2)).call();
+            BedEnterHook beh = (BedEnterHook)new BedEnterHook(((EntityPlayerMP)this).getPlayer(), this.o.getCanaryWorld().getBlockAt(new BlockPosition(blockpos))).call();
             if (beh.isCanceled()) {
                 return EnumStatus.OTHER_PROBLEM;
             }
@@ -1197,6 +1199,14 @@ public abstract class EntityPlayer extends EntityLivingBase {
         this.a(0.6F, 1.8F);
         IBlockState iblockstate = this.o.p(this.bv);
 
+        // CanaryMod: BedLeaveHook
+        if (this.getCanaryEntity() instanceof CanaryPlayer) {
+            net.canarymod.api.world.blocks.Block bed = this.o.getCanaryWorld().getBlockAt(new BlockPosition(this.bv));
+
+            new BedExitHook(((EntityPlayerMP)this).getPlayer(), bed).call();
+        }
+        //
+
         if (this.bv != null && iblockstate.c() == Blocks.C) {
             this.o.a(this.bv, iblockstate.a(BlockBed.b, Boolean.valueOf(false)), 4);
             BlockPos blockpos = BlockBed.a(this.o, this.bv, 0);
@@ -1212,15 +1222,6 @@ public abstract class EntityPlayer extends EntityLivingBase {
         if (!this.o.D && flag1) {
             this.o.d();
         }
-
-        // CanaryMod: BedLeaveHook
-        if (this.getCanaryEntity() instanceof CanaryPlayer) {
-            net.canarymod.api.world.blocks.Block bed = this.o.getCanaryWorld().getBlockAt(chunkcoordinates.a, chunkcoordinates.b, chunkcoordinates.c);
-
-            new BedExitHook(((EntityPlayerMP)this).getPlayer(), bed).call();
-            ;
-        }
-        //
 
         this.b = flag0 ? 0 : 100;
         if (flag2) {
@@ -1695,7 +1696,9 @@ public abstract class EntityPlayer extends EntityLivingBase {
     }
 
     public boolean t_() {
-        return MinecraftServer.M().c[0].Q().b("sendCommandFeedback");
+        // canaryMod: reroute for the right world
+        //return MinecraftServer.M().c[0].Q().b("sendCommandFeedback");
+        return o.Q().b("sendCommandFeedback");
     }
 
     public boolean d(int i0, ItemStack itemstack) {
@@ -1826,7 +1829,7 @@ public abstract class EntityPlayer extends EntityLivingBase {
     // CanaryMod
     // Start: Custom XP methods
     public void addXP(int amount) {
-        this.v(amount);
+        this.u(amount);
         updateXP();
     }
 
@@ -1835,7 +1838,7 @@ public abstract class EntityPlayer extends EntityLivingBase {
             rXp = this.bA;
         }
 
-        this.bH -= (float)rXp / (float)this.cj();
+        this.bB -= (float)rXp / (float)this.cj();
 
         // Inverse of for loop in this.t(int)
         for (this.bA -= rXp; this.bB < 0.0F; this.bB = this.bB / this.cj() + 1.0F) {
@@ -1850,7 +1853,7 @@ public abstract class EntityPlayer extends EntityLivingBase {
             this.removeXP(this.bz - i);
         }
         else {
-            this.w(i - this.bz);
+            this.u(i - this.bz);
         }
         updateXP();
     }
@@ -1873,7 +1876,7 @@ public abstract class EntityPlayer extends EntityLivingBase {
 
     private void updateXP() {
         CanaryPlayer player = ((CanaryPlayer)getCanaryEntity());
-        S1FPacketSetExperience packet = new S1FPacketSetExperience(this.bH, this.bG, this.bz);
+        S1FPacketSetExperience packet = new S1FPacketSetExperience(this.bB, this.bA, this.bz);
 
         player.sendPacket(new CanaryPacket(packet));
     }
@@ -1888,7 +1891,7 @@ public abstract class EntityPlayer extends EntityLivingBase {
     // End: Custom XP methods
     // Start: Inventory getters
     public PlayerInventory getPlayerInventory() {
-        return new CanaryPlayerInventory(bm);
+        return new CanaryPlayerInventory(bg);
     }
 
     public EnderChestInventory getEnderChestInventory() {
@@ -1902,7 +1905,7 @@ public abstract class EntityPlayer extends EntityLivingBase {
         if (metadata == null) {
             return this.d_(); // For when metadata isn't initialized yet
         }
-        return metadata.getString("CustomName").isEmpty() ? this.b_() : metadata.getString("CustomName");
+        return metadata.getString("CustomName").isEmpty() ? this.d_() : metadata.getString("CustomName");
     }
 
     public void setDisplayName(String name) {
@@ -1922,7 +1925,7 @@ public abstract class EntityPlayer extends EntityLivingBase {
             if (respawnWorld == null || respawnWorld.isEmpty()) {
                 respawnWorld = getCanaryWorld().getFqName();
             }
-            return new Location(Canary.getServer().getWorld(respawnWorld), c.a, c.b, c.c, 0, 0);
+            return new Location(Canary.getServer().getWorld(respawnWorld), c.n(), c.o(), c.p(), 0, 0);
         }
         return null;
     }
@@ -1934,11 +1937,8 @@ public abstract class EntityPlayer extends EntityLivingBase {
             return;
         }
         if (c == null) {
-            c = new ChunkCoordinates();
+            c = new BlockPos(l.getBlockX(), l.getBlockY(), l.getBlockZ());
         }
-        c.a = l.getBlockX();
-        c.b = l.getBlockY();
-        c.c = l.getBlockZ();
         respawnWorld = l.getWorld().getFqName();
     }
 

@@ -9,18 +9,9 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIControlledByPlayer;
-import net.minecraft.entity.ai.EntityAIFollowParent;
-import net.minecraft.entity.ai.EntityAILookIdle;
-import net.minecraft.entity.ai.EntityAIMate;
-import net.minecraft.entity.ai.EntityAIPanic;
-import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.ai.EntityAITempt;
-import net.minecraft.entity.ai.EntityAIWander;
-import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.ai.*;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.monster.EntityPigZombie;
-import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -36,7 +27,7 @@ import net.minecraft.world.World;
 public class EntityPig extends EntityAnimal {
 
     private final EntityAIControlledByPlayer bk;
-   
+
     public EntityPig(World world) {
         super(world);
         this.a(0.9F, 0.9F);
@@ -54,9 +45,6 @@ public class EntityPig extends EntityAnimal {
         this.entity = new CanaryPig(this); // CanaryMod: Wrap Entity
     }
 
-    public boolean bk() {
-        return true;
-    }
 
     protected void aW() {
         super.aW();
@@ -104,12 +92,14 @@ public class EntityPig extends EntityAnimal {
     public boolean a(EntityPlayer entityplayer) {
         if (super.a(entityplayer)) {
             return true;
-        } else if (this.cj() && !this.o.D && (this.l == null || this.l == entityplayer)) {
+        }
+        else if (this.cj() && !this.o.D && (this.l == null || this.l == entityplayer)) {
             // CanaryMod: VehicleEnter/VehicleExit
             CancelableHook hook;
             if (this.l == null) {
                 hook = new VehicleEnterHook((Vehicle) this.entity, entityplayer.getCanaryHuman());
-            } else {
+            }
+            else {
                 hook = new VehicleExitHook((Vehicle) this.entity, entityplayer.getCanaryHuman());
             }
             hook.call();
@@ -118,7 +108,8 @@ public class EntityPig extends EntityAnimal {
             }
             //
             return true;
-        } else {
+        }
+        else {
             return false;
         }
     }
@@ -133,7 +124,8 @@ public class EntityPig extends EntityAnimal {
         for (int i2 = 0; i2 < i1; ++i2) {
             if (this.au()) {
                 this.a(Items.am, 1);
-            } else {
+            }
+            else {
                 this.a(Items.al, 1);
             }
         }
@@ -151,7 +143,8 @@ public class EntityPig extends EntityAnimal {
     public void l(boolean flag0) {
         if (flag0) {
             this.ac.b(16, Byte.valueOf((byte) 1));
-        } else {
+        }
+        else {
             this.ac.b(16, Byte.valueOf((byte) 0));
         }
 

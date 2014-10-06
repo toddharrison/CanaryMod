@@ -4,13 +4,14 @@ import net.canarymod.api.entity.CanaryTNTPrimed;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 
 public class EntityTNTPrimed extends Entity {
 
     public int a;
     private EntityLivingBase b;
-   
+
     public EntityTNTPrimed(World world) {
         super(world);
         this.k = true;
@@ -33,7 +34,8 @@ public class EntityTNTPrimed extends Entity {
         this.b = entitylivingbase;
     }
 
-    protected void h() {}
+    protected void h() {
+    }
 
     protected boolean r_() {
         return false;
@@ -63,7 +65,8 @@ public class EntityTNTPrimed extends Entity {
             if (!this.o.D) {
                 this.l();
             }
-        } else {
+        }
+        else {
             this.W();
             this.o.a(EnumParticleTypes.SMOKE_NORMAL, this.s, this.t + 0.5D, this.u, 0.0D, 0.0D, 0.0D, new int[0]);
         }

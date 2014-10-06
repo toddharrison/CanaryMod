@@ -1,5 +1,6 @@
 package net.minecraft.entity.item;
 
+import com.google.common.collect.Lists;
 import net.canarymod.api.CanaryDamageSource;
 import net.canarymod.api.entity.CanaryFallingBlock;
 import net.canarymod.hook.entity.DamageHook;
@@ -16,20 +17,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
 
-import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.Iterator;
 
 public class EntityFallingBlock extends Entity {
 
-    private IBlockState d;
     public int a;
     public boolean b;
     public boolean e; // CanaryMod: private => public; isBreakingAnvil?
@@ -37,17 +32,14 @@ public class EntityFallingBlock extends Entity {
     public int g = 40; // CanaryMod: private -> public
     public float h = 2.0F; // CanaryMod: private -> public
     public NBTTagCompound c;
-   
+    private IBlockState d;
+
     public EntityFallingBlock(World world) {
         super(world);
         this.entity = new CanaryFallingBlock(this); // CanaryMod: Wrap Entity
     }
 
-    public EntityFallingBlock(World world, double d0, double d1, double d2, Block block) {
-        this(world, d0, d1, d2, block, 0);
-    }
-
-    public EntityFallingBlock(World world, double d0, double d1, double d2, Block block, int i0) {
+    public EntityFallingBlock(World world, double d0, double d1, double d2, IBlockState iblockstate) {
         super(world);
         this.d = iblockstate;
         this.k = true;
@@ -66,7 +58,8 @@ public class EntityFallingBlock extends Entity {
         return false;
     }
 
-    protected void h() {}
+    protected void h() {
+    }
 
     public boolean ad() {
         return !this.I;
@@ -77,7 +70,8 @@ public class EntityFallingBlock extends Entity {
 
         if (block.r() == Material.a) {
             this.J();
-        } else {
+        }
+        else {
             this.p = this.s;
             this.q = this.t;
             this.r = this.u;
@@ -87,7 +81,8 @@ public class EntityFallingBlock extends Entity {
                 blockpos = new BlockPos(this);
                 if (this.o.p(blockpos).c() == block) {
                     this.o.g(blockpos);
-                } else if (!this.o.D) {
+                }
+                else if (!this.o.D) {
                     this.J();
                     return;
                 }
@@ -133,11 +128,13 @@ public class EntityFallingBlock extends Entity {
                                     tileentity.o_();
                                 }
                             }
-                        } else if (this.b && !this.e && this.o.Q().b("doTileDrops")) {
+                        }
+                        else if (this.b && !this.e && this.o.Q().b("doTileDrops")) {
                             this.a(new ItemStack(block, 1, block.a(this.d)), 0.0F);
                         }
                     }
-                } else if (this.a > 100 && !this.o.D && (blockpos.o() < 1 || blockpos.o() > 256) || this.a > 600) {
+                }
+                else if (this.a > 100 && !this.o.D && (blockpos.o() < 1 || blockpos.o() > 256) || this.a > 600) {
                     if (this.b && this.o.Q().b("doTileDrops")) {
                         this.a(new ItemStack(block, 1, block.a(this.d)), 0.0F);
                     }
@@ -177,7 +174,8 @@ public class EntityFallingBlock extends Entity {
                     ++i1;
                     if (i1 > 2) {
                         this.e = true;
-                    } else {
+                    }
+                    else {
                         this.d = this.d.a(BlockAnvil.b, Integer.valueOf(i1));
                     }
                 }
@@ -208,9 +206,11 @@ public class EntityFallingBlock extends Entity {
 
         if (nbttagcompound.b("Block", 8)) {
             this.d = Block.b(nbttagcompound.j("Block")).a(i0);
-        } else if (nbttagcompound.b("TileID", 99)) {
+        }
+        else if (nbttagcompound.b("TileID", 99)) {
             this.d = Block.c(nbttagcompound.f("TileID")).a(i0);
-        } else {
+        }
+        else {
             this.d = Block.c(nbttagcompound.d("Tile") & 255).a(i0);
         }
 
@@ -221,7 +221,8 @@ public class EntityFallingBlock extends Entity {
             this.f = nbttagcompound.n("HurtEntities");
             this.h = nbttagcompound.h("FallHurtAmount");
             this.g = nbttagcompound.f("FallHurtMax");
-        } else if (block == Blocks.cf) {
+        }
+        else if (block == Blocks.cf) {
             this.f = true;
         }
 
@@ -259,7 +260,7 @@ public class EntityFallingBlock extends Entity {
     }
 
     // CanaryMod
-    public void setBlock(Block block) {
-        this.e = block;
+    public void setBlockState(IBlockState block) {
+        this.d = block;
     }
 }

@@ -2,7 +2,6 @@ package net.minecraft.entity.item;
 
 import net.canarymod.api.entity.CanaryEnderEye;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -25,14 +24,15 @@ public class EntityEnderEye extends Entity {
         this.entity = new CanaryEnderEye(this); // CanaryMod: Wrap Entity
     }
 
-    protected void h() {}
-
     public EntityEnderEye(World world, double d0, double d1, double d2) {
         super(world);
         this.d = 0;
         this.a(0.25F, 0.25F);
         this.b(d0, d1, d2);
         this.entity = new CanaryEnderEye(this); // CanaryMod: Wrap Entity
+    }
+
+    protected void h() {
     }
 
     public void a(BlockPos blockpos) {
@@ -47,7 +47,8 @@ public class EntityEnderEye extends Entity {
             this.a = this.s + d2 / (double) f0 * 12.0D;
             this.c = this.u + d3 / (double) f0 * 12.0D;
             this.b = this.t + 8.0D;
-        } else {
+        }
+        else {
             this.a = d0;
             this.b = (double) i0;
             this.c = d1;
@@ -103,7 +104,8 @@ public class EntityEnderEye extends Entity {
             this.x = Math.sin((double) f2) * d2;
             if (this.t < this.b) {
                 this.w += (1.0D - this.w) * 0.014999999664723873D;
-            } else {
+            }
+            else {
                 this.w += (-1.0D - this.w) * 0.014999999664723873D;
             }
         }
@@ -114,7 +116,8 @@ public class EntityEnderEye extends Entity {
             for (int i0 = 0; i0 < 4; ++i0) {
                 this.o.a(EnumParticleTypes.WATER_BUBBLE, this.s - this.v * (double) f3, this.t - this.w * (double) f3, this.u - this.x * (double) f3, this.v, this.w, this.x, new int[0]);
             }
-        } else {
+        }
+        else {
             this.o.a(EnumParticleTypes.PORTAL, this.s - this.v * (double) f3 + this.V.nextDouble() * 0.6D - 0.3D, this.t - this.w * (double) f3 - 0.5D, this.u - this.x * (double) f3 + this.V.nextDouble() * 0.6D - 0.3D, this.v, this.w, this.x, new int[0]);
         }
 
@@ -125,16 +128,19 @@ public class EntityEnderEye extends Entity {
                 this.J();
                 if (this.e) {
                     this.o.d((Entity) (new EntityItem(this.o, this.s, this.t, this.u, new ItemStack(Items.bH))));
-                } else {
+                }
+                else {
                     this.o.b(2003, new BlockPos(this), 0);
                 }
             }
         }
     }
 
-    public void b(NBTTagCompound nbttagcompound) {}
+    public void b(NBTTagCompound nbttagcompound) {
+    }
 
-    public void a(NBTTagCompound nbttagcompound) {}
+    public void a(NBTTagCompound nbttagcompound) {
+    }
 
     public float c(float f0) {
         return 1.0F;

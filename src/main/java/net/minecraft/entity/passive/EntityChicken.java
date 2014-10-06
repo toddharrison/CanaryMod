@@ -1,25 +1,14 @@
 package net.minecraft.entity.passive;
 
 import net.canarymod.api.entity.living.animal.CanaryChicken;
-import net.canarymod.api.entity.living.animal.Chicken;
-import net.canarymod.hook.entity.ChickenLayEggHook;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIFollowParent;
-import net.minecraft.entity.ai.EntityAILookIdle;
-import net.minecraft.entity.ai.EntityAIMate;
-import net.minecraft.entity.ai.EntityAIPanic;
-import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.ai.EntityAITempt;
-import net.minecraft.entity.ai.EntityAIWander;
-import net.minecraft.entity.ai.EntityAIWatchClosest;
-import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.ai.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
@@ -36,7 +25,7 @@ public class EntityChicken extends EntityAnimal {
     public float bp = 1.0F;
     public int bq;
     public boolean br;
-   
+
     public EntityChicken(World world) {
         super(world);
         this.a(0.4F, 0.7F);
@@ -86,7 +75,8 @@ public class EntityChicken extends EntityAnimal {
 
     }
 
-    public void e(float f0, float f1) {}
+    public void e(float f0, float f1) {
+    }
 
     protected String z() {
         return "mob.chicken.say";
@@ -117,7 +107,8 @@ public class EntityChicken extends EntityAnimal {
 
         if (this.au()) {
             this.a(Items.bl, 1);
-        } else {
+        }
+        else {
             this.a(Items.bk, 1);
         }
 

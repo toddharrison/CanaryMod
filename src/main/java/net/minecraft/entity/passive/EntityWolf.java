@@ -1,5 +1,6 @@
 package net.minecraft.entity.passive;
 
+import com.google.common.base.Predicate;
 import net.canarymod.api.entity.living.animal.CanaryWolf;
 import net.canarymod.hook.entity.EntityTameHook;
 import net.minecraft.block.Block;
@@ -7,28 +8,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIAttackOnCollide;
-import net.minecraft.entity.ai.EntityAIBeg;
-import net.minecraft.entity.ai.EntityAIFollowOwner;
-import net.minecraft.entity.ai.EntityAIHurtByTarget;
-import net.minecraft.entity.ai.EntityAILeapAtTarget;
-import net.minecraft.entity.ai.EntityAILookIdle;
-import net.minecraft.entity.ai.EntityAIMate;
-import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
-import net.minecraft.entity.ai.EntityAIOwnerHurtByTarget;
-import net.minecraft.entity.ai.EntityAIOwnerHurtTarget;
-import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.ai.EntityAITargetNonTamed;
-import net.minecraft.entity.ai.EntityAIWander;
-import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.ai.*;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntityGhast;
 import net.minecraft.entity.monster.EntitySkeleton;
-import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.passive.EntityHorse;
-import net.minecraft.entity.passive.EntityRabbit;
-import net.minecraft.entity.passive.EntitySheep;
-import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.EntityArrow;
@@ -45,8 +28,6 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-import com.google.common.base.Predicate;
-
 public class EntityWolf extends EntityTameable {
 
     private float bm;
@@ -55,7 +36,7 @@ public class EntityWolf extends EntityTameable {
     private boolean bp;
     private float bq;
     private float br;
-   
+
     public EntityWolf(World world) {
         super(world);
         this.a(0.6F, 0.8F);
@@ -93,7 +74,8 @@ public class EntityWolf extends EntityTameable {
         this.a(SharedMonsterAttributes.d).a(0.30000001192092896D);
         if (this.cj()) {
             this.a(SharedMonsterAttributes.a).a(20.0D);
-        } else {
+        }
+        else {
             this.a(SharedMonsterAttributes.a).a(8.0D);
         }
 
@@ -105,7 +87,8 @@ public class EntityWolf extends EntityTameable {
         super.d(entitylivingbase);
         if (entitylivingbase == null) {
             this.o(false);
-        } else if (!this.cj()) {
+        }
+        else if (!this.cj()) {
             this.o(true);
         }
 
@@ -181,7 +164,8 @@ public class EntityWolf extends EntityTameable {
         this.bn = this.bm;
         if (this.cv()) {
             this.bm += (1.0F - this.bm) * 0.4F;
-        } else {
+        }
+        else {
             this.bm += (0.0F - this.bm) * 0.4F;
         }
 
@@ -190,7 +174,8 @@ public class EntityWolf extends EntityTameable {
             this.bp = false;
             this.bq = 0.0F;
             this.br = 0.0F;
-        } else if ((this.bo || this.bp) && this.bp) {
+        }
+        else if ((this.bo || this.bp) && this.bp) {
             if (this.bq == 0.0F) {
                 this.a("mob.wolf.shake", this.bA(), (this.V.nextFloat() - this.V.nextFloat()) * 0.2F + 1.0F);
             }
@@ -230,7 +215,8 @@ public class EntityWolf extends EntityTameable {
     public boolean a(DamageSource damagesource, float f0) {
         if (this.b(damagesource)) {
             return false;
-        } else {
+        }
+        else {
             Entity entity = damagesource.j();
 
             this.bk.a(false);
@@ -256,7 +242,8 @@ public class EntityWolf extends EntityTameable {
         super.m(flag0);
         if (flag0) {
             this.a(SharedMonsterAttributes.a).a(20.0D);
-        } else {
+        }
+        else {
             this.a(SharedMonsterAttributes.a).a(8.0D);
         }
 
@@ -283,7 +270,8 @@ public class EntityWolf extends EntityTameable {
 
                         return true;
                     }
-                } else if (itemstack.b() == Items.aW) {
+                }
+                else if (itemstack.b() == Items.aW) {
                     EnumDyeColor enumdyecolor = EnumDyeColor.a(itemstack.i());
 
                     if (enumdyecolor != this.cu()) {
@@ -303,7 +291,8 @@ public class EntityWolf extends EntityTameable {
                 this.h.n();
                 this.d((EntityLivingBase) null);
             }
-        } else if (itemstack != null && itemstack.b() == Items.aX && !this.ct()) {
+        }
+        else if (itemstack != null && itemstack.b() == Items.aX && !this.ct()) {
             if (!entityplayer.by.d) {
                 --itemstack.b;
             }
@@ -326,7 +315,8 @@ public class EntityWolf extends EntityTameable {
                     this.b(entityplayer.aJ().toString());
                     this.l(true);
                     this.o.a((Entity) this, (byte) 7);
-                } else {
+                }
+                else {
                     this.l(false);
                     this.o.a((Entity) this, (byte) 6);
                 }
@@ -355,7 +345,8 @@ public class EntityWolf extends EntityTameable {
 
         if (flag0) {
             this.ac.b(16, Byte.valueOf((byte) (b0 | 2)));
-        } else {
+        }
+        else {
             this.ac.b(16, Byte.valueOf((byte) (b0 & -3)));
         }
 
@@ -384,7 +375,8 @@ public class EntityWolf extends EntityTameable {
     public void p(boolean flag0) {
         if (flag0) {
             this.ac.b(19, Byte.valueOf((byte) 1));
-        } else {
+        }
+        else {
             this.ac.b(19, Byte.valueOf((byte) 0));
         }
 
@@ -393,11 +385,14 @@ public class EntityWolf extends EntityTameable {
     public boolean a(EntityAnimal entityanimal) {
         if (entityanimal == this) {
             return false;
-        } else if (!this.cj()) {
+        }
+        else if (!this.cj()) {
             return false;
-        } else if (!(entityanimal instanceof EntityWolf)) {
+        }
+        else if (!(entityanimal instanceof EntityWolf)) {
             return false;
-        } else {
+        }
+        else {
             EntityWolf entitywolf = (EntityWolf) entityanimal;
 
             return !entitywolf.cj() ? false : (entitywolf.cl() ? false : this.cp() && entitywolf.cp());
@@ -423,7 +418,8 @@ public class EntityWolf extends EntityTameable {
             }
 
             return entitylivingbase instanceof EntityPlayer && entitylivingbase1 instanceof EntityPlayer && !((EntityPlayer) entitylivingbase1).a((EntityPlayer) entitylivingbase) ? false : !(entitylivingbase instanceof EntityHorse) || !((EntityHorse) entitylivingbase).cm();
-        } else {
+        }
+        else {
             return false;
         }
     }

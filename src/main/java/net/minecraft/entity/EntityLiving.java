@@ -891,9 +891,11 @@ public abstract class EntityLiving extends EntityLivingBase {
 
         ON_GROUND("ON_GROUND", 0), IN_AIR("IN_AIR", 1), IN_WATER("IN_WATER", 2);
 
-        private static final EntityLiving.SpawnPlacementType[] $VALUES = new EntityLiving.SpawnPlacementType[] { ON_GROUND, IN_AIR, IN_WATER};
-      
-        private SpawnPlacementType(String p_i45893_1_, int p_i45893_2_) {}
+        private static final EntityLiving.SpawnPlacementType[] $VALUES = new EntityLiving.SpawnPlacementType[]{ON_GROUND, IN_AIR, IN_WATER};
+
+        private SpawnPlacementType(String p_i45893_1_, int p_i45893_2_) {
+        }
+    }
 
     // CanaryMod
     public float getDropChanceForSlot(int slot) {

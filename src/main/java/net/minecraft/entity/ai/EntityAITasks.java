@@ -1,24 +1,20 @@
 package net.minecraft.entity.ai;
 
-import net.canarymod.api.ai.CanaryAIManager;
 import com.google.common.collect.Lists;
-import java.util.Iterator;
-import java.util.List;
-import net.minecraft.entity.ai.EntityAIBase;
+import net.canarymod.api.ai.CanaryAIManager;
 import net.minecraft.profiler.Profiler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 public class EntityAITasks {
 
     private static final Logger a = LogManager.getLogger();
+    private final Profiler d;
     public List b = Lists.newArrayList(); // CanaryMod: private -> public
     public List c = Lists.newArrayList(); // CanaryMod: private -> public
-    private final Profiler d;
     private int e;
     private int f = 3;
     // CanaryMod: our variables
@@ -77,7 +73,8 @@ public class EntityAITasks {
                     this.c.add(entityaitasks_entityaitaskentry);
                 }
             }
-        } else {
+        }
+        else {
             iterator = this.c.iterator();
 
             while (iterator.hasNext()) {
@@ -118,7 +115,8 @@ public class EntityAITasks {
                     if (!this.a(entityaitasks_entityaitaskentry, entityaitasks_entityaitaskentry1) && this.c.contains(entityaitasks_entityaitaskentry1)) {
                         return false;
                     }
-                } else if (!entityaitasks_entityaitaskentry1.a.i() && this.c.contains(entityaitasks_entityaitaskentry1)) {
+                }
+                else if (!entityaitasks_entityaitaskentry1.a.i() && this.c.contains(entityaitasks_entityaitaskentry1)) {
                     return false;
                 }
             }
@@ -131,18 +129,18 @@ public class EntityAITasks {
         return (entityaitasks_entityaitaskentry.a.j() & entityaitasks_entityaitaskentry1.a.j()) == 0;
     }
 
+    public CanaryAIManager getAIManager() {
+        return this.manager;
+    }
+
     class EntityAITaskEntry {
 
         public EntityAIBase a;
         public int b;
-      
+
         public EntityAITaskEntry(int p_i1627_2_, EntityAIBase p_i1627_3_) {
             this.b = p_i1627_2_;
             this.a = p_i1627_3_;
         }
-    }
-
-    public CanaryAIManager getAIManager() {
-        return this.manager;
     }
 }

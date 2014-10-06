@@ -1,5 +1,6 @@
 package net.minecraft.entity.passive;
 
+import com.google.common.base.Predicate;
 import net.canarymod.api.entity.living.animal.CanaryHorse;
 import net.canarymod.api.entity.vehicle.Vehicle;
 import net.canarymod.hook.CancelableHook;
@@ -7,23 +8,11 @@ import net.canarymod.hook.entity.VehicleEnterHook;
 import net.canarymod.hook.entity.VehicleExitHook;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityAgeable;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.IEntityLivingData;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIFollowParent;
-import net.minecraft.entity.ai.EntityAILookIdle;
-import net.minecraft.entity.ai.EntityAIMate;
-import net.minecraft.entity.ai.EntityAIPanic;
-import net.minecraft.entity.ai.EntityAIRunAroundLikeCrazy;
-import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.ai.EntityAIWander;
-import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.*;
+import net.minecraft.entity.ai.*;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
-import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -61,23 +50,23 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
         }
     };
     private static final IAttribute br = (new RangedAttribute((IAttribute) null, "horse.jumpStrength", 0.7D, 0.0D, 2.0D)).a("Jump Strength").a(true);
-    private static final String[] bs = new String[] { null, "textures/entity/horse/armor/horse_armor_iron.png", "textures/entity/horse/armor/horse_armor_gold.png", "textures/entity/horse/armor/horse_armor_diamond.png"};
-    private static final String[] bt = new String[] { "", "meo", "goo", "dio"};
-    private static final int[] bu = new int[] { 0, 5, 7, 11};
-    private static final String[] bv = new String[] { "textures/entity/horse/horse_white.png", "textures/entity/horse/horse_creamy.png", "textures/entity/horse/horse_chestnut.png", "textures/entity/horse/horse_brown.png", "textures/entity/horse/horse_black.png", "textures/entity/horse/horse_gray.png", "textures/entity/horse/horse_darkbrown.png"};
-    private static final String[] bw = new String[] { "hwh", "hcr", "hch", "hbr", "hbl", "hgr", "hdb"};
-    private static final String[] bx = new String[] { null, "textures/entity/horse/horse_markings_white.png", "textures/entity/horse/horse_markings_whitefield.png", "textures/entity/horse/horse_markings_whitedots.png", "textures/entity/horse/horse_markings_blackdots.png"};
-    private static final String[] by = new String[] { "", "wo_", "wmo", "wdo", "bdo"};
-    private int bz;
-    private int bA;
-    private int bB;
+    private static final String[] bs = new String[]{null, "textures/entity/horse/armor/horse_armor_iron.png", "textures/entity/horse/armor/horse_armor_gold.png", "textures/entity/horse/armor/horse_armor_diamond.png"};
+    private static final String[] bt = new String[]{"", "meo", "goo", "dio"};
+    private static final int[] bu = new int[]{0, 5, 7, 11};
+    private static final String[] bv = new String[]{"textures/entity/horse/horse_white.png", "textures/entity/horse/horse_creamy.png", "textures/entity/horse/horse_chestnut.png", "textures/entity/horse/horse_brown.png", "textures/entity/horse/horse_black.png", "textures/entity/horse/horse_gray.png", "textures/entity/horse/horse_darkbrown.png"};
+    private static final String[] bw = new String[]{"hwh", "hcr", "hch", "hbr", "hbl", "hgr", "hdb"};
+    private static final String[] bx = new String[]{null, "textures/entity/horse/horse_markings_white.png", "textures/entity/horse/horse_markings_whitefield.png", "textures/entity/horse/horse_markings_whitedots.png", "textures/entity/horse/horse_markings_blackdots.png"};
+    private static final String[] by = new String[]{"", "wo_", "wmo", "wdo", "bdo"};
     public int bk;
     public int bm;
     protected boolean bn;
-    private AnimalChest bC; // CanaryMod: private => public
-    private boolean bD;
     protected int bo;
     protected float bp;
+    private int bz;
+    private int bA;
+    private int bB;
+    private AnimalChest bC; // CanaryMod: private => public
+    private boolean bD;
     private boolean bE;
     private float bF;
     private float bG;
@@ -89,7 +78,7 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
     private String bM;
     private String[] bN = new String[3];
     private boolean bO = false;
-   
+
     public EntityHorse(World world) {
         super(world);
         this.a(1.4F, 1.6F);
@@ -106,6 +95,10 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
         this.i.a(8, new EntityAILookIdle(this));
         this.cY();
         this.entity = new CanaryHorse(this); // CanaryMod: wrap entity
+    }
+
+    public static boolean a(Item item) {
+        return item == Items.ck || item == Items.cl || item == Items.cm;
     }
 
     protected void h() {
@@ -138,7 +131,8 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
     public String d_() {
         if (this.k_()) {
             return this.aL();
-        } else {
+        }
+        else {
             int i0 = this.cj();
 
             switch (i0) {
@@ -170,7 +164,8 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
 
         if (flag0) {
             this.ac.b(16, Integer.valueOf(i1 | i0));
-        } else {
+        }
+        else {
             this.ac.b(16, Integer.valueOf(i1 & ~i0));
         }
 
@@ -205,7 +200,8 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
     public void a(boolean flag0) {
         if (flag0) {
             this.a(this.cs());
-        } else {
+        }
+        else {
             this.a(1.0F);
         }
 
@@ -245,7 +241,8 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
     private int f(ItemStack itemstack) {
         if (itemstack == null) {
             return 0;
-        } else {
+        }
+        else {
             Item item = itemstack.b();
 
             return item == Items.ck ? 1 : (item == Items.cl ? 2 : (item == Items.cm ? 3 : 0));
@@ -411,7 +408,8 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
         if (this.W > 20) {
             if (i0 == 0 && i0 != this.cv()) {
                 this.a("mob.horse.armor", 0.5F, 1.0F);
-            } else if (i0 != this.cv()) {
+            }
+            else if (i0 != this.cv()) {
                 this.a("mob.horse.armor", 0.5F, 1.0F);
             }
 
@@ -515,12 +513,15 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
                     if (i0 == 0 && this.V.nextInt(10) == 0) {
                         this.a("mob.horse.breathe", block_soundtype.d() * 0.6F, block_soundtype.e());
                     }
-                } else if (this.bL <= 5) {
+                }
+                else if (this.bL <= 5) {
                     this.a("mob.horse.wood", block_soundtype.d() * 0.15F, block_soundtype.e());
                 }
-            } else if (block_soundtype == Block.f) {
+            }
+            else if (block_soundtype == Block.f) {
                 this.a("mob.horse.wood", block_soundtype.d() * 0.15F, block_soundtype.e());
-            } else {
+            }
+            else {
                 this.a("mob.horse.soft", block_soundtype.d() * 0.15F, block_soundtype.e());
             }
         }
@@ -567,14 +568,18 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
 
         if (itemstack != null && itemstack.b() == Items.bJ) {
             return super.a(entityplayer);
-        } else if (!this.cm() && this.cP()) {
+        }
+        else if (!this.cm() && this.cP()) {
             return false;
-        } else if (this.cm() && this.cl() && entityplayer.aw()) {
+        }
+        else if (this.cm() && this.cl() && entityplayer.aw()) {
             this.g(entityplayer);
             return true;
-        } else if (this.cn() && this.l != null) {
+        }
+        else if (this.cn() && this.l != null) {
             return super.a(entityplayer);
-        } else {
+        }
+        else {
             if (itemstack != null) {
                 boolean flag0 = false;
 
@@ -583,9 +588,11 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
 
                     if (itemstack.b() == Items.ck) {
                         b0 = 1;
-                    } else if (itemstack.b() == Items.cl) {
+                    }
+                    else if (itemstack.b() == Items.cl) {
                         b0 = 2;
-                    } else if (itemstack.b() == Items.cm) {
+                    }
+                    else if (itemstack.b() == Items.cm) {
                         b0 = 3;
                     }
 
@@ -609,18 +616,22 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
                         f0 = 2.0F;
                         short1 = 20;
                         b1 = 3;
-                    } else if (itemstack.b() == Items.aY) {
+                    }
+                    else if (itemstack.b() == Items.aY) {
                         f0 = 1.0F;
                         short1 = 30;
                         b1 = 3;
-                    } else if (Block.a(itemstack.b()) == Blocks.cx) {
+                    }
+                    else if (Block.a(itemstack.b()) == Blocks.cx) {
                         f0 = 20.0F;
                         short1 = 180;
-                    } else if (itemstack.b() == Items.e) {
+                    }
+                    else if (itemstack.b() == Items.e) {
                         f0 = 3.0F;
                         short1 = 60;
                         b1 = 3;
-                    } else if (itemstack.b() == Items.bW) {
+                    }
+                    else if (itemstack.b() == Items.bW) {
                         f0 = 4.0F;
                         short1 = 60;
                         b1 = 5;
@@ -628,7 +639,8 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
                             flag0 = true;
                             this.c(entityplayer);
                         }
-                    } else if (itemstack.b() == Items.ao) {
+                    }
+                    else if (itemstack.b() == Items.ao) {
                         f0 = 10.0F;
                         short1 = 240;
                         b1 = 10;
@@ -691,11 +703,13 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
             if (this.cn() && this.l == null) {
                 if (itemstack != null && itemstack.a(entityplayer, (EntityLivingBase) this)) {
                     return true;
-                } else {
+                }
+                else {
                     this.i(entityplayer);
                     return true;
                 }
-            } else {
+            }
+            else {
                 return super.a(entityplayer);
             }
         }
@@ -711,7 +725,8 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
             CancelableHook hook = null;
             if (this.l == null) {
                 hook = new VehicleEnterHook((Vehicle) this.entity, entityplayer.getCanaryHuman());
-            } else if (this.l == entityplayer) {
+            }
+            else if (this.l == entityplayer) {
                 hook = new VehicleExitHook((Vehicle) this.entity, entityplayer.getCanaryHuman());
             }
             if (hook != null) {
@@ -830,7 +845,8 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
             if (this.bF > 1.0F) {
                 this.bF = 1.0F;
             }
-        } else {
+        }
+        else {
             this.bF += (0.0F - this.bF) * 0.4F - 0.05F;
             if (this.bF < 0.0F) {
                 this.bF = 0.0F;
@@ -844,7 +860,8 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
             if (this.bH > 1.0F) {
                 this.bH = 1.0F;
             }
-        } else {
+        }
+        else {
             this.bE = false;
             this.bH += (0.8F * this.bH * this.bH * this.bH - this.bH) * 0.6F - 0.05F;
             if (this.bH < 0.0F) {
@@ -858,7 +875,8 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
             if (this.bJ > 1.0F) {
                 this.bJ = 1.0F;
             }
-        } else {
+        }
+        else {
             this.bJ += (0.0F - this.bJ) * 0.7F - 0.05F;
             if (this.bJ < 0.0F) {
                 this.bJ = 0.0F;
@@ -998,7 +1016,8 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
 
             this.az += (f4 - this.az) * 0.4F;
             this.aA += this.az;
-        } else {
+        }
+        else {
             this.S = 0.5F;
             this.aK = 0.02F;
             super.g(f0, f1);
@@ -1058,7 +1077,8 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
 
         if (nbttagcompound.b("OwnerUUID", 8)) {
             s0 = nbttagcompound.j("OwnerUUID");
-        } else {
+        }
+        else {
             String s1 = nbttagcompound.j("Owner");
 
             s0 = PreYggdrasilConverter.a(s1);
@@ -1103,7 +1123,8 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
             if (itemstack != null && itemstack.b() == Items.aA) {
                 this.bC.a(0, itemstack);
             }
-        } else if (nbttagcompound.n("Saddle")) {
+        }
+        else if (nbttagcompound.n("Saddle")) {
             this.bC.a(0, new ItemStack(Items.aA));
         }
 
@@ -1113,9 +1134,11 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
     public boolean a(EntityAnimal entityanimal) {
         if (entityanimal == this) {
             return false;
-        } else if (entityanimal.getClass() != this.getClass()) {
+        }
+        else if (entityanimal.getClass() != this.getClass()) {
             return false;
-        } else {
+        }
+        else {
             EntityHorse entityhorse = (EntityHorse) entityanimal;
 
             if (this.de() && entityhorse.de()) {
@@ -1123,7 +1146,8 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
                 int i1 = entityhorse.cj();
 
                 return i0 == i1 || i0 == 0 && i1 == 1 || i0 == 1 && i1 == 0;
-            } else {
+            }
+            else {
                 return false;
             }
         }
@@ -1138,7 +1162,8 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
 
         if (i0 == i1) {
             i2 = i0;
-        } else if (i0 == 0 && i1 == 1 || i0 == 1 && i1 == 0) {
+        }
+        else if (i0 == 0 && i1 == 1 || i0 == 1 && i1 == 0) {
             i2 = 2;
         }
 
@@ -1148,9 +1173,11 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
 
             if (i3 < 4) {
                 i4 = this.ck() & 255;
-            } else if (i3 < 8) {
+            }
+            else if (i3 < 8) {
                 i4 = entityhorse.ck() & 255;
-            } else {
+            }
+            else {
                 i4 = this.V.nextInt(7);
             }
 
@@ -1158,9 +1185,11 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
 
             if (i5 < 2) {
                 i4 |= this.ck() & '\uff00';
-            } else if (i5 < 4) {
+            }
+            else if (i5 < 4) {
                 i4 |= entityhorse.ck() & '\uff00';
-            } else {
+            }
+            else {
                 i4 |= this.V.nextInt(5) << 8 & '\uff00';
             }
 
@@ -1189,10 +1218,12 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
         if (ientitylivingdata1 instanceof EntityHorse.GroupData) {
             i1 = ((EntityHorse.GroupData) ientitylivingdata1).a;
             i0 = ((EntityHorse.GroupData) ientitylivingdata1).b & 255 | this.V.nextInt(5) << 8;
-        } else {
+        }
+        else {
             if (this.V.nextInt(10) == 0) {
                 i1 = 1;
-            } else {
+            }
+            else {
                 int i2 = this.V.nextInt(7);
                 int i3 = this.V.nextInt(5);
 
@@ -1213,17 +1244,20 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
             this.a(SharedMonsterAttributes.a).a((double) this.dg());
             if (i1 == 0) {
                 this.a(SharedMonsterAttributes.d).a(this.di());
-            } else {
+            }
+            else {
                 this.a(SharedMonsterAttributes.d).a(0.17499999701976776D);
             }
-        } else {
+        }
+        else {
             this.a(SharedMonsterAttributes.a).a(15.0D);
             this.a(SharedMonsterAttributes.d).a(0.20000000298023224D);
         }
 
         if (i1 != 2 && i1 != 1) {
             this.a(br).a(this.dh());
-        } else {
+        }
+        else {
             this.a(br).a(0.5D);
         }
 
@@ -1235,14 +1269,16 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
         if (this.cE()) {
             if (i0 < 0) {
                 i0 = 0;
-            } else {
+            }
+            else {
                 this.bE = true;
                 this.df();
             }
 
             if (i0 >= 90) {
                 this.bp = 1.0F;
-            } else {
+            }
+            else {
                 this.bp = 0.4F + 0.4F * (float) i0 / 90.0F;
             }
         }
@@ -1277,10 +1313,6 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
         return (0.44999998807907104D + this.V.nextDouble() * 0.3D + this.V.nextDouble() * 0.3D + this.V.nextDouble() * 0.3D) * 0.25D;
     }
 
-    public static boolean a(Item item) {
-        return item == Items.ck || item == Items.cl || item == Items.cm;
-    }
-
     public boolean j_() {
         return false;
     }
@@ -1309,20 +1341,24 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
         if (i1 >= 0 && i1 < 2 && i1 < this.bC.n_()) {
             if (i1 == 0 && itemstack != null && itemstack.b() != Items.aA) {
                 return false;
-            } else if (i1 == 1 && (itemstack != null && !a(itemstack.b()) || !this.cM())) {
+            }
+            else if (i1 == 1 && (itemstack != null && !a(itemstack.b()) || !this.cM())) {
                 return false;
-            } else {
+            }
+            else {
                 this.bC.a(i1, itemstack);
                 this.cZ();
                 return true;
             }
-        } else {
+        }
+        else {
             int i2 = i0 - 500 + 2;
 
             if (i2 >= 2 && i2 < this.bC.n_()) {
                 this.bC.a(i2, itemstack);
                 return true;
-            } else {
+            }
+            else {
                 return false;
             }
         }
@@ -1332,7 +1368,7 @@ public class EntityHorse extends EntityAnimal implements IInvBasic {
 
         public int a;
         public int b;
-      
+
         public GroupData(int p_i1684_1_, int p_i1684_2_) {
             this.a = p_i1684_1_;
             this.b = p_i1684_2_;

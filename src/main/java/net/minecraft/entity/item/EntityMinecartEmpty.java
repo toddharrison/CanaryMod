@@ -7,7 +7,6 @@ import net.canarymod.hook.CancelableHook;
 import net.canarymod.hook.entity.VehicleEnterHook;
 import net.canarymod.hook.entity.VehicleExitHook;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 
@@ -27,16 +26,19 @@ public class EntityMinecartEmpty extends EntityMinecart {
     public boolean e(EntityPlayer entityplayer) {
         if (this.l != null && this.l instanceof EntityPlayer && this.l != entityplayer) {
             return true;
-        } else if (this.l != null && this.l != entityplayer) {
+        }
+        else if (this.l != null && this.l != entityplayer) {
             return false;
-        } else {
+        }
+        else {
             if (!this.o.D) {
                 // CanaryMod: VehicleEnter/VehicleExit
                 CancelableHook hook;
 
                 if (this.l == null) {
                     hook = new VehicleEnterHook((Vehicle) this.entity, (LivingBase) entityplayer.getCanaryEntity());
-                } else {
+                }
+                else {
                     hook = new VehicleExitHook((Vehicle) this.entity, (LivingBase) entityplayer.getCanaryEntity());
                 }
                 hook.call();

@@ -16,12 +16,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntityDamageSourceIndirect;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -36,13 +31,26 @@ public class EntityBoat extends Entity {
     private double f;
     private double g;
     private double h;
-   
+
     public EntityBoat(World world) {
         super(world);
         this.a = true;
         this.b = 0.07D;
         this.k = true;
         this.a(1.5F, 0.6F);
+        this.entity = new CanaryBoat(this); // CanaryMod: Wrap Entity
+    }
+
+    public EntityBoat(World world, double d0, double d1, double d2) {
+        this(world);
+        this.b(d0, d1, d2);
+        this.v = 0.0D;
+        this.w = 0.0D;
+        this.x = 0.0D;
+        this.p = d0;
+        this.q = d1;
+        this.r = d2;
+
         this.entity = new CanaryBoat(this); // CanaryMod: Wrap Entity
     }
 
@@ -68,19 +76,6 @@ public class EntityBoat extends Entity {
         return true;
     }
 
-    public EntityBoat(World world, double d0, double d1, double d2) {
-        this(world);
-        this.b(d0, d1, d2);
-        this.v = 0.0D;
-        this.w = 0.0D;
-        this.x = 0.0D;
-        this.p = d0;
-        this.q = d1;
-        this.r = d2;
-
-        this.entity = new CanaryBoat(this); // CanaryMod: Wrap Entity
-    }
-
     public double an() {
         return (double) this.K * 0.0D - 0.30000001192092896D;
     }
@@ -88,10 +83,12 @@ public class EntityBoat extends Entity {
     public boolean a(DamageSource damagesource, float f0) {
         if (this.b(damagesource)) {
             return false;
-        } else if (!this.o.D && !this.I) {
+        }
+        else if (!this.o.D && !this.I) {
             if (this.l != null && this.l == damagesource.j() && damagesource instanceof EntityDamageSourceIndirect) {
                 return false;
-            } else {
+            }
+            else {
                 // CanaryMod: VehicleDamage
                 net.canarymod.api.entity.Entity attk = null;
 
@@ -128,7 +125,8 @@ public class EntityBoat extends Entity {
 
                 return true;
             }
-        } else {
+        }
+        else {
             return true;
         }
     }
@@ -146,6 +144,9 @@ public class EntityBoat extends Entity {
         if (this.j() > 0.0F) {
             this.a(this.j() - 1.0F);
         }
+
+        double ppX = this.p, ppY = this.q, ppZ = this.r; // CanaryMod: previousprevious
+        float prevRot = this.y, prevPit = this.z;
 
         this.p = this.s;
         this.q = this.t;
@@ -182,7 +183,8 @@ public class EntityBoat extends Entity {
                     d8 = this.s - d4 * d6 * 0.8D + d5 * d7;
                     d9 = this.u - d5 * d6 * 0.8D - d4 * d7;
                     this.o.a(EnumParticleTypes.WATER_SPLASH, d8, this.t - 0.125D, d9, this.v, this.w, this.x, new int[0]);
-                } else {
+                }
+                else {
                     d8 = this.s + d4 + d5 * d6 * 0.7D;
                     d9 = this.u + d5 - d4 * d6 * 0.7D;
                     this.o.a(EnumParticleTypes.WATER_SPLASH, d8, this.t - 0.125D, d9, this.v, this.w, this.x, new int[0]);
@@ -204,7 +206,8 @@ public class EntityBoat extends Entity {
                 --this.c;
                 this.b(d4, d5, d10);
                 this.b(this.y, this.z);
-            } else {
+            }
+            else {
                 d4 = this.s + this.v;
                 d5 = this.t + this.w;
                 d10 = this.u + this.x;
@@ -220,11 +223,13 @@ public class EntityBoat extends Entity {
                 this.x *= 0.9900000095367432D;
             }
 
-        } else {
+        }
+        else {
             if (d0 < 1.0D) {
                 d4 = d0 * 2.0D - 1.0D;
                 this.w += 0.03999999910593033D * d4;
-            } else {
+            }
+            else {
                 if (this.w < 0.0D) {
                     this.w /= 2.0D;
                 }
@@ -253,7 +258,8 @@ public class EntityBoat extends Entity {
                 if (this.b > 0.35D) {
                     this.b = 0.35D;
                 }
-            } else {
+            }
+            else {
                 this.b -= (this.b - 0.07D) / 35.0D;
                 if (this.b < 0.07D) {
                     this.b = 0.07D;
@@ -275,7 +281,8 @@ public class EntityBoat extends Entity {
                     if (block == Blocks.aH) {
                         this.o.g(blockpos);
                         this.D = false;
-                    } else if (block == Blocks.bx) {
+                    }
+                    else if (block == Blocks.bx) {
                         this.o.b(blockpos, true);
                         this.D = false;
                     }
@@ -301,7 +308,8 @@ public class EntityBoat extends Entity {
                         this.a(Items.y, 1, 0.0F);
                     }
                 }
-            } else {
+            }
+            else {
                 this.v *= 0.9900000095367432D;
                 this.w *= 0.949999988079071D;
                 this.x *= 0.9900000095367432D;
@@ -346,9 +354,6 @@ public class EntityBoat extends Entity {
                 }
             }
             //
-            if (!this.o.E) {
-                List list = this.o.b((Entity) this, this.C.b(0.20000000298023224D, 0.0D, 0.20000000298023224D));
-
             if (!this.o.D) {
                 List list = this.o.b((Entity) this, this.aQ().b(0.20000000298023224D, 0.0D, 0.20000000298023224D));
 
@@ -384,21 +389,25 @@ public class EntityBoat extends Entity {
         }
     }
 
-    protected void b(NBTTagCompound nbttagcompound) {}
+    protected void b(NBTTagCompound nbttagcompound) {
+    }
 
-    protected void a(NBTTagCompound nbttagcompound) {}
+    protected void a(NBTTagCompound nbttagcompound) {
+    }
 
     public boolean e(EntityPlayer entityplayer) {
         if (this.l != null && this.l instanceof EntityPlayer && this.l != entityplayer) {
             return true;
-        } else {
+        }
+        else {
             if (!this.o.D) {
                 // CanaryMod: VehicleEnter/VehicleExit
                 CancelableHook hook = null;
 
                 if (this.l == null) {
                     hook = new VehicleEnterHook((Vehicle) this.entity, (LivingBase) entityplayer.getCanaryEntity());
-                } else if (this.l == entityplayer) {
+                }
+                else if (this.l == entityplayer) {
                     hook = new VehicleExitHook((Vehicle) this.entity, (LivingBase) entityplayer.getCanaryEntity());
                 }
                 if (hook != null) {
@@ -434,7 +443,8 @@ public class EntityBoat extends Entity {
 
                 this.O = 0.0F;
             }
-        } else if (this.o.p((new BlockPos(this)).b()).c().r() != Material.h && d0 < 0.0D) {
+        }
+        else if (this.o.p((new BlockPos(this)).b()).c().r() != Material.h && d0 < 0.0D) {
             this.O = (float) ((double) this.O - d0);
         }
 

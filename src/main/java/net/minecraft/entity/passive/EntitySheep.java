@@ -1,22 +1,14 @@
 package net.minecraft.entity.passive;
 
+import com.google.common.collect.Maps;
 import net.canarymod.api.entity.living.animal.CanarySheep;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIEatGrass;
-import net.minecraft.entity.ai.EntityAIFollowParent;
-import net.minecraft.entity.ai.EntityAILookIdle;
-import net.minecraft.entity.ai.EntityAIMate;
-import net.minecraft.entity.ai.EntityAIPanic;
-import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.ai.EntityAITempt;
-import net.minecraft.entity.ai.EntityAIWander;
-import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.ai.*;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -37,19 +29,15 @@ import java.util.Random;
 
 public class EntitySheep extends EntityAnimal {
 
+    private static final Map bm = Maps.newEnumMap(EnumDyeColor.class);
     private final InventoryCrafting bk = new InventoryCrafting(new Container() {
 
         public boolean a(EntityPlayer p_a_1_) {
             return false;
         }
     }, 2, 1);
-    private static final Map bm = Maps.newEnumMap(EnumDyeColor.class);
     private int bn;
     private EntityAIEatGrass bo = new EntityAIEatGrass(this);
-   
-    public static float[] a(EnumDyeColor enumdyecolor) {
-        return (float[]) bm.get(enumdyecolor);
-    }
 
     public EntitySheep(World world) {
         super(world);
@@ -67,6 +55,16 @@ public class EntitySheep extends EntityAnimal {
         this.bk.a(0, new ItemStack(Items.aW, 1, 0));
         this.bk.a(1, new ItemStack(Items.aW, 1, 0));
         this.entity = new CanarySheep(this); // CanaryMod: Wrap Entity
+    }
+
+    public static float[] a(EnumDyeColor enumdyecolor) {
+        return (float[]) bm.get(enumdyecolor);
+    }
+
+    public static EnumDyeColor a(Random random) {
+        int i0 = random.nextInt(100);
+
+        return i0 < 5 ? EnumDyeColor.BLACK : (i0 < 10 ? EnumDyeColor.GRAY : (i0 < 15 ? EnumDyeColor.SILVER : (i0 < 18 ? EnumDyeColor.BROWN : (random.nextInt(500) == 0 ? EnumDyeColor.PINK : EnumDyeColor.WHITE))));
     }
 
     protected void E() {
@@ -103,7 +101,8 @@ public class EntitySheep extends EntityAnimal {
         for (int i2 = 0; i2 < i1; ++i2) {
             if (this.au()) {
                 this.a(Items.bn, 1);
-            } else {
+            }
+            else {
                 this.a(Items.bm, 1);
             }
         }
@@ -185,16 +184,11 @@ public class EntitySheep extends EntityAnimal {
 
         if (flag0) {
             this.ac.b(16, Byte.valueOf((byte) (b0 | 16)));
-        } else {
+        }
+        else {
             this.ac.b(16, Byte.valueOf((byte) (b0 & -17)));
         }
 
-    }
-
-    public static EnumDyeColor a(Random random) {
-        int i0 = random.nextInt(100);
-
-        return i0 < 5 ? EnumDyeColor.BLACK : (i0 < 10 ? EnumDyeColor.GRAY : (i0 < 15 ? EnumDyeColor.SILVER : (i0 < 18 ? EnumDyeColor.BROWN : (random.nextInt(500) == 0 ? EnumDyeColor.PINK : EnumDyeColor.WHITE))));
     }
 
     public EntitySheep b(EntityAgeable entityageable) {
@@ -230,7 +224,8 @@ public class EntitySheep extends EntityAnimal {
 
         if (itemstack != null && itemstack.b() == Items.aW) {
             i2 = itemstack.i();
-        } else {
+        }
+        else {
             i2 = this.o.s.nextBoolean() ? i0 : i1;
         }
 
@@ -246,21 +241,21 @@ public class EntitySheep extends EntityAnimal {
     }
 
     static {
-        bm.put(EnumDyeColor.WHITE, new float[] { 1.0F, 1.0F, 1.0F});
-        bm.put(EnumDyeColor.ORANGE, new float[] { 0.85F, 0.5F, 0.2F});
-        bm.put(EnumDyeColor.MAGENTA, new float[] { 0.7F, 0.3F, 0.85F});
-        bm.put(EnumDyeColor.LIGHT_BLUE, new float[] { 0.4F, 0.6F, 0.85F});
-        bm.put(EnumDyeColor.YELLOW, new float[] { 0.9F, 0.9F, 0.2F});
-        bm.put(EnumDyeColor.LIME, new float[] { 0.5F, 0.8F, 0.1F});
-        bm.put(EnumDyeColor.PINK, new float[] { 0.95F, 0.5F, 0.65F});
-        bm.put(EnumDyeColor.GRAY, new float[] { 0.3F, 0.3F, 0.3F});
-        bm.put(EnumDyeColor.SILVER, new float[] { 0.6F, 0.6F, 0.6F});
-        bm.put(EnumDyeColor.CYAN, new float[] { 0.3F, 0.5F, 0.6F});
-        bm.put(EnumDyeColor.PURPLE, new float[] { 0.5F, 0.25F, 0.7F});
-        bm.put(EnumDyeColor.BLUE, new float[] { 0.2F, 0.3F, 0.7F});
-        bm.put(EnumDyeColor.BROWN, new float[] { 0.4F, 0.3F, 0.2F});
-        bm.put(EnumDyeColor.GREEN, new float[] { 0.4F, 0.5F, 0.2F});
-        bm.put(EnumDyeColor.RED, new float[] { 0.6F, 0.2F, 0.2F});
-        bm.put(EnumDyeColor.BLACK, new float[] { 0.1F, 0.1F, 0.1F});
+        bm.put(EnumDyeColor.WHITE, new float[]{1.0F, 1.0F, 1.0F});
+        bm.put(EnumDyeColor.ORANGE, new float[]{0.85F, 0.5F, 0.2F});
+        bm.put(EnumDyeColor.MAGENTA, new float[]{0.7F, 0.3F, 0.85F});
+        bm.put(EnumDyeColor.LIGHT_BLUE, new float[]{0.4F, 0.6F, 0.85F});
+        bm.put(EnumDyeColor.YELLOW, new float[]{0.9F, 0.9F, 0.2F});
+        bm.put(EnumDyeColor.LIME, new float[]{0.5F, 0.8F, 0.1F});
+        bm.put(EnumDyeColor.PINK, new float[]{0.95F, 0.5F, 0.65F});
+        bm.put(EnumDyeColor.GRAY, new float[]{0.3F, 0.3F, 0.3F});
+        bm.put(EnumDyeColor.SILVER, new float[]{0.6F, 0.6F, 0.6F});
+        bm.put(EnumDyeColor.CYAN, new float[]{0.3F, 0.5F, 0.6F});
+        bm.put(EnumDyeColor.PURPLE, new float[]{0.5F, 0.25F, 0.7F});
+        bm.put(EnumDyeColor.BLUE, new float[]{0.2F, 0.3F, 0.7F});
+        bm.put(EnumDyeColor.BROWN, new float[]{0.4F, 0.3F, 0.2F});
+        bm.put(EnumDyeColor.GREEN, new float[]{0.4F, 0.5F, 0.2F});
+        bm.put(EnumDyeColor.RED, new float[]{0.6F, 0.2F, 0.2F});
+        bm.put(EnumDyeColor.BLACK, new float[]{0.1F, 0.1F, 0.1F});
     }
 }

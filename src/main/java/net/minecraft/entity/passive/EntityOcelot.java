@@ -1,30 +1,14 @@
 package net.minecraft.entity.passive;
 
+import com.google.common.base.Predicate;
 import net.canarymod.api.entity.living.animal.CanaryOcelot;
 import net.canarymod.hook.entity.EntityTameHook;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityAgeable;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.IEntityLivingData;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIAvoidEntity;
-import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.ai.EntityAIFollowOwner;
-import net.minecraft.entity.ai.EntityAILeapAtTarget;
-import net.minecraft.entity.ai.EntityAIMate;
-import net.minecraft.entity.ai.EntityAIOcelotAttack;
-import net.minecraft.entity.ai.EntityAIOcelotSit;
-import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.ai.EntityAITargetNonTamed;
-import net.minecraft.entity.ai.EntityAITempt;
-import net.minecraft.entity.ai.EntityAIWander;
-import net.minecraft.entity.ai.EntityAIWatchClosest;
-import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.passive.EntityChicken;
-import net.minecraft.entity.passive.EntityTameable;
+import net.minecraft.entity.*;
+import net.minecraft.entity.ai.*;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -37,13 +21,11 @@ import net.minecraft.util.StatCollector;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
-import com.google.common.base.Predicate;
-
 public class EntityOcelot extends EntityTameable {
 
     private EntityAIAvoidEntity bm;
     private EntityAITempt bn;
-   
+
     public EntityOcelot(World world) {
         super(world);
         this.a(0.6F, 0.7F);
@@ -74,14 +56,17 @@ public class EntityOcelot extends EntityTameable {
             if (d0 == 0.6D) {
                 this.c(true);
                 this.d(false);
-            } else if (d0 == 1.33D) {
+            }
+            else if (d0 == 1.33D) {
                 this.c(false);
                 this.d(true);
-            } else {
+            }
+            else {
                 this.c(false);
                 this.d(false);
             }
-        } else {
+        }
+        else {
             this.c(false);
             this.d(false);
         }
@@ -98,7 +83,8 @@ public class EntityOcelot extends EntityTameable {
         this.a(SharedMonsterAttributes.d).a(0.30000001192092896D);
     }
 
-    public void e(float f0, float f1) {}
+    public void e(float f0, float f1) {
+    }
 
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
@@ -137,13 +123,15 @@ public class EntityOcelot extends EntityTameable {
     public boolean a(DamageSource damagesource, float f0) {
         if (this.b(damagesource)) {
             return false;
-        } else {
+        }
+        else {
             this.bk.a(false);
             return super.a(damagesource, f0);
         }
     }
 
-    protected void b(boolean flag0, int i0) {}
+    protected void b(boolean flag0, int i0) {
+    }
 
     public boolean a(EntityPlayer entityplayer) {
         ItemStack itemstack = entityplayer.bg.h();
@@ -152,7 +140,8 @@ public class EntityOcelot extends EntityTameable {
             if (this.e(entityplayer) && !this.o.D && !this.d(itemstack)) {
                 this.bk.a(!this.cl());
             }
-        } else if (this.bn.f() && itemstack != null && itemstack.b() == Items.aU && entityplayer.h(this) < 9.0D) {
+        }
+        else if (this.bn.f() && itemstack != null && itemstack.b() == Items.aU && entityplayer.h(this) < 9.0D) {
             if (!entityplayer.by.d) {
                 --itemstack.b;
             }
@@ -173,7 +162,8 @@ public class EntityOcelot extends EntityTameable {
                     this.l(true);
                     this.bk.a(true);
                     this.o.a((Entity) this, (byte) 7);
-                } else {
+                }
+                else {
                     this.l(false);
                     this.o.a((Entity) this, (byte) 6);
                 }
@@ -204,11 +194,14 @@ public class EntityOcelot extends EntityTameable {
     public boolean a(EntityAnimal entityanimal) {
         if (entityanimal == this) {
             return false;
-        } else if (!this.cj()) {
+        }
+        else if (!this.cj()) {
             return false;
-        } else if (!(entityanimal instanceof EntityOcelot)) {
+        }
+        else if (!(entityanimal instanceof EntityOcelot)) {
             return false;
-        } else {
+        }
+        else {
             EntityOcelot entityocelot = (EntityOcelot) entityanimal;
 
             return !entityocelot.cj() ? false : this.cp() && entityocelot.cp();

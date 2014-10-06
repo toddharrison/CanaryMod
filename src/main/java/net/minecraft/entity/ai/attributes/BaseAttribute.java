@@ -1,16 +1,15 @@
 package net.minecraft.entity.ai.attributes;
 
 import net.canarymod.api.attributes.CanaryAttribute;
-import net.minecraft.entity.ai.attributes.IAttribute;
 
 public abstract class BaseAttribute implements IAttribute {
 
     private final IAttribute a;
     private final String b;
     private final double c;
-    private boolean d;
-    // CanaryMod: our vars    
+    // CanaryMod: our vars
     protected CanaryAttribute canaryAttribute;
+    private boolean d;
 
     protected BaseAttribute(IAttribute iattribute, String s0, double d0) {
         this.a = iattribute;

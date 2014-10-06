@@ -69,7 +69,8 @@ public class EntityEnderPearl extends EntityThrowable {
 
         if (entitylivingbase != null && entitylivingbase instanceof EntityPlayer && !entitylivingbase.ai()) {
             this.J();
-        } else {
+        }
+        else {
             super.s_();
         }
 

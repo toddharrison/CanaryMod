@@ -1,6 +1,6 @@
 package net.minecraft.entity.monster;
 
-import net.canarymod.hook.entity.MobTargetHook;
+import com.google.common.base.Predicate;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
@@ -8,16 +8,12 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAvoidEntity;
 import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.monster.EntityCreeper;
-import net.minecraft.entity.monster.IMob;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
-
-import com.google.common.base.Predicate;
 
 public abstract class EntityMob extends EntityCreature implements IMob {
 
@@ -31,7 +27,7 @@ public abstract class EntityMob extends EntityCreature implements IMob {
             return this.a((Entity) p_apply_1_);
         }
     }, 4.0F, 1.0D, 2.0D);
-   
+
     public EntityMob(World world) {
         super(world);
         this.b_ = 5;
@@ -70,24 +66,7 @@ public abstract class EntityMob extends EntityCreature implements IMob {
         } else if (super.a(damagesource, f0)) {
             Entity entity = damagesource.j();
 
-            if (this.l != entity && this.m != entity) {
-                if (entity != this) {
-                    // CanaryMod: MobTarget
-                    if (entity instanceof EntityLiving) {
-                        MobTargetHook hook = (MobTargetHook) new MobTargetHook((net.canarymod.api.entity.living.EntityLiving) this.getCanaryEntity(), (net.canarymod.api.entity.living.EntityLiving) entity.getCanaryEntity()).call();
-                        if (!hook.isCanceled()) {
-                            this.bm = entity;
-                        }
-                    } else {
-                        this.bm = entity;
-                    }
-                    //
-                }
-
-                return true;
-            } else {
-                return true;
-            }
+            return this.l != entity && this.m != entity ? true : true;
         } else {
             return false;
         }
@@ -144,7 +123,8 @@ public abstract class EntityMob extends EntityCreature implements IMob {
 
         if (this.o.b(EnumSkyBlock.SKY, blockpos) > this.V.nextInt(32)) {
             return false;
-        } else {
+        }
+        else {
             int i0 = this.o.l(blockpos);
 
             if (this.o.R()) {

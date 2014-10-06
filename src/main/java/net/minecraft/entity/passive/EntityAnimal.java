@@ -5,7 +5,6 @@ import net.canarymod.api.entity.living.animal.CanaryAnimal;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
-import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -17,14 +16,12 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-import java.util.List;
-
 public abstract class EntityAnimal extends EntityAgeable implements IAnimals {
 
     protected Block bl;
     private int bk;
     private EntityPlayer bm;
-   
+
     public EntityAnimal(World world) {
         super(world);
         this.bl = Blocks.c;
@@ -79,7 +76,8 @@ public abstract class EntityAnimal extends EntityAgeable implements IAnimals {
     public boolean a(DamageSource damagesource, float f0) {
         if (this.b(damagesource)) {
             return false;
-        } else {
+        }
+        else {
             this.bk = 0;
             return super.a(damagesource, f0);
         }

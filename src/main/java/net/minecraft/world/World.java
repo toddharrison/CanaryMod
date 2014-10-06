@@ -71,7 +71,7 @@ public abstract class World implements IBlockAccess {
     protected float p;
     protected float q;
     protected float r;
-    private int I;
+    public int I; // CanaryMod: private >> public
     public final Random s = new Random();
     public final WorldProvider t;
     protected List u = Lists.newArrayList();

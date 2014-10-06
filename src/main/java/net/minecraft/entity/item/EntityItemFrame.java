@@ -25,7 +25,7 @@ import net.minecraft.world.storage.MapData;
 public class EntityItemFrame extends EntityHanging {
 
     public float c = 1.0F; // CanaryMod: private -> public
-   
+
     public EntityItemFrame(World world) {
         super(world);
         this.entity = new CanaryItemFrame(this); // CanaryMod: Wrap Entity
@@ -49,14 +49,16 @@ public class EntityItemFrame extends EntityHanging {
     public boolean a(DamageSource damagesource, float f0) {
         if (this.b(damagesource)) {
             return false;
-        } else if (!damagesource.c() && this.o() != null) {
+        }
+        else if (!damagesource.c() && this.o() != null) {
             if (!this.o.D) {
                 this.a(damagesource.j(), false);
                 this.a((ItemStack) null);
             }
 
             return true;
-        } else {
+        }
+        else {
             return super.a(damagesource, f0);
         }
     }
@@ -78,7 +80,8 @@ public class EntityItemFrame extends EntityHanging {
         HangingEntityDestroyHook hook;
         if (entity instanceof EntityPlayer) {
             hook = (HangingEntityDestroyHook) new HangingEntityDestroyHook((HangingEntity) this.getCanaryEntity(), (Player) entity.getCanaryEntity(), CanaryDamageSource.getDamageSourceFromType(DamageType.GENERIC)).call();
-        } else {
+        }
+        else {
             hook = (HangingEntityDestroyHook) new HangingEntityDestroyHook((HangingEntity) this.getCanaryEntity(), null, CanaryDamageSource.getDamageSourceFromType(DamageType.GENERIC)).call();
         }
         if (hook.isCanceled()) {
@@ -86,7 +89,7 @@ public class EntityItemFrame extends EntityHanging {
         }
         //CanaryMod end
 
-       if (this.o.Q().b("doTileDrops")) {
+        if (this.o.Q().b("doTileDrops")) {
             ItemStack itemstack = this.o();
 
             if (entity instanceof EntityPlayer) {
@@ -200,7 +203,8 @@ public class EntityItemFrame extends EntityHanging {
                     entityplayer.bg.a(entityplayer.bg.c, (ItemStack) null);
                 }
             }
-        } else if (!this.o.D) {
+        }
+        else if (!this.o.D) {
             this.a(this.p() + 1);
         }
 

@@ -6,16 +6,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIArrowAttack;
-import net.minecraft.entity.ai.EntityAIHurtByTarget;
-import net.minecraft.entity.ai.EntityAILookIdle;
-import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
-import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.ai.EntityAIWander;
-import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.ai.*;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
-import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityPotion;
 import net.minecraft.init.Items;
@@ -35,9 +28,9 @@ public class EntityWitch extends EntityMob implements IRangedAttackMob {
 
     private static final UUID b = UUID.fromString("5CD17E52-A79A-43D3-A529-90FDE04B181E");
     private static final AttributeModifier c = (new AttributeModifier(b, "Drinking speed penalty", -0.25D, 0)).a(false);
-    private static final Item[] bk = new Item[] { Items.aT, Items.aY, Items.aC, Items.bB, Items.bA, Items.H, Items.y, Items.y};
+    private static final Item[] bk = new Item[]{Items.aT, Items.aY, Items.aC, Items.bB, Items.bA, Items.H, Items.y, Items.y};
     private int bl;
-   
+
     public EntityWitch(World world) {
         super(world);
         this.a(0.6F, 1.95F);
@@ -107,18 +100,23 @@ public class EntityWitch extends EntityMob implements IRangedAttackMob {
 
                     this.a(SharedMonsterAttributes.d).c(c);
                 }
-            } else {
+            }
+            else {
                 short short1 = -1;
 
                 if (this.V.nextFloat() < 0.15F && this.a(Material.h) && !this.a(Potion.o)) {
                     short1 = 8237;
-                } else if (this.V.nextFloat() < 0.15F && this.au() && !this.a(Potion.n)) {
+                }
+                else if (this.V.nextFloat() < 0.15F && this.au() && !this.a(Potion.n)) {
                     short1 = 16307;
-                } else if (this.V.nextFloat() < 0.05F && this.bm() < this.bt()) {
+                }
+                else if (this.V.nextFloat() < 0.05F && this.bm() < this.bt()) {
                     short1 = 16341;
-                } else if (this.V.nextFloat() < 0.25F && this.u() != null && !this.a(Potion.c) && this.u().h(this) > 121.0D) {
+                }
+                else if (this.V.nextFloat() < 0.25F && this.u() != null && !this.a(Potion.c) && this.u().h(this) > 121.0D) {
                     short1 = 16274;
-                } else if (this.V.nextFloat() < 0.25F && this.u() != null && !this.a(Potion.c) && this.u().h(this) > 121.0D) {
+                }
+                else if (this.V.nextFloat() < 0.25F && this.u() != null && !this.a(Potion.c) && this.u().h(this) > 121.0D) {
                     short1 = 16274;
                 }
 
@@ -185,9 +183,11 @@ public class EntityWitch extends EntityMob implements IRangedAttackMob {
 
             if (f1 >= 8.0F && !entitylivingbase.a(Potion.d)) {
                 entitypotion.a(32698);
-            } else if (entitylivingbase.bm() >= 8.0F && !entitylivingbase.a(Potion.u)) {
+            }
+            else if (entitylivingbase.bm() >= 8.0F && !entitylivingbase.a(Potion.u)) {
                 entitypotion.a(32660);
-            } else if (f1 <= 3.0F && !entitylivingbase.a(Potion.t) && this.V.nextFloat() < 0.25F) {
+            }
+            else if (f1 <= 3.0F && !entitylivingbase.a(Potion.t) && this.V.nextFloat() < 0.25F) {
                 entitypotion.a(32696);
             }
 

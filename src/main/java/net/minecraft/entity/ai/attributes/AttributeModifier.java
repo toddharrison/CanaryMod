@@ -1,12 +1,12 @@
 package net.minecraft.entity.ai.attributes;
 
-import net.canarymod.api.attributes.CanaryAttributeModifier;
-import org.apache.commons.lang3.Validate;
 import io.netty.util.internal.ThreadLocalRandom;
-import java.util.Random;
-import java.util.UUID;
+import net.canarymod.api.attributes.CanaryAttributeModifier;
 import net.minecraft.util.MathHelper;
 import org.apache.commons.lang3.Validate;
+
+import java.util.Random;
+import java.util.UUID;
 
 
 public class AttributeModifier {
@@ -63,19 +63,22 @@ public class AttributeModifier {
     public boolean equals(Object object) {
         if (this == object) {
             return true;
-        } else if (object != null && this.getClass() == object.getClass()) {
+        }
+        else if (object != null && this.getClass() == object.getClass()) {
             AttributeModifier attributemodifier = (AttributeModifier) object;
 
             if (this.d != null) {
                 if (!this.d.equals(attributemodifier.d)) {
                     return false;
                 }
-            } else if (attributemodifier.d != null) {
+            }
+            else if (attributemodifier.d != null) {
                 return false;
             }
 
             return true;
-        } else {
+        }
+        else {
             return false;
         }
     }

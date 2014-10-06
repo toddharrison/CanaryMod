@@ -1,7 +1,6 @@
 package net.minecraft.entity.monster;
 
 import net.canarymod.api.entity.living.monster.CanaryGhast;
-import net.canarymod.hook.entity.MobTargetHook;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityFlying;
 import net.minecraft.entity.EntityLivingBase;
@@ -9,7 +8,6 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAIFindEntityNearestPlayer;
 import net.minecraft.entity.ai.EntityMoveHelper;
-import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityLargeFireball;
 import net.minecraft.init.Items;
@@ -17,19 +15,17 @@ import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.stats.AchievementList;
 import net.minecraft.stats.StatBase;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.*;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
+
+import java.util.Random;
 
 
 public class EntityGhast extends EntityFlying implements IMob {
 
     private int a = 1;
-   
+
     public EntityGhast(World world) {
         super(world);
         this.a(4.0F, 4.0F);
@@ -62,11 +58,13 @@ public class EntityGhast extends EntityFlying implements IMob {
     public boolean a(DamageSource damagesource, float f0) {
         if (this.b(damagesource)) {
             return false;
-        } else if ("fireball".equals(damagesource.p()) && damagesource.j() instanceof EntityPlayer) {
+        }
+        else if ("fireball".equals(damagesource.p()) && damagesource.j() instanceof EntityPlayer) {
             super.a(damagesource, 1000.0F);
             ((EntityPlayer) damagesource.j()).b((StatBase) AchievementList.z);
             return true;
-        } else {
+        }
+        else {
             return super.a(damagesource, f0);
         }
     }
@@ -146,9 +144,9 @@ public class EntityGhast extends EntityFlying implements IMob {
 
     class AIFireballAttack extends EntityAIBase {
 
-        private EntityGhast b = EntityGhast.this;
         public int a;
-      
+        private EntityGhast b = EntityGhast.this;
+
         public boolean a() {
             return this.b.u() != null;
         }
@@ -190,7 +188,8 @@ public class EntityGhast extends EntityFlying implements IMob {
                     world.d((Entity) entitylargefireball);
                     this.a = -40;
                 }
-            } else if (this.a > 0) {
+            }
+            else if (this.a > 0) {
                 --this.a;
             }
 
@@ -202,7 +201,7 @@ public class EntityGhast extends EntityFlying implements IMob {
     class AILookAround extends EntityAIBase {
 
         private EntityGhast a = EntityGhast.this;
-      
+
         public AILookAround() {
             this.a(2);
         }
@@ -214,7 +213,8 @@ public class EntityGhast extends EntityFlying implements IMob {
         public void e() {
             if (this.a.u() == null) {
                 this.a.aG = this.a.y = -((float) Math.atan2(this.a.v, this.a.x)) * 180.0F / 3.1415927F;
-            } else {
+            }
+            else {
                 EntityLivingBase entitylivingbase = this.a.u();
                 double d0 = 64.0D;
 
@@ -232,7 +232,7 @@ public class EntityGhast extends EntityFlying implements IMob {
     class AIRandomFly extends EntityAIBase {
 
         private EntityGhast a = EntityGhast.this;
-      
+
         public AIRandomFly() {
             this.a(1);
         }
@@ -242,7 +242,8 @@ public class EntityGhast extends EntityFlying implements IMob {
 
             if (!random.a()) {
                 return true;
-            } else {
+            }
+            else {
                 double d4 = random.d() - this.a.s;
                 double d5 = random.e() - this.a.t;
                 double d6 = random.f() - this.a.u;
@@ -270,7 +271,7 @@ public class EntityGhast extends EntityFlying implements IMob {
 
         private EntityGhast g = EntityGhast.this;
         private int h;
-      
+
         public GhastMoveHelper() {
             super(EntityGhast.this);
         }
@@ -289,7 +290,8 @@ public class EntityGhast extends EntityFlying implements IMob {
                         this.g.v += d0 / d3 * 0.1D;
                         this.g.w += d1 / d3 * 0.1D;
                         this.g.x += d2 / d3 * 0.1D;
-                    } else {
+                    }
+                    else {
                         this.f = false;
                     }
                 }

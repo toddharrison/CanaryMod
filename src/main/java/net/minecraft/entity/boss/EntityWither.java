@@ -1,11 +1,14 @@
 package net.minecraft.entity.boss;
 
+import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
 import net.canarymod.api.entity.living.monster.CanaryWither;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.*;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
@@ -29,13 +32,6 @@ import java.util.List;
 
 public class EntityWither extends EntityMob implements IRangedAttackMob {
 
-    private float[] b = new float[2];
-    private float[] c = new float[2];
-    private float[] bk = new float[2];
-    private float[] bl = new float[2];
-    private int[] bm = new int[2];
-    private int[] bn = new int[2];
-    private int bo;
     private static final Predicate bp = new Predicate() {
 
         public boolean a(Entity p_a_1_) {
@@ -46,7 +42,14 @@ public class EntityWither extends EntityMob implements IRangedAttackMob {
             return this.a((Entity) p_apply_1_);
         }
     };
-   
+    private float[] b = new float[2];
+    private float[] c = new float[2];
+    private float[] bk = new float[2];
+    private float[] bl = new float[2];
+    private int[] bm = new int[2];
+    private int[] bn = new int[2];
+    private int bo;
+
     public EntityWither(World world) {
         super(world);
         this.h(this.bt());
@@ -160,7 +163,8 @@ public class EntityWither extends EntityMob implements IRangedAttackMob {
 
                 this.b[i0] = this.b(this.b[i0], f1, 40.0F);
                 this.c[i0] = this.b(this.c[i0], f0, 10.0F);
-            } else {
+            }
+            else {
                 this.c[i0] = this.b(this.c[i0], this.aG, 10.0F);
             }
         }
@@ -201,7 +205,8 @@ public class EntityWither extends EntityMob implements IRangedAttackMob {
                 this.g(10.0F);
             }
 
-        } else {
+        }
+        else {
             super.E();
 
             int i1;
@@ -234,10 +239,12 @@ public class EntityWither extends EntityMob implements IRangedAttackMob {
                             this.a(i0 + 1, (EntityLivingBase) entity);
                             this.bm[i0 - 1] = this.W + 40 + this.V.nextInt(20);
                             this.bn[i0 - 1] = 0;
-                        } else {
+                        }
+                        else {
                             this.b(i0, 0);
                         }
-                    } else {
+                    }
+                    else {
                         List list = this.o.a(EntityLivingBase.class, this.aQ().b(20.0D, 8.0D, 20.0D), Predicates.and(bp, IEntitySelector.d));
 
                         for (int i4 = 0; i4 < 10 && !list.isEmpty(); ++i4) {
@@ -248,7 +255,8 @@ public class EntityWither extends EntityMob implements IRangedAttackMob {
                                     if (!((EntityPlayer) entitylivingbase).by.a) {
                                         this.b(i0, entitylivingbase.F());
                                     }
-                                } else {
+                                }
+                                else {
                                     this.b(i0, entitylivingbase.F());
                                 }
                                 break;
@@ -262,7 +270,8 @@ public class EntityWither extends EntityMob implements IRangedAttackMob {
 
             if (this.u() != null) {
                 this.b(0, this.u().F());
-            } else {
+            }
+            else {
                 this.b(0, 0);
             }
 
@@ -307,7 +316,8 @@ public class EntityWither extends EntityMob implements IRangedAttackMob {
         this.h(this.bt() / 3.0F);
     }
 
-    public void aB() {}
+    public void aB() {
+    }
 
     public int bq() {
         return 4;
@@ -316,7 +326,8 @@ public class EntityWither extends EntityMob implements IRangedAttackMob {
     private double t(int i0) {
         if (i0 <= 0) {
             return this.s;
-        } else {
+        }
+        else {
             float f0 = (this.aG + (float) (180 * (i0 - 1))) / 180.0F * 3.1415927F;
             float f1 = MathHelper.b(f0);
 
@@ -331,7 +342,8 @@ public class EntityWither extends EntityMob implements IRangedAttackMob {
     private double v(int i0) {
         if (i0 <= 0) {
             return this.u;
-        } else {
+        }
+        else {
             float f0 = (this.aG + (float) (180 * (i0 - 1))) / 180.0F * 3.1415927F;
             float f1 = MathHelper.a(f0);
 
@@ -384,10 +396,12 @@ public class EntityWither extends EntityMob implements IRangedAttackMob {
     public boolean a(DamageSource damagesource, float f0) {
         if (this.b(damagesource)) {
             return false;
-        } else if (damagesource != DamageSource.f && !(damagesource.j() instanceof EntityWither)) {
+        }
+        else if (damagesource != DamageSource.f && !(damagesource.j() instanceof EntityWither)) {
             if (this.cj() > 0 && damagesource != DamageSource.j) {
                 return false;
-            } else {
+            }
+            else {
                 Entity entity;
 
                 if (this.ck()) {
@@ -400,7 +414,8 @@ public class EntityWither extends EntityMob implements IRangedAttackMob {
                 entity = damagesource.j();
                 if (entity != null && !(entity instanceof EntityPlayer) && entity instanceof EntityLivingBase && ((EntityLivingBase) entity).by() == this.by()) {
                     return false;
-                } else {
+                }
+                else {
                     if (this.bo <= 0) {
                         this.bo = 20;
                     }
@@ -412,7 +427,8 @@ public class EntityWither extends EntityMob implements IRangedAttackMob {
                     return super.a(damagesource, f0);
                 }
             }
-        } else {
+        }
+        else {
             return false;
         }
     }
@@ -439,9 +455,11 @@ public class EntityWither extends EntityMob implements IRangedAttackMob {
         this.aO = 0;
     }
 
-    public void e(float f0, float f1) {}
+    public void e(float f0, float f1) {
+    }
 
-    public void c(PotionEffect potioneffect) {}
+    public void c(PotionEffect potioneffect) {
+    }
 
     protected void aW() {
         super.aW();

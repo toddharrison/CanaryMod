@@ -1,17 +1,14 @@
 package net.minecraft.entity.item;
 
 import net.canarymod.api.entity.vehicle.CanaryFurnaceMinecart;
-import net.minecraft.block.Block;
+import net.minecraft.block.BlockFurnace;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
 
 
@@ -20,7 +17,7 @@ public class EntityMinecartFurnace extends EntityMinecart {
     public int c; // CanaryMod: private -> public
     public double a;
     public double b;
-   
+
     public EntityMinecartFurnace(World world) {
         super(world);
         this.entity = new CanaryFurnaceMinecart(this); // CanaryMod: Wrap Entity
@@ -80,7 +77,8 @@ public class EntityMinecartFurnace extends EntityMinecart {
             if (this.a * this.v + this.b * this.x < 0.0D) {
                 this.a = 0.0D;
                 this.b = 0.0D;
-            } else {
+            }
+            else {
                 double d1 = d0 / this.m();
 
                 this.a *= d1;
@@ -104,7 +102,8 @@ public class EntityMinecartFurnace extends EntityMinecart {
             this.x *= 0.800000011920929D;
             this.v += this.a * d1;
             this.x += this.b * d1;
-        } else {
+        }
+        else {
             this.v *= 0.9800000190734863D;
             this.w *= 0.0D;
             this.x *= 0.9800000190734863D;
@@ -150,7 +149,8 @@ public class EntityMinecartFurnace extends EntityMinecart {
     protected void i(boolean flag0) {
         if (flag0) {
             this.ac.b(16, Byte.valueOf((byte) (this.ac.a(16) | 1)));
-        } else {
+        }
+        else {
             this.ac.b(16, Byte.valueOf((byte) (this.ac.a(16) & -2)));
         }
 

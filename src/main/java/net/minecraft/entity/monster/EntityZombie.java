@@ -3,31 +3,12 @@ package net.minecraft.entity.monster;
 import net.canarymod.api.entity.living.monster.CanaryZombie;
 import net.minecraft.block.Block;
 import net.minecraft.command.IEntitySelector;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.entity.IEntityLivingData;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIAttackOnCollide;
-import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.ai.EntityAIBreakDoor;
-import net.minecraft.entity.ai.EntityAIHurtByTarget;
-import net.minecraft.entity.ai.EntityAILookIdle;
-import net.minecraft.entity.ai.EntityAIMoveThroughVillage;
-import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
-import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
-import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.ai.EntityAIWander;
-import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.*;
+import net.minecraft.entity.ai.*;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
-import net.minecraft.entity.monster.EntityCreeper;
-import net.minecraft.entity.monster.EntityIronGolem;
-import net.minecraft.entity.monster.EntityMob;
-import net.minecraft.entity.monster.EntityPigZombie;
 import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
@@ -61,7 +42,7 @@ public class EntityZombie extends EntityMob {
     private boolean bn = false;
     private float bo = -1.0F;
     private float bp;
-   
+
     public EntityZombie(World world) {
         super(world);
         ((PathNavigateGround) this.s()).b(true);
@@ -81,7 +62,7 @@ public class EntityZombie extends EntityMob {
         this.i.a(4, new EntityAIAttackOnCollide(this, EntityVillager.class, 1.0D, true));
         this.i.a(4, new EntityAIAttackOnCollide(this, EntityIronGolem.class, 1.0D, true));
         this.i.a(6, new EntityAIMoveThroughVillage(this, 1.0D, false));
-        this.bg.a(1, new EntityAIHurtByTarget(this, true, new Class[] { EntityPigZombie.class}));
+        this.bg.a(1, new EntityAIHurtByTarget(this, true, new Class[]{EntityPigZombie.class}));
         this.bg.a(2, new EntityAINearestAttackableTarget(this, EntityPlayer.class, true));
         this.bg.a(2, new EntityAINearestAttackableTarget(this, EntityVillager.class, false));
         this.bg.a(2, new EntityAINearestAttackableTarget(this, EntityIronGolem.class, true));
@@ -121,7 +102,8 @@ public class EntityZombie extends EntityMob {
             this.bn = flag0;
             if (flag0) {
                 this.i.a(1, this.bl);
-            } else {
+            }
+            else {
                 this.i.a((EntityAIBase) this.bl);
             }
         }
@@ -230,7 +212,8 @@ public class EntityZombie extends EntityMob {
             }
 
             return true;
-        } else {
+        }
+        else {
             return false;
         }
     }
@@ -309,7 +292,8 @@ public class EntityZombie extends EntityMob {
 
             if (i0 == 0) {
                 this.c(0, new ItemStack(Items.l));
-            } else {
+            }
+            else {
                 this.c(0, new ItemStack(Items.a));
             }
         }
@@ -411,7 +395,8 @@ public class EntityZombie extends EntityMob {
                         entitychicken.l(true);
                         this.a((Entity) entitychicken);
                     }
-                } else if ((double) this.o.s.nextFloat() < 0.05D) {
+                }
+                else if ((double) this.o.s.nextFloat() < 0.05D) {
                     EntityChicken entitychicken1 = new EntityChicken(this.o);
 
                     entitychicken1.b(this.s, this.t, this.u, this.y, 0.0F);
@@ -468,7 +453,8 @@ public class EntityZombie extends EntityMob {
             }
 
             return true;
-        } else {
+        }
+        else {
             return false;
         }
     }
@@ -563,11 +549,21 @@ public class EntityZombie extends EntityMob {
 
     }
 
+    // CanaryMod
+    public int getConvertTicks() {
+        return this.bt;
+    }
+
+    public void stopConversion() {
+        this.z().b(12, Byte.valueOf((byte) 0));
+        this.bt = -1;
+    }
+
     class GroupData implements IEntityLivingData {
 
         public boolean a;
         public boolean b;
-      
+
         private GroupData(boolean p_i2348_2_, boolean p_i2348_3_) {
             this.a = false;
             this.b = false;
@@ -578,16 +574,6 @@ public class EntityZombie extends EntityMob {
         GroupData(boolean p_i2349_2_, boolean p_i2349_3_, Object p_i2349_4_) {
             this(p_i2349_2_, p_i2349_3_);
         }
-    }
-
-    // CanaryMod
-    public int getConvertTicks() {
-        return this.bt;
-    }
-
-    public void stopConversion() {
-        this.z().b(12, Byte.valueOf((byte) 0));
-        this.bt = -1;
     }
     //
 }

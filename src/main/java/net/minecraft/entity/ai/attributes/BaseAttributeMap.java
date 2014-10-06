@@ -6,13 +6,8 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import net.canarymod.api.attributes.CanaryAttributeMap;
 import net.minecraft.server.management.LowerStringMap;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.IAttribute;
-import net.minecraft.entity.ai.attributes.IAttributeInstance;
-import net.minecraft.server.management.LowerStringMap;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -23,7 +18,7 @@ public abstract class BaseAttributeMap {
     protected final Map a = Maps.newHashMap();
     protected final Map b = new LowerStringMap();
     protected final Multimap c = HashMultimap.create();
-   
+
     public IAttributeInstance a(IAttribute iattribute) {
         return (IAttributeInstance) this.a.get(iattribute);
     }
@@ -35,7 +30,8 @@ public abstract class BaseAttributeMap {
     public IAttributeInstance b(IAttribute iattribute) {
         if (this.b.containsKey(iattribute.a())) {
             throw new IllegalArgumentException("Attribute is already registered!");
-        } else {
+        }
+        else {
             IAttributeInstance iattributeinstance = this.c(iattribute);
 
             this.b.put(iattribute.a(), iattributeinstance);
@@ -55,7 +51,8 @@ public abstract class BaseAttributeMap {
         return this.b.values();
     }
 
-    public void a(IAttributeInstance iattributeinstance) {}
+    public void a(IAttributeInstance iattributeinstance) {
+    }
 
     public void a(Multimap multimap) {
         Iterator iterator = multimap.entries().iterator();

@@ -9,7 +9,7 @@ import net.minecraft.command.server.CommandTestForBlock;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
@@ -220,62 +220,49 @@ public class InventoryPlayer implements IInventory {
 
     // CanaryMod: Simulate Pickup (Its the same as a(ItemStack) but without altering the inventory
     public boolean canPickup(EntityItem entityitem) {
-        ItemStack itemstack = entityitem.f();
-        int i;
+        ItemStack itemstack = entityitem.l();
 
         if (itemstack != null && itemstack.b != 0 && itemstack.b() != null) {
-            try {
-                int i0;
+            int i0;
 
-                if (itemstack.g()) {
-                    i = this.j();
-                    if (i >= 0) {
-                        // CanaryMod: ItemPickUp
-                        ItemPickupHook hook = (ItemPickupHook) new ItemPickupHook(((EntityPlayerMP) this.d).getPlayer(), (net.canarymod.api.entity.EntityItem) entityitem.getCanaryEntity()).call();
-                        return !hook.isCanceled();
-                        //
-                    } else if (this.d.bE.d) {
-                        return true;
-                    } else {
-                        return false;
-                    }
+            if (itemstack.g()) {
+                i0 = this.j();
+                if (i0 >= 0) {
+                    // CanaryMod: ItemPickUp
+                    ItemPickupHook hook = (ItemPickupHook) new ItemPickupHook(((EntityPlayerMP) this.d).getPlayer(), (net.canarymod.api.entity.EntityItem) entityitem.getCanaryEntity()).call();
+                    return !hook.isCanceled();
+                    //
+                } else if (this.d.by.d) {
+                    return true;
                 } else {
-                    int slot = 0;
-                    int left = itemstack.b;
-                    {
-                        if (itemstack1 == null) {
-                            delta = Math.min(64, left);
-                        } else if (itemstack1.b < 64 && itemstack.c == itemstack1.c && itemstack.e() == itemstack1.e()) {
-                            delta = Math.min(64 - itemstack.b, left);
-                        }
-                        left -= delta;
-                        slot++;
-                    } while (itemstack.b > 0 && itemstack.b < i0);
-
-                    if (itemstack.b == i0 && this.d.by.d) {
-                        // CanaryMod: ItemPickUp
-                        if (this.d instanceof EntityPlayerMP) { // Cause NPC may be picking something up...
-                            return !((ItemPickupHook) new ItemPickupHook(((EntityPlayerMP) this.d).getPlayer(), (net.canarymod.api.entity.EntityItem) entityitem.getCanaryEntity()).call()).isCanceled();
-                        }
-                        return true;
-                        //
-                    } else {
-                        return false;
-                    }
+                    return false;
                 }
-            } catch (Throwable throwable) {
-                CrashReport crashreport = CrashReport.a(throwable, "Adding item to inventory");
-                CrashReportCategory crashreportcategory = crashreport.a("Item being added");
-
-                crashreportcategory.a("Item ID", (Object) Integer.valueOf(Item.b(itemstack.b())));
-                crashreportcategory.a("Item data", (Object) Integer.valueOf(itemstack.i()));
-                crashreportcategory.a("Item name", new Callable() {
-
-                    public String call() {
-                        return itemstack.q();
+            } else {
+                int slot = 0;
+                int left = itemstack.b;
+                do {
+                    ItemStack itemstack1 = this.a[slot];
+                    int delta = 0;
+                    if (itemstack1 == null) {
+                        delta = Math.min(64, left);
+                    } else if (itemstack1.b < 64 && itemstack.c == itemstack1.c && itemstack.e() == itemstack1.e()) {
+                        delta = Math.min(64 - itemstack.b, left);
                     }
-                });
-                throw new ReportedException(crashreport);
+                    left -= delta;
+                    slot++;
+                }
+                while (left > 0 && slot < 36);
+
+                if (itemstack.b - left > 0) {
+                    // CanaryMod: ItemPickUp
+                    if (this.d instanceof EntityPlayerMP) { // Cause NPC may be picking something up...
+                        return !((ItemPickupHook) new ItemPickupHook(((EntityPlayerMP) this.d).getPlayer(), (net.canarymod.api.entity.EntityItem) entityitem.getCanaryEntity()).call()).isCanceled();
+                    }
+                    return true;
+                    //
+                } else {
+                    return false;
+                }
             }
         } else {
             return false;

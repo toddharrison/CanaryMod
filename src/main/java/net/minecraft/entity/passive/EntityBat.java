@@ -4,7 +4,6 @@ import net.canarymod.api.entity.living.animal.CanaryBat;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.passive.EntityAmbientCreature;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
@@ -17,7 +16,7 @@ import java.util.Calendar;
 public class EntityBat extends EntityAmbientCreature {
 
     private BlockPos a;
-   
+
     public EntityBat(World world) {
         super(world);
         this.a(0.5F, 0.9F);
@@ -54,9 +53,11 @@ public class EntityBat extends EntityAmbientCreature {
         return false;
     }
 
-    protected void s(Entity entity) {}
+    protected void s(Entity entity) {
+    }
 
-    protected void bK() {}
+    protected void bK() {
+    }
 
     protected void aW() {
         super.aW();
@@ -72,7 +73,8 @@ public class EntityBat extends EntityAmbientCreature {
 
         if (flag0) {
             this.ac.b(16, Byte.valueOf((byte) (b0 | 1)));
-        } else {
+        }
+        else {
             this.ac.b(16, Byte.valueOf((byte) (b0 & -2)));
         }
 
@@ -83,7 +85,8 @@ public class EntityBat extends EntityAmbientCreature {
         if (this.n()) {
             this.v = this.w = this.x = 0.0D;
             this.t = (double) MathHelper.c(this.t) + 1.0D - (double) this.K;
-        } else {
+        }
+        else {
             this.w *= 0.6000000238418579D;
         }
 
@@ -98,7 +101,8 @@ public class EntityBat extends EntityAmbientCreature {
             if (!this.o.p(blockpos1).c().t()) {
                 this.a(false);
                 this.o.a((EntityPlayer) null, 1015, blockpos, 0);
-            } else {
+            }
+            else {
                 if (this.V.nextInt(200) == 0) {
                     this.aI = (float) this.V.nextInt(360);
                 }
@@ -108,7 +112,8 @@ public class EntityBat extends EntityAmbientCreature {
                     this.o.a((EntityPlayer) null, 1015, blockpos, 0);
                 }
             }
-        } else {
+        }
+        else {
             if (this.a != null && (!this.o.d(this.a) || this.a.o() < 1)) {
                 this.a = null;
             }
@@ -140,9 +145,11 @@ public class EntityBat extends EntityAmbientCreature {
         return false;
     }
 
-    public void e(float f0, float f1) {}
+    public void e(float f0, float f1) {
+    }
 
-    protected void a(double d0, boolean flag0, Block block, BlockPos blockpos) {}
+    protected void a(double d0, boolean flag0, Block block, BlockPos blockpos) {
+    }
 
     public boolean aH() {
         return true;
@@ -151,7 +158,8 @@ public class EntityBat extends EntityAmbientCreature {
     public boolean a(DamageSource damagesource, float f0) {
         if (this.b(damagesource)) {
             return false;
-        } else {
+        }
+        else {
             if (!this.o.D && this.n()) {
                 this.a(false);
             }
@@ -175,13 +183,15 @@ public class EntityBat extends EntityAmbientCreature {
 
         if (blockpos.o() >= 63) {
             return false;
-        } else {
+        }
+        else {
             int i0 = this.o.l(blockpos);
             byte b0 = 4;
 
             if (this.a(this.o.Y())) {
                 b0 = 7;
-            } else if (this.V.nextBoolean()) {
+            }
+            else if (this.V.nextBoolean()) {
                 return false;
             }
 

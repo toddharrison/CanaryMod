@@ -6,13 +6,7 @@ import net.minecraft.block.BlockSilverfish;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIAttackOnCollide;
-import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.ai.EntityAIHurtByTarget;
-import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
-import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.ai.EntityAIWander;
-import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.ai.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -22,11 +16,13 @@ import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
+import java.util.Random;
+
 
 public class EntitySilverfish extends EntityMob {
 
     private EntitySilverfish.AISummonSilverfish b;
-   
+
     public EntitySilverfish(World world) {
         super(world);
         this.a(0.4F, 0.3F);
@@ -69,7 +65,8 @@ public class EntitySilverfish extends EntityMob {
     public boolean a(DamageSource damagesource, float f0) {
         if (this.b(damagesource)) {
             return false;
-        } else {
+        }
+        else {
             if (damagesource instanceof EntityDamageSource || damagesource == DamageSource.l) {
                 this.b.f();
             }
@@ -104,7 +101,8 @@ public class EntitySilverfish extends EntityMob {
             EntityPlayer entityplayer = this.o.a(this, 5.0D);
 
             return entityplayer == null;
-        } else {
+        }
+        else {
             return false;
         }
     }
@@ -117,7 +115,7 @@ public class EntitySilverfish extends EntityMob {
 
         private EnumFacing b;
         private boolean c;
-      
+
         public AIHideInStone() {
             super(EntitySilverfish.this, 1.0D, 10);
             this.a(1);
@@ -126,13 +124,15 @@ public class EntitySilverfish extends EntityMob {
         public boolean a() {
             if (EntitySilverfish.this.u() != null) {
                 return false;
-            } else if (!EntitySilverfish.this.s().m()) {
+            }
+            else if (!EntitySilverfish.this.s().m()) {
                 return false;
-            } else {
-                Random world = EntitySilverfish.this.bb();
+            }
+            else {
+                Random random = EntitySilverfish.this.bb();
 
-                if (world.nextInt(10) == 0) {
-                    this.b = EnumFacing.a(world);
+                if (random.nextInt(10) == 0) {
+                    this.b = EnumFacing.a(random);
                     BlockPos blockpos1 = (new BlockPos(EntitySilverfish.this.s, EntitySilverfish.this.t + 0.5D, EntitySilverfish.this.u)).a(this.b);
                     IBlockState iblockstate1 = EntitySilverfish.this.o.p(blockpos1);
 
@@ -154,7 +154,8 @@ public class EntitySilverfish extends EntityMob {
         public void c() {
             if (!this.c) {
                 super.c();
-            } else {
+            }
+            else {
                 World world = EntitySilverfish.this.o;
                 BlockPos blockpos1 = (new BlockPos(EntitySilverfish.this.s, EntitySilverfish.this.t + 0.5D, EntitySilverfish.this.u)).a(this.b);
                 IBlockState iblockstate1 = world.p(blockpos1);
@@ -174,7 +175,7 @@ public class EntitySilverfish extends EntityMob {
 
         private EntitySilverfish a = EntitySilverfish.this;
         private int b;
-      
+
         public void f() {
             if (this.b == 0) {
                 this.b = 20;
@@ -202,7 +203,8 @@ public class EntitySilverfish extends EntityMob {
                             if (iblockstate.c() == Blocks.be) {
                                 if (world.Q().b("mobGriefing")) {
                                     world.b(blockpos1, true);
-                                } else {
+                                }
+                                else {
                                     world.a(blockpos1, ((BlockSilverfish.EnumType) iblockstate.b(BlockSilverfish.a)).d(), 3);
                                 }
 

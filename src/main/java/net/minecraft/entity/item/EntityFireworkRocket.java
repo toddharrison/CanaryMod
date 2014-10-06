@@ -7,6 +7,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
@@ -20,10 +21,6 @@ public class EntityFireworkRocket extends Entity {
         super(world);
         this.a(0.25F, 0.25F);
         this.entity = new CanaryFireworkRocket(this); // CanaryMod: Wrap Entity
-    }
-
-    protected void h() {
-        this.ac.a(8, 5);
     }
 
     public EntityFireworkRocket(World world, double d0, double d1, double d2, ItemStack itemstack) {
@@ -48,6 +45,10 @@ public class EntityFireworkRocket extends Entity {
         this.w = 0.05D;
         this.b = 10 * i0 + this.V.nextInt(6) + this.V.nextInt(7);
         this.entity = new CanaryFireworkRocket(this); // CanaryMod: Wrap Entity
+    }
+
+    protected void h() {
+        this.ac.a(8, 5);
     }
 
     public void s_() {
@@ -147,7 +148,7 @@ public class EntityFireworkRocket extends Entity {
     public void setItemStack(ItemStack stack) {
         this.ac.b(8, stack);
         // Update Flight information
-        NBTTagCompound nbttagcompound = stack.q();
+        NBTTagCompound nbttagcompound = stack.o();
         NBTTagCompound nbttagcompound1 = nbttagcompound.m("Fireworks");
         if (nbttagcompound1 != null) {
             this.b = 10 * nbttagcompound1.d("Flight") + this.V.nextInt(6) + this.V.nextInt(7);

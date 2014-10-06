@@ -5,7 +5,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.passive.EntityWaterMob;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
@@ -30,7 +29,7 @@ public class EntitySquid extends EntityWaterMob {
     private float bq;
     private float br;
     private float bs;
-   
+
     public EntitySquid(World world) {
         super(world);
         this.a(0.95F, 0.95F);
@@ -96,7 +95,8 @@ public class EntitySquid extends EntityWaterMob {
         if ((double) this.bj > 6.283185307179586D) {
             if (this.o.D) {
                 this.bj = 6.2831855F;
-            } else {
+            }
+            else {
                 this.bj = (float) ((double) this.bj - 6.283185307179586D);
                 if (this.V.nextInt(10) == 0) {
                     this.bo = 1.0F / (this.V.nextFloat() + 1.0F) * 0.2F;
@@ -115,10 +115,12 @@ public class EntitySquid extends EntityWaterMob {
                 if ((double) f0 > 0.75D) {
                     this.bn = 1.0F;
                     this.bp = 1.0F;
-                } else {
+                }
+                else {
                     this.bp *= 0.8F;
                 }
-            } else {
+            }
+            else {
                 this.bl = 0.0F;
                 this.bn *= 0.9F;
                 this.bp *= 0.99F;
@@ -135,7 +137,8 @@ public class EntitySquid extends EntityWaterMob {
             this.y = this.aG;
             this.c = (float) ((double) this.c + 3.141592653589793D * (double) this.bp * 1.5D);
             this.a += (-((float) Math.atan2((double) f0, this.w)) * 180.0F / 3.1415927F - this.a) * 0.1F;
-        } else {
+        }
+        else {
             this.bl = MathHelper.e(MathHelper.a(this.bj)) * 3.1415927F * 0.25F;
             if (!this.o.D) {
                 this.v = 0.0D;
@@ -170,7 +173,7 @@ public class EntitySquid extends EntityWaterMob {
     class AIMoveRandom extends EntityAIBase {
 
         private EntitySquid a = EntitySquid.this;
-      
+
         public boolean a() {
             return true;
         }
@@ -180,7 +183,8 @@ public class EntitySquid extends EntityWaterMob {
 
             if (i0 > 100) {
                 this.a.b(0.0F, 0.0F, 0.0F);
-            } else if (this.a.bb().nextInt(50) == 0 || !this.a.Y || !this.a.n()) {
+            }
+            else if (this.a.bb().nextInt(50) == 0 || !this.a.Y || !this.a.n()) {
                 float f0 = this.a.bb().nextFloat() * 3.1415927F * 2.0F;
                 float f1 = MathHelper.b(f0) * 0.2F;
                 float f2 = -0.1F + this.a.bb().nextFloat() * 0.2F;

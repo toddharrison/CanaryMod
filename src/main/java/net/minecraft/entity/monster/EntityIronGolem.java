@@ -5,25 +5,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockFlower;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIAttackOnCollide;
-import net.minecraft.entity.ai.EntityAIDefendVillage;
-import net.minecraft.entity.ai.EntityAIHurtByTarget;
-import net.minecraft.entity.ai.EntityAILookAtVillager;
-import net.minecraft.entity.ai.EntityAILookIdle;
-import net.minecraft.entity.ai.EntityAIMoveThroughVillage;
-import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
-import net.minecraft.entity.ai.EntityAIMoveTowardsTarget;
-import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
-import net.minecraft.entity.ai.EntityAIWander;
-import net.minecraft.entity.ai.EntityAIWatchClosest;
-import net.minecraft.entity.monster.EntityCreeper;
-import net.minecraft.entity.monster.EntityGolem;
-import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.*;
+import net.minecraft.entity.ai.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -40,11 +23,11 @@ import net.minecraft.world.World;
 
 public class EntityIronGolem extends EntityGolem {
 
-    private int b;
     public Village a; // CanaryMod package -> public
+    private int b;
     private int c;
     private int bk;
-   
+
     public EntityIronGolem(World world) {
         super(world);
         this.a(1.4F, 2.9F);
@@ -74,7 +57,8 @@ public class EntityIronGolem extends EntityGolem {
             this.a = this.o.ae().a(new BlockPos(this), 32);
             if (this.a == null) {
                 this.ch();
-            } else {
+            }
+            else {
                 BlockPos blockpos = this.a.a();
 
                 this.a(blockpos, (int) ((float) this.a.b() * 0.6F));
@@ -120,7 +104,7 @@ public class EntityIronGolem extends EntityGolem {
             Block block = iblockstate.c();
 
             if (block.r() != Material.a) {
-                this.o.a(EnumParticleTypes.BLOCK_CRACK, this.s + ((double) this.V.nextFloat() - 0.5D) * (double) this.J, this.aQ().b + 0.1D, this.u + ((double) this.V.nextFloat() - 0.5D) * (double) this.J, 4.0D * ((double) this.V.nextFloat() - 0.5D), 0.5D, ((double) this.V.nextFloat() - 0.5D) * 4.0D, new int[] { Block.f(iblockstate)});
+                this.o.a(EnumParticleTypes.BLOCK_CRACK, this.s + ((double) this.V.nextFloat() - 0.5D) * (double) this.J, this.aQ().b + 0.1D, this.u + ((double) this.V.nextFloat() - 0.5D) * (double) this.J, 4.0D * ((double) this.V.nextFloat() - 0.5D), 0.5D, ((double) this.V.nextFloat() - 0.5D) * 4.0D, new int[]{Block.f(iblockstate)});
             }
         }
 
@@ -205,7 +189,8 @@ public class EntityIronGolem extends EntityGolem {
 
         if (flag0) {
             this.ac.b(16, Byte.valueOf((byte) (b0 | 1)));
-        } else {
+        }
+        else {
             this.ac.b(16, Byte.valueOf((byte) (b0 & -2)));
         }
 
@@ -228,9 +213,11 @@ public class EntityIronGolem extends EntityGolem {
                 public boolean a(EntityLivingBase p_a_1_) {
                     if (p_i45858_6_ != null && !p_i45858_6_.apply(p_a_1_)) {
                         return false;
-                    } else if (p_a_1_ instanceof EntityCreeper) {
+                    }
+                    else if (p_a_1_ instanceof EntityCreeper) {
                         return false;
-                    } else {
+                    }
+                    else {
                         if (p_a_1_ instanceof EntityPlayer) {
                             double d0 = AINearestAttackableTargetNonCreeper.this.f();
 
@@ -263,9 +250,9 @@ public class EntityIronGolem extends EntityGolem {
             };
         }
 
-    // CanaryMod
-    public void setRoseTicks(int ticks) {
-        this.bk = ticks;
+        // CanaryMod
+        public void setRoseTicks(int ticks) {
+            this.bk = ticks;
+        }
+        //
     }
-    //
-}

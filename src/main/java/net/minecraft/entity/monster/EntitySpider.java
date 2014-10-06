@@ -2,22 +2,8 @@ package net.minecraft.entity.monster;
 
 import net.canarymod.api.entity.living.monster.CanarySpider;
 import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.entity.IEntityLivingData;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIAttackOnCollide;
-import net.minecraft.entity.ai.EntityAIHurtByTarget;
-import net.minecraft.entity.ai.EntityAILeapAtTarget;
-import net.minecraft.entity.ai.EntityAILookIdle;
-import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
-import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.ai.EntityAIWander;
-import net.minecraft.entity.ai.EntityAIWatchClosest;
-import net.minecraft.entity.monster.EntityIronGolem;
-import net.minecraft.entity.monster.EntityMob;
-import net.minecraft.entity.monster.EntitySkeleton;
+import net.minecraft.entity.*;
+import net.minecraft.entity.ai.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -106,7 +92,8 @@ public class EntitySpider extends EntityMob {
         return this.n();
     }
 
-    public void aB() {}
+    public void aB() {
+    }
 
     public EnumCreatureAttribute by() {
         return EnumCreatureAttribute.ARTHROPOD;
@@ -125,7 +112,8 @@ public class EntitySpider extends EntityMob {
 
         if (flag0) {
             b0 = (byte) (b0 | 1);
-        } else {
+        }
+        else {
             b0 &= -2;
         }
 
@@ -166,6 +154,29 @@ public class EntitySpider extends EntityMob {
         return 0.65F;
     }
 
+    public static class GroupData implements IEntityLivingData {
+
+        public int a;
+
+        public void a(Random p_a_1_) {
+            int i0 = p_a_1_.nextInt(5);
+
+            if (i0 <= 1) {
+                this.a = Potion.c.H;
+            }
+            else if (i0 <= 2) {
+                this.a = Potion.g.H;
+            }
+            else if (i0 <= 3) {
+                this.a = Potion.l.H;
+            }
+            else if (i0 <= 4) {
+                this.a = Potion.p.H;
+            }
+
+        }
+    }
+
     class AISpiderAttack extends EntityAIAttackOnCollide {
 
         public AISpiderAttack(Class p_i45819_2_) {
@@ -178,7 +189,8 @@ public class EntitySpider extends EntityMob {
             if (f0 >= 0.5F && this.b.bb().nextInt(100) == 0) {
                 this.b.d((EntityLivingBase) null);
                 return false;
-            } else {
+            }
+            else {
                 return super.b();
             }
         }
@@ -187,7 +199,6 @@ public class EntitySpider extends EntityMob {
             return (double) (4.0F + p_a_1_.J);
         }
     }
-
 
     class AISpiderTarget extends EntityAINearestAttackableTarget {
 
@@ -199,27 +210,6 @@ public class EntitySpider extends EntityMob {
             float f0 = this.e.c(1.0F);
 
             return f0 >= 0.5F ? false : super.a();
-        }
-    }
-
-
-    public static class GroupData implements IEntityLivingData {
-
-        public int a;
-      
-        public void a(Random p_a_1_) {
-            int i0 = p_a_1_.nextInt(5);
-
-            if (i0 <= 1) {
-                this.a = Potion.c.H;
-            } else if (i0 <= 2) {
-                this.a = Potion.g.H;
-            } else if (i0 <= 3) {
-                this.a = Potion.l.H;
-            } else if (i0 <= 4) {
-                this.a = Potion.p.H;
-            }
-
         }
     }
 }

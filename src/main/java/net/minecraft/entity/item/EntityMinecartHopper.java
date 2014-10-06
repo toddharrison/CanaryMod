@@ -4,9 +4,6 @@ import net.canarymod.api.entity.vehicle.CanaryHopperMinecart;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.command.IEntitySelector;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.item.EntityMinecartContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
@@ -25,10 +22,10 @@ import java.util.List;
 
 public class EntityMinecartHopper extends EntityMinecartContainer implements IHopper {
 
-    private boolean a = true;
     public int b = -1; // CanaryMod: private -> public
+    private boolean a = true;
     private BlockPos c;
-   
+
     public EntityMinecartHopper(World world) {
         super(world);
         this.c = BlockPos.a;
@@ -105,7 +102,8 @@ public class EntityMinecartHopper extends EntityMinecartContainer implements IHo
 
             if (blockpos.equals(this.c)) {
                 --this.b;
-            } else {
+            }
+            else {
                 this.m(0);
             }
 
@@ -123,7 +121,8 @@ public class EntityMinecartHopper extends EntityMinecartContainer implements IHo
     public boolean D() {
         if (TileEntityHopper.a((IHopper) this)) {
             return true;
-        } else {
+        }
+        else {
             List list = this.o.a(EntityItem.class, this.aQ().b(0.25D, 0.0D, 0.25D), IEntitySelector.a);
 
             if (list.size() > 0) {

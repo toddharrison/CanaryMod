@@ -1,31 +1,12 @@
 package net.minecraft.entity.monster;
 
+import com.google.common.base.Predicate;
 import net.canarymod.api.entity.living.monster.CanarySkeleton;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.entity.IEntityLivingData;
-import net.minecraft.entity.IRangedAttackMob;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIArrowAttack;
-import net.minecraft.entity.ai.EntityAIAttackOnCollide;
-import net.minecraft.entity.ai.EntityAIAvoidEntity;
-import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.ai.EntityAIFleeSun;
-import net.minecraft.entity.ai.EntityAIHurtByTarget;
-import net.minecraft.entity.ai.EntityAILookIdle;
-import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
-import net.minecraft.entity.ai.EntityAIRestrictSun;
-import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.ai.EntityAIWander;
-import net.minecraft.entity.ai.EntityAIWatchClosest;
-import net.minecraft.entity.monster.EntityCreeper;
-import net.minecraft.entity.monster.EntityIronGolem;
-import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.*;
+import net.minecraft.entity.ai.*;
 import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
@@ -50,7 +31,7 @@ public class EntitySkeleton extends EntityMob implements IRangedAttackMob {
 
     private EntityAIArrowAttack b = new EntityAIArrowAttack(this, 1.0D, 20, 60, 15.0F);
     private EntityAIAttackOnCollide c = new EntityAIAttackOnCollide(this, EntityPlayer.class, 1.2D, false);
-   
+
     public EntitySkeleton(World world) {
         super(world);
         this.i.a(1, new EntityAISwimming(this));
@@ -112,7 +93,8 @@ public class EntitySkeleton extends EntityMob implements IRangedAttackMob {
             }
 
             return true;
-        } else {
+        }
+        else {
             return false;
         }
     }
@@ -175,7 +157,8 @@ public class EntitySkeleton extends EntityMob implements IRangedAttackMob {
             if (d0 * d0 + d1 * d1 >= 2500.0D) {
                 entityplayer.b((StatBase) AchievementList.v);
             }
-        } else if (damagesource.j() instanceof EntityCreeper && ((EntityCreeper) damagesource.j()).n() && ((EntityCreeper) damagesource.j()).cn()) {
+        }
+        else if (damagesource.j() instanceof EntityCreeper && ((EntityCreeper) damagesource.j()).n() && ((EntityCreeper) damagesource.j()).cn()) {
             ((EntityCreeper) damagesource.j()).co();
             this.a(new ItemStack(Items.bX, 1, this.ck() == 1 ? 1 : 0), 0.0F);
         }
@@ -196,7 +179,8 @@ public class EntitySkeleton extends EntityMob implements IRangedAttackMob {
             for (i2 = 0; i2 < i1; ++i2) {
                 this.a(Items.h, 1);
             }
-        } else {
+        }
+        else {
             i1 = this.V.nextInt(3 + i0);
 
             for (i2 = 0; i2 < i1; ++i2) {
@@ -231,7 +215,8 @@ public class EntitySkeleton extends EntityMob implements IRangedAttackMob {
             this.a(1);
             this.c(0, new ItemStack(Items.q));
             this.a(SharedMonsterAttributes.e).a(4.0D);
-        } else {
+        }
+        else {
             this.i.a(4, this.b);
             this.a(difficultyinstance);
             this.b(difficultyinstance);
@@ -257,7 +242,8 @@ public class EntitySkeleton extends EntityMob implements IRangedAttackMob {
 
         if (itemstack != null && itemstack.b() == Items.f) {
             this.i.a(4, this.b);
-        } else {
+        }
+        else {
             this.i.a(4, this.c);
         }
 
@@ -294,7 +280,8 @@ public class EntitySkeleton extends EntityMob implements IRangedAttackMob {
         this.ab = i0 == 1;
         if (i0 == 1) {
             this.a(0.72F, 2.535F);
-        } else {
+        }
+        else {
             this.a(0.6F, 1.95F);
         }
 

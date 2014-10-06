@@ -2,24 +2,16 @@ package net.minecraft.entity.ai.attributes;
 
 
 import com.google.common.collect.Sets;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-import net.minecraft.entity.ai.attributes.BaseAttributeMap;
-import net.minecraft.entity.ai.attributes.IAttribute;
-import net.minecraft.entity.ai.attributes.IAttributeInstance;
-import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
-import net.minecraft.entity.ai.attributes.RangedAttribute;
-import net.minecraft.server.management.LowerStringMap;
 import net.canarymod.api.attributes.CanaryAttributeMap;
+import net.minecraft.server.management.LowerStringMap;
+
+import java.util.*;
 
 
 public class ServersideAttributeMap extends BaseAttributeMap {
 
-    private final Set e = Sets.newHashSet();
     protected final Map d = new LowerStringMap();
+    private final Set e = Sets.newHashSet();
     // CanaryMod: our variables    
     private final CanaryAttributeMap canaryAttributeMap = new CanaryAttributeMap(this);
 

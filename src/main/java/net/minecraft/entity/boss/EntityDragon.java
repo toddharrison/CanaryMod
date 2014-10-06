@@ -1,32 +1,20 @@
 package net.minecraft.entity.boss;
 
+import com.google.common.collect.Lists;
 import net.canarymod.api.entity.living.monster.CanaryEnderDragon;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.IEntityMultiPart;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.boss.EntityDragonPart;
+import net.minecraft.entity.*;
 import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntityDamageSource;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.*;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
-import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -50,13 +38,13 @@ public class EntityDragon extends EntityLiving implements IEntityMultiPart, IMob
     public float bt;
     public boolean bu;
     public boolean bv;
-    private Entity by;
     public int bw;
     public EntityEnderCrystal bx;
-   
+    private Entity by;
+
     public EntityDragon(World world) {
         super(world);
-        this.bk = new EntityDragonPart[] { this.bl = new EntityDragonPart(this, "head", 6.0F, 6.0F), this.bm = new EntityDragonPart(this, "body", 8.0F, 8.0F), this.bn = new EntityDragonPart(this, "tail", 4.0F, 4.0F), this.bo = new EntityDragonPart(this, "tail", 4.0F, 4.0F), this.bp = new EntityDragonPart(this, "tail", 4.0F, 4.0F), this.bq = new EntityDragonPart(this, "wing", 4.0F, 4.0F), this.br = new EntityDragonPart(this, "wing", 4.0F, 4.0F)};
+        this.bk = new EntityDragonPart[]{this.bl = new EntityDragonPart(this, "head", 6.0F, 6.0F), this.bm = new EntityDragonPart(this, "body", 8.0F, 8.0F), this.bn = new EntityDragonPart(this, "tail", 4.0F, 4.0F), this.bo = new EntityDragonPart(this, "tail", 4.0F, 4.0F), this.bp = new EntityDragonPart(this, "tail", 4.0F, 4.0F), this.bq = new EntityDragonPart(this, "wing", 4.0F, 4.0F), this.br = new EntityDragonPart(this, "wing", 4.0F, 4.0F)};
         this.h(this.bt());
         this.a(16.0F, 8.0F);
         this.T = true;
@@ -115,13 +103,15 @@ public class EntityDragon extends EntityLiving implements IEntityMultiPart, IMob
             f1 = (this.V.nextFloat() - 0.5F) * 4.0F;
             f2 = (this.V.nextFloat() - 0.5F) * 8.0F;
             this.o.a(EnumParticleTypes.EXPLOSION_LARGE, this.s + (double) f0, this.t + 2.0D + (double) f1, this.u + (double) f2, 0.0D, 0.0D, 0.0D, new int[0]);
-        } else {
+        }
+        else {
             this.n();
             f0 = 0.2F / (MathHelper.a(this.v * this.v + this.x * this.x) * 10.0F + 1.0F);
             f0 *= (float) Math.pow(2.0D, this.w);
             if (this.bv) {
                 this.bt += f0 * 0.5F;
-            } else {
+            }
+            else {
                 this.bt += f0;
             }
 
@@ -157,7 +147,8 @@ public class EntityDragon extends EntityLiving implements IEntityMultiPart, IMob
                     this.b(d3, d0, d1);
                     this.b(this.y, this.z);
                 }
-            } else {
+            }
+            else {
                 d3 = this.a - this.s;
                 d0 = this.b - this.t;
                 d1 = this.c - this.u;
@@ -177,7 +168,8 @@ public class EntityDragon extends EntityLiving implements IEntityMultiPart, IMob
                     }
 
                     this.b = this.by.aQ().b + d4;
-                } else {
+                }
+                else {
                     this.a += this.V.nextGaussian() * 2.0D;
                     this.c += this.V.nextGaussian() * 2.0D;
                 }
@@ -228,7 +220,8 @@ public class EntityDragon extends EntityLiving implements IEntityMultiPart, IMob
                 this.a(0.0F, -1.0F, f7 * (f4 * f6 + (1.0F - f6)));
                 if (this.bv) {
                     this.d(this.v * 0.800000011920929D, this.w * 0.800000011920929D, this.x * 0.800000011920929D);
-                } else {
+                }
+                else {
                     this.d(this.v, this.w, this.x);
                 }
 
@@ -321,7 +314,8 @@ public class EntityDragon extends EntityLiving implements IEntityMultiPart, IMob
                 }
 
                 this.bx = null;
-            } else if (this.W % 10 == 0 && this.bm() < this.bt()) {
+            }
+            else if (this.W % 10 == 0 && this.bm() < this.bt()) {
                 this.h(this.bm() + 1.0F);
             }
         }
@@ -392,7 +386,8 @@ public class EntityDragon extends EntityLiving implements IEntityMultiPart, IMob
 
         if (this.V.nextInt(2) == 0 && !arraylist.isEmpty()) {
             this.by = (Entity) arraylist.get(this.V.nextInt(arraylist.size()));
-        } else {
+        }
+        else {
             boolean flag0;
 
             do {
@@ -435,7 +430,8 @@ public class EntityDragon extends EntityLiving implements IEntityMultiPart, IMob
                     if (block.r() != Material.a) {
                         if (block != Blocks.cv && block != Blocks.Z && block != Blocks.bH && block != Blocks.h && block != Blocks.bX && this.o.Q().b("mobGriefing")) {
                             flag1 = this.o.g(new BlockPos(i6, i7, i8)) || flag1;
-                        } else {
+                        }
+                        else {
                             flag0 = true;
                         }
                     }
@@ -553,11 +549,14 @@ public class EntityDragon extends EntityLiving implements IEntityMultiPart, IMob
                             if (d2 <= 6.25D) {
                                 this.o.a(blockpos1, Blocks.h.P());
                             }
-                        } else if (i0 > 0) {
+                        }
+                        else if (i0 > 0) {
                             this.o.a(blockpos1, Blocks.a.P());
-                        } else if (d2 > 6.25D) {
+                        }
+                        else if (d2 > 6.25D) {
                             this.o.a(blockpos1, Blocks.h.P());
-                        } else {
+                        }
+                        else {
                             this.o.a(blockpos1, Blocks.bF.P());
                         }
                     }
@@ -578,7 +577,8 @@ public class EntityDragon extends EntityLiving implements IEntityMultiPart, IMob
         this.o.a(blockpos.b(4), Blocks.bI.P());
     }
 
-    protected void D() {}
+    protected void D() {
+    }
 
     public Entity[] aC() {
         return this.bk;

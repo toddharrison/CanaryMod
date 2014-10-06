@@ -27,13 +27,13 @@ import java.util.Iterator;
 public class EntityItem extends Entity {
 
     private static final Logger b = LogManager.getLogger();
+    public int e; // CanaryMod: private => public; health
+    public float a;
     private int c;
     private int d;
-    public int e; // CanaryMod: private => public; health
     private String f;
     private String g;
-    public float a;
-   
+
     public EntityItem(World world, double d0, double d1, double d2) {
         super(world);
         this.e = 5;
@@ -52,10 +52,6 @@ public class EntityItem extends Entity {
         this.a(itemstack);
     }
 
-    protected boolean r_() {
-        return false;
-    }
-
     public EntityItem(World world) {
         super(world);
         this.e = 5;
@@ -65,6 +61,10 @@ public class EntityItem extends Entity {
         this.entity = new CanaryEntityItem(this); // CanaryMod: Wrap Entity
     }
 
+    protected boolean r_() {
+        return false;
+    }
+
     protected void h() {
         this.H().a(10, 5);
     }
@@ -72,7 +72,8 @@ public class EntityItem extends Entity {
     public void s_() {
         if (this.l() == null) {
             this.J();
-        } else {
+        }
+        else {
             super.s_();
             if (this.d > 0 && this.d != 32767) {
                 --this.d;
@@ -133,7 +134,8 @@ public class EntityItem extends Entity {
                 EntityDespawnHook hook = (EntityDespawnHook) new EntityDespawnHook(getCanaryEntity()).call();
                 if (!hook.isCanceled()) {
                     this.J();
-                } else {
+                }
+                else {
                     this.c = 0; // Reset Age
                 }
                 //
@@ -156,7 +158,8 @@ public class EntityItem extends Entity {
     private boolean a(EntityItem entityitem) {
         if (entityitem == this) {
             return false;
-        } else if (entityitem.ai() && this.ai()) {
+        }
+        else if (entityitem.ai() && this.ai()) {
             ItemStack itemstack = this.l();
             ItemStack itemstack1 = entityitem.l();
 
@@ -164,19 +167,26 @@ public class EntityItem extends Entity {
                 if (this.c != -32768 && entityitem.c != -32768) {
                     if (itemstack1.b() != itemstack.b()) {
                         return false;
-                    } else if (itemstack1.n() ^ itemstack.n()) {
+                    }
+                    else if (itemstack1.n() ^ itemstack.n()) {
                         return false;
-                    } else if (itemstack1.n() && !itemstack1.o().equals(itemstack.o())) {
+                    }
+                    else if (itemstack1.n() && !itemstack1.o().equals(itemstack.o())) {
                         return false;
-                    } else if (itemstack1.b() == null) {
+                    }
+                    else if (itemstack1.b() == null) {
                         return false;
-                    } else if (itemstack1.b().k() && itemstack1.i() != itemstack.i()) {
+                    }
+                    else if (itemstack1.b().k() && itemstack1.i() != itemstack.i()) {
                         return false;
-                    } else if (itemstack1.b < itemstack.b) {
+                    }
+                    else if (itemstack1.b < itemstack.b) {
                         return entityitem.a(this);
-                    } else if (itemstack1.b + itemstack.b > itemstack1.c()) {
+                    }
+                    else if (itemstack1.b + itemstack.b > itemstack1.c()) {
                         return false;
-                    } else {
+                    }
+                    else {
                         itemstack1.b += itemstack.b;
                         entityitem.d = Math.max(entityitem.d, this.d);
                         entityitem.c = Math.min(entityitem.c, this.c);
@@ -184,13 +194,16 @@ public class EntityItem extends Entity {
                         this.J();
                         return true;
                     }
-                } else {
+                }
+                else {
                     return false;
                 }
-            } else {
+            }
+            else {
                 return false;
             }
-        } else {
+        }
+        else {
             return false;
         }
     }
@@ -206,7 +219,8 @@ public class EntityItem extends Entity {
             }
 
             this.Y = true;
-        } else {
+        }
+        else {
             this.Y = false;
         }
 
@@ -220,9 +234,11 @@ public class EntityItem extends Entity {
     public boolean a(DamageSource damagesource, float f0) {
         if (this.b(damagesource)) {
             return false;
-        } else if (this.l() != null && this.l().b() == Items.bZ && damagesource.c()) {
+        }
+        else if (this.l() != null && this.l().b() == Items.bZ && damagesource.c()) {
             return false;
-        } else {
+        }
+        else {
             this.ac();
             this.e = (int) ((float) this.e - f0);
             if (this.e <= 0) {
@@ -347,7 +363,8 @@ public class EntityItem extends Entity {
             }
 
             return new ItemStack(Blocks.b);
-        } else {
+        }
+        else {
             return itemstack;
         }
     }

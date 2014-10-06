@@ -33,9 +33,9 @@ import java.util.Map;
 
 public abstract class EntityMinecart extends Entity implements IWorldNameable {
 
+    private static final int[][][] c = new int[][][]{{{0, 0, -1}, {0, 0, 1}}, {{-1, 0, 0}, {1, 0, 0}}, {{-1, -1, 0}, {1, 0, 0}}, {{-1, 0, 0}, {1, -1, 0}}, {{0, 0, -1}, {0, -1, 1}}, {{0, -1, -1}, {0, 0, 1}}, {{0, 0, 1}, {1, 0, 0}}, {{0, 0, 1}, {-1, 0, 0}}, {{0, 0, -1}, {-1, 0, 0}}, {{0, 0, -1}, {1, 0, 0}}};
     private boolean a;
     private String b;
-    private static final int[][][] c = new int[][][]{{{0, 0, -1}, {0, 0, 1}}, {{-1, 0, 0}, {1, 0, 0}}, {{-1, -1, 0}, {1, 0, 0}}, {{-1, 0, 0}, {1, -1, 0}}, {{0, 0, -1}, {0, -1, 1}}, {{0, -1, -1}, {0, 0, 1}}, {{0, 0, 1}, {1, 0, 0}}, {{0, 0, 1}, {-1, 0, 0}}, {{0, 0, -1}, {-1, 0, 0}}, {{0, 0, -1}, {1, 0, 0}}};
     private int d;
     private double e;
     private double f;
@@ -47,6 +47,17 @@ public abstract class EntityMinecart extends Entity implements IWorldNameable {
         super(world);
         this.k = true;
         this.a(0.98F, 0.7F);
+    }
+
+    public EntityMinecart(World world, double d0, double d1, double d2) {
+        this(world);
+        this.b(d0, d1, d2);
+        this.v = 0.0D;
+        this.w = 0.0D;
+        this.x = 0.0D;
+        this.p = d0;
+        this.q = d1;
+        this.r = d2;
     }
 
     public static EntityMinecart a(World world, double d0, double d1, double d2, EntityMinecart.EnumMinecartType entityminecart_enumminecarttype) {
@@ -97,17 +108,6 @@ public abstract class EntityMinecart extends Entity implements IWorldNameable {
 
     public boolean ae() {
         return true;
-    }
-
-    public EntityMinecart(World world, double d0, double d1, double d2) {
-        this(world);
-        this.b(d0, d1, d2);
-        this.v = 0.0D;
-        this.w = 0.0D;
-        this.x = 0.0D;
-        this.p = d0;
-        this.q = d1;
-        this.r = d2;
     }
 
     public double an() {
@@ -799,6 +799,7 @@ public abstract class EntityMinecart extends Entity implements IWorldNameable {
                 }
             }
         }
+    }
 
     public void a(float f0) {
         this.ac.b(19, Float.valueOf(f0));
@@ -897,22 +898,13 @@ public abstract class EntityMinecart extends Entity implements IWorldNameable {
 
         RIDEABLE("RIDEABLE", 0, 0, "MinecartRideable"), CHEST("CHEST", 1, 1, "MinecartChest"), FURNACE("FURNACE", 2, 2, "MinecartFurnace"), TNT("TNT", 3, 3, "MinecartTNT"), SPAWNER("SPAWNER", 4, 4, "MinecartSpawner"), HOPPER("HOPPER", 5, 5, "MinecartHopper"), COMMAND_BLOCK("COMMAND_BLOCK", 6, 6, "MinecartCommandBlock");
         private static final Map h = Maps.newHashMap();
+        private static final EntityMinecart.EnumMinecartType[] $VALUES = new EntityMinecart.EnumMinecartType[]{RIDEABLE, CHEST, FURNACE, TNT, SPAWNER, HOPPER, COMMAND_BLOCK};
         private final int i;
         private final String j;
-
-        private static final EntityMinecart.EnumMinecartType[] $VALUES = new EntityMinecart.EnumMinecartType[]{RIDEABLE, CHEST, FURNACE, TNT, SPAWNER, HOPPER, COMMAND_BLOCK};
 
         private EnumMinecartType(String p_i45847_1_, int p_i45847_2_, int p_i45847_3_, String p_i45847_4_) {
             this.i = p_i45847_3_;
             this.j = p_i45847_4_;
-        }
-
-        public int a() {
-            return this.i;
-        }
-
-        public String b() {
-            return this.j;
         }
 
         public static EntityMinecart.EnumMinecartType a(int p_a_0_) {
@@ -920,7 +912,6 @@ public abstract class EntityMinecart extends Entity implements IWorldNameable {
 
             return i0 == null ? RIDEABLE : i0;
         }
-
         static {
             EntityMinecart.EnumMinecartType[] aentityminecart_enumminecarttype = values();
             int i0 = aentityminecart_enumminecarttype.length;
@@ -931,6 +922,14 @@ public abstract class EntityMinecart extends Entity implements IWorldNameable {
                 h.put(Integer.valueOf(entityminecart_enumminecarttype1.a()), entityminecart_enumminecarttype1);
             }
 
+        }
+
+        public int a() {
+            return this.i;
+        }
+
+        public String b() {
+            return this.j;
         }
     }
 

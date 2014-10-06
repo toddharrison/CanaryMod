@@ -19,7 +19,7 @@ public class ModifiableAttributeInstance implements IAttributeInstance {
     private boolean g = true;
     private double h;
     private CanaryModifiedAttribute canaryModifiableAttribute;
-   
+
     public ModifiableAttributeInstance(BaseAttributeMap baseattributemap, IAttribute iattribute) {
         this.a = baseattributemap;
         this.b = iattribute;
@@ -71,7 +71,8 @@ public class ModifiableAttributeInstance implements IAttributeInstance {
     public void b(AttributeModifier attributemodifier) {
         if (this.a(attributemodifier.a()) != null) {
             throw new IllegalArgumentException("Modifier is already applied on this attribute!");
-        } else {
+        }
+        else {
             Object object = (Set) this.d.get(attributemodifier.b());
 
             if (object == null) {

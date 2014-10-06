@@ -3,7 +3,6 @@ package net.minecraft.entity.monster;
 import net.canarymod.api.entity.living.monster.CanaryMagmaCube;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.util.EnumParticleTypes;
@@ -91,7 +90,8 @@ public class EntityMagmaCube extends EntitySlime {
         this.ai = true;
     }
 
-    public void e(float f0, float f1) {}
+    public void e(float f0, float f1) {
+    }
 
     protected boolean cg() {
         return true;

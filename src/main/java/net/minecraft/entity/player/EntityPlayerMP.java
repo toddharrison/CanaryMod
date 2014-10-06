@@ -1,27 +1,17 @@
 package net.minecraft.entity.player;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.mojang.authlib.GameProfile;
 import io.netty.buffer.Unpooled;
 import net.canarymod.Canary;
 import net.canarymod.api.CanaryNetServerHandler;
 import net.canarymod.api.PlayerListEntry;
-import net.canarymod.api.chat.CanaryChatComponent;
-import net.canarymod.api.entity.living.animal.EntityAnimal;
 import net.canarymod.api.entity.living.humanoid.CanaryPlayer;
 import net.canarymod.api.entity.living.humanoid.Player;
-import net.canarymod.api.entity.vehicle.CanaryChestMinecart;
-import net.canarymod.api.inventory.CanaryAnimalInventory;
-import net.canarymod.api.inventory.CanaryEnderChestInventory;
-import net.canarymod.api.inventory.Inventory;
-import net.canarymod.api.inventory.NativeCustomStorageInventory;
 import net.canarymod.api.nbt.CompoundTag;
 import net.canarymod.api.packet.CanaryPacket;
 import net.canarymod.api.world.CanaryWorld;
-import net.canarymod.api.world.blocks.CanaryAnvil;
-import net.canarymod.api.world.blocks.CanaryDoubleChest;
-import net.canarymod.api.world.blocks.CanaryEnchantmentTable;
-import net.canarymod.api.world.blocks.CanaryWorkbench;
 import net.canarymod.api.world.position.Location;
 import net.canarymod.config.Configuration;
 import net.canarymod.config.WorldConfiguration;
@@ -33,6 +23,7 @@ import net.minecraft.block.BlockFence;
 import net.minecraft.block.BlockFenceGate;
 import net.minecraft.block.BlockWall;
 import net.minecraft.block.material.Material;
+import net.minecraft.command.ICommand;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.entity.Entity;
@@ -40,10 +31,11 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IMerchant;
 import net.minecraft.entity.passive.EntityHorse;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.*;
 import net.minecraft.item.EnumAction;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemMapBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -59,26 +51,20 @@ import net.minecraft.scoreboard.ScoreObjective;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.ItemInWorldManager;
-import net.minecraft.server.management.UserListOpsEntry;
 import net.minecraft.stats.AchievementList;
 import net.minecraft.stats.StatBase;
 import net.minecraft.stats.StatList;
 import net.minecraft.stats.StatisticsFile;
-import net.minecraft.tileentity.*;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntitySign;
 import net.minecraft.util.*;
 import net.minecraft.village.MerchantRecipeList;
-import net.minecraft.world.ChunkCoordIntPair;
-import net.minecraft.world.IInteractionObject;
-import net.minecraft.world.ILockableContainer;
-import net.minecraft.world.WorldServer;
-import net.minecraft.world.WorldSettings;
+import net.minecraft.world.*;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.Chunk;
-import org.apache.commons.io.Charsets;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
 import java.util.*;
 
 public class EntityPlayerMP extends EntityPlayer implements ICrafting {
@@ -116,7 +102,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
         BlockPos blockpos = worldserver.M();
 
         if (!worldserver.t.o() && worldserver.P().r() != WorldSettings.GameType.ADVENTURE) {
-            int i0 = Math.max(5, cfg.getSpawnProtectionSize() - 6);
+            int i0 = Math.max(5, minecraftserver.au() - 6);
             int i1 = MathHelper.c(worldserver.af().b((double) blockpos.n(), (double) blockpos.p()));
 
             if (i1 < i0) {
@@ -186,7 +172,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
             //if (MinecraftServer.I().ap()) {
             if (Configuration.getWorldConfig(o.getCanaryWorld().getFqName()).forceDefaultGamemode()) {
                 //this.c.a(MinecraftServer.I().i());
-                this.c.a(o.M().m());
+                this.c.a(o.P().m());
             } else {
                 this.c.a(WorldSettings.GameType.a(nbttagcompound.f("playerGameType")));
             }
@@ -334,12 +320,12 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
             if (this.bm() != this.bK || this.bL != this.bj.a() || this.bj.e() == 0.0F != this.bM) {
                 // updates your health when it is changed.
                 if (!Configuration.getWorldConfig(getCanaryWorld().getFqName()).isHealthEnabled()) {
-                    super.b(this.bt());
+                    super.e(this.bt(), 1.0F);
                     this.I = false;
                 } else {
-                    HealthChangeHook hook = (HealthChangeHook) new HealthChangeHook(getPlayer(), bQ, this.aS()).call();
+                    HealthChangeHook hook = (HealthChangeHook) new HealthChangeHook(getPlayer(), bK, this.bm()).call();
                     if (hook.isCanceled()) {
-                        super.b(this.bK);
+                        super.e(this.bK, 1.0F);
                     }
                 }
             }
@@ -369,7 +355,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
                 this.bA = 0;
                 this.bN = 0;
             } else if (this.bA != this.bN) {
-                ExperienceHook hook = (ExperienceHook) new ExperienceHook(getPlayer(), this.bT, this.bG).call();
+                ExperienceHook hook = (ExperienceHook) new ExperienceHook(getPlayer(), this.bN, this.bA).call();
 
                 if (!hook.isCanceled()) {
                     this.bN = this.bA;
@@ -431,7 +417,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
 
     public void a(DamageSource damagesource) {
         // CanaryMod: Start: PlayerDeathHook
-        PlayerDeathHook hook = (PlayerDeathHook) new PlayerDeathHook(getPlayer(), damagesource.getCanaryDamageSource(), this.aW().b().getWrapper()).call();
+        PlayerDeathHook hook = (PlayerDeathHook) new PlayerDeathHook(getPlayer(), damagesource.getCanaryDamageSource(), this.br().c().getWrapper()).call();
         // Check Death Message enabled
         if (Configuration.getServerConfig().isDeathMessageEnabled()) {
         //if (this.o.Q().b("showDeathMessages")) {
@@ -533,7 +519,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
                 this.b((StatBase) AchievementList.C);
                 BlockPos blockpos = this.b.a(i0).m();
 
-                if (chunkcoordinates != null) {
+                if (blockpos != null) {
                     // CanaryMod: Teleport Cause added
                                   this.a.a((double) blockpos.n(), (double) blockpos.o(), (double) blockpos.p(), 0.0F, 0.0F, getCanaryWorld().getType().getId(), getCanaryWorld().getName(), TeleportHook.TeleportCause.PORTAL);
                 }
@@ -639,10 +625,9 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
                 block = this.o.p(blockpos).c();
             }
         }
-    }
-
         super.a(d0, flag0, block, blockpos);
     }
+
     public void a(TileEntitySign tileentitysign) {
         tileentitysign.a((EntityPlayer) this);
         this.a.a((Packet) (new S36PacketSignEditorOpen(tileentitysign.v())));
@@ -817,7 +802,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
     public void a(StatBase statbase) {
         if (statbase != null) {
             // CanaryMod: StatGained
-            StatGainedHook hook = (StatGainedHook)new StatGainedHook(getPlayer(), statbase.getCanaryStat(), i0).call();
+            StatGainedHook hook = (StatGainedHook)new StatGainedHook(getPlayer(), statbase.getCanaryStat(), 0).call(); // TODO: is this right?
             if (hook.isCanceled()) {
                 return;
             }
@@ -893,7 +878,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
     }
 
     public void a(double d0, double d1, double d2) {
-        this.a.a(d0, d1, d2, this.y, this.z);
+        this.a..a(d0, d1, d2, this.y, this.z);
     }
 
     public void b(Entity entity) {
@@ -950,7 +935,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
             return Canary.commands().canUseCommand(getPlayer(), args[0]);
         }
         // Might be vanilla, so just assume
-        ICommand icommand = (ICommand) MinecraftServer.I().J().a().get(args[0]);
+        ICommand icommand = (ICommand) MinecraftServer.M().O().a().get(args[0]);
         if (icommand == null) {
             return false;
         }
@@ -987,7 +972,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
 
     public void z() {
         // CanaryMod: ReturnFromIdleHook
-        long timeidle = MinecraftServer.ar() - this.bX;
+        long timeidle = MinecraftServer.ax() - this.bR;
         if (timeidle > 10000) {// let them idle at least 10 seconds
             new ReturnFromIdleHook(this.getPlayer(), timeidle).call();
         }
@@ -1046,12 +1031,12 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
     // TODO update below here
     // CanaryMod: Override
     @Override
-    public GameProfile bJ() {
-        if (!this.getDisplayName().equals(this.b_())) {
+    public GameProfile cc() {
+        if (!this.getDisplayName().equals(this.d_())) {
             // We need a new GameProfile to change the display name
-            return new GameProfile(this.aB(), this.getDisplayName());
+            return new GameProfile(this.aJ(), this.getDisplayName());
         }
-        return super.i;
+        return super.bF;
     }
 
     @Override
@@ -1075,11 +1060,11 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
     }
 
     public boolean getColorEnabled() {
-        return this.bW;
+        return this.bQ;
     }
 
     public int getViewDistance() {
-        return this.bU;
+        return this.bO;
     }
 
     /**
@@ -1101,45 +1086,45 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
     }
 
     public void changeWorld(WorldServer srv) {
-        ChunkCoordinates chunkcoordinates = srv.l();
+        BlockPos blockpos = srv.m();
 
-        if (chunkcoordinates != null) {
-            this.a.a((double) chunkcoordinates.a, (double) chunkcoordinates.b, (double) chunkcoordinates.c, 0.0F, 0.0F, srv.getCanaryWorld().getType().getId(), srv.getCanaryWorld().getName(), TeleportHook.TeleportCause.PLUGIN);
+        if (blockpos != null) {
+            this.a.a(blockpos.n(), blockpos.o(), blockpos.p(), 0.0F, 0.0F, srv.getCanaryWorld().getType().getId(), srv.getCanaryWorld().getName(), TeleportHook.TeleportCause.PLUGIN);
         }
 
         // CanaryMod: Dimension switch hook.
-        Location goingTo = this.simulatePortalUse(srv.q, MinecraftServer.I().getWorld(this.getCanaryWorld().getName(), srv.q));
+        Location goingTo = this.simulatePortalUse(srv.I, MinecraftServer.M().getWorld(this.getCanaryWorld().getName(), srv.I));
         CancelableHook hook = (CancelableHook) new DimensionSwitchHook(this.getCanaryEntity(), this.getCanaryEntity().getLocation(), goingTo).call();
         if (hook.isCanceled()) {
             return;
         }//
 
-        this.b.ah().a(this, srv.getCanaryWorld().getName(), srv.getCanaryWorld().getType().getId());
-        this.bT = -1;
-        this.bQ = -1.0F;
-        this.bR = -1;
+        this.b.an().a(this, srv.getCanaryWorld().getName(), srv.getCanaryWorld().getType().getId());
+        this.bN = -1;
+        this.bK = -1.0F;
+        this.bL = -1;
     }
 
     // CanaryMod: Special methods for remote inventory opening
     public void openContainer(Container container, int containerId, int size) {
         this.bV();
-        this.a.a(new S2DPacketOpenWindow(this.bY, containerId, container.getInventory().getInventoryName(), size, true));
-        this.bo = container;
-        this.bo.d = this.bY;
-        this.bo.a((ICrafting) this);
+        this.a.a(new S2DPacketOpenWindow(this.bT, containerId, container.getInventory().getInventoryName(), size, true));
+        this.bi = container;
+        this.bi.d = this.bT;
+        this.bi.a((ICrafting) this);
     }
 
     public void openContainer(Container container, int containerId, int size, boolean flag) {
         this.bV();
-        this.a.a(new S2DPacketOpenWindow(this.bY, containerId, container.getInventory().getInventoryName(), size, flag));
-        this.bo = container;
-        this.bo.d = this.bY;
-        this.bo.a((ICrafting) this);
+        this.a.a(new S2DPacketOpenWindow(this.bT, containerId, container.getInventory().getInventoryName(), size, flag));
+        this.bi = container;
+        this.bi.d = this.bT;
+        this.bi.a((ICrafting) this);
     }
 
     public void setMetaData(CompoundTag meta) {
         this.metadata = meta;
-        this.b_();
+        this.d_();
     }
 
     public void saveMeta() {

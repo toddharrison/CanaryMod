@@ -4,15 +4,7 @@ import net.canarymod.api.entity.living.animal.CanaryCow;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIFollowParent;
-import net.minecraft.entity.ai.EntityAILookIdle;
-import net.minecraft.entity.ai.EntityAIMate;
-import net.minecraft.entity.ai.EntityAIPanic;
-import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.ai.EntityAITempt;
-import net.minecraft.entity.ai.EntityAIWander;
-import net.minecraft.entity.ai.EntityAIWatchClosest;
-import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.ai.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -37,10 +29,6 @@ public class EntityCow extends EntityAnimal {
         this.i.a(6, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
         this.i.a(7, new EntityAILookIdle(this));
         this.entity = new CanaryCow(this); // CanaryMod: Wrap Entity
-    }
-
-    public boolean bk() {
-        return true;
     }
 
     protected void aW() {
@@ -87,7 +75,8 @@ public class EntityCow extends EntityAnimal {
         for (i2 = 0; i2 < i1; ++i2) {
             if (this.au()) {
                 this.a(Items.bj, 1);
-            } else {
+            }
+            else {
                 this.a(Items.bi, 1);
             }
         }
@@ -100,12 +89,14 @@ public class EntityCow extends EntityAnimal {
         if (itemstack != null && itemstack.b() == Items.aw && !entityplayer.by.d) {
             if (itemstack.b-- == 1) {
                 entityplayer.bg.a(entityplayer.bg.c, new ItemStack(Items.aG));
-            } else if (!entityplayer.bg.a(new ItemStack(Items.aG))) {
+            }
+            else if (!entityplayer.bg.a(new ItemStack(Items.aG))) {
                 entityplayer.a(new ItemStack(Items.aG, 1, 0), false);
             }
 
             return true;
-        } else {
+        }
+        else {
             return super.a(entityplayer);
         }
     }

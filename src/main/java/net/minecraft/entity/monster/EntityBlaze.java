@@ -4,14 +4,7 @@ import net.canarymod.api.entity.living.monster.CanaryBlaze;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.ai.EntityAIHurtByTarget;
-import net.minecraft.entity.ai.EntityAILookIdle;
-import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
-import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
-import net.minecraft.entity.ai.EntityAIWander;
-import net.minecraft.entity.ai.EntityAIWatchClosest;
-import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.ai.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntitySmallFireball;
 import net.minecraft.init.Items;
@@ -27,7 +20,7 @@ public class EntityBlaze extends EntityMob {
 
     private float b = 0.5F;
     private int c;
-   
+
     public EntityBlaze(World world) {
         super(world);
         this.ab = true;
@@ -109,7 +102,8 @@ public class EntityBlaze extends EntityMob {
         super.E();
     }
 
-    public void e(float f0, float f1) {}
+    public void e(float f0, float f1) {
+    }
 
     protected Item A() {
         return Items.bv;
@@ -139,7 +133,8 @@ public class EntityBlaze extends EntityMob {
 
         if (flag0) {
             b0 = (byte) (b0 | 1);
-        } else {
+        }
+        else {
             b0 &= -2;
         }
 
@@ -155,7 +150,7 @@ public class EntityBlaze extends EntityMob {
         private EntityBlaze a = EntityBlaze.this;
         private int b;
         private int c;
-      
+
         public AIFireballAttack() {
             this.a(3);
         }
@@ -186,7 +181,8 @@ public class EntityBlaze extends EntityMob {
                 }
 
                 this.a.q().a(entitylivingbase1.s, entitylivingbase1.t, entitylivingbase1.u, 1.0D);
-            } else if (d0 < 256.0D) {
+            }
+            else if (d0 < 256.0D) {
                 double d1 = entitylivingbase1.s - this.a.s;
                 double d2 = entitylivingbase1.aQ().b + (double) (entitylivingbase1.K / 2.0F) - (this.a.t + (double) (this.a.K / 2.0F));
                 double d3 = entitylivingbase1.u - this.a.u;
@@ -196,9 +192,11 @@ public class EntityBlaze extends EntityMob {
                     if (this.b == 1) {
                         this.c = 60;
                         this.a.a(true);
-                    } else if (this.b <= 4) {
+                    }
+                    else if (this.b <= 4) {
                         this.c = 6;
-                    } else {
+                    }
+                    else {
                         this.c = 100;
                         this.b = 0;
                         this.a.a(false);
@@ -219,7 +217,8 @@ public class EntityBlaze extends EntityMob {
                 }
 
                 this.a.p().a(entitylivingbase1, 10.0F, 10.0F);
-            } else {
+            }
+            else {
                 this.a.s().n();
                 this.a.q().a(entitylivingbase1.s, entitylivingbase1.t, entitylivingbase1.u, 1.0D);
             }

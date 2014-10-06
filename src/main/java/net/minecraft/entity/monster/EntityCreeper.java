@@ -1,21 +1,12 @@
 package net.minecraft.entity.monster;
 
+import com.google.common.base.Predicate;
 import net.canarymod.api.entity.living.monster.CanaryCreeper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIAttackOnCollide;
-import net.minecraft.entity.ai.EntityAIAvoidEntity;
-import net.minecraft.entity.ai.EntityAICreeperSwell;
-import net.minecraft.entity.ai.EntityAIHurtByTarget;
-import net.minecraft.entity.ai.EntityAILookIdle;
-import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
-import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.ai.EntityAIWander;
-import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.ai.*;
 import net.minecraft.entity.effect.EntityLightningBolt;
-import net.minecraft.entity.monster.EntityMob;
-import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -28,10 +19,10 @@ import net.minecraft.world.World;
 
 public class EntityCreeper extends EntityMob {
 
-    private int b;
-    private int c;
     public int bk = 30; // CanaryMod: private -> public // Fuse
     public int bl = 3; // CanaryMod: private -> public // Power
+    private int b;
+    private int c;
     private int bm = 0;
 
     public EntityCreeper(World world) {
@@ -154,7 +145,8 @@ public class EntityCreeper extends EntityMob {
             int i2 = i0 + this.V.nextInt(i1 - i0 + 1);
 
             this.a(Item.b(i2), 1);
-        } else if (damagesource.j() instanceof EntityCreeper && damagesource.j() != this && ((EntityCreeper) damagesource.j()).n() && ((EntityCreeper) damagesource.j()).cn()) {
+        }
+        else if (damagesource.j() instanceof EntityCreeper && damagesource.j() != this && ((EntityCreeper) damagesource.j()).n() && ((EntityCreeper) damagesource.j()).cn()) {
             ((EntityCreeper) damagesource.j()).co();
             this.a(new ItemStack(Items.bX, 1, 4), 0.0F);
         }

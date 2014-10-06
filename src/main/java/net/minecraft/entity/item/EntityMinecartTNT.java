@@ -6,11 +6,9 @@ import net.canarymod.api.entity.vehicle.Minecart;
 import net.canarymod.api.entity.vehicle.TNTMinecart;
 import net.canarymod.hook.entity.MinecartActivateHook;
 import net.canarymod.hook.world.TNTActivateHook;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -49,7 +47,8 @@ public class EntityMinecartTNT extends EntityMinecart {
         if (this.a > 0) {
             --this.a;
             this.o.a(EnumParticleTypes.SMOKE_NORMAL, this.s, this.t + 0.5D, this.u, 0.0D, 0.0D, 0.0D, new int[0]);
-        } else if (this.a == 0) {
+        }
+        else if (this.a == 0) {
             this.b(this.v * this.v + this.x * this.x);
         }
 

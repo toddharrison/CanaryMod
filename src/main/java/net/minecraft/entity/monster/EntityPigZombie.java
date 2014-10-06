@@ -2,16 +2,11 @@ package net.minecraft.entity.monster;
 
 import net.canarymod.api.entity.living.monster.CanaryPigZombie;
 import net.canarymod.hook.entity.MobTargetHook;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.IEntityLivingData;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
-import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -21,7 +16,6 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 
-import java.util.List;
 import java.util.UUID;
 
 public class EntityPigZombie extends EntityZombie {
@@ -31,7 +25,7 @@ public class EntityPigZombie extends EntityZombie {
     public int bl; // CanaryMod: private -> public
     private int bm;
     private UUID bn;
-   
+
     public EntityPigZombie(World world) {
         super(world);
         this.ab = true;
@@ -71,7 +65,8 @@ public class EntityPigZombie extends EntityZombie {
             }
 
             --this.bl;
-        } else if (iattributeinstance.a(bk)) {
+        }
+        else if (iattributeinstance.a(bk)) {
             iattributeinstance.c(bk);
         }
 
@@ -103,7 +98,8 @@ public class EntityPigZombie extends EntityZombie {
         nbttagcompound.a("Anger", (short) this.bl);
         if (this.bn != null) {
             nbttagcompound.a("HurtBy", this.bn.toString());
-        } else {
+        }
+        else {
             nbttagcompound.a("HurtBy", "");
         }
 
@@ -130,7 +126,8 @@ public class EntityPigZombie extends EntityZombie {
     public boolean a(DamageSource damagesource, float f0) {
         if (this.b(damagesource)) {
             return false;
-        } else {
+        }
+        else {
             Entity entity = damagesource.j();
 
             if (entity instanceof EntityPlayer) {

@@ -3,7 +3,6 @@ package net.minecraft.entity.item;
 import net.canarymod.api.entity.throwable.CanaryXPBottle;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MovingObjectPosition;
