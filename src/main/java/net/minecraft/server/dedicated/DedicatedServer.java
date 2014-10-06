@@ -71,7 +71,7 @@ public class DedicatedServer extends MinecraftServer implements IServer {
                     reader = new ConsoleReader("Minecraft", System.in, System.out, new UnsupportedTerminal());
                 }
                 catch (IOException ex) {
-                    i.fatal("Could not initialize ConsoleReader", ex);
+                    j.fatal("Could not initialize ConsoleReader", ex);
                 }
             }
         }
@@ -487,7 +487,7 @@ public class DedicatedServer extends MinecraftServer implements IServer {
                 ((CanaryServer)Canary.getServer()).setCurrentGUI(MinecraftServerGui.a(this));
             }
             Canary.getServer().getCurrentGUI().start();
-            this.q = true;
+            this.r = true;
             MinecraftServer.setHeadless(false);
         }
         catch (Exception ex) {
@@ -655,7 +655,7 @@ public class DedicatedServer extends MinecraftServer implements IServer {
     }
 
     public long aQ() {
-        return Configuration.getServerConfig().getMaxTickTime()//this.n.a("max-tick-time", TimeUnit.MINUTES.toMillis(1L));
+        return Configuration.getServerConfig().getMaxTickTime(); //this.n.a("max-tick-time", TimeUnit.MINUTES.toMillis(1L));
     }
 
     public ServerConfigurationManager an() {

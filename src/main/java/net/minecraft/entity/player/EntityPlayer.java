@@ -69,7 +69,7 @@ public abstract class EntityPlayer extends EntityLivingBase {
     private InventoryEnderChest a = new InventoryEnderChest();
     public Container bh;
     public Container bi;
-    protected FoodStats bj = new FoodStats();
+    protected FoodStats bj = new FoodStats(this); // CanaryMod: Constructor change
     protected int bk;
     public float bl;
     public float bm;
@@ -114,7 +114,7 @@ public abstract class EntityPlayer extends EntityLivingBase {
         this.bi = this.bh;
         BlockPos blockpos = world.M();
 
-        this.b((double) blockpos.n() + 0.5D, (double) (blockpos.o() + 1), (double) blockpos.p() + 0.5D, 0.0F, 0.0F);
+        this.b((double)blockpos.n() + 0.5D, (double)(blockpos.o() + 1), (double)blockpos.p() + 0.5D, 0.0F, 0.0F);
         this.aT = 180.0F;
         this.X = 20;
         this.entity = new CanaryHuman(this) { // CanaryMod: Special Case wrap
@@ -130,7 +130,7 @@ public abstract class EntityPlayer extends EntityLivingBase {
 
             @Override
             public EntityPlayer getHandle() {
-                return (EntityPlayer) entity;
+                return (EntityPlayer)entity;
             }
         };
     }
@@ -143,10 +143,10 @@ public abstract class EntityPlayer extends EntityLivingBase {
 
     protected void h() {
         super.h();
-        this.ac.a(16, Byte.valueOf((byte) 0));
+        this.ac.a(16, Byte.valueOf((byte)0));
         this.ac.a(17, Float.valueOf(0.0F));
         this.ac.a(18, Integer.valueOf(0));
-        this.ac.a(10, Byte.valueOf((byte) 0));
+        this.ac.a(10, Byte.valueOf((byte)0));
     }
 
     public boolean bR() {
@@ -167,7 +167,6 @@ public abstract class EntityPlayer extends EntityLivingBase {
         if (!this.o.D) {
             this.f(false);
         }
-
     }
 
     public boolean bV() {
@@ -191,7 +190,8 @@ public abstract class EntityPlayer extends EntityLivingBase {
                 if (--this.h == 0 && !this.o.D) {
                     this.s();
                 }
-            } else {
+            }
+            else {
                 this.bU();
             }
         }
@@ -209,11 +209,13 @@ public abstract class EntityPlayer extends EntityLivingBase {
             if (!this.o.D) {
                 if (!this.p()) {
                     this.a(true, true, false);
-                } else if (this.o.w()) {
+                }
+                else if (this.o.w()) {
                     this.a(false, true, true);
                 }
             }
-        } else if (this.b > 0) {
+        }
+        else if (this.b > 0) {
             ++this.b;
             if (this.b >= 110) {
                 this.b = 0;
@@ -284,7 +286,6 @@ public abstract class EntityPlayer extends EntityLivingBase {
         if (d4 != this.s || d5 != this.u) {
             this.b(d4, this.t, d5);
         }
-
     }
 
     public int L() {
@@ -314,26 +315,26 @@ public abstract class EntityPlayer extends EntityLivingBase {
 
         if (itemstack.m() == EnumAction.EAT) {
             for (int i1 = 0; i1 < i0; ++i1) {
-                Vec3 vec3 = new Vec3(((double) this.V.nextFloat() - 0.5D) * 0.1D, Math.random() * 0.1D + 0.1D, 0.0D);
+                Vec3 vec3 = new Vec3(((double)this.V.nextFloat() - 0.5D) * 0.1D, Math.random() * 0.1D + 0.1D, 0.0D);
 
                 vec3 = vec3.a(-this.z * 3.1415927F / 180.0F);
                 vec3 = vec3.b(-this.y * 3.1415927F / 180.0F);
-                double d0 = (double) (-this.V.nextFloat()) * 0.6D - 0.3D;
-                Vec3 vec31 = new Vec3(((double) this.V.nextFloat() - 0.5D) * 0.3D, d0, 0.6D);
+                double d0 = (double)(-this.V.nextFloat()) * 0.6D - 0.3D;
+                Vec3 vec31 = new Vec3(((double)this.V.nextFloat() - 0.5D) * 0.3D, d0, 0.6D);
 
                 vec31 = vec31.a(-this.z * 3.1415927F / 180.0F);
                 vec31 = vec31.b(-this.y * 3.1415927F / 180.0F);
-                vec31 = vec31.b(this.s, this.t + (double) this.aR(), this.u);
+                vec31 = vec31.b(this.s, this.t + (double)this.aR(), this.u);
                 if (itemstack.f()) {
-                    this.o.a(EnumParticleTypes.ITEM_CRACK, vec31.a, vec31.b, vec31.c, vec3.a, vec3.b + 0.05D, vec3.c, new int[] { Item.b(itemstack.b()), itemstack.i()});
-                } else {
-                    this.o.a(EnumParticleTypes.ITEM_CRACK, vec31.a, vec31.b, vec31.c, vec3.a, vec3.b + 0.05D, vec3.c, new int[] { Item.b(itemstack.b())});
+                    this.o.a(EnumParticleTypes.ITEM_CRACK, vec31.a, vec31.b, vec31.c, vec3.a, vec3.b + 0.05D, vec3.c, new int[]{ Item.b(itemstack.b()), itemstack.i() });
+                }
+                else {
+                    this.o.a(EnumParticleTypes.ITEM_CRACK, vec31.a, vec31.b, vec31.c, vec3.a, vec3.b + 0.05D, vec3.c, new int[]{ Item.b(itemstack.b()) });
                 }
             }
 
-            this.a("random.eat", 0.5F + 0.5F * (float) this.V.nextInt(2), (this.V.nextFloat() - this.V.nextFloat()) * 0.2F + 1.0F);
+            this.a("random.eat", 0.5F + 0.5F * (float)this.V.nextInt(2), (this.V.nextFloat() - this.V.nextFloat()) * 0.2F + 1.0F);
         }
-
     }
 
     protected void s() {
@@ -351,7 +352,6 @@ public abstract class EntityPlayer extends EntityLivingBase {
 
             this.bU();
         }
-
     }
 
     protected boolean bC() {
@@ -364,9 +364,10 @@ public abstract class EntityPlayer extends EntityLivingBase {
 
     public void ak() {
         if (!this.o.D && this.aw()) {
-            this.a((Entity) null);
+            this.a((Entity)null);
             this.c(false);
-        } else {
+        }
+        else {
             double d0 = this.s;
             double d1 = this.t;
             double d2 = this.u;
@@ -380,9 +381,8 @@ public abstract class EntityPlayer extends EntityLivingBase {
             if (this.m instanceof EntityPig) {
                 this.z = f1;
                 this.y = f0;
-                this.aG = ((EntityPig) this.m).aG;
+                this.aG = ((EntityPig)this.m).aG;
             }
-
         }
     }
 
@@ -413,17 +413,17 @@ public abstract class EntityPlayer extends EntityLivingBase {
         IAttributeInstance iattributeinstance = this.a(SharedMonsterAttributes.d);
 
         if (!this.o.D) {
-            iattributeinstance.a((double) this.by.b());
+            iattributeinstance.a((double)this.by.b());
         }
 
         this.aK = this.bD;
         if (this.ax()) {
-            this.aK = (float) ((double) this.aK + (double) this.bD * 0.3D);
+            this.aK = (float)((double)this.aK + (double)this.bD * 0.3D);
         }
 
-        this.j((float) iattributeinstance.e());
+        this.j((float)iattributeinstance.e());
         float f0 = MathHelper.a(this.v * this.v + this.x * this.x);
-        float f1 = (float) (Math.atan(-this.w * 0.20000000298023224D) * 15.0D);
+        float f1 = (float)(Math.atan(-this.w * 0.20000000298023224D) * 15.0D);
 
         if (f0 > 0.1F) {
             f0 = 0.1F;
@@ -444,21 +444,21 @@ public abstract class EntityPlayer extends EntityLivingBase {
 
             if (this.m != null && !this.m.I) {
                 axisalignedbb = this.aQ().a(this.m.aQ()).b(1.0D, 0.0D, 1.0D);
-            } else {
+            }
+            else {
                 axisalignedbb = this.aQ().b(1.0D, 0.5D, 1.0D);
             }
 
-            List list = this.o.b((Entity) this, axisalignedbb);
+            List list = this.o.b((Entity)this, axisalignedbb);
 
             for (int i0 = 0; i0 < list.size(); ++i0) {
-                Entity entity = (Entity) list.get(i0);
+                Entity entity = (Entity)list.get(i0);
 
                 if (!entity.I) {
                     this.d(entity);
                 }
             }
         }
-
     }
 
     private void d(Entity entity) {
@@ -493,9 +493,10 @@ public abstract class EntityPlayer extends EntityLivingBase {
         }
 
         if (damagesource != null) {
-            this.v = (double) (-MathHelper.b((this.au + this.y) * 3.1415927F / 180.0F) * 0.1F);
-            this.x = (double) (-MathHelper.a((this.au + this.y) * 3.1415927F / 180.0F) * 0.1F);
-        } else {
+            this.v = (double)(-MathHelper.b((this.au + this.y) * 3.1415927F / 180.0F) * 0.1F);
+            this.x = (double)(-MathHelper.a((this.au + this.y) * 3.1415927F / 180.0F) * 0.1F);
+        }
+        else {
             this.v = this.x = 0.0D;
         }
 
@@ -519,19 +520,19 @@ public abstract class EntityPlayer extends EntityLivingBase {
             this.b(StatList.B);
             collection.addAll(this.co().a(IScoreObjectiveCriteria.e));
             collection.addAll(this.e(entity));
-        } else {
+        }
+        else {
             this.b(StatList.z);
         }
 
         Iterator iterator = collection.iterator();
 
         while (iterator.hasNext()) {
-            ScoreObjective scoreobjective = (ScoreObjective) iterator.next();
+            ScoreObjective scoreobjective = (ScoreObjective)iterator.next();
             Score score = this.co().c(this.d_(), scoreobjective);
 
             score.a();
         }
-
     }
 
     private Collection e(Entity entity) {
@@ -544,7 +545,7 @@ public abstract class EntityPlayer extends EntityLivingBase {
                 Iterator iterator = this.co().a(IScoreObjectiveCriteria.i[i0]).iterator();
 
                 while (iterator.hasNext()) {
-                    ScoreObjective scoreobjective = (ScoreObjective) iterator.next();
+                    ScoreObjective scoreobjective = (ScoreObjective)iterator.next();
                     Score score = this.co().c(entity.d_(), scoreobjective);
 
                     score.a();
@@ -576,10 +577,12 @@ public abstract class EntityPlayer extends EntityLivingBase {
     public EntityItem a(ItemStack itemstack, boolean flag0, boolean flag1) {
         if (itemstack == null) {
             return null;
-        } else if (itemstack.b == 0) {
+        }
+        else if (itemstack.b == 0) {
             return null;
-        } else {
-            double d0 = this.t - 0.30000001192092896D + (double) this.aR();
+        }
+        else {
+            double d0 = this.t - 0.30000001192092896D + (double)this.aR();
             EntityItem entityitem = new EntityItem(this.o, this.s, d0, this.u, itemstack);
 
             entityitem.a(40);
@@ -593,24 +596,25 @@ public abstract class EntityPlayer extends EntityLivingBase {
             if (flag0) {
                 f0 = this.V.nextFloat() * 0.5F;
                 f1 = this.V.nextFloat() * 3.1415927F * 2.0F;
-                entityitem.v = (double) (-MathHelper.a(f1) * f0);
-                entityitem.x = (double) (MathHelper.b(f1) * f0);
+                entityitem.v = (double)(-MathHelper.a(f1) * f0);
+                entityitem.x = (double)(MathHelper.b(f1) * f0);
                 entityitem.w = 0.20000000298023224D;
-            } else {
+            }
+            else {
                 f0 = 0.3F;
-                entityitem.v = (double) (-MathHelper.a(this.y / 180.0F * 3.1415927F) * MathHelper.b(this.z / 180.0F * 3.1415927F) * f0);
-                entityitem.x = (double) (MathHelper.b(this.y / 180.0F * 3.1415927F) * MathHelper.b(this.z / 180.0F * 3.1415927F) * f0);
-                entityitem.w = (double) (-MathHelper.a(this.z / 180.0F * 3.1415927F) * f0 + 0.1F);
+                entityitem.v = (double)(-MathHelper.a(this.y / 180.0F * 3.1415927F) * MathHelper.b(this.z / 180.0F * 3.1415927F) * f0);
+                entityitem.x = (double)(MathHelper.b(this.y / 180.0F * 3.1415927F) * MathHelper.b(this.z / 180.0F * 3.1415927F) * f0);
+                entityitem.w = (double)(-MathHelper.a(this.z / 180.0F * 3.1415927F) * f0 + 0.1F);
                 f1 = this.V.nextFloat() * 3.1415927F * 2.0F;
                 f0 = 0.02F * this.V.nextFloat();
-                entityitem.v += Math.cos((double) f1) * (double) f0;
-                entityitem.w += (double) ((this.V.nextFloat() - this.V.nextFloat()) * 0.1F);
-                entityitem.x += Math.sin((double) f1) * (double) f0;
+                entityitem.v += Math.cos((double)f1) * (double)f0;
+                entityitem.w += (double)((this.V.nextFloat() - this.V.nextFloat()) * 0.1F);
+                entityitem.x += Math.sin((double)f1) * (double)f0;
             }
 
             // CanaryMod: ItemDrop
             if (this instanceof EntityPlayerMP) { // NO NPCs
-                ItemDropHook hook = (ItemDropHook) new ItemDropHook(((EntityPlayerMP) this).getPlayer(), (net.canarymod.api.entity.EntityItem) entityitem.getCanaryEntity()).call();
+                ItemDropHook hook = (ItemDropHook)new ItemDropHook(((EntityPlayerMP)this).getPlayer(), (net.canarymod.api.entity.EntityItem)entityitem.getCanaryEntity()).call();
                 if (!hook.isCanceled()) {
                     CanaryItem droppedItem = entityitem.f().getCanaryItem();
 
@@ -630,7 +634,7 @@ public abstract class EntityPlayer extends EntityLivingBase {
     }
 
     protected void a(EntityItem entityitem) {
-        this.o.d((Entity) entityitem);
+        this.o.d((Entity)entityitem);
     }
 
     public float a(Block block) {
@@ -641,12 +645,12 @@ public abstract class EntityPlayer extends EntityLivingBase {
             ItemStack itemstack = this.bg.h();
 
             if (i0 > 0 && itemstack != null) {
-                f0 += (float) (i0 * i0 + 1);
+                f0 += (float)(i0 * i0 + 1);
             }
         }
 
         if (this.a(Potion.e)) {
-            f0 *= 1.0F + (float) (this.b(Potion.e).c() + 1) * 0.2F;
+            f0 *= 1.0F + (float)(this.b(Potion.e).c() + 1) * 0.2F;
         }
 
         if (this.a(Potion.f)) {
@@ -725,15 +729,14 @@ public abstract class EntityPlayer extends EntityLivingBase {
 
             this.a.a(nbttaglist1);
         }
-
     }
 
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.a("Inventory", (NBTBase) this.bg.a(new NBTTagList()));
+        nbttagcompound.a("Inventory", (NBTBase)this.bg.a(new NBTTagList()));
         nbttagcompound.a("SelectedItemSlot", this.bg.c);
         nbttagcompound.a("Sleeping", this.bu);
-        nbttagcompound.a("SleepTimer", (short) this.b);
+        nbttagcompound.a("SleepTimer", (short)this.b);
         nbttagcompound.a("XpP", this.bB);
         nbttagcompound.a("XpLevel", this.bz);
         nbttagcompound.a("XpTotal", this.bA);
@@ -750,27 +753,29 @@ public abstract class EntityPlayer extends EntityLivingBase {
 
         this.bj.b(nbttagcompound);
         this.by.a(nbttagcompound);
-        nbttagcompound.a("EnderItems", (NBTBase) this.a.h());
+        nbttagcompound.a("EnderItems", (NBTBase)this.a.h());
         //Make sure meta is saved right
         saveMeta();
         ItemStack itemstack = this.bg.h();
 
         if (itemstack != null && itemstack.b() != null) {
-            nbttagcompound.a("SelectedItem", (NBTBase) itemstack.b(new NBTTagCompound()));
+            nbttagcompound.a("SelectedItem", (NBTBase)itemstack.b(new NBTTagCompound()));
         }
-
     }
 
     public boolean a(DamageSource damagesource, float f0) {
         if (this.b(damagesource)) {
             return false;
-        } else if (this.by.a && !damagesource.g()) {
+        }
+        else if (this.by.a && !damagesource.g()) {
             return false;
-        } else {
+        }
+        else {
             this.aO = 0;
             if (this.bm() <= 0.0F) {
                 return false;
-            } else {
+            }
+            else {
                 if (this.bI() && !this.o.D) {
                     this.a(true, true, false);
                 }
@@ -791,11 +796,12 @@ public abstract class EntityPlayer extends EntityLivingBase {
 
                 if (f0 == 0.0F) {
                     return false;
-                } else {
+                }
+                else {
                     Entity entity = damagesource.j();
 
-                    if (entity instanceof EntityArrow && ((EntityArrow) entity).c != null) {
-                        entity = ((EntityArrow) entity).c;
+                    if (entity instanceof EntityArrow && ((EntityArrow)entity).c != null) {
+                        entity = ((EntityArrow)entity).c;
                     }
 
                     return super.a(damagesource, f0);
@@ -832,7 +838,7 @@ public abstract class EntityPlayer extends EntityLivingBase {
             }
         }
 
-        return (float) i0 / (float) this.bg.b.length;
+        return (float)i0 / (float)this.bg.b.length;
     }
 
     protected void d(DamageSource damagesource, float f0) {
@@ -856,39 +862,46 @@ public abstract class EntityPlayer extends EntityLivingBase {
                 if (f0 < 3.4028235E37F) {
                     this.a(StatList.x, Math.round(f0 * 10.0F));
                 }
-
             }
         }
     }
 
-    public void a(TileEntitySign tileentitysign) {}
+    public void a(TileEntitySign tileentitysign) {
+    }
 
-    public void a(CommandBlockLogic commandblocklogic) {}
+    public void a(CommandBlockLogic commandblocklogic) {
+    }
 
-    public void a(IMerchant imerchant) {}
+    public void a(IMerchant imerchant) {
+    }
 
-    public void a(IInventory iinventory) {}
+    public void a(IInventory iinventory) {
+    }
 
-    public void a(EntityHorse entityhorse, IInventory iinventory) {}
+    public void a(EntityHorse entityhorse, IInventory iinventory) {
+    }
 
-    public void a(IInteractionObject iinteractionobject) {}
+    public void a(IInteractionObject iinteractionobject) {
+    }
 
-    public void a(ItemStack itemstack) {}
+    public void a(ItemStack itemstack) {
+    }
 
     public boolean u(Entity entity) {
         // CanaryMod: EntityRightClickHook
-        EntityRightClickHook hook = (EntityRightClickHook) new EntityRightClickHook(entity.getCanaryEntity(), ((EntityPlayerMP) this).getPlayer()).call();
+        EntityRightClickHook hook = (EntityRightClickHook)new EntityRightClickHook(entity.getCanaryEntity(), ((EntityPlayerMP)this).getPlayer()).call();
         if (hook.isCanceled()) {
             return false;
         }
         //
         if (this.v()) {
             if (entity instanceof IInventory) {
-                this.a((IInventory) entity);
+                this.a((IInventory)entity);
             }
 
             return false;
-        } else {
+        }
+        else {
             ItemStack itemstack = this.bY();
             ItemStack itemstack1 = itemstack != null ? itemstack.k() : null;
 
@@ -898,7 +911,7 @@ public abstract class EntityPlayer extends EntityLivingBase {
                         itemstack = itemstack1;
                     }
 
-                    if (itemstack.a(this, (EntityLivingBase) entity)) {
+                    if (itemstack.a(this, (EntityLivingBase)entity)) {
                         if (itemstack.b <= 0 && !this.by.d) {
                             this.bZ();
                         }
@@ -908,11 +921,13 @@ public abstract class EntityPlayer extends EntityLivingBase {
                 }
 
                 return false;
-            } else {
+            }
+            else {
                 if (itemstack != null && itemstack == this.bY()) {
                     if (itemstack.b <= 0 && !this.by.d) {
                         this.bZ();
-                    } else if (itemstack.b < itemstack1.b && this.by.d) {
+                    }
+                    else if (itemstack.b < itemstack1.b && this.by.d) {
                         itemstack.b = itemstack1.b;
                     }
                 }
@@ -937,7 +952,7 @@ public abstract class EntityPlayer extends EntityLivingBase {
             }
         }
         //
-        this.bg.a(this.bg.c, (ItemStack) null);
+        this.bg.a(this.bg.c, (ItemStack)null);
     }
 
     public double am() {
@@ -947,17 +962,18 @@ public abstract class EntityPlayer extends EntityLivingBase {
     public void f(Entity entity) {
         if (entity.aE()) {
             if (!entity.l(this)) {
-                float f0 = (float) this.a(SharedMonsterAttributes.e).e();
+                float f0 = (float)this.a(SharedMonsterAttributes.e).e();
                 byte b0 = 0;
                 float f1 = 0.0F;
 
                 if (entity instanceof EntityLivingBase) {
-                    f1 = EnchantmentHelper.a(this.bz(), ((EntityLivingBase) entity).by());
-                } else {
+                    f1 = EnchantmentHelper.a(this.bz(), ((EntityLivingBase)entity).by());
+                }
+                else {
                     f1 = EnchantmentHelper.a(this.bz(), EnumCreatureAttribute.UNDEFINED);
                 }
 
-                int i0 = b0 + EnchantmentHelper.a((EntityLivingBase) this);
+                int i0 = b0 + EnchantmentHelper.a((EntityLivingBase)this);
 
                 if (this.ax()) {
                     ++i0;
@@ -972,7 +988,7 @@ public abstract class EntityPlayer extends EntityLivingBase {
 
                     f0 += f1;
                     boolean flag1 = false;
-                    int i1 = EnchantmentHelper.b((EntityLivingBase) this);
+                    int i1 = EnchantmentHelper.b((EntityLivingBase)this);
 
                     if (entity instanceof EntityLivingBase && i1 > 0 && !entity.au()) {
                         flag1 = true;
@@ -986,14 +1002,14 @@ public abstract class EntityPlayer extends EntityLivingBase {
 
                     if (flag2) {
                         if (i0 > 0) {
-                            entity.g((double) (-MathHelper.a(this.y * 3.1415927F / 180.0F) * (float) i0 * 0.5F), 0.1D, (double) (MathHelper.b(this.y * 3.1415927F / 180.0F) * (float) i0 * 0.5F));
+                            entity.g((double)(-MathHelper.a(this.y * 3.1415927F / 180.0F) * (float)i0 * 0.5F), 0.1D, (double)(MathHelper.b(this.y * 3.1415927F / 180.0F) * (float)i0 * 0.5F));
                             this.v *= 0.6D;
                             this.x *= 0.6D;
                             this.d(false);
                         }
 
                         if (entity instanceof EntityPlayerMP && entity.G) {
-                            ((EntityPlayerMP) entity).a.a((Packet) (new S12PacketEntityVelocity(entity)));
+                            ((EntityPlayerMP)entity).a.a((Packet)(new S12PacketEntityVelocity(entity)));
                             entity.G = false;
                             entity.v = d0;
                             entity.w = d1;
@@ -1009,12 +1025,12 @@ public abstract class EntityPlayer extends EntityLivingBase {
                         }
 
                         if (f0 >= 18.0F) {
-                            this.b((StatBase) AchievementList.F);
+                            this.b((StatBase)AchievementList.F);
                         }
 
                         this.p(entity);
                         if (entity instanceof EntityLivingBase) {
-                            EnchantmentHelper.a((EntityLivingBase) entity, (Entity) this);
+                            EnchantmentHelper.a((EntityLivingBase)entity, (Entity)this);
                         }
 
                         EnchantmentHelper.b(this, entity);
@@ -1022,15 +1038,15 @@ public abstract class EntityPlayer extends EntityLivingBase {
                         Object object = entity;
 
                         if (entity instanceof EntityDragonPart) {
-                            IEntityMultiPart ientitymultipart = ((EntityDragonPart) entity).a;
+                            IEntityMultiPart ientitymultipart = ((EntityDragonPart)entity).a;
 
                             if (ientitymultipart instanceof EntityLivingBase) {
-                                object = (EntityLivingBase) ientitymultipart;
+                                object = (EntityLivingBase)ientitymultipart;
                             }
                         }
 
                         if (itemstack != null && object instanceof EntityLivingBase) {
-                            itemstack.a((EntityLivingBase) object, this);
+                            itemstack.a((EntityLivingBase)object, this);
                             if (itemstack.b <= 0) {
                                 this.bZ();
                             }
@@ -1044,18 +1060,20 @@ public abstract class EntityPlayer extends EntityLivingBase {
                         }
 
                         this.a(0.3F);
-                    } else if (flag1) {
+                    }
+                    else if (flag1) {
                         entity.N();
                     }
                 }
-
             }
         }
     }
 
-    public void b(Entity entity) {}
+    public void b(Entity entity) {
+    }
 
-    public void c(Entity entity) {}
+    public void c(Entity entity) {
+    }
 
     public void J() {
         super.J();
@@ -1063,7 +1081,6 @@ public abstract class EntityPlayer extends EntityLivingBase {
         if (this.bi != null) {
             this.bi.b(this);
         }
-
     }
 
     public boolean aj() {
@@ -1088,13 +1105,13 @@ public abstract class EntityPlayer extends EntityLivingBase {
                 return EntityPlayer.EnumStatus.NOT_POSSIBLE_NOW;
             }
 
-            if (Math.abs(this.s - (double) blockpos.n()) > 3.0D || Math.abs(this.t - (double) blockpos.o()) > 2.0D || Math.abs(this.u - (double) blockpos.p()) > 3.0D) {
+            if (Math.abs(this.s - (double)blockpos.n()) > 3.0D || Math.abs(this.t - (double)blockpos.o()) > 2.0D || Math.abs(this.u - (double)blockpos.p()) > 3.0D) {
                 return EntityPlayer.EnumStatus.TOO_FAR_AWAY;
             }
 
             double d0 = 8.0D;
             double d1 = 5.0D;
-            List list = this.o.a(EntityMob.class, new AxisAlignedBB((double) blockpos.n() - d0, (double) blockpos.o() - d1, (double) blockpos.p() - d0, (double) blockpos.n() + d0, (double) blockpos.o() + d1, (double) blockpos.p() + d0));
+            List list = this.o.a(EntityMob.class, new AxisAlignedBB((double)blockpos.n() - d0, (double)blockpos.o() - d1, (double)blockpos.p() - d0, (double)blockpos.n() + d0, (double)blockpos.o() + d1, (double)blockpos.p() + d0));
 
             if (!list.isEmpty()) {
                 return EntityPlayer.EnumStatus.NOT_SAFE;
@@ -1102,12 +1119,12 @@ public abstract class EntityPlayer extends EntityLivingBase {
         }
 
         if (this.av()) {
-            this.a((Entity) null);
+            this.a((Entity)null);
         }
 
         // CanaryMod: BedEnterHook
         if (this.getCanaryEntity() instanceof CanaryPlayer) {
-            BedEnterHook beh = (BedEnterHook) new BedEnterHook(((EntityPlayerMP) this).getPlayer(), this.o.getCanaryWorld().getBlockAt(i0, i1, i2)).call();
+            BedEnterHook beh = (BedEnterHook)new BedEnterHook(((EntityPlayerMP)this).getPlayer(), this.o.getCanaryWorld().getBlockAt(i0, i1, i2)).call();
             if (beh.isCanceled()) {
                 return EnumStatus.OTHER_PROBLEM;
             }
@@ -1116,7 +1133,7 @@ public abstract class EntityPlayer extends EntityLivingBase {
 
         this.a(0.2F, 0.2F);
         if (this.o.e(blockpos)) {
-            EnumFacing enumfacing = (EnumFacing) this.o.p(blockpos).b(BlockDirectional.N);
+            EnumFacing enumfacing = (EnumFacing)this.o.p(blockpos).b(BlockDirectional.N);
             float f0 = 0.5F;
             float f1 = 0.5F;
 
@@ -1138,9 +1155,10 @@ public abstract class EntityPlayer extends EntityLivingBase {
             }
 
             this.a(enumfacing);
-            this.b((double) ((float) blockpos.n() + f0), (double) ((float) blockpos.o() + 0.6875F), (double) ((float) blockpos.p() + f1));
-        } else {
-            this.b((double) ((float) blockpos.n() + 0.5F), (double) ((float) blockpos.o() + 0.6875F), (double) ((float) blockpos.p() + 0.5F));
+            this.b((double)((float)blockpos.n() + f0), (double)((float)blockpos.o() + 0.6875F), (double)((float)blockpos.p() + f1));
+        }
+        else {
+            this.b((double)((float)blockpos.n() + 0.5F), (double)((float)blockpos.o() + 0.6875F), (double)((float)blockpos.p() + 0.5F));
         }
 
         this.bu = true;
@@ -1173,7 +1191,6 @@ public abstract class EntityPlayer extends EntityLivingBase {
             case 4:
                 this.bw = -1.8F;
         }
-
     }
 
     public void a(boolean flag0, boolean flag1, boolean flag2) {
@@ -1188,7 +1205,7 @@ public abstract class EntityPlayer extends EntityLivingBase {
                 blockpos = this.bv.a();
             }
 
-            this.b((double) ((float) blockpos.n() + 0.5F), (double) ((float) blockpos.o() + 0.1F), (double) ((float) blockpos.p() + 0.5F));
+            this.b((double)((float)blockpos.n() + 0.5F), (double)((float)blockpos.o() + 0.1F), (double)((float)blockpos.p() + 0.5F));
         }
 
         this.bu = false;
@@ -1200,7 +1217,7 @@ public abstract class EntityPlayer extends EntityLivingBase {
         if (this.getCanaryEntity() instanceof CanaryPlayer) {
             net.canarymod.api.world.blocks.Block bed = this.o.getCanaryWorld().getBlockAt(chunkcoordinates.a, chunkcoordinates.b, chunkcoordinates.c);
 
-            new BedExitHook(((EntityPlayerMP) this).getPlayer(), bed).call();
+            new BedExitHook(((EntityPlayerMP)this).getPlayer(), bed).call();
             ;
         }
         //
@@ -1219,7 +1236,8 @@ public abstract class EntityPlayer extends EntityLivingBase {
         if (world.p(blockpos).c() != Blocks.C) {
             if (!flag0) {
                 return null;
-            } else {
+            }
+            else {
                 Material material = world.p(blockpos).c().r();
                 Material material1 = world.p(blockpos.a()).c().r();
                 boolean flag1 = !material.a() && !material.d();
@@ -1227,7 +1245,8 @@ public abstract class EntityPlayer extends EntityLivingBase {
 
                 return flag1 && flag2 ? blockpos : null;
             }
-        } else {
+        }
+        else {
             return BlockBed.a(world, blockpos, 0);
         }
     }
@@ -1240,7 +1259,8 @@ public abstract class EntityPlayer extends EntityLivingBase {
         return this.bu && this.b >= 100;
     }
 
-    public void b(IChatComponent ichatcomponent) {}
+    public void b(IChatComponent ichatcomponent) {
+    }
 
     public BlockPos cg() {
         return this.c;
@@ -1254,30 +1274,32 @@ public abstract class EntityPlayer extends EntityLivingBase {
         if (blockpos != null) {
             this.c = blockpos;
             this.d = flag0;
-        } else {
+        }
+        else {
             this.c = null;
             this.d = false;
         }
-
     }
 
     public void b(StatBase statbase) {
         this.a(statbase, 1);
     }
 
-    public void a(StatBase statbase, int i0) {}
+    public void a(StatBase statbase, int i0) {
+    }
 
-    public void a(StatBase statbase) {}
+    public void a(StatBase statbase) {
+    }
 
     public void bE() {
         super.bE();
         this.b(StatList.u);
         if (this.ax()) {
             this.a(0.8F);
-        } else {
+        }
+        else {
             this.a(0.2F);
         }
-
     }
 
     public void g(float f0, float f1) {
@@ -1289,11 +1311,12 @@ public abstract class EntityPlayer extends EntityLivingBase {
             double d3 = this.w;
             float f2 = this.aK;
 
-            this.aK = this.by.a() * (float) (this.ax() ? 2 : 1);
+            this.aK = this.by.a() * (float)(this.ax() ? 2 : 1);
             super.g(f0, f1);
             this.w = d3 * 0.6D;
             this.aK = f2;
-        } else {
+        }
+        else {
             super.g(f0, f1);
         }
 
@@ -1301,7 +1324,7 @@ public abstract class EntityPlayer extends EntityLivingBase {
     }
 
     public float bH() {
-        return (float) this.a(SharedMonsterAttributes.d).e();
+        return (float)this.a(SharedMonsterAttributes.d).e();
     }
 
     public void k(double d0, double d1, double d2) {
@@ -1312,40 +1335,44 @@ public abstract class EntityPlayer extends EntityLivingBase {
                 i0 = Math.round(MathHelper.a(d0 * d0 + d1 * d1 + d2 * d2) * 100.0F);
                 if (i0 > 0) {
                     this.a(StatList.p, i0);
-                    this.a(0.015F * (float) i0 * 0.01F);
+                    this.a(0.015F * (float)i0 * 0.01F);
                 }
-            } else if (this.V()) {
+            }
+            else if (this.V()) {
                 i0 = Math.round(MathHelper.a(d0 * d0 + d2 * d2) * 100.0F);
                 if (i0 > 0) {
                     this.a(StatList.l, i0);
-                    this.a(0.015F * (float) i0 * 0.01F);
+                    this.a(0.015F * (float)i0 * 0.01F);
                 }
-            } else if (this.j_()) {
+            }
+            else if (this.j_()) {
                 if (d1 > 0.0D) {
-                    this.a(StatList.n, (int) Math.round(d1 * 100.0D));
+                    this.a(StatList.n, (int)Math.round(d1 * 100.0D));
                 }
-            } else if (this.C) {
+            }
+            else if (this.C) {
                 i0 = Math.round(MathHelper.a(d0 * d0 + d2 * d2) * 100.0F);
                 if (i0 > 0) {
                     this.a(StatList.i, i0);
                     if (this.ax()) {
                         this.a(StatList.k, i0);
-                        this.a(0.099999994F * (float) i0 * 0.01F);
-                    } else {
+                        this.a(0.099999994F * (float)i0 * 0.01F);
+                    }
+                    else {
                         if (this.aw()) {
                             this.a(StatList.j, i0);
                         }
 
-                        this.a(0.01F * (float) i0 * 0.01F);
+                        this.a(0.01F * (float)i0 * 0.01F);
                     }
                 }
-            } else {
+            }
+            else {
                 i0 = Math.round(MathHelper.a(d0 * d0 + d2 * d2) * 100.0F);
                 if (i0 > 25) {
                     this.a(StatList.o, i0);
                 }
             }
-
         }
     }
 
@@ -1358,25 +1385,28 @@ public abstract class EntityPlayer extends EntityLivingBase {
                     this.a(StatList.q, i0);
                     if (this.e == null) {
                         this.e = new BlockPos(this);
-                    } else if (this.e.c((double) MathHelper.c(this.s), (double) MathHelper.c(this.t), (double) MathHelper.c(this.u)) >= 1000000.0D) {
-                        this.b((StatBase) AchievementList.q);
                     }
-                } else if (this.m instanceof EntityBoat) {
+                    else if (this.e.c((double)MathHelper.c(this.s), (double)MathHelper.c(this.t), (double)MathHelper.c(this.u)) >= 1000000.0D) {
+                        this.b((StatBase)AchievementList.q);
+                    }
+                }
+                else if (this.m instanceof EntityBoat) {
                     this.a(StatList.r, i0);
-                } else if (this.m instanceof EntityPig) {
+                }
+                else if (this.m instanceof EntityPig) {
                     this.a(StatList.s, i0);
-                } else if (this.m instanceof EntityHorse) {
+                }
+                else if (this.m instanceof EntityHorse) {
                     this.a(StatList.t, i0);
                 }
             }
         }
-
     }
 
     public void e(float f0, float f1) {
         if (!this.by.c) {
             if (f0 >= 2.0F) {
-                this.a(StatList.m, (int) Math.round((double) f0 * 100.0D));
+                this.a(StatList.m, (int)Math.round((double)f0 * 100.0D));
             }
 
             super.e(f0, f1);
@@ -1387,7 +1417,6 @@ public abstract class EntityPlayer extends EntityLivingBase {
         if (!this.v()) {
             super.X();
         }
-
     }
 
     protected String n(int i0) {
@@ -1396,22 +1425,20 @@ public abstract class EntityPlayer extends EntityLivingBase {
 
     public void a(EntityLivingBase entitylivingbase) {
         if (entitylivingbase instanceof IMob) {
-            this.b((StatBase) AchievementList.s);
+            this.b((StatBase)AchievementList.s);
         }
 
-        EntityList.EntityEggInfo entitylist_entityegginfo = (EntityList.EntityEggInfo) EntityList.a.get(Integer.valueOf(EntityList.a(entitylivingbase)));
+        EntityList.EntityEggInfo entitylist_entityegginfo = (EntityList.EntityEggInfo)EntityList.a.get(Integer.valueOf(EntityList.a(entitylivingbase)));
 
         if (entitylist_entityegginfo != null) {
             this.b(entitylist_entityegginfo.d);
         }
-
     }
 
     public void aB() {
         if (!this.by.b) {
             super.aB();
         }
-
     }
 
     public ItemStack q(int i0) {
@@ -1426,13 +1453,12 @@ public abstract class EntityPlayer extends EntityLivingBase {
             i0 = i1;
         }
 
-        this.bB += (float) i0 / (float) this.cj();
+        this.bB += (float)i0 / (float)this.cj();
 
-        for (this.bA += i0; this.bB >= 1.0F; this.bB /= (float) this.cj()) {
-            this.bB = (this.bB - 1.0F) * (float) this.cj();
+        for (this.bA += i0; this.bB >= 1.0F; this.bB /= (float)this.cj()) {
+            this.bB = (this.bB - 1.0F) * (float)this.cj();
             this.a(1);
         }
-
     }
 
     public int ci() {
@@ -1452,7 +1478,7 @@ public abstract class EntityPlayer extends EntityLivingBase {
 
     public void a(int i0) {
         // CanaryMod: LevelUpHook
-        new LevelUpHook(((EntityPlayerMP) this).getPlayer()).call();
+        new LevelUpHook(((EntityPlayerMP)this).getPlayer()).call();
         //
         this.bz += i0;
         if (this.bz < 0) {
@@ -1461,13 +1487,12 @@ public abstract class EntityPlayer extends EntityLivingBase {
             this.bA = 0;
         }
 
-        if (i0 > 0 && this.bz % 5 == 0 && (float) this.i < (float) this.W - 100.0F) {
-            float f0 = this.bz > 30 ? 1.0F : (float) this.bz / 30.0F;
+        if (i0 > 0 && this.bz % 5 == 0 && (float)this.i < (float)this.W - 100.0F) {
+            float f0 = this.bz > 30 ? 1.0F : (float)this.bz / 30.0F;
 
-            this.o.a((Entity) this, "random.levelup", f0 * 0.75F, 1.0F);
+            this.o.a((Entity)this, "random.levelup", f0 * 0.75F, 1.0F);
             this.i = this.W;
         }
-
     }
 
     public int cj() {
@@ -1479,7 +1504,6 @@ public abstract class EntityPlayer extends EntityLivingBase {
             if (!this.o.D) {
                 this.bj.a(f0);
             }
-
         }
     }
 
@@ -1502,7 +1526,6 @@ public abstract class EntityPlayer extends EntityLivingBase {
             if (!this.o.D) {
                 this.f(true);
             }
-
         }
     }
 
@@ -1513,9 +1536,11 @@ public abstract class EntityPlayer extends EntityLivingBase {
     public boolean a(BlockPos blockpos, EnumFacing enumfacing, ItemStack itemstack) {
         if (this.by.e) {
             return true;
-        } else if (itemstack == null) {
+        }
+        else if (itemstack == null) {
             return false;
-        } else {
+        }
+        else {
             BlockPos blockpos1 = blockpos.a(enumfacing.d());
             Block block = this.o.p(blockpos1).c();
 
@@ -1526,7 +1551,8 @@ public abstract class EntityPlayer extends EntityLivingBase {
     protected int b(EntityPlayer entityplayer) {
         if (this.o.Q().b("keepInventory")) {
             return 0;
-        } else {
+        }
+        else {
             int i0 = this.bz * 7;
 
             return i0 > 100 ? 100 : i0;
@@ -1547,7 +1573,8 @@ public abstract class EntityPlayer extends EntityLivingBase {
             this.bB = entityplayer.bB;
             this.r(entityplayer.bW());
             this.an = entityplayer.an;
-        } else if (this.o.Q().b("keepInventory")) {
+        }
+        else if (this.o.Q().b("keepInventory")) {
             this.bg.b(entityplayer.bg);
             this.bz = entityplayer.bz;
             this.bA = entityplayer.bA;
@@ -1563,9 +1590,11 @@ public abstract class EntityPlayer extends EntityLivingBase {
         return !this.by.b;
     }
 
-    public void t() {}
+    public void t() {
+    }
 
-    public void a(WorldSettings.GameType worldsettings_gametype) {}
+    public void a(WorldSettings.GameType worldsettings_gametype) {
+    }
 
     public String d_() {
         return this.bF.getName();
@@ -1657,7 +1686,8 @@ public abstract class EntityPlayer extends EntityLivingBase {
     public boolean a(LockCode lockcode) {
         if (lockcode.a()) {
             return true;
-        } else {
+        }
+        else {
             ItemStack itemstack = this.bY();
 
             return itemstack != null && itemstack.s() ? itemstack.q().equals(lockcode.b()) : false;
@@ -1672,7 +1702,8 @@ public abstract class EntityPlayer extends EntityLivingBase {
         if (i0 >= 0 && i0 < this.bg.a.length) {
             this.bg.a(i0, itemstack);
             return true;
-        } else {
+        }
+        else {
             int i1 = i0 - 100;
             int i2;
 
@@ -1707,13 +1738,15 @@ public abstract class EntityPlayer extends EntityLivingBase {
 
     public static enum EnumChatVisibility {
 
-        FULL("FULL", 0, 0, "options.chat.visibility.full"), SYSTEM("SYSTEM", 1, 1, "options.chat.visibility.system"), HIDDEN("HIDDEN", 2, 2, "options.chat.visibility.hidden");
+        FULL("FULL", 0, 0, "options.chat.visibility.full"),
+        SYSTEM("SYSTEM", 1, 1, "options.chat.visibility.system"),
+        HIDDEN("HIDDEN", 2, 2, "options.chat.visibility.hidden");
         private static final EntityPlayer.EnumChatVisibility[] d = new EntityPlayer.EnumChatVisibility[values().length];
         private final int e;
         private final String f;
 
-        private static final EntityPlayer.EnumChatVisibility[] $VALUES = new EntityPlayer.EnumChatVisibility[] { FULL, SYSTEM, HIDDEN};
-      
+        private static final EntityPlayer.EnumChatVisibility[] $VALUES = new EntityPlayer.EnumChatVisibility[]{ FULL, SYSTEM, HIDDEN };
+
         private EnumChatVisibility(String p_i45323_1_, int p_i45323_2_, int p_i45323_3_, String p_i45323_4_) {
             this.e = p_i45323_3_;
             this.f = p_i45323_4_;
@@ -1736,20 +1769,24 @@ public abstract class EntityPlayer extends EntityLivingBase {
 
                 d[entityplayer_enumchatvisibility.e] = entityplayer_enumchatvisibility;
             }
-
         }
     }
 
     public static enum EnumStatus {
 
-        OK("OK", 0), NOT_POSSIBLE_HERE("NOT_POSSIBLE_HERE", 1), NOT_POSSIBLE_NOW("NOT_POSSIBLE_NOW", 2), TOO_FAR_AWAY("TOO_FAR_AWAY", 3), OTHER_PROBLEM("OTHER_PROBLEM", 4), NOT_SAFE("NOT_SAFE", 5);
+        OK("OK", 0),
+        NOT_POSSIBLE_HERE("NOT_POSSIBLE_HERE", 1),
+        NOT_POSSIBLE_NOW("NOT_POSSIBLE_NOW", 2),
+        TOO_FAR_AWAY("TOO_FAR_AWAY", 3),
+        OTHER_PROBLEM("OTHER_PROBLEM", 4),
+        NOT_SAFE("NOT_SAFE", 5);
 
-        private static final EntityPlayer.EnumStatus[] $VALUES = new EntityPlayer.EnumStatus[] { OK, NOT_POSSIBLE_HERE, NOT_POSSIBLE_NOW, TOO_FAR_AWAY, OTHER_PROBLEM, NOT_SAFE};
-      
-        private EnumStatus(String p_i1751_1_, int p_i1751_2_) {}
+        private static final EntityPlayer.EnumStatus[] $VALUES = new EntityPlayer.EnumStatus[]{ OK, NOT_POSSIBLE_HERE, NOT_POSSIBLE_NOW, TOO_FAR_AWAY, OTHER_PROBLEM, NOT_SAFE };
+
+        private EnumStatus(String p_i1751_1_, int p_i1751_2_) {
+        }
 
     }
-
 
     static final class SwitchEnumFacing {
 
@@ -1783,9 +1820,7 @@ public abstract class EntityPlayer extends EntityLivingBase {
             catch (NoSuchFieldError nosuchfielderror3) {
                 ;
             }
-
         }
-
     }
 
     // CanaryMod
@@ -1800,7 +1835,7 @@ public abstract class EntityPlayer extends EntityLivingBase {
             rXp = this.bA;
         }
 
-        this.bH -= (float) rXp / (float) this.cj();
+        this.bH -= (float)rXp / (float)this.cj();
 
         // Inverse of for loop in this.t(int)
         for (this.bA -= rXp; this.bB < 0.0F; this.bB = this.bB / this.cj() + 1.0F) {
@@ -1810,18 +1845,18 @@ public abstract class EntityPlayer extends EntityLivingBase {
         updateXP();
     }
 
-
     public void setXP(int i) {
         if (i < this.bz) {
             this.removeXP(this.bz - i);
-        } else {
+        }
+        else {
             this.w(i - this.bz);
         }
         updateXP();
     }
 
     public void recalculateXP() {
-        this.bB = this.bA / (float) this.cj();
+        this.bB = this.bA / (float)this.cj();
         this.bz = 0;
 
         while (this.bB >= 1.0F) {
@@ -1837,15 +1872,15 @@ public abstract class EntityPlayer extends EntityLivingBase {
     }
 
     private void updateXP() {
-        CanaryPlayer player = ((CanaryPlayer) getCanaryEntity());
+        CanaryPlayer player = ((CanaryPlayer)getCanaryEntity());
         S1FPacketSetExperience packet = new S1FPacketSetExperience(this.bH, this.bG, this.bz);
 
         player.sendPacket(new CanaryPacket(packet));
     }
 
     private void updateLevels() {
-        CanaryPlayer player = ((CanaryPlayer) getCanaryEntity());
-        S06PacketUpdateHealth packet = new S06PacketUpdateHealth(((CanaryPlayer) getCanaryEntity()).getHealth(), ((CanaryPlayer) getCanaryEntity()).getHunger(), ((CanaryPlayer) getCanaryEntity()).getExhaustionLevel());
+        CanaryPlayer player = ((CanaryPlayer)getCanaryEntity());
+        S06PacketUpdateHealth packet = new S06PacketUpdateHealth(((CanaryPlayer)getCanaryEntity()).getHealth(), ((CanaryPlayer)getCanaryEntity()).getHunger(), ((CanaryPlayer)getCanaryEntity()).getExhaustionLevel());
 
         player.sendPacket(new CanaryPacket(packet));
     }
@@ -1864,7 +1899,9 @@ public abstract class EntityPlayer extends EntityLivingBase {
 
     // Start: Custom Display Name
     public String getDisplayName() {
-        if (metadata == null) return this.d_(); // For when metadata isn't initialized yet
+        if (metadata == null) {
+            return this.d_(); // For when metadata isn't initialized yet
+        }
         return metadata.getString("CustomName").isEmpty() ? this.b_() : metadata.getString("CustomName");
     }
 
@@ -1923,7 +1960,7 @@ public abstract class EntityPlayer extends EntityLivingBase {
     }
 
     public CanaryHuman getCanaryHuman() {
-        return (CanaryHuman) entity;
+        return (CanaryHuman)entity;
     }
 
     public void initializeNewMeta() {

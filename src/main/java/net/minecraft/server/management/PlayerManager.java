@@ -313,7 +313,7 @@ public class PlayerManager {
             if (this.b.contains(entityplayermp)) {
                 Chunk chunk = PlayerManager.this.b.a(this.c.a, this.c.b);
 
-                if (chunk.k()) {
+                if (chunk.i()) {
                     entityplayermp.a.a((Packet)(new S21PacketChunkData(chunk, true, 0)));
                 }
 
@@ -322,7 +322,7 @@ public class PlayerManager {
                 if (this.b.isEmpty()) {
                     long i5 = (long)this.c.a + 2147483647L | (long)this.c.b + 2147483647L << 32;
 
-                    this.a(entityplayermp);
+                    this.a(chunk);
                     PlayerManager.this.d.d(i5);
                     PlayerManager.this.f.remove(this);
                     if (this.e > 0) {
@@ -339,7 +339,7 @@ public class PlayerManager {
         }
 
         private void a(Chunk chunk) {
-            chunk.s += PlayerManager.this.b.K() - this.g;
+            chunk.c(chunk.w() + PlayerManager.this.b.K() - this.g);
             this.g = PlayerManager.this.b.K();
         }
 
@@ -429,9 +429,9 @@ public class PlayerManager {
             }
         }
 
-        private void a(TileEntity p_a_1_) {
-            if (p_a_1_ != null) {
-                Packet packet = p_a_1_.x_();
+        private void a(TileEntity tileentity) {
+            if (tileentity != null) {
+                Packet packet = tileentity.x_();
 
                 if (packet != null) {
                     this.a(packet);
@@ -440,16 +440,11 @@ public class PlayerManager {
         }
     }
 
-    /**
-     * Get the canary player manager
-     *
-     * @return
-     */
+    /* CanaryMod */
     public CanaryPlayerManager getPlayerManager() {
         return playerManager;
     }
 
-    // CanaryMod
     public List<EntityPlayerMP> getManagedPlayers() {
         return c;
     }
@@ -457,5 +452,5 @@ public class PlayerManager {
     public int getPlayerViewRadius() {
         return g;
     }
-    //
+    /* CanaryMod */
 }

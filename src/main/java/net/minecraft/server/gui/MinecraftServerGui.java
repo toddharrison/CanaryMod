@@ -198,7 +198,7 @@ public class MinecraftServerGui extends JComponent implements GUIControl {
 
     @Override
     public void start() {
-        a((DedicatedServer)MinecraftServer.I());
+        a((DedicatedServer)MinecraftServer.M());
     }
 
     /**

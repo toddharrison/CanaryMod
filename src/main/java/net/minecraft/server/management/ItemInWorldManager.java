@@ -3,6 +3,7 @@ package net.minecraft.server.management;
 import net.canarymod.api.GameMode;
 import net.canarymod.api.entity.living.humanoid.CanaryPlayer;
 import net.canarymod.api.world.blocks.CanaryBlock;
+import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.player.BlockDestroyHook;
 import net.canarymod.hook.player.BlockLeftClickHook;
 import net.canarymod.hook.player.GameModeChangeHook;
@@ -53,7 +54,7 @@ public class ItemInWorldManager {
     public void a(WorldSettings.GameType worldsettings_gametype) {
         // CanaryMod: GameModeChangeHook
         if (this.c != worldsettings_gametype) {
-            GameModeChangeHook gmch = (GameModeChangeHook) new GameModeChangeHook(this.b.getPlayer(), GameMode.fromId(worldsettings_gametype.a())).call();
+            GameModeChangeHook gmch = (GameModeChangeHook)new GameModeChangeHook(this.b.getPlayer(), GameMode.fromId(worldsettings_gametype.a())).call();
             if (gmch.isCanceled()) {
                 return; //Blocked mode change
             }
@@ -99,7 +100,7 @@ public class ItemInWorldManager {
             }
             else {
                 f0 = block.a((EntityPlayer)this.b, this.b.o, this.i) * (float)(i1 + 1);
-                i0 = (int) (f0 * 10.0F);
+                i0 = (int)(f0 * 10.0F);
                 if (i0 != this.k) {
                     this.a.c(this.b.F(), this.i, i0);
                     this.k = i0;
@@ -123,7 +124,7 @@ public class ItemInWorldManager {
                 int i2 = this.g - this.e;
 
                 f0 = block1.a((EntityPlayer)this.b, this.b.o, this.i) * (float)(i2 + 1);
-                i0 = (int) (f0 * 10.0F);
+                i0 = (int)(f0 * 10.0F);
                 if (i0 != this.k) {
                     this.a.c(this.b.F(), this.f, i0);
                     this.k = i0;
@@ -134,11 +135,11 @@ public class ItemInWorldManager {
 
     public void a(BlockPos blockpos, EnumFacing enumfacing) {
         // CanaryMod: BlockLeftClick
-        net.canarymod.api.world.blocks.Block cblock = this.b.getCanaryWorld().getBlockAt(i0, i1, i2);
-        BlockLeftClickHook blcHook = (BlockLeftClickHook) new BlockLeftClickHook(this.b.getPlayer(), cblock).call();
+        net.canarymod.api.world.blocks.Block cblock = this.b.getCanaryWorld().getBlockAt(new BlockPosition(blockpos));
+        BlockLeftClickHook blcHook = (BlockLeftClickHook)new BlockLeftClickHook(this.b.getPlayer(), cblock).call();
         if (blcHook.isCanceled()) {
             if (this.c.d()) { // Fix ghosting for creative players
-                this.b.a.a((Packet) (new S23PacketBlockChange(i0, i1, i2, this.a)));
+                this.b.a.a((Packet)(new S23PacketBlockChange(this.a, blockpos)));
             }
             return;
         }
@@ -189,7 +190,6 @@ public class ItemInWorldManager {
                 this.a.c(this.b.F(), blockpos, i0);
                 this.k = i0;
             }
-
         }
     }
 
@@ -224,8 +224,8 @@ public class ItemInWorldManager {
     private boolean c(BlockPos blockpos) {
         IBlockState iblockstate = this.a.p(blockpos);
         // CanaryMod: BlockDestroyHook
-        net.canarymod.api.world.blocks.Block cblock = this.b.getCanaryWorld().getBlockAt(i0, i1, i2);
-        BlockDestroyHook hook = (BlockDestroyHook) new BlockDestroyHook(this.b.getPlayer(), cblock).call();
+        net.canarymod.api.world.blocks.Block cblock = this.b.getCanaryWorld().getBlockAt(new BlockPosition(blockpos));
+        BlockDestroyHook hook = (BlockDestroyHook)new BlockDestroyHook(this.b.getPlayer(), cblock).call();
         if (hook.isCanceled()) {
             this.e();
             return false;
@@ -251,8 +251,8 @@ public class ItemInWorldManager {
 
             if (this.c.c()) {
                 if (this.c == WorldSettings.GameType.SPECTATOR) {
-            return false;
-        }
+                    return false;
+                }
                 if (!this.b.cm()) {
                     ItemStack itemstack = this.b.bY();
 
@@ -293,7 +293,7 @@ public class ItemInWorldManager {
 
     // CanaryMod: ItemUseHook
     public boolean itemUsed(CanaryPlayer player, World world, ItemStack itemstack, CanaryBlock clicked) {
-        ItemUseHook hook = (ItemUseHook) new ItemUseHook(player, itemstack.getCanaryItem(), clicked).call();
+        ItemUseHook hook = (ItemUseHook)new ItemUseHook(player, itemstack.getCanaryItem(), clicked).call();
         if (hook.isCanceled()) {
             return false;
         }
@@ -306,7 +306,7 @@ public class ItemInWorldManager {
             return false;
         }
         else {
-        int i0 = itemstack.b;
+            int i0 = itemstack.b;
             int i1 = itemstack.i();
             ItemStack itemstack1 = itemstack.a(world, entityplayer);
 
@@ -349,8 +349,8 @@ public class ItemInWorldManager {
 
                 if (ilockablecontainer != null) {
                     entityplayer.a((IInventory)ilockablecontainer);
-            return true;
-        }
+                    return true;
+                }
             }
             else if (tileentity instanceof IInventory) {
                 entityplayer.a((IInventory)tileentity);
@@ -364,7 +364,7 @@ public class ItemInWorldManager {
 
                 if (iblockstate.c().a(world, blockpos, iblockstate, entityplayer, enumfacing, f0, f1, f2)) {
                     return true;
-        }
+                }
             }
 
             if (itemstack == null) {
@@ -377,7 +377,7 @@ public class ItemInWorldManager {
 
                 itemstack.b(i0);
                 itemstack.b = i1;
-            return flag0;
+                return flag0;
             }
             else {
                 return itemstack.a(entityplayer, world, blockpos, enumfacing, f0, f1, f2);
