@@ -14,6 +14,10 @@ public class BlockPosition extends Position {
         super(blockPos.n(), blockPos.o(), blockPos.p());
     }
 
+    public BlockPosition(Position templ) {
+        super(templ);
+    }
+
     public void transform(BlockFace face) {
         switch (face) {
             case TOP:
@@ -40,6 +44,6 @@ public class BlockPosition extends Position {
     }
 
     public BlockPosition clone() {
-        return (BlockPosition)super.clone();
+        return new BlockPosition(this);
     }
 }
