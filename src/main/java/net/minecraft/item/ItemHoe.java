@@ -2,6 +2,7 @@ package net.minecraft.item;
 
 import net.canarymod.api.world.blocks.BlockFace;
 import net.canarymod.api.world.blocks.CanaryBlock;
+import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.player.ItemUseHook;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirt;
@@ -36,9 +37,11 @@ public class ItemHoe extends Item {
             Block block = iblockstate.c();
 
             // CanaryMod: ItemUse
-            CanaryBlock clicked = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
-            clicked.setFaceClicked(BlockFace.fromByte((byte) i3));
-            ItemUseHook hook = (ItemUseHook) new ItemUseHook(((EntityPlayerMP) entityplayer).getPlayer(), itemstack.getCanaryItem(), clicked).call();
+            BlockPosition cbp = new BlockPosition(blockpos); // Translate native block pos
+            CanaryBlock clicked = (CanaryBlock)world.getCanaryWorld().getBlockAt(cbp); // Store Clicked
+            BlockFace cbf = BlockFace.fromByte((byte)enumfacing.a()); // Get the click face
+            clicked.setFaceClicked(cbf); // Set face clicked
+            ItemUseHook hook = (ItemUseHook)new ItemUseHook(((EntityPlayerMP)entityplayer).getPlayer(), itemstack.getCanaryItem(), clicked).call();
             //
 
             if (enumfacing != EnumFacing.DOWN && world.p(blockpos.a()).c().r() == Material.a) {
@@ -47,7 +50,7 @@ public class ItemHoe extends Item {
                 }
 
                 if (block == Blocks.d) {
-                    switch (ItemHoe.SwitchDirtType.a[((BlockDirt.DirtType) iblockstate.b(BlockDirt.a)).ordinal()]) {
+                    switch (ItemHoe.SwitchDirtType.a[((BlockDirt.DirtType)iblockstate.b(BlockDirt.a)).ordinal()]) {
                         case 1:
                             return this.a(itemstack, entityplayer, world, blockpos, Blocks.ak.P());
 
@@ -62,13 +65,13 @@ public class ItemHoe extends Item {
     }
 
     protected boolean a(ItemStack itemstack, EntityPlayer entityplayer, World world, BlockPos blockpos, IBlockState iblockstate) {
-        world.a((double) ((float) blockpos.n() + 0.5F), (double) ((float) blockpos.o() + 0.5F), (double) ((float) blockpos.p() + 0.5F), iblockstate.c().H.c(), (iblockstate.c().H.d() + 1.0F) / 2.0F, iblockstate.c().H.e() * 0.8F);
+        world.a((double)((float)blockpos.n() + 0.5F), (double)((float)blockpos.o() + 0.5F), (double)((float)blockpos.p() + 0.5F), iblockstate.c().H.c(), (iblockstate.c().H.d() + 1.0F) / 2.0F, iblockstate.c().H.e() * 0.8F);
         if (world.D) {
             return true;
         }
         else {
             world.a(blockpos, iblockstate);
-            itemstack.a(1, (EntityLivingBase) entityplayer);
+            itemstack.a(1, (EntityLivingBase)entityplayer);
             return true;
         }
     }
@@ -95,7 +98,6 @@ public class ItemHoe extends Item {
             catch (NoSuchFieldError nosuchfielderror1) {
                 ;
             }
-
         }
     }
 }

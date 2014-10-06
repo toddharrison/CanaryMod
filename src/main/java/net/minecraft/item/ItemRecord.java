@@ -1,7 +1,9 @@
 package net.minecraft.item;
 
+import com.google.common.collect.Maps;
 import net.canarymod.api.world.blocks.BlockFace;
 import net.canarymod.api.world.blocks.CanaryBlock;
+import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.player.ItemUseHook;
 import net.minecraft.block.BlockJukebox;
 import net.minecraft.block.state.IBlockState;
@@ -14,7 +16,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 import java.util.Map;
-
 
 public class ItemRecord extends Item {
 
@@ -31,21 +32,22 @@ public class ItemRecord extends Item {
     public boolean a(ItemStack itemstack, EntityPlayer entityplayer, World world, BlockPos blockpos, EnumFacing enumfacing, float f0, float f1, float f2) {
         IBlockState iblockstate = world.p(blockpos);
         // CanaryMod: ItemUse
-        CanaryBlock clicked = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
-
-        clicked.setFaceClicked(BlockFace.fromByte((byte) i3));
-        ItemUseHook hook = (ItemUseHook) new ItemUseHook(((EntityPlayerMP) entityplayer).getPlayer(), itemstack.getCanaryItem(), clicked).call();
+        BlockPosition cbp = new BlockPosition(blockpos); // Translate native block pos
+        CanaryBlock clicked = (CanaryBlock)world.getCanaryWorld().getBlockAt(cbp); // Store Clicked
+        BlockFace cbf = BlockFace.fromByte((byte)enumfacing.a()); // Get the click face
+        clicked.setFaceClicked(cbf); // Set face clicked
+        ItemUseHook hook = (ItemUseHook)new ItemUseHook(((EntityPlayerMP)entityplayer).getPlayer(), itemstack.getCanaryItem(), clicked).call();
         if (hook.isCanceled()) {
             return false;
         }
         //
-        if (iblockstate.c() == Blocks.aN && !((Boolean) iblockstate.b(BlockJukebox.a)).booleanValue()) {
+        if (iblockstate.c() == Blocks.aN && !((Boolean)iblockstate.b(BlockJukebox.a)).booleanValue()) {
             if (world.D) {
                 return true;
             }
             else {
-                ((BlockJukebox) Blocks.aN).a(world, blockpos, iblockstate, itemstack);
-                world.a((EntityPlayer) null, 1005, blockpos, Item.b((Item) this));
+                ((BlockJukebox)Blocks.aN).a(world, blockpos, iblockstate, itemstack);
+                world.a((EntityPlayer)null, 1005, blockpos, Item.b((Item)this));
                 --itemstack.b;
                 return true;
             }

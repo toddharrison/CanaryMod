@@ -1,7 +1,9 @@
 package net.minecraft.item;
 
 import net.canarymod.api.world.blocks.BlockFace;
+import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.blocks.CanaryBlock;
+import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.player.BlockPlaceHook;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSnow;
@@ -28,11 +30,15 @@ public class ItemReed extends Item {
         Block block = iblockstate.c();
 
         // CanaryMod: BlockPlaceHook
-        CanaryBlock clicked = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
-        clicked.setFaceClicked(BlockFace.fromByte((byte) i3));
+        BlockPosition cbp = new BlockPosition(blockpos); // Translate native block pos
+        CanaryBlock clicked = (CanaryBlock)world.getCanaryWorld().getBlockAt(cbp); // Store Clicked
+        BlockFace cbf = BlockFace.fromByte((byte)enumfacing.a()); // Get the click face
+        clicked.setFaceClicked(cbf); // Set face clicked
+        cbp = cbp.clone(); // Remake BlockPosition
+        cbp.transform(cbf); // Adjust position based on face
         //
 
-        if (block == Blocks.aH && ((Integer) iblockstate.b(BlockSnow.a)).intValue() < 1) {
+        if (block == Blocks.aH && ((Integer)iblockstate.b(BlockSnow.a)).intValue() < 1) {
             enumfacing = EnumFacing.UP;
         }
         else if (!block.f(world, blockpos)) {
@@ -46,32 +52,32 @@ public class ItemReed extends Item {
             return false;
         }
         else {
-            if (!entityplayer.a(i0, i1, i2, i3, itemstack)) {
+            if (!entityplayer.a(blockpos, enumfacing, itemstack)) {
                 return false;
             }
             else if (itemstack.b == 0) {
                 return false;
             }
             else {
-                if (world.a(this.a, blockpos, false, enumfacing, (Entity) null, itemstack)) {
+                if (world.a(this.a, blockpos, false, enumfacing, (Entity)null, itemstack)) {
                     IBlockState iblockstate1 = this.a.a(world, blockpos, enumfacing, f0, f1, f2, 0, entityplayer);
 
                     if (world.a(blockpos, iblockstate1, 3)) {
                         iblockstate1 = world.p(blockpos);
                         // set placed
-                        CanaryBlock placed = new CanaryBlock((short) Block.b(this.a), (short) 0, i0, i1, i2, world.getCanaryWorld());
+                        CanaryBlock placed = new CanaryBlock(BlockType.fromId(Block.a(this.a)), (short)0, cbp, world.getCanaryWorld());
                         // Create and Call
-                        BlockPlaceHook hook = (BlockPlaceHook) new BlockPlaceHook(((EntityPlayerMP) entityplayer).getPlayer(), clicked, placed).call();
+                        BlockPlaceHook hook = (BlockPlaceHook)new BlockPlaceHook(((EntityPlayerMP)entityplayer).getPlayer(), clicked, placed).call();
                         if (hook.isCanceled()) {
                             return false;
                         }
                         //
                         if (iblockstate1.c() == this.a) {
                             ItemBlock.a(world, blockpos, itemstack);
-                            iblockstate1.c().a(world, blockpos, iblockstate1, (EntityLivingBase) entityplayer, itemstack);
+                            iblockstate1.c().a(world, blockpos, iblockstate1, (EntityLivingBase)entityplayer, itemstack);
                         }
 
-                        world.a((double) ((float) blockpos.n() + 0.5F), (double) ((float) blockpos.o() + 0.5F), (double) ((float) blockpos.p() + 0.5F), this.a.H.b(), (this.a.H.d() + 1.0F) / 2.0F, this.a.H.e() * 0.8F);
+                        world.a((double)((float)blockpos.n() + 0.5F), (double)((float)blockpos.o() + 0.5F), (double)((float)blockpos.p() + 0.5F), this.a.H.b(), (this.a.H.d() + 1.0F) / 2.0F, this.a.H.e() * 0.8F);
                         --itemstack.b;
                         return true;
                     }
@@ -81,3 +87,4 @@ public class ItemReed extends Item {
             }
         }
     }
+}

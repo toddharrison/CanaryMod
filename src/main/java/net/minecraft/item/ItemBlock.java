@@ -1,7 +1,9 @@
 package net.minecraft.item;
 
 import net.canarymod.api.world.blocks.BlockFace;
+import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.blocks.CanaryBlock;
+import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.player.BlockPlaceHook;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSnow;
@@ -36,11 +38,15 @@ public class ItemBlock extends Item {
         Block block = iblockstate.c();
 
         // CanaryMod: BlockPlaceHook
-        CanaryBlock clicked = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
-        clicked.setFaceClicked(BlockFace.fromByte((byte) i3));
+        BlockPosition cbp = new BlockPosition(blockpos); // Translate native block pos
+        CanaryBlock clicked = (CanaryBlock)world.getCanaryWorld().getBlockAt(cbp); // Store Clicked
+        BlockFace cbf = BlockFace.fromByte((byte)enumfacing.a()); // Get the click face
+        clicked.setFaceClicked(cbf); // Set face clicked
+        cbp = cbp.clone(); // Remake BlockPosition
+        cbp.transform(cbf); // Adjust position based on face
         //
 
-        if (block == Blocks.aH && ((Integer) iblockstate.b(BlockSnow.a)).intValue() < 1) {
+        if (block == Blocks.aH && ((Integer)iblockstate.b(BlockSnow.a)).intValue() < 1) {
             enumfacing = EnumFacing.UP;
         }
         else if (!block.f(world, blockpos)) {
@@ -56,15 +62,15 @@ public class ItemBlock extends Item {
         else if (blockpos.o() == 255 && this.a.r().a()) {
             return false;
         }
-        else if (world.a(this.a, blockpos, false, enumfacing, (Entity) null, itemstack)) {
+        else if (world.a(this.a, blockpos, false, enumfacing, (Entity)null, itemstack)) {
             int i0 = this.a(itemstack.i());
             IBlockState iblockstate1 = this.a.a(world, blockpos, enumfacing, f0, f1, f2, i0, entityplayer);
 
             if (!handled) { // if ItemSlab didn't call BlockPlace
                 // set placed
-                CanaryBlock placed = new CanaryBlock((short) Block.b(this.a), (short) i5, i0, i1, i2, world.getCanaryWorld());
+                CanaryBlock placed = new CanaryBlock(BlockType.fromId(Block.a(this.a)), (short)itemstack.h(), cbp, world.getCanaryWorld());
                 // Create and Call
-                BlockPlaceHook hook = (BlockPlaceHook) new BlockPlaceHook(((EntityPlayerMP) entityplayer).getPlayer(), clicked, placed).call();
+                BlockPlaceHook hook = (BlockPlaceHook)new BlockPlaceHook(((EntityPlayerMP)entityplayer).getPlayer(), clicked, placed).call();
                 if (hook.isCanceled()) {
                     return false;
                 }
@@ -75,10 +81,10 @@ public class ItemBlock extends Item {
                 iblockstate1 = world.p(blockpos);
                 if (iblockstate1.c() == this.a) {
                     a(world, blockpos, itemstack);
-                    this.a.a(world, blockpos, iblockstate1, (EntityLivingBase) entityplayer, itemstack);
+                    this.a.a(world, blockpos, iblockstate1, (EntityLivingBase)entityplayer, itemstack);
                 }
 
-                world.a((double) ((float) blockpos.n() + 0.5F), (double) ((float) blockpos.o() + 0.5F), (double) ((float) blockpos.p() + 0.5F), this.a.H.b(), (this.a.H.d() + 1.0F) / 2.0F, this.a.H.e() * 0.8F);
+                world.a((double)((float)blockpos.n() + 0.5F), (double)((float)blockpos.o() + 0.5F), (double)((float)blockpos.p() + 0.5F), this.a.H.b(), (this.a.H.d() + 1.0F) / 2.0F, this.a.H.e() * 0.8F);
                 --itemstack.b;
             }
 
@@ -95,10 +101,10 @@ public class ItemBlock extends Item {
 
             if (tileentity != null) {
                 NBTTagCompound nbttagcompound = new NBTTagCompound();
-                NBTTagCompound nbttagcompound1 = (NBTTagCompound) nbttagcompound.b();
+                NBTTagCompound nbttagcompound1 = (NBTTagCompound)nbttagcompound.b();
 
                 tileentity.b(nbttagcompound);
-                NBTTagCompound nbttagcompound2 = (NBTTagCompound) itemstack.o().a("BlockEntityTag");
+                NBTTagCompound nbttagcompound2 = (NBTTagCompound)itemstack.o().a("BlockEntityTag");
 
                 nbttagcompound.a(nbttagcompound2);
                 nbttagcompound.a("x", blockpos.n());

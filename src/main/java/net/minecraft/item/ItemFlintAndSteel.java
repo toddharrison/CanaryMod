@@ -3,6 +3,7 @@ package net.minecraft.item;
 import net.canarymod.Canary;
 import net.canarymod.api.world.blocks.BlockFace;
 import net.canarymod.api.world.blocks.CanaryBlock;
+import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.player.ItemUseHook;
 import net.canarymod.hook.world.IgnitionHook;
 import net.canarymod.hook.world.IgnitionHook.IgnitionCause;
@@ -27,10 +28,13 @@ public class ItemFlintAndSteel extends Item {
     public boolean a(ItemStack itemstack, EntityPlayer entityplayer, World world, BlockPos blockpos, EnumFacing enumfacing, float f0, float f1, float f2) {
         blockpos = blockpos.a(enumfacing);
         // CanaryMod: get clicked
-        CanaryBlock clicked = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
-
-        clicked.setFaceClicked(BlockFace.fromByte((byte) i3));
-        clicked.setStatus((byte) 2); // Flint&Steel Status 2
+        BlockPosition cbp = new BlockPosition(blockpos); // Translate native block pos
+        CanaryBlock clicked = (CanaryBlock)world.getCanaryWorld().getBlockAt(cbp); // Store Clicked
+        BlockFace cbf = BlockFace.fromByte((byte)enumfacing.a()); // Get the click face
+        clicked.setFaceClicked(cbf); // Set face clicked
+        cbp = cbp.clone(); // Remake BlockPosition
+        cbp.transform(cbf); // Adjust position based on face
+        clicked.setStatus((byte)2); // Flint&Steel Status 2
         //
 
         if (!entityplayer.a(blockpos, enumfacing, itemstack)) {
@@ -40,10 +44,10 @@ public class ItemFlintAndSteel extends Item {
 
             // CanaryMod: ItemUse/Ignition
             // Create & Call ItemUseHook
-            ItemUseHook iuh = (ItemUseHook) new ItemUseHook(((EntityPlayerMP) entityplayer).getPlayer(), itemstack.getCanaryItem(), clicked).call();
+            ItemUseHook iuh = (ItemUseHook)new ItemUseHook(((EntityPlayerMP)entityplayer).getPlayer(), itemstack.getCanaryItem(), clicked).call();
             // Create & Call IgnitionHook
-            CanaryBlock ignited = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
-            IgnitionHook ih = new IgnitionHook(ignited, ((EntityPlayerMP) entityplayer).getPlayer(), clicked, IgnitionCause.FLINT_AND_STEEL);
+            CanaryBlock ignited = (CanaryBlock)world.getCanaryWorld().getBlockAt(cbp);
+            IgnitionHook ih = new IgnitionHook(ignited, ((EntityPlayerMP)entityplayer).getPlayer(), clicked, IgnitionCause.FLINT_AND_STEEL);
             Canary.hooks().callHook(ih);
 
             // If either hook is canceled, return
@@ -53,11 +57,11 @@ public class ItemFlintAndSteel extends Item {
             //
 
             if (world.p(blockpos).c().r() == Material.a) {
-                world.a((double) blockpos.n() + 0.5D, (double) blockpos.o() + 0.5D, (double) blockpos.p() + 0.5D, "fire.ignite", 1.0F, g.nextFloat() * 0.4F + 0.8F);
+                world.a((double)blockpos.n() + 0.5D, (double)blockpos.o() + 0.5D, (double)blockpos.p() + 0.5D, "fire.ignite", 1.0F, g.nextFloat() * 0.4F + 0.8F);
                 world.a(blockpos, Blocks.ab.P());
             }
 
-            itemstack.a(1, (EntityLivingBase) entityplayer);
+            itemstack.a(1, (EntityLivingBase)entityplayer);
             return true;
         }
     }

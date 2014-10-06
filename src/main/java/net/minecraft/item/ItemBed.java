@@ -36,14 +36,19 @@ public class ItemBed extends Item {
             Block block = iblockstate.c();
             boolean flag0 = block.f(world, blockpos);
             // CanaryMod: BlockPlaceHook
-            CanaryBlock clicked = (CanaryBlock) world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos)); // Store Clicked
-            clicked.setFaceClicked(BlockFace.fromByte((byte) i3)); // Set face clicked
+            BlockPosition cbp = new BlockPosition(blockpos); // Translate native block pos
+            CanaryBlock clicked = (CanaryBlock)world.getCanaryWorld().getBlockAt(cbp); // Store Clicked
+            BlockFace cbf = BlockFace.fromByte((byte)enumfacing.a()); // Get the click face
+            clicked.setFaceClicked(cbf); // Set face clicked
+            cbp = cbp.clone(); // Remake BlockPosition
+            cbp.transform(cbf); // Adjust position based on face
+            //
 
             if (!flag0) {
                 blockpos = blockpos.a();
             }
 
-            int i0 = MathHelper.c((double) (entityplayer.y * 4.0F / 360.0F) + 0.5D) & 3;
+            int i0 = MathHelper.c((double)(entityplayer.y * 4.0F / 360.0F) + 0.5D) & 3;
             EnumFacing enumfacing1 = EnumFacing.b(i0);
             BlockPos blockpos1 = blockpos.a(enumfacing1);
             boolean flag1 = block.f(world, blockpos1);
@@ -51,13 +56,14 @@ public class ItemBed extends Item {
             boolean flag3 = world.d(blockpos1) || flag1;
 
             if (entityplayer.a(blockpos, enumfacing, itemstack) && entityplayer.a(blockpos1, enumfacing, itemstack)) {
-                if (flag2 && flag3 && World.a((IBlockAccess) world, blockpos.b()) && World.a((IBlockAccess) world, blockpos1.b())) {
+                if (flag2 && flag3 && World.a((IBlockAccess)world, blockpos.b()) && World.a((IBlockAccess)world, blockpos1.b())) {
                     int i1 = enumfacing1.b();
                     IBlockState iblockstate1 = Blocks.C.P().a(BlockBed.b, Boolean.valueOf(false)).a(BlockBed.N, enumfacing1).a(BlockBed.a, BlockBed.EnumPartType.FOOT);
 
-                    CanaryBlock placed = new CanaryBlock(BlockType.BedBlock, (short) 0, new BlockPosition(blockpos), world.getCanaryWorld());
-                    // Create Hook and call it
-                    BlockPlaceHook hook = (BlockPlaceHook) new BlockPlaceHook(((EntityPlayerMP) entityplayer).getPlayer(), clicked, placed).call();
+                    // CanaryMod: BlockPlaceHook continued
+                    CanaryBlock placed = new CanaryBlock(BlockType.BedBlock, (short)0, cbp, world.getCanaryWorld());
+                    // CanaryMod: Create Hook and call it
+                    BlockPlaceHook hook = (BlockPlaceHook)new BlockPlaceHook(((EntityPlayerMP)entityplayer).getPlayer(), clicked, placed).call();
                     if (hook.isCanceled()) {
                         return false;
                     }

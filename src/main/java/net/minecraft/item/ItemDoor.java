@@ -1,12 +1,16 @@
 package net.minecraft.item;
 
+import net.canarymod.api.world.blocks.BlockFace;
+import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.blocks.CanaryBlock;
+import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.player.BlockPlaceHook;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
@@ -40,15 +44,20 @@ public class ItemDoor extends Item {
             }
             else {
                 // CanaryMod: BlockPlaceHook
-                CanaryBlock clicked = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
-                CanaryBlock placed = new CanaryBlock((short) Block.b(block), (short) 0, i0, i1 + 1, i2, world.getCanaryWorld());
-                BlockPlaceHook hook = (BlockPlaceHook) new BlockPlaceHook(((EntityPlayerMP) entityplayer).getPlayer(), clicked, placed).call();
+                BlockPosition cbp = new BlockPosition(blockpos);
+                CanaryBlock clicked = (CanaryBlock)world.getCanaryWorld().getBlockAt(cbp);
+                BlockFace cbf = BlockFace.fromByte((byte)enumfacing.a());
+                clicked.setFaceClicked(cbf); // Set face clicked
+                cbp = cbp.clone(); // clone the original BlockPosition
+                cbp.transform(cbf); // Adjust BlockPostiion according to clicked face
+                CanaryBlock placed = new CanaryBlock(BlockType.fromId((short)Block.a(block)), (short)0, cbp, world.getCanaryWorld());
+                BlockPlaceHook hook = (BlockPlaceHook)new BlockPlaceHook(((EntityPlayerMP)entityplayer).getPlayer(), clicked, placed).call();
                 if (hook.isCanceled()) {
                     return false;
                 }
                 //
 
-                a(world, blockpos, EnumFacing.a((double) entityplayer.y), this.a);
+                a(world, blockpos, EnumFacing.a((double)entityplayer.y), this.a);
                 --itemstack.b;
                 return true;
             }

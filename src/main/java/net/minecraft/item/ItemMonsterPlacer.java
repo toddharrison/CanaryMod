@@ -2,6 +2,7 @@ package net.minecraft.item;
 
 import net.canarymod.api.world.blocks.BlockFace;
 import net.canarymod.api.world.blocks.CanaryBlock;
+import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.player.ItemUseHook;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.BlockLiquid;
@@ -9,6 +10,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.*;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.MobSpawnerBaseLogic;
@@ -44,10 +46,11 @@ public class ItemMonsterPlacer extends Item {
         }
         else {
             // CanaryMod: ItemUse
-            CanaryBlock clicked = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
-
-            clicked.setFaceClicked(BlockFace.fromByte((byte) i3));
-            ItemUseHook hook = (ItemUseHook) new ItemUseHook(((EntityPlayerMP) entityplayer).getPlayer(), itemstack.getCanaryItem(), clicked).call();
+            BlockPosition cbp = new BlockPosition(blockpos); // Translate native block pos
+            CanaryBlock clicked = (CanaryBlock)world.getCanaryWorld().getBlockAt(cbp); // Store Clicked
+            BlockFace cbf = BlockFace.fromByte((byte)enumfacing.a()); // Get the click face
+            clicked.setFaceClicked(cbf); // Set face clicked
+            ItemUseHook hook = (ItemUseHook)new ItemUseHook(((EntityPlayerMP)entityplayer).getPlayer(), itemstack.getCanaryItem(), clicked).call();
             if (hook.isCanceled()) {
                 return false;
             }
@@ -59,7 +62,7 @@ public class ItemMonsterPlacer extends Item {
                 TileEntity tileentity = world.s(blockpos);
 
                 if (tileentity instanceof TileEntityMobSpawner) {
-                    MobSpawnerBaseLogic mobspawnerbaselogic = ((TileEntityMobSpawner) tileentity).b();
+                    MobSpawnerBaseLogic mobspawnerbaselogic = ((TileEntityMobSpawner)tileentity).b();
 
                     mobspawnerbaselogic.a(EntityList.b(itemstack.i()));
                     tileentity.o_();
@@ -79,7 +82,7 @@ public class ItemMonsterPlacer extends Item {
                 d0 = 0.5D;
             }
 
-            Entity entity = a(world, itemstack.i(), (double) blockpos.n() + 0.5D, (double) blockpos.o() + d0, (double) blockpos.p() + 0.5D);
+            Entity entity = a(world, itemstack.i(), (double)blockpos.n() + 0.5D, (double)blockpos.o() + d0, (double)blockpos.p() + 0.5D);
 
             if (entity != null) {
                 if (entity instanceof EntityLivingBase && itemstack.s()) {
@@ -118,18 +121,18 @@ public class ItemMonsterPlacer extends Item {
                     }
 
                     if (world.p(blockpos).c() instanceof BlockLiquid) {
-                        Entity entity = a(world, itemstack.i(), (double) blockpos.n() + 0.5D, (double) blockpos.o() + 0.5D, (double) blockpos.p() + 0.5D);
+                        Entity entity = a(world, itemstack.i(), (double)blockpos.n() + 0.5D, (double)blockpos.o() + 0.5D, (double)blockpos.p() + 0.5D);
 
                         if (entity != null) {
                             if (entity instanceof EntityLivingBase && itemstack.s()) {
-                                ((EntityLiving) entity).a(itemstack.q());
+                                ((EntityLiving)entity).a(itemstack.q());
                             }
 
                             if (!entityplayer.by.d) {
                                 --itemstack.b;
                             }
 
-                            entityplayer.b(StatList.J[Item.b((Item) this)]);
+                            entityplayer.b(StatList.J[Item.b((Item)this)]);
                         }
                     }
                 }
@@ -153,12 +156,12 @@ public class ItemMonsterPlacer extends Item {
             for (int i1 = 0; i1 < 1; ++i1) {
                 entity = EntityList.a(i0, world);
                 if (entity instanceof EntityLivingBase) {
-                    EntityLiving entityliving = (EntityLiving) entity;
+                    EntityLiving entityliving = (EntityLiving)entity;
 
                     entity.b(d0, d1, d2, MathHelper.g(world.s.nextFloat() * 360.0F), 0.0F);
                     entityliving.aI = entityliving.y;
                     entityliving.aG = entityliving.y;
-                    entityliving.a(world.E(new BlockPos(entityliving)), (IEntityLivingData) null);
+                    entityliving.a(world.E(new BlockPos(entityliving)), (IEntityLivingData)null);
                     if (spawn) { // CanaryMod check if spawn is allowed
                         world.d(entity);
                     }

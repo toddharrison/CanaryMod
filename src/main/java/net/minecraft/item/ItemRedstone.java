@@ -3,12 +3,16 @@ package net.minecraft.item;
 import net.canarymod.api.world.blocks.BlockFace;
 import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.blocks.CanaryBlock;
+import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.player.BlockPlaceHook;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 public class ItemRedstone extends Item {
@@ -21,8 +25,12 @@ public class ItemRedstone extends Item {
         boolean flag0 = world.p(blockpos).c().f(world, blockpos);
         BlockPos blockpos1 = flag0 ? blockpos : blockpos.a(enumfacing);
         // CanaryMod: BlockPlaceHook
-        CanaryBlock clicked = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
-        clicked.setFaceClicked(BlockFace.fromByte((byte) i3));
+        BlockPosition cbp = new BlockPosition(blockpos); // Translate native block pos
+        CanaryBlock clicked = (CanaryBlock)world.getCanaryWorld().getBlockAt(cbp); // Store Clicked
+        BlockFace cbf = BlockFace.fromByte((byte)enumfacing.a()); // Get the click face
+        clicked.setFaceClicked(cbf); // Set face clicked
+        cbp = cbp.clone(); // Remake BlockPosition
+        cbp.transform(cbf); // Adjust position based on face
         //
 
         if (!entityplayer.a(blockpos1, enumfacing, itemstack)) {
@@ -30,9 +38,9 @@ public class ItemRedstone extends Item {
         }
         else {
             // set placed
-            CanaryBlock placed = new CanaryBlock(BlockType.RedstoneBlock, i0, i1, i2, world.getCanaryWorld());
+            CanaryBlock placed = new CanaryBlock(BlockType.RedstoneWire, (short)0, cbp, world.getCanaryWorld());
             // Create and Call
-            BlockPlaceHook hook = (BlockPlaceHook) new BlockPlaceHook(((EntityPlayerMP) entityplayer).getPlayer(), clicked, placed).call();
+            BlockPlaceHook hook = (BlockPlaceHook)new BlockPlaceHook(((EntityPlayerMP)entityplayer).getPlayer(), clicked, placed).call();
             if (hook.isCanceled()) {
                 return false;
             }
@@ -40,7 +48,7 @@ public class ItemRedstone extends Item {
 
             Block block = world.p(blockpos1).c();
 
-            if (!world.a(block, blockpos1, false, enumfacing, (Entity) null, itemstack)) {
+            if (!world.a(block, blockpos1, false, enumfacing, (Entity)null, itemstack)) {
                 return false;
             }
             else if (Blocks.af.c(world, blockpos1)) {

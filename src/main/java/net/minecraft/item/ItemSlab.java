@@ -40,7 +40,13 @@ public class ItemSlab extends ItemBlock {
         this.hook = null; // CanaryMod: Clean up
         this.handled = false; // CanaryMod: Clean up
         // CanaryMod: BlockPlaceHook
-        CanaryBlock clicked = (CanaryBlock) world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos));
+        BlockPosition cbp = new BlockPosition(blockpos); // Translate native block pos
+        CanaryBlock clicked = (CanaryBlock)world.getCanaryWorld().getBlockAt(cbp); // Store Clicked
+        BlockFace cbf = BlockFace.fromByte((byte)enumfacing.a()); // Get the click face
+        clicked.setFaceClicked(cbf); // Set face clicked
+        cbp = cbp.clone(); // Remake BlockPosition
+        cbp.transform(cbf); // Adjust position based on face
+        //
 
         if (itemstack.b == 0) {
             return false;
@@ -55,20 +61,19 @@ public class ItemSlab extends ItemBlock {
             if (iblockstate.c() == this.b) {
                 IProperty iproperty = this.b.l();
                 Comparable comparable = iblockstate.b(iproperty);
-                BlockSlab.EnumBlockHalf blockslab_enumblockhalf = (BlockSlab.EnumBlockHalf) iblockstate.b(BlockSlab.a);
+                BlockSlab.EnumBlockHalf blockslab_enumblockhalf = (BlockSlab.EnumBlockHalf)iblockstate.b(BlockSlab.a);
 
-                // CanaryMod: BlockPlace / set face, block placed, and call hook
-                clicked.setFaceClicked(BlockFace.fromByte((byte) i3));
-                CanaryBlock placed = new CanaryBlock((short) i4, (short) i5, i0, i1, i2, world.getCanaryWorld());
+                // CanaryMod: BlockPlace / set block placed and call hook
+                CanaryBlock placed = new CanaryBlock((short)i4, (short)i5, i0, i1, i2, world.getCanaryWorld());
 
-                hook = (BlockPlaceHook) new BlockPlaceHook(((EntityPlayerMP) entityplayer).getPlayer(), clicked, placed).call();
+                hook = (BlockPlaceHook)new BlockPlaceHook(((EntityPlayerMP)entityplayer).getPlayer(), clicked, placed).call();
                 if (hook.isCanceled()) {
                     return true;
                 }
                 //
 
                 if (world.b(this.c.a(world, blockpos, iblockstate1)) && world.a(blockpos, iblockstate1, 3)) {
-                    world.a((double) ((float) blockpos.n() + 0.5F), (double) ((float) blockpos.o() + 0.5F), (double) ((float) blockpos.p() + 0.5F), this.c.H.b(), (this.c.H.d() + 1.0F) / 2.0F, this.c.H.e() * 0.8F);
+                    world.a((double)((float)blockpos.n() + 0.5F), (double)((float)blockpos.o() + 0.5F), (double)((float)blockpos.p() + 0.5F), this.c.H.b(), (this.c.H.d() + 1.0F) / 2.0F, this.c.H.e() * 0.8F);
                     --itemstack.b;
                 }
 
@@ -86,8 +91,8 @@ public class ItemSlab extends ItemBlock {
     private boolean a(ItemStack itemstack, World world, BlockPos blockpos, Object object) {
         IBlockState iblockstate = world.p(blockpos);
         // CanaryMod: BlockPlaceHook
-        CanaryBlock clicked = (CanaryBlock) world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos));
-        clicked.setFaceClicked(BlockFace.fromByte((byte) i3));
+        CanaryBlock clicked = (CanaryBlock)world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos));
+        clicked.setFaceClicked(BlockFace.fromByte((byte)i3));
         //
 
         if (iblockstate.c() == this.b) {
@@ -97,15 +102,15 @@ public class ItemSlab extends ItemBlock {
                 IBlockState iblockstate1 = this.c.P().a(this.b.l(), comparable);
 
                 // Call hook
-                CanaryBlock placed = new CanaryBlock((short) i4, (short) i5, new BlockPosition(blockpos), world.getCanaryWorld());
-                hook = (BlockPlaceHook) new BlockPlaceHook(((EntityPlayerMP) entityplayer).getPlayer(), clicked, placed).call();
+                CanaryBlock placed = new CanaryBlock((short)i4, (short)i5, new BlockPosition(blockpos), world.getCanaryWorld());
+                hook = (BlockPlaceHook)new BlockPlaceHook(((EntityPlayerMP)entityplayer).getPlayer(), clicked, placed).call();
                 if (hook.isCanceled()) {
                     return false;
                 }
                 //
 
                 if (world.b(this.c.a(world, blockpos, iblockstate1)) && world.a(blockpos, iblockstate1, 3)) {
-                    world.a((double) ((float) blockpos.n() + 0.5F), (double) ((float) blockpos.o() + 0.5F), (double) ((float) blockpos.p() + 0.5F), this.c.H.b(), (this.c.H.d() + 1.0F) / 2.0F, this.c.H.e() * 0.8F);
+                    world.a((double)((float)blockpos.n() + 0.5F), (double)((float)blockpos.o() + 0.5F), (double)((float)blockpos.p() + 0.5F), this.c.H.b(), (this.c.H.d() + 1.0F) / 2.0F, this.c.H.e() * 0.8F);
                     --itemstack.b;
                 }
 

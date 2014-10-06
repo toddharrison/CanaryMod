@@ -1,7 +1,9 @@
 package net.minecraft.item;
 
 import net.canarymod.api.entity.living.humanoid.Player;
+import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.blocks.CanaryBlock;
+import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.player.BlockDestroyHook;
 import net.canarymod.hook.player.BlockPlaceHook;
 import net.minecraft.block.Block;
@@ -45,8 +47,8 @@ public class ItemBucket extends Item {
                 }
 
                 // CanaryMod: BlockDestroyHook
-                CanaryBlock clicked = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
-                BlockDestroyHook hook = new BlockDestroyHook(((EntityPlayerMP) entityplayer).getPlayer(), clicked);
+                CanaryBlock clicked = (CanaryBlock)world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos));
+                BlockDestroyHook hook = new BlockDestroyHook(((EntityPlayerMP)entityplayer).getPlayer(), clicked);
                 //
 
                 if (flag0) {
@@ -57,7 +59,7 @@ public class ItemBucket extends Item {
                     IBlockState iblockstate = world.p(blockpos);
                     Material material = iblockstate.c().r();
 
-                    if (material == Material.h && ((Integer) iblockstate.b(BlockLiquid.b)).intValue() == 0) {
+                    if (material == Material.h && ((Integer)iblockstate.b(BlockLiquid.b)).intValue() == 0) {
                         // Filling Bucket with Water
                         hook.call();
                         if (hook.isCanceled()) {
@@ -66,11 +68,11 @@ public class ItemBucket extends Item {
                         //
 
                         world.g(blockpos);
-                        entityplayer.b(StatList.J[Item.b((Item) this)]);
+                        entityplayer.b(StatList.J[Item.b((Item)this)]);
                         return this.a(itemstack, entityplayer, Items.ax);
                     }
 
-                    if (material == Material.i && ((Integer) iblockstate.b(BlockLiquid.b)).intValue() == 0) {
+                    if (material == Material.i && ((Integer)iblockstate.b(BlockLiquid.b)).intValue() == 0) {
                         // Filling Bucket with Lava
                         hook.call();
                         if (hook.isCanceled()) {
@@ -79,10 +81,9 @@ public class ItemBucket extends Item {
                         //
 
                         world.g(blockpos);
-                        entityplayer.b(StatList.J[Item.b((Item) this)]);
+                        entityplayer.b(StatList.J[Item.b((Item)this)]);
                         return this.a(itemstack, entityplayer, Items.ay);
                     }
-
                 }
                 else {
                     if (this.a == Blocks.a) {
@@ -97,7 +98,7 @@ public class ItemBucket extends Item {
 
                     // CanaryMod: Pass player to tryPlace
                     if (this.a(world, blockpos1, entityplayer, false) && !entityplayer.by.d) {
-                        entityplayer.b(StatList.J[Item.b((Item) this)]);
+                        entityplayer.b(StatList.J[Item.b((Item)this)]);
                         return new ItemStack(Items.aw);
                     }
                 }
@@ -145,10 +146,10 @@ public class ItemBucket extends Item {
                     int i1 = blockpos.o();
                     int i2 = blockpos.p();
 
-                    world.a((double) ((float) i0 + 0.5F), (double) ((float) i1 + 0.5F), (double) ((float) i2 + 0.5F), "random.fizz", 0.5F, 2.6F + (world.s.nextFloat() - world.s.nextFloat()) * 0.8F);
+                    world.a((double)((float)i0 + 0.5F), (double)((float)i1 + 0.5F), (double)((float)i2 + 0.5F), "random.fizz", 0.5F, 2.6F + (world.s.nextFloat() - world.s.nextFloat()) * 0.8F);
 
                     for (int i3 = 0; i3 < 8; ++i3) {
-                        world.a(EnumParticleTypes.SMOKE_LARGE, (double) i0 + Math.random(), (double) i1 + Math.random(), (double) i2 + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
+                        world.a(EnumParticleTypes.SMOKE_LARGE, (double)i0 + Math.random(), (double)i1 + Math.random(), (double)i2 + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
                     }
                 }
                 else {
@@ -158,10 +159,11 @@ public class ItemBucket extends Item {
 
                     // CanaryMod: BlockPlaceHook water/lava bucket
                     if (entityplayer != null) {
-                        CanaryBlock clicked = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
-                        CanaryBlock placed = new CanaryBlock((short) Block.b(this.a), (short) 0, i0, i1, i2, world.getCanaryWorld());
-                        Player player = ((EntityPlayerMP) entityplayer).getPlayer();
-                        BlockPlaceHook hook = (BlockPlaceHook) new BlockPlaceHook(player, clicked, placed).call();
+                        BlockPosition cbp = new BlockPosition(blockpos);
+                        CanaryBlock clicked = (CanaryBlock)world.getCanaryWorld().getBlockAt(cbp);
+                        CanaryBlock placed = new CanaryBlock(BlockType.fromId(Block.a(this.a)), (short)0, cbp, world.getCanaryWorld());
+                        Player player = ((EntityPlayerMP)entityplayer).getPlayer();
+                        BlockPlaceHook hook = (BlockPlaceHook)new BlockPlaceHook(player, clicked, placed).call();
                         if (hook.isCanceled()) {
                             return false;
                         }

@@ -1,5 +1,6 @@
 package net.minecraft.item.crafting;
 
+import com.google.common.collect.Lists;
 import net.canarymod.api.inventory.recipes.CanaryShapelessRecipe;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
@@ -51,7 +52,7 @@ public class ShapelessRecipes implements IRecipe {
                     Iterator iterator = arraylist.iterator();
 
                     while (iterator.hasNext()) {
-                        ItemStack itemstack1 = (ItemStack) iterator.next();
+                        ItemStack itemstack1 = (ItemStack)iterator.next();
 
                         if (itemstack.b() == itemstack1.b() && (itemstack1.i() == 32767 || itemstack.i() == itemstack1.i())) {
                             flag0 = true;

@@ -26,10 +26,9 @@ import net.minecraft.world.World;
 
 import java.util.UUID;
 
-
 public class ItemSkull extends Item {
 
-    private static final String[] a = new String[]{"skeleton", "wither", "zombie", "char", "creeper"};
+    private static final String[] a = new String[]{ "skeleton", "wither", "zombie", "char", "creeper" };
 
     public ItemSkull() {
         this.a(CreativeTabs.c);
@@ -47,8 +46,12 @@ public class ItemSkull extends Item {
             boolean flag0 = block.f(world, blockpos);
 
             // CanaryMod: BlockPlaceHook
-            CanaryBlock clicked = (CanaryBlock) world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos));
-            clicked.setFaceClicked(BlockFace.fromByte((byte) i3));
+            BlockPosition cbp = new BlockPosition(blockpos); // Translate native block pos
+            CanaryBlock clicked = (CanaryBlock)world.getCanaryWorld().getBlockAt(cbp); // Store Clicked
+            BlockFace cbf = BlockFace.fromByte((byte)enumfacing.a()); // Get the click face
+            clicked.setFaceClicked(cbf); // Set face clicked
+            cbp = cbp.clone(); // Remake BlockPosition
+            cbp.transform(cbf); // Adjust position based on face
             //
 
             if (!flag0) {
@@ -67,8 +70,8 @@ public class ItemSkull extends Item {
             }
             else {
                 if (!world.D) {
-                    CanaryBlock placed = new CanaryBlock(BlockType.SkeletonHead, (short) itemstack.getCanaryItem().getDamage(), new BlockPosition(blockpos), world.getCanaryWorld());
-                    BlockPlaceHook hook = (BlockPlaceHook) new BlockPlaceHook(((EntityPlayerMP) entityplayer).getPlayer(), clicked, placed).call();
+                    CanaryBlock placed = new CanaryBlock(BlockType.SkeletonHead, (short)itemstack.h(), cbp, world.getCanaryWorld());
+                    BlockPlaceHook hook = (BlockPlaceHook)new BlockPlaceHook(((EntityPlayerMP)entityplayer).getPlayer(), clicked, placed).call();
                     if (hook.isCanceled()) {
                         return false;
                     }
@@ -77,13 +80,13 @@ public class ItemSkull extends Item {
                     int i0 = 0;
 
                     if (enumfacing == EnumFacing.UP) {
-                        i0 = MathHelper.c((double) (entityplayer.y * 16.0F / 360.0F) + 0.5D) & 15;
+                        i0 = MathHelper.c((double)(entityplayer.y * 16.0F / 360.0F) + 0.5D) & 15;
                     }
 
                     TileEntity tileentity = world.s(blockpos);
 
                     if (tileentity instanceof TileEntitySkull) {
-                        TileEntitySkull tileentityskull = (TileEntitySkull) tileentity;
+                        TileEntitySkull tileentityskull = (TileEntitySkull)tileentity;
 
                         if (itemstack.i() == 3) {
                             GameProfile gameprofile = null;
@@ -95,7 +98,7 @@ public class ItemSkull extends Item {
                                     gameprofile = NBTUtil.a(nbttagcompound.m("SkullOwner"));
                                 }
                                 else if (nbttagcompound.b("SkullOwner", 8) && nbttagcompound.j("SkullOwner").length() > 0) {
-                                    gameprofile = new GameProfile((UUID) null, nbttagcompound.j("SkullOwner"));
+                                    gameprofile = new GameProfile((UUID)null, nbttagcompound.j("SkullOwner"));
                                 }
                             }
 
@@ -134,14 +137,14 @@ public class ItemSkull extends Item {
     public String a(ItemStack itemstack) {
         if (itemstack.i() == 3 && itemstack.n()) {
             if (itemstack.o().b("SkullOwner", 8)) {
-                return StatCollector.a("item.skull.player.name", new Object[]{itemstack.o().j("SkullOwner")});
+                return StatCollector.a("item.skull.player.name", new Object[]{ itemstack.o().j("SkullOwner") });
             }
 
             if (itemstack.o().b("SkullOwner", 10)) {
                 NBTTagCompound nbttagcompound = itemstack.o().m("SkullOwner");
 
                 if (nbttagcompound.b("Name", 8)) {
-                    return StatCollector.a("item.skull.player.name", new Object[]{nbttagcompound.j("Name")});
+                    return StatCollector.a("item.skull.player.name", new Object[]{ nbttagcompound.j("Name") });
                 }
             }
         }
@@ -152,15 +155,14 @@ public class ItemSkull extends Item {
     public boolean a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
         if (nbttagcompound.b("SkullOwner", 8) && nbttagcompound.j("SkullOwner").length() > 0) {
-            GameProfile gameprofile = new GameProfile((UUID) null, nbttagcompound.j("SkullOwner"));
+            GameProfile gameprofile = new GameProfile((UUID)null, nbttagcompound.j("SkullOwner"));
 
             gameprofile = TileEntitySkull.b(gameprofile);
-            nbttagcompound.a("SkullOwner", (NBTBase) NBTUtil.a(new NBTTagCompound(), gameprofile));
+            nbttagcompound.a("SkullOwner", (NBTBase)NBTUtil.a(new NBTTagCompound(), gameprofile));
             return true;
         }
         else {
             return false;
         }
     }
-
 }

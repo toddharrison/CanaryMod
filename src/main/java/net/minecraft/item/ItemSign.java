@@ -35,8 +35,12 @@ public class ItemSign extends Item {
         else {
             blockpos = blockpos.a(enumfacing);
             // CanaryMod: BlockPlaceHook
-            CanaryBlock clicked = (CanaryBlock) world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos));
-            clicked.setFaceClicked(BlockFace.fromByte((byte) enumfacing.a()));
+            BlockPosition cbp = new BlockPosition(blockpos); // Translate native block pos
+            CanaryBlock clicked = (CanaryBlock)world.getCanaryWorld().getBlockAt(cbp); // Store Clicked
+            BlockFace cbf = BlockFace.fromByte((byte)enumfacing.a()); // Get the click face
+            clicked.setFaceClicked(cbf); // Set face clicked
+            cbp = cbp.clone(); // Remake BlockPosition
+            cbp.transform(cbf); // Adjust position based on face
             //
 
             if (!entityplayer.a(blockpos, enumfacing, itemstack)) {
@@ -50,15 +54,15 @@ public class ItemSign extends Item {
             }
             else {
                 // Create and call
-                CanaryBlock placed = new CanaryBlock(i3 == 1 ? BlockType.SignPost : BlockType.WallSign, new BlockPosition(blockpos), world.getCanaryWorld());
-                BlockPlaceHook hook = (BlockPlaceHook) new BlockPlaceHook(((EntityPlayerMP) entityplayer).getPlayer(), clicked, placed).call();
+                CanaryBlock placed = new CanaryBlock(enumfacing == EnumFacing.UP ? BlockType.SignPost : BlockType.WallSign, (short)0, new BlockPosition(blockpos), world.getCanaryWorld());
+                BlockPlaceHook hook = (BlockPlaceHook)new BlockPlaceHook(((EntityPlayerMP)entityplayer).getPlayer(), clicked, placed).call();
                 if (hook.isCanceled()) {
                     return false;
                 }
                 //
 
                 if (enumfacing == EnumFacing.UP) {
-                    int i0 = MathHelper.c((double) ((entityplayer.y + 180.0F) * 16.0F / 360.0F) + 0.5D) & 15;
+                    int i0 = MathHelper.c((double)((entityplayer.y + 180.0F) * 16.0F / 360.0F) + 0.5D) & 15;
 
                     world.a(blockpos, Blocks.an.P().a(BlockStandingSign.a, Integer.valueOf(i0)), 3);
                 }
@@ -70,7 +74,7 @@ public class ItemSign extends Item {
                 TileEntity tileentity = world.s(blockpos);
 
                 if (tileentity instanceof TileEntitySign && !ItemBlock.a(world, blockpos, itemstack)) {
-                    entityplayer.a((TileEntitySign) tileentity);
+                    entityplayer.a((TileEntitySign)tileentity);
                 }
 
                 return true;
