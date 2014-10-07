@@ -9,6 +9,7 @@ import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.api.world.position.Position;
 import net.minecraft.network.play.server.S23PacketBlockChange;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 
 /**
  * BlockChangePacket implementation
@@ -21,14 +22,14 @@ public class CanaryBlockChangePacket extends CanaryPacket implements BlockChange
         super(packet);
     }
 
-    public CanaryBlockChangePacket(BlockType type, int meta, BlockPosition blockposition, CanaryWorld world) {
-        this(new S23PacketBlockChange(world.getHandle(), blockposition.asNative()));
+    public CanaryBlockChangePacket(BlockType type, int meta, BlockPosition blockposition) {
+        this(new S23PacketBlockChange(((CanaryWorld)Canary.getServer().getDefaultWorld()).getHandle(), blockposition.asNative()));
         this.setType(type);
         this.setData(meta);
     }
 
     public CanaryBlockChangePacket(Block block) {
-        this(block.getType(), block.getData(), (BlockPosition)block.getPosition(), (CanaryWorld)block.getWorld());
+        this(block.getType(), block.getData(), (BlockPosition)block.getPosition());
     }
 
     @Override
@@ -93,7 +94,8 @@ public class CanaryBlockChangePacket extends CanaryPacket implements BlockChange
 
     @Override
     public void setTypeId(int id) {
-        //getPacket().d = net.minecraft.block.Block.e(id); Err..
+        // TODO: This may be incorrect
+        getPacket().b.c().a(((CanaryWorld)Canary.getServer().getDefaultWorld()).getHandle(), ((BlockPosition)getPosition()).asNative(), EnumFacing.UP, 0.0F, 0.0F, 0.0F, getTypeId(), null);
     }
 
     @Override
@@ -103,12 +105,12 @@ public class CanaryBlockChangePacket extends CanaryPacket implements BlockChange
 
     @Override
     public void setData(int data) {
-        //getPacket().e = data; Err...
+        getPacket().b.c().a(data);
     }
 
     @Override
     public Block getBlock() {
-        return new CanaryBlock((short) getTypeId(), (short) getData(), getX(), getY(), getZ(), Canary.getServer().getDefaultWorld());
+        return new CanaryBlock((short)getTypeId(), (short)getData(), getX(), getY(), getZ(), Canary.getServer().getDefaultWorld());
     }
 
     @Override
@@ -120,6 +122,6 @@ public class CanaryBlockChangePacket extends CanaryPacket implements BlockChange
 
     @Override
     public S23PacketBlockChange getPacket() {
-        return (S23PacketBlockChange) packet;
+        return (S23PacketBlockChange)packet;
     }
 }

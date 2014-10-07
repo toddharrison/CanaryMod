@@ -39,7 +39,7 @@ public class CanaryCompoundTag extends CanaryBaseTag implements CompoundTag {
     @Override
     public Collection<BaseTag> values() {
         Collection<BaseTag> values = new ArrayList<BaseTag>();
-        for (NBTBase tag : (Collection<NBTBase>) getHandle().c()) {
+        for (NBTBase tag : (Collection<NBTBase>)getHandle().c()) {
             values.add(CanaryBaseTag.wrap(tag));
         }
         return values;
@@ -54,7 +54,7 @@ public class CanaryCompoundTag extends CanaryBaseTag implements CompoundTag {
      */
     @Override
     public void put(String key, BaseTag value) {
-        getHandle().a(key, ((CanaryBaseTag) value).getHandle());
+        getHandle().a(key, ((CanaryBaseTag)value).getHandle());
     }
 
     /**
@@ -134,7 +134,7 @@ public class CanaryCompoundTag extends CanaryBaseTag implements CompoundTag {
      */
     @Override
     public void put(String key, CompoundTag value) {
-        getHandle().a(key, ((CanaryCompoundTag) value).getHandle());
+        getHandle().a(key, ((CanaryCompoundTag)value).getHandle());
     }
 
     /**
@@ -270,7 +270,7 @@ public class CanaryCompoundTag extends CanaryBaseTag implements CompoundTag {
      */
     @Override
     public boolean isEmpty() {
-        return getHandle().d();
+        return getHandle().c_();
     }
 
     /**
@@ -278,7 +278,7 @@ public class CanaryCompoundTag extends CanaryBaseTag implements CompoundTag {
      */
     @Override
     public CompoundTag copy() {
-        return new CanaryCompoundTag((NBTTagCompound) getHandle().b());
+        return new CanaryCompoundTag((NBTTagCompound)getHandle().b());
     }
 
     /**
@@ -286,6 +286,6 @@ public class CanaryCompoundTag extends CanaryBaseTag implements CompoundTag {
      */
     @Override
     public NBTTagCompound getHandle() {
-        return (NBTTagCompound) tag;
+        return (NBTTagCompound)tag;
     }
 }
