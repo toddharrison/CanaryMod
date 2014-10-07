@@ -33,7 +33,7 @@ public class NMSToolBox extends ToolBox {
     public static net.minecraft.block.Block[] blockIdsToBlocks(int[] ids) {
         net.minecraft.block.Block[] blocks = new net.minecraft.block.Block[ids.length];
         for (int index = 0; index < ids.length; index++) {
-            blocks[index] = net.minecraft.block.Block.e(ids[index]);
+            blocks[index] = net.minecraft.block.Block.c(ids[index]);
         }
         return blocks;
     }
@@ -49,7 +49,7 @@ public class NMSToolBox extends ToolBox {
     public static String usernameFromUUID(UUID uuid) {
         String uuidStr = uuid.toString();
         String name = null;
-        GameProfile profile = ((CanaryServer) Canary.getServer()).gameprofileFromCache(uuid);
+        GameProfile profile = ((CanaryServer)Canary.getServer()).gameprofileFromCache(uuid);
         if (profile != null) {
             return profile.getName();
         }
@@ -65,13 +65,13 @@ public class NMSToolBox extends ToolBox {
 
         try {
             URL url = new URL("https://sessionserver.mojang.com/session/minecraft/profile/" + uuidStr.replaceAll("\\-", ""));
-            HttpURLConnection uc = (HttpURLConnection) url.openConnection();
+            HttpURLConnection uc = (HttpURLConnection)url.openConnection();
 
             // Parse it
             String json = new Scanner(uc.getInputStream(), "UTF-8").useDelimiter("\\A").next();
             JSONParser parser = new JSONParser();
             Object obj = parser.parse(json);
-            name = (String) ((JSONObject) obj).get("name");
+            name = (String)((JSONObject)obj).get("name");
         }
         catch (Exception ex) {
             Canary.log.warn("Failed to translate UUID into a Username. Reason: " + ex.getMessage());
@@ -100,11 +100,11 @@ public class NMSToolBox extends ToolBox {
             }
         }
         UUID uuidOther = uuidFromUsername(name);
-        GameProfile profileOther = MinecraftServer.I().av().fillProfileProperties(new GameProfile(uuidOther, name), true);
+        GameProfile profileOther = MinecraftServer.M().aB().fillProfileProperties(new GameProfile(uuidOther, name), true);
         Property property = Iterables.getFirst(profileOther.getProperties().get("textures"), null);
 
         if (property != null) {
-            skincache.setStringArray(name, ":", new String[]{escapeEqual(property.getValue()), escapeEqual(property.getSignature())});
+            skincache.setStringArray(name, ":", new String[]{ escapeEqual(property.getValue()), escapeEqual(property.getSignature()) });
             skincache.setComments(name, ";Verified " + System.currentTimeMillis());
             skincache.save();
         }
