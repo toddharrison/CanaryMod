@@ -9,7 +9,7 @@ import net.visualillusionsent.utils.StringUtils;
 
 /**
  * Item Factory
- * 
+ *
  * @author Brian (WWOL)
  * @author Jason (darkdiplomat)
  */
@@ -69,7 +69,7 @@ public class CanaryItemFactory implements ItemFactory {
      */
     @Override
     public Item newItem(Item item) {
-        return item == null ? null : new CanaryItem(((CanaryItem) item).getHandle().m());
+        return item == null ? null : new CanaryItem(((CanaryItem)item).getHandle().k());
     }
 
     /**
@@ -89,16 +89,17 @@ public class CanaryItemFactory implements ItemFactory {
         }
 
         if (data.length == 1 && !data[0].matches("\\d+")) {
-            data = new String[]{"minecraft", data[0]};
+            data = new String[]{ "minecraft", data[0] };
             endIndex++;
         }
 
         type = StringUtils.joinString(data, ":", 0, endIndex);
 
         if (type.matches("\\d+")) {
-            item = (CanaryItem) (newItem(ItemType.fromIdAndData(Integer.parseInt(type), meta)));
-        } else {
-            item = (CanaryItem) (newItem(ItemType.fromStringAndData(type, meta)));
+            item = (CanaryItem)(newItem(ItemType.fromIdAndData(Integer.parseInt(type), meta)));
+        }
+        else {
+            item = (CanaryItem)(newItem(ItemType.fromStringAndData(type, meta)));
         }
 
         return item;
@@ -135,8 +136,9 @@ public class CanaryItemFactory implements ItemFactory {
 
     public MapData getMapData(Item item) {
         if (item.getType() == ItemType.Map) {
-            return new CanaryMapData(((ItemMap) net.minecraft.item.Item.d(ItemType.Map.getId()))
-                    .a(((CanaryItem) item).getHandle(), ((CanaryWorld) Canary.getServer().getDefaultWorld()).getHandle()));
+            return new CanaryMapData(((ItemMap)net.minecraft.item.Item.b(ItemType.Map.getId()))
+                                             .a(((CanaryItem)item).getHandle(), ((CanaryWorld)Canary.getServer().getDefaultWorld()).getHandle())
+            );
         }
         return null;
     }
