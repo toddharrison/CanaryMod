@@ -38,7 +38,7 @@ import net.minecraft.network.play.server.S02PacketChat;
 import net.minecraft.network.play.server.S2BPacketChangeGameState;
 import net.minecraft.network.play.server.S38PacketPlayerListItem;
 import net.minecraft.network.play.server.S39PacketPlayerAbilities;
-import net.minecraft.util.ChunkCoordinates;
+//import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.WorldSettings;
 import net.visualillusionsent.utils.StringUtils;
 

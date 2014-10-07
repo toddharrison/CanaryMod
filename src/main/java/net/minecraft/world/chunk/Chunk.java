@@ -38,7 +38,7 @@ public class Chunk {
     private final int[] f;
     private final boolean[] g;
     private boolean h;
-    private final World i;
+    public final World i; // CanaryMod private => public
     private final int[] j;
     public final int a;
     public final int b;
