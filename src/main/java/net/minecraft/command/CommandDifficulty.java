@@ -1,12 +1,6 @@
 package net.minecraft.command;
 
 import net.canarymod.api.world.CanaryWorld;
-import net.canarymod.api.world.DimensionType;
-import net.canarymod.commandsys.TabCompleteHelper;
-import net.minecraft.command.CommandBase;
-import net.minecraft.command.CommandException;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.command.WrongUsageException;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentTranslation;
@@ -29,23 +23,24 @@ public class CommandDifficulty extends CommandBase {
         return "commands.difficulty.usage";
     }
 
-    public void b(ICommandSender icommandsender, String[] astring) {
+    public void a(ICommandSender icommandsender, String[] astring) throws CommandException {
         if (astring.length <= 0) {
             throw new WrongUsageException("commands.difficulty.usage", new Object[0]);
-        } else {
+        }
+        else {
             EnumDifficulty enumdifficulty = this.e(astring[0]);
 
-            WorldServer worldserver = (WorldServer) icommandsender.d();
+            WorldServer worldserver = (WorldServer)icommandsender.e();
             if (astring.length > 1) { // Add an argument to allow picking a world
-                boolean loaded = MinecraftServer.I().worldManager.worldIsLoaded(astring[1]);
+                boolean loaded = MinecraftServer.M().worldManager.worldIsLoaded(astring[1]);
                 if (!loaded) {
-                    a(icommandsender, this, "No world loaded of Name: '%s'", new Object[]{astring[1]});
+                    a(icommandsender, this, "No world loaded of Name: '%s'", new Object[]{ astring[1] });
                     return;
                 }
-                worldserver = (WorldServer) ((CanaryWorld) MinecraftServer.I().worldManager.getWorld(astring[1], false)).getHandle();
+                worldserver = (WorldServer)((CanaryWorld)MinecraftServer.M().worldManager.getWorld(astring[1], false)).getHandle();
             }
             MinecraftServer.M().a(enumdifficulty, worldserver);
-            a(icommandsender, this, "commands.difficulty.success", new Object[] { new ChatComponentTranslation(enumdifficulty.b(), new Object[0])});
+            a(icommandsender, this, "commands.difficulty.success", new Object[]{ new ChatComponentTranslation(enumdifficulty.b(), new Object[0]) });
         }
     }
 
@@ -54,6 +49,6 @@ public class CommandDifficulty extends CommandBase {
     }
 
     public List a(ICommandSender icommandsender, String[] astring, BlockPos blockpos) {
-        return astring.length == 1 ? a(astring, new String[] { "peaceful", "easy", "normal", "hard"}) : null;
+        return astring.length == 1 ? a(astring, new String[]{ "peaceful", "easy", "normal", "hard" }) : null;
     }
 }

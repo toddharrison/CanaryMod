@@ -1,26 +1,12 @@
 package net.minecraft.command;
 
-
-import net.canarymod.Canary;
-import net.canarymod.chat.MessageReceiver;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.Map.Entry;
-import net.minecraft.command.CommandBase;
-import net.minecraft.command.CommandException;
-import net.minecraft.command.CommandResultStats;
-import net.minecraft.command.ICommand;
-import net.minecraft.command.ICommandManager;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.command.PlayerSelector;
-import net.minecraft.command.WrongUsageException;
+import net.canarymod.Canary;
+import net.canarymod.chat.MessageReceiver;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumChatFormatting;
@@ -30,13 +16,12 @@ import org.apache.logging.log4j.Logger;
 import java.util.*;
 import java.util.Map.Entry;
 
-
 public class CommandHandler implements ICommandManager {
 
     private static final Logger a = LogManager.getLogger();
     private final Map b = Maps.newHashMap();
     private final Set c = Sets.newHashSet();
-   
+
     public int a(ICommandSender icommandsender, String s0) {
         s0 = s0.trim();
         if (s0.startsWith("/")) {
@@ -47,7 +32,7 @@ public class CommandHandler implements ICommandManager {
         String s1 = astring[0];
 
         astring = a(astring);
-        ICommand icommand = (ICommand) this.b.get(s1);
+        ICommand icommand = (ICommand)this.b.get(s1);
         int i0 = this.a(icommand, astring);
         int i1 = 0;
 
@@ -57,7 +42,8 @@ public class CommandHandler implements ICommandManager {
             chatcomponenttranslation = new ChatComponentTranslation("commands.generic.notFound", new Object[0]);
             chatcomponenttranslation.b().a(EnumChatFormatting.RED);
             icommandsender.a(chatcomponenttranslation);
-        } else if (icommand.a(icommandsender)) {
+        }
+        else if (icommand.a(icommandsender)) {
             if (i0 > -1) {
                 List list = PlayerSelector.b(icommandsender, astring[i0], Entity.class);
                 String s2 = astring[i0];
@@ -66,7 +52,7 @@ public class CommandHandler implements ICommandManager {
                 Iterator iterator = list.iterator();
 
                 while (iterator.hasNext()) {
-                    Entity entity = (Entity) iterator.next();
+                    Entity entity = (Entity)iterator.next();
 
                     astring[i0] = entity.aJ().toString();
                     if (this.a(icommandsender, astring, icommand, s0)) {
@@ -75,13 +61,15 @@ public class CommandHandler implements ICommandManager {
                 }
 
                 astring[i0] = s2;
-            } else {
+            }
+            else {
                 icommandsender.a(CommandResultStats.Type.AFFECTED_ENTITIES, 1);
                 if (this.a(icommandsender, astring, icommand, s0)) {
                     ++i1;
                 }
             }
-        } else {
+        }
+        else {
             chatcomponenttranslation = new ChatComponentTranslation("commands.generic.permission", new Object[0]);
             chatcomponenttranslation.b().a(EnumChatFormatting.RED);
             icommandsender.a(chatcomponenttranslation);
@@ -97,15 +85,18 @@ public class CommandHandler implements ICommandManager {
         try {
             icommand.a(icommandsender, astring);
             return true;
-        } catch (WrongUsageException wrongusageexception) {
-            chatcomponenttranslation = new ChatComponentTranslation("commands.generic.usage", new Object[] { new ChatComponentTranslation(wrongusageexception.getMessage(), wrongusageexception.a())});
+        }
+        catch (WrongUsageException wrongusageexception) {
+            chatcomponenttranslation = new ChatComponentTranslation("commands.generic.usage", new Object[]{ new ChatComponentTranslation(wrongusageexception.getMessage(), wrongusageexception.a()) });
             chatcomponenttranslation.b().a(EnumChatFormatting.RED);
             icommandsender.a(chatcomponenttranslation);
-        } catch (CommandException commandexception) {
+        }
+        catch (CommandException commandexception) {
             chatcomponenttranslation = new ChatComponentTranslation(commandexception.getMessage(), commandexception.a());
             chatcomponenttranslation.b().a(EnumChatFormatting.RED);
             icommandsender.a(chatcomponenttranslation);
-        } catch (Throwable throwable) {
+        }
+        catch (Throwable throwable) {
             chatcomponenttranslation = new ChatComponentTranslation("commands.generic.exception", new Object[0]);
             chatcomponenttranslation.b().a(EnumChatFormatting.RED);
             icommandsender.a(chatcomponenttranslation);
@@ -121,8 +112,8 @@ public class CommandHandler implements ICommandManager {
         Iterator iterator = icommand.b().iterator();
 
         while (iterator.hasNext()) {
-            String s0 = (String) iterator.next();
-            ICommand icommand1 = (ICommand) this.b.get(s0);
+            String s0 = (String)iterator.next();
+            ICommand icommand1 = (ICommand)this.b.get(s0);
 
             if (icommand1 == null || !icommand1.c().equals(s0)) {
                 this.b.put(s0, icommand);
@@ -148,30 +139,31 @@ public class CommandHandler implements ICommandManager {
             Iterator iterator = this.b.entrySet().iterator();
 
             //CanaryMod: Add possible Canary command matches
-            MessageReceiver msgrec = icommandsender instanceof EntityPlayerMP ? ((EntityPlayerMP) icommandsender).getPlayer() : Canary.getServer(); // I don't see a command block doing tab complete
+            MessageReceiver msgrec = icommandsender instanceof EntityPlayerMP ? ((EntityPlayerMP)icommandsender).getPlayer() : Canary.getServer(); // I don't see a command block doing tab complete
             arraylist.addAll(Canary.commands().matchCommandNames(msgrec, s1, false));
             //
 
             while (iterator.hasNext()) {
-                Entry entry = (Entry) iterator.next();
+                Entry entry = (Entry)iterator.next();
 
-                if (CommandBase.a(s1, (String) entry.getKey()) && ((ICommand) entry.getValue()).a(icommandsender)) {
+                if (CommandBase.a(s1, (String)entry.getKey()) && ((ICommand)entry.getValue()).a(icommandsender)) {
                     arraylist.add(entry.getKey());
                 }
             }
 
             return arraylist;
-        } else {
+        }
+        else {
             if (astring.length > 1) {
                 // CanaryMod: Inject out commands then revert to vanilla commands
-                MessageReceiver msgrec = icommandsender instanceof EntityPlayerMP ? ((EntityPlayerMP) icommandsender).getPlayer() : Canary.getServer(); // I don't see a command block doing tab complete
+                MessageReceiver msgrec = icommandsender instanceof EntityPlayerMP ? ((EntityPlayerMP)icommandsender).getPlayer() : Canary.getServer(); // I don't see a command block doing tab complete
                 List<String> rez = Canary.commands().tabComplete(msgrec, s1, a(astring));
                 if (rez != null) {
                     return rez;
                 }
                 //
 
-                ICommand icommand = (ICommand) this.b.get(s1);
+                ICommand icommand = (ICommand)this.b.get(s1);
 
                 if (icommand != null && icommand.a(icommandsender)) {
                     return icommand.a(icommandsender, a(astring), blockpos);
@@ -187,12 +179,12 @@ public class CommandHandler implements ICommandManager {
         Iterator iterator = this.c.iterator();
 
         //CanaryMod: Add possible Canary command matches
-        MessageReceiver msgrec = icommandsender instanceof EntityPlayerMP ? ((EntityPlayerMP) icommandsender).getPlayer() : Canary.getServer(); // I don't see a command block doing tab complete
+        MessageReceiver msgrec = icommandsender instanceof EntityPlayerMP ? ((EntityPlayerMP)icommandsender).getPlayer() : Canary.getServer(); // I don't see a command block doing tab complete
         arraylist.addAll(Canary.commands().matchCommandNames(msgrec, "", false));
         //
 
         while (iterator.hasNext()) {
-            ICommand icommand = (ICommand) iterator.next();
+            ICommand icommand = (ICommand)iterator.next();
 
             if (icommand.a(icommandsender)) {
                 arraylist.add(icommand);
@@ -209,7 +201,8 @@ public class CommandHandler implements ICommandManager {
     private int a(ICommand icommand, String[] astring) {
         if (icommand == null) {
             return -1;
-        } else {
+        }
+        else {
             for (int i0 = 0; i0 < astring.length; ++i0) {
                 if (icommand.b(astring, i0) && PlayerSelector.a(astring[i0])) {
                     return i0;
@@ -219,5 +212,4 @@ public class CommandHandler implements ICommandManager {
             return -1;
         }
     }
-
 }

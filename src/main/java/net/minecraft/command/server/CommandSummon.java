@@ -12,8 +12,8 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.effect.EntityLightningBolt;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.JsonToNBT;
-import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTException;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
@@ -40,10 +40,14 @@ public class CommandSummon extends CommandBase {
     public void a(ICommandSender icommandsender, String[] astring) throws CommandException {
         if (astring.length < 1) {
             throw new WrongUsageException("commands.summon.usage", new Object[0]);
-        } else {
+        }
+        else {
             String s0 = astring[0];
+            BlockPos blockpos = icommandsender.c();
+            Vec3 vec3 = icommandsender.d();
+
             // CanaryMod: Inject some LineTracer
-            CanaryBlock targetBlock = new CanaryBlock(BlockType.Air, 0, 0, 0, icommandsender.d().getCanaryWorld());
+            CanaryBlock targetBlock = new CanaryBlock(BlockType.Air, 0, 0, 0, icommandsender.e().getCanaryWorld());
             if (icommandsender instanceof EntityPlayerMP) {
                 BlockIterator iterator = new BlockIterator(((EntityPlayerMP)icommandsender).getPlayer());
                 while (iterator.hasNext() && targetBlock.getType() == BlockType.Air) {
@@ -52,9 +56,9 @@ public class CommandSummon extends CommandBase {
             }
 
             boolean isAir = targetBlock.getType() == BlockType.Air;
-            double d0 = (!isAir ? targetBlock.getX() : icommandsender.f_().a) + 0.5D;
-            double d1 = (!isAir ? targetBlock.getY() + 1.1D : icommandsender.f_().b);
-            double d2 = (!isAir ? targetBlock.getZ() : icommandsender.f_().c) + 0.5D;
+            double d0 = !isAir ? targetBlock.getX() + 0.5D : vec3.a;
+            double d1 = !isAir ? targetBlock.getY() + 1.1D : vec3.b;
+            double d2 = !isAir ? targetBlock.getZ() + 0.5D : vec3.c;
             //
 
             if (astring.length >= 4) {
@@ -68,10 +72,12 @@ public class CommandSummon extends CommandBase {
 
             if (!world.e(blockpos)) {
                 throw new CommandException("commands.summon.outOfWorld", new Object[0]);
-            } else if ("LightningBolt".equals(s0)) {
-                world.c((Entity) (new EntityLightningBolt(world, d0, d1, d2)));
+            }
+            else if ("LightningBolt".equals(s0)) {
+                world.c((Entity)(new EntityLightningBolt(world, d0, d1, d2)));
                 a(icommandsender, this, "commands.summon.success", new Object[0]);
-            } else {
+            }
+            else {
                 NBTTagCompound nbttagcompound = new NBTTagCompound();
                 boolean flag0 = false;
 
@@ -81,8 +87,9 @@ public class CommandSummon extends CommandBase {
                     try {
                         nbttagcompound = JsonToNBT.a(ichatcomponent.c());
                         flag0 = true;
-                    } catch (NBTException nbtexception) {
-                        throw new CommandException("commands.summon.tagError", new Object[] { nbtexception.getMessage()});
+                    }
+                    catch (NBTException nbtexception) {
+                        throw new CommandException("commands.summon.tagError", new Object[]{ nbtexception.getMessage() });
                     }
                 }
 
@@ -92,16 +99,18 @@ public class CommandSummon extends CommandBase {
 
                 try {
                     entity = EntityList.a(nbttagcompound, world);
-                } catch (RuntimeException runtimeexception) {
+                }
+                catch (RuntimeException runtimeexception) {
                     throw new CommandException("commands.summon.failed", new Object[0]);
                 }
 
                 if (entity == null) {
                     throw new CommandException("commands.summon.failed", new Object[0]);
-                } else {
+                }
+                else {
                     entity.b(d0, d1, d2, entity.y, entity.z);
                     if (!flag0 && entity instanceof EntityLiving) {
-                        ((EntityLiving) entity).a(world.E(new BlockPos(entity)), (IEntityLivingData) null);
+                        ((EntityLiving)entity).a(world.E(new BlockPos(entity)), (IEntityLivingData)null);
                     }
 
                     // CanaryMod: Actually check that it spawns

@@ -1,9 +1,9 @@
 package net.minecraft.command.server;
 
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.concurrent.Callable;
+import net.canarymod.Canary;
+import net.canarymod.api.world.CanaryWorld;
+import net.canarymod.config.Configuration;
+import net.canarymod.hook.command.CommandBlockCommandHook;
 import net.minecraft.command.CommandResultStats;
 import net.minecraft.command.ICommandManager;
 import net.minecraft.command.ICommandSender;
@@ -19,7 +19,7 @@ import net.minecraft.world.World;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
+import java.util.concurrent.Callable;
 
 public abstract class CommandBlockLogic implements ICommandSender {
 
@@ -30,7 +30,7 @@ public abstract class CommandBlockLogic implements ICommandSender {
     private String e = "";
     private String f = "@";
     private final CommandResultStats g = new CommandResultStats();
-   
+
     public int j() {
         return this.b;
     }
@@ -100,40 +100,44 @@ public abstract class CommandBlockLogic implements ICommandSender {
                 }
                 else if (Configuration.getServerConfig().isCommandBlockOpped() || this.getReference().hasPermission("canary.command.vanilla.".concat(this.e.split(" ")[0]))) {
                     this.b = icommandmanager.a(this, this.e);
-                } else {
+                }
+                else {
                     this.b = 0;
                 }
                 //
-            } catch (Throwable throwable) {
+            }
+            catch (Throwable throwable) {
                 CrashReport crashreport = CrashReport.a(throwable, "Executing command block");
                 CrashReportCategory crashreportcategory = crashreport.a("Command to be executed");
 
                 crashreportcategory.a("Command", new Callable() {
 
-                    public String a() {
-                        return CommandBlockLogic.this.l();
-                    }
+                                          public String a() {
+                                              return CommandBlockLogic.this.l();
+                                          }
 
-                    public Object call() {
-                        return this.a();
-                    }
-                });
+                                          public Object call() {
+                                              return this.a();
+                                          }
+                                      }
+                                     );
                 crashreportcategory.a("Name", new Callable() {
 
-                    public String a() {
-                        return CommandBlockLogic.this.d_();
-                    }
+                                          public String a() {
+                                              return CommandBlockLogic.this.d_();
+                                          }
 
-                    public Object call() {
-                        return this.a();
-                    }
-                });
+                                          public Object call() {
+                                              return this.a();
+                                          }
+                                      }
+                                     );
                 throw new ReportedException(crashreport);
             }
-        } else {
+        }
+        else {
             this.b = 0;
         }
-
     }
 
     public String d_() {
@@ -153,13 +157,12 @@ public abstract class CommandBlockLogic implements ICommandSender {
             this.d = (new ChatComponentText("[" + a.format(new Date()) + "] ")).a(ichatcomponent);
             this.h();
         }
-
     }
 
     public boolean t_() {
         MinecraftServer minecraftserver = MinecraftServer.M();
-
-        return minecraftserver == null || !minecraftserver.N() || minecraftserver.c[0].Q().b("commandBlockOutput");
+        // CanaryMod: Multiworld fix ->     ->    ->    ->    ->    here
+        return minecraftserver == null || !minecraftserver.N() || ((CanaryWorld)Canary.getServer().getDefaultWorld()).getHandle().Q().b("commandBlockOutput");
     }
 
     public void a(CommandResultStats.Type commandresultstats_type, int i0) {
@@ -183,7 +186,8 @@ public abstract class CommandBlockLogic implements ICommandSender {
     public boolean a(EntityPlayer entityplayer) {
         if (!entityplayer.by.d) {
             return false;
-        } else {
+        }
+        else {
             if (entityplayer.e().D) {
                 entityplayer.a(this);
             }
@@ -199,5 +203,4 @@ public abstract class CommandBlockLogic implements ICommandSender {
     // CanaryMod: Add method to get CommandBlock reference (Either CanaryCommandBlock or CanaryCommandBlockMinecart)
     public abstract net.canarymod.api.CommandBlockLogic getReference();
     //
-
 }

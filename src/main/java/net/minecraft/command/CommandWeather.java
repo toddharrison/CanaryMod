@@ -4,6 +4,7 @@ import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.api.world.DimensionType;
 import net.canarymod.commandsys.TabCompleteHelper;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.WorldInfo;
 
@@ -29,7 +30,7 @@ public class CommandWeather extends CommandBase {
             int i0 = (300 + (new Random()).nextInt(600)) * 20;
 
             // CanaryMod: MutliWorld fix
-            WorldServer worldserver = (WorldServer) icommandsender.d();
+            WorldServer worldserver = (WorldServer)icommandsender.e();
 
             if (astring.length > 1) {
                 // CanaryMod: inject world selection
@@ -39,10 +40,10 @@ public class CommandWeather extends CommandBase {
                         a(icommandsender, this, "No world loaded of Name: '%s'", new Object[]{astring[1]});
                         return;
                     }
-                    worldserver = (WorldServer) ((CanaryWorld) MinecraftServer.I().worldManager.getWorld(astring[1], false)).getHandle();
-                    i0 = a(icommandsender, astring[2], 1, 1000000) * 20;
+                    worldserver = (WorldServer)((CanaryWorld)MinecraftServer.M().worldManager.getWorld(astring[1], false)).getHandle();
+                    i0 = a(astring[2], 1, 1000000) * 20;
                 } else if (astring[1].matches("\\d+")) {
-                    i0 = a(icommandsender, astring[1], 1, 1000000) * 20;
+                    i0 = a(astring[1], 1, 1000000) * 20;
                 } else {
                     boolean loaded = MinecraftServer.M().worldManager.worldIsLoaded(astring[1]);
                     if (!loaded) {
@@ -53,7 +54,6 @@ public class CommandWeather extends CommandBase {
                 }
             }
 
-            WorldServer worldserver = MinecraftServer.M().c[0];
             WorldInfo worldinfo = worldserver.P();
 
             if ("clear".equalsIgnoreCase(astring[0])) {
@@ -88,7 +88,7 @@ public class CommandWeather extends CommandBase {
         }
     }
 
-    public List a(ICommandSender icommandsender, String[] astring) {
+    public List a(ICommandSender icommandsender, String[] astring, BlockPos blockpos) {
         return astring.length == 1 ? a(astring, new String[]{"clear", "rain", "thunder"})
                 : astring.length == 2 ? TabCompleteHelper.matchToLoadedWorldOfDimension(astring, DimensionType.NORMAL)
                 : null;
