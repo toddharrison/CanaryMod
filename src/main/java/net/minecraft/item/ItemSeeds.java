@@ -34,13 +34,13 @@ public class ItemSeeds extends Item {
         else if (world.p(blockpos).c() == this.b && world.d(blockpos.a())) {
             // CanaryMod: BlockPlaceHook
             BlockPosition cbp = new BlockPosition(blockpos);
-            CanaryBlock clicked = (CanaryBlock) world.getCanaryWorld().getBlockAt(cbp);
-            BlockFace cbf = BlockFace.fromByte((byte) 1); // Its always UP
+            CanaryBlock clicked = (CanaryBlock)world.getCanaryWorld().getBlockAt(cbp);
+            BlockFace cbf = BlockFace.fromByte((byte)1); // Its always UP
             clicked.setFaceClicked(cbf); // Set face clicked
-            cbp = cbp.clone(); // clone the original BlockPosition
+            cbp = cbp.safeClone(); // clone the original BlockPosition
             cbp.transform(cbf); // Adjust BlockPostiion according to clicked face
-            CanaryBlock placed = new CanaryBlock(BlockType.fromId((short) Block.a(this.a)), (short) 0, cbp, world.getCanaryWorld());
-            BlockPlaceHook hook = (BlockPlaceHook) new BlockPlaceHook(((EntityPlayerMP) entityplayer).getPlayer(), clicked, placed).call();
+            CanaryBlock placed = new CanaryBlock(BlockType.fromId((short)Block.a(this.a)), (short)0, cbp, world.getCanaryWorld());
+            BlockPlaceHook hook = (BlockPlaceHook)new BlockPlaceHook(((EntityPlayerMP)entityplayer).getPlayer(), clicked, placed).call();
             if (hook.isCanceled()) {
                 return false;
             }

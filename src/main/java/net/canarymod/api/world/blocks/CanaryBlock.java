@@ -181,7 +181,7 @@ public class CanaryBlock implements Block {
 
     @Override
     public Position getPosition() {
-        return new Position(x, y, z);
+        return new BlockPosition(x, y, z);
     }
 
     @Override

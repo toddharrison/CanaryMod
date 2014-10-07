@@ -48,7 +48,7 @@ public class ItemDoor extends Item {
                 CanaryBlock clicked = (CanaryBlock)world.getCanaryWorld().getBlockAt(cbp);
                 BlockFace cbf = BlockFace.fromByte((byte)enumfacing.a());
                 clicked.setFaceClicked(cbf); // Set face clicked
-                cbp = cbp.clone(); // clone the original BlockPosition
+                cbp = cbp.safeClone(); // clone the original BlockPosition
                 cbp.transform(cbf); // Adjust BlockPostiion according to clicked face
                 CanaryBlock placed = new CanaryBlock(BlockType.fromId((short)Block.a(block)), (short)0, cbp, world.getCanaryWorld());
                 BlockPlaceHook hook = (BlockPlaceHook)new BlockPlaceHook(((EntityPlayerMP)entityplayer).getPlayer(), clicked, placed).call();

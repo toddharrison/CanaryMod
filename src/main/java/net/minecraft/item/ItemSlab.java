@@ -44,7 +44,7 @@ public class ItemSlab extends ItemBlock {
         CanaryBlock clicked = (CanaryBlock)world.getCanaryWorld().getBlockAt(cbp); // Store Clicked
         BlockFace cbf = BlockFace.fromByte((byte)enumfacing.a()); // Get the click face
         clicked.setFaceClicked(cbf); // Set face clicked
-        cbp = cbp.clone(); // Remake BlockPosition
+        cbp = cbp.safeClone(); // Remake BlockPosition
         cbp.transform(cbf); // Adjust position based on face
         //
 

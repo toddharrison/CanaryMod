@@ -13,7 +13,29 @@ public class BlockPosition extends Position {
         super(blockPos.n(), blockPos.o(), blockPos.p());
     }
 
-    public BlockPosition clone() {
+    public BlockPosition(int x, int y, int z) {
+        super(x, y, z);
+    }
+
+    public BlockPosition(BlockPosition templ) {
+        super(templ);
+    }
+
+    public BlockPosition clone() throws CloneNotSupportedException {
         return (BlockPosition)super.clone();
+    }
+
+    public BlockPosition safeClone() {
+        try {
+            return this.clone();
+        }
+        catch (CloneNotSupportedException e) {
+            //it is supported...
+        }
+        return new BlockPosition(this);
+    }
+
+    public BlockPos asNative() {
+        return new BlockPos(getBlockX(), getBlockY(), getBlockZ());
     }
 }

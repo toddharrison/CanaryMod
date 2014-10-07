@@ -32,7 +32,7 @@ public class ItemFlintAndSteel extends Item {
         CanaryBlock clicked = (CanaryBlock)world.getCanaryWorld().getBlockAt(cbp); // Store Clicked
         BlockFace cbf = BlockFace.fromByte((byte)enumfacing.a()); // Get the click face
         clicked.setFaceClicked(cbf); // Set face clicked
-        cbp = cbp.clone(); // Remake BlockPosition
+        cbp = cbp.safeClone(); // Remake BlockPosition
         cbp.transform(cbf); // Adjust position based on face
         clicked.setStatus((byte)2); // Flint&Steel Status 2
         //

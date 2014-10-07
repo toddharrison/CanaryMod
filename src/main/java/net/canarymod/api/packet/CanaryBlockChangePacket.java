@@ -5,8 +5,10 @@ import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.api.world.blocks.Block;
 import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.blocks.CanaryBlock;
+import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.api.world.position.Position;
 import net.minecraft.network.play.server.S23PacketBlockChange;
+import net.minecraft.util.BlockPos;
 
 /**
  * BlockChangePacket implementation
@@ -19,56 +21,58 @@ public class CanaryBlockChangePacket extends CanaryPacket implements BlockChange
         super(packet);
     }
 
-    public CanaryBlockChangePacket(int x, int y, int z, int typeID, int data) {
-        this(new S23PacketBlockChange(x, y, z, ((CanaryWorld) Canary.getServer().getDefaultWorld()).getHandle())); // World doesn't mean shit really but required in the constructor
-        this.setTypeId(typeID);
-        this.setData(data);
+    public CanaryBlockChangePacket(BlockType type, int meta, BlockPosition blockposition, CanaryWorld world) {
+        this(new S23PacketBlockChange(world.getHandle(), blockposition.asNative()));
+        this.setType(type);
+        this.setData(meta);
     }
 
     public CanaryBlockChangePacket(Block block) {
-        this(block.getX(), block.getY(), block.getZ(), block.getTypeId(), block.getData());
+        this(block.getType(), block.getData(), (BlockPosition)block.getPosition(), (CanaryWorld)block.getWorld());
     }
 
     @Override
     public int getX() {
-        return getPacket().a;
+        return getPacket().a.n();
     }
 
     @Override
     public void setX(int x) {
-        getPacket().a = x;
+        this.setPosition(x, getY(), getZ());
     }
 
     @Override
     public int getY() {
-        return getPacket().b;
+        return getPacket().a.o();
     }
 
     @Override
     public void setY(int y) {
-        getPacket().b = y;
+        setPosition(getX(), y, getZ());
     }
 
     @Override
     public int getZ() {
-        return getPacket().c;
+        return getPacket().a.p();
     }
 
     @Override
     public void setZ(int z) {
-        getPacket().c = z;
+        setPosition(getX(), getY(), z);
     }
 
     @Override
     public Position getPosition() {
-        return new Position(getX(), getY(), getZ());
+        return new BlockPosition(getPacket().a);
     }
 
     @Override
     public void setPosition(Position position) {
-        this.setX(position.getBlockX());
-        this.setY(position.getBlockY());
-        this.setZ(position.getBlockZ());
+        this.setPosition(position.getBlockX(), position.getBlockY(), position.getBlockZ());
+    }
+
+    public void setPosition(int x, int y, int z) {
+        getPacket().a = new BlockPos(x, y, z);
     }
 
     @Override
@@ -84,22 +88,22 @@ public class CanaryBlockChangePacket extends CanaryPacket implements BlockChange
 
     @Override
     public int getTypeId() {
-        return net.minecraft.block.Block.b(getPacket().d);
+        return net.minecraft.block.Block.a(getPacket().b.c());
     }
 
     @Override
     public void setTypeId(int id) {
-        getPacket().d = net.minecraft.block.Block.e(id);
+        //getPacket().d = net.minecraft.block.Block.e(id); Err..
     }
 
     @Override
     public int getData() {
-        return getPacket().e;
+        return getPacket().b.c().c(getPacket().b);
     }
 
     @Override
     public void setData(int data) {
-        getPacket().e = data;
+        //getPacket().e = data; Err...
     }
 
     @Override
@@ -109,10 +113,8 @@ public class CanaryBlockChangePacket extends CanaryPacket implements BlockChange
 
     @Override
     public void setBlock(Block block) {
-        this.setX(block.getX());
-        this.setY(block.getY());
-        this.setZ(block.getZ());
-        this.setTypeId(block.getTypeId());
+        this.setPosition(block.getPosition());
+        this.setType(block.getType());
         this.setData(block.getData());
     }
 
