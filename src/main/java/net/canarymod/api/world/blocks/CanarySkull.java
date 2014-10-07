@@ -31,7 +31,7 @@ public class CanarySkull extends CanaryTileEntity implements Skull {
      */
     @Override
     public int getSkullType() {
-        return getTileEntity().b();
+        return getTileEntity().c();
     }
 
     /**
@@ -47,7 +47,7 @@ public class CanarySkull extends CanaryTileEntity implements Skull {
      */
     @Override
     public String getExtraType() {
-        GameProfile profile = getTileEntity().a();
+        GameProfile profile = getTileEntity().b();
         if (profile == null) {
             return null;
         }
@@ -78,12 +78,12 @@ public class CanarySkull extends CanaryTileEntity implements Skull {
             if (ToolBox.isUUID(extra)) {
                 Player player = Canary.getServer().getPlayerFromUUID(extra);
                 if (player != null) {
-                    profile = ((CanaryPlayer) player).getHandle().bJ();
+                    profile = ((CanaryPlayer) player).getHandle().cc();
                 }
             } else {
                 PlayerReference player = Canary.getServer().matchKnownPlayer(extra);
                 if (player != null && player.isOnline()) {
-                    profile = ((CanaryPlayer) player).getHandle().bJ();
+                    profile = ((CanaryPlayer) player).getHandle().cc();
                 } else {
                     profile = new GameProfile((UUID) null, extra);
                 }

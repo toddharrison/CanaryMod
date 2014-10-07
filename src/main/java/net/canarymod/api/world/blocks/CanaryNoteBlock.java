@@ -1,7 +1,9 @@
 package net.canarymod.api.world.blocks;
 
+import net.canarymod.api.world.CanaryWorld;
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntityNote;
+import net.minecraft.util.BlockPos;
 
 /**
  * NoteBlock wrapper implementation
@@ -25,7 +27,7 @@ public class CanaryNoteBlock extends CanaryTileEntity implements NoteBlock {
      */
     @Override
     public byte getInstrument() {
-        Material material = tileentity.w().a(getX(), getY() - 1, getZ()).o();
+        Material material = ((CanaryBlock)getWorld().getBlockAt(getX(), getY() - 1, getZ())).getBlock().r();
         byte instrument = 0;
 
         if (material == Material.e) {
@@ -60,7 +62,7 @@ public class CanaryNoteBlock extends CanaryTileEntity implements NoteBlock {
      */
     @Override
     public void play() {
-        getTileEntity().a(tileentity.w(), getX(), getY(), getZ());
+        getTileEntity().a(tileentity.z(), new BlockPos(getX(), getY(), getZ()));
     }
 
     /**

@@ -63,7 +63,7 @@ public class CanaryBeacon extends CanaryBlockInventory implements Beacon {
      */
     @Override
     public PotionEffectType getPrimaryEffect() {
-        return PotionEffectType.fromId(this.getTileEntity().j());
+        return PotionEffectType.fromId(this.getTileEntity().a_(1));
     }
 
     /**
@@ -71,7 +71,7 @@ public class CanaryBeacon extends CanaryBlockInventory implements Beacon {
      */
     @Override
     public void setPrimaryEffect(PotionEffectType effect) {
-        this.getTileEntity().d(effect.getID());
+        this.getTileEntity().b(1, effect.getID());
     }
 
     /**
@@ -87,7 +87,7 @@ public class CanaryBeacon extends CanaryBlockInventory implements Beacon {
      */
     @Override
     public PotionEffectType getSecondaryEffect() {
-        return PotionEffectType.fromId(this.getTileEntity().k());
+        return PotionEffectType.fromId(this.getTileEntity().a_(2));
     }
 
     /**
@@ -95,7 +95,7 @@ public class CanaryBeacon extends CanaryBlockInventory implements Beacon {
      */
     @Override
     public void setSecondaryEffect(PotionEffectType effect) {
-        this.getTileEntity().e(effect.getID());
+        this.getTileEntity().b(2, effect.getID());
     }
 
     /**
@@ -111,7 +111,7 @@ public class CanaryBeacon extends CanaryBlockInventory implements Beacon {
      */
     @Override
     public int getLevels() {
-        return getTileEntity().l();
+        return this.getTileEntity().a_(0);
     }
 
     /**

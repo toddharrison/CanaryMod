@@ -83,7 +83,7 @@ public class CanaryBlockMaterial implements BlockMaterial {
      */
     @Override
     public boolean isAlwaysHarvested() {
-        return material.q();
+        return material.isAlwaysHarvested();
     }
 
     /**
@@ -91,6 +91,6 @@ public class CanaryBlockMaterial implements BlockMaterial {
      */
     @Override
     public boolean isTranslucent() {
-        return material.J;
+        return material.K;
     }
 }

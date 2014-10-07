@@ -39,7 +39,7 @@ public class CanaryFurnace extends CanaryBlockInventory implements Furnace {
      */
     @Override
     public short getBurnTime() {
-        return (short) getTileEntity().a;
+        return (short) getTileEntity().a_(0);
     }
 
     /**
@@ -47,7 +47,7 @@ public class CanaryFurnace extends CanaryBlockInventory implements Furnace {
      */
     @Override
     public void setBurnTime(short time) {
-        getTileEntity().a = time;
+        getTileEntity().b(0, time);
     }
 
     /**
@@ -55,7 +55,7 @@ public class CanaryFurnace extends CanaryBlockInventory implements Furnace {
      */
     @Override
     public short getCookTime() {
-        return (short) getTileEntity().c;
+        return (short) getTileEntity().a_(1);
     }
 
     /**
@@ -63,7 +63,7 @@ public class CanaryFurnace extends CanaryBlockInventory implements Furnace {
      */
     @Override
     public void setCookTime(short time) {
-        getTileEntity().c = time;
+        getTileEntity().b(1, time);
     }
 
     /**
@@ -71,7 +71,7 @@ public class CanaryFurnace extends CanaryBlockInventory implements Furnace {
      */
     @Override
     public void clearContents() {
-        Arrays.fill(getTileEntity().n, null);
+        Arrays.fill(getTileEntity().h, null);
     }
 
     /**
@@ -79,7 +79,7 @@ public class CanaryFurnace extends CanaryBlockInventory implements Furnace {
      */
     @Override
     public Item[] clearInventory() {
-        ItemStack[] items = Arrays.copyOf(getTileEntity().n, getSize());
+        ItemStack[] items = Arrays.copyOf(getTileEntity().h, getSize());
 
         clearContents();
         return CanaryItem.stackArrayToItemArray(items);
@@ -90,7 +90,7 @@ public class CanaryFurnace extends CanaryBlockInventory implements Furnace {
      */
     @Override
     public Item[] getContents() {
-        return CanaryItem.stackArrayToItemArray(getTileEntity().n);
+        return CanaryItem.stackArrayToItemArray(getTileEntity().h);
     }
 
     /**
@@ -98,7 +98,7 @@ public class CanaryFurnace extends CanaryBlockInventory implements Furnace {
      */
     @Override
     public void setContents(Item[] items) {
-        System.arraycopy(CanaryItem.itemArrayToStackArray(items), 0, getTileEntity().n, 0, getSize());
+        System.arraycopy(CanaryItem.itemArrayToStackArray(items), 0, getTileEntity().h, 0, getSize());
     }
 
     /**

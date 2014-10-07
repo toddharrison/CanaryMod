@@ -6,7 +6,7 @@ import net.minecraft.tileentity.TileEntityMobSpawner;
 
 public class CanaryMobSpawner extends CanaryTileEntity implements MobSpawner {
 
-    private MobSpawnerLogic logic = ((TileEntityMobSpawner) this.tileentity).a().logic;
+    private MobSpawnerLogic logic = ((TileEntityMobSpawner) this.tileentity).b().logic;
 
     public CanaryMobSpawner(TileEntityMobSpawner tileentity) {
         super(tileentity);

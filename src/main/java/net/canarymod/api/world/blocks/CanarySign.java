@@ -1,11 +1,12 @@
 package net.canarymod.api.world.blocks;
 
+import java.util.Arrays;
 import net.canarymod.api.entity.living.humanoid.CanaryPlayer;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntitySign;
-
-import java.util.Arrays;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.IChatComponent;
 
 /**
  * Sign wrapper implementation
@@ -29,7 +30,11 @@ public class CanarySign extends CanaryTileEntity implements Sign {
      */
     @Override
     public String[] getText() {
-        return getTileEntity().a.clone();
+        String[] strings = new String[4];
+        for (int i = 0 ; i < 5 ; i++) {
+            strings[i] = getTileEntity().a[i].getWrapper().getFullText();
+        }
+        return strings;
     }
 
     /**
@@ -38,7 +43,7 @@ public class CanarySign extends CanaryTileEntity implements Sign {
     @Override
     public String getTextOnLine(int line) {
         if (line >= 0 && line <= 3) {
-            return getTileEntity().a[line];
+            return getText()[line];
         }
         return null;
     }
@@ -48,7 +53,11 @@ public class CanarySign extends CanaryTileEntity implements Sign {
      */
     @Override
     public void setText(String[] text) {
-        getTileEntity().a = insureData(text);
+        String[] data = insureData(text);
+        for (int i = 0 ; i < 5 ; i++) {
+            getTileEntity().a[i] = new ChatComponentText(data[i]);
+        }
+        
     }
 
     /**
@@ -57,7 +66,7 @@ public class CanarySign extends CanaryTileEntity implements Sign {
     @Override
     public void setTextOnLine(String text, int line) {
         if (line >= 0 && line <= 3) {
-            getTileEntity().a[line] = text == null ? "" : text.length() > 15 ? text.substring(0, 15) : text;
+            getTileEntity().a[line] = new ChatComponentText(text == null ? "" : text.length() > 15 ? text.substring(0, 15) : text);
         }
     }
 
@@ -101,12 +110,12 @@ public class CanarySign extends CanaryTileEntity implements Sign {
 
     @Override
     public boolean isEditable() {
-        return getTileEntity().j;
+        return getTileEntity().g;
     }
 
     @Override
     public void setEditable(boolean edit) {
-        getTileEntity().j = edit;
+        getTileEntity().g = edit;
     }
 
     @Override
@@ -116,7 +125,7 @@ public class CanarySign extends CanaryTileEntity implements Sign {
 
     @Override
     public Player getOwner() {
-        EntityPlayer entityplayer = getTileEntity().b();
+        EntityPlayer entityplayer = getTileEntity().c();
         return (Player) (entityplayer == null ? null : entityplayer.getCanaryEntity());
     }
 

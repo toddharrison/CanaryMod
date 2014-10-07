@@ -24,7 +24,7 @@ public abstract class TileEntity {
     private static Map f = Maps.newHashMap();
     private static Map g = Maps.newHashMap();
     protected World b;
-    protected BlockPos c;
+    public BlockPos c;// CanaryMod: protected => public
     protected boolean d;
     private int h;
     protected Block e;

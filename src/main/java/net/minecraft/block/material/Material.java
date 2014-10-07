@@ -136,6 +136,10 @@ public class Material {
     }
 
     // CanaryMod
+    public boolean isAlwaysHarvested() {
+        return this.P;
+    }
+
     public CanaryBlockMaterial getCanaryBlockMaterial() {
         return this.cbm;
     }

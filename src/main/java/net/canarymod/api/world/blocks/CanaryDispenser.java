@@ -1,5 +1,6 @@
 package net.canarymod.api.world.blocks;
 
+import java.util.Arrays;
 import net.canarymod.api.entity.Entity;
 import net.canarymod.api.inventory.CanaryBlockInventory;
 import net.canarymod.api.inventory.CanaryItem;
@@ -11,8 +12,7 @@ import net.minecraft.block.BlockSourceImpl;
 import net.minecraft.dispenser.IBehaviorDispenseItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityDispenser;
-
-import java.util.Arrays;
+import net.minecraft.util.BlockPos;
 
 /**
  * Dispenser wrapper implementation
@@ -59,15 +59,15 @@ public class CanaryDispenser extends CanaryBlockInventory implements Dispenser {
             return dispense(((CanaryItem) stack).getHandle(), slot);
         }
         else {
-            ((CanaryWorld) getWorld()).getHandle().c(1001, this.getX(), this.getY(), this.getZ(), 0);
+            ((CanaryWorld) getWorld()).getHandle().c(1001, new BlockPos(this.getX(), this.getY(), this.getZ()), 0);
         }
         return null;
     }
 
     private Entity dispense(ItemStack item, int slot) {
         if (item != null) {
-            BlockSourceImpl blocksourceimpl = new BlockSourceImpl(((CanaryWorld) getWorld()).getHandle(), getX(), getY(), getZ());
-            IBehaviorDispenseItem ibehaviordispenseitem = (IBehaviorDispenseItem) ((BlockDispenser) net.minecraft.block.Block.e(BlockType.Dispenser.getId())).a(item);
+            BlockSourceImpl blocksourceimpl = new BlockSourceImpl(((CanaryWorld) getWorld()).getHandle(), new BlockPos(getX(), getY(), getZ()));
+            IBehaviorDispenseItem ibehaviordispenseitem = (IBehaviorDispenseItem) ((BlockDispenser) net.minecraft.block.Block.c(BlockType.Dispenser.getId())).a(item);
 
             if (ibehaviordispenseitem != IBehaviorDispenseItem.a) {
                 ItemStack itemstack1 = ibehaviordispenseitem.a(blocksourceimpl, item);
@@ -85,7 +85,7 @@ public class CanaryDispenser extends CanaryBlockInventory implements Dispenser {
      */
     @Override
     public void clearContents() {
-        Arrays.fill(getTileEntity().i, null);
+        Arrays.fill(getTileEntity().g, null);
     }
 
     /**
@@ -93,7 +93,7 @@ public class CanaryDispenser extends CanaryBlockInventory implements Dispenser {
      */
     @Override
     public Item[] clearInventory() {
-        ItemStack[] items = Arrays.copyOf(getTileEntity().i, getSize());
+        ItemStack[] items = Arrays.copyOf(getTileEntity().g, getSize());
 
         clearContents();
         return CanaryItem.stackArrayToItemArray(items);
@@ -104,7 +104,7 @@ public class CanaryDispenser extends CanaryBlockInventory implements Dispenser {
      */
     @Override
     public Item[] getContents() {
-        return CanaryItem.stackArrayToItemArray(getTileEntity().i);
+        return CanaryItem.stackArrayToItemArray(getTileEntity().g);
     }
 
     /**
@@ -112,7 +112,7 @@ public class CanaryDispenser extends CanaryBlockInventory implements Dispenser {
      */
     @Override
     public void setContents(Item[] items) {
-        System.arraycopy(CanaryItem.itemArrayToStackArray(items), 0, getTileEntity().i, 0, getSize());
+        System.arraycopy(CanaryItem.itemArrayToStackArray(items), 0, getTileEntity().g, 0, getSize());
     }
 
     /**

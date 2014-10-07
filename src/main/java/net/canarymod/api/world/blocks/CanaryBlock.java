@@ -11,6 +11,7 @@ import net.canarymod.api.world.position.Location;
 import net.canarymod.api.world.position.Position;
 
 import java.util.Random;
+import net.minecraft.util.BlockPos;
 
 public class CanaryBlock implements Block {
     private final static Random rndm = new Random(); // Passed to the idDropped method
@@ -22,7 +23,7 @@ public class CanaryBlock implements Block {
     protected byte status = 0;
 
     private static String machineNameOfBlock(net.minecraft.block.Block nmsBlock) {
-        return net.minecraft.block.Block.c.c(nmsBlock);
+        return (String)net.minecraft.block.Block.c.c(nmsBlock);
     }
 
     public CanaryBlock(short typeId, short data, int x, int y, int z, World world) {
@@ -169,7 +170,7 @@ public class CanaryBlock implements Block {
     @Override
     public BlockMaterial getBlockMaterial() {
         if (net.minecraft.block.Block.b(getType().getMachineName()) != null) {
-            return net.minecraft.block.Block.b(getType().getMachineName()).o().getCanaryBlockMaterial();
+            return net.minecraft.block.Block.b(getType().getMachineName()).r().getCanaryBlockMaterial();
         }
         return null;
     }
@@ -221,12 +222,12 @@ public class CanaryBlock implements Block {
 
     @Override
     public int getIdDropped() {
-        return net.minecraft.item.Item.b(net.minecraft.block.Block.b(getType().getMachineName()).a(0, rndm, 0));
+        return net.minecraft.item.Item.b(getBlock().a(getBlock().P(), rndm, 0));
     }
 
     @Override
     public int getDamageDropped() {
-        return net.minecraft.block.Block.b(getType().getMachineName()).a(getData());
+        return net.minecraft.block.Block.b(getType().getMachineName()).a(getBlock().P());
     }
 
     @Override
@@ -236,7 +237,7 @@ public class CanaryBlock implements Block {
 
     @Override
     public void dropBlockAsItem(boolean remove) {
-        net.minecraft.block.Block.b(getType().getMachineName()).a(((CanaryWorld)getWorld()).getHandle(), getX(), getY(), getZ(), getData(), 1.0F, 0);
+        net.minecraft.block.Block.b(getType().getMachineName()).a(((CanaryWorld)getWorld()).getHandle(), new BlockPos(getX(), getY(), getZ()), getBlock().P(), 1.0F, 0);
         if (remove) {
             this.setTypeId((short)0);
             this.update();
@@ -250,7 +251,7 @@ public class CanaryBlock implements Block {
 
     @Override
     public boolean rightClick(Player player) {
-        return net.minecraft.block.Block.b(getType().getMachineName()).a(((CanaryWorld)getWorld()).getHandle(), getX(), getY(), getZ(), player != null ? ((CanaryPlayer)player).getHandle() : null, 0, 0, 0, 0); // last four parameters aren't even used by lever or button
+        return net.minecraft.block.Block.b(getType().getMachineName()).a(((CanaryWorld)getWorld()).getHandle(), new BlockPos(getX(), getY(), getZ()), getBlock().P(), player != null ? ((CanaryPlayer)player).getHandle() : null, /*ENUM FACING GOES HERE */, 0, 0, 0); // last four parameters aren't even used by lever or button
     }
 
     public void sendUpdateToPlayers(Player... players) {
@@ -309,4 +310,12 @@ public class CanaryBlock implements Block {
         hash = 97 * hash + this.z;
         return hash;
     }
+    
+    /**
+     * Convenience Method
+     */
+    public net.minecraft.block.Block getBlock() {
+        return net.minecraft.block.Block.b(getType().getMachineName());
+    }
+    
 }

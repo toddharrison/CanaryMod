@@ -36,7 +36,7 @@ public class CanaryCommandBlock extends CanaryTileEntity implements CommandBlock
      */
     @Override
     public String getName() {
-        return getLogic().b_();
+        return getLogic().d_();
     }
 
     /**
@@ -97,7 +97,7 @@ public class CanaryCommandBlock extends CanaryTileEntity implements CommandBlock
      */
     @Override
     public String getCommand() {
-        return getLogic().i();
+        return getLogic().l();
     }
 
     /**

@@ -40,7 +40,7 @@ public class ContainerEnchantment extends Container {
     public int[] g; // CanaryMod: private => public
     public int[] h; // CanaryMod: private => public
     public World i; // CanaryMod: private => public
-    private BlockPos j;
+    public BlockPos j; // CanaryMod: private => public
     private Random k = new Random();
 
     public ContainerEnchantment(InventoryPlayer inventoryplayer, World world, BlockPos blockpos) {

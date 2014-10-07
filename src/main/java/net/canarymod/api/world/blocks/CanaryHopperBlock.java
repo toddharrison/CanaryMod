@@ -95,7 +95,7 @@ public class CanaryHopperBlock extends CanaryBlockInventory implements HopperBlo
      */
     @Override
     public World getWorld() {
-        return this.getTileEntity().w().getCanaryWorld();
+        return this.getTileEntity().z().getCanaryWorld();
     }
 
     /**
@@ -127,7 +127,7 @@ public class CanaryHopperBlock extends CanaryBlockInventory implements HopperBlo
      */
     @Override
     public int getTranferCooldown() {
-        return this.getTileEntity().c;
+        return this.getTileEntity().g;
     }
 
     /**
@@ -135,7 +135,7 @@ public class CanaryHopperBlock extends CanaryBlockInventory implements HopperBlo
      */
     @Override
     public void setTransferCooldown(int cooldown) {
-        this.getTileEntity().c(cooldown);
+        this.getTileEntity().d(cooldown);
     }
 
     /**
