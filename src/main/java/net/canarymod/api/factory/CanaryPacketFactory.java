@@ -27,17 +27,18 @@ import net.canarymod.api.statistics.CanaryStat;
 import net.canarymod.api.statistics.Stat;
 import net.canarymod.api.world.CanaryChunk;
 import net.canarymod.api.world.Chunk;
+import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.blocks.CanaryBlock;
+import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.api.world.position.Position;
 import net.canarymod.api.world.position.Vector3D;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.server.*;
 import net.minecraft.stats.StatBase;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.Vec3;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static net.canarymod.Canary.log;
 
@@ -70,8 +71,7 @@ public class CanaryPacketFactory implements PacketFactory {
                 return new CanaryPacket(new S04PacketEntityEquipment((Integer)args[0], (Integer)args[1], ((CanaryItem)args[2]).getHandle()));
             case 0x05: // 5
                 verify(id, "SpawnPosition", 3, args, test(Integer.class, 3));
-                //return new CanaryPacket(new S05PacketSpawnPosition((Integer) args[0], (Integer) args[1], (Integer) args[2]));
-                throw new NotYetImplementedException("A Minecraft Update has broken this construction");
+                return new CanaryPacket(new S05PacketSpawnPosition(blockPosFromArgs(0, args)));
             case 0x06: // 6
                 verify(id, "UpdateHealth", 3, args, test(Float.class, 1), test(Integer.class, 1), test(Float.class, 1));
                 return new CanaryPacket(new S06PacketUpdateHealth((Float)args[0], (Integer)args[1], (Float)args[2]));
@@ -79,16 +79,18 @@ public class CanaryPacketFactory implements PacketFactory {
                 //int EnumDifficulty WorldType WorldSettings.GameType
                 return new CanaryPacket(new S07PacketRespawn());
             case 0x08: // 8
-                verify(id, "PlayerPosLook", 6, args, test(Double.class, 3), test(Float.class, 2), test(Boolean.class, 1));
-                //return new CanaryPacket(new S08PacketPlayerPosLook((Double) args[0], (Double) args[1], (Double) args[2], (Float) args[3], (Float) args[4], (Boolean) args[5]));
-                throw new NotYetImplementedException("A Minecraft Update has broken this construction");
+                if (args.length > 5) {
+                    verify(id, "PlayerPosLook", 6, args, test(Double.class, 3), test(Float.class, 2), test(Set.class, 1));
+                    return new CanaryPacket(new S08PacketPlayerPosLook((Double)args[0], (Double)args[1], (Double)args[2], (Float)args[3], (Float)args[4], (Set)args[5]));
+                }
+                verify(id, "PlayerPosLook", 6, args, test(Double.class, 3), test(Float.class, 2));
+                return new CanaryPacket(new S08PacketPlayerPosLook((Double)args[0], (Double)args[1], (Double)args[2], (Float)args[3], (Float)args[4], Collections.emptySet()));
             case 0x09: // 9
                 verify(id, "HeldItemChange", 1, args, test(Integer.class, 1));
                 return new CanaryPacket(new S09PacketHeldItemChange((Integer)args[0]));
             case 0x0A: // 10
                 verify(id, "UseBed", 4, args, test(CanaryHuman.class, 1), test(Integer.class, 3));
-                //return new CanaryPacket(new S0APacketUseBed(((CanaryHuman) args[0]).getHandle(), (Integer) args[1], (Integer) args[2], (Integer) args[3]));
-                throw new NotYetImplementedException("A Minecraft Update has broken this construction");
+                return new CanaryPacket(new S0APacketUseBed(((CanaryHuman)args[0]).getHandle(), blockPosFromArgs(1, args)));
             case 0x0B: // 11
                 verify(id, "Animation", 2, args, test(CanaryEntity.class, 1), test(Integer.class, 1));
                 return new CanaryPacket(new S0BPacketAnimation(((CanaryEntity)args[0]).getHandle(), (Integer)args[1]));
@@ -128,21 +130,17 @@ public class CanaryPacketFactory implements PacketFactory {
                 throw new InvalidPacketConstructionException(id, "Entity", "Is abstract packet for ids 15, 16, and 17");
             case 0x15: // 21
                 verify(id, "EntityRelMove", 4, args, test(Integer.class, 1), test(Byte.class, 3));
-                //return new CanaryPacket(new S14PacketEntity.S15PacketEntityRelMove((Integer) args[0], (Byte) args[1], (Byte) args[2], (Byte) args[3]));
-                throw new NotYetImplementedException("A Minecraft Update has broken this construction");
+                return new CanaryPacket(new S14PacketEntity.S15PacketEntityRelMove((Integer)args[0], (Byte)args[1], (Byte)args[2], (Byte)args[3], true));
             case 0x16: // 22
                 verify(id, "EntityLook", 3, args, test(Integer.class, 1), test(Byte.class, 2));
-                //return new CanaryPacket(new S14PacketEntity.S16PacketEntityLook((Integer) args[0], (Byte) args[1], (Byte) args[2]));
-                throw new NotYetImplementedException("A Minecraft Update has broken this construction");
+                return new CanaryPacket(new S14PacketEntity.S16PacketEntityLook((Integer) args[0], (Byte) args[1], (Byte) args[2], true));
             case 0x17: // 23
                 verify(id, "EntityLookMove", 6, args, test(Integer.class, 1), test(Byte.class, 5));
-                //return new CanaryPacket(new S14PacketEntity.S17PacketEntityLookMove((Integer) args[0], (Byte) args[1], (Byte) args[2], (Byte) args[3], (Byte) args[4], (Byte) args[5]));
-                throw new NotYetImplementedException("A Minecraft Update has broken this construction");
+                return new CanaryPacket(new S14PacketEntity.S17PacketEntityLookMove((Integer) args[0], (Byte) args[1], (Byte) args[2], (Byte) args[3], (Byte) args[4], (Byte) args[5], true));
             case 0x18: // 24
                 if (args.length > 1) {
                     verify(id, "EntityTeleport", 6, args, test(Integer.class, 4), test(Byte.class, 2));
-                    //return new CanaryPacket(new S18PacketEntityTeleport((Integer) args[0], (Integer) args[1], (Integer) args[2], (Integer) args[3], (Byte) args[4], (Byte) args[5]));
-                    throw new NotYetImplementedException("A Minecraft Update has broken this construction");
+                    return new CanaryPacket(new S18PacketEntityTeleport((Integer)args[0], (Integer)args[1], (Integer)args[2], (Integer)args[3], (Byte)args[4], (Byte)args[5], true));
                 }
                 verify(id, "EntityTeleport", 1, args, test(CanaryEntity.class, 1));
                 return new CanaryPacket(new S18PacketEntityTeleport(((CanaryEntity)args[0]).getHandle()));
@@ -175,8 +173,7 @@ public class CanaryPacketFactory implements PacketFactory {
             case 0x23: // 35
                 if (args.length > 1) {
                     verify(id, "BlockChange", 5, args, test(Integer.class, 5));
-                    //return new CanaryBlockChangePacket((Integer) args[0], (Integer) args[1], (Integer) args[2], (Integer) args[3], (Integer) args[4]);
-                    throw new NotYetImplementedException("A Minecraft Update has broken this construction");
+                    return new CanaryBlockChangePacket(BlockType.fromId((Integer)args[0]), (Integer)args[1], new BlockPosition((Integer)args[2], (Integer)args[3], (Integer)args[4]));
                 }
                 verify(id, "BlockChange", 1, args, test(CanaryBlock.class, 1));
                 return new CanaryBlockChangePacket((CanaryBlock)args[0]);
@@ -186,8 +183,7 @@ public class CanaryPacketFactory implements PacketFactory {
                 throw new NotYetImplementedException("A Minecraft Update has broken this construction");
             case 0x25: // 37
                 verify(id, "BlockBreakAnim", 5, args, test(Integer.class, 5));
-                //return new CanaryPacket(new S25PacketBlockBreakAnim((Integer) args[0], (Integer) args[1], (Integer) args[2], (Integer) args[3], (Integer) args[4]));
-                throw new NotYetImplementedException("A Minecraft Update has broken this construction");
+                return new CanaryPacket(new S25PacketBlockBreakAnim((Integer) args[0], blockPosFromArgs(1, args), (Integer) args[4]));
             case 0x26: // 38
                 verify(id, "MapChunkBulk", 1, args, test(List.class, 1));
                 ArrayList<net.minecraft.world.chunk.Chunk> nmsChunks = new ArrayList<net.minecraft.world.chunk.Chunk>();
@@ -196,25 +192,23 @@ public class CanaryPacketFactory implements PacketFactory {
                 }
                 return new CanaryPacket(new S26PacketMapChunkBulk(nmsChunks));
             case 0x27: // 39
-                /*
                 verify(id, "Explosion", 6, args, test(Double.class, 3), test(Float.class, 1), test(List.class, 1), test(Vector3D.class, 1));
-                ArrayList<ChunkPosition> cp = new ArrayList<ChunkPosition>();
+                ArrayList<BlockPos> listbp = new ArrayList<BlockPos>();
                 for (Object position : (List) args[4]) {
-                    cp.add(new ChunkPosition(((Position) position).getBlockX(), ((Position) position).getBlockY(), ((Position) position).getBlockZ()));
+                    listbp.add(new BlockPos(((Position)position).getBlockX(), ((Position)position).getBlockY(), ((Position)position).getBlockZ()));
                 }
                 Vector3D v3D = (Vector3D) args[5];
-                return new CanaryPacket(new S27PacketExplosion((Double) args[0], (Double) args[1], (Double) args[2], (Float) args[3], cp, Vec3.a(v3D.getX(), v3D.getY(), v3D.getZ())));
-                */
-                throw new NotYetImplementedException("A Minecraft Update has broken this construction");
+                return new CanaryPacket(new S27PacketExplosion((Double) args[0], (Double) args[1], (Double) args[2], (Float) args[3], listbp, new Vec3(v3D.getX(), v3D.getY(), v3D.getZ())));
             case 0x28: // 40
                 verify(id, "Effect", 6, args, test(Integer.class, 5), test(Boolean.class, 1));
-                //return new CanaryPacket(new S28PacketEffect((Integer) args[0], (Integer) args[1], (Integer) args[2], (Integer) args[3], (Integer) args[4], (Boolean) args[5]));
-                throw new NotYetImplementedException("A Minecraft Update has broken this construction");
+                return new CanaryPacket(new S28PacketEffect((Integer) args[0], blockPosFromArgs(1, args), (Integer) args[4], (Boolean) args[5]));
             case 0x29: // 41
                 verify(id, "SoundEffect", 6, args, test(String.class, 1), test(Double.class, 3), test(Float.class, 2));
                 return new CanaryPacket(new S29PacketSoundEffect((String)args[0], (Double)args[1], (Double)args[2], (Double)args[3], (Float)args[4], (Float)args[5]));
             case 0x2A: // 42
-                verify(id, "Particles", 9, args, test(String.class, 1), test(Float.class, 7), test(Integer.class, 1));
+                //verify(id, "Particles", 9, args, test(String.class, 1), test(Float.class, 7), test(Integer.class, 1));
+                // Plus the fact that i lost this part of the factory somewhere...
+                throw new NotYetImplementedException("A Minecraft Update has broken this construction");
             case 0x2B: // 43
                 verify(id, "ChangeGameState", 2, args, test(Integer.class, 1), test(Float.class, 1));
                 return new CanaryPacket(new S2BPacketChangeGameState((Integer)args[0], (Float)args[1]));
@@ -254,12 +248,10 @@ public class CanaryPacketFactory implements PacketFactory {
                 throw new NotYetImplementedException("A Minecraft Update has broken this construction");
             case 0x35: // 53
                 verify(id, "UpdateTileEntity", 5, args, test(Integer.class, 4), test(CanaryCompoundTag.class, 1));
-                //return new CanaryPacket(new S35PacketUpdateTileEntity((Integer) args[0], (Integer) args[1], (Integer) args[2], (Integer) args[3], ((CanaryCompoundTag) args[4]).getHandle()));
-                throw new NotYetImplementedException("A Minecraft Update has broken this construction");
+                return new CanaryPacket(new S35PacketUpdateTileEntity(blockPosFromArgs(0, args), (Integer) args[3], ((CanaryCompoundTag) args[4]).getHandle()));
             case 0x36: // 54
                 verify(id, "SignEditorOpen", 3, args, test(Integer.class, 3));
-                //return new CanaryPacket(new S36PacketSignEditorOpen((Integer) args[0], (Integer) args[1], (Integer) args[2]));
-                throw new NotYetImplementedException("A Minecraft Update has broken this construction");
+                return new CanaryPacket(new S36PacketSignEditorOpen(blockPosFromArgs(0, args)));
             case 0x37: // 55
                 verify(id, "Statistics", 1, args, test(Map.class, 1));
                 HashMap<StatBase, Integer> nmsStatMap = new HashMap<StatBase, Integer>();
@@ -268,7 +260,7 @@ public class CanaryPacketFactory implements PacketFactory {
                 }
                 return new CanaryPacket(new S37PacketStatistics(nmsStatMap));
             case 0x38:
-                verify(id, "PlayerListItem", 3, args, test(String.class, 1), test(Boolean.class, 1), test(Integer.class, 1));
+                //verify(id, "PlayerListItem", 3, args, test(String.class, 1), test(Boolean.class, 1), test(Integer.class, 1));
                 //return new CanaryPacket(new S38PacketPlayerListItem((String) args[0], (Boolean) args[1], (Integer) args[2]));
                 throw new NotYetImplementedException("A Minecraft Update has broken this construction");
             case 0x39:
@@ -291,6 +283,10 @@ public class CanaryPacketFactory implements PacketFactory {
             default:
                 throw new InvalidPacketConstructionException(id, "UNKNOWN", "Unknown Packet ID");
         }
+    }
+
+    private BlockPos blockPosFromArgs(int start, Object[] args) {
+        return new BlockPos((Integer)args[start], (Integer)args[start + 1], (Integer)args[start + 2]);
     }
 
     @Override
