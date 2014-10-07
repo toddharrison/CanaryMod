@@ -39,6 +39,11 @@ public class EntityMinecartCommandBlock extends EntityMinecart {
         public Entity f() {
             return EntityMinecartCommandBlock.this;
         }
+
+        @Override
+        public net.canarymod.api.CommandBlockLogic getReference() {
+            throw new UnsupportedOperationException("CommandBlockLogic.getReference() Not supported yet in EntityMinecartCommandBlock.");
+        }
     };
     private int b = 0;
    

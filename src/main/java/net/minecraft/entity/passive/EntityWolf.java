@@ -303,7 +303,7 @@ public class EntityWolf extends EntityTameable {
 
             if (!this.o.D) {
                 // CanaryMod: EntityTame
-                EntityTameHook hook = (EntityTameHook) new EntityTameHook((net.canarymod.api.entity.living.animal.EntityAnimal) this.getCanaryEntity(), ((EntityPlayerMP) entityplayer).getPlayer(), this.Z.nextInt(3) == 0).call();
+                EntityTameHook hook = (EntityTameHook) new EntityTameHook((net.canarymod.api.entity.living.animal.EntityAnimal) this.getCanaryEntity(), ((EntityPlayerMP) entityplayer).getPlayer(), this.V.nextInt(3) == 0).call();
 
                 if (hook.isTamed() && !hook.isCanceled()) {
                     //

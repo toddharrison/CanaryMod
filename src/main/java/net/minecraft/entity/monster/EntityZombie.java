@@ -119,7 +119,7 @@ public class EntityZombie extends EntityMob {
             this.b_ = (int) ((float) this.b_ * 2.5F);
         }
 
-        return super.e(entityplayer);
+        return super.b(entityplayer);
     }
 
     public void l(boolean flag0) {
@@ -551,12 +551,12 @@ public class EntityZombie extends EntityMob {
 
     // CanaryMod
     public int getConvertTicks() {
-        return this.bt;
+        return this.bm;
     }
 
     public void stopConversion() {
-        this.z().b(12, Byte.valueOf((byte) 0));
-        this.bt = -1;
+        this.H().b(12, Byte.valueOf((byte) 0));
+        this.bm = -1;
     }
 
     class GroupData implements IEntityLivingData {

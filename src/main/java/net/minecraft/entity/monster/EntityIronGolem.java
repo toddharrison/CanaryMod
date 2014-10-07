@@ -1,5 +1,6 @@
 package net.minecraft.entity.monster;
 
+import com.google.common.base.Predicate;
 import net.canarymod.api.entity.living.CanaryIronGolem;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFlower;
@@ -249,10 +250,11 @@ public class EntityIronGolem extends EntityGolem {
                 }
             };
         }
-
-        // CanaryMod
-        public void setRoseTicks(int ticks) {
-            this.bk = ticks;
-        }
-        //
     }
+
+    // CanaryMod
+    public void setRoseTicks(int ticks) {
+        this.bk = ticks;
+    }
+    //
+}

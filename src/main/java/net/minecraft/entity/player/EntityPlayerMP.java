@@ -172,7 +172,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
             //if (MinecraftServer.I().ap()) {
             if (Configuration.getWorldConfig(o.getCanaryWorld().getFqName()).forceDefaultGamemode()) {
                 //this.c.a(MinecraftServer.I().i());
-                this.c.a(o.P().m());
+                this.c.a(o.P().r());
             } else {
                 this.c.a(WorldSettings.GameType.a(nbttagcompound.f("playerGameType")));
             }
@@ -417,7 +417,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
 
     public void a(DamageSource damagesource) {
         // CanaryMod: Start: PlayerDeathHook
-        PlayerDeathHook hook = (PlayerDeathHook) new PlayerDeathHook(getPlayer(), damagesource.getCanaryDamageSource(), this.br().c().getWrapper()).call();
+        PlayerDeathHook hook = (PlayerDeathHook) new PlayerDeathHook(getPlayer(), damagesource.getCanaryDamageSource(), this.br().b().getWrapper()).call();
         // Check Death Message enabled
         if (Configuration.getServerConfig().isDeathMessageEnabled()) {
         //if (this.o.Q().b("showDeathMessages")) {
@@ -530,7 +530,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
             }
 
             // CanaryMod onPortalUse && onDimensionSwitch
-            Location goingTo = simulatePortalUse(i0, MinecraftServer.I().getWorld(getCanaryWorld().getName(), i0));
+            Location goingTo = simulatePortalUse(i0, MinecraftServer.M().getWorld(getCanaryWorld().getName(), i0));
 
             PortalUseHook puh = (PortalUseHook) new PortalUseHook(getPlayer(), goingTo).call();
             DimensionSwitchHook dsh = (DimensionSwitchHook) new DimensionSwitchHook(this.getCanaryEntity(), this.getCanaryEntity().getLocation(), goingTo).call();
@@ -878,7 +878,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
     }
 
     public void a(double d0, double d1, double d2) {
-        this.a..a(d0, d1, d2, this.y, this.z);
+        this.a.a(d0, d1, d2, this.y, this.z);
     }
 
     public void b(Entity entity) {
