@@ -9,7 +9,6 @@ import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.api.world.position.Position;
 import net.minecraft.network.play.server.S23PacketBlockChange;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
 
 /**
  * BlockChangePacket implementation
@@ -94,8 +93,8 @@ public class CanaryBlockChangePacket extends CanaryPacket implements BlockChange
 
     @Override
     public void setTypeId(int id) {
-        // TODO: This may be incorrect
-        getPacket().b.c().a(((CanaryWorld)Canary.getServer().getDefaultWorld()).getHandle(), ((BlockPosition)getPosition()).asNative(), EnumFacing.UP, 0.0F, 0.0F, 0.0F, getTypeId(), null);
+        int data = getData();
+        getPacket().b = net.minecraft.block.Block.d(getTypeId()).c().a(data);
     }
 
     @Override
