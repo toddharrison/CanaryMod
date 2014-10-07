@@ -11,12 +11,12 @@ public class CanaryRangedAttribute extends CanaryAttribute implements RangedAttr
 
     @Override
     public RangedAttribute setDescription(String description) {
-        return (RangedAttribute) getNative().a(description).getWrapper();
+        return (RangedAttribute)getNative().a(description).getWrapper();
     }
 
     @Override
     public String getDescription() {
-        return getNative().f();
+        return getNative().g();
     }
 
     @Override
@@ -35,6 +35,6 @@ public class CanaryRangedAttribute extends CanaryAttribute implements RangedAttr
     }
 
     public net.minecraft.entity.ai.attributes.RangedAttribute getNative() {
-        return (net.minecraft.entity.ai.attributes.RangedAttribute) super.getNative();
+        return (net.minecraft.entity.ai.attributes.RangedAttribute)super.getNative();
     }
 }

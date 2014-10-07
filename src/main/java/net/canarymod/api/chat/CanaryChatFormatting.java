@@ -19,7 +19,7 @@ public final class CanaryChatFormatting implements ChatFormatting {
      */
     @Override
     public char getFormattingCode() {
-        return getNative().a();
+        return getNative().z;
     }
 
     /**
@@ -27,14 +27,6 @@ public final class CanaryChatFormatting implements ChatFormatting {
      */
     @Override
     public boolean isFormat() {
-        return getNative().b();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean isColor() {
         return getNative().c();
     }
 
@@ -42,8 +34,16 @@ public final class CanaryChatFormatting implements ChatFormatting {
      * {@inheritDoc}
      */
     @Override
-    public String getName() {
+    public boolean isColor() {
         return getNative().d();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getName() {
+        return getNative().e();
     }
 
     /**
