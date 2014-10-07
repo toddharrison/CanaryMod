@@ -414,6 +414,11 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, IUpdatePlaye
             f3 = f1 + this.b.z;
         }
 
+        // CanaryMod: InterWorld/InterDimensional Travel
+        if (this.b.getCanaryWorld() != dim) {
+            this.b.setDimension((CanaryWorld)dim);
+        }
+        //
         this.b.a(this.o, this.p, this.q, f2, f3);
         this.b.a.a((Packet) (new S08PacketPlayerPosLook(d0, d1, d2, f0, f1, set)));
     }

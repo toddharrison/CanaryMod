@@ -4,13 +4,19 @@ import net.canarymod.Canary;
 import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.api.world.UnknownWorldException;
 import net.canarymod.hook.player.TeleportHook;
-import net.minecraft.command.*;
+import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.network.play.server.S08PacketPlayerPosLook;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.MathHelper;
 import net.visualillusionsent.utils.BooleanUtils;
 
+import java.util.EnumSet;
 import java.util.List;
 
 public class CommandTeleport extends CommandBase {
@@ -33,84 +39,137 @@ public class CommandTeleport extends CommandBase {
         }
         else {
             byte b0 = 0;
-            EntityPlayerMP entityplayermp;
-            // CanaryMod: just rewrite this stuff
-            if (astring[0].matches("\\d+") || (astring.length < 3 && astring[0].equals(icommandsender.d_())) || (astring.length == 1)) {
-                entityplayermp = b(icommandsender);
+            Entity entity; // CanaryMod: replace object...
+
+            // CanaryMod: Arguments made different
+            if (astring[0].matches("\\d+") || astring[0].equals(icommandsender.d_())) {
+                entity = b(icommandsender); // Self
             }
             else {
-                entityplayermp = d(icommandsender, astring[0]);
+                entity = b(icommandsender, astring[0]); // Other
                 b0 = 1;
             }
 
-            if (entityplayermp == null) {
-                throw new PlayerNotFoundException();
+            if (astring[0 + b0].matches("\\d+")) { // Coordinates TP
+                if (astring.length < b0 + 3) {
+                    throw new WrongUsageException("commands.tp.usage", new Object[0]);
+                }
+                else if (entity.o != null) {
+                    int i0 = b0 + 1;
+                    CommandBase.CoordinateArg commandbase_coordinatearg = a(entity.s, astring[b0], true);
+                    CommandBase.CoordinateArg commandbase_coordinatearg1 = a(entity.t, astring[i0++], 0, 0, false);
+                    CommandBase.CoordinateArg commandbase_coordinatearg2 = a(entity.u, astring[i0++], true);
+                    CommandBase.CoordinateArg commandbase_coordinatearg3 = a((double)entity.y, astring.length > i0 ? astring[i0++] : "~", false);
+                    CommandBase.CoordinateArg commandbase_coordinatearg4 = a((double)entity.z, astring.length > i0 ? astring[i0] : "~", false);
+                    float f0;
+
+                    if (entity instanceof EntityPlayerMP) {
+                        EnumSet enumset = EnumSet.noneOf(S08PacketPlayerPosLook.EnumFlags.class);
+
+                        if (commandbase_coordinatearg.c()) {
+                            enumset.add(S08PacketPlayerPosLook.EnumFlags.X);
+                        }
+
+                        if (commandbase_coordinatearg1.c()) {
+                            enumset.add(S08PacketPlayerPosLook.EnumFlags.Y);
+                        }
+
+                        if (commandbase_coordinatearg2.c()) {
+                            enumset.add(S08PacketPlayerPosLook.EnumFlags.Z);
+                        }
+
+                        if (commandbase_coordinatearg4.c()) {
+                            enumset.add(S08PacketPlayerPosLook.EnumFlags.X_ROT);
+                        }
+
+                        if (commandbase_coordinatearg3.c()) {
+                            enumset.add(S08PacketPlayerPosLook.EnumFlags.Y_ROT);
+                        }
+
+                        f0 = (float)commandbase_coordinatearg3.b();
+                        if (!commandbase_coordinatearg3.c()) {
+                            f0 = MathHelper.g(f0);
+                        }
+
+                        float f1 = (float)commandbase_coordinatearg4.b();
+
+                        if (!commandbase_coordinatearg4.c()) {
+                            f1 = MathHelper.g(f1);
+                        }
+
+                        if (f1 > 90.0F || f1 < -90.0F) {
+                            f1 = MathHelper.g(180.0F - f1);
+                            f0 = MathHelper.g(f0 + 180.0F);
+                        }
+
+                        // CanaryMod: InterWorld
+                        boolean load = false;
+                        CanaryWorld canaryWorld = entity.getCanaryWorld();
+                        if (astring.length > i0) {
+                            if (!Canary.getServer().getWorldManager().worldExists(astring[i0])) {
+                                a(icommandsender, this, "That world do not exists", new Object[0]);
+                                return;
+                            }
+
+                            if (astring.length > i0 + 1) {
+                                load = BooleanUtils.parseBoolean(astring[i0 + 1]);
+                            }
+
+                            if (!Canary.getServer().getWorldManager().worldIsLoaded(astring[i0]) && !load) {
+                                a(icommandsender, this, "That world is not loaded", new Object[0]);
+                                return;
+                            }
+
+                            try {
+                                canaryWorld = (CanaryWorld)Canary.getServer().getWorldManager().getWorld(astring[i0], load);
+                            }
+                            catch (UnknownWorldException uwex) {
+                                // damagefilter and his pointless exception throwing...
+                            }
+                        }
+                        //
+
+                        entity.a((Entity)null);
+                        // CanaryMod: Teleport/Teleport Cause fix
+                        ((EntityPlayerMP)entity).a.a(commandbase_coordinatearg.b(), commandbase_coordinatearg1.b(), commandbase_coordinatearg2.b(), f0, f1, enumset, canaryWorld.getType().getId(), canaryWorld.getName(), TeleportHook.TeleportCause.COMMAND);
+                        entity.f(f0);
+                    }
+                    else {
+                        float f2 = (float)MathHelper.g(commandbase_coordinatearg3.a());
+
+                        f0 = (float)MathHelper.g(commandbase_coordinatearg4.a());
+                        if (f0 > 90.0F || f0 < -90.0F) {
+                            f0 = MathHelper.g(180.0F - f0);
+                            f2 = MathHelper.g(f2 + 180.0F);
+                        }
+
+                        entity.b(commandbase_coordinatearg.a(), commandbase_coordinatearg1.a(), commandbase_coordinatearg2.a(), f2, f0);
+                        entity.f(f2);
+                    }
+
+                    a(icommandsender, this, "commands.tp.success.coordinates", new Object[]{ entity.d_(), Double.valueOf(commandbase_coordinatearg.a()), Double.valueOf(commandbase_coordinatearg1.a()), Double.valueOf(commandbase_coordinatearg2.a()) });
+                }
             }
-            //
+            else { // Entity to Entity
+                Entity entity1 = b(icommandsender, astring[astring.length - 1]);
 
-            /* CanaryMod: Change this whole thing out
-            if (astring.length != 3 && astring.length != 4) {
-            */
-            if (astring.length < 3) {
-                EntityPlayerMP entityplayermp1 = d(icommandsender, astring[astring.length - 1]);
-
-                if (entityplayermp1 == null) {
-                    throw new PlayerNotFoundException();
-                }
-                else if (entityplayermp == entityplayermp1) {
-                    return;
-                }
-
-                // CanaryMod: Allow interdimensional teleporting for those ignoring restrictions
+                // CanaryMod: Interdimensional
                 boolean interdimensional = icommandsender instanceof EntityPlayerMP && ((EntityPlayerMP)icommandsender).getPlayer().canIgnoreRestrictions();
-                if (entityplayermp1.o != entityplayermp.o && !interdimensional) {
-                    a(icommandsender, this, "commands.tp.notSameDimension", new Object[0]);
-                    return;
+                if (entity1.o != entity.o && !interdimensional) {
+                    throw new CommandException("commands.tp.notSameDimension", new Object[0]);
                 }
+                else {
+                    entity.a((Entity)null);
+                    if (entity instanceof EntityPlayerMP) {
+                        // CanaryMod: Teleport/Teleport Cause fix
+                        ((EntityPlayerMP)entity).a.a(entity1.s, entity1.t, entity1.u, entity1.y, entity1.z, entity1.am, entity1.getCanaryWorld().getName(), TeleportHook.TeleportCause.COMMAND);
+                    }
+                    else {
+                        entity.b(entity1.s, entity1.t, entity1.u, entity1.y, entity1.z);
+                    }
 
-                ((Entity)entityplayermp).a((Entity)null);
-                // CanaryMod: Multiworld Fix and Teleportation Cause
-                entityplayermp.a.a(entityplayermp1.s, entityplayermp1.t, entityplayermp1.u, entityplayermp1.y, entityplayermp1.z, entityplayermp1.getCanaryWorld().getType().getId(), entityplayermp1.getCanaryWorld().getName(), TeleportHook.TeleportCause.COMMAND);
-                a(icommandsender, this, "commands.tp.success", new Object[]{ entityplayermp.d_(), entityplayermp1.d_() });
-            }
-            else if (entityplayermp.o != null) {
-                // CanaryMod: Redo this int i0 mess
-                int i0 = astring[0].matches("\\d+") ? 0 : 1;
-                double d0 = a(icommandsender, entityplayermp.s, astring[i0++]);
-                double d1 = a(icommandsender, entityplayermp.t, astring[i0++], 0, 0);
-                double d2 = a(icommandsender, entityplayermp.u, astring[i0++]);
-
-                // CanaryMod: Add params for world specifications
-                CanaryWorld canaryWorld = null;
-                boolean load = false;
-                if (astring.length > i0) {
-                    if (!Canary.getServer().getWorldManager().worldExists(astring[i0])) {
-                        a(icommandsender, this, "World non-existent or not loaded", new Object[0]);
-                        return;
-                    }
-                    if (astring.length > i0 + 1) {
-                        load = BooleanUtils.parseBoolean(astring[i0 + 1]);
-                    }
-                    try {
-                        canaryWorld = (CanaryWorld)Canary.getServer().getWorldManager().getWorld(astring[i0], load);
-                    }
-                    catch (UnknownWorldException uwex) {
-                        // damagefilter and his pointless exception throwing...
-                    }
+                    a(icommandsender, this, "commands.tp.success", new Object[]{ entity.d_(), entity1.d_() });
                 }
-
-                if (canaryWorld != null && entityplayermp.o != canaryWorld.getHandle()) {
-                    Canary.getServer().getConfigurationManager().switchDimension(entityplayermp.getPlayer(), canaryWorld, false);
-                }
-                //
-
-                entityplayermp.a((Entity)null);
-                entityplayermp.a(d0, d1, d2);
-
-                a(icommandsender, this, "commands.tp.success.coordinates", new Object[]{ entityplayermp.b_(), Double.valueOf(d0), Double.valueOf(d1), Double.valueOf(d2) });
-            }
-            else {
-                throw new WrongUsageException("commands.tp.usage", new Object[0]);
             }
         }
     }
