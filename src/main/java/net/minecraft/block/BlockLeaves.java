@@ -1,15 +1,19 @@
 package net.minecraft.block;
 
+import java.util.Random;
 import net.canarymod.api.world.blocks.CanaryBlock;
+import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.world.LeafDecayHook;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
-import java.util.Random;
 
 public abstract class BlockLeaves extends BlockLeavesBase {
 
@@ -71,7 +75,6 @@ public abstract class BlockLeaves extends BlockLeavesBase {
                 if (world.a(new BlockPos(i1 - i0, i2 - i0, i3 - i0), new BlockPos(i1 + i0, i2 + i0, i3 + i0))) {
                     int i7;
                     int i8;
-                    int i9;
 
                     for (i6 = -b0; i6 <= b0; ++i6) {
                         for (i7 = -b0; i7 <= b0; ++i7) {
@@ -142,7 +145,7 @@ public abstract class BlockLeaves extends BlockLeavesBase {
 
     private void d(World world, BlockPos blockpos) {
         // CanaryMod: LeafDecay
-        CanaryBlock leaves = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
+        CanaryBlock leaves = (CanaryBlock) world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos));
         LeafDecayHook hook = (LeafDecayHook) new LeafDecayHook(leaves).call();
         if (!hook.isCanceled()) {
             this.b(world, blockpos, world.p(blockpos), 0);

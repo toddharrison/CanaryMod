@@ -118,7 +118,9 @@ public class BlockDynamicLiquid extends BlockLiquid {
             }
 
             // CanaryMod: Flow (down)
-            CanaryBlock to = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1 - 1, i2);
+            BlockPosition bp = new BlockPosition(blockpos);
+            bp.setY(bp.getBlockY() - 1);
+            CanaryBlock to = (CanaryBlock) world.getCanaryWorld().getBlockAt(bp);
             FlowHook hook = (FlowHook) new FlowHook(from, to).call();
             if (!hook.isCanceled()) {
                 if (i0 >= 8) {
@@ -129,33 +131,36 @@ public class BlockDynamicLiquid extends BlockLiquid {
                 }
                 //
             }
-            else if (i0 >= 0 && (i0 == 0 || this.g(world, blockpos.b(), iblockstate2))) {
-                Set set = this.e(world, blockpos);
+        }
+        else if (i0 >= 0 && (i0 == 0 || this.g(world, blockpos.b(), iblockstate2))) {
+            Set set = this.e(world, blockpos);
 
-                i2 = i0 + b0;
-                if (i0 >= 8) {
-                    i2 = 1;
+            i2 = i0 + b0;
+            if (i0 >= 8) {
+                i2 = 1;
+            }
+
+            if (i2 >= 8) {
+                return;
+            }
+
+            Iterator iterator1 = set.iterator();
+
+            while (iterator1.hasNext()) {
+                EnumFacing enumfacing1 = (EnumFacing) iterator1.next();
+
+                // CanaryMod: Flow
+                BlockPosition bp = new BlockPosition(blockpos);
+                bp.setZ(bp.getBlockZ() + 1);
+                CanaryBlock to = (CanaryBlock) world.getCanaryWorld().getBlockAt(bp);
+                FlowHook hook = (FlowHook) new FlowHook(from, to).call();
+                if (!hook.isCanceled()) {
+                    this.a(world, blockpos.a(enumfacing1), world.p(blockpos.a(enumfacing1)), i2);
                 }
-
-                if (i2 >= 8) {
-                    return;
-                }
-
-                Iterator iterator1 = set.iterator();
-
-                while (iterator1.hasNext()) {
-                    EnumFacing enumfacing1 = (EnumFacing) iterator1.next();
-
-                    // CanaryMod: Flow
-                    CanaryBlock to = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2 + 1);
-                    FlowHook hook = (FlowHook) new FlowHook(from, to).call();
-                    if (!hook.isCanceled()) {
-                        this.a(world, blockpos.a(enumfacing1), world.p(blockpos.a(enumfacing1)), i2);
-                    }
-                    //
-                }
+                //
             }
         }
+    }
 
     private void a(World world, BlockPos blockpos, IBlockState iblockstate, int i0) {
         if (this.h(world, blockpos, iblockstate)) {

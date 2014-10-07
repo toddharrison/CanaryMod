@@ -1,17 +1,22 @@
 package net.minecraft.block;
 
+import java.util.Random;
 import net.canarymod.api.world.blocks.CanaryBlock;
+import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.world.PortalCreateHook;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemMonsterPlacer;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.Direction;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
-import java.util.Random;
 
 public class BlockPortal extends BlockBreakable {
 
@@ -21,6 +26,10 @@ public class BlockPortal extends BlockBreakable {
         super(Material.E, false);
         this.j(this.L.b().a(a, EnumFacing.Axis.X));
         this.a(true);
+    }
+
+    public static int a(EnumFacing.Axis enumfacing_axis) {
+        return enumfacing_axis == EnumFacing.Axis.X ? 1 : (enumfacing_axis == EnumFacing.Axis.Z ? 2 : 0);
     }
 
     public void b(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {
@@ -65,10 +74,6 @@ public class BlockPortal extends BlockBreakable {
         this.a(0.5F - f0, 0.0F, 0.5F - f1, 0.5F + f0, 1.0F, 0.5F + f1);
     }
 
-    public static int a(EnumFacing.Axis enumfacing_axis) {
-        return enumfacing_axis == EnumFacing.Axis.X ? 1 : (enumfacing_axis == EnumFacing.Axis.Z ? 2 : 0);
-    }
-
     public boolean d() {
         return false;
     }
@@ -85,18 +90,21 @@ public class BlockPortal extends BlockBreakable {
                 return true;
             }
         }
-        else if (blockportal_size1.b() && blockportal_size1.e == 0) {
-            hook = (PortalCreateHook) new PortalCreateHook(blockportal_size1.getPortalBlocks()).call();
-            if (!hook.isCanceled()) {
-                blockportal_size1.c();
-                return true;
+        else {
+            BlockPortal.Size blockportal_size1 = new BlockPortal.Size(world, blockpos, EnumFacing.Axis.Z);
+            if (blockportal_size1.b() && blockportal_size1.e == 0) {
+                hook = (PortalCreateHook) new PortalCreateHook(blockportal_size1.getPortalBlocks()).call();
+                if (!hook.isCanceled()) {
+                    blockportal_size1.c();
+                    return true;
+                }
             }
-        }
-
         // else {
-        return false;
+        //
         // }
         // CanaryMod: End
+        }
+        return false;
     }
 
     public void a(World world, BlockPos blockpos, IBlockState iblockstate, Block block) {
@@ -274,15 +282,14 @@ public class BlockPortal extends BlockBreakable {
         // CanaryMod: cloning the method above to determine the shape/size of the portal
         public CanaryBlock[][] getPortalBlocks() {
             CanaryBlock[][] portalBlockArray = new CanaryBlock[this.h][this.g];
-            for (int i17 = 0; i17 < this.h; ++i17) {
-                int i18 = this.f.a + Direction.a[this.c] * i17;
-                int i19 = this.f.c + Direction.b[this.c] * i17;
+            for (int i3 = 0; i3 < this.h; ++i3) {
+                BlockPos blockpos3 = this.f.a(this.c, i3);
 
-                for (int i20 = 0; i20 < this.g; ++i20) {
-                    int i21 = this.f.b + i20;
+                for (int i4 = 0; i4 < this.g; ++i4) {
+                    
 
                     //this.a.d(i18, i21, i19, Blocks.aO, this.b, 2);
-                    portalBlockArray[i17][i20] = (CanaryBlock) this.a.getCanaryWorld().getBlockAt(i18, i21, i19);
+                    portalBlockArray[i3][i4] = (CanaryBlock) this.a.getCanaryWorld().getBlockAt(new BlockPosition(blockpos3));
                 }
             }
             return portalBlockArray;

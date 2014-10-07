@@ -1,19 +1,31 @@
 package net.minecraft.block;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.Iterator;
+import java.util.Random;
+import java.util.Set;
 import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.blocks.CanaryBlock;
+import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.world.RedstoneChangeHook;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.properties.PropertyInteger;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IStringSerializable;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.Set;
 
 public class BlockRedstoneWire extends Block {
 
@@ -135,11 +147,11 @@ public class BlockRedstoneWire extends Block {
             i1 = i2;
         }
 
-        // CanaryMod: RedstoneChange
+        // CanaryMod: RedstoneChange  // TODO : does this fuck up redstone change?
         if (i0 != i1) {
-            RedstoneChangeHook hook = (RedstoneChangeHook) new RedstoneChangeHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), i6, i7).call();
+            RedstoneChangeHook hook = (RedstoneChangeHook) new RedstoneChangeHook(world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos)), i2, i3).call();
             if (hook.isCanceled()) {
-                return;
+                return iblockstate;
             }
         }
         //
@@ -219,9 +231,10 @@ public class BlockRedstoneWire extends Block {
         super.b(world, blockpos, iblockstate);
         if (!world.D) {
             // CanaryMod: RedstoneChange (Wire Destroy)
-            int lvl = world.w(i0, i1, i2) - 1; // Subtract 1 from current in
+            int lvl = world.A(blockpos) - 1; // Subtract 1 from current in
             if (lvl > 0) {
-                new RedstoneChangeHook(new CanaryBlock(BlockType.RedstoneWire.getId(), (short) i3, i0, i1, i2, world.getCanaryWorld()), lvl, 0).call();
+                BlockPosition bp = new BlockPosition(blockpos);
+                new RedstoneChangeHook(new CanaryBlock(BlockType.RedstoneWire.getId(), (short) iblockstate.c().c(iblockstate), bp.getBlockX(), bp.getBlockY(), bp.getBlockZ(), world.getCanaryWorld()), lvl, 0).call();
             }
             //
             EnumFacing[] aenumfacing = EnumFacing.values();

@@ -1,16 +1,21 @@
 package net.minecraft.block;
 
 
+import java.util.Random;
 import net.canarymod.api.world.blocks.CanaryBlock;
+import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.world.BlockGrowHook;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyInteger;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
-
-import java.util.Random;
 
 
 public class BlockNetherWart extends BlockBush {
@@ -40,9 +45,9 @@ public class BlockNetherWart extends BlockBush {
         if (i0 < 3 && random.nextInt(10) == 0) {
             iblockstate = iblockstate.a(a, Integer.valueOf(i0 + 1));
             // CanaryMod: BlockGrow
-            CanaryBlock original = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
-            CanaryBlock growth = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
-            growth.setData((short) i3);
+            CanaryBlock original = (CanaryBlock) world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos));
+            CanaryBlock growth = (CanaryBlock) world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos));
+            growth.setData((short) i0);
             BlockGrowHook blockGrowHook = (BlockGrowHook) new BlockGrowHook(original, growth).call();
             if (!blockGrowHook.isCanceled()) {
                 world.a(blockpos, iblockstate, 2);

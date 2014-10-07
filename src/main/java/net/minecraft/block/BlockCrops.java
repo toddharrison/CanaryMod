@@ -1,7 +1,9 @@
 package net.minecraft.block;
 
 
+import java.util.Random;
 import net.canarymod.api.world.blocks.CanaryBlock;
+import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.world.BlockGrowHook;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyInteger;
@@ -15,8 +17,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-
-import java.util.Random;
 
 
 public class BlockCrops extends BlockBush implements IGrowable {
@@ -52,7 +52,7 @@ public class BlockCrops extends BlockBush implements IGrowable {
                     BlockPosition cbp = new BlockPosition(blockpos);
                     CanaryBlock original = (CanaryBlock) world.getCanaryWorld().getBlockAt(cbp);
                     CanaryBlock growth = (CanaryBlock) world.getCanaryWorld().getBlockAt(cbp);
-                    growth.setData((short) i0 + 1);
+                    growth.setData((short) (i0 + 1));
                     BlockGrowHook blockGrowHook = (BlockGrowHook) new BlockGrowHook(original, growth).call();
                     if (!blockGrowHook.isCanceled()) {
                         world.a(blockpos, iblockstate.a(a, Integer.valueOf(i0 + 1)), 2);

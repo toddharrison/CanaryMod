@@ -1,10 +1,13 @@
 package net.minecraft.block;
 
 import net.canarymod.api.entity.living.LivingBase;
+import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.world.TNTActivateHook;
 import net.canarymod.hook.world.TNTActivateHook.ActivationCause;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -13,7 +16,9 @@ import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
@@ -46,9 +51,10 @@ public class BlockTNT extends Block {
     public void a(World world, BlockPos blockpos, Explosion explosion) {
         if (!world.D) {
             // CanaryMod: TNTActivateHook
-            TNTActivateHook tah = (TNTActivateHook) new TNTActivateHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), null, ActivationCause.EXPLOSION).call();
+            BlockPosition bp = new BlockPosition(blockpos);
+            TNTActivateHook tah = (TNTActivateHook) new TNTActivateHook(world.getCanaryWorld().getBlockAt(bp), null, ActivationCause.EXPLOSION).call();
             if (!tah.isCanceled()) {
-                EntityTNTPrimed entitytntprimed = new EntityTNTPrimed(world, (double) ((float) i0 + 0.5F), (double) ((float) i1 + 0.5F), (double) ((float) i2 + 0.5F), explosion.c());
+                EntityTNTPrimed entitytntprimed = new EntityTNTPrimed(world, (double) ((float) bp.getBlockX() + 0.5F), (double) ((float) bp.getBlockY() + 0.5F), (double) ((float) bp.getBlockZ() + 0.5F), explosion.c());
 
                 entitytntprimed.a = world.s.nextInt(entitytntprimed.a / 4) + entitytntprimed.a / 8;
                 world.d((Entity) entitytntprimed);
@@ -57,21 +63,18 @@ public class BlockTNT extends Block {
         }
     }
 
-    public void b(World world, int i0, int i1, int i2, int i3) {
-        this.a(world, i0, i1, i2, i3, (EntityLivingBase) null, ActivationCause.UNKNOWN); // CanaryMod: Can't say for sure what calls this...
+    public void d(World world, BlockPos blockpos, IBlockState iblockstate) {
+        this.a(world, blockpos, iblockstate, (EntityLivingBase) null);
     }
 
-    public void a(World world, int i0, int i1, int i2, int i3, EntityLivingBase entitylivingbase) { // Original Method
-        this.a(world, i0, i1, i2, i3, entitylivingbase, ActivationCause.UNKNOWN);
-    }
+    public void a(World world, BlockPos blockpos, IBlockState iblockstate, EntityLivingBase entitylivingbase, ActivationCause cause) {
+        if (!world.D) {
+            if (((Boolean) iblockstate.b(a)).booleanValue()) {
+                EntityTNTPrimed entitytntprimed = new EntityTNTPrimed(world, (double) ((float) blockpos.n() + 0.5F), (double) ((float) blockpos.o() + 0.5F), (double) ((float) blockpos.p() + 0.5F), entitylivingbase);
 
-    public void a(World world, int i0, int i1, int i2, int i3, EntityLivingBase entitylivingbase, ActivationCause cause) { // CanaryMod: Signature Change to incorporate ActivationCause
-        if (!world.E) {
-            if ((i3 & 1) == 1) {
                 // CanaryMod: TNTActivateHook
-                TNTActivateHook tah = (TNTActivateHook) new TNTActivateHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), (LivingBase) (entitylivingbase == null ? null : entitylivingbase.getCanaryEntity()), cause).call();
+                TNTActivateHook tah = (TNTActivateHook) new TNTActivateHook(world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos)), (LivingBase) (entitylivingbase == null ? null : entitylivingbase.getCanaryEntity()), cause).call();
                 if (!tah.isCanceled()) {
-                    EntityTNTPrimed entitytntprimed = new EntityTNTPrimed(world, (double) ((float) i0 + 0.5F), (double) ((float) i1 + 0.5F), (double) ((float) i2 + 0.5F), entitylivingbase);
 
                     world.d((Entity) entitytntprimed);
                     world.a((Entity) entitytntprimed, "game.tnt.primed", 1.0F, 1.0F);
@@ -81,25 +84,34 @@ public class BlockTNT extends Block {
         }
     }
 
-    public boolean a(World world, int i0, int i1, int i2, EntityPlayer entityplayer, int i3, float f0, float f1, float f2) {
-        if (entityplayer.bF() != null && entityplayer.bF().b() == Items.d) {
-            this.a(world, i0, i1, i2, 1, entityplayer, ActivationCause.FIRE); // CanaryMod: Add FIRE cause
-            world.f(i0, i1, i2);
-            entityplayer.bF().a(1, (EntityLivingBase) entityplayer);
-            return true;
+    public boolean a(World world, BlockPos blockpos, IBlockState iblockstate, EntityPlayer entityplayer, EnumFacing enumfacing, float f0, float f1, float f2) {
+        if (entityplayer.bY() != null) {
+            Item item = entityplayer.bY().b();
+
+            if (item == Items.d || item == Items.bL) {
+                this.a(world, blockpos, iblockstate.a(a, Boolean.valueOf(true)), (EntityLivingBase) entityplayer);
+                world.g(blockpos);
+                if (item == Items.d) {
+                    entityplayer.bY().a(1, (EntityLivingBase) entityplayer);
+                }
+                else if (!entityplayer.by.d) {
+                    --entityplayer.bY().b;
+                }
+
+                return true;
+            }
         }
-        else {
-            return super.a(world, i0, i1, i2, entityplayer, i3, f0, f1, f2);
-        }
+
+        return super.a(world, blockpos, iblockstate, entityplayer, enumfacing, f0, f1, f2);
     }
 
-    public void a(World world, int i0, int i1, int i2, Entity entity) {
-        if (entity instanceof EntityArrow && !world.E) {
+    public void a(World world, BlockPos blockpos, IBlockState iblockstate, Entity entity) {
+        if (!world.D && entity instanceof EntityArrow) {
             EntityArrow entityarrow = (EntityArrow) entity;
 
-            if (entityarrow.al()) {
-                this.a(world, i0, i1, i2, 1, entityarrow.c instanceof EntityLivingBase ? (EntityLivingBase) entityarrow.c : null);
-                world.f(i0, i1, i2);
+            if (entityarrow.au()) {
+                this.a(world, blockpos, world.p(blockpos).a(a, Boolean.valueOf(true)), entityarrow.c instanceof EntityLivingBase ? (EntityLivingBase) entityarrow.c : null);
+                world.g(blockpos);
             }
         }
     }
@@ -107,4 +119,17 @@ public class BlockTNT extends Block {
     public boolean a(Explosion explosion) {
         return false;
     }
+
+    public IBlockState a(int i0) {
+        return this.P().a(a, Boolean.valueOf((i0 & 1) > 0));
+    }
+
+    public int c(IBlockState iblockstate) {
+        return ((Boolean) iblockstate.b(a)).booleanValue() ? 1 : 0;
+    }
+
+    protected BlockState e() {
+        return new BlockState(this, new IProperty[]{a});
+    }
+
 }

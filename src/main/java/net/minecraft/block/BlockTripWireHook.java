@@ -1,15 +1,27 @@
 package net.minecraft.block;
 
 
+import com.google.common.base.Objects;
+import com.google.common.base.Predicate;
+import java.util.Iterator;
+import java.util.Random;
+import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.world.BlockPhysicsHook;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
-import java.util.Random;
 
 
 public class BlockTripWireHook extends Block {
@@ -92,7 +104,7 @@ public class BlockTripWireHook extends Block {
 
     public void a(World world, BlockPos blockpos, IBlockState iblockstate, boolean flag0, boolean flag1, int i0, IBlockState iblockstate1) {
         // CanaryMod: Block Physics
-        BlockPhysicsHook blockPhysics = (BlockPhysicsHook) new BlockPhysicsHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), false).call();
+        BlockPhysicsHook blockPhysics = (BlockPhysicsHook) new BlockPhysicsHook(world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos)), false).call();
         if (blockPhysics.isCanceled()) {
             return;
         }

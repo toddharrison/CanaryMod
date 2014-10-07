@@ -4,23 +4,62 @@ import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.blocks.CanaryBlock;
 import net.canarymod.hook.world.RedstoneChangeHook;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IStringSerializable;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import java.util.Iterator;
+
+
 public class BlockLever extends Block {
+
+    public static final PropertyEnum a = PropertyEnum.a("facing", BlockLever.EnumOrientation.class);
+    public static final PropertyBool b = PropertyBool.a("powered");
 
     protected BlockLever() {
         super(Material.q);
+        this.j(this.L.b().a(a, BlockLever.EnumOrientation.NORTH).a(b, Boolean.valueOf(false)));
         this.a(CreativeTabs.d);
     }
 
-    public AxisAlignedBB a(World world, int i0, int i1, int i2) {
+    public static int a(EnumFacing enumfacing) {
+        switch (BlockLever.SwitchEnumFacing.a[enumfacing.ordinal()]) {
+            case 1:
+                return 0;
+
+            case 2:
+                return 5;
+
+            case 3:
+                return 4;
+
+            case 4:
+                return 3;
+
+            case 5:
+                return 2;
+
+            case 6:
+                return 1;
+
+            default:
+                return -1;
+        }
+    }
+
+    public AxisAlignedBB a(World world, BlockPos blockpos, IBlockState iblockstate) {
         return null;
     }
 
@@ -32,277 +71,377 @@ public class BlockLever extends Block {
         return false;
     }
 
-    public int b() {
-        return 12;
+    public boolean a(World world, BlockPos blockpos, EnumFacing enumfacing) {
+        return enumfacing == EnumFacing.UP && World.a((IBlockAccess) world, blockpos.b()) ? true : this.d(world, blockpos.a(enumfacing.d()));
     }
 
-    public boolean d(World world, int i0, int i1, int i2, int i3) {
-        return i3 == 0 && world.a(i0, i1 + 1, i2).r() ? true : (i3 == 1 && World.a((IBlockAccess) world, i0, i1 - 1, i2) ? true : (i3 == 2 && world.a(i0, i1, i2 + 1).r() ? true : (i3 == 3 && world.a(i0, i1, i2 - 1).r() ? true : (i3 == 4 && world.a(i0 + 1, i1, i2).r() ? true : i3 == 5 && world.a(i0 - 1, i1, i2).r()))));
+    public boolean c(World world, BlockPos blockpos) {
+        return this.d(world, blockpos.e()) ? true : (this.d(world, blockpos.f()) ? true : (this.d(world, blockpos.c()) ? true : (this.d(world, blockpos.d()) ? true : (World.a((IBlockAccess) world, blockpos.b()) ? true : this.d(world, blockpos.a())))));
     }
 
-    public boolean c(World world, int i0, int i1, int i2) {
-        return world.a(i0 - 1, i1, i2).r() ? true : (world.a(i0 + 1, i1, i2).r() ? true : (world.a(i0, i1, i2 - 1).r() ? true : (world.a(i0, i1, i2 + 1).r() ? true : (World.a((IBlockAccess) world, i0, i1 - 1, i2) ? true : world.a(i0, i1 + 1, i2).r()))));
+    protected boolean d(World world, BlockPos blockpos) {
+        return world.p(blockpos).c().t();
     }
 
-    public int a(World world, int i0, int i1, int i2, int i3, float f0, float f1, float f2, int i4) {
-        int i5 = i4 & 8;
-        int i6 = i4 & 7;
-        byte b0 = -1;
+    public IBlockState a(World world, BlockPos blockpos, EnumFacing enumfacing, float f0, float f1, float f2, int i0, EntityLivingBase entitylivingbase) {
+        IBlockState iblockstate = this.P().a(b, Boolean.valueOf(false));
 
-        if (i3 == 0 && world.a(i0, i1 + 1, i2).r()) {
-            b0 = 0;
+        if (this.d(world, blockpos.a(enumfacing.d()))) {
+            return iblockstate.a(a, BlockLever.EnumOrientation.a(enumfacing, entitylivingbase.aO()));
         }
+        else {
+            Iterator iterator = EnumFacing.Plane.HORIZONTAL.iterator();
 
-        if (i3 == 1 && World.a((IBlockAccess) world, i0, i1 - 1, i2)) {
-            b0 = 5;
-        }
+            EnumFacing enumfacing1;
 
-        if (i3 == 2 && world.a(i0, i1, i2 + 1).r()) {
-            b0 = 4;
-        }
+            do {
+                if (!iterator.hasNext()) {
+                    if (World.a((IBlockAccess) world, blockpos.b())) {
+                        return iblockstate.a(a, BlockLever.EnumOrientation.a(EnumFacing.UP, entitylivingbase.aO()));
+                    }
 
-        if (i3 == 3 && world.a(i0, i1, i2 - 1).r()) {
-            b0 = 3;
-        }
+                    return iblockstate;
+                }
 
-        if (i3 == 4 && world.a(i0 + 1, i1, i2).r()) {
-            b0 = 2;
-        }
+                enumfacing1 = (EnumFacing) iterator.next();
+            } while (enumfacing1 == enumfacing || !this.d(world, blockpos.a(enumfacing1.d())));
 
-        if (i3 == 5 && world.a(i0 - 1, i1, i2).r()) {
-            b0 = 1;
-        }
-
-        return b0 + i5;
-    }
-
-    public void a(World world, int i0, int i1, int i2, EntityLivingBase entitylivingbase, ItemStack itemstack) {
-        int i3 = world.e(i0, i1, i2);
-        int i4 = i3 & 7;
-        int i5 = i3 & 8;
-
-        if (i4 == b(1)) {
-            if ((MathHelper.c((double) (entitylivingbase.y * 4.0F / 360.0F) + 0.5D) & 1) == 0) {
-                world.a(i0, i1, i2, 5 | i5, 2);
-            }
-            else {
-                world.a(i0, i1, i2, 6 | i5, 2);
-            }
-        }
-        else if (i4 == b(0)) {
-            if ((MathHelper.c((double) (entitylivingbase.y * 4.0F / 360.0F) + 0.5D) & 1) == 0) {
-                world.a(i0, i1, i2, 7 | i5, 2);
-            }
-            else {
-                world.a(i0, i1, i2, 0 | i5, 2);
-            }
+            return iblockstate.a(a, BlockLever.EnumOrientation.a(enumfacing1, entitylivingbase.aO()));
         }
     }
 
-    public static int b(int i0) {
-        switch (i0) {
-            case 0:
-                return 0;
-
-            case 1:
-                return 5;
-
-            case 2:
-                return 4;
-
-            case 3:
-                return 3;
-
-            case 4:
-                return 2;
-
-            case 5:
-                return 1;
-
-            default:
-                return -1;
+    public void a(World world, BlockPos blockpos, IBlockState iblockstate, Block block) {
+        if (this.e(world, blockpos) && !this.d(world, blockpos.a(((BlockLever.EnumOrientation) iblockstate.b(a)).c().d()))) {
+            this.b(world, blockpos, iblockstate, 0);
+            world.g(blockpos);
         }
+
     }
 
-    public void a(World world, int i0, int i1, int i2, Block block) {
-        if (this.e(world, i0, i1, i2)) {
-            int i3 = world.e(i0, i1, i2) & 7;
-            boolean flag0 = false;
-
-            if (!world.a(i0 - 1, i1, i2).r() && i3 == 1) {
-                flag0 = true;
-            }
-
-            if (!world.a(i0 + 1, i1, i2).r() && i3 == 2) {
-                flag0 = true;
-            }
-
-            if (!world.a(i0, i1, i2 - 1).r() && i3 == 3) {
-                flag0 = true;
-            }
-
-            if (!world.a(i0, i1, i2 + 1).r() && i3 == 4) {
-                flag0 = true;
-            }
-
-            if (!World.a((IBlockAccess) world, i0, i1 - 1, i2) && i3 == 5) {
-                flag0 = true;
-            }
-
-            if (!World.a((IBlockAccess) world, i0, i1 - 1, i2) && i3 == 6) {
-                flag0 = true;
-            }
-
-            if (!world.a(i0, i1 + 1, i2).r() && i3 == 0) {
-                flag0 = true;
-            }
-
-            if (!world.a(i0, i1 + 1, i2).r() && i3 == 7) {
-                flag0 = true;
-            }
-
-            if (flag0) {
-                this.b(world, i0, i1, i2, world.e(i0, i1, i2), 0);
-                world.f(i0, i1, i2);
-            }
+    private boolean e(World world, BlockPos blockpos) {
+        if (this.c(world, blockpos)) {
+            return true;
         }
-    }
-
-    private boolean e(World world, int i0, int i1, int i2) {
-        if (!this.c(world, i0, i1, i2)) {
-            this.b(world, i0, i1, i2, world.e(i0, i1, i2), 0);
-            world.f(i0, i1, i2);
+        else {
+            this.b(world, blockpos, world.p(blockpos), 0);
+            world.g(blockpos);
             return false;
         }
-        else {
-            return true;
-        }
     }
 
-    public void a(IBlockAccess iblockaccess, int i0, int i1, int i2) {
-        int i3 = iblockaccess.e(i0, i1, i2) & 7;
+    public void a(IBlockAccess iblockaccess, BlockPos blockpos) {
         float f0 = 0.1875F;
 
-        if (i3 == 1) {
-            this.a(0.0F, 0.2F, 0.5F - f0, f0 * 2.0F, 0.8F, 0.5F + f0);
-        }
-        else if (i3 == 2) {
-            this.a(1.0F - f0 * 2.0F, 0.2F, 0.5F - f0, 1.0F, 0.8F, 0.5F + f0);
-        }
-        else if (i3 == 3) {
-            this.a(0.5F - f0, 0.2F, 0.0F, 0.5F + f0, 0.8F, f0 * 2.0F);
-        }
-        else if (i3 == 4) {
-            this.a(0.5F - f0, 0.2F, 1.0F - f0 * 2.0F, 0.5F + f0, 0.8F, 1.0F);
-        }
-        else if (i3 != 5 && i3 != 6) {
-            if (i3 == 0 || i3 == 7) {
+        switch (BlockLever.SwitchEnumFacing.b[((BlockLever.EnumOrientation) iblockaccess.p(blockpos).b(a)).ordinal()]) {
+            case 1:
+                this.a(0.0F, 0.2F, 0.5F - f0, f0 * 2.0F, 0.8F, 0.5F + f0);
+                break;
+
+            case 2:
+                this.a(1.0F - f0 * 2.0F, 0.2F, 0.5F - f0, 1.0F, 0.8F, 0.5F + f0);
+                break;
+
+            case 3:
+                this.a(0.5F - f0, 0.2F, 0.0F, 0.5F + f0, 0.8F, f0 * 2.0F);
+                break;
+
+            case 4:
+                this.a(0.5F - f0, 0.2F, 1.0F - f0 * 2.0F, 0.5F + f0, 0.8F, 1.0F);
+                break;
+
+            case 5:
+            case 6:
+                f0 = 0.25F;
+                this.a(0.5F - f0, 0.0F, 0.5F - f0, 0.5F + f0, 0.6F, 0.5F + f0);
+                break;
+
+            case 7:
+            case 8:
                 f0 = 0.25F;
                 this.a(0.5F - f0, 0.4F, 0.5F - f0, 0.5F + f0, 1.0F, 0.5F + f0);
-            }
         }
-        else {
-            f0 = 0.25F;
-            this.a(0.5F - f0, 0.0F, 0.5F - f0, 0.5F + f0, 0.6F, 0.5F + f0);
-        }
+
     }
 
-    public boolean a(World world, int i0, int i1, int i2, EntityPlayer entityplayer, int i3, float f0, float f1, float f2) {
-        if (world.E) {
+    public boolean a(World world, BlockPos blockpos, IBlockState iblockstate, EntityPlayer entityplayer, EnumFacing enumfacing, float f0, float f1, float f2) {
+        if (world.D) {
             return true;
         }
         else {
-            int i4 = world.e(i0, i1, i2);
-            int i5 = i4 & 7;
-            int i6 = 8 - (i4 & 8);
+            iblockstate = iblockstate.a(b);
+            world.a(blockpos, iblockstate, 3);
+            world.a((double) blockpos.n() + 0.5D, (double) blockpos.o() + 0.5D, (double) blockpos.p() + 0.5D, "random.click", 0.3F, ((Boolean) iblockstate.b(b)).booleanValue() ? 0.6F : 0.5F);
+            world.c(blockpos, (Block) this);
+            EnumFacing enumfacing1 = ((BlockLever.EnumOrientation) iblockstate.b(a)).c();
 
-            // CanaryMod: RedstoneChange
-            int newLvl = i6 == 0 ? 0 : 15; //
-            RedstoneChangeHook hook = (RedstoneChangeHook) new RedstoneChangeHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), ~newLvl & 15, newLvl).call();
-            if (hook.isCanceled()) {
-                return true;
-            } // CanaryMod: end
-
-            world.a(i0, i1, i2, i5 + i6, 3);
-            world.a((double) i0 + 0.5D, (double) i1 + 0.5D, (double) i2 + 0.5D, "random.click", 0.3F, i6 > 0 ? 0.6F : 0.5F);
-            world.d(i0, i1, i2, this);
-            if (i5 == 1) {
-                world.d(i0 - 1, i1, i2, this);
-            }
-            else if (i5 == 2) {
-                world.d(i0 + 1, i1, i2, this);
-            }
-            else if (i5 == 3) {
-                world.d(i0, i1, i2 - 1, this);
-            }
-            else if (i5 == 4) {
-                world.d(i0, i1, i2 + 1, this);
-            }
-            else if (i5 != 5 && i5 != 6) {
-                if (i5 == 0 || i5 == 7) {
-                    world.d(i0, i1 + 1, i2, this);
-                }
-            }
-            else {
-                world.d(i0, i1 - 1, i2, this);
-            }
-
+            world.c(blockpos.a(enumfacing1.d()), (Block) this);
             return true;
         }
     }
 
-    public void a(World world, int i0, int i1, int i2, Block block, int i3) {
-        if ((i3 & 8) > 0) {
-            // CanaryMod: RedstoneChange
-            new RedstoneChangeHook(new CanaryBlock(BlockType.Lever.getId(), (short) 0, i0, i1, i2, world.getCanaryWorld()), 15, 0).call();
-            // Not sure if canceling here would be wise
-            // CanaryMod: end
-            world.d(i0, i1, i2, this);
-            int i4 = i3 & 7;
+    public void b(World world, BlockPos blockpos, IBlockState iblockstate) {
+        if (((Boolean) iblockstate.b(b)).booleanValue()) {
+            world.c(blockpos, (Block) this);
+            EnumFacing enumfacing = ((BlockLever.EnumOrientation) iblockstate.b(a)).c();
 
-            if (i4 == 1) {
-                world.d(i0 - 1, i1, i2, this);
-            }
-            else if (i4 == 2) {
-                world.d(i0 + 1, i1, i2, this);
-            }
-            else if (i4 == 3) {
-                world.d(i0, i1, i2 - 1, this);
-            }
-            else if (i4 == 4) {
-                world.d(i0, i1, i2 + 1, this);
-            }
-            else if (i4 != 5 && i4 != 6) {
-                if (i4 == 0 || i4 == 7) {
-                    world.d(i0, i1 + 1, i2, this);
-                }
-            }
-            else {
-                world.d(i0, i1 - 1, i2, this);
-            }
+            world.c(blockpos.a(enumfacing.d()), (Block) this);
         }
 
-        super.a(world, i0, i1, i2, block, i3);
+        super.b(world, blockpos, iblockstate);
     }
 
-    public int b(IBlockAccess iblockaccess, int i0, int i1, int i2, int i3) {
-        return (iblockaccess.e(i0, i1, i2) & 8) > 0 ? 15 : 0;
+    public int a(IBlockAccess iblockaccess, BlockPos blockpos, IBlockState iblockstate, EnumFacing enumfacing) {
+        return ((Boolean) iblockstate.b(b)).booleanValue() ? 15 : 0;
     }
 
-    public int c(IBlockAccess iblockaccess, int i0, int i1, int i2, int i3) {
-        int i4 = iblockaccess.e(i0, i1, i2);
-
-        if ((i4 & 8) == 0) {
-            return 0;
-        }
-        else {
-            int i5 = i4 & 7;
-
-            return i5 == 0 && i3 == 0 ? 15 : (i5 == 7 && i3 == 0 ? 15 : (i5 == 6 && i3 == 1 ? 15 : (i5 == 5 && i3 == 1 ? 15 : (i5 == 4 && i3 == 2 ? 15 : (i5 == 3 && i3 == 3 ? 15 : (i5 == 2 && i3 == 4 ? 15 : (i5 == 1 && i3 == 5 ? 15 : 0)))))));
-        }
+    public int b(IBlockAccess iblockaccess, BlockPos blockpos, IBlockState iblockstate, EnumFacing enumfacing) {
+        return !((Boolean) iblockstate.b(b)).booleanValue() ? 0 : (((BlockLever.EnumOrientation) iblockstate.b(a)).c() == enumfacing ? 15 : 0);
     }
 
-    public boolean f() {
+    public boolean g() {
         return true;
+    }
+
+    public IBlockState a(int i0) {
+        return this.P().a(a, BlockLever.EnumOrientation.a(i0 & 7)).a(b, Boolean.valueOf((i0 & 8) > 0));
+    }
+
+    public int c(IBlockState iblockstate) {
+        byte b0 = 0;
+        int i0 = b0 | ((BlockLever.EnumOrientation) iblockstate.b(a)).a();
+
+        if (((Boolean) iblockstate.b(b)).booleanValue()) {
+            i0 |= 8;
+        }
+
+        return i0;
+    }
+
+    protected BlockState e() {
+        return new BlockState(this, new IProperty[]{a, b});
+    }
+
+    public static enum EnumOrientation implements IStringSerializable {
+
+        DOWN_X("DOWN_X", 0, 0, "down_x", EnumFacing.DOWN), EAST("EAST", 1, 1, "east", EnumFacing.EAST), WEST("WEST", 2, 2, "west", EnumFacing.WEST), SOUTH("SOUTH", 3, 3, "south", EnumFacing.SOUTH), NORTH("NORTH", 4, 4, "north", EnumFacing.NORTH), UP_Z("UP_Z", 5, 5, "up_z", EnumFacing.UP), UP_X("UP_X", 6, 6, "up_x", EnumFacing.UP), DOWN_Z("DOWN_Z", 7, 7, "down_z", EnumFacing.DOWN);
+        private static final BlockLever.EnumOrientation[] i = new BlockLever.EnumOrientation[values().length];
+        private static final BlockLever.EnumOrientation[] $VALUES = new BlockLever.EnumOrientation[]{DOWN_X, EAST, WEST, SOUTH, NORTH, UP_Z, UP_X, DOWN_Z};
+        private final int j;
+        private final String k;
+        private final EnumFacing l;
+
+        private EnumOrientation(String p_i45709_1_, int p_i45709_2_, int p_i45709_3_, String p_i45709_4_, EnumFacing p_i45709_5_) {
+            this.j = p_i45709_3_;
+            this.k = p_i45709_4_;
+            this.l = p_i45709_5_;
+        }
+
+        public static BlockLever.EnumOrientation a(int p_a_0_) {
+            if (p_a_0_ < 0 || p_a_0_ >= i.length) {
+                p_a_0_ = 0;
+            }
+
+            return i[p_a_0_];
+        }
+
+        public static BlockLever.EnumOrientation a(EnumFacing p_a_0_, EnumFacing p_a_1_) {
+            switch (BlockLever.SwitchEnumFacing.a[p_a_0_.ordinal()]) {
+                case 1:
+                    switch (BlockLever.SwitchEnumFacing.c[p_a_1_.k().ordinal()]) {
+                        case 1:
+                            return DOWN_X;
+
+                        case 2:
+                            return DOWN_Z;
+
+                        default:
+                            throw new IllegalArgumentException("Invalid entityFacing " + p_a_1_ + " for facing " + p_a_0_);
+                    }
+
+                case 2:
+                    switch (BlockLever.SwitchEnumFacing.c[p_a_1_.k().ordinal()]) {
+                        case 1:
+                            return UP_X;
+
+                        case 2:
+                            return UP_Z;
+
+                        default:
+                            throw new IllegalArgumentException("Invalid entityFacing " + p_a_1_ + " for facing " + p_a_0_);
+                    }
+
+                case 3:
+                    return NORTH;
+
+                case 4:
+                    return SOUTH;
+
+                case 5:
+                    return WEST;
+
+                case 6:
+                    return EAST;
+
+                default:
+                    throw new IllegalArgumentException("Invalid facing: " + p_a_0_);
+            }
+        }
+
+        public int a() {
+            return this.j;
+        }
+
+        public EnumFacing c() {
+            return this.l;
+        }
+
+        public String toString() {
+            return this.k;
+        }
+
+        public String l() {
+            return this.k;
+        }
+
+        static {
+            BlockLever.EnumOrientation[] ablocklever_enumorientation = values();
+            int i0 = ablocklever_enumorientation.length;
+
+            for (int i1 = 0; i1 < i0; ++i1) {
+                BlockLever.EnumOrientation blocklever_enumorientation = ablocklever_enumorientation[i1];
+
+                i[blocklever_enumorientation.a()] = blocklever_enumorientation;
+            }
+
+        }
+    }
+
+
+    static final class SwitchEnumFacing {
+
+        static final int[] a;
+
+        static final int[] b;
+
+        static final int[] c = new int[EnumFacing.Axis.values().length];
+
+        static {
+            try {
+                c[EnumFacing.Axis.X.ordinal()] = 1;
+            }
+            catch (NoSuchFieldError nosuchfielderror156) {
+                ;
+            }
+
+            try {
+                c[EnumFacing.Axis.Z.ordinal()] = 2;
+            }
+            catch (NoSuchFieldError nosuchfielderror155) {
+                ;
+            }
+
+            b = new int[BlockLever.EnumOrientation.values().length];
+
+            try {
+                b[BlockLever.EnumOrientation.EAST.ordinal()] = 1;
+            }
+            catch (NoSuchFieldError nosuchfielderror154) {
+                ;
+            }
+
+            try {
+                b[BlockLever.EnumOrientation.WEST.ordinal()] = 2;
+            }
+            catch (NoSuchFieldError nosuchfielderror153) {
+                ;
+            }
+
+            try {
+                b[BlockLever.EnumOrientation.SOUTH.ordinal()] = 3;
+            }
+            catch (NoSuchFieldError nosuchfielderror152) {
+                ;
+            }
+
+            try {
+                b[BlockLever.EnumOrientation.NORTH.ordinal()] = 4;
+            }
+            catch (NoSuchFieldError nosuchfielderror151) {
+                ;
+            }
+
+            try {
+                b[BlockLever.EnumOrientation.UP_Z.ordinal()] = 5;
+            }
+            catch (NoSuchFieldError nosuchfielderror150) {
+                ;
+            }
+
+            try {
+                b[BlockLever.EnumOrientation.UP_X.ordinal()] = 6;
+            }
+            catch (NoSuchFieldError nosuchfielderror7) {
+                ;
+            }
+
+            try {
+                b[BlockLever.EnumOrientation.DOWN_X.ordinal()] = 7;
+            }
+            catch (NoSuchFieldError nosuchfielderror8) {
+                ;
+            }
+
+            try {
+                b[BlockLever.EnumOrientation.DOWN_Z.ordinal()] = 8;
+            }
+            catch (NoSuchFieldError nosuchfielderror9) {
+                ;
+            }
+
+            a = new int[EnumFacing.values().length];
+
+            try {
+                a[EnumFacing.DOWN.ordinal()] = 1;
+            }
+            catch (NoSuchFieldError nosuchfielderror10) {
+                ;
+            }
+
+            try {
+                a[EnumFacing.UP.ordinal()] = 2;
+            }
+            catch (NoSuchFieldError nosuchfielderror11) {
+                ;
+            }
+
+            try {
+                a[EnumFacing.NORTH.ordinal()] = 3;
+            }
+            catch (NoSuchFieldError nosuchfielderror12) {
+                ;
+            }
+
+            try {
+                a[EnumFacing.SOUTH.ordinal()] = 4;
+            }
+            catch (NoSuchFieldError nosuchfielderror13) {
+                ;
+            }
+
+            try {
+                a[EnumFacing.WEST.ordinal()] = 5;
+            }
+            catch (NoSuchFieldError nosuchfielderror14) {
+                ;
+            }
+
+            try {
+                a[EnumFacing.EAST.ordinal()] = 6;
+            }
+            catch (NoSuchFieldError nosuchfielderror15) {
+                ;
+            }
+
+        }
     }
 }

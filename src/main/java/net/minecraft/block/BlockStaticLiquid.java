@@ -1,13 +1,16 @@
 package net.minecraft.block;
 
+import java.util.Random;
 import net.canarymod.api.world.blocks.CanaryBlock;
+import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.world.IgnitionHook;
 import net.canarymod.hook.world.IgnitionHook.IgnitionCause;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-
-import java.util.Random;
 
 public class BlockStaticLiquid extends BlockLiquid {
 
@@ -40,7 +43,7 @@ public class BlockStaticLiquid extends BlockLiquid {
                 int i0 = random.nextInt(3);
 
                 // CanaryMod: Ignition
-                CanaryBlock ignited = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
+                CanaryBlock ignited = (CanaryBlock) world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos));
 
                 ignited.setStatus((byte) 1); // Lava Status 1
                 IgnitionHook hook = (IgnitionHook) new IgnitionHook(ignited, null, null, IgnitionCause.LAVA).call();
@@ -49,7 +52,6 @@ public class BlockStaticLiquid extends BlockLiquid {
                 }
                 //
 
-                int i0 = random.nextInt(3);
 
                 if (i0 > 0) {
                     BlockPos blockpos1 = blockpos;
@@ -81,6 +83,7 @@ public class BlockStaticLiquid extends BlockLiquid {
                 }
             }
         }
+    }
 
     protected boolean e(World world, BlockPos blockpos) {
         EnumFacing[] aenumfacing = EnumFacing.values();

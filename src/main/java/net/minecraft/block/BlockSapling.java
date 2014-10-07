@@ -1,14 +1,21 @@
 package net.minecraft.block;
 
+import java.util.Random;
 import net.canarymod.api.world.blocks.CanaryBlock;
+import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.world.BlockGrowHook;
 import net.canarymod.hook.world.TreeGrowHook;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.properties.PropertyInteger;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.*;
 
-import java.util.Random;
 
 
 public class BlockSapling extends BlockBush implements IGrowable {
@@ -37,9 +44,9 @@ public class BlockSapling extends BlockBush implements IGrowable {
     public void d(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {
         if (((Integer) iblockstate.b(b)).intValue() == 0) {
             // CanaryMod: BlockGrowHook
-            CanaryBlock growth = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
-            growth.setData((short) (i3 | 8));
-            BlockGrowHook blockGrowHook = new BlockGrowHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), growth);
+            CanaryBlock growth = (CanaryBlock) world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos));
+            growth.setData((short) (iblockstate.c().c(iblockstate) | 8));
+            BlockGrowHook blockGrowHook = new BlockGrowHook(world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos)), growth);
             if (!blockGrowHook.isCanceled()) {
                 world.a(blockpos, iblockstate.a(b), 4);
             }
@@ -47,7 +54,7 @@ public class BlockSapling extends BlockBush implements IGrowable {
         }
         else {
             // CanaryMod: TreeGrow; If someone figures out how to get more information into this, let me know - darkdiplomat;
-            TreeGrowHook hook = (TreeGrowHook) new TreeGrowHook(world.getCanaryWorld().getBlockAt(i0, i1, i2)).call();
+            TreeGrowHook hook = (TreeGrowHook) new TreeGrowHook(world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos))).call();
             if (!hook.isCanceled()) {
                 this.e(world, blockpos, iblockstate, random);
             }

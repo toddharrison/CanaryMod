@@ -1,5 +1,7 @@
 package net.minecraft.block;
 
+import java.util.Random;
+import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.world.RedstoneChangeHook;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -18,8 +20,6 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
-import java.util.Random;
 
 
 public class BlockDaylightDetector extends BlockContainer {

@@ -1,6 +1,11 @@
 package net.minecraft.block;
 
+import net.canarymod.api.world.blocks.CanaryJukebox;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
@@ -11,12 +16,18 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
+
 
 public class BlockJukebox extends BlockContainer {
 
+    public static final PropertyBool a = PropertyBool.a("has_record");
+
     protected BlockJukebox() {
         super(Material.d);
+        this.j(this.L.b().a(a, Boolean.valueOf(false)));
         this.a(CreativeTabs.c);
     }
 
@@ -28,12 +39,6 @@ public class BlockJukebox extends BlockContainer {
             return true;
         }
         else {
-            return false;
-        }
-        else{
-            this.e(world, i0, i1, i2);
-            return true;
-        }else{
             return false;
         }
     }
@@ -127,6 +132,10 @@ public class BlockJukebox extends BlockContainer {
     public static class TileEntityJukebox extends TileEntity {
 
         private ItemStack a;
+        
+        public TileEntityJukebox() {
+            this.complexBlock = new CanaryJukebox(this); // CanaryMod: wrap tile entity
+        }
 
         public void a(NBTTagCompound p_a_1_) {
             super.a(p_a_1_);
@@ -154,6 +163,11 @@ public class BlockJukebox extends BlockContainer {
         public void a(ItemStack p_a_1_) {
             this.a = p_a_1_;
             this.o_();
+        }
+        
+        // CanaryMod
+        public CanaryJukebox getCanaryJukebox() {
+            return (CanaryJukebox) complexBlock;
         }
     }
 }

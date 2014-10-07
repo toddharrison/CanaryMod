@@ -1,7 +1,10 @@
 package net.minecraft.block;
 
+import java.util.List;
 import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.blocks.CanaryBlock;
+import net.canarymod.api.world.position.BlockPosition;
+import net.canarymod.api.world.position.Position;
 import net.canarymod.hook.world.PistonExtendHook;
 import net.canarymod.hook.world.PistonRetractHook;
 import net.minecraft.block.material.Material;
@@ -24,8 +27,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
-import java.util.List;
 
 public class BlockPistonBase extends Block {
 
@@ -78,8 +79,11 @@ public class BlockPistonBase extends Block {
         boolean flag0 = this.b(world, blockpos, enumfacing);
 
         // CanaryMod: Get Blocks
-        CanaryBlock piston = new CanaryBlock((this.a ? BlockType.StickyPiston.getId() : BlockType.Piston.getId()), (byte) 0, i0, i1, i2, world.getCanaryWorld());
-        CanaryBlock moving = new CanaryBlock((short) Block.b(world.a(i0 + Facing.b[i4], i1 + Facing.c[i4], i2 + Facing.d[i4])), (byte) 0, (i0 + Facing.b[i4]), (i1 + Facing.c[i4]), (i2 + Facing.d[i4]), world.getCanaryWorld());
+        BlockPosition bp = new BlockPosition(blockpos);
+        CanaryBlock piston = new CanaryBlock((this.M ? BlockType.StickyPiston.getId() : BlockType.Piston.getId()), (byte) 0, bp.getBlockX(), bp.getBlockY(), bp.getBlockZ(), world.getCanaryWorld());
+        Position bp2 = new Position(bp.getBlockX() + enumfacing.g(), bp.getBlockY() + enumfacing.h(), bp.getBlockZ() + enumfacing.i());
+        net.canarymod.api.world.blocks.Block block = world.getCanaryWorld().getBlockAt(bp2);
+        CanaryBlock moving = new CanaryBlock(block.getData(), (byte) 0, bp2.getBlockX(), bp2.getBlockY(), bp2.getBlockZ(), world.getCanaryWorld());
         //
 
         if (flag0 && !((Boolean) iblockstate.b(b)).booleanValue()) {
@@ -95,7 +99,9 @@ public class BlockPistonBase extends Block {
         else if (!flag0 && ((Boolean) iblockstate.b(b)).booleanValue()) {
 
             // CanaryMod: PistonRetract
-            moving = new CanaryBlock((short) Block.b(world.a(i0 + Facing.b[i4] * 2, i1 + Facing.c[i4] * 2, i2 + Facing.d[i4] * 2)), (byte) 0, (i0 + Facing.b[i4]), (i1 + Facing.c[i4]), (i2 + Facing.d[i4]), world.getCanaryWorld());
+            Position bp3 = new Position(bp2.getBlockX() * 2, bp2.getBlockY() * 2, bp2.getBlockZ() * 2);
+            net.canarymod.api.world.blocks.Block block2 = world.getCanaryWorld().getBlockAt(bp3);
+            moving = new CanaryBlock(block2.getData(), (byte) 0,  bp2.getBlockX(), bp2.getBlockY(), bp2.getBlockZ(), world.getCanaryWorld());
             PistonRetractHook hook = (PistonRetractHook) new PistonRetractHook(piston, moving).call();
             attemptRetract = !hook.isCanceled();
             //
@@ -191,7 +197,7 @@ public class BlockPistonBase extends Block {
                 }
 
                 // CanaryMod: check attemptRetract
-                if (attemptRetract && !flag1 && block.r() != Material.a && a(block, world, blockpos1, enumfacing.d(), false) && (block.i() == 0 || block == Blocks.J || block == Blocks.F)))
+                if (attemptRetract && !flag1 && block.r() != Material.a && a(block, world, blockpos1, enumfacing.d(), false) && (block.i() == 0 || block == Blocks.J || block == Blocks.F))
                 {
                     this.a(world, blockpos, enumfacing, false);
                 }

@@ -1,14 +1,17 @@
 package net.minecraft.block;
 
+import java.util.Random;
+import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.world.RedstoneChangeHook;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
-import java.util.Random;
 
 public abstract class BlockRedstoneDiode extends BlockDirectional {
 
@@ -20,6 +23,10 @@ public abstract class BlockRedstoneDiode extends BlockDirectional {
         this.a(0.0F, 0.0F, 0.0F, 1.0F, 0.125F, 1.0F);
     }
 
+    public static boolean d(Block block) {
+        return Blocks.bb.e(block) || Blocks.cj.e(block);
+    }
+
     public boolean d() {
         return false;
     }
@@ -28,8 +35,8 @@ public abstract class BlockRedstoneDiode extends BlockDirectional {
         return World.a((IBlockAccess) world, blockpos.b()) ? super.c(world, blockpos) : false;
     }
 
-    public boolean j(World world, int i0, int i1, int i2) {
-        return !World.a((IBlockAccess) world, i0, i1 - 1, i2) ? false : super.j(world, i0, i1, i2);
+    public boolean d(World world, BlockPos blockpos) {
+        return World.a((IBlockAccess) world, blockpos.b());
     }
 
     public void a(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {
@@ -41,16 +48,16 @@ public abstract class BlockRedstoneDiode extends BlockDirectional {
 
             if (this.M && !flag0) {
                 // CanaryMod: RedstoneChange; turning off
-                RedstoneChangeHook hook = (RedstoneChangeHook) new RedstoneChangeHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), 15, 0).call();
+                RedstoneChangeHook hook = (RedstoneChangeHook) new RedstoneChangeHook(world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos)), 15, 0).call();
                 if (hook.isCanceled()) {
                     return;
                 }
                 //
                 world.a(blockpos, this.k(iblockstate), 2);
             }
-            else if (!this.a) {
+            else if (!this.M) {
                 // CanaryMod: RedstoneChange; turning on
-                RedstoneChangeHook hook = (RedstoneChangeHook) new RedstoneChangeHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), 0, 15).call();
+                RedstoneChangeHook hook = (RedstoneChangeHook) new RedstoneChangeHook(world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos)), 0, 15).call();
                 if (hook.isCanceled()) {
                     return;
                 }
@@ -205,10 +212,6 @@ public abstract class BlockRedstoneDiode extends BlockDirectional {
 
     protected int a(IBlockAccess iblockaccess, BlockPos blockpos, IBlockState iblockstate) {
         return 15;
-    }
-
-    public static boolean d(Block block) {
-        return Blocks.bb.e(block) || Blocks.cj.e(block);
     }
 
     public boolean e(Block block) {

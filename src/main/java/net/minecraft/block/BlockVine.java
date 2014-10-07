@@ -1,22 +1,30 @@
 package net.minecraft.block;
 
 
+import java.util.Iterator;
+import java.util.Random;
 import net.canarymod.api.world.blocks.CanaryBlock;
+import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.world.BlockGrowHook;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.Direction;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
-import java.util.Random;
 
 
 public class BlockVine extends Block {
@@ -37,6 +45,48 @@ public class BlockVine extends Block {
         this.j(this.L.b().a(a, Boolean.valueOf(false)).a(b, Boolean.valueOf(false)).a(M, Boolean.valueOf(false)).a(N, Boolean.valueOf(false)).a(O, Boolean.valueOf(false)));
         this.a(true);
         this.a(CreativeTabs.c);
+    }
+
+    private static int b(EnumFacing enumfacing) {
+        return 1 << enumfacing.b();
+    }
+
+    public static PropertyBool a(EnumFacing enumfacing) {
+        switch (BlockVine.SwitchEnumFacing.a[enumfacing.ordinal()]) {
+            case 1:
+                return a;
+
+            case 2:
+                return b;
+
+            case 3:
+                return N;
+
+            case 4:
+                return M;
+
+            case 5:
+                return O;
+
+            default:
+                throw new IllegalArgumentException(enumfacing + " is an invalid choice");
+        }
+    }
+
+    public static int d(IBlockState iblockstate) {
+        int i0 = 0;
+        PropertyBool[] apropertybool = P;
+        int i1 = apropertybool.length;
+
+        for (int i2 = 0; i2 < i1; ++i2) {
+            PropertyBool propertybool = apropertybool[i2];
+
+            if (((Boolean) iblockstate.b(propertybool)).booleanValue()) {
+                ++i0;
+            }
+        }
+
+        return i0;
     }
 
     public IBlockState a(IBlockState iblockstate, IBlockAccess iblockaccess, BlockPos blockpos) {
@@ -242,13 +292,13 @@ public class BlockVine extends Block {
                                 BlockPos blockpos3 = blockpos1.a(enumfacing2);
 
                                 // CanaryMod: Grab the original stuff
-                                CanaryBlock original = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
-                                CanaryBlock growth = new CanaryBlock(this, (short) 0, i0 + Direction.a[i6], i1, i2 + Direction.b[i6], world.getCanaryWorld());
+                                CanaryBlock original = (CanaryBlock) world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos));
+                                CanaryBlock growth = new CanaryBlock(this, (short) 0, blockpos3.n(), blockpos3.o(), blockpos3.p(), world.getCanaryWorld());
                                 BlockGrowHook blockGrowHook = new BlockGrowHook(original, growth);
                                 //
                                 if (flag1 && this.c(world.p(blockpos2).c())) {
                                     // CanaryMod: set data, call hook
-                                    growth.setData((short) (1 << i7));
+                                    growth.setData((short) (world.p(blockpos2).c().c(world.p(blockpos2))));
                                     blockGrowHook.call();
                                     if (!blockGrowHook.isCanceled()) {
                                         world.a(blockpos1, this.P().a(a(enumfacing1), Boolean.valueOf(true)), 2);
@@ -257,7 +307,7 @@ public class BlockVine extends Block {
                                 }
                                 else if (flag2 && this.c(world.p(blockpos3).c())) {
                                     // CanaryMod: set data, call hook
-                                    growth.setData((short) (1 << i9));
+                                    growth.setData((short) (world.p(blockpos3).c().c(world.p(blockpos3))));
                                     blockGrowHook.call();
                                     if (!blockGrowHook.isCanceled()) {
                                         world.a(blockpos1, this.P().a(a(enumfacing2), Boolean.valueOf(true)), 2);
@@ -266,7 +316,7 @@ public class BlockVine extends Block {
                                 }
                                 else if (flag1 && world.d(blockpos2) && this.c(world.p(blockpos.a(enumfacing1)).c())) {
                                     // CanaryMod: set data, call hook
-                                    growth.setData((short) (1 << (i6 + 2 & 3)));
+                                    growth.setData((short) (1 << (world.p(blockpos.a(enumfacing1)).c().c(world.p(blockpos.a(enumfacing1))))));
                                     blockGrowHook.call();
                                     if (!blockGrowHook.isCanceled()) {
                                         world.a(blockpos2, this.P().a(a(enumfacing.d()), Boolean.valueOf(true)), 2);
@@ -275,7 +325,7 @@ public class BlockVine extends Block {
                                 }
                                 else if (flag2 && world.d(blockpos3) && this.c(world.p(blockpos.a(enumfacing2)).c())) {
                                     // CanaryMod: set data, call hook
-                                    growth.setData((short) (1 << (i6 + 2 & 3)));
+                                    growth.setData((short) (1 << (world.p(blockpos.a(enumfacing2)).c().c(world.p(blockpos.a(enumfacing2))) + 2 & 3)));
                                     blockGrowHook.call();
                                     if (!blockGrowHook.isCanceled()) {
                                         world.a(blockpos3, this.P().a(a(enumfacing.d()), Boolean.valueOf(true)), 2);
@@ -339,39 +389,20 @@ public class BlockVine extends Block {
                             }
 
                         }
+
                     }
                 }
             }
         }
-
-    private static int b(EnumFacing enumfacing) {
-        return 1 << enumfacing.b();
     }
 
-    public int a(World world, int i0, int i1, int i2, int i3, float f0, float f1, float f2, int i4) {
-        byte b0 = 0;
+    public IBlockState a(World world, BlockPos blockpos, EnumFacing enumfacing, float f0, float f1, float f2, int i0, EntityLivingBase entitylivingbase) {
+        IBlockState iblockstate = this.P().a(a, Boolean.valueOf(false)).a(b, Boolean.valueOf(false)).a(M, Boolean.valueOf(false)).a(N, Boolean.valueOf(false)).a(O, Boolean.valueOf(false));
 
-        switch (i3) {
-            case 2:
-                b0 = 1;
-                break;
-
-            case 3:
-                b0 = 4;
-                break;
-
-            case 4:
-                b0 = 8;
-                break;
-
-            case 5:
-                b0 = 2;
-        }
-
-        return b0 != 0 ? b0 : i4;
+        return enumfacing.k().c() ? iblockstate.a(a(enumfacing.d()), Boolean.valueOf(true)) : iblockstate;
     }
 
-    public Item a(int i0, Random random, int i1) {
+    public Item a(IBlockState iblockstate, Random random, int i0) {
         return null;
     }
 
@@ -379,14 +410,87 @@ public class BlockVine extends Block {
         return 0;
     }
 
-    public void a(World world, EntityPlayer entityplayer, int i0, int i1, int i2, int i3) {
-        if (!world.E && entityplayer.bF() != null && entityplayer.bF().b() == Items.aZ) {
-            entityplayer.a(StatList.C[Block.b((Block) this)], 1);
-            this.a(world, i0, i1, i2, new ItemStack(Blocks.bd, 1, 0));
+    public void a(World world, EntityPlayer entityplayer, BlockPos blockpos, IBlockState iblockstate, TileEntity tileentity) {
+        if (!world.D && entityplayer.bY() != null && entityplayer.bY().b() == Items.be) {
+            entityplayer.b(StatList.H[Block.a((Block) this)]);
+            a(world, blockpos, new ItemStack(Blocks.bn, 1, 0));
         }
         else {
-            super.a(world, entityplayer, i0, i1, i2, i3);
+            super.a(world, entityplayer, blockpos, iblockstate, tileentity);
         }
 
+    }
+
+    public IBlockState a(int i0) {
+        return this.P().a(b, Boolean.valueOf((i0 & R) > 0)).a(M, Boolean.valueOf((i0 & S) > 0)).a(N, Boolean.valueOf((i0 & Q) > 0)).a(O, Boolean.valueOf((i0 & T) > 0));
+    }
+
+    public int c(IBlockState iblockstate) {
+        int i0 = 0;
+
+        if (((Boolean) iblockstate.b(b)).booleanValue()) {
+            i0 |= R;
+        }
+
+        if (((Boolean) iblockstate.b(M)).booleanValue()) {
+            i0 |= S;
+        }
+
+        if (((Boolean) iblockstate.b(N)).booleanValue()) {
+            i0 |= Q;
+        }
+
+        if (((Boolean) iblockstate.b(O)).booleanValue()) {
+            i0 |= T;
+        }
+
+        return i0;
+    }
+
+    protected BlockState e() {
+        return new BlockState(this, new IProperty[]{a, b, M, N, O});
+    }
+
+    static final class SwitchEnumFacing {
+
+        static final int[] a = new int[EnumFacing.values().length];
+
+        static {
+            try {
+                a[EnumFacing.UP.ordinal()] = 1;
+            }
+            catch (NoSuchFieldError nosuchfielderror) {
+                ;
+            }
+
+            try {
+                a[EnumFacing.NORTH.ordinal()] = 2;
+            }
+            catch (NoSuchFieldError nosuchfielderror1) {
+                ;
+            }
+
+            try {
+                a[EnumFacing.SOUTH.ordinal()] = 3;
+            }
+            catch (NoSuchFieldError nosuchfielderror2) {
+                ;
+            }
+
+            try {
+                a[EnumFacing.EAST.ordinal()] = 4;
+            }
+            catch (NoSuchFieldError nosuchfielderror3) {
+                ;
+            }
+
+            try {
+                a[EnumFacing.WEST.ordinal()] = 5;
+            }
+            catch (NoSuchFieldError nosuchfielderror4) {
+                ;
+            }
+
+        }
     }
 }

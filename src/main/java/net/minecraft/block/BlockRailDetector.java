@@ -1,6 +1,15 @@
 package net.minecraft.block;
 
+import com.google.common.base.Predicate;
+import java.util.List;
+import java.util.Random;
+import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.world.RedstoneChangeHook;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityMinecartCommandBlock;
@@ -8,11 +17,10 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
-import java.util.List;
-import java.util.Random;
 
 public class BlockRailDetector extends BlockRailBase {
 
@@ -78,7 +86,7 @@ public class BlockRailDetector extends BlockRailBase {
 
         if (flag1 && !flag0) {
             // CanaryMod: RedstoneChange; Rails on
-            RedstoneChangeHook hook = (RedstoneChangeHook) new RedstoneChangeHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), 0, 15).call();
+            RedstoneChangeHook hook = (RedstoneChangeHook) new RedstoneChangeHook(world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos)), 0, 15).call();
             if (hook.isCanceled()) {
                 return;
             }
@@ -91,7 +99,7 @@ public class BlockRailDetector extends BlockRailBase {
 
         if (!flag1 && flag0) {
             // CanaryMod: RedstoneChange; Rails off
-            RedstoneChangeHook hook = (RedstoneChangeHook) new RedstoneChangeHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), 15, 0).call();
+            RedstoneChangeHook hook = (RedstoneChangeHook) new RedstoneChangeHook(world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos)), 15, 0).call();
             if (hook.isCanceled()) {
                 return;
             }

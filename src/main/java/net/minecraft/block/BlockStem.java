@@ -1,19 +1,28 @@
 package net.minecraft.block;
 
 
+import com.google.common.base.Predicate;
+import java.util.Iterator;
+import java.util.Random;
 import net.canarymod.api.world.blocks.CanaryBlock;
+import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.world.BlockGrowHook;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.properties.PropertyInteger;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
-import java.util.Random;
 
 
 public class BlockStem extends BlockBush implements IGrowable {
@@ -70,14 +79,14 @@ public class BlockStem extends BlockBush implements IGrowable {
                 int i0 = ((Integer) iblockstate.b(a)).intValue();
 
                 // CanaryMod: Grab the original stuff
-                CanaryBlock original = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
+                CanaryBlock original = (CanaryBlock) world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos));
                 CanaryBlock growth;
                 BlockGrowHook blockGrowHook;
                 //
                 if (i0 < 7) {
                     iblockstate = iblockstate.a(a, Integer.valueOf(i0 + 1));
                     // Growth is original with new data
-                    growth = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
+                    growth = (CanaryBlock) world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos));
                     growth.setData((short) i0);
                     blockGrowHook = (BlockGrowHook) new BlockGrowHook(original, growth).call();
                     if (!blockGrowHook.isCanceled()) {
@@ -101,7 +110,8 @@ public class BlockStem extends BlockBush implements IGrowable {
 
                     if (world.p(blockpos).c().J == Material.a && (block == Blocks.ak || block == Blocks.d || block == Blocks.c)) {
                         // A Melon/Pumpkin has spawned
-                        growth = new CanaryBlock(this.a, (short) 0, i5, i1, i6, world.getCanaryWorld());
+                        BlockPosition bp = new BlockPosition(blockpos);
+                        growth = new CanaryBlock(this.M, (short) 0, bp.getBlockX(), bp.getBlockY(), bp.getBlockZ(), world.getCanaryWorld());
                         blockGrowHook = (BlockGrowHook) new BlockGrowHook(original, growth);
                         if (!blockGrowHook.isCanceled()) {
                             world.a(blockpos, this.M.P());

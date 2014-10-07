@@ -1,19 +1,34 @@
 package net.minecraft.block;
 
+import com.google.common.base.Predicate;
+import java.util.List;
+import java.util.Random;
 import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.blocks.CanaryBlock;
+import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.world.BlockPhysicsHook;
 import net.canarymod.hook.world.RedstoneChangeHook;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityComparator;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IStringSerializable;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
-import java.util.Random;
 
 public class BlockRedstoneComparator extends BlockRedstoneDiode implements ITileEntityProvider {
 
@@ -122,11 +137,9 @@ public class BlockRedstoneComparator extends BlockRedstoneDiode implements ITile
         return list.size() == 1 ? (EntityItemFrame) list.get(0) : null;
     }
 
-    ppublic
-
-    boolean a(World world, BlockPos blockpos, IBlockState iblockstate, EntityPlayer entityplayer, EnumFacing enumfacing, float f0, float f1, float f2) {
+    public boolean a(World world, BlockPos blockpos, IBlockState iblockstate, EntityPlayer entityplayer, EnumFacing enumfacing, float f0, float f1, float f2) {
         // CanaryMod: Block Physics
-        BlockPhysicsHook blockPhysics = (BlockPhysicsHook) new BlockPhysicsHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), false).call();
+        BlockPhysicsHook blockPhysics = (BlockPhysicsHook) new BlockPhysicsHook(world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos)), false).call();
         if (blockPhysics.isCanceled()) {
             return false;
         }
@@ -161,7 +174,7 @@ public class BlockRedstoneComparator extends BlockRedstoneDiode implements ITile
         }
     }
 
-    private void c(World world, int i0, int i1, int i2, Random random) {
+    private void k(World world, BlockPos blockpos, IBlockState iblockstate) {
         int i0 = this.j(world, blockpos, iblockstate);
         TileEntity tileentity = world.s(blockpos);
         int i1 = 0;
@@ -174,8 +187,11 @@ public class BlockRedstoneComparator extends BlockRedstoneDiode implements ITile
         }
 
         if (i1 != i0 || iblockstate.b(b) == Mode.COMPARE) {
+            boolean flag0 = this.e(world, blockpos, iblockstate);
+            boolean flag1 = this.l(iblockstate);
+
             // CanaryMod: RedstoneChange; Comparator change
-            RedstoneChangeHook hook = (RedstoneChangeHook) new RedstoneChangeHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), i5, i4).call();
+            RedstoneChangeHook hook = (RedstoneChangeHook) new RedstoneChangeHook(world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos)), i0, i1).call();
             if (hook.isCanceled()) {
                 return;
             }
@@ -207,9 +223,11 @@ public class BlockRedstoneComparator extends BlockRedstoneDiode implements ITile
 
     public void b(World world, BlockPos blockpos, IBlockState iblockstate) {
         // CanaryMod: Comparator break
-        int oldLvl = this.e((IBlockAccess) world, i0, i1, i2).a();
+        EnumFacing enumfacing = (EnumFacing) iblockstate.b(a);
+        int oldLvl = ((TileEntityComparator)world.s(blockpos)).b();
         if (oldLvl != 0) {
-            new RedstoneChangeHook(new CanaryBlock(BlockType.RedstoneComparator.getId(), (short) 2, i0, i1, i2, world.getCanaryWorld()), oldLvl, 0).call();
+            BlockPosition bp = new BlockPosition(blockpos);
+            new RedstoneChangeHook(new CanaryBlock(BlockType.RedstoneComparator.getId(), (short) 2, bp.getBlockX(), bp.getBlockY(), bp.getBlockZ(), world.getCanaryWorld()), oldLvl, 0).call();
         }
         //
         super.b(world, blockpos, iblockstate);
@@ -258,9 +276,8 @@ public class BlockRedstoneComparator extends BlockRedstoneDiode implements ITile
     public static enum Mode implements IStringSerializable {
 
         COMPARE("COMPARE", 0, "compare"), SUBTRACT("SUBTRACT", 1, "subtract");
-        private final String c;
-
         private static final Mode[] $VALUES = new Mode[]{COMPARE, SUBTRACT};
+        private final String c;
 
         private Mode(String p_i45731_1_, int p_i45731_2_, String p_i45731_3_) {
             this.c = p_i45731_3_;

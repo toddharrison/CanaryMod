@@ -1,16 +1,23 @@
 package net.minecraft.block;
 
 
+import java.util.Iterator;
+import java.util.Random;
 import net.canarymod.api.world.blocks.CanaryBlock;
+import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.world.BlockGrowHook;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyInteger;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-
-import java.util.Random;
 
 
 public class BlockReed extends Block {
@@ -38,8 +45,9 @@ public class BlockReed extends Block {
                 if (i0 < 3) {
                     int i1 = ((Integer) iblockstate.b(a)).intValue();
                     // CanaryMod: Grab the original stuff
-                    CanaryBlock original = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
-                    CanaryBlock growth = new CanaryBlock(this, (short) 0, i0, i1 + 1, i2, world.getCanaryWorld());
+                    BlockPosition bp = new BlockPosition(blockpos);
+                    CanaryBlock original = (CanaryBlock) world.getCanaryWorld().getBlockAt(bp);
+                    CanaryBlock growth = new CanaryBlock(this, (short) 0, bp.getBlockX(), bp.getBlockY() + 1, bp.getBlockZ(), world.getCanaryWorld());
                     BlockGrowHook blockGrowHook = new BlockGrowHook(original, growth);
                     //
 
@@ -54,7 +62,7 @@ public class BlockReed extends Block {
                     }
                     else {
                         // Call hook for just growing in place
-                        growth = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
+                        growth = (CanaryBlock) world.getCanaryWorld().getBlockAt(bp);
                         growth.setData((short) (i1 + 1));
                         blockGrowHook = (BlockGrowHook) new BlockGrowHook(original, growth).call();
                         if (!blockGrowHook.isCanceled()) {

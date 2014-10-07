@@ -1,12 +1,15 @@
 package net.minecraft.block;
 
+import java.util.Iterator;
+import java.util.Random;
 import net.canarymod.api.world.blocks.CanaryBlock;
+import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.world.BlockGrowHook;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenBigMushroom;
-
-import java.util.Random;
 
 
 public class BlockMushroom extends BlockBush implements IGrowable {
@@ -18,10 +21,10 @@ public class BlockMushroom extends BlockBush implements IGrowable {
         this.a(true);
     }
 
-    public void a(World world, int i0, int i1, int i2, Random random) {
+    public void b(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {
         if (random.nextInt(25) == 0) {
             // CanaryMod: Grab the original stuff
-            CanaryBlock original = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
+            CanaryBlock original = (CanaryBlock) world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos));
             //
             int i0 = 5;
             boolean flag0 = true;
@@ -50,7 +53,9 @@ public class BlockMushroom extends BlockBush implements IGrowable {
 
             if (world.d(blockpos2) && this.f(world, blockpos2, this.P())) {
                 // CanaryMod: BlockGrow
-                CanaryBlock growth = new CanaryBlock(this, (short) 0, i0, i1 + 1, i2, world.getCanaryWorld());
+                BlockPosition bp = new BlockPosition(blockpos);
+                bp.setY(bp.getBlockY() + 1);
+                CanaryBlock growth = new CanaryBlock(this, (short) 0, bp.getBlockX(), bp.getBlockY(), bp.getBlockZ(), world.getCanaryWorld());
                 BlockGrowHook blockGrowHook = (BlockGrowHook) new BlockGrowHook(original, growth).call();
                 if (!blockGrowHook.isCanceled()) {
                     world.a(blockpos2, this.P(), 2);

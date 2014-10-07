@@ -35,27 +35,6 @@ public class BlockFire extends Block {
     private final Map S = Maps.newIdentityHashMap();
     private final Map T = Maps.newIdentityHashMap();
 
-    public IBlockState a(IBlockState iblockstate, IBlockAccess iblockaccess, BlockPos blockpos) {
-        int i0 = blockpos.n();
-        int i1 = blockpos.o();
-        int i2 = blockpos.p();
-
-        if (!World.a(iblockaccess, blockpos.b()) && !Blocks.ab.e(iblockaccess, blockpos.b())) {
-            boolean flag0 = (i0 + i1 + i2 & 1) == 1;
-            boolean flag1 = (i0 / 2 + i1 / 2 + i2 / 2 & 1) == 1;
-            int i3 = 0;
-
-            if (this.e(iblockaccess, blockpos.a())) {
-                i3 = flag0 ? 1 : 2;
-            }
-
-            return iblockstate.a(N, Boolean.valueOf(this.e(iblockaccess, blockpos.c()))).a(O, Boolean.valueOf(this.e(iblockaccess, blockpos.f()))).a(P, Boolean.valueOf(this.e(iblockaccess, blockpos.d()))).a(Q, Boolean.valueOf(this.e(iblockaccess, blockpos.e()))).a(R, Integer.valueOf(i3)).a(b, Boolean.valueOf(flag1)).a(M, Boolean.valueOf(flag0));
-        }
-        else {
-            return this.P();
-        }
-    }
-
     protected BlockFire() {
         super(Material.o);
         this.j(this.L.b().a(a, Integer.valueOf(0)).a(b, Boolean.valueOf(false)).a(M, Boolean.valueOf(false)).a(N, Boolean.valueOf(false)).a(O, Boolean.valueOf(false)).a(P, Boolean.valueOf(false)).a(Q, Boolean.valueOf(false)).a(R, Integer.valueOf(0)));

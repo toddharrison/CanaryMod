@@ -6,6 +6,8 @@ import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.blocks.CanaryBlock;
 import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.world.RedstoneChangeHook;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
@@ -123,7 +125,7 @@ public class BlockRedstoneTorch extends BlockTorch {
         if (this.M) {
             if (flag0) {
                 // CanaryMod: RedstoneChange; Torch off
-                RedstoneChangeHook hook = (RedstoneChangeHook) new RedstoneChangeHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), 15, 0).call();
+                RedstoneChangeHook hook = (RedstoneChangeHook) new RedstoneChangeHook(world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos)), 15, 0).call();
                 if (hook.isCanceled()) {
                     return;
                 }
@@ -146,7 +148,7 @@ public class BlockRedstoneTorch extends BlockTorch {
         }
         else if (!flag0 && !this.a(world, blockpos, false)) {
             // CanaryMod: RedstoneChange; Torch on
-            RedstoneChangeHook hook = (RedstoneChangeHook) new RedstoneChangeHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), 15, 0).call();
+            RedstoneChangeHook hook = (RedstoneChangeHook) new RedstoneChangeHook(world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos)), 15, 0).call();
             if (hook.isCanceled()) {
                 return;
             }

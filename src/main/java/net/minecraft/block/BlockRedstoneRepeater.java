@@ -1,17 +1,24 @@
 package net.minecraft.block;
 
+import java.util.Random;
 import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.blocks.CanaryBlock;
+import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.world.BlockPhysicsHook;
 import net.canarymod.hook.world.RedstoneChangeHook;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.properties.PropertyInteger;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
-import java.util.Random;
 
 public class BlockRedstoneRepeater extends BlockRedstoneDiode {
 
@@ -28,9 +35,9 @@ public class BlockRedstoneRepeater extends BlockRedstoneDiode {
     }
 
 
-    public boolean a(World world, int i0, int i1, int i2, EntityPlayer entityplayer, int i3, float f0, float f1, float f2) {
+    public boolean a(World world, BlockPos blockpos, IBlockState iblockstate, EntityPlayer entityplayer, EnumFacing enumfacing, float f0, float f1, float f2) {
         // CanaryMod: Block Physics
-        BlockPhysicsHook blockPhysics = (BlockPhysicsHook) new BlockPhysicsHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), false).call();
+        BlockPhysicsHook blockPhysics = (BlockPhysicsHook) new BlockPhysicsHook(world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos)), false).call();
         if (blockPhysics.isCanceled()) {
             return false;
         }
@@ -80,7 +87,8 @@ public class BlockRedstoneRepeater extends BlockRedstoneDiode {
     public void b(World world, BlockPos blockpos, IBlockState iblockstate) {
         // CanaryMod: RedstoneChange
         if (this.M) {
-            new RedstoneChangeHook(new CanaryBlock(BlockType.RedstoneRepeaterOn.getId(), (short) i3, i0, i1, i2, world.getCanaryWorld()), 15, 0).call();
+            BlockPosition bp =new BlockPosition(blockpos);
+            new RedstoneChangeHook(new CanaryBlock(BlockType.RedstoneRepeaterOn.getId(), (short) iblockstate.c().c(iblockstate), bp.getBlockX(), bp.getBlockY(), bp.getBlockZ(), world.getCanaryWorld()), 15, 0).call();
         }
         // CanaryMod: end
         super.b(world, blockpos, iblockstate);
