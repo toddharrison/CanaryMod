@@ -1679,8 +1679,11 @@ public abstract class Entity implements ICommandSender {
             this.o.B.a("changeDimension");
             MinecraftServer minecraftserver = MinecraftServer.M();
             int i1 = this.am;
-            WorldServer worldserver = minecraftserver.a(i1);
-            WorldServer worldserver1 = minecraftserver.a(i0);
+
+            // CanaryMod: Multiworld fixes
+            WorldServer worldserver = minecraftserver.getWorld(getCanaryWorld().getName(), i1);
+            WorldServer worldserver1 = minecraftserver.getWorld(getCanaryWorld().getName(), i0);
+            //
 
             // CanaryMod: Dimension switch hook.
             Location goingTo = this.simulatePortalUse(i0, worldserver1);
@@ -1956,10 +1959,10 @@ public abstract class Entity implements ICommandSender {
     public CanaryEntity getCanaryEntity() {
         return entity;
     }
-    
-    // TODO : fix this shiz
+
     // CanaryMod: Simulates the use of a Portal by the Player to determine the location going to
-    protected final Location simulatePortalUse(int dimensionTo, WorldServer oworldserverTo) {
+    // Its like ServerConfigurationManager public void [obfuscated_name](Entity entity, int i0, WorldServer worldserver, WorldServer worldserver1) {
+    protected final Location simulatePortalUse(int dimensionTo, WorldServer worldserverTo) {
         double y = this.t;
         float rotX = this.y;
         float rotY = this.z;
@@ -1968,18 +1971,18 @@ public abstract class Entity implements ICommandSender {
         double adjust = 8.0D;
 
         if (dimensionTo == -1) {
-            x /= adjust;
-            z /= adjust;
+            x = MathHelper.a(x / adjust, worldserverTo.af().b() + 16.0D, worldserverTo.af().d() - 16.0D);
+            z = MathHelper.a(z / adjust, worldserverTo.af().c() + 16.0D, worldserverTo.af().e() - 16.0D);
         } else if (dimensionTo == 0) {
-            x *= adjust;
-            z *= adjust;
+            x = MathHelper.a(x * adjust, worldserverTo.af().b() + 16.0D, worldserverTo.af().d() - 16.0D);
+            z = MathHelper.a(z * adjust, worldserverTo.af().c() + 16.0D, worldserverTo.af().e() - 16.0D);
         } else {
             BlockPos blockpos;
 
             if (dimensionTo == 1) {
-                blockpos = oworldserverTo.M();
+                blockpos = worldserverTo.M();
             } else {
-                blockpos = oworldserverTo.M();
+                blockpos = worldserverTo.m();
             }
             x = (double) blockpos.n();
             y = (double) blockpos.o();
@@ -1991,7 +1994,7 @@ public abstract class Entity implements ICommandSender {
             x = (double) MathHelper.a((int) x, -29999872, 29999872);
             z = (double) MathHelper.a((int) z, -29999872, 29999872);
         }
-        return new Location(oworldserverTo.getCanaryWorld(), x, y, z, rotY, rotX);
+        return new Location(worldserverTo.getCanaryWorld(), x, y, z, rotY, rotX);
     }
 
     public CompoundTag getMetaData() {

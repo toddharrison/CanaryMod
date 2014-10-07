@@ -9,6 +9,9 @@ import net.canarymod.api.CanaryNetServerHandler;
 import net.canarymod.api.PlayerListEntry;
 import net.canarymod.api.entity.living.humanoid.CanaryPlayer;
 import net.canarymod.api.entity.living.humanoid.Player;
+import net.canarymod.api.inventory.CanaryBlockInventory;
+import net.canarymod.api.inventory.CanaryEntityInventory;
+import net.canarymod.api.inventory.Inventory;
 import net.canarymod.api.nbt.CompoundTag;
 import net.canarymod.api.packet.CanaryPacket;
 import net.canarymod.api.world.CanaryWorld;
@@ -838,11 +841,11 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
     }
 
     public void b(IChatComponent ichatcomponent) {
-        this.a.a((Packet) (new S02PacketChat(ichatcomponent)));
+        this.a.a((Packet)(new S02PacketChat(ichatcomponent)));
     }
 
     protected void s() {
-        this.a.a((Packet) (new S19PacketEntityStatus(this, (byte) 9)));
+        this.a.a((Packet)(new S19PacketEntityStatus(this, (byte)9)));
         super.s();
     }
 
@@ -859,7 +862,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
         this.bN = -1;
         this.bK = -1.0F;
         this.bL = -1;
-        this.bH.addAll(((EntityPlayerMP) entityplayer).bH);
+        this.bH.addAll(((EntityPlayerMP)entityplayer).bH);
     }
 
     protected void a(PotionEffect potioneffect) {
@@ -878,7 +881,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
     }
 
     public void a(double d0, double d1, double d2) {
-        this.a.a(d0, d1, d2, this.y, this.z);
+        this.a.a(d0, d1, d2, this.y, this.z, this.am, getCanaryWorld().getName(), TeleportHook.TeleportCause.MOVEMENT);
     }
 
     public void b(Entity entity) {
@@ -986,7 +989,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
 
     public void d(Entity entity) {
         if (entity instanceof EntityPlayer) {
-            this.a.a((Packet) (new S13PacketDestroyEntities(new int[] { entity.F()})));
+            this.a.a((Packet)(new S13PacketDestroyEntities(new int[]{ entity.F() })));
         } else {
             this.bH.add(Integer.valueOf(entity.F()));
         }
@@ -1093,7 +1096,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
         }
 
         // CanaryMod: Dimension switch hook.
-        Location goingTo = this.simulatePortalUse(srv.I, MinecraftServer.M().getWorld(this.getCanaryWorld().getName(), srv.I));
+        Location goingTo = this.simulatePortalUse(srv.getCanaryWorld().getType().getId(), MinecraftServer.M().getWorld(this.getCanaryWorld().getName(), srv.getCanaryWorld().getType().getId()));
         CancelableHook hook = (CancelableHook) new DimensionSwitchHook(this.getCanaryEntity(), this.getCanaryEntity().getLocation(), goingTo).call();
         if (hook.isCanceled()) {
             return;
@@ -1106,20 +1109,30 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
     }
 
     // CanaryMod: Special methods for remote inventory opening
-    public void openContainer(Container container, int containerId, int size) {
-        this.bV();
-        this.a.a(new S2DPacketOpenWindow(this.bT, containerId, container.getInventory().getInventoryName(), size, true));
-        this.bi = container;
-        this.bi.d = this.bT;
-        this.bi.a((ICrafting) this);
-    }
+    public void openContainer(Container container) {
+        this.cr();
 
-    public void openContainer(Container container, int containerId, int size, boolean flag) {
-        this.bV();
-        this.a.a(new S2DPacketOpenWindow(this.bT, containerId, container.getInventory().getInventoryName(), size, flag));
-        this.bi = container;
-        this.bi.d = this.bT;
-        this.bi.a((ICrafting) this);
+        Inventory inv = container.getInventory();
+        IInventory nativeInv = null;
+        if (inv instanceof CanaryEntityInventory) {
+            nativeInv = ((CanaryEntityInventory)inv).getHandle();
+        }
+        else if (inv instanceof CanaryBlockInventory) {
+            nativeInv = ((CanaryBlockInventory)inv).getInventoryHandle();
+        }
+
+        if (nativeInv != null) {
+            if (nativeInv instanceof IInteractionObject) {
+                this.a.a((Packet)(new S2DPacketOpenWindow(this.bT, ((IInteractionObject)nativeInv).k(), nativeInv.e_(), nativeInv.n_())));
+            }
+            else {
+                this.a.a((Packet)(new S2DPacketOpenWindow(this.bT, "minecraft:container", nativeInv.e_(), nativeInv.n_())));
+            }
+
+            this.bi = container;
+            this.bi.d = this.bT;
+            this.bi.a((ICrafting)this);
+        }
     }
 
     public void setMetaData(CompoundTag meta) {
