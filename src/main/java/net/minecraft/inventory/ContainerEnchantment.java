@@ -40,11 +40,10 @@ public class ContainerEnchantment extends Container {
     public int[] g; // CanaryMod: private => public
     public int[] h; // CanaryMod: private => public
     public World i; // CanaryMod: private => public
-    private World i;
     private BlockPos j;
     private Random k = new Random();
 
-    public ContainerEnchantment(InventoryPlayer inventoryplayer, World world, int i0, int i1, int i2) {
+    public ContainerEnchantment(InventoryPlayer inventoryplayer, World world, BlockPos blockpos) {
         this.i = world;
         this.j = blockpos;
         this.f = inventoryplayer.d.ci();
@@ -205,7 +204,7 @@ public class ContainerEnchantment extends Container {
         }
         else if (this.g[i0] > 0 && itemstack != null && (entityplayer.bz >= i1 && entityplayer.bz >= this.g[i0] || entityplayer.by.d)) {
             if (!this.i.D) {
-                List list = this.a(itemstack, i0, this.g[i0]);
+                List<EnchantmentData> list = this.a(itemstack, i0, this.g[i0]);
                 boolean flag0 = itemstack.b() == Items.aL;
 
                 if (list != null) {

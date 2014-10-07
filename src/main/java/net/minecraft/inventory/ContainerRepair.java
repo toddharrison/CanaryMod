@@ -1,8 +1,12 @@
 package net.minecraft.inventory;
 
+import java.util.Iterator;
+import java.util.Map;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.world.blocks.CanaryAnvil;
 import net.canarymod.hook.player.AnvilUseHook;
+import net.minecraft.block.BlockAnvil;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,9 +21,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.Iterator;
-import java.util.Map;
-
 public class ContainerRepair extends Container {
 
     private static final Logger f = LogManager.getLogger();
@@ -28,8 +29,8 @@ public class ContainerRepair extends Container {
     public IInventory g = new InventoryCraftResult(); // CanaryMod: private -> public
     public IInventory h = new InventoryBasic("Repair", true, 2) {
 
-        public void e() {
-            super.e();
+        public void o_() {
+            super.o_();
             ContainerRepair.this.a((IInventory) this);
         }
     };

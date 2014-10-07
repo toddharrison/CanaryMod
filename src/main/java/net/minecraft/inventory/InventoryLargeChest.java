@@ -2,14 +2,19 @@ package net.minecraft.inventory;
 
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.IChatComponent;
+import net.minecraft.world.ILockableContainer;
+import net.minecraft.world.LockCode;
 
 public class InventoryLargeChest implements IInventory {
 
     private String a;
-    public IInventory b; // CanaryMod: private -> public
-    public IInventory c; // CanaryMod: private -> public
-    private String a;
+    public ILockableContainer b; // CanaryMod: private -> public
+    public ILockableContainer c; // CanaryMod: private -> public
 
     public InventoryLargeChest(String s0, ILockableContainer ilockablecontainer, ILockableContainer ilockablecontainer1) {
         this.a = s0;
