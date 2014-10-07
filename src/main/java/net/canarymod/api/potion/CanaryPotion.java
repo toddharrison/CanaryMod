@@ -24,7 +24,7 @@ public class CanaryPotion implements Potion {
      */
     @Override
     public int getID() {
-        return potion.c();
+        return potion.d();
     }
 
     /**
@@ -48,7 +48,7 @@ public class CanaryPotion implements Potion {
      */
     @Override
     public boolean isBad() {
-        return potion.J;
+        return potion.K;
     }
 
     /**
@@ -56,7 +56,7 @@ public class CanaryPotion implements Potion {
      */
     @Override
     public double getEffectiveness() {
-        return potion.g();
+        return potion.h();
     }
 
     /**
@@ -64,7 +64,7 @@ public class CanaryPotion implements Potion {
      */
     @Override
     public boolean isUsable() {
-        return potion.i();
+        return potion.j();
     }
 
     /**
@@ -83,5 +83,4 @@ public class CanaryPotion implements Potion {
     public net.minecraft.potion.Potion getHandle() {
         return potion;
     }
-
 }

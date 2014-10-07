@@ -59,7 +59,7 @@ public class CanaryPotionEffect implements PotionEffect {
      */
     @Override
     public String getName() {
-        return effect.f();
+        return effect.g();
     }
 
     /**
@@ -67,7 +67,7 @@ public class CanaryPotionEffect implements PotionEffect {
      */
     @Override
     public void performEffect(LivingBase entity) {
-        net.minecraft.entity.EntityLivingBase oLiving = (net.minecraft.entity.EntityLivingBase) ((CanaryLivingBase) entity).getHandle();
+        net.minecraft.entity.EntityLivingBase oLiving = (net.minecraft.entity.EntityLivingBase)((CanaryLivingBase)entity).getHandle();
 
         effect.b(oLiving);
     }
@@ -80,5 +80,4 @@ public class CanaryPotionEffect implements PotionEffect {
     public net.minecraft.potion.PotionEffect getHandle() {
         return effect;
     }
-
 }
