@@ -7,10 +7,9 @@ import net.minecraft.block.properties.PropertyDirection;
  *
  * @author Jason Jones (darkdiplomat)
  */
-public class CanaryBlockDirectionProperty extends CanaryBlockProperty implements BlockDirectionProperty {
+public class CanaryBlockDirectionProperty extends CanaryBlockEnumProperty implements BlockDirectionProperty {
 
     protected CanaryBlockDirectionProperty(PropertyDirection property) {
         super(property);
     }
-
 }

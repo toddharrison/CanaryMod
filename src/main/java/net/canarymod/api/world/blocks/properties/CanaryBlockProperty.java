@@ -42,16 +42,16 @@ public class CanaryBlockProperty implements BlockProperty {
 
     public static CanaryBlockProperty wrapAs(IProperty iproperty) {
         if (iproperty instanceof PropertyBool) {
-            return new CanaryBlockBooleanProperty((PropertyBool) iproperty);
+            return new CanaryBlockBooleanProperty((PropertyBool)iproperty);
         }
-        else if (iproperty instanceof PropertyDirection) {
-            return new CanaryBlockDirectionProperty((PropertyDirection) iproperty);
+        else if (iproperty instanceof PropertyDirection) { // Direction should always be before enum
+            return new CanaryBlockDirectionProperty((PropertyDirection)iproperty);
         }
         else if (iproperty instanceof PropertyEnum) {
-            return new CanaryBlockEnumProperty((PropertyEnum) iproperty);
+            return new CanaryBlockEnumProperty((PropertyEnum)iproperty);
         }
         else if (iproperty instanceof PropertyInteger) {
-            return new CanaryBlockProperty((PropertyInteger) iproperty);
+            return new CanaryBlockProperty((PropertyInteger)iproperty);
         }
         return new CanaryBlockProperty(iproperty); // Unknown instance
     }

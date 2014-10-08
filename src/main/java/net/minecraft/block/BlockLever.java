@@ -1,5 +1,7 @@
 package net.minecraft.block;
 
+import net.canarymod.api.world.blocks.CanaryBlock;
+import net.canarymod.hook.world.RedstoneChangeHook;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
@@ -162,7 +164,15 @@ public class BlockLever extends Block {
             return true;
         }
         else {
+            // CanaryMod: RedstoneChange
+            int newLvl = !(Boolean)iblockstate.b(b) ? 0 : 15;
+            if (new RedstoneChangeHook(new CanaryBlock(iblockstate, blockpos, world), ~newLvl & 15, newLvl).call().isCanceled()) {
+                return true;
+            }
+            // CanaryMod: end
+
             iblockstate = iblockstate.a(b);
+
             world.a(blockpos, iblockstate, 3);
             world.a((double)blockpos.n() + 0.5D, (double)blockpos.o() + 0.5D, (double)blockpos.p() + 0.5D, "random.click", 0.3F, ((Boolean)iblockstate.b(b)).booleanValue() ? 0.6F : 0.5F);
             world.c(blockpos, (Block)this);
@@ -175,6 +185,9 @@ public class BlockLever extends Block {
 
     public void b(World world, BlockPos blockpos, IBlockState iblockstate) {
         if (((Boolean)iblockstate.b(b)).booleanValue()) {
+            // CanaryMod: RedstoneChange (pretty sure allowing canceling could cause issues)
+            new RedstoneChangeHook(new CanaryBlock(iblockstate, blockpos, world), 15, 0).call();
+            // CanaryMod: end
             world.c(blockpos, (Block)this);
             EnumFacing enumfacing = ((BlockLever.EnumOrientation)iblockstate.b(a)).c();
 
