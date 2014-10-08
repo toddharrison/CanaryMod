@@ -1,22 +1,7 @@
 package net.canarymod.api.inventory.slot;
 
 import net.canarymod.api.inventory.Inventory;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ContainerBeacon;
-import net.minecraft.inventory.ContainerBrewingStand;
-import net.minecraft.inventory.ContainerChest;
-import net.minecraft.inventory.ContainerDispenser;
-import net.minecraft.inventory.ContainerEnchantment;
-import net.minecraft.inventory.ContainerFurnace;
-import net.minecraft.inventory.ContainerHorseInventory;
-import net.minecraft.inventory.ContainerMerchant;
-import net.minecraft.inventory.ContainerPlayer;
-import net.minecraft.inventory.ContainerRepair;
-import net.minecraft.inventory.ContainerWorkbench;
-import net.minecraft.inventory.Slot;
-import net.minecraft.inventory.SlotCrafting;
-import net.minecraft.inventory.SlotFurnace;
-import net.minecraft.inventory.SlotMerchantResult;
+import net.minecraft.inventory.*;
 
 /**
  * SlotHelper for SlotClickHook
@@ -71,7 +56,7 @@ public final class SlotHelper {
         else if (container instanceof ContainerEnchantment) {
             return SlotType.ENCHANTMENT;
         }
-        else if (slot instanceof SlotFurnace) {
+        else if (slot instanceof SlotFurnaceFuel || slot instanceof SlotFurnaceOutput) {
             return SlotType.FURNACE;
         }
         else if (slot instanceof SlotMerchantResult) {
