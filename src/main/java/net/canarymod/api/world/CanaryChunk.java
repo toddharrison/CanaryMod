@@ -6,7 +6,9 @@ import net.canarymod.api.world.position.Position;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.ClassInheratanceMultiMap;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -134,16 +136,15 @@ public class CanaryChunk implements Chunk {
     @SuppressWarnings("unchecked")
     @Deprecated
     public List<Entity>[] getEntityLists() {
-        // FIXME: look in chunk.c() (classinharatancelist thing)
-//        List<Entity>[] toRet = new List[handle.j.length];
-//        for (int index = 0; index < handle.j.length; index++) {
-//            toRet[index] = new ArrayList<Entity>();
-//            for (Object e : handle.j[index]) {
-//                toRet[index].add(((net.minecraft.entity.Entity) e).getCanaryEntity());
-//            }
-//        }
-//        return toRet;
-        return null;
+        ClassInheratanceMultiMap[] entities = handle.s();
+        List<Entity>[] toRet = new List[entities.length];
+        for (int index = 0; index < entities.length; index++) {
+            toRet[index] = new ArrayList<Entity>();
+            for (Object e : entities[index]) {
+                toRet[index].add(((net.minecraft.entity.Entity) e).getCanaryEntity());
+            }
+        }
+        return toRet;
     }
 
     @Override
