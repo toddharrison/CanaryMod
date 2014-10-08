@@ -1,8 +1,10 @@
 package net.canarymod.api.world;
 
 import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.IProgressUpdate;
-import net.minecraft.world.ChunkPosition;
+import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
 
 import java.util.List;
@@ -29,7 +31,7 @@ public class CanaryChunkProviderCustom implements IChunkProvider {
     public boolean a(int i0, int i1) {
         return handle.a(i0, i1);
     }
-
+//
     //provideChunk
     @Override
     public net.minecraft.world.chunk.Chunk d(int i0, int i1) {
@@ -39,14 +41,22 @@ public class CanaryChunkProviderCustom implements IChunkProvider {
 
     //loadChunk
     @Override
-    public net.minecraft.world.chunk.Chunk c(int i0, int i1) {
-        return handle.c(i0, i1);
+    public Chunk a(BlockPos blockPos) {
+        return handle.a(blockPos);
+    }
+
+    // TODO whatthe fark?
+    @Override
+    public void a(IChunkProvider iChunkProvider, int i, int i2) {
+
     }
 
     //populate (distribute ores, flowers and detail structures etc)
     @Override
-    public void a(IChunkProvider ichunkprovider, int i0, int i1) {
-        provider.populate(i0, i1);
+    public boolean a(IChunkProvider iChunkProvider, Chunk chunk, int i, int i2) {
+        // TODO: Change chunk provider interface in canary to accept the chunk that is populated
+        // provider.populate(i0, i1);
+        return handle.a(iChunkProvider, chunk, i, i2);
     }
 
     //saveChunks
@@ -77,14 +87,13 @@ public class CanaryChunkProviderCustom implements IChunkProvider {
 
     //getPossibleCreaturs (list of mobs that can spawn here) TODO: Should be useful to have access to!
     @Override
-    public List a(EnumCreatureType enumcreaturetype, int i0, int i1, int i2) {
-        return handle.a(enumcreaturetype, i0, i1, i2);
+    public List a(EnumCreatureType enumCreatureType, BlockPos blockPos) {
+        return handle.a(enumCreatureType, blockPos);
     }
 
-    //Find closes structure
     @Override
-    public ChunkPosition a(net.minecraft.world.World world, String s0, int i0, int i1, int i2) {
-        return handle.a(world, s0, i0, i1, i2);
+    public BlockPos a(World world, String s, BlockPos blockPos) {
+        return handle.a(world, s, blockPos);
     }
 
     //getLoadedChunkCount
@@ -95,13 +104,12 @@ public class CanaryChunkProviderCustom implements IChunkProvider {
 
     //recreateStructures
     @Override
-    public void e(int i0, int i1) {
-        provider.createStructures(i0, i1);
+    public void a(Chunk chunk, int i, int i2) {
+        // provider.createStructures(i0, i1);
     }
 
     @Override
     public void c() {
         handle.c();
     }
-
 }
