@@ -1,17 +1,22 @@
 package net.canarymod.api.world.blocks;
 
+import com.google.common.collect.ImmutableMap;
+import net.canarymod.NotYetImplementedException;
 import net.canarymod.api.entity.living.humanoid.CanaryPlayer;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.packet.BlockChangePacket;
 import net.canarymod.api.packet.CanaryBlockChangePacket;
 import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.api.world.World;
+import net.canarymod.api.world.blocks.properties.BlockProperty;
 import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.api.world.position.Location;
 import net.canarymod.api.world.position.Position;
-
-import java.util.Random;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+
+import java.util.Collection;
+import java.util.Random;
 
 public class CanaryBlock implements Block {
     private final static Random rndm = new Random(); // Passed to the idDropped method
@@ -251,7 +256,32 @@ public class CanaryBlock implements Block {
 
     @Override
     public boolean rightClick(Player player) {
-        return net.minecraft.block.Block.b(getType().getMachineName()).a(((CanaryWorld)getWorld()).getHandle(), new BlockPos(getX(), getY(), getZ()), getBlock().P(), player != null ? ((CanaryPlayer)player).getHandle() : null, /*ENUM FACING GOES HERE */, 0, 0, 0); // last four parameters aren't even used by lever or button
+        EnumFacing enumfacing = EnumFacing.UP;
+        if (player != null) {
+            double degrees = (player.getRotation() - 180) % 360;
+
+            if (degrees < 0) {
+                degrees += 360.0;
+            }
+
+            if (0 <= degrees && degrees < 33.75) {
+                enumfacing = EnumFacing.NORTH;
+            }
+            else if (33.75 <= degrees && degrees < 123.75) {
+                enumfacing = EnumFacing.EAST;
+            }
+            else if (123.75 <= degrees && degrees < 213.75) {
+                enumfacing = EnumFacing.SOUTH;
+            }
+            else if (213.75 <= degrees && degrees < 303.75) {
+                enumfacing = EnumFacing.WEST;
+            }
+            else if (303.75 <= degrees && degrees < 360.0) {
+                enumfacing = EnumFacing.NORTH;
+            }
+        }
+
+        return net.minecraft.block.Block.b(getType().getMachineName()).a(((CanaryWorld) getWorld()).getHandle(), new BlockPos(getX(), getY(), getZ()), getBlock().P(), player != null ? ((CanaryPlayer) player).getHandle() : null, enumfacing, 0, 0, 0); // last four parameters aren't even used by lever or button
     }
 
     public void sendUpdateToPlayers(Player... players) {
@@ -263,6 +293,26 @@ public class CanaryBlock implements Block {
     @Override
     public BlockChangePacket getBlockPacket() {
         return new CanaryBlockChangePacket(this);
+    }
+
+    @Override
+    public Collection<BlockProperty> getPropertyKeys() {
+        throw new NotYetImplementedException("BlockProperties are not yet implemented");
+    }
+
+    @Override
+    public ImmutableMap<BlockProperty, Comparable> getProperties() {
+        throw new NotYetImplementedException("BlockProperties are not yet implemented");
+    }
+
+    @Override
+    public Comparable getValue(BlockProperty property) {
+        throw new NotYetImplementedException("BlockProperties are not yet implemented");
+    }
+
+    @Override
+    public void setPropertyValue(BlockProperty property, Comparable comparable) {
+        throw new NotYetImplementedException("BlockProperties are not yet implemented");
     }
 
     @Override
