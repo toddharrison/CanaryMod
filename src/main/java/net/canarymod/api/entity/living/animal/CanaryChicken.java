@@ -37,7 +37,7 @@ public class CanaryChicken extends CanaryAgeableAnimal implements Chicken {
     }
 
     public int getTimeUntilNextEgg() {
-        return getHandle().bu;
+        return getHandle().bq;
     }
 
     /**
@@ -45,7 +45,7 @@ public class CanaryChicken extends CanaryAgeableAnimal implements Chicken {
      */
     @Override
     public void setTimeUntilNextEgg(int timeTicks) {
-        getHandle().bu = timeTicks;
+        getHandle().bq = timeTicks;
     }
 
     /**

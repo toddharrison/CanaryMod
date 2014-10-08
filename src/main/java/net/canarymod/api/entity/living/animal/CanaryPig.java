@@ -40,7 +40,7 @@ public class CanaryPig extends CanaryAnimalVehicle implements Pig {
      */
     @Override
     public boolean isSaddled() {
-        return getHandle().bZ();
+        return getHandle().cj();
     }
 
     /**
@@ -48,7 +48,7 @@ public class CanaryPig extends CanaryAnimalVehicle implements Pig {
      */
     @Override
     public void setSaddled(boolean saddled) {
-        getHandle().i(saddled);
+        getHandle().l(saddled);
     }
 
     /**
@@ -56,7 +56,7 @@ public class CanaryPig extends CanaryAnimalVehicle implements Pig {
      */
     @Override
     public int getGrowingAge() {
-        return getHandle().d();
+        return getHandle().l();
     }
 
     /**
@@ -64,7 +64,7 @@ public class CanaryPig extends CanaryAnimalVehicle implements Pig {
      */
     @Override
     public void setGrowingAge(int age) {
-        getHandle().c(age);
+        getHandle().b(age);
     }
 
     /**

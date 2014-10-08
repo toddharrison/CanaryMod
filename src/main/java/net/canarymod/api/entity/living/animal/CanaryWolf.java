@@ -5,6 +5,7 @@ import net.canarymod.api.entity.EntityType;
 import net.minecraft.entity.passive.EntityWolf;
 
 import static net.canarymod.api.entity.EntityType.WOLF;
+import net.minecraft.item.EnumDyeColor;
 
 /**
  * Wolf wrapper implementation
@@ -40,7 +41,7 @@ public class CanaryWolf extends CanaryTameable implements Wolf {
      */
     @Override
     public void setCollarColor(DyeColor color) {
-        getHandle().s(color.getColorCode());
+        getHandle().a(EnumDyeColor.b(color.getDyeColorCode()));
     }
 
     /**
@@ -48,7 +49,7 @@ public class CanaryWolf extends CanaryTameable implements Wolf {
      */
     @Override
     public DyeColor getCollarColor() {
-        return DyeColor.values()[getHandle().cj()];
+        return DyeColor.values()[getHandle().cu().a()];
     }
 
     /**
@@ -56,7 +57,7 @@ public class CanaryWolf extends CanaryTameable implements Wolf {
      */
     @Override
     public boolean isAngry() {
-        return getHandle().ci();
+        return getHandle().ct();
     }
 
     /**
@@ -64,7 +65,7 @@ public class CanaryWolf extends CanaryTameable implements Wolf {
      */
     @Override
     public void setAngry(boolean angry) {
-        getHandle().l(angry);
+        getHandle().o(angry);
     }
 
     /**

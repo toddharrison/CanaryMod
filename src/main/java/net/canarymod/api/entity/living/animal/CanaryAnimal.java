@@ -39,7 +39,7 @@ public abstract class CanaryAnimal extends CanaryEntityLiving implements EntityA
         if (this.getEntityType() == EntityType.BAT || this.getEntityType() == EntityType.SQUID || item == null) {
             return false;
         }
-        return getAnimalHandle().c(((CanaryItem) item).getHandle());
+        return getAnimalHandle().d(((CanaryItem) item).getHandle());
     }
 
     private net.minecraft.entity.passive.EntityAnimal getAnimalHandle() {

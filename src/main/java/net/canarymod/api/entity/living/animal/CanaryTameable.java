@@ -24,7 +24,7 @@ public abstract class CanaryTameable extends CanaryAgeableAnimal implements Tame
      */
     @Override
     public LivingBase getOwner() {
-        return (LivingBase) getHandle().cb().getCanaryEntity();
+        return (LivingBase) getHandle().cm().getCanaryEntity();
     }
 
     /**
@@ -56,7 +56,7 @@ public abstract class CanaryTameable extends CanaryAgeableAnimal implements Tame
      */
     @Override
     public boolean isTamed() {
-        return getHandle().bZ();
+        return getHandle().cj();
     }
 
     /**
@@ -64,7 +64,7 @@ public abstract class CanaryTameable extends CanaryAgeableAnimal implements Tame
      */
     @Override
     public void setTamed(boolean tamed) {
-        getHandle().j(tamed);
+        getHandle().m(tamed);
     }
 
     /**
@@ -72,7 +72,7 @@ public abstract class CanaryTameable extends CanaryAgeableAnimal implements Tame
      */
     @Override
     public boolean isSitting() {
-        return getHandle().bY();
+        return getHandle().cl();
     }
 
     /**
@@ -80,7 +80,7 @@ public abstract class CanaryTameable extends CanaryAgeableAnimal implements Tame
      */
     @Override
     public void setSitting(boolean sitting) {
-        getHandle().k(sitting);
+        getHandle().n(sitting);
     }
 
     /**

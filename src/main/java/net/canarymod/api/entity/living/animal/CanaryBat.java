@@ -41,7 +41,7 @@ public class CanaryBat extends CanaryAnimal implements Bat, AmbientCreature {
      */
     @Override
     public boolean isHanging() {
-        return getHandle().bN();
+        return getHandle().cb();
     }
 
     /**
