@@ -9,22 +9,29 @@ import net.canarymod.api.packet.CanaryBlockChangePacket;
 import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.api.world.World;
 import net.canarymod.api.world.blocks.properties.BlockProperty;
+import net.canarymod.api.world.blocks.properties.CanaryBlockProperty;
 import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.api.world.position.Location;
 import net.canarymod.api.world.position.Position;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Random;
 
 public class CanaryBlock implements Block {
     private final static Random rndm = new Random(); // Passed to the idDropped method
-    protected short data;
-    protected BlockType type;
+    protected BlockType type; // Going away
+    protected int x, y, z; // Going away
+
+    protected IBlockState state;
+    protected BlockPosition position;
     protected World world;
-    protected int x, y, z;
     protected BlockFace faceClicked;
+    protected short data;
     protected byte status = 0;
 
     private static String machineNameOfBlock(net.minecraft.block.Block nmsBlock) {
@@ -64,6 +71,12 @@ public class CanaryBlock implements Block {
 
     public CanaryBlock(BlockType type, int data, BlockPosition blockPosition, World world) {
         this(type, data, blockPosition.getBlockX(), blockPosition.getBlockY(), blockPosition.getBlockZ(), world);
+    }
+
+    public CanaryBlock(IBlockState state, BlockPosition position, World world) {
+        this.state = state;
+        this.position = position;
+        this.world = world;
     }
 
     @Override
@@ -297,7 +310,14 @@ public class CanaryBlock implements Block {
 
     @Override
     public Collection<BlockProperty> getPropertyKeys() {
-        throw new NotYetImplementedException("BlockProperties are not yet implemented");
+        if (state == null) {
+            throw new NotYetImplementedException("CanaryBlock was formed missing the IBlockState, this is a bug and should be reported");
+        }
+        Collection<BlockProperty> blockProperties = Collections.emptyList();
+        for (Object nativeProperty : state.a()) {
+            blockProperties.add(CanaryBlockProperty.wrapAs((IProperty) nativeProperty));
+        }
+        return blockProperties;
     }
 
     @Override
@@ -307,7 +327,10 @@ public class CanaryBlock implements Block {
 
     @Override
     public Comparable getValue(BlockProperty property) {
-        throw new NotYetImplementedException("BlockProperties are not yet implemented");
+        if (state == null) {
+            throw new NotYetImplementedException("CanaryBlock was formed missing the IBlockState, this is a bug and should be reported");
+        }
+        return state.b(((CanaryBlockProperty) property).getNative());
     }
 
     @Override
