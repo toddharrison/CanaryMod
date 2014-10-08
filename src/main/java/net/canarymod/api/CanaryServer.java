@@ -27,7 +27,6 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.*;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.play.server.S38PacketPlayerListItem;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.gui.MinecraftServerGui;
 import net.minecraft.server.management.ServerConfigurationManager;
@@ -145,7 +144,7 @@ public class CanaryServer implements Server {
      */
     @Override
     public boolean consoleCommand(String command) {
-        ConsoleCommandHook hook = (ConsoleCommandHook) new ConsoleCommandHook(this, command).call();
+        ConsoleCommandHook hook = (ConsoleCommandHook)new ConsoleCommandHook(this, command).call();
         if (hook.isCanceled()) {
             return true;
         }
@@ -155,7 +154,7 @@ public class CanaryServer implements Server {
             cmdName = cmdName.substring(1);
         }
         if (!Canary.commands().parseCommand(this, cmdName, args)) {
-            return server.J().a(server, command) > 0; // Vanilla Commands passed
+            return server.O().a(server, command) > 0; // Vanilla Commands passed
         }
         return true;
     }
@@ -165,7 +164,7 @@ public class CanaryServer implements Server {
      */
     @Override
     public boolean consoleCommand(String command, Player player) {
-        ConsoleCommandHook hook = (ConsoleCommandHook) new ConsoleCommandHook(player, command).call();
+        ConsoleCommandHook hook = (ConsoleCommandHook)new ConsoleCommandHook(player, command).call();
         if (hook.isCanceled()) {
             return true;
         }
@@ -176,7 +175,7 @@ public class CanaryServer implements Server {
         }
         if (!Canary.commands().parseCommand(player, cmdName, args)) {
             if (Canary.ops().isOpped(player.getName()) || player.hasPermission("canary.vanilla.".concat(cmdName))) {
-                return server.J().a(((CanaryPlayer) player).getHandle(), command) > 0; // Vanilla Commands passed
+                return server.O().a(((CanaryPlayer)player).getHandle(), command) > 0; // Vanilla Commands passed
             }
             return false;
         }
@@ -221,7 +220,7 @@ public class CanaryServer implements Server {
             default:
                 sender = this.server;
         }
-        server.J().a(sender, command);
+        server.O().a(sender, command);
     }
 
     /**
@@ -280,7 +279,9 @@ public class CanaryServer implements Server {
     @Override
     public OfflinePlayer getOfflinePlayer(String player) {
         UUID uuid = ToolBox.uuidFromUsername(player);
-        if (uuid == null) return null;
+        if (uuid == null) {
+            return null;
+        }
         return getOfflinePlayer(uuid);
     }
 
@@ -293,7 +294,7 @@ public class CanaryServer implements Server {
         CanaryCompoundTag comp;
         if (nbttagcompound != null) {
             comp = new CanaryCompoundTag(nbttagcompound);
-            GameProfile profile = server.ax().a(uuid);
+            GameProfile profile = server.aD().a(uuid);
             if (profile != null) {
                 return new CanaryOfflinePlayer(profile.getName(), uuid, comp);
             }
@@ -498,14 +499,14 @@ public class CanaryServer implements Server {
     @Override
     public Recipe addRecipe(CraftingRecipe recipe) {
         if (recipe.hasShape()) {
-            return CraftingManager.a().a(((CanaryItem) recipe.getResult()).getHandle(), ShapedRecipeHelper.createRecipeShape(recipe)).getCanaryRecipe();
+            return CraftingManager.a().a(((CanaryItem)recipe.getResult()).getHandle(), ShapedRecipeHelper.createRecipeShape(recipe)).getCanaryRecipe();
         }
         else {
-            ItemStack result = ((CanaryItem) recipe.getResult()).getHandle();
+            ItemStack result = ((CanaryItem)recipe.getResult()).getHandle();
             Object[] rec = new Object[recipe.getItems().length];
 
             for (int index = 0; index < recipe.getItems().length; index++) {
-                rec[index] = ((CanaryItem) recipe.getItems()[index]).getHandle();
+                rec[index] = ((CanaryItem)recipe.getItems()[index]).getHandle();
             }
             return CraftingManager.a().addShapeless(result, rec).getCanaryRecipe();
         }
@@ -521,10 +522,10 @@ public class CanaryServer implements Server {
         List<Recipe> rtn_recipes = new ArrayList<Recipe>();
         for (IRecipe recipe : server_recipes) {
             if (recipe instanceof ShapedRecipes) {
-                rtn_recipes.add(((ShapedRecipes) recipe).getCanaryRecipe());
+                rtn_recipes.add(((ShapedRecipes)recipe).getCanaryRecipe());
             }
             else if (recipe instanceof ShapelessRecipes) {
-                rtn_recipes.add(((ShapelessRecipes) recipe).getCanaryRecipe());
+                rtn_recipes.add(((ShapelessRecipes)recipe).getCanaryRecipe());
             }
             // if it's neither, something went wrong or its something I haven't included yet
         }
@@ -536,7 +537,7 @@ public class CanaryServer implements Server {
      */
     @Override
     public boolean removeRecipe(Recipe recipe) {
-        return CraftingManager.a().b().remove(((CanaryRecipe) recipe).getHandle());
+        return CraftingManager.a().b().remove(((CanaryRecipe)recipe).getHandle());
     }
 
     /**
@@ -544,7 +545,7 @@ public class CanaryServer implements Server {
      */
     @Override
     public void addSmeltingRecipe(SmeltRecipe recipe) {
-        FurnaceRecipes.a().a(net.minecraft.item.Item.d(recipe.getItemIDFrom()), ((CanaryItem) recipe.getResult()).getHandle(), recipe.getXP());
+        FurnaceRecipes.a().a(net.minecraft.item.Item.b(recipe.getItemIDFrom()), ((CanaryItem)recipe.getResult()).getHandle(), recipe.getXP());
     }
 
     /**
@@ -605,7 +606,7 @@ public class CanaryServer implements Server {
      */
     @Override
     public String getServerVersion() {
-        return server.A();
+        return server.F();
     }
 
     /**
@@ -663,7 +664,8 @@ public class CanaryServer implements Server {
     @Override
     public void sendPlayerListEntry(PlayerListEntry entry) {
         if (Configuration.getServerConfig().isPlayerListEnabled()) {
-            server.ah().a(new S38PacketPlayerListItem(entry.getName(), entry.isShown(), entry.getPing()));
+            // FIXME
+            //server.ah().a(new S38PacketPlayerListItem(entry.getName(), entry.isShown(), entry.getPing()));
         }
     }
 
@@ -676,11 +678,11 @@ public class CanaryServer implements Server {
     }
 
     public GameProfile gameprofileFromCache(UUID uuid) {
-        return server.ax().a(uuid);
+        return server.aD().a(uuid);
     }
 
     public GameProfile gameprofileFromCache(String username) {
-        return server.ax().a(username);
+        return server.aD().a(username);
     }
 
     /**
@@ -728,7 +730,7 @@ public class CanaryServer implements Server {
         public final void run() {
             long timeSpan = System.currentTimeMillis() - tpsSpan;
             int ticks = getCurrentTick() - startTick;
-            tps = (float) ticks / ((float) timeSpan / 1000.0F);
+            tps = (float)ticks / ((float)timeSpan / 1000.0F);
         }
     }
 }

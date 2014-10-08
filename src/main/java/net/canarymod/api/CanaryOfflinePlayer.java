@@ -71,7 +71,7 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
             }
         }
 
-        this.statisticsFile = new StatisticsFile(((CanaryServer) Canary.getServer()).getHandle(), file2);
+        this.statisticsFile = new StatisticsFile(((CanaryServer)Canary.getServer()).getHandle(), file2);
         this.statisticsFile.a();
     }
 
@@ -153,9 +153,9 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
         }
         ListTag<? extends CanaryBaseTag> poslist = data.getListTag("Pos");
         Position p = new Position();
-        p.setX(((CanaryDoubleTag) poslist.get(0)).getValue());
-        p.setY(((CanaryDoubleTag) poslist.get(1)).getValue());
-        p.setZ(((CanaryDoubleTag) poslist.get(2)).getValue());
+        p.setX(((CanaryDoubleTag)poslist.get(0)).getValue());
+        p.setY(((CanaryDoubleTag)poslist.get(1)).getValue());
+        p.setZ(((CanaryDoubleTag)poslist.get(2)).getValue());
         return p;
     }
 
@@ -314,10 +314,10 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
             return;
         }
         if (getNBT() != null) {
-            ISaveHandler handler = ((CanaryWorld) getWorld()).getHandle().M();
+            ISaveHandler handler = ((CanaryWorld)getWorld()).getHandle().O();
             if (handler instanceof SaveHandler) {
-                SaveHandler shandler = (SaveHandler) handler;
-                shandler.writePlayerNbt(uuid, (CanaryCompoundTag) getNBT());
+                SaveHandler shandler = (SaveHandler)handler;
+                shandler.writePlayerNbt(uuid, (CanaryCompoundTag)getNBT());
             }
             else {
                 log.error(getName() + "'s OfflinePlayer could not be saved! Unsupported SaveHandler!");
@@ -634,7 +634,7 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
         if (getNBT() != null) {
             float newHealth = Math.max(0, health);
             getNBT().put("HealF", newHealth);
-            getNBT().put("Health", (short) ((int) Math.ceil((double) newHealth)));
+            getNBT().put("Health", (short)((int)Math.ceil((double)newHealth)));
         }
     }
 
@@ -646,7 +646,7 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
         if (getNBT() != null) {
             float newHealth = Math.max(0, getHealth() + health);
             getNBT().put("HealF", newHealth);
-            getNBT().put("Health", (short) ((int) Math.ceil((double) newHealth)));
+            getNBT().put("Health", (short)((int)Math.ceil((double)newHealth)));
         }
     }
 
@@ -655,7 +655,7 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
      */
     @Override
     public void setStat(Stat stat, int value) {
-        statisticsFile.a(null, ((CanaryStat) stat).getHandle(), value);
+        statisticsFile.a(null, ((CanaryStat)stat).getHandle(), value);
     }
 
     /**
@@ -663,7 +663,9 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
      */
     @Override
     public void increaseStat(Stat stat, int value) {
-        if (value < 0) return;
+        if (value < 0) {
+            return;
+        }
         setStat(stat, getStat(stat) + value);
     }
 
@@ -672,7 +674,9 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
      */
     @Override
     public void decreaseStat(Stat stat, int value) {
-        if (value < 0) return;
+        if (value < 0) {
+            return;
+        }
         setStat(stat, getStat(stat) - value);
     }
 
@@ -681,7 +685,7 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
      */
     @Override
     public int getStat(Stat stat) {
-        return statisticsFile.a(((CanaryStat) stat).getHandle());
+        return statisticsFile.a(((CanaryStat)stat).getHandle());
     }
 
     /**
@@ -693,8 +697,8 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
         if (achievement.getParent() != null && !hasAchievement(achievement.getParent())) {
             awardAchievement(achievement.getParent());
         }
-        statisticsFile.b(null, ((CanaryAchievement) achievement).getHandle(), 1);
-        statisticsFile.b((EntityPlayerMP) null);
+        statisticsFile.b(null, ((CanaryAchievement)achievement).getHandle(), 1);
+        statisticsFile.b((EntityPlayerMP)null);
     }
 
     /**
@@ -709,7 +713,7 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
                 removeAchievement(child);
             }
         }
-        statisticsFile.a(null, ((CanaryAchievement) achievement).getHandle(), 0);
+        statisticsFile.a(null, ((CanaryAchievement)achievement).getHandle(), 0);
     }
 
     /**
@@ -717,7 +721,6 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
      */
     @Override
     public boolean hasAchievement(Achievement achievement) {
-        return statisticsFile.a(((CanaryAchievement) achievement).getHandle());
+        return statisticsFile.a(((CanaryAchievement)achievement).getHandle());
     }
-
 }

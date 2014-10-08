@@ -24,12 +24,12 @@ public class CanaryDamageSource implements DamageSource {
 
     @Override
     public String getNativeName() {
-        return handle.o;
+        return handle.p;
     }
 
     @Override
     public String getDeathMessage(Player player) {
-        return handle.b(((CanaryPlayer) player).getHandle()).toString();
+        return handle.b(((CanaryPlayer)player).getHandle()).toString();
     }
 
     @Override
@@ -86,54 +86,40 @@ public class CanaryDamageSource implements DamageSource {
      */
     public static DamageSource getDamageSourceFromType(DamageType type) {
         switch (type) {
-            case ANVIL:
-                return new CanaryDamageSource(net.minecraft.util.DamageSource.m);
-
-            case CACTUS:
-                return new CanaryDamageSource(net.minecraft.util.DamageSource.g);
-
-            case EXPLOSION:
-                return new CanaryDamageSource(net.minecraft.util.DamageSource.a((Explosion) null));
-
-            case FALL:
-                return new CanaryDamageSource(net.minecraft.util.DamageSource.h);
-
-            case FALLING_BLOCK:
-                return new CanaryDamageSource(net.minecraft.util.DamageSource.n);
-
             case FIRE:
                 return new CanaryDamageSource(net.minecraft.util.DamageSource.a);
-
-            case FIRE_TICK:
+            case LIGHTNINGBOLT:
                 return new CanaryDamageSource(net.minecraft.util.DamageSource.b);
-
-            case GENERIC:
-                return new CanaryDamageSource(net.minecraft.util.DamageSource.j);
-
-            case LAVA:
+            case FIRE_TICK:
                 return new CanaryDamageSource(net.minecraft.util.DamageSource.c);
-
-            case POTION:
-                return new CanaryDamageSource(net.minecraft.util.DamageSource.k);
-
-            case STARVATION:
-                return new CanaryDamageSource(net.minecraft.util.DamageSource.f);
-
-            case SUFFOCATION:
+            case LAVA:
                 return new CanaryDamageSource(net.minecraft.util.DamageSource.d);
-
-            case VOID:
-                return new CanaryDamageSource(net.minecraft.util.DamageSource.i);
-
-            case WATER:
+            case SUFFOCATION:
                 return new CanaryDamageSource(net.minecraft.util.DamageSource.e);
-
-            case WITHER:
+            case WATER:
+                return new CanaryDamageSource(net.minecraft.util.DamageSource.f);
+            case STARVATION:
+                return new CanaryDamageSource(net.minecraft.util.DamageSource.g);
+            case CACTUS:
+                return new CanaryDamageSource(net.minecraft.util.DamageSource.h);
+            case FALL:
+                return new CanaryDamageSource(net.minecraft.util.DamageSource.i);
+            case VOID:
+                return new CanaryDamageSource(net.minecraft.util.DamageSource.j);
+            case GENERIC:
+                return new CanaryDamageSource(net.minecraft.util.DamageSource.k);
+            case POTION:
                 return new CanaryDamageSource(net.minecraft.util.DamageSource.l);
-
+            case WITHER:
+                return new CanaryDamageSource(net.minecraft.util.DamageSource.m);
+            case ANVIL:
+                return new CanaryDamageSource(net.minecraft.util.DamageSource.n);
+            case FALLING_BLOCK:
+                return new CanaryDamageSource(net.minecraft.util.DamageSource.o);
+            case EXPLOSION:
+                return new CanaryDamageSource(net.minecraft.util.DamageSource.a((Explosion)null));
             default:
                 return null;
         }
     }
-
 }

@@ -32,8 +32,7 @@ public class CanaryNetServerHandler implements NetServerHandler {
 
     @Override
     public void sendPacket(Packet packet) {
-        handler.a(((CanaryPacket) packet).getPacket());
-
+        handler.a(((CanaryPacket)packet).getPacket());
     }
 
     public void sendPacket(net.minecraft.network.Packet packet) {
@@ -42,11 +41,10 @@ public class CanaryNetServerHandler implements NetServerHandler {
 
     @Override
     public void handleChat(Packet chatPacket) {
-        if (!(((CanaryPacket) chatPacket).getPacket() instanceof S02PacketChat)) {
+        if (!(((CanaryPacket)chatPacket).getPacket() instanceof S02PacketChat)) {
             return;
         }
-        handler.a((S02PacketChat) ((CanaryPacket) chatPacket).getPacket());
-
+        handler.a((S02PacketChat)((CanaryPacket)chatPacket).getPacket());
     }
 
     @Override
@@ -59,15 +57,14 @@ public class CanaryNetServerHandler implements NetServerHandler {
     @Override
     public void handleCommand(String[] command) {
         getUser().executeCommand(command);
-
     }
 
     @Override
     public void handleRespawn(Packet respawnPacket) {
-        if (!(((CanaryPacket) respawnPacket).getPacket() instanceof S07PacketRespawn)) {
+        if (!(((CanaryPacket)respawnPacket).getPacket() instanceof S07PacketRespawn)) {
             return;
         }
-        handler.a((S07PacketRespawn) ((CanaryPacket) respawnPacket).getPacket());
+        handler.a((S07PacketRespawn)((CanaryPacket)respawnPacket).getPacket());
     }
 
     @Override
@@ -90,10 +87,10 @@ public class CanaryNetServerHandler implements NetServerHandler {
                     break; // dangling style; just drop it
                 }
                 workingMsg = tokenizer.nextToken();
-                if (((CanaryChatStyle) working.getChatStyle()).getNative().equals(ChatStyle.j)) {
+                if (((CanaryChatStyle)working.getChatStyle()).getNative().equals(ChatStyle.k)) {
                     working.setChatStyle(new ChatStyle().getWrapper());
                 }
-                CanaryChatStyle style = (CanaryChatStyle) working.getChatStyle();
+                CanaryChatStyle style = (CanaryChatStyle)working.getChatStyle();
                 EnumChatFormatting ecf = enumChatFormattingFromChar(workingMsg.toLowerCase().charAt(0));
                 if (ecf != null) {
                     style.setColor(ecf.getWrapper());
