@@ -43,7 +43,7 @@ public class CanaryEntityItem extends CanaryEntity implements EntityItem {
      */
     @Override
     public void setAge(short age) {
-        getHandle().a = age;
+        getHandle().c = age;
     }
 
     /**
@@ -51,7 +51,7 @@ public class CanaryEntityItem extends CanaryEntity implements EntityItem {
      */
     @Override
     public short getAge() {
-        return (short) getHandle().a;
+        return (short) getHandle().c;
     }
 
     /**
@@ -59,7 +59,7 @@ public class CanaryEntityItem extends CanaryEntity implements EntityItem {
      */
     @Override
     public int getPickUpDelay() {
-        return getHandle().b;
+        return getHandle().d;
     }
 
     /**
@@ -67,7 +67,7 @@ public class CanaryEntityItem extends CanaryEntity implements EntityItem {
      */
     @Override
     public void setPickUpDelay(int delay) {
-        getHandle().b = delay;
+        getHandle().d = delay;
     }
 
     /**
@@ -91,7 +91,7 @@ public class CanaryEntityItem extends CanaryEntity implements EntityItem {
      */
     @Override
     public CanaryItem getItem() {
-        return getHandle().f().getCanaryItem();
+        return getHandle().l().getCanaryItem();
     }
 
     /**
@@ -109,7 +109,7 @@ public class CanaryEntityItem extends CanaryEntity implements EntityItem {
      */
     @Override
     public String getOwner() {
-        return getHandle().i();
+        return getHandle().m();
     }
 
     /**
@@ -117,7 +117,7 @@ public class CanaryEntityItem extends CanaryEntity implements EntityItem {
      */
     @Override
     public void setOwner(String owner) {
-        getHandle().a(owner);
+        getHandle().b(owner);
     }
 
     /**
@@ -125,7 +125,7 @@ public class CanaryEntityItem extends CanaryEntity implements EntityItem {
      */
     @Override
     public String getThrower() {
-        return getHandle().j();
+        return getHandle().n();
     }
 
     /**
@@ -133,7 +133,7 @@ public class CanaryEntityItem extends CanaryEntity implements EntityItem {
      */
     @Override
     public void setThrower(String thrower) {
-        getHandle().b(thrower);
+        getHandle().c(thrower);
     }
 
     /**

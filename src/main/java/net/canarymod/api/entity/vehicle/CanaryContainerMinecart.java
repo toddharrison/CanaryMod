@@ -172,7 +172,7 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
      */
     @Override
     public String getInventoryName() {
-        return this.getHandle().b();
+        return this.getHandle().d_();
     }
 
     /**
@@ -180,7 +180,7 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
      */
     @Override
     public int getInventoryStackLimit() {
-        return this.getHandle().d();
+        return this.getHandle().p_();
     }
 
     /**
@@ -257,7 +257,7 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
      */
     @Override
     public int getSize() {
-        return this.getHandle().a();
+        return getHandle().a.length;
     }
 
     /**
@@ -570,7 +570,7 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
 
     @Override
     public void update() {
-        this.getHandle().l_();
+        this.getHandle().e();
     }
 
     public boolean canOpenRemote() {

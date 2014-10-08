@@ -43,7 +43,7 @@ public class CanaryVillager extends CanaryEntityLiving implements Villager {
      */
     @Override
     public Profession getProfession() {
-        return Profession.fromId(getHandle().bZ());
+        return Profession.fromId(getHandle().cj());
     }
 
     /**
@@ -51,7 +51,7 @@ public class CanaryVillager extends CanaryEntityLiving implements Villager {
      */
     @Override
     public void setProfession(Profession profession) {
-        getHandle().s(profession.ordinal());
+        getHandle().r(profession.ordinal());
     }
 
     /**
@@ -59,7 +59,7 @@ public class CanaryVillager extends CanaryEntityLiving implements Villager {
      */
     @Override
     public boolean isMating() {
-        return getHandle().bY();
+        return getHandle().ck();
     }
 
     /**
@@ -67,7 +67,7 @@ public class CanaryVillager extends CanaryEntityLiving implements Villager {
      */
     @Override
     public void setMating(boolean isMating) {
-        getHandle().i(isMating);
+        getHandle().j(isMating);
     }
 
     /**
@@ -75,7 +75,7 @@ public class CanaryVillager extends CanaryEntityLiving implements Villager {
      */
     @Override
     public boolean isPlaying() {
-        return getHandle().cb();
+        return getHandle().cl();
     }
 
     /**
@@ -83,7 +83,7 @@ public class CanaryVillager extends CanaryEntityLiving implements Villager {
      */
     @Override
     public void setPlaying(boolean playing) {
-        getHandle().j(playing);
+        getHandle().m(playing);
     }
 
     /**
@@ -99,7 +99,7 @@ public class CanaryVillager extends CanaryEntityLiving implements Villager {
      */
     @Override
     public Player getCustomer() {
-        EntityPlayer customerentity = getHandle().b();
+        EntityPlayer customerentity = getHandle().u_();
         return customerentity == null ? null : (Player) customerentity.getCanaryEntity();
     }
 
@@ -108,7 +108,7 @@ public class CanaryVillager extends CanaryEntityLiving implements Villager {
      */
     @Override
     public boolean hasCustomer() {
-        return getHandle().ca();
+        return getHandle().ck();
     }
 
     /**
@@ -124,7 +124,7 @@ public class CanaryVillager extends CanaryEntityLiving implements Villager {
      */
     @Override
     public Village getVillage() {
-        return getHandle().bp.getCanaryVillage();
+        return getHandle().bk.getCanaryVillage();
     }
 
     /**
@@ -132,7 +132,7 @@ public class CanaryVillager extends CanaryEntityLiving implements Villager {
      */
     @Override
     public void setVillage(Village village) {
-        getHandle().bp = ((CanaryVillage) village).getHandle();
+        getHandle().bk = ((CanaryVillage) village).getHandle();
     }
 
     /**
@@ -140,7 +140,7 @@ public class CanaryVillager extends CanaryEntityLiving implements Villager {
      */
     @Override
     public int getGrowingAge() {
-        return getHandle().d();
+        return getHandle().l();
     }
 
     /**
@@ -148,7 +148,7 @@ public class CanaryVillager extends CanaryEntityLiving implements Villager {
      */
     @Override
     public void setGrowingAge(int age) {
-        getHandle().c(age);
+        getHandle().b(age);
     }
 
     /**
@@ -156,7 +156,7 @@ public class CanaryVillager extends CanaryEntityLiving implements Villager {
      */
     @Override
     public VillagerTrade[] getTrades() {
-        MerchantRecipeList list = getHandle().b((EntityPlayer) null);
+        MerchantRecipeList list = getHandle().b_((EntityPlayer) null);
         VillagerTrade[] rt = new VillagerTrade[list.size()];
 
         for (int i = 0; i < rt.length; i++) {
@@ -171,7 +171,7 @@ public class CanaryVillager extends CanaryEntityLiving implements Villager {
     @SuppressWarnings("unchecked")
     @Override
     public void addTrade(VillagerTrade trade) {
-        getHandle().b((EntityPlayer) null).add(((CanaryVillagerTrade) trade).getRecipe());
+        getHandle().b_((EntityPlayer) null).add(((CanaryVillagerTrade) trade).getRecipe());
     }
 
     /**
@@ -179,7 +179,7 @@ public class CanaryVillager extends CanaryEntityLiving implements Villager {
      */
     @Override
     public void removeTrade(int index) {
-        getHandle().b((EntityPlayer) null).remove(index);
+        getHandle().b_((EntityPlayer) null).remove(index);
     }
 
     /**

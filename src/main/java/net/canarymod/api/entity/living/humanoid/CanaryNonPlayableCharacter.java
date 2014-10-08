@@ -74,7 +74,7 @@ public class CanaryNonPlayableCharacter extends CanaryHuman implements NonPlayab
      */
     @Override
     public void lookAtNearest() {
-        net.minecraft.entity.Entity target = ((CanaryWorld) this.getWorld()).getHandle().a(EntityPlayerMP.class, this.getHandle().C.b(15.0D, 15.0D, 15.0D), this.getHandle());
+        net.minecraft.entity.Entity target = ((CanaryWorld) this.getWorld()).getHandle().a(EntityPlayerMP.class, this.getHandle().aQ().b(15.0D, 15.0D, 15.0D), this.getHandle());
         if (target != null) {
             lookAt(target.getCanaryEntity());
         }

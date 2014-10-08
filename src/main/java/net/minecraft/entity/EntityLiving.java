@@ -449,7 +449,7 @@ public abstract class EntityLiving extends EntityLivingBase {
         this.h.k();
         this.o.B.b();
         this.o.B.a("mob tick");
-        this.E();
+        //this.E();
         this.o.B.b();
         this.o.B.a("controls");
         this.o.B.a("move");
@@ -462,7 +462,7 @@ public abstract class EntityLiving extends EntityLivingBase {
         this.o.B.b();
     }
 
-    protected void E() {}
+    //protected void E() {}
 
     public int bP() {
         return 40;

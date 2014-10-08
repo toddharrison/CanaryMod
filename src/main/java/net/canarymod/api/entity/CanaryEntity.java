@@ -140,7 +140,7 @@ public abstract class CanaryEntity implements Entity {
 
     @Override
     public float getEyeHeight() {
-        return entity.g();
+        return entity.aD();
     }
 
     @Override
@@ -183,12 +183,12 @@ public abstract class CanaryEntity implements Entity {
 
     @Override
     public void setFireTicks(int ticks) {
-        this.entity.e = ticks;
+        this.entity.i = ticks;
     }
 
     @Override
     public int getFireTicks() {
-        return this.entity.e;
+        return this.entity.i;
     }
 
     @Override
@@ -228,7 +228,7 @@ public abstract class CanaryEntity implements Entity {
 
     @Override
     public EntityItem dropLoot(int itemId, int amount) {
-        return (EntityItem) entity.a(net.minecraft.item.Item.d(itemId), amount).getEntityItem();
+        return (EntityItem) entity.a(net.minecraft.item.Item.b(itemId), amount).getEntityItem();
     }
 
     public EntityItem dropLoot(Item item) {
@@ -237,7 +237,7 @@ public abstract class CanaryEntity implements Entity {
 
     @Override
     public boolean isSprinting() { // 3
-        return entity.ao();
+        return entity.ax();
     }
 
     @Override
@@ -247,7 +247,7 @@ public abstract class CanaryEntity implements Entity {
 
     @Override
     public boolean isSneaking() { // 1
-        return entity.an();
+        return entity.aw();
     }
 
     @Override
@@ -257,7 +257,7 @@ public abstract class CanaryEntity implements Entity {
 
     @Override
     public boolean isInvisible() { // 5
-        return entity.ap();
+        return entity.ay();
     }
 
     @Override
@@ -267,7 +267,7 @@ public abstract class CanaryEntity implements Entity {
 
     @Override
     public String getName() {
-        return entity.b_();
+        return entity.d_();
     }
 
     @Override
@@ -282,12 +282,12 @@ public abstract class CanaryEntity implements Entity {
 
     @Override
     public int getID() {
-        return entity.y();
+        return entity.F();
     }
 
     @Override
     public UUID getUUID() {
-        return entity.aB();
+        return entity.aJ();
     }
 
     @Override
@@ -305,14 +305,14 @@ public abstract class CanaryEntity implements Entity {
     @Override
     public boolean canSpawn() {
         if (this.isLiving()) {
-            return ((net.minecraft.entity.EntityLiving) entity).by();
+            return ((net.minecraft.entity.EntityLiving) entity).bQ();
         }
-        return getHandle().o.a(entity, entity.C).isEmpty(); //Is not occupied space
+        return getHandle().o.a(entity, entity.aQ()).isEmpty(); //Is not occupied space
     }
 
     @Override
     public boolean isRiding() {
-        return entity.am();
+        return entity.av();
     }
 
     @Override
@@ -361,12 +361,12 @@ public abstract class CanaryEntity implements Entity {
     /** Destroys this entity */
     @Override
     public void destroy() {
-        entity.B();
+        entity.F();
     }
 
     @Override
     public boolean isDead() {
-        return entity.K;
+        return entity.I;
     }
 
     @Override
@@ -425,7 +425,7 @@ public abstract class CanaryEntity implements Entity {
      */
     @Override
     public boolean isOnGround() {
-        return getHandle().D;
+        return getHandle().C;
     }
 
     /**
@@ -433,7 +433,7 @@ public abstract class CanaryEntity implements Entity {
      */
     @Override
     public boolean isInWeb() {
-        return getHandle().I;
+        return getHandle().H;
     }
 
     /**
@@ -441,7 +441,7 @@ public abstract class CanaryEntity implements Entity {
      */
     @Override
     public boolean isInWater() {
-        return getHandle().ac;
+        return getHandle().Y;
     }
 
     /**
@@ -449,7 +449,7 @@ public abstract class CanaryEntity implements Entity {
      */
     @Override
     public boolean isInLava() {
-        return getHandle().P();
+        return getHandle().ab();
     }
 
     @Override

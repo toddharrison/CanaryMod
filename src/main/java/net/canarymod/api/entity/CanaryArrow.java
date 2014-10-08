@@ -58,7 +58,7 @@ public class CanaryArrow extends CanaryProjectile implements Arrow {
      */
     @Override
     public double getDamage() {
-        return getHandle().e();
+        return getHandle().j();
     }
 
     /**
@@ -74,7 +74,7 @@ public class CanaryArrow extends CanaryProjectile implements Arrow {
      */
     @Override
     public boolean isCritical() {
-        return getHandle().f();
+        return getHandle().l();
     }
 
     /**
@@ -98,7 +98,7 @@ public class CanaryArrow extends CanaryProjectile implements Arrow {
      */
     @Override
     public int getTicksInAir() {
-        return getHandle().au;
+        return getHandle().aq;
     }
 
     /**
@@ -106,7 +106,7 @@ public class CanaryArrow extends CanaryProjectile implements Arrow {
      */
     @Override
     public int getTicksInGround() {
-        return getHandle().at;
+        return getHandle().ap;
     }
 
     /**
@@ -114,7 +114,7 @@ public class CanaryArrow extends CanaryProjectile implements Arrow {
      */
     @Override
     public int getKnockbackStrength() {
-        return getHandle().cmeakb();
+        return getHandle().as;
     }
 
     /**

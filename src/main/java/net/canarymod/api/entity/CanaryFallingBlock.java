@@ -38,7 +38,7 @@ public class CanaryFallingBlock extends CanaryEntity implements FallingBlock {
      */
     @Override
     public short getBlockID() {
-        return (short) net.minecraft.block.Block.b(getHandle().f());
+        return (short) net.minecraft.block.Block.a(getHandle().l());
     }
 
     /**
@@ -47,7 +47,7 @@ public class CanaryFallingBlock extends CanaryEntity implements FallingBlock {
     @Override
     public void setBlockID(short id) {
         if (BlockType.fromId(id) != null) { // Safety
-            getHandle().setBlock(net.minecraft.block.Block.e(id));
+            getHandle().setBlock(net.minecraft.block.Block.c(id));
         }
     }
 
@@ -72,7 +72,7 @@ public class CanaryFallingBlock extends CanaryEntity implements FallingBlock {
      */
     @Override
     public int getFallTime() {
-        return getHandle().b;
+        return getHandle().a;
     }
 
     /**
@@ -80,7 +80,7 @@ public class CanaryFallingBlock extends CanaryEntity implements FallingBlock {
      */
     @Override
     public void setFallTime(int fallTime) {
-        getHandle().b = fallTime;
+        getHandle().a = fallTime;
     }
 
     /**
@@ -88,7 +88,7 @@ public class CanaryFallingBlock extends CanaryEntity implements FallingBlock {
      */
     @Override
     public boolean dropsItem() {
-        return getHandle().c;
+        return getHandle().b;
     }
 
     /**
@@ -96,7 +96,7 @@ public class CanaryFallingBlock extends CanaryEntity implements FallingBlock {
      */
     @Override
     public void setDropsItem(boolean drops) {
-        getHandle().c = drops;
+        getHandle().b = drops;
     }
 
     /**
@@ -122,7 +122,7 @@ public class CanaryFallingBlock extends CanaryEntity implements FallingBlock {
      */
     @Override
     public boolean hurtEntities() {
-        return getHandle().g;
+        return getHandle().f;
     }
 
     /**
@@ -130,7 +130,7 @@ public class CanaryFallingBlock extends CanaryEntity implements FallingBlock {
      */
     @Override
     public void setHurtEntities(boolean hurt) {
-        getHandle().g = hurt;
+        getHandle().f = hurt;
     }
 
     /**
@@ -138,7 +138,7 @@ public class CanaryFallingBlock extends CanaryEntity implements FallingBlock {
      */
     @Override
     public int getMaxDamage() {
-        return getHandle().h;
+        return getHandle().g;
     }
 
     /**
@@ -146,7 +146,7 @@ public class CanaryFallingBlock extends CanaryEntity implements FallingBlock {
      */
     @Override
     public void setMaxDamage(int max) {
-        getHandle().h = max;
+        getHandle().g = max;
     }
 
     /**
@@ -154,7 +154,7 @@ public class CanaryFallingBlock extends CanaryEntity implements FallingBlock {
      */
     @Override
     public float getDamageAmount() {
-        return getHandle().i;
+        return getHandle().h;
     }
 
     /**
@@ -162,7 +162,7 @@ public class CanaryFallingBlock extends CanaryEntity implements FallingBlock {
      */
     @Override
     public void setDamageAmount(float damage) {
-        getHandle().i = damage;
+        getHandle().h = damage;
     }
 
     /**

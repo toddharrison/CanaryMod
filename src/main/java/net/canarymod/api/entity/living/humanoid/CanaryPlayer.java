@@ -1,6 +1,13 @@
 package net.canarymod.api.entity.living.humanoid;
 
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import net.canarymod.Canary;
+import static net.canarymod.Canary.log;
 import net.canarymod.MathHelp;
 import net.canarymod.ToolBox;
 import net.canarymod.api.GameMode;
@@ -17,6 +24,7 @@ import net.canarymod.api.statistics.*;
 import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.api.world.World;
 import net.canarymod.api.world.blocks.*;
+import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.api.world.position.Direction;
 import net.canarymod.api.world.position.Location;
 import net.canarymod.chat.Colors;
@@ -38,18 +46,9 @@ import net.minecraft.network.play.server.S02PacketChat;
 import net.minecraft.network.play.server.S2BPacketChangeGameState;
 import net.minecraft.network.play.server.S38PacketPlayerListItem;
 import net.minecraft.network.play.server.S39PacketPlayerAbilities;
-//import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.WorldSettings;
 import net.visualillusionsent.utils.StringUtils;
-
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.UUID;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import static net.canarymod.Canary.log;
 
 /**
  * Canary Player wrapper.
@@ -99,7 +98,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
     }
 
     public UUID getUUID() {
-        return EntityPlayer.a(getHandle().bJ());
+        return EntityPlayer.a(getHandle().cc());
     }
 
     /**
@@ -173,10 +172,10 @@ public class CanaryPlayer extends CanaryHuman implements Player {
     @Override
     public Location getSpawnPosition() {
         Location spawn = Canary.getServer().getDefaultWorld().getSpawnLocation();
-        ChunkCoordinates loc = getHandle().bN();
 
-        if (loc != null) {
-            spawn = new Location(Canary.getServer().getDefaultWorld(), loc.a, loc.b, loc.c, 0.0F, 0.0F);
+        if (getHandle().cg() != null) {
+            BlockPosition loc = new BlockPosition(getHandle().cg());
+            spawn = new Location(Canary.getServer().getDefaultWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), 0.0F, 0.0F);
         }
         return spawn;
     }
@@ -215,7 +214,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
      */
     @Override
     public void setSpawnPosition(Location spawn) {
-        ChunkCoordinates loc = new ChunkCoordinates((int) spawn.getX(), (int) spawn.getY(), (int) spawn.getZ());
+        BlockPos loc = new BlockPos((int) spawn.getX(), (int) spawn.getY(), (int) spawn.getZ());
 
         getHandle().a(loc, true);
     }
@@ -651,7 +650,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
      */
     @Override
     public void addExhaustion(float exhaustion) {
-        getHandle().bQ().a(exhaustion);
+        getHandle().ck().a(exhaustion);
     }
 
     /**
@@ -659,7 +658,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
      */
     @Override
     public void setExhaustion(float exhaustion) {
-        getHandle().bQ().setExhaustionLevel(exhaustion);
+        getHandle().ck().setExhaustionLevel(exhaustion);
     }
 
     /**
@@ -667,7 +666,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
      */
     @Override
     public float getExhaustionLevel() {
-        return getHandle().bQ().getExhaustionLevel();
+        return getHandle().ck().getExhaustionLevel();
     }
 
     /**
@@ -675,7 +674,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
      */
     @Override
     public void setHunger(int hunger) {
-        getHandle().bQ().setFoodLevel(hunger);
+        getHandle().ck().setFoodLevel(hunger);
     }
 
     /**
@@ -683,7 +682,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
      */
     @Override
     public int getHunger() {
-        return getHandle().bQ().a();
+        return getHandle().ck().a();
     }
 
     /**
@@ -707,7 +706,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
      */
     @Override
     public int getExperience() {
-        return getHandle().bG;
+        return getHandle().bA;
     }
 
     /**
@@ -726,7 +725,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
      */
     @Override
     public int getLevel() {
-        return getHandle().bF;
+        return getHandle().bz;
     }
 
     /**
@@ -758,7 +757,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
      */
     @Override
     public boolean isSleeping() {
-        return getHandle().bm();
+        return getHandle().bI();
     }
 
     /**
@@ -766,7 +765,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
      */
     @Override
     public boolean isDeeplySleeping() {
-        return getHandle().bL();
+        return getHandle().ce();
     }
 
     /**
@@ -985,7 +984,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
      */
     @Override
     public void closeWindow() {
-        getHandle().k();
+        getHandle().n();
     }
 
     /**
@@ -1022,7 +1021,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
      */
     @Override
     public String getLocale() {
-        return getHandle().bM;
+        return getHandle().bG;
     }
 
     /**
@@ -1082,7 +1081,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
      */
     @Override
     public void setCompassTarget(int x, int y, int z) {
-        this.sendPacket(new CanaryPacket(new net.minecraft.network.play.server.S05PacketSpawnPosition(x, y, z)));
+        this.sendPacket(new CanaryPacket(new net.minecraft.network.play.server.S05PacketSpawnPosition(new BlockPos(x, y, z))));
     }
 
     /**
@@ -1090,7 +1089,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
      */
     @Override
     public void setStat(Stat stat, int value) {
-        getHandle().w().a(getHandle(), ((CanaryStat) stat).getHandle(), value);
+        getHandle().A().a(getHandle(), ((CanaryStat) stat).getHandle(), value);
     }
 
     /**
@@ -1116,7 +1115,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
      */
     @Override
     public int getStat(Stat stat) {
-        return getHandle().w().a(((CanaryStat) stat).getHandle());
+        return getHandle().A().a(((CanaryStat) stat).getHandle());
     }
 
     /**
@@ -1128,8 +1127,8 @@ public class CanaryPlayer extends CanaryHuman implements Player {
         if (achievement.getParent() != null && !hasAchievement(achievement.getParent())) {
             awardAchievement(achievement.getParent());
         }
-        getHandle().w().b(getHandle(), ((CanaryAchievement) achievement).getHandle(), 1);
-        getHandle().w().b(getHandle());
+        getHandle().A().b(getHandle(), ((CanaryAchievement) achievement).getHandle(), 1);
+        getHandle().A().b(getHandle());
     }
 
     /**
@@ -1144,7 +1143,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
                 removeAchievement(child);
             }
         }
-        getHandle().w().a(getHandle(), ((CanaryAchievement) achievement).getHandle(), 0);
+        getHandle().A().a(getHandle(), ((CanaryAchievement) achievement).getHandle(), 0);
     }
 
     /**
@@ -1152,7 +1151,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
      */
     @Override
     public boolean hasAchievement(Achievement achievement) {
-        return getHandle().w().a(((CanaryAchievement) achievement).getHandle());
+        return getHandle().A().a(((CanaryAchievement) achievement).getHandle());
     }
 
     /**

@@ -27,12 +27,12 @@ import java.util.Iterator;
 public class EntityItem extends Entity {
 
     private static final Logger b = LogManager.getLogger();
+    public int c;  // CanaryMod: private => public; age
+    public int d;  // CanaryMod: private => public; pickupdelay
     public int e; // CanaryMod: private => public; health
-    public float a;
-    private int c;
-    private int d;
     private String f;
     private String g;
+    public float a;
 
     public EntityItem(World world, double d0, double d1, double d2) {
         super(world);

@@ -29,7 +29,7 @@ public abstract class CanaryFireball extends CanaryEntity implements Fireball {
      */
     @Override
     public int getTicksAlive() {
-        return getHandle().at;
+        return getHandle().ap;
     }
 
     /**
@@ -37,7 +37,7 @@ public abstract class CanaryFireball extends CanaryEntity implements Fireball {
      */
     @Override
     public void setTicksAlive(int ticks) {
-        getHandle().j = ticks;
+        getHandle().ap = ticks;
     }
 
     /**
@@ -45,7 +45,7 @@ public abstract class CanaryFireball extends CanaryEntity implements Fireball {
      */
     @Override
     public int getTicksInAir() {
-        return getHandle().au;
+        return getHandle().aq;
     }
 
     /**
@@ -53,7 +53,7 @@ public abstract class CanaryFireball extends CanaryEntity implements Fireball {
      */
     @Override
     public void setTicksInAir(int ticks) {
-        getHandle().au = ticks;
+        getHandle().aq = ticks;
     }
 
     /**
@@ -109,7 +109,7 @@ public abstract class CanaryFireball extends CanaryEntity implements Fireball {
      */
     @Override
     public float getMotionFactor() {
-        return getHandle().e();
+        return getHandle().j();
     }
 
     /**

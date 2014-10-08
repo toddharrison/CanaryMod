@@ -37,7 +37,7 @@ public class EntityArrow extends Entity implements IProjectile {
     public int ap; // CanaryMod: private => public; ticksInGround
     public int aq; // CanaryMod: private => public; ticksInAir
     private double ar = 2.0D;
-    private int as;
+    public int as; // CanaryMod: private => public; ticksInAir
 
     public EntityArrow(World world) {
         super(world);

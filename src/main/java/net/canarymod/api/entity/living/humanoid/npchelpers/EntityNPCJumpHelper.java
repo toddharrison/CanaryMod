@@ -4,19 +4,19 @@ import net.canarymod.api.entity.living.humanoid.EntityNonPlayableCharacter;
 
 public class EntityNPCJumpHelper {
 
-    private EntityNonPlayableCharacter a;
-    private boolean b;
+    private EntityNonPlayableCharacter b;
+    private boolean a;
 
     public EntityNPCJumpHelper(EntityNonPlayableCharacter enpc) {
-        this.a = enpc;
+        this.b = enpc;
     }
 
     public void a() {
-        this.b = true;
+        this.a = true;
     }
 
     public void b() {
-        this.a.f(this.b);
-        this.b = false;
+        this.b.i(this.a);
+        this.a = false;
     }
 }

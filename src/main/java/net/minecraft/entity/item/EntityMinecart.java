@@ -34,7 +34,7 @@ import java.util.Map;
 public abstract class EntityMinecart extends Entity implements IWorldNameable {
 
     private static final int[][][] c = new int[][][]{{{0, 0, -1}, {0, 0, 1}}, {{-1, 0, 0}, {1, 0, 0}}, {{-1, -1, 0}, {1, 0, 0}}, {{-1, 0, 0}, {1, -1, 0}}, {{0, 0, -1}, {0, -1, 1}}, {{0, -1, -1}, {0, 0, 1}}, {{0, 0, 1}, {1, 0, 0}}, {{0, 0, 1}, {-1, 0, 0}}, {{0, 0, -1}, {-1, 0, 0}}, {{0, 0, -1}, {1, 0, 0}}};
-    private boolean a;
+    public boolean a; // CanaryMod: private>>public
     private String b;
     private int d;
     private double e;
