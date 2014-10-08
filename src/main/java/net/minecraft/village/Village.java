@@ -368,14 +368,14 @@ public class Village {
     public int a(String s0) {
         Integer integer = (Integer) this.j.get(s0);
 
-        return integer != null ? integer.intValue() : 0;
+        return integer != null ? integer : 0;
     }
 
     public int a(String s0, int i0) {
         int i1 = this.a(s0);
         int i2 = MathHelper.a(i1 + i0, -30, 10);
 
-        this.j.put(s0, Integer.valueOf(i2));
+        this.j.put(s0, i2);
         return i2;
     }
 
