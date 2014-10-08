@@ -51,7 +51,7 @@ public class EntitySlime extends EntityLiving implements IMob {
         this.ac.a(16, Byte.valueOf((byte) 1));
     }
 
-    protected void a(int i0) {
+    public void a(int i0) { // CanaryMod: protected >> public
         this.ac.b(16, Byte.valueOf((byte) i0));
         this.a(0.51000005F * (float) i0, 0.51000005F * (float) i0);
         this.b(this.s, this.t, this.u);

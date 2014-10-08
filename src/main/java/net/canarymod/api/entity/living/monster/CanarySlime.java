@@ -39,7 +39,7 @@ public class CanarySlime extends CanaryEntityMob implements Slime {
      */
     @Override
     public Size getSize() {
-        return Size.fromByte((byte) getHandle().bX());
+        return Size.fromByte((byte) getHandle().ck());
     }
 
     /**

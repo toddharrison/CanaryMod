@@ -553,6 +553,10 @@ public class EntityZombie extends EntityMob {
     public int getConvertTicks() {
         return this.bm;
     }
+    
+    public void setConversionTime(int i0) {
+        this.a(i0);
+    }
 
     public void stopConversion() {
         this.H().b(12, Byte.valueOf((byte) 0));

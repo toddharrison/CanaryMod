@@ -1,6 +1,7 @@
 package net.canarymod.api.entity.living.monster;
 
 import net.canarymod.api.entity.EntityType;
+import net.minecraft.block.Block;
 import net.minecraft.entity.monster.EntityEnderman;
 
 /**
@@ -38,7 +39,7 @@ public class CanaryEnderman extends CanaryEntityMob implements Enderman {
      */
     @Override
     public short getCarriedBlockID() {
-        return (short) net.minecraft.block.Block.b(getHandle().cb());
+        return (short) Block.a(getHandle().ck().c());
     }
 
     /**
@@ -46,7 +47,7 @@ public class CanaryEnderman extends CanaryEntityMob implements Enderman {
      */
     @Override
     public void setCarriedBlockID(short blockId) {
-        getHandle().a(net.minecraft.block.Block.e(blockId));
+        getHandle().a(net.minecraft.block.Block.d(blockId));
     }
 
     /**
@@ -54,7 +55,7 @@ public class CanaryEnderman extends CanaryEntityMob implements Enderman {
      */
     @Override
     public short getCarriedBlockMetaData() {
-        return (short) getHandle().cc();
+        return (short) getHandle().ck().c().c(getHandle().ck());
     }
 
     /**
@@ -70,7 +71,7 @@ public class CanaryEnderman extends CanaryEntityMob implements Enderman {
      */
     @Override
     public boolean randomTeleport() {
-        return getHandle().bZ();
+        return getHandle().n();
     }
 
     /**
@@ -78,7 +79,7 @@ public class CanaryEnderman extends CanaryEntityMob implements Enderman {
      */
     @Override
     public boolean isScreaming() {
-        return getHandle().cd();
+        return getHandle().cm();
     }
 
     /**

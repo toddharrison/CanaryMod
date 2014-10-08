@@ -38,7 +38,7 @@ public class CanarySilverfish extends CanaryEntityMob implements Silverfish {
      */
     @Override
     public int getAllySummonCooldown() {
-        return getHandle().bp;
+        throw new UnsupportedOperationException("Minecraft update broke this shit");
     }
 
     /**
@@ -46,7 +46,7 @@ public class CanarySilverfish extends CanaryEntityMob implements Silverfish {
      */
     @Override
     public void setAllySummonCooldown(int cooldown) {
-        getHandle().bp = cooldown;
+        throw new UnsupportedOperationException("Minecraft update broke this shit");
     }
 
     /**

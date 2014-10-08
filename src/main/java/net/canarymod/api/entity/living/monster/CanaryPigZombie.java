@@ -4,6 +4,7 @@ import net.canarymod.api.entity.EntityType;
 import net.canarymod.api.entity.living.humanoid.CanaryPlayer;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityPigZombie;
 
 /**
@@ -41,7 +42,7 @@ public class CanaryPigZombie extends CanaryZombie implements PigZombie {
      */
     @Override
     public int getAngerLevel() {
-        return getHandle().bs;
+        return getHandle().bl;
     }
 
     /**
@@ -49,7 +50,7 @@ public class CanaryPigZombie extends CanaryZombie implements PigZombie {
      */
     @Override
     public boolean isAngry() {
-        return getHandle().bs > 0;
+        return getHandle().bl > 0;
     }
 
     /**
@@ -57,7 +58,7 @@ public class CanaryPigZombie extends CanaryZombie implements PigZombie {
      */
     @Override
     public void setAngerLevel(int level) {
-        getHandle().bs = level;
+        getHandle().bl = level;
     }
 
     /**
@@ -68,7 +69,7 @@ public class CanaryPigZombie extends CanaryZombie implements PigZombie {
         if (player == null) {
             return;
         }
-        getHandle().c((Entity) ((CanaryPlayer) player).getHandle());
+        getHandle().b((EntityLivingBase) ((CanaryPlayer) player).getHandle());
     }
 
     /**
