@@ -65,18 +65,19 @@ public class CanaryChunkProviderServer implements ChunkProvider {
         if (newChunk != null) {
             newChunk.c();
             newChunk.d();
-        }
-        newChunk.a(handle, handle, x, z);
+            newChunk.a(handle, handle, x, z);
+            // Save the new chunk, overriding the old one
+            handle.a(newChunk);
+            handle.b(newChunk);
+            newChunk.k = false;
+            if (handle.e != null) {
+                handle.e.c();
+            }
 
-        // Save the new chunk, overriding the old one
-        handle.a(newChunk);
-        handle.b(newChunk);
-        newChunk.k = false;
-        if (handle.e != null) {
-            handle.e.c();
+            return newChunk.getCanaryChunk();
         }
-
-        return newChunk.getCanaryChunk();
+        // FIXME: Should rather throw an exception
+        return null;
     }
 
     @Override

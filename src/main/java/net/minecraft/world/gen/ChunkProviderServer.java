@@ -43,7 +43,7 @@ public class ChunkProviderServer implements IChunkProvider {
     public IChunkLoader f; // //CanaryMod private->public
     public boolean a = true;
     public LongHashMap g = new LongHashMap(); // CanaryMod private->public
-    public List h = Lists.newArrayList(); // CanaryMod private->public
+    public List h = Lists.newArrayList(); // CanaryMod private->public (loadedChunks)
     private WorldServer i;
 
     // CanaryMod start
@@ -77,11 +77,11 @@ public class ChunkProviderServer implements IChunkProvider {
     public void b(int i0, int i1) {
         if (this.i.t.e()) {
             if (!this.i.c(i0, i1)) {
-                this.c.add(Long.valueOf(ChunkCoordIntPair.a(i0, i1)));
+                this.c.add(ChunkCoordIntPair.a(i0, i1));
             }
         }
         else {
-            this.c.add(Long.valueOf(ChunkCoordIntPair.a(i0, i1)));
+            this.c.add(ChunkCoordIntPair.a(i0, i1));
         }
     }
 
