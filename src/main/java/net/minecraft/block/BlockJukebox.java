@@ -20,7 +20,6 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
-
 public class BlockJukebox extends BlockContainer {
 
     public static final PropertyBool a = PropertyBool.a("has_record");
@@ -32,7 +31,7 @@ public class BlockJukebox extends BlockContainer {
     }
 
     public boolean a(World world, BlockPos blockpos, IBlockState iblockstate, EntityPlayer entityplayer, EnumFacing enumfacing, float f0, float f1, float f2) {
-        if (((Boolean) iblockstate.b(a)).booleanValue()) {
+        if (((Boolean)iblockstate.b(a)).booleanValue()) {
             this.e(world, blockpos, iblockstate);
             iblockstate = iblockstate.a(a, Boolean.valueOf(false));
             world.a(blockpos, iblockstate, 2);
@@ -48,7 +47,7 @@ public class BlockJukebox extends BlockContainer {
             TileEntity tileentity = world.s(blockpos);
 
             if (tileentity instanceof BlockJukebox.TileEntityJukebox) {
-                ((BlockJukebox.TileEntityJukebox) tileentity).a(new ItemStack(itemstack.b(), 1, itemstack.i()));
+                ((BlockJukebox.TileEntityJukebox)tileentity).a(new ItemStack(itemstack.b(), 1, itemstack.i()));
                 world.a(blockpos, iblockstate.a(a, Boolean.valueOf(true)), 2);
             }
         }
@@ -59,22 +58,22 @@ public class BlockJukebox extends BlockContainer {
             TileEntity tileentity = world.s(blockpos);
 
             if (tileentity instanceof BlockJukebox.TileEntityJukebox) {
-                BlockJukebox.TileEntityJukebox blockjukebox_tileentityjukebox = (BlockJukebox.TileEntityJukebox) tileentity;
+                BlockJukebox.TileEntityJukebox blockjukebox_tileentityjukebox = (BlockJukebox.TileEntityJukebox)tileentity;
                 ItemStack itemstack = blockjukebox_tileentityjukebox.a();
 
                 if (itemstack != null) {
                     world.b(1005, blockpos, 0);
-                    world.a(blockpos, (String) null);
-                    blockjukebox_tileentityjukebox.a((ItemStack) null);
+                    world.a(blockpos, (String)null);
+                    blockjukebox_tileentityjukebox.a((ItemStack)null);
                     float f0 = 0.7F;
-                    double d0 = (double) (world.s.nextFloat() * f0) + (double) (1.0F - f0) * 0.5D;
-                    double d1 = (double) (world.s.nextFloat() * f0) + (double) (1.0F - f0) * 0.2D + 0.6D;
-                    double d2 = (double) (world.s.nextFloat() * f0) + (double) (1.0F - f0) * 0.5D;
+                    double d0 = (double)(world.s.nextFloat() * f0) + (double)(1.0F - f0) * 0.5D;
+                    double d1 = (double)(world.s.nextFloat() * f0) + (double)(1.0F - f0) * 0.2D + 0.6D;
+                    double d2 = (double)(world.s.nextFloat() * f0) + (double)(1.0F - f0) * 0.5D;
                     ItemStack itemstack1 = itemstack.k();
-                    EntityItem entityitem = new EntityItem(world, (double) blockpos.n() + d0, (double) blockpos.o() + d1, (double) blockpos.p() + d2, itemstack1);
+                    EntityItem entityitem = new EntityItem(world, (double)blockpos.n() + d0, (double)blockpos.o() + d1, (double)blockpos.p() + d2, itemstack1);
 
                     entityitem.p();
-                    world.d((Entity) entityitem);
+                    world.d((Entity)entityitem);
                 }
             }
         }
@@ -103,7 +102,7 @@ public class BlockJukebox extends BlockContainer {
         TileEntity tileentity = world.s(blockpos);
 
         if (tileentity instanceof BlockJukebox.TileEntityJukebox) {
-            ItemStack itemstack = ((BlockJukebox.TileEntityJukebox) tileentity).a();
+            ItemStack itemstack = ((BlockJukebox.TileEntityJukebox)tileentity).a();
 
             if (itemstack != null) {
                 return Item.b(itemstack.b()) + 1 - Item.b(Items.cq);
@@ -122,17 +121,17 @@ public class BlockJukebox extends BlockContainer {
     }
 
     public int c(IBlockState iblockstate) {
-        return ((Boolean) iblockstate.b(a)).booleanValue() ? 1 : 0;
+        return ((Boolean)iblockstate.b(a)).booleanValue() ? 1 : 0;
     }
 
     protected BlockState e() {
-        return new BlockState(this, new IProperty[]{a});
+        return new BlockState(this, new IProperty[]{ a });
     }
 
     public static class TileEntityJukebox extends TileEntity {
 
         private ItemStack a;
-        
+
         public TileEntityJukebox() {
             this.complexBlock = new CanaryJukebox(this); // CanaryMod: wrap tile entity
         }
@@ -145,15 +144,13 @@ public class BlockJukebox extends BlockContainer {
             else if (p_a_1_.f("Record") > 0) {
                 this.a(new ItemStack(Item.b(p_a_1_.f("Record")), 1, 0));
             }
-
         }
 
         public void b(NBTTagCompound p_b_1_) {
             super.b(p_b_1_);
             if (this.a() != null) {
-                p_b_1_.a("RecordItem", (NBTBase) this.a().b(new NBTTagCompound()));
+                p_b_1_.a("RecordItem", (NBTBase)this.a().b(new NBTTagCompound()));
             }
-
         }
 
         public ItemStack a() {
@@ -164,10 +161,10 @@ public class BlockJukebox extends BlockContainer {
             this.a = p_a_1_;
             this.o_();
         }
-        
+
         // CanaryMod
         public CanaryJukebox getCanaryJukebox() {
-            return (CanaryJukebox) complexBlock;
+            return (CanaryJukebox)complexBlock;
         }
     }
 }

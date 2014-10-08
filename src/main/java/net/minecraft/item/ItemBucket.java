@@ -1,8 +1,6 @@
 package net.minecraft.item;
 
-import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.world.blocks.CanaryBlock;
-import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.player.BlockDestroyHook;
 import net.canarymod.hook.player.BlockPlaceHook;
 import net.minecraft.block.Block;
@@ -16,6 +14,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
@@ -45,11 +44,6 @@ public class ItemBucket extends Item {
                     return itemstack;
                 }
 
-                // CanaryMod: BlockDestroyHook
-                CanaryBlock clicked = (CanaryBlock)world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos));
-                BlockDestroyHook hook = new BlockDestroyHook(((EntityPlayerMP)entityplayer).getPlayer(), clicked);
-                //
-
                 if (flag0) {
                     if (!entityplayer.a(blockpos.a(movingobjectposition.b), movingobjectposition.b, itemstack)) {
                         return itemstack;
@@ -57,11 +51,13 @@ public class ItemBucket extends Item {
 
                     IBlockState iblockstate = world.p(blockpos);
                     Material material = iblockstate.c().r();
+                    // CanaryMod: BlockDestroyHook
+                    BlockDestroyHook hook = new BlockDestroyHook(((EntityPlayerMP)entityplayer).getPlayer(), new CanaryBlock(iblockstate, blockpos, world));
+                    //
 
                     if (material == Material.h && ((Integer)iblockstate.b(BlockLiquid.b)).intValue() == 0) {
-                        // Filling Bucket with Water
-                        hook.call();
-                        if (hook.isCanceled()) {
+                        // CanaryMod: Filling Bucket with Water
+                        if (hook.call().isCanceled()) {
                             return itemstack;
                         }
                         //
@@ -72,9 +68,8 @@ public class ItemBucket extends Item {
                     }
 
                     if (material == Material.i && ((Integer)iblockstate.b(BlockLiquid.b)).intValue() == 0) {
-                        // Filling Bucket with Lava
-                        hook.call();
-                        if (hook.isCanceled()) {
+                        // CanaryMod: Filling Bucket with Lava
+                        if (hook.call().isCanceled()) {
                             return itemstack;
                         }
                         //
@@ -156,21 +151,17 @@ public class ItemBucket extends Item {
                         world.b(blockpos, true);
                     }
 
-                    // CanaryMod: BlockPlaceHook water/lava bucket
-                    if (entityplayer != null) {
-                        BlockPosition cbp = new BlockPosition(blockpos);
-                        CanaryBlock clicked = (CanaryBlock)world.getCanaryWorld().getBlockAt(cbp);
-                        CanaryBlock placed = new CanaryBlock(this.a.P(), cbp, world.getCanaryWorld());
-                        Player player = ((EntityPlayerMP)entityplayer).getPlayer();
-                        BlockPlaceHook hook = (BlockPlaceHook)new BlockPlaceHook(player, clicked, placed).call();
-                        if (hook.isCanceled()) {
-                            return false;
-                        }
-                    }
-                    //
-
                     // CanaryMod: Dispense helper
                     if (!testOnly) {
+                        // CanaryMod: BlockPlaceHook water/lava bucket
+                        if (entityplayer != null) {
+                            BlockPos temp = blockpos.a(EnumFacing.DOWN); // Since we lose track of the original, assume placing on top
+                            if (new BlockPlaceHook(((EntityPlayerMP)entityplayer).getPlayer(), new CanaryBlock(world.p(blockpos), blockpos, world), new CanaryBlock(this.a.P(), blockpos, world)).call().isCanceled()) {
+                                return false;
+                            }
+                        }
+                        //
+
                         world.a(blockpos, this.a.P(), 3);
                     }
                     //

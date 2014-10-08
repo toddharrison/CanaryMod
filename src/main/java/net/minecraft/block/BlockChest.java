@@ -1,6 +1,5 @@
 package net.minecraft.block;
 
-
 import com.google.common.base.Predicate;
 import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.world.RedstoneChangeHook;
@@ -34,7 +33,7 @@ import java.util.Random;
 
 public class BlockChest extends BlockContainer {
 
-    public static final PropertyDirection a = PropertyDirection.a("facing", (Predicate) EnumFacing.Plane.HORIZONTAL);
+    public static final PropertyDirection a = PropertyDirection.a("facing", (Predicate)EnumFacing.Plane.HORIZONTAL);
     private final Random M = new Random();
     public final int b;
     private int oldLvl; // CanaryMod: store old
@@ -82,7 +81,7 @@ public class BlockChest extends BlockContainer {
         Iterator iterator = EnumFacing.Plane.HORIZONTAL.iterator();
 
         while (iterator.hasNext()) {
-            EnumFacing enumfacing = (EnumFacing) iterator.next();
+            EnumFacing enumfacing = (EnumFacing)iterator.next();
             BlockPos blockpos1 = blockpos.a(enumfacing);
             IBlockState iblockstate1 = world.p(blockpos1);
 
@@ -90,7 +89,6 @@ public class BlockChest extends BlockContainer {
                 this.e(world, blockpos1, iblockstate1);
             }
         }
-
     }
 
     public IBlockState a(World world, BlockPos blockpos, EnumFacing enumfacing, float f0, float f1, float f2, int i0, EntityLivingBase entitylivingbase) {
@@ -98,7 +96,7 @@ public class BlockChest extends BlockContainer {
     }
 
     public void a(World world, BlockPos blockpos, IBlockState iblockstate, EntityLivingBase entitylivingbase, ItemStack itemstack) {
-        EnumFacing enumfacing = EnumFacing.b(MathHelper.c((double) (entitylivingbase.y * 4.0F / 360.0F) + 0.5D) & 3).d();
+        EnumFacing enumfacing = EnumFacing.b(MathHelper.c((double)(entitylivingbase.y * 4.0F / 360.0F) + 0.5D) & 3).d();
 
         iblockstate = iblockstate.a(a, enumfacing);
         BlockPos blockpos1 = blockpos.c();
@@ -138,10 +136,9 @@ public class BlockChest extends BlockContainer {
             TileEntity tileentity = world.s(blockpos);
 
             if (tileentity instanceof TileEntityChest) {
-                ((TileEntityChest) tileentity).a(itemstack.q());
+                ((TileEntityChest)tileentity).a(itemstack.q());
             }
         }
-
     }
 
     public IBlockState e(World world, BlockPos blockpos, IBlockState iblockstate) {
@@ -153,7 +150,7 @@ public class BlockChest extends BlockContainer {
             IBlockState iblockstate2 = world.p(blockpos.d());
             IBlockState iblockstate3 = world.p(blockpos.e());
             IBlockState iblockstate4 = world.p(blockpos.f());
-            EnumFacing enumfacing = (EnumFacing) iblockstate.b(a);
+            EnumFacing enumfacing = (EnumFacing)iblockstate.b(a);
             Block block = iblockstate1.c();
             Block block1 = iblockstate2.c();
             Block block2 = iblockstate3.c();
@@ -172,10 +169,10 @@ public class BlockChest extends BlockContainer {
                     EnumFacing enumfacing1;
 
                     if (block2 == this) {
-                        enumfacing1 = (EnumFacing) iblockstate3.b(a);
+                        enumfacing1 = (EnumFacing)iblockstate3.b(a);
                     }
                     else {
-                        enumfacing1 = (EnumFacing) iblockstate4.b(a);
+                        enumfacing1 = (EnumFacing)iblockstate4.b(a);
                     }
 
                     if (enumfacing1 == EnumFacing.NORTH) {
@@ -203,10 +200,10 @@ public class BlockChest extends BlockContainer {
                 EnumFacing enumfacing2;
 
                 if (block == this) {
-                    enumfacing2 = (EnumFacing) iblockstate1.b(a);
+                    enumfacing2 = (EnumFacing)iblockstate1.b(a);
                 }
                 else {
-                    enumfacing2 = (EnumFacing) iblockstate2.b(a);
+                    enumfacing2 = (EnumFacing)iblockstate2.b(a);
                 }
 
                 if (enumfacing2 == EnumFacing.WEST) {
@@ -236,7 +233,7 @@ public class BlockChest extends BlockContainer {
         Iterator iterator = EnumFacing.Plane.HORIZONTAL.iterator();
 
         while (iterator.hasNext()) {
-            EnumFacing enumfacing1 = (EnumFacing) iterator.next();
+            EnumFacing enumfacing1 = (EnumFacing)iterator.next();
             IBlockState iblockstate1 = world.p(blockpos.a(enumfacing1));
 
             if (iblockstate1.c() == this) {
@@ -257,7 +254,7 @@ public class BlockChest extends BlockContainer {
             return iblockstate.a(a, enumfacing.d());
         }
         else {
-            EnumFacing enumfacing2 = (EnumFacing) iblockstate.b(a);
+            EnumFacing enumfacing2 = (EnumFacing)iblockstate.b(a);
 
             if (world.p(blockpos.a(enumfacing2)).c().m()) {
                 enumfacing2 = enumfacing2.d();
@@ -331,8 +328,9 @@ public class BlockChest extends BlockContainer {
                     return false;
                 }
 
-                enumfacing = (EnumFacing) iterator.next();
-            } while (world.p(blockpos.a(enumfacing)).c() != this);
+                enumfacing = (EnumFacing)iterator.next();
+            }
+            while (world.p(blockpos.a(enumfacing)).c() != this);
 
             return true;
         }
@@ -345,14 +343,13 @@ public class BlockChest extends BlockContainer {
         if (tileentity instanceof TileEntityChest) {
             tileentity.E();
         }
-
     }
 
     public void b(World world, BlockPos blockpos, IBlockState iblockstate) {
         TileEntity tileentity = world.s(blockpos);
 
         if (tileentity instanceof IInventory) {
-            InventoryHelper.a(world, blockpos, (IInventory) tileentity);
+            InventoryHelper.a(world, blockpos, (IInventory)tileentity);
             world.e(blockpos, this);
         }
 
@@ -367,7 +364,7 @@ public class BlockChest extends BlockContainer {
             ILockableContainer ilockablecontainer = this.d(world, blockpos);
 
             if (ilockablecontainer != null) {
-                entityplayer.a((IInventory) ilockablecontainer);
+                entityplayer.a((IInventory)ilockablecontainer);
             }
 
             return true;
@@ -381,7 +378,7 @@ public class BlockChest extends BlockContainer {
             return null;
         }
         else {
-            Object object = (TileEntityChest) tileentity;
+            Object object = (TileEntityChest)tileentity;
 
             if (this.m(world, blockpos)) {
                 return null;
@@ -390,7 +387,7 @@ public class BlockChest extends BlockContainer {
                 Iterator iterator = EnumFacing.Plane.HORIZONTAL.iterator();
 
                 while (iterator.hasNext()) {
-                    EnumFacing enumfacing = (EnumFacing) iterator.next();
+                    EnumFacing enumfacing = (EnumFacing)iterator.next();
                     BlockPos blockpos1 = blockpos.a(enumfacing);
                     Block block = world.p(blockpos1).c();
 
@@ -403,16 +400,16 @@ public class BlockChest extends BlockContainer {
 
                         if (tileentity1 instanceof TileEntityChest) {
                             if (enumfacing != EnumFacing.WEST && enumfacing != EnumFacing.NORTH) {
-                                object = new InventoryLargeChest("container.chestDouble", (ILockableContainer) object, (TileEntityChest) tileentity1);
+                                object = new InventoryLargeChest("container.chestDouble", (ILockableContainer)object, (TileEntityChest)tileentity1);
                             }
                             else {
-                                object = new InventoryLargeChest("container.chestDouble", (TileEntityChest) tileentity1, (ILockableContainer) object);
+                                object = new InventoryLargeChest("container.chestDouble", (TileEntityChest)tileentity1, (ILockableContainer)object);
                             }
                         }
                     }
                 }
 
-                return (ILockableContainer) object;
+                return (ILockableContainer)object;
             }
         }
     }
@@ -434,12 +431,12 @@ public class BlockChest extends BlockContainer {
             TileEntity tileentity = iblockaccess.s(blockpos);
 
             if (tileentity instanceof TileEntityChest) {
-                i0 = ((TileEntityChest) tileentity).l;
+                i0 = ((TileEntityChest)tileentity).l;
             }
             // CanaryMod: RedstoneChange
             int newLvl = MathHelper.a(i0, 0, 15);
             if (newLvl != oldLvl) {
-                RedstoneChangeHook hook = (RedstoneChangeHook) new RedstoneChangeHook(((World) iblockaccess).getCanaryWorld().getBlockAt(new BlockPosition(blockpos)), oldLvl, newLvl).call();
+                RedstoneChangeHook hook = (RedstoneChangeHook)new RedstoneChangeHook(((World)iblockaccess).getCanaryWorld().getBlockAt(new BlockPosition(blockpos)), oldLvl, newLvl).call();
                 if (hook.isCanceled()) {
                     return oldLvl;
                 }
@@ -462,7 +459,7 @@ public class BlockChest extends BlockContainer {
     }
 
     private boolean o(World world, BlockPos blockpos) {
-        Iterator iterator = world.a(EntityOcelot.class, new AxisAlignedBB((double) blockpos.n(), (double) (blockpos.o() + 1), (double) blockpos.p(), (double) (blockpos.n() + 1), (double) (blockpos.o() + 2), (double) (blockpos.p() + 1))).iterator();
+        Iterator iterator = world.a(EntityOcelot.class, new AxisAlignedBB((double)blockpos.n(), (double)(blockpos.o() + 1), (double)blockpos.p(), (double)(blockpos.n() + 1), (double)(blockpos.o() + 2), (double)(blockpos.p() + 1))).iterator();
 
         EntityOcelot entityocelot;
 
@@ -471,10 +468,11 @@ public class BlockChest extends BlockContainer {
                 return false;
             }
 
-            Entity entity = (Entity) iterator.next();
+            Entity entity = (Entity)iterator.next();
 
-            entityocelot = (EntityOcelot) entity;
-        } while (!entityocelot.cl());
+            entityocelot = (EntityOcelot)entity;
+        }
+        while (!entityocelot.cl());
 
         return true;
     }
@@ -484,7 +482,7 @@ public class BlockChest extends BlockContainer {
     }
 
     public int l(World world, BlockPos blockpos) {
-        return Container.b((IInventory) this.d(world, blockpos));
+        return Container.b((IInventory)this.d(world, blockpos));
     }
 
     public IBlockState a(int i0) {
@@ -498,11 +496,10 @@ public class BlockChest extends BlockContainer {
     }
 
     public int c(IBlockState iblockstate) {
-        return ((EnumFacing) iblockstate.b(a)).a();
+        return ((EnumFacing)iblockstate.b(a)).a();
     }
 
     protected BlockState e() {
-        return new BlockState(this, new IProperty[]{a});
+        return new BlockState(this, new IProperty[]{ a });
     }
-
 }

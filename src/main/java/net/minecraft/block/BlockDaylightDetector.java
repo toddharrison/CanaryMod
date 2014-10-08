@@ -1,7 +1,6 @@
 package net.minecraft.block;
 
-import java.util.Random;
-import net.canarymod.api.world.position.BlockPosition;
+import net.canarymod.api.world.blocks.CanaryBlock;
 import net.canarymod.hook.world.RedstoneChangeHook;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -21,6 +20,7 @@ import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import java.util.Random;
 
 public class BlockDaylightDetector extends BlockContainer {
 
@@ -43,7 +43,7 @@ public class BlockDaylightDetector extends BlockContainer {
     }
 
     public int a(IBlockAccess iblockaccess, BlockPos blockpos, IBlockState iblockstate, EnumFacing enumfacing) {
-        return ((Integer) iblockstate.b(a)).intValue();
+        return ((Integer)iblockstate.b(a)).intValue();
     }
 
     public void d(World world, BlockPos blockpos) {
@@ -54,51 +54,29 @@ public class BlockDaylightDetector extends BlockContainer {
             float f1 = f0 < 3.1415927F ? 0.0F : 6.2831855F;
 
             f0 += (f1 - f0) * 0.2F;
-            i0 = Math.round((float) i0 * MathHelper.b(f0));
+            i0 = Math.round((float)i0 * MathHelper.b(f0));
             i0 = MathHelper.a(i0, 0, 15);
             if (this.b) {
                 i0 = 15 - i0;
             }
 
-            if (((Integer) iblockstate.b(a)).intValue() != i0) {
+            if (((Integer)iblockstate.b(a)).intValue() != i0) {
                 // CanaryMod: RedstoneChange; Comparator change
-                RedstoneChangeHook hook = (RedstoneChangeHook) new RedstoneChangeHook(world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos)), i0, ((Integer) iblockstate.b(a)).intValue()).call();
-                if (hook.isCanceled()) {
+                if (new RedstoneChangeHook(new CanaryBlock(iblockstate, blockpos, world), ((Integer)iblockstate.b(a)), i0).call().isCanceled()) {
                     return;
                 }
                 //
                 world.a(blockpos, iblockstate.a(a, Integer.valueOf(i0)), 3);
             }
-
         }
     }
 
-/* FIXME
-    // CanaryMod: include break method so we can do a redstone change on destruction
-    public void a(World world, int i0, int i1, int i2, Block block, int i4) {
-        // CanaryMod: Redstone Change; broken
-        int oldLvl = world.b(EnumSkyBlock.Sky, i0, i1, i2) - world.j;
-        float f0 = world.d(1.0F);
-        if (f0 < 3.1415927F) {
-            f0 += (0.0F - f0) * 0.2F;
-        }
-        else {
-            f0 += (6.2831855F - f0) * 0.2F;
-        }
-        oldLvl = Math.round((float) oldLvl * MathHelper.b(f0));
-        if (oldLvl < 0) {
-            oldLvl = 0;
-        }
-        if (oldLvl > 15) {
-            oldLvl = 15;
-        }
-        if (oldLvl != 0) {
-            new RedstoneChangeHook(new CanaryBlock(BlockType.DaylightSensor.getId(), (short) 2, i0, i1, i2, world.getCanaryWorld()), oldLvl, 0).call();
-        }
-        //
-        super.a(world, i0, i1, i2, block, i4); // CanaryMod: call super
+    // CanaryMod: pull break method in to do RedstoneChange
+    public void b(World world, BlockPos blockpos, IBlockState iblockstate) {
+        new RedstoneChangeHook(new CanaryBlock(iblockstate, blockpos, world), ((Integer)iblockstate.b(a)), 0); //Can't really cancel this here...
+        super.b(world, blockpos, iblockstate);
     }
-*/
+    //
 
     public boolean a(World world, BlockPos blockpos, IBlockState iblockstate, EntityPlayer entityplayer, EnumFacing enumfacing, float f0, float f1, float f2) {
         if (entityplayer.cm()) {
@@ -124,7 +102,7 @@ public class BlockDaylightDetector extends BlockContainer {
     }
 
     public Item a(IBlockState iblockstate, Random random, int i0) {
-        return Item.a((Block) Blocks.cl);
+        return Item.a((Block)Blocks.cl);
     }
 
     public boolean d() {
@@ -152,11 +130,10 @@ public class BlockDaylightDetector extends BlockContainer {
     }
 
     public int c(IBlockState iblockstate) {
-        return ((Integer) iblockstate.b(a)).intValue();
+        return ((Integer)iblockstate.b(a)).intValue();
     }
 
     protected BlockState e() {
-        return new BlockState(this, new IProperty[]{a});
+        return new BlockState(this, new IProperty[]{ a });
     }
-
 }

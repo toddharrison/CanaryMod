@@ -30,7 +30,7 @@ public class FurnaceRecipes {
         this.a(Blocks.p, new ItemStack(Items.j), 0.7F);
         this.a(Blocks.o, new ItemStack(Items.k), 1.0F);
         this.a(Blocks.ag, new ItemStack(Items.i), 1.0F);
-        this.a((Block) Blocks.m, new ItemStack(Blocks.w), 0.1F);
+        this.a((Block)Blocks.m, new ItemStack(Blocks.w), 0.1F);
         this.a(Items.al, new ItemStack(Items.am), 0.35F);
         this.a(Items.bi, new ItemStack(Items.bj), 0.35F);
         this.a(Items.bk, new ItemStack(Items.bl), 0.35F);
@@ -40,7 +40,7 @@ public class FurnaceRecipes {
         this.a(new ItemStack(Blocks.bf, 1, BlockStoneBrick.b), new ItemStack(Blocks.bf, 1, BlockStoneBrick.N), 0.1F);
         this.a(Items.aI, new ItemStack(Items.aH), 0.3F);
         this.a(Blocks.aL, new ItemStack(Blocks.cz), 0.35F);
-        this.a((Block) Blocks.aK, new ItemStack(Items.aW, 1, EnumDyeColor.GREEN.b()), 0.2F);
+        this.a((Block)Blocks.aK, new ItemStack(Items.aW, 1, EnumDyeColor.GREEN.b()), 0.2F);
         this.a(Blocks.r, new ItemStack(Items.h, 1, 1), 0.15F);
         this.a(Blocks.s, new ItemStack(Items.h, 1, 1), 0.15F);
         this.a(Blocks.bP, new ItemStack(Items.bO), 1.0F);
@@ -87,10 +87,11 @@ public class FurnaceRecipes {
                 return null;
             }
 
-            entry = (Entry) iterator.next();
-        } while (!this.a(itemstack, (ItemStack) entry.getKey()));
+            entry = (Entry)iterator.next();
+        }
+        while (!this.a(itemstack, (ItemStack)entry.getKey()));
 
-        return (ItemStack) entry.getValue();
+        return (ItemStack)entry.getValue();
     }
 
     private boolean a(ItemStack itemstack, ItemStack itemstack1) {
@@ -111,19 +112,20 @@ public class FurnaceRecipes {
                 return 0.0F;
             }
 
-            entry = (Entry) iterator.next();
-        } while (!this.a(itemstack, (ItemStack) entry.getKey()));
+            entry = (Entry)iterator.next();
+        }
+        while (!this.a(itemstack, (ItemStack)entry.getKey()));
 
-        return ((Float) entry.getValue()).floatValue();
+        return ((Float)entry.getValue()).floatValue();
     }
 
     // CanaryMod
     public List<SmeltRecipe> getSmeltingRecipes() {
         List<SmeltRecipe> smelting_recipes = new ArrayList<SmeltRecipe>();
         for (Object key : this.b.keySet()) {
-            int fromId = ((Integer) key).intValue();
-            net.canarymod.api.inventory.Item result = ((ItemStack) this.b.get(key)).getCanaryItem();
-            float xp = this.b(((CanaryItem) result).getHandle());
+            int fromId = ((Integer)key).intValue();
+            net.canarymod.api.inventory.Item result = ((ItemStack)this.b.get(key)).getCanaryItem();
+            float xp = this.b(((CanaryItem)result).getHandle());
             smelting_recipes.add(new SmeltRecipe(fromId, result, xp));
         }
         return smelting_recipes;

@@ -2,14 +2,7 @@ package net.minecraft.block;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.Iterator;
-import java.util.Random;
-import java.util.Set;
-import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.blocks.CanaryBlock;
-import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.world.RedstoneChangeHook;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -26,6 +19,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import java.util.*;
 
 public class BlockRedstoneWire extends Block {
 
@@ -78,7 +73,7 @@ public class BlockRedstoneWire extends Block {
     }
 
     public boolean c(World world, BlockPos blockpos) {
-        return World.a((IBlockAccess) world, blockpos.b()) || world.p(blockpos.b()).c() == Blocks.aX;
+        return World.a((IBlockAccess)world, blockpos.b()) || world.p(blockpos.b()).c() == Blocks.aX;
     }
 
     private IBlockState e(World world, BlockPos blockpos, IBlockState iblockstate) {
@@ -89,9 +84,9 @@ public class BlockRedstoneWire extends Block {
         Iterator iterator = arraylist.iterator();
 
         while (iterator.hasNext()) {
-            BlockPos blockpos1 = (BlockPos) iterator.next();
+            BlockPos blockpos1 = (BlockPos)iterator.next();
 
-            world.c(blockpos1, (Block) this);
+            world.c(blockpos1, (Block)this);
         }
 
         return iblockstate;
@@ -99,7 +94,7 @@ public class BlockRedstoneWire extends Block {
 
     private IBlockState a(World world, BlockPos blockpos, BlockPos blockpos1, IBlockState iblockstate) {
         IBlockState iblockstate1 = iblockstate;
-        int i0 = ((Integer) iblockstate.b(O)).intValue();
+        int i0 = ((Integer)iblockstate.b(O)).intValue();
         byte b0 = 0;
         int i1 = this.a(world, blockpos1, b0);
 
@@ -115,7 +110,7 @@ public class BlockRedstoneWire extends Block {
         Iterator iterator = EnumFacing.Plane.HORIZONTAL.iterator();
 
         while (iterator.hasNext()) {
-            EnumFacing enumfacing = (EnumFacing) iterator.next();
+            EnumFacing enumfacing = (EnumFacing)iterator.next();
             BlockPos blockpos2 = blockpos.a(enumfacing);
             boolean flag0 = blockpos2.n() != blockpos1.n() || blockpos2.p() != blockpos1.p();
 
@@ -147,10 +142,9 @@ public class BlockRedstoneWire extends Block {
             i1 = i2;
         }
 
-        // CanaryMod: RedstoneChange  // TODO : does this fuck up redstone change?
+        // CanaryMod: RedstoneChange
         if (i0 != i1) {
-            RedstoneChangeHook hook = (RedstoneChangeHook) new RedstoneChangeHook(world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos)), i2, i3).call();
-            if (hook.isCanceled()) {
+            if (new RedstoneChangeHook(new CanaryBlock(iblockstate, blockpos, world), i0, i1).call().isCanceled()) {
                 return iblockstate;
             }
         }
@@ -178,16 +172,15 @@ public class BlockRedstoneWire extends Block {
 
     private void d(World world, BlockPos blockpos) {
         if (world.p(blockpos).c() == this) {
-            world.c(blockpos, (Block) this);
+            world.c(blockpos, (Block)this);
             EnumFacing[] aenumfacing = EnumFacing.values();
             int i0 = aenumfacing.length;
 
             for (int i1 = 0; i1 < i0; ++i1) {
                 EnumFacing enumfacing = aenumfacing[i1];
 
-                world.c(blockpos.a(enumfacing), (Block) this);
+                world.c(blockpos.a(enumfacing), (Block)this);
             }
-
         }
     }
 
@@ -199,21 +192,21 @@ public class BlockRedstoneWire extends Block {
             EnumFacing enumfacing;
 
             while (iterator.hasNext()) {
-                enumfacing = (EnumFacing) iterator.next();
-                world.c(blockpos.a(enumfacing), (Block) this);
+                enumfacing = (EnumFacing)iterator.next();
+                world.c(blockpos.a(enumfacing), (Block)this);
             }
 
             iterator = EnumFacing.Plane.HORIZONTAL.iterator();
 
             while (iterator.hasNext()) {
-                enumfacing = (EnumFacing) iterator.next();
+                enumfacing = (EnumFacing)iterator.next();
                 this.d(world, blockpos.a(enumfacing));
             }
 
             iterator = EnumFacing.Plane.HORIZONTAL.iterator();
 
             while (iterator.hasNext()) {
-                enumfacing = (EnumFacing) iterator.next();
+                enumfacing = (EnumFacing)iterator.next();
                 BlockPos blockpos1 = blockpos.a(enumfacing);
 
                 if (world.p(blockpos1).c().t()) {
@@ -223,7 +216,6 @@ public class BlockRedstoneWire extends Block {
                     this.d(world, blockpos1.b());
                 }
             }
-
         }
     }
 
@@ -233,8 +225,7 @@ public class BlockRedstoneWire extends Block {
             // CanaryMod: RedstoneChange (Wire Destroy)
             int lvl = world.A(blockpos) - 1; // Subtract 1 from current in
             if (lvl > 0) {
-                BlockPosition bp = new BlockPosition(blockpos);
-                new RedstoneChangeHook(new CanaryBlock(BlockType.RedstoneWire.getId(), (short) iblockstate.c().c(iblockstate), bp.getBlockX(), bp.getBlockY(), bp.getBlockZ(), world.getCanaryWorld()), lvl, 0).call();
+                new RedstoneChangeHook(new CanaryBlock(iblockstate, blockpos, world), lvl, 0).call();
             }
             //
             EnumFacing[] aenumfacing = EnumFacing.values();
@@ -243,7 +234,7 @@ public class BlockRedstoneWire extends Block {
             for (int i1 = 0; i1 < i0; ++i1) {
                 EnumFacing enumfacing = aenumfacing[i1];
 
-                world.c(blockpos.a(enumfacing), (Block) this);
+                world.c(blockpos.a(enumfacing), (Block)this);
             }
 
             this.e(world, blockpos, iblockstate);
@@ -252,14 +243,14 @@ public class BlockRedstoneWire extends Block {
             EnumFacing enumfacing1;
 
             while (iterator.hasNext()) {
-                enumfacing1 = (EnumFacing) iterator.next();
+                enumfacing1 = (EnumFacing)iterator.next();
                 this.d(world, blockpos.a(enumfacing1));
             }
 
             iterator = EnumFacing.Plane.HORIZONTAL.iterator();
 
             while (iterator.hasNext()) {
-                enumfacing1 = (EnumFacing) iterator.next();
+                enumfacing1 = (EnumFacing)iterator.next();
                 BlockPos blockpos1 = blockpos.a(enumfacing1);
 
                 if (world.p(blockpos1).c().t()) {
@@ -269,7 +260,6 @@ public class BlockRedstoneWire extends Block {
                     this.d(world, blockpos1.b());
                 }
             }
-
         }
     }
 
@@ -278,7 +268,7 @@ public class BlockRedstoneWire extends Block {
             return i0;
         }
         else {
-            int i1 = ((Integer) world.p(blockpos).b(O)).intValue();
+            int i1 = ((Integer)world.p(blockpos).b(O)).intValue();
 
             return i1 > i0 ? i1 : i0;
         }
@@ -293,7 +283,6 @@ public class BlockRedstoneWire extends Block {
                 this.b(world, blockpos, iblockstate, 0);
                 world.g(blockpos);
             }
-
         }
     }
 
@@ -310,7 +299,7 @@ public class BlockRedstoneWire extends Block {
             return 0;
         }
         else {
-            int i0 = ((Integer) iblockstate.b(O)).intValue();
+            int i0 = ((Integer)iblockstate.b(O)).intValue();
 
             if (i0 == 0) {
                 return 0;
@@ -323,7 +312,7 @@ public class BlockRedstoneWire extends Block {
                 Iterator iterator = EnumFacing.Plane.HORIZONTAL.iterator();
 
                 while (iterator.hasNext()) {
-                    EnumFacing enumfacing1 = (EnumFacing) iterator.next();
+                    EnumFacing enumfacing1 = (EnumFacing)iterator.next();
 
                     if (this.d(iblockaccess, blockpos, enumfacing1)) {
                         enumset.add(enumfacing1);
@@ -358,7 +347,7 @@ public class BlockRedstoneWire extends Block {
     }
 
     protected static boolean d(IBlockState iblockstate) {
-        return a(iblockstate, (EnumFacing) null);
+        return a(iblockstate, (EnumFacing)null);
     }
 
     protected static boolean a(IBlockState iblockstate, EnumFacing enumfacing) {
@@ -368,7 +357,7 @@ public class BlockRedstoneWire extends Block {
             return true;
         }
         else if (Blocks.bb.e(block)) {
-            EnumFacing enumfacing1 = (EnumFacing) iblockstate.b(BlockRedstoneRepeater.N);
+            EnumFacing enumfacing1 = (EnumFacing)iblockstate.b(BlockRedstoneRepeater.N);
 
             return enumfacing1 == enumfacing || enumfacing1.d() == enumfacing;
         }
@@ -386,19 +375,21 @@ public class BlockRedstoneWire extends Block {
     }
 
     public int c(IBlockState iblockstate) {
-        return ((Integer) iblockstate.b(O)).intValue();
+        return ((Integer)iblockstate.b(O)).intValue();
     }
 
     protected BlockState e() {
-        return new BlockState(this, new IProperty[]{a, b, M, N, O});
+        return new BlockState(this, new IProperty[]{ a, b, M, N, O });
     }
 
     static enum EnumAttachPosition implements IStringSerializable {
 
-        UP("UP", 0, "up"), SIDE("SIDE", 1, "side"), NONE("NONE", 2, "none");
+        UP("UP", 0, "up"),
+        SIDE("SIDE", 1, "side"),
+        NONE("NONE", 2, "none");
         private final String d;
 
-        private static final BlockRedstoneWire.EnumAttachPosition[] $VALUES = new BlockRedstoneWire.EnumAttachPosition[]{UP, SIDE, NONE};
+        private static final BlockRedstoneWire.EnumAttachPosition[] $VALUES = new BlockRedstoneWire.EnumAttachPosition[]{ UP, SIDE, NONE };
 
         private EnumAttachPosition(String p_i45689_1_, int p_i45689_2_, String p_i45689_3_) {
             this.d = p_i45689_3_;

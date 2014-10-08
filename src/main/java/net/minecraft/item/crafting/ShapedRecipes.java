@@ -102,7 +102,7 @@ public class ShapedRecipes implements IRecipe {
                 ItemStack itemstack1 = inventorycrafting.a(i0);
 
                 if (itemstack1 != null && itemstack1.n()) {
-                    itemstack.d((NBTTagCompound) itemstack1.o().b());
+                    itemstack.d((NBTTagCompound)itemstack1.o().b());
                 }
             }
         }

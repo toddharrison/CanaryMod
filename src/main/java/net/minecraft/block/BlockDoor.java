@@ -1,8 +1,7 @@
 package net.minecraft.block;
 
-
 import com.google.common.base.Predicate;
-import net.canarymod.api.world.position.BlockPosition;
+import net.canarymod.api.world.blocks.CanaryBlock;
 import net.canarymod.hook.world.BlockPhysicsHook;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -21,10 +20,9 @@ import net.minecraft.world.World;
 
 import java.util.Random;
 
-
 public class BlockDoor extends Block {
 
-    public static final PropertyDirection a = PropertyDirection.a("facing", (Predicate) EnumFacing.Plane.HORIZONTAL);
+    public static final PropertyDirection a = PropertyDirection.a("facing", (Predicate)EnumFacing.Plane.HORIZONTAL);
     public static final PropertyBool b = PropertyBool.a("open");
     public static final PropertyEnum M = PropertyEnum.a("hinge", BlockDoor.EnumHingePosition.class);
     public static final PropertyBool N = PropertyBool.a("powered");
@@ -110,7 +108,6 @@ public class BlockDoor extends Block {
         else if (enumfacing == EnumFacing.NORTH) {
             this.a(0.0F, 0.0F, 1.0F - f0, 1.0F, 1.0F, 1.0F);
         }
-
     }
 
     public boolean a(World world, BlockPos blockpos, IBlockState iblockstate, EntityPlayer entityplayer, EnumFacing enumfacing, float f0, float f1, float f2) {
@@ -119,8 +116,7 @@ public class BlockDoor extends Block {
         }
         else {
             // CanaryMod: Block Physics
-            BlockPhysicsHook blockPhysics = (BlockPhysicsHook) new BlockPhysicsHook(world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos)), false).call();
-            if (blockPhysics.isCanceled()) {
+            if (new BlockPhysicsHook(new CanaryBlock(iblockstate, blockpos, world), false).call().isCanceled()) {
                 return true;
             }
             //
@@ -135,7 +131,7 @@ public class BlockDoor extends Block {
                 iblockstate = iblockstate1.a(b);
                 world.a(blockpos1, iblockstate, 2);
                 world.b(blockpos1, blockpos);
-                world.a(entityplayer, ((Boolean) iblockstate.b(b)).booleanValue() ? 1003 : 1006, blockpos, 0);
+                world.a(entityplayer, ((Boolean)iblockstate.b(b)).booleanValue() ? 1003 : 1006, blockpos, 0);
                 return true;
             }
         }
@@ -146,8 +142,7 @@ public class BlockDoor extends Block {
 
         if (iblockstate.c() == this) {
             // CanaryMod: Block Physics
-            BlockPhysicsHook blockPhysics = (BlockPhysicsHook) new BlockPhysicsHook(world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos)), false).call();
-            if (blockPhysics.isCanceled()) {
+            if (new BlockPhysicsHook(new CanaryBlock(iblockstate, blockpos, world), false).call().isCanceled()) {
                 return;
             }
             //
@@ -155,12 +150,11 @@ public class BlockDoor extends Block {
             BlockPos blockpos1 = iblockstate.b(O) == BlockDoor.EnumDoorHalf.LOWER ? blockpos : blockpos.b();
             IBlockState iblockstate1 = blockpos == blockpos1 ? iblockstate : world.p(blockpos1);
 
-            if (iblockstate1.c() == this && ((Boolean) iblockstate1.b(b)).booleanValue() != flag0) {
+            if (iblockstate1.c() == this && ((Boolean)iblockstate1.b(b)).booleanValue() != flag0) {
                 world.a(blockpos1, iblockstate1.a(b, Boolean.valueOf(flag0)), 2);
                 world.b(blockpos1, blockpos);
-                world.a((EntityPlayer) null, flag0 ? 1003 : 1006, blockpos, 0);
+                world.a((EntityPlayer)null, flag0 ? 1003 : 1006, blockpos, 0);
             }
-
         }
     }
 
@@ -186,7 +180,7 @@ public class BlockDoor extends Block {
                 flag0 = true;
             }
 
-            if (!World.a((IBlockAccess) world, blockpos.b())) {
+            if (!World.a((IBlockAccess)world, blockpos.b())) {
                 world.g(blockpos);
                 flag0 = true;
                 if (iblockstate2.c() == this) {
@@ -202,17 +196,16 @@ public class BlockDoor extends Block {
             else {
                 boolean flag1 = world.z(blockpos) || world.z(blockpos2);
 
-                if ((flag1 || block.g()) && block != this && flag1 != ((Boolean) iblockstate2.b(N)).booleanValue()) {
+                if ((flag1 || block.g()) && block != this && flag1 != ((Boolean)iblockstate2.b(N)).booleanValue()) {
                     world.a(blockpos2, iblockstate2.a(N, Boolean.valueOf(flag1)), 2);
-                    if (flag1 != ((Boolean) iblockstate.b(b)).booleanValue()) {
+                    if (flag1 != ((Boolean)iblockstate.b(b)).booleanValue()) {
                         world.a(blockpos, iblockstate.a(b, Boolean.valueOf(flag1)), 2);
                         world.b(blockpos, blockpos);
-                        world.a((EntityPlayer) null, flag1 ? 1003 : 1006, blockpos, 0);
+                        world.a((EntityPlayer)null, flag1 ? 1003 : 1006, blockpos, 0);
                     }
                 }
             }
         }
-
     }
 
     public Item a(IBlockState iblockstate, Random random, int i0) {
@@ -225,7 +218,7 @@ public class BlockDoor extends Block {
     }
 
     public boolean c(World world, BlockPos blockpos) {
-        return blockpos.o() >= 255 ? false : World.a((IBlockAccess) world, blockpos.b()) && super.c(world, blockpos) && super.c(world, blockpos.a());
+        return blockpos.o() >= 255 ? false : World.a((IBlockAccess)world, blockpos.b()) && super.c(world, blockpos) && super.c(world, blockpos.a());
     }
 
     public int i() {
@@ -258,7 +251,6 @@ public class BlockDoor extends Block {
         if (entityplayer.by.d && iblockstate.b(O) == BlockDoor.EnumDoorHalf.UPPER && world.p(blockpos1).c() == this) {
             world.g(blockpos1);
         }
-
     }
 
     public IBlockState a(IBlockState iblockstate, IBlockAccess iblockaccess, BlockPos blockpos) {
@@ -294,13 +286,13 @@ public class BlockDoor extends Block {
                 i0 |= 1;
             }
 
-            if (((Boolean) iblockstate.b(N)).booleanValue()) {
+            if (((Boolean)iblockstate.b(N)).booleanValue()) {
                 i0 |= 2;
             }
         }
         else {
-            i0 = b0 | ((EnumFacing) iblockstate.b(a)).e().b();
-            if (((Boolean) iblockstate.b(b)).booleanValue()) {
+            i0 = b0 | ((EnumFacing)iblockstate.b(a)).e().b();
+            if (((Boolean)iblockstate.b(b)).booleanValue()) {
                 i0 |= 4;
             }
         }
@@ -337,14 +329,15 @@ public class BlockDoor extends Block {
     }
 
     protected BlockState e() {
-        return new BlockState(this, new IProperty[]{O, a, b, M, N});
+        return new BlockState(this, new IProperty[]{ O, a, b, M, N });
     }
 
     public static enum EnumDoorHalf implements IStringSerializable {
 
-        UPPER("UPPER", 0), LOWER("LOWER", 1);
+        UPPER("UPPER", 0),
+        LOWER("LOWER", 1);
 
-        private static final BlockDoor.EnumDoorHalf[] $VALUES = new BlockDoor.EnumDoorHalf[]{UPPER, LOWER};
+        private static final BlockDoor.EnumDoorHalf[] $VALUES = new BlockDoor.EnumDoorHalf[]{ UPPER, LOWER };
 
         private EnumDoorHalf(String p_i45726_1_, int p_i45726_2_) {
         }
@@ -359,12 +352,12 @@ public class BlockDoor extends Block {
 
     }
 
-
     public static enum EnumHingePosition implements IStringSerializable {
 
-        LEFT("LEFT", 0), RIGHT("RIGHT", 1);
+        LEFT("LEFT", 0),
+        RIGHT("RIGHT", 1);
 
-        private static final BlockDoor.EnumHingePosition[] $VALUES = new BlockDoor.EnumHingePosition[]{LEFT, RIGHT};
+        private static final BlockDoor.EnumHingePosition[] $VALUES = new BlockDoor.EnumHingePosition[]{ LEFT, RIGHT };
 
         private EnumHingePosition(String p_i45725_1_, int p_i45725_2_) {
         }

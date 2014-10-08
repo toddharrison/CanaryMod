@@ -1,8 +1,6 @@
 package net.minecraft.item;
 
-import net.canarymod.api.world.blocks.BlockFace;
 import net.canarymod.api.world.blocks.CanaryBlock;
-import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.player.ItemUseHook;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirt;
@@ -37,14 +35,11 @@ public class ItemHoe extends Item {
             Block block = iblockstate.c();
 
             // CanaryMod: ItemUse
-            BlockPosition cbp = new BlockPosition(blockpos); // Translate native block pos
-            CanaryBlock clicked = (CanaryBlock)world.getCanaryWorld().getBlockAt(cbp); // Store Clicked
-            BlockFace cbf = BlockFace.fromByte((byte)enumfacing.a()); // Get the click face
-            clicked.setFaceClicked(cbf); // Set face clicked
-            if (((ItemUseHook)new ItemUseHook(((EntityPlayerMP)entityplayer).getPlayer(), itemstack.getCanaryItem(), clicked).call()).isCanceled()) {
+            CanaryBlock clicked = new CanaryBlock(iblockstate, blockpos, world); // Store Clicked
+            clicked.setFaceClicked(enumfacing.asBlockFace()); // Set face clicked
+            if (new ItemUseHook(((EntityPlayerMP)entityplayer).getPlayer(), itemstack.getCanaryItem(), clicked).call().isCanceled()) {
                 return false;
             }
-
             //
 
             if (enumfacing != EnumFacing.DOWN && world.p(blockpos.a()).c().r() == Material.a) {

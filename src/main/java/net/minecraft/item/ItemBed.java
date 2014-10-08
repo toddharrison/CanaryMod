@@ -1,8 +1,6 @@
 package net.minecraft.item;
 
-import net.canarymod.api.world.blocks.BlockFace;
 import net.canarymod.api.world.blocks.CanaryBlock;
-import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.player.BlockPlaceHook;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBed;
@@ -35,12 +33,8 @@ public class ItemBed extends Item {
             Block block = iblockstate.c();
             boolean flag0 = block.f(world, blockpos);
             // CanaryMod: BlockPlaceHook
-            BlockPosition cbp = new BlockPosition(blockpos); // Translate native block pos
-            CanaryBlock clicked = (CanaryBlock)world.getCanaryWorld().getBlockAt(cbp); // Store Clicked
-            BlockFace cbf = BlockFace.fromByte((byte)enumfacing.a()); // Get the click face
-            clicked.setFaceClicked(cbf); // Set face clicked
-            cbp = cbp.safeClone(); // Remake BlockPosition
-            cbp.transform(cbf); // Adjust position based on face
+            CanaryBlock clicked = new CanaryBlock(iblockstate, blockpos, world);
+            clicked.setFaceClicked(enumfacing.asBlockFace()); // Set face clicked
             //
 
             if (!flag0) {
@@ -60,10 +54,8 @@ public class ItemBed extends Item {
                     IBlockState iblockstate1 = Blocks.C.P().a(BlockBed.b, false).a(BlockBed.N, enumfacing1).a(BlockBed.a, BlockBed.EnumPartType.FOOT);
 
                     // CanaryMod: BlockPlaceHook continued
-                    CanaryBlock placed = new CanaryBlock(iblockstate1, cbp, world.getCanaryWorld());
                     // CanaryMod: Create Hook and call it
-                    BlockPlaceHook hook = (BlockPlaceHook)new BlockPlaceHook(((EntityPlayerMP)entityplayer).getPlayer(), clicked, placed).call();
-                    if (hook.isCanceled()) {
+                    if (new BlockPlaceHook(((EntityPlayerMP)entityplayer).getPlayer(), clicked, new CanaryBlock(iblockstate1, blockpos1, world)).call().isCanceled()) {
                         return false;
                     }
                     //

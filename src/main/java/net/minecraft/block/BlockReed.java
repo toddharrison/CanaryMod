@@ -1,10 +1,6 @@
 package net.minecraft.block;
 
-
-import java.util.Iterator;
-import java.util.Random;
 import net.canarymod.api.world.blocks.CanaryBlock;
-import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.world.BlockGrowHook;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -19,6 +15,8 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
+import java.util.Iterator;
+import java.util.Random;
 
 public class BlockReed extends Block {
 
@@ -43,18 +41,14 @@ public class BlockReed extends Block {
                 }
 
                 if (i0 < 3) {
-                    int i1 = ((Integer) iblockstate.b(a)).intValue();
-                    // CanaryMod: Grab the original stuff
-                    BlockPosition bp = new BlockPosition(blockpos);
-                    CanaryBlock original = (CanaryBlock) world.getCanaryWorld().getBlockAt(bp);
-                    CanaryBlock growth = new CanaryBlock(this, (short) 0, bp.getBlockX(), bp.getBlockY() + 1, bp.getBlockZ(), world.getCanaryWorld());
-                    BlockGrowHook blockGrowHook = new BlockGrowHook(original, growth);
+                    int i1 = ((Integer)iblockstate.b(a)).intValue();
+                    // CanaryMod: Grab the original block
+                    CanaryBlock original = new CanaryBlock(iblockstate, blockpos, world);
                     //
 
                     if (i1 == 15) {
                         // Call hook for spawning new
-                        blockGrowHook.call();
-                        if (!blockGrowHook.isCanceled()) {
+                        if (!new BlockGrowHook(original, new CanaryBlock(this.P(), blockpos, world)).isCanceled()) {
                             world.a(blockpos.a(), this.P());
                             world.a(blockpos, iblockstate.a(a, Integer.valueOf(0)), 4);
                         }
@@ -62,17 +56,13 @@ public class BlockReed extends Block {
                     }
                     else {
                         // Call hook for just growing in place
-                        growth = (CanaryBlock) world.getCanaryWorld().getBlockAt(bp);
-                        growth.setData((short) (i1 + 1));
-                        blockGrowHook = (BlockGrowHook) new BlockGrowHook(original, growth).call();
-                        if (!blockGrowHook.isCanceled()) {
+                        if (!new BlockGrowHook(original, new CanaryBlock(iblockstate.a(a, i1 + 1), blockpos, world)).isCanceled()) {
                             world.a(blockpos, iblockstate.a(a, Integer.valueOf(i1 + 1)), 4);
                         }
                         //
                     }
                 }
             }
-
         }
     }
 
@@ -95,8 +85,9 @@ public class BlockReed extends Block {
                     return false;
                 }
 
-                enumfacing = (EnumFacing) iterator.next();
-            } while (world.p(blockpos.a(enumfacing).b()).c().r() != Material.h);
+                enumfacing = (EnumFacing)iterator.next();
+            }
+            while (world.p(blockpos.a(enumfacing).b()).c().r() != Material.h);
 
             return true;
         }
@@ -142,11 +133,10 @@ public class BlockReed extends Block {
     }
 
     public int c(IBlockState iblockstate) {
-        return ((Integer) iblockstate.b(a)).intValue();
+        return ((Integer)iblockstate.b(a)).intValue();
     }
 
     protected BlockState e() {
-        return new BlockState(this, new IProperty[]{a});
+        return new BlockState(this, new IProperty[]{ a });
     }
-
 }

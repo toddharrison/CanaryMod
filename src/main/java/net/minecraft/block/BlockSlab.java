@@ -1,6 +1,5 @@
 package net.minecraft.block;
 
-
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
@@ -17,7 +16,6 @@ import net.minecraft.world.World;
 
 import java.util.List;
 import java.util.Random;
-
 
 public abstract class BlockSlab extends Block {
 
@@ -54,7 +52,6 @@ public abstract class BlockSlab extends Block {
                     this.a(0.0F, 0.0F, 0.0F, 1.0F, 0.5F, 1.0F);
                 }
             }
-
         }
     }
 
@@ -65,11 +62,10 @@ public abstract class BlockSlab extends Block {
         else {
             this.a(0.0F, 0.0F, 0.0F, 1.0F, 0.5F, 1.0F);
         }
-
     }
 
     public void a(World world, BlockPos blockpos, IBlockState iblockstate, AxisAlignedBB axisalignedbb, List list, Entity entity) {
-        this.a((IBlockAccess) world, blockpos); // CanaryMod: cast fix
+        this.a((IBlockAccess)world, blockpos); // CanaryMod: cast fix
         super.a(world, blockpos, iblockstate, axisalignedbb, list, entity);
     }
 
@@ -80,7 +76,7 @@ public abstract class BlockSlab extends Block {
     public IBlockState a(World world, BlockPos blockpos, EnumFacing enumfacing, float f0, float f1, float f2, int i0, EntityLivingBase entitylivingbase) {
         IBlockState iblockstate = super.a(world, blockpos, enumfacing, f0, f1, f2, i0, entitylivingbase).a(a, BlockSlab.EnumBlockHalf.BOTTOM);
 
-        return this.j() ? iblockstate : (enumfacing != EnumFacing.DOWN && (enumfacing == EnumFacing.UP || (double) f1 <= 0.5D) ? iblockstate : iblockstate.a(a, BlockSlab.EnumBlockHalf.TOP));
+        return this.j() ? iblockstate : (enumfacing != EnumFacing.DOWN && (enumfacing == EnumFacing.UP || (double)f1 <= 0.5D) ? iblockstate : iblockstate.a(a, BlockSlab.EnumBlockHalf.TOP));
     }
 
     public int a(Random random) {
@@ -105,10 +101,11 @@ public abstract class BlockSlab extends Block {
 
     public static enum EnumBlockHalf implements IStringSerializable {
 
-        TOP("TOP", 0, "top"), BOTTOM("BOTTOM", 1, "bottom");
+        TOP("TOP", 0, "top"),
+        BOTTOM("BOTTOM", 1, "bottom");
         private final String c;
 
-        private static final BlockSlab.EnumBlockHalf[] $VALUES = new BlockSlab.EnumBlockHalf[]{TOP, BOTTOM};
+        private static final BlockSlab.EnumBlockHalf[] $VALUES = new BlockSlab.EnumBlockHalf[]{ TOP, BOTTOM };
 
         private EnumBlockHalf(String p_i45713_1_, int p_i45713_2_, String p_i45713_3_) {
             this.c = p_i45713_3_;

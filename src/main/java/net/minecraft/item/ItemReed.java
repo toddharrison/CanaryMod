@@ -1,8 +1,6 @@
 package net.minecraft.item;
 
-import net.canarymod.api.world.blocks.BlockFace;
 import net.canarymod.api.world.blocks.CanaryBlock;
-import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.player.BlockPlaceHook;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSnow;
@@ -29,12 +27,8 @@ public class ItemReed extends Item {
         Block block = iblockstate.c();
 
         // CanaryMod: BlockPlaceHook
-        BlockPosition cbp = new BlockPosition(blockpos); // Translate native block pos
-        CanaryBlock clicked = (CanaryBlock)world.getCanaryWorld().getBlockAt(cbp); // Store Clicked
-        BlockFace cbf = BlockFace.fromByte((byte)enumfacing.a()); // Get the click face
-        clicked.setFaceClicked(cbf); // Set face clicked
-        cbp = cbp.safeClone(); // Remake BlockPosition
-        cbp.transform(cbf); // Adjust position based on face
+        CanaryBlock clicked = new CanaryBlock(world.p(blockpos), blockpos, world); // Store Clicked
+        clicked.setFaceClicked(enumfacing.asBlockFace()); // Set face clicked
         //
 
         if (block == Blocks.aH && ((Integer)iblockstate.b(BlockSnow.a)).intValue() < 1) {
@@ -63,10 +57,9 @@ public class ItemReed extends Item {
 
                     if (world.a(blockpos, iblockstate1, 3)) {
                         iblockstate1 = world.p(blockpos);
-                        // set placed
-                        CanaryBlock placed = new CanaryBlock(iblockstate1, cbp, world.getCanaryWorld());
-                        // Create and Call
-                        BlockPlaceHook hook = (BlockPlaceHook)new BlockPlaceHook(((EntityPlayerMP)entityplayer).getPlayer(), clicked, placed).call();
+
+                        // CanaryMod: create and call
+                        BlockPlaceHook hook = (BlockPlaceHook)new BlockPlaceHook(((EntityPlayerMP)entityplayer).getPlayer(), clicked, new CanaryBlock(iblockstate1, blockpos, world)).call();
                         if (hook.isCanceled()) {
                             return false;
                         }

@@ -1,9 +1,6 @@
 package net.minecraft.block;
 
-import java.util.Iterator;
-import java.util.Random;
 import net.canarymod.api.world.blocks.CanaryBlock;
-import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.world.BlockGrowHook;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -11,6 +8,8 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenBigMushroom;
 
+import java.util.Iterator;
+import java.util.Random;
 
 public class BlockMushroom extends BlockBush implements IGrowable {
 
@@ -23,15 +22,13 @@ public class BlockMushroom extends BlockBush implements IGrowable {
 
     public void b(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {
         if (random.nextInt(25) == 0) {
-            // CanaryMod: Grab the original stuff
-            CanaryBlock original = (CanaryBlock) world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos));
-            //
+
             int i0 = 5;
             boolean flag0 = true;
             Iterator iterator = BlockPos.b(blockpos.a(-4, -1, -4), blockpos.a(4, 1, 4)).iterator();
 
             while (iterator.hasNext()) {
-                BlockPos blockpos1 = (BlockPos) iterator.next();
+                BlockPos blockpos1 = (BlockPos)iterator.next();
 
                 if (world.p(blockpos1).c() == this) {
                     --i0;
@@ -53,11 +50,7 @@ public class BlockMushroom extends BlockBush implements IGrowable {
 
             if (world.d(blockpos2) && this.f(world, blockpos2, this.P())) {
                 // CanaryMod: BlockGrow
-                BlockPosition bp = new BlockPosition(blockpos);
-                bp.setY(bp.getBlockY() + 1);
-                CanaryBlock growth = new CanaryBlock(this, (short) 0, bp.getBlockX(), bp.getBlockY(), bp.getBlockZ(), world.getCanaryWorld());
-                BlockGrowHook blockGrowHook = (BlockGrowHook) new BlockGrowHook(original, growth).call();
-                if (!blockGrowHook.isCanceled()) {
+                if (!new BlockGrowHook(new CanaryBlock(iblockstate, blockpos, world), new CanaryBlock(this.P(), blockpos2, world)).call().isCanceled()) {
                     world.a(blockpos2, this.P(), 2);
                 }
                 //
@@ -109,7 +102,7 @@ public class BlockMushroom extends BlockBush implements IGrowable {
     }
 
     public boolean a(World world, Random random, BlockPos blockpos, IBlockState iblockstate) {
-        return (double) random.nextFloat() < 0.4D;
+        return (double)random.nextFloat() < 0.4D;
     }
 
     public void b(World world, Random random, BlockPos blockpos, IBlockState iblockstate) {

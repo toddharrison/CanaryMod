@@ -48,7 +48,7 @@ public class BlockDispenser extends BlockContainer {
 
     private void e(World world, BlockPos blockpos, IBlockState iblockstate) {
         if (!world.D) {
-            EnumFacing enumfacing = (EnumFacing) iblockstate.b(a);
+            EnumFacing enumfacing = (EnumFacing)iblockstate.b(a);
             boolean flag0 = world.p(blockpos.c()).c().m();
             boolean flag1 = world.p(blockpos.d()).c().m();
 
@@ -82,7 +82,7 @@ public class BlockDispenser extends BlockContainer {
             TileEntity tileentity = world.s(blockpos);
 
             if (tileentity instanceof TileEntityDispenser) {
-                entityplayer.a((IInventory) ((TileEntityDispenser) tileentity));
+                entityplayer.a((IInventory)((TileEntityDispenser)tileentity));
             }
 
             return true;
@@ -91,15 +91,14 @@ public class BlockDispenser extends BlockContainer {
 
     protected void d(World world, BlockPos blockpos) {
         BlockSourceImpl blocksourceimpl = new BlockSourceImpl(world, blockpos);
-        TileEntityDispenser tileentitydispenser = (TileEntityDispenser) blocksourceimpl.h();
+        TileEntityDispenser tileentitydispenser = (TileEntityDispenser)blocksourceimpl.h();
 
         if (tileentitydispenser != null) {
             int i0 = tileentitydispenser.m();
 
             if (i0 < 0) {
-                // CanaryMod: Dispense Smoke
-                DispenseHook hook = (DispenseHook) new DispenseHook(tileentitydispenser.getCanaryDispenser(), null).call();
-                if (!hook.isCanceled()) {
+                // CanaryMod: Dispense Smok
+                if (!new DispenseHook(tileentitydispenser.getCanaryDispenser(), null).call().isCanceled()) {
                     world.b(1001, blockpos, 0);
                 }
                 //
@@ -113,35 +112,32 @@ public class BlockDispenser extends BlockContainer {
 
                     tileentitydispenser.a(i0, itemstack1.b == 0 ? null : itemstack1);
                 }
-
             }
         }
     }
-    
+
     // CanaryMod: protected>>public
     public IBehaviorDispenseItem a(ItemStack itemstack) {
-        return (IBehaviorDispenseItem) M.a(itemstack == null ? null : itemstack.b());
+        return (IBehaviorDispenseItem)M.a(itemstack == null ? null : itemstack.b());
     }
 
     public void a(World world, BlockPos blockpos, IBlockState iblockstate, Block block) {
         boolean flag0 = world.z(blockpos) || world.z(blockpos.a());
-        boolean flag1 = ((Boolean) iblockstate.b(b)).booleanValue();
+        boolean flag1 = ((Boolean)iblockstate.b(b)).booleanValue();
 
         if (flag0 && !flag1) {
-            world.a(blockpos, (Block) this, this.a(world));
+            world.a(blockpos, (Block)this, this.a(world));
             world.a(blockpos, iblockstate.a(b, Boolean.valueOf(true)), 4);
         }
         else if (!flag0 && flag1) {
             world.a(blockpos, iblockstate.a(b, Boolean.valueOf(false)), 4);
         }
-
     }
 
     public void b(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {
         if (!world.D) {
             this.d(world, blockpos);
         }
-
     }
 
     public TileEntity a(World world, int i0) {
@@ -158,17 +154,16 @@ public class BlockDispenser extends BlockContainer {
             TileEntity tileentity = world.s(blockpos);
 
             if (tileentity instanceof TileEntityDispenser) {
-                ((TileEntityDispenser) tileentity).a(itemstack.q());
+                ((TileEntityDispenser)tileentity).a(itemstack.q());
             }
         }
-
     }
 
     public void b(World world, BlockPos blockpos, IBlockState iblockstate) {
         TileEntity tileentity = world.s(blockpos);
 
         if (tileentity instanceof TileEntityDispenser) {
-            InventoryHelper.a(world, blockpos, (TileEntityDispenser) tileentity);
+            InventoryHelper.a(world, blockpos, (TileEntityDispenser)tileentity);
             world.e(blockpos, this);
         }
 
@@ -177,9 +172,9 @@ public class BlockDispenser extends BlockContainer {
 
     public static IPosition a(IBlockSource iblocksource) {
         EnumFacing enumfacing = b(iblocksource.f());
-        double d0 = iblocksource.a() + 0.7D * (double) enumfacing.g();
-        double d1 = iblocksource.b() + 0.7D * (double) enumfacing.h();
-        double d2 = iblocksource.c() + 0.7D * (double) enumfacing.i();
+        double d0 = iblocksource.a() + 0.7D * (double)enumfacing.g();
+        double d1 = iblocksource.b() + 0.7D * (double)enumfacing.h();
+        double d2 = iblocksource.c() + 0.7D * (double)enumfacing.i();
 
         return new PositionImpl(d0, d1, d2);
     }
@@ -206,9 +201,9 @@ public class BlockDispenser extends BlockContainer {
 
     public int c(IBlockState iblockstate) {
         byte b0 = 0;
-        int i0 = b0 | ((EnumFacing) iblockstate.b(a)).a();
+        int i0 = b0 | ((EnumFacing)iblockstate.b(a)).a();
 
-        if (((Boolean) iblockstate.b(b)).booleanValue()) {
+        if (((Boolean)iblockstate.b(b)).booleanValue()) {
             i0 |= 8;
         }
 
@@ -216,7 +211,6 @@ public class BlockDispenser extends BlockContainer {
     }
 
     protected BlockState e() {
-        return new BlockState(this, new IProperty[]{a, b});
+        return new BlockState(this, new IProperty[]{ a, b });
     }
-
 }

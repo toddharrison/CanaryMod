@@ -1,8 +1,6 @@
 package net.minecraft.item;
 
-import net.canarymod.api.world.blocks.BlockFace;
 import net.canarymod.api.world.blocks.CanaryBlock;
-import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.player.BlockPlaceHook;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
@@ -32,15 +30,9 @@ public class ItemSeeds extends Item {
         }
         else if (world.p(blockpos).c() == this.b && world.d(blockpos.a())) {
             // CanaryMod: BlockPlaceHook
-            BlockPosition cbp = new BlockPosition(blockpos);
-            CanaryBlock clicked = (CanaryBlock)world.getCanaryWorld().getBlockAt(cbp);
-            BlockFace cbf = BlockFace.fromByte((byte)1); // Its always UP
-            clicked.setFaceClicked(cbf); // Set face clicked
-            cbp = cbp.safeClone(); // clone the original BlockPosition
-            cbp.transform(cbf); // Adjust BlockPostiion according to clicked face
-            CanaryBlock placed = new CanaryBlock(this.a.P(), cbp, world.getCanaryWorld());
-            BlockPlaceHook hook = (BlockPlaceHook)new BlockPlaceHook(((EntityPlayerMP)entityplayer).getPlayer(), clicked, placed).call();
-            if (hook.isCanceled()) {
+            CanaryBlock clicked = new CanaryBlock(world.p(blockpos), blockpos, world);
+            clicked.setFaceClicked(enumfacing.asBlockFace()); // Set face clicked
+            if (new BlockPlaceHook(((EntityPlayerMP)entityplayer).getPlayer(), clicked, new CanaryBlock(this.a.P(), blockpos.a(), world)).call().isCanceled()) {
                 return false;
             }
             //

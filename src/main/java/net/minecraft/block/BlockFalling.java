@@ -1,7 +1,6 @@
 package net.minecraft.block;
 
-
-import net.canarymod.api.world.position.BlockPosition;
+import net.canarymod.api.world.blocks.CanaryBlock;
 import net.canarymod.hook.world.BlockPhysicsHook;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -30,30 +29,27 @@ public class BlockFalling extends Block {
     public void c(World world, BlockPos blockpos, IBlockState iblockstate) {
         // CanaryMod: BlockPhysics
         if (world.getCanaryWorld() != null) {
-            BlockPhysicsHook hook = (BlockPhysicsHook) new BlockPhysicsHook(world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos)), true).call();
-            if (hook.isCanceled()) {
+            if (new BlockPhysicsHook(new CanaryBlock(iblockstate, blockpos, world), true).call().isCanceled()) {
                 return;
             }
         }
         //
-        world.a(blockpos, (Block) this, this.a(world));
+        world.a(blockpos, (Block)this, this.a(world));
     }
 
     public void a(World world, BlockPos blockpos, IBlockState iblockstate, Block block) {
         // CanaryMod: BlockPhysics
-        BlockPhysicsHook hook = (BlockPhysicsHook) new BlockPhysicsHook(world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos)), false).call();
-        if (hook.isCanceled()) {
+        if (new BlockPhysicsHook(new CanaryBlock(iblockstate, blockpos, world), true).call().isCanceled()) {
             return;
         }
         //
-        world.a(blockpos, (Block) this, this.a(world));
+        world.a(blockpos, (Block)this, this.a(world));
     }
 
     public void b(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {
         if (!world.D) {
             this.e(world, blockpos);
         }
-
     }
 
     private void e(World world, BlockPos blockpos) {
@@ -62,10 +58,10 @@ public class BlockFalling extends Block {
 
             if (!M && world.a(blockpos.a(-b0, -b0, -b0), blockpos.a(b0, b0, b0))) {
                 if (!world.D) {
-                    EntityFallingBlock entityfallingblock = new EntityFallingBlock(world, (double) blockpos.n() + 0.5D, (double) blockpos.o(), (double) blockpos.p() + 0.5D, world.p(blockpos));
+                    EntityFallingBlock entityfallingblock = new EntityFallingBlock(world, (double)blockpos.n() + 0.5D, (double)blockpos.o(), (double)blockpos.p() + 0.5D, world.p(blockpos));
 
                     this.a(entityfallingblock);
-                    world.d((Entity) entityfallingblock);
+                    world.d((Entity)entityfallingblock);
                 }
             }
             else {
@@ -81,7 +77,6 @@ public class BlockFalling extends Block {
                     world.a(blockpos1.a(), this.P());
                 }
             }
-
         }
     }
 

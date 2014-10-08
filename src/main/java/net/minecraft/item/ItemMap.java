@@ -38,17 +38,17 @@ public class ItemMap extends ItemMapBase {
             return brokenMap;
         }
 
-        MapData mapdata = (MapData) world.a(MapData.class, s0);
+        MapData mapdata = (MapData)world.a(MapData.class, s0);
 
         if (mapdata == null && !world.D) {
             itemstack.b(world.b("map"));
             s0 = "map_" + itemstack.i();
             mapdata = new MapData(s0);
             mapdata.e = 3;
-            mapdata.a((double) world.P().c(), (double) world.P().e(), mapdata.e);
-            mapdata.d = (byte) world.t.q();
+            mapdata.a((double)world.P().c(), (double)world.P().e(), mapdata.e);
+            mapdata.d = (byte)world.t.q();
             mapdata.c();
-            world.a(s0, (WorldSavedData) mapdata);
+            world.a(s0, (WorldSavedData)mapdata);
         }
 
         if (mapdata != null && mapdata.worldName.isEmpty()) {
@@ -67,15 +67,15 @@ public class ItemMap extends ItemMapBase {
             int i0 = 1 << mapdata.e;
             int i1 = mapdata.b;
             int i2 = mapdata.c;
-            int i3 = MathHelper.c(entity.s - (double) i1) / i0 + 64;
-            int i4 = MathHelper.c(entity.u - (double) i2) / i0 + 64;
+            int i3 = MathHelper.c(entity.s - (double)i1) / i0 + 64;
+            int i4 = MathHelper.c(entity.u - (double)i2) / i0 + 64;
             int i5 = 128 / i0;
 
             if (world.t.o()) {
                 i5 /= 2;
             }
 
-            MapData.MapInfo mapdata_mapinfo = mapdata.a((EntityPlayer) entity);
+            MapData.MapInfo mapdata_mapinfo = mapdata.a((EntityPlayer)entity);
 
             ++mapdata_mapinfo.b;
             boolean flag0 = false;
@@ -124,7 +124,8 @@ public class ItemMap extends ItemMapBase {
                                                 do {
                                                     --i17;
                                                     iblockstate = chunk.g(new BlockPos(i15 + i12, i17, i16 + i13));
-                                                } while (iblockstate.c().g(iblockstate) == MapColor.b && i17 > 0);
+                                                }
+                                                while (iblockstate.c().g(iblockstate) == MapColor.b && i17 > 0);
 
                                                 if (i17 > 0 && iblockstate.c().r().d()) {
                                                     int i18 = i17 - 1;
@@ -134,18 +135,19 @@ public class ItemMap extends ItemMapBase {
                                                     do {
                                                         block = chunk.a(i15 + i12, i18--, i16 + i13);
                                                         ++i14;
-                                                    } while (i18 > 0 && block.r().d());
+                                                    }
+                                                    while (i18 > 0 && block.r().d());
                                                 }
                                             }
 
-                                            d1 += (double) i17 / (double) (i0 * i0);
+                                            d1 += (double)i17 / (double)(i0 * i0);
                                             hashmultiset.add(iblockstate.c().g(iblockstate));
                                         }
                                     }
                                 }
 
                                 i14 /= i0 * i0;
-                                double d2 = (d1 - d0) * 4.0D / (double) (i0 + 4) + ((double) (i6 + i7 & 1) - 0.5D) * 0.4D;
+                                double d2 = (d1 - d0) * 4.0D / (double)(i0 + 4) + ((double)(i6 + i7 & 1) - 0.5D) * 0.4D;
                                 byte b0 = 1;
 
                                 if (d2 > 0.6D) {
@@ -156,10 +158,10 @@ public class ItemMap extends ItemMapBase {
                                     b0 = 0;
                                 }
 
-                                MapColor mapcolor = (MapColor) Iterables.getFirst(Multisets.copyHighestCountFirst(hashmultiset), MapColor.b);
+                                MapColor mapcolor = (MapColor)Iterables.getFirst(Multisets.copyHighestCountFirst(hashmultiset), MapColor.b);
 
                                 if (mapcolor == MapColor.n) {
-                                    d2 = (double) i14 * 0.1D + (double) (i6 + i7 & 1) * 0.2D;
+                                    d2 = (double)i14 * 0.1D + (double)(i6 + i7 & 1) * 0.2D;
                                     b0 = 1;
                                     if (d2 < 0.5D) {
                                         b0 = 2;
@@ -173,7 +175,7 @@ public class ItemMap extends ItemMapBase {
                                 d0 = d1;
                                 if (i7 >= 0 && i8 * i8 + i9 * i9 < i5 * i5 && (!flag1 || (i6 + i7 & 1) != 0)) {
                                     byte b1 = mapdata.f[i6 + i7 * 128];
-                                    byte b2 = (byte) (mapcolor.M * 4 + b0);
+                                    byte b2 = (byte)(mapcolor.M * 4 + b0);
 
                                     if (b1 != b2) {
                                         mapdata.f[i6 + i7 * 128] = b2;
@@ -186,10 +188,8 @@ public class ItemMap extends ItemMapBase {
                     }
                 }
             }
-
         }
     }
-
 
     public void a(ItemStack itemstack, World world, Entity entity, int i0, boolean flag0) {
         if (!world.D) {
@@ -202,7 +202,7 @@ public class ItemMap extends ItemMapBase {
             //
 
             if (entity instanceof EntityPlayer) {
-                EntityPlayer entityplayer = (EntityPlayer) entity;
+                EntityPlayer entityplayer = (EntityPlayer)entity;
 
                 mapdata.a(entityplayer, itemstack);
             }
@@ -224,15 +224,15 @@ public class ItemMap extends ItemMapBase {
             itemstack.b(world.b("map"));
             MapData mapdata1 = new MapData("map_" + itemstack.i());
 
-            mapdata1.e = (byte) (mapdata.e + 1);
+            mapdata1.e = (byte)(mapdata.e + 1);
             if (mapdata1.e > 4) {
                 mapdata1.e = 4;
             }
 
-            mapdata1.a((double) mapdata.b, (double) mapdata.c, mapdata1.e);
+            mapdata1.a((double)mapdata.b, (double)mapdata.c, mapdata1.e);
             mapdata1.d = mapdata.d;
             mapdata1.c();
-            world.a("map_" + itemstack.i(), (WorldSavedData) mapdata1);
+            world.a("map_" + itemstack.i(), (WorldSavedData)mapdata1);
         }
     }
 }

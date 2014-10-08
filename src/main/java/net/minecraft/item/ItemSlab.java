@@ -1,9 +1,7 @@
 package net.minecraft.item;
 
 import net.canarymod.api.entity.living.humanoid.CanaryPlayer;
-import net.canarymod.api.world.blocks.BlockFace;
 import net.canarymod.api.world.blocks.CanaryBlock;
-import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.player.BlockPlaceHook;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSlab;
@@ -41,12 +39,8 @@ public class ItemSlab extends ItemBlock {
         this.hook = null; // CanaryMod: Clean up
         this.handled = false; // CanaryMod: Clean up
         // CanaryMod: BlockPlaceHook
-        BlockPosition cbp = new BlockPosition(blockpos); // Translate native block pos
-        CanaryBlock clicked = (CanaryBlock)world.getCanaryWorld().getBlockAt(cbp); // Store Clicked
-        BlockFace cbf = BlockFace.fromByte((byte)enumfacing.a()); // Get the click face
-        clicked.setFaceClicked(cbf); // Set face clicked
-        cbp = cbp.safeClone(); // Remake BlockPosition
-        cbp.transform(cbf); // Adjust position based on face
+        CanaryBlock clicked = new CanaryBlock(world.p(blockpos), blockpos, world); // Store Clicked
+        clicked.setFaceClicked(enumfacing.asBlockFace()); // Set face clicked
         //
 
         if (itemstack.b == 0) {
@@ -67,10 +61,8 @@ public class ItemSlab extends ItemBlock {
                 if ((enumfacing == EnumFacing.UP && blockslab_enumblockhalf == BlockSlab.EnumBlockHalf.BOTTOM || enumfacing == EnumFacing.DOWN && blockslab_enumblockhalf == BlockSlab.EnumBlockHalf.TOP) && comparable == object) {
                     IBlockState iblockstate1 = this.c.P().a(iproperty, comparable);
 
-                    // CanaryMod: BlockPlace / set block placed and call hook
-                    CanaryBlock placed = new CanaryBlock(iblockstate1, cbp, world.getCanaryWorld());
-
-                    hook = (BlockPlaceHook)new BlockPlaceHook(((EntityPlayerMP)entityplayer).getPlayer(), clicked, placed).call();
+                    // CanaryMod: BlockPlace
+                    hook = (BlockPlaceHook)new BlockPlaceHook(((EntityPlayerMP)entityplayer).getPlayer(), clicked, new CanaryBlock(iblockstate1, blockpos.a(enumfacing), world)).call();
                     if (hook.isCanceled()) {
                         return false;
                     }
@@ -104,8 +96,7 @@ public class ItemSlab extends ItemBlock {
                 IBlockState iblockstate1 = this.c.P().a(this.b.l(), comparable);
 
                 // Call hook
-                CanaryBlock placed = new CanaryBlock(iblockstate1, new BlockPosition(blockpos), world.getCanaryWorld());
-                hook = (BlockPlaceHook)new BlockPlaceHook(player, clicked, placed).call();
+                hook = (BlockPlaceHook)new BlockPlaceHook(player, clicked, new CanaryBlock(iblockstate1, blockpos, world)).call();
                 if (hook.isCanceled()) {
                     return false;
                 }

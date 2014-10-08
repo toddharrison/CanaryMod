@@ -1,8 +1,6 @@
 package net.minecraft.item;
 
-import net.canarymod.api.world.blocks.BlockFace;
 import net.canarymod.api.world.blocks.CanaryBlock;
-import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.player.ItemUseHook;
 import net.canarymod.hook.world.IgnitionHook;
 import net.canarymod.hook.world.IgnitionHook.IgnitionCause;
@@ -23,13 +21,8 @@ public class ItemFireball extends Item {
 
     public boolean a(ItemStack itemstack, EntityPlayer entityplayer, World world, BlockPos blockpos, EnumFacing enumfacing, float f0, float f1, float f2) {
         // CanaryMod: get clicked
-        BlockPosition cbp = new BlockPosition(blockpos); // Translate native block pos
-        CanaryBlock clicked = (CanaryBlock)world.getCanaryWorld().getBlockAt(cbp); // Store Clicked
-        BlockFace cbf = BlockFace.fromByte((byte)enumfacing.a()); // Get the click face
-        clicked.setFaceClicked(cbf); // Set face clicked
-        cbp = cbp.safeClone(); // Remake BlockPosition
-        cbp.transform(cbf); // Adjust position based on face
-        clicked.setStatus((byte)6); // Fireball Status 6
+        CanaryBlock clicked = new CanaryBlock(world.p(blockpos), blockpos, world, (byte)6); // Store Clicked
+        clicked.setFaceClicked(enumfacing.asBlockFace()); // Set face clicked
         //
         if (world.D) {
             return true;
@@ -40,15 +33,12 @@ public class ItemFireball extends Item {
                 return false;
             }
             else {
-                // CanaryMod: ItemUse/Ignition
-                // Create & Call ItemUseHook
-                ItemUseHook iuh = (ItemUseHook)new ItemUseHook(((EntityPlayerMP)entityplayer).getPlayer(), itemstack.getCanaryItem(), clicked).call();
-                // Create & Call IgnitionHook
-                CanaryBlock ignited = (CanaryBlock)world.getCanaryWorld().getBlockAt(cbp);
-                IgnitionHook ih = (IgnitionHook)new IgnitionHook(ignited, ((EntityPlayerMP)entityplayer).getPlayer(), clicked, IgnitionCause.FIREBALL_CLICK).call();
 
-                // If either hook is canceled, return
-                if (iuh.isCanceled() || ih.isCanceled()) {
+                // CanaryMod: ItemUse/Ignition
+                CanaryBlock ignited = new CanaryBlock(world.p(blockpos), blockpos, world);
+                // If item use gets canceled then no ignition would really take place
+                if (new ItemUseHook(((EntityPlayerMP)entityplayer).getPlayer(), itemstack.getCanaryItem(), clicked).call().isCanceled()
+                            || new IgnitionHook(ignited, ((EntityPlayerMP)entityplayer).getPlayer(), clicked, IgnitionCause.FIREBALL_CLICK).call().isCanceled()) {
                     return false;
                 }
                 //

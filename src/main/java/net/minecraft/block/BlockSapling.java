@@ -1,8 +1,6 @@
 package net.minecraft.block;
 
-import java.util.Random;
 import net.canarymod.api.world.blocks.CanaryBlock;
-import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.world.BlockGrowHook;
 import net.canarymod.hook.world.TreeGrowHook;
 import net.minecraft.block.properties.IProperty;
@@ -16,7 +14,7 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.*;
 
-
+import java.util.Random;
 
 public class BlockSapling extends BlockBush implements IGrowable {
 
@@ -37,25 +35,20 @@ public class BlockSapling extends BlockBush implements IGrowable {
             if (world.l(blockpos.a()) >= 9 && random.nextInt(7) == 0) {
                 this.d(world, blockpos, iblockstate, random);
             }
-
         }
     }
 
     public void d(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {
-        if (((Integer) iblockstate.b(b)).intValue() == 0) {
+        if (((Integer)iblockstate.b(b)).intValue() == 0) {
             // CanaryMod: BlockGrowHook
-            CanaryBlock growth = (CanaryBlock) world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos));
-            growth.setData((short) (iblockstate.c().c(iblockstate) | 8));
-            BlockGrowHook blockGrowHook = new BlockGrowHook(world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos)), growth);
-            if (!blockGrowHook.isCanceled()) {
+            if (!new BlockGrowHook(new CanaryBlock(iblockstate, blockpos, world), new CanaryBlock(iblockstate.a(b), blockpos, world)).isCanceled()) {
                 world.a(blockpos, iblockstate.a(b), 4);
             }
             //
         }
         else {
             // CanaryMod: TreeGrow; If someone figures out how to get more information into this, let me know - darkdiplomat;
-            TreeGrowHook hook = (TreeGrowHook) new TreeGrowHook(world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos))).call();
-            if (!hook.isCanceled()) {
+            if (!new TreeGrowHook(new CanaryBlock(iblockstate, blockpos, world)).call().isCanceled()) {
                 this.e(world, blockpos, iblockstate, random);
             }
             //
@@ -68,7 +61,7 @@ public class BlockSapling extends BlockBush implements IGrowable {
         int i1 = 0;
         boolean flag0 = false;
 
-        switch (BlockSapling.SwitchEnumType.a[((BlockPlanks.EnumType) iblockstate.b(a)).ordinal()]) {
+        switch (BlockSapling.SwitchEnumType.a[((BlockPlanks.EnumType)iblockstate.b(a)).ordinal()]) {
             case 1:
                 label78:
                 for (i0 = 0; i0 >= -1; --i0) {
@@ -146,7 +139,7 @@ public class BlockSapling extends BlockBush implements IGrowable {
             world.a(blockpos, iblockstate1, 4);
         }
 
-        if (!((WorldGenerator) object).b(world, random, blockpos.a(i0, 0, i1))) {
+        if (!((WorldGenerator)object).b(world, random, blockpos.a(i0, 0, i1))) {
             if (flag0) {
                 world.a(blockpos.a(i0, 0, i1), iblockstate, 4);
                 world.a(blockpos.a(i0 + 1, 0, i1), iblockstate, 4);
@@ -157,7 +150,6 @@ public class BlockSapling extends BlockBush implements IGrowable {
                 world.a(blockpos, iblockstate, 4);
             }
         }
-
     }
 
     public boolean a(World world, BlockPos blockpos, BlockPlanks.EnumType blockplanks_enumtype) {
@@ -167,7 +159,7 @@ public class BlockSapling extends BlockBush implements IGrowable {
     }
 
     public int a(IBlockState iblockstate) {
-        return ((BlockPlanks.EnumType) iblockstate.b(a)).a();
+        return ((BlockPlanks.EnumType)iblockstate.b(a)).a();
     }
 
     public boolean a(World world, BlockPos blockpos, IBlockState iblockstate, boolean flag0) {
@@ -175,7 +167,7 @@ public class BlockSapling extends BlockBush implements IGrowable {
     }
 
     public boolean a(World world, Random random, BlockPos blockpos, IBlockState iblockstate) {
-        return (double) world.s.nextFloat() < 0.45D;
+        return (double)world.s.nextFloat() < 0.45D;
     }
 
     public void b(World world, Random random, BlockPos blockpos, IBlockState iblockstate) {
@@ -188,14 +180,14 @@ public class BlockSapling extends BlockBush implements IGrowable {
 
     public int c(IBlockState iblockstate) {
         byte b0 = 0;
-        int i0 = b0 | ((BlockPlanks.EnumType) iblockstate.b(a)).a();
+        int i0 = b0 | ((BlockPlanks.EnumType)iblockstate.b(a)).a();
 
-        i0 |= ((Integer) iblockstate.b(b)).intValue() << 3;
+        i0 |= ((Integer)iblockstate.b(b)).intValue() << 3;
         return i0;
     }
 
     protected BlockState e() {
-        return new BlockState(this, new IProperty[]{a, b});
+        return new BlockState(this, new IProperty[]{ a, b });
     }
 
     static final class SwitchEnumType {
@@ -244,7 +236,6 @@ public class BlockSapling extends BlockBush implements IGrowable {
             catch (NoSuchFieldError nosuchfielderror5) {
                 ;
             }
-
         }
     }
 }

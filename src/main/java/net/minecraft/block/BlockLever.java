@@ -1,8 +1,5 @@
 package net.minecraft.block;
 
-import net.canarymod.api.world.blocks.BlockType;
-import net.canarymod.api.world.blocks.CanaryBlock;
-import net.canarymod.hook.world.RedstoneChangeHook;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
@@ -12,7 +9,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
@@ -21,7 +17,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import java.util.Iterator;
-
 
 public class BlockLever extends Block {
 
@@ -72,11 +67,11 @@ public class BlockLever extends Block {
     }
 
     public boolean a(World world, BlockPos blockpos, EnumFacing enumfacing) {
-        return enumfacing == EnumFacing.UP && World.a((IBlockAccess) world, blockpos.b()) ? true : this.d(world, blockpos.a(enumfacing.d()));
+        return enumfacing == EnumFacing.UP && World.a((IBlockAccess)world, blockpos.b()) ? true : this.d(world, blockpos.a(enumfacing.d()));
     }
 
     public boolean c(World world, BlockPos blockpos) {
-        return this.d(world, blockpos.e()) ? true : (this.d(world, blockpos.f()) ? true : (this.d(world, blockpos.c()) ? true : (this.d(world, blockpos.d()) ? true : (World.a((IBlockAccess) world, blockpos.b()) ? true : this.d(world, blockpos.a())))));
+        return this.d(world, blockpos.e()) ? true : (this.d(world, blockpos.f()) ? true : (this.d(world, blockpos.c()) ? true : (this.d(world, blockpos.d()) ? true : (World.a((IBlockAccess)world, blockpos.b()) ? true : this.d(world, blockpos.a())))));
     }
 
     protected boolean d(World world, BlockPos blockpos) {
@@ -96,26 +91,26 @@ public class BlockLever extends Block {
 
             do {
                 if (!iterator.hasNext()) {
-                    if (World.a((IBlockAccess) world, blockpos.b())) {
+                    if (World.a((IBlockAccess)world, blockpos.b())) {
                         return iblockstate.a(a, BlockLever.EnumOrientation.a(EnumFacing.UP, entitylivingbase.aO()));
                     }
 
                     return iblockstate;
                 }
 
-                enumfacing1 = (EnumFacing) iterator.next();
-            } while (enumfacing1 == enumfacing || !this.d(world, blockpos.a(enumfacing1.d())));
+                enumfacing1 = (EnumFacing)iterator.next();
+            }
+            while (enumfacing1 == enumfacing || !this.d(world, blockpos.a(enumfacing1.d())));
 
             return iblockstate.a(a, BlockLever.EnumOrientation.a(enumfacing1, entitylivingbase.aO()));
         }
     }
 
     public void a(World world, BlockPos blockpos, IBlockState iblockstate, Block block) {
-        if (this.e(world, blockpos) && !this.d(world, blockpos.a(((BlockLever.EnumOrientation) iblockstate.b(a)).c().d()))) {
+        if (this.e(world, blockpos) && !this.d(world, blockpos.a(((BlockLever.EnumOrientation)iblockstate.b(a)).c().d()))) {
             this.b(world, blockpos, iblockstate, 0);
             world.g(blockpos);
         }
-
     }
 
     private boolean e(World world, BlockPos blockpos) {
@@ -132,7 +127,7 @@ public class BlockLever extends Block {
     public void a(IBlockAccess iblockaccess, BlockPos blockpos) {
         float f0 = 0.1875F;
 
-        switch (BlockLever.SwitchEnumFacing.b[((BlockLever.EnumOrientation) iblockaccess.p(blockpos).b(a)).ordinal()]) {
+        switch (BlockLever.SwitchEnumFacing.b[((BlockLever.EnumOrientation)iblockaccess.p(blockpos).b(a)).ordinal()]) {
             case 1:
                 this.a(0.0F, 0.2F, 0.5F - f0, f0 * 2.0F, 0.8F, 0.5F + f0);
                 break;
@@ -160,7 +155,6 @@ public class BlockLever extends Block {
                 f0 = 0.25F;
                 this.a(0.5F - f0, 0.4F, 0.5F - f0, 0.5F + f0, 1.0F, 0.5F + f0);
         }
-
     }
 
     public boolean a(World world, BlockPos blockpos, IBlockState iblockstate, EntityPlayer entityplayer, EnumFacing enumfacing, float f0, float f1, float f2) {
@@ -170,32 +164,32 @@ public class BlockLever extends Block {
         else {
             iblockstate = iblockstate.a(b);
             world.a(blockpos, iblockstate, 3);
-            world.a((double) blockpos.n() + 0.5D, (double) blockpos.o() + 0.5D, (double) blockpos.p() + 0.5D, "random.click", 0.3F, ((Boolean) iblockstate.b(b)).booleanValue() ? 0.6F : 0.5F);
-            world.c(blockpos, (Block) this);
-            EnumFacing enumfacing1 = ((BlockLever.EnumOrientation) iblockstate.b(a)).c();
+            world.a((double)blockpos.n() + 0.5D, (double)blockpos.o() + 0.5D, (double)blockpos.p() + 0.5D, "random.click", 0.3F, ((Boolean)iblockstate.b(b)).booleanValue() ? 0.6F : 0.5F);
+            world.c(blockpos, (Block)this);
+            EnumFacing enumfacing1 = ((BlockLever.EnumOrientation)iblockstate.b(a)).c();
 
-            world.c(blockpos.a(enumfacing1.d()), (Block) this);
+            world.c(blockpos.a(enumfacing1.d()), (Block)this);
             return true;
         }
     }
 
     public void b(World world, BlockPos blockpos, IBlockState iblockstate) {
-        if (((Boolean) iblockstate.b(b)).booleanValue()) {
-            world.c(blockpos, (Block) this);
-            EnumFacing enumfacing = ((BlockLever.EnumOrientation) iblockstate.b(a)).c();
+        if (((Boolean)iblockstate.b(b)).booleanValue()) {
+            world.c(blockpos, (Block)this);
+            EnumFacing enumfacing = ((BlockLever.EnumOrientation)iblockstate.b(a)).c();
 
-            world.c(blockpos.a(enumfacing.d()), (Block) this);
+            world.c(blockpos.a(enumfacing.d()), (Block)this);
         }
 
         super.b(world, blockpos, iblockstate);
     }
 
     public int a(IBlockAccess iblockaccess, BlockPos blockpos, IBlockState iblockstate, EnumFacing enumfacing) {
-        return ((Boolean) iblockstate.b(b)).booleanValue() ? 15 : 0;
+        return ((Boolean)iblockstate.b(b)).booleanValue() ? 15 : 0;
     }
 
     public int b(IBlockAccess iblockaccess, BlockPos blockpos, IBlockState iblockstate, EnumFacing enumfacing) {
-        return !((Boolean) iblockstate.b(b)).booleanValue() ? 0 : (((BlockLever.EnumOrientation) iblockstate.b(a)).c() == enumfacing ? 15 : 0);
+        return !((Boolean)iblockstate.b(b)).booleanValue() ? 0 : (((BlockLever.EnumOrientation)iblockstate.b(a)).c() == enumfacing ? 15 : 0);
     }
 
     public boolean g() {
@@ -208,9 +202,9 @@ public class BlockLever extends Block {
 
     public int c(IBlockState iblockstate) {
         byte b0 = 0;
-        int i0 = b0 | ((BlockLever.EnumOrientation) iblockstate.b(a)).a();
+        int i0 = b0 | ((BlockLever.EnumOrientation)iblockstate.b(a)).a();
 
-        if (((Boolean) iblockstate.b(b)).booleanValue()) {
+        if (((Boolean)iblockstate.b(b)).booleanValue()) {
             i0 |= 8;
         }
 
@@ -218,14 +212,21 @@ public class BlockLever extends Block {
     }
 
     protected BlockState e() {
-        return new BlockState(this, new IProperty[]{a, b});
+        return new BlockState(this, new IProperty[]{ a, b });
     }
 
     public static enum EnumOrientation implements IStringSerializable {
 
-        DOWN_X("DOWN_X", 0, 0, "down_x", EnumFacing.DOWN), EAST("EAST", 1, 1, "east", EnumFacing.EAST), WEST("WEST", 2, 2, "west", EnumFacing.WEST), SOUTH("SOUTH", 3, 3, "south", EnumFacing.SOUTH), NORTH("NORTH", 4, 4, "north", EnumFacing.NORTH), UP_Z("UP_Z", 5, 5, "up_z", EnumFacing.UP), UP_X("UP_X", 6, 6, "up_x", EnumFacing.UP), DOWN_Z("DOWN_Z", 7, 7, "down_z", EnumFacing.DOWN);
+        DOWN_X("DOWN_X", 0, 0, "down_x", EnumFacing.DOWN),
+        EAST("EAST", 1, 1, "east", EnumFacing.EAST),
+        WEST("WEST", 2, 2, "west", EnumFacing.WEST),
+        SOUTH("SOUTH", 3, 3, "south", EnumFacing.SOUTH),
+        NORTH("NORTH", 4, 4, "north", EnumFacing.NORTH),
+        UP_Z("UP_Z", 5, 5, "up_z", EnumFacing.UP),
+        UP_X("UP_X", 6, 6, "up_x", EnumFacing.UP),
+        DOWN_Z("DOWN_Z", 7, 7, "down_z", EnumFacing.DOWN);
         private static final BlockLever.EnumOrientation[] i = new BlockLever.EnumOrientation[values().length];
-        private static final BlockLever.EnumOrientation[] $VALUES = new BlockLever.EnumOrientation[]{DOWN_X, EAST, WEST, SOUTH, NORTH, UP_Z, UP_X, DOWN_Z};
+        private static final BlockLever.EnumOrientation[] $VALUES = new BlockLever.EnumOrientation[]{ DOWN_X, EAST, WEST, SOUTH, NORTH, UP_Z, UP_X, DOWN_Z };
         private final int j;
         private final String k;
         private final EnumFacing l;
@@ -312,10 +313,8 @@ public class BlockLever extends Block {
 
                 i[blocklever_enumorientation.a()] = blocklever_enumorientation;
             }
-
         }
     }
-
 
     static final class SwitchEnumFacing {
 
@@ -441,7 +440,6 @@ public class BlockLever extends Block {
             catch (NoSuchFieldError nosuchfielderror15) {
                 ;
             }
-
         }
     }
 }

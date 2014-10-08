@@ -121,24 +121,24 @@ public class BlockFire extends Block {
                 world.g(blockpos);
             }
             else {
-                int i0 = ((Integer) iblockstate.b(a)).intValue();
+                int i0 = ((Integer)iblockstate.b(a)).intValue();
 
                 if (i0 < 15) {
                     iblockstate = iblockstate.a(a, Integer.valueOf(i0 + random.nextInt(3) / 2));
                     world.a(blockpos, iblockstate, 4);
                 }
 
-                world.a(blockpos, (Block) this, this.a(world) + random.nextInt(10));
+                world.a(blockpos, (Block)this, this.a(world) + random.nextInt(10));
                 if (!flag0) {
                     if (!this.e(world, blockpos)) {
-                        if (!World.a((IBlockAccess) world, blockpos.b()) || i0 > 3) {
+                        if (!World.a((IBlockAccess)world, blockpos.b()) || i0 > 3) {
                             world.g(blockpos);
                         }
 
                         return;
                     }
 
-                    if (!this.e((IBlockAccess) world, blockpos.b()) && i0 == 15 && random.nextInt(4) == 0) {
+                    if (!this.e((IBlockAccess)world, blockpos.b()) && i0 == 15 && random.nextInt(4) == 0) {
                         world.g(blockpos);
                         return;
                     }
@@ -186,11 +186,8 @@ public class BlockFire extends Block {
                                         }
 
                                         // CanaryMod: Ignition
-                                        CanaryBlock ignited = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
-
-                                        ignited.setStatus((byte) 3); // Spread Status 3
-                                        IgnitionHook hook = (IgnitionHook) new IgnitionHook(ignited, null, null, IgnitionCause.FIRE_SPREAD).call();
-                                        if (!hook.isCanceled()) {
+                                        // Spread Status 3
+                                        if (!new IgnitionHook(new CanaryBlock(world.p(blockpos1), blockpos1, world, (byte)3), null, null, IgnitionCause.FIRE_SPREAD).call().isCanceled()) {
                                             world.a(blockpos1, iblockstate.a(a, Integer.valueOf(i7)), 3);
                                         }
                                         //
@@ -201,7 +198,6 @@ public class BlockFire extends Block {
                     }
                 }
             }
-
         }
     }
 
@@ -214,19 +210,22 @@ public class BlockFire extends Block {
     }
 
     private int c(Block block) {
-        Integer integer = (Integer) this.T.get(block);
+        Integer integer = (Integer)this.T.get(block);
 
         return integer == null ? 0 : integer.intValue();
     }
 
     private int d(Block block) {
-        Integer integer = (Integer) this.S.get(block);
+        Integer integer = (Integer)this.S.get(block);
 
         return integer == null ? 0 : integer.intValue();
     }
 
     private void a(World world, BlockPos blockpos, int i0, Random random, int i1) {
         int i2 = this.c(world.p(blockpos).c());
+        // CanaryBlock: Ignition
+        CanaryBlock ignited = new CanaryBlock(world.p(blockpos), blockpos, world);
+        //
 
         if (random.nextInt(i0) < i2) {
             IBlockState iblockstate = world.p(blockpos);
@@ -238,10 +237,8 @@ public class BlockFire extends Block {
                     i3 = 15;
                 }
                 // CanaryMod: Ignition
-                CanaryBlock ignited = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
-
-                ignited.setStatus((byte) 3); // Spread Status 3
-                IgnitionHook hook = (IgnitionHook) new IgnitionHook(ignited, null, null, IgnitionCause.FIRE_SPREAD).call();
+                ignited.setStatus((byte)3); // Spread Status 3
+                IgnitionHook hook = (IgnitionHook)new IgnitionHook(ignited, null, null, IgnitionCause.FIRE_SPREAD).call();
                 if (!hook.isCanceled()) {
                     world.a(blockpos, this.P().a(a, Integer.valueOf(i3)), 3);
                 }
@@ -249,10 +246,8 @@ public class BlockFire extends Block {
             }
             else {
                 // CanaryMod: Ignition
-                CanaryBlock ignited = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
-
-                ignited.setStatus((byte) 4); // Burned Up Status 4
-                IgnitionHook hook = (IgnitionHook) new IgnitionHook(ignited, null, null, IgnitionCause.BURNT).call();
+                ignited.setStatus((byte)4); // Burned Up Status 4
+                IgnitionHook hook = (IgnitionHook)new IgnitionHook(ignited, null, null, IgnitionCause.BURNT).call();
                 if (!hook.isCanceled()) {
                     world.g(blockpos);
                 }
@@ -272,7 +267,7 @@ public class BlockFire extends Block {
         for (int i1 = 0; i1 < i0; ++i1) {
             EnumFacing enumfacing = aenumfacing[i1];
 
-            if (this.e((IBlockAccess) world, blockpos.a(enumfacing))) {
+            if (this.e((IBlockAccess)world, blockpos.a(enumfacing))) {
                 return true;
             }
         }
@@ -308,23 +303,22 @@ public class BlockFire extends Block {
     }
 
     public boolean c(World world, BlockPos blockpos) {
-        return World.a((IBlockAccess) world, blockpos.b()) || this.e(world, blockpos);
+        return World.a((IBlockAccess)world, blockpos.b()) || this.e(world, blockpos);
     }
 
     public void a(World world, BlockPos blockpos, IBlockState iblockstate, Block block) {
-        if (!World.a((IBlockAccess) world, blockpos.b()) && !this.e(world, blockpos)) {
+        if (!World.a((IBlockAccess)world, blockpos.b()) && !this.e(world, blockpos)) {
             world.g(blockpos);
         }
-
     }
 
     public void c(World world, BlockPos blockpos, IBlockState iblockstate) {
         if (world.t.q() > 0 || !Blocks.aY.d(world, blockpos)) {
-            if (!World.a((IBlockAccess) world, blockpos.b()) && !this.e(world, blockpos)) {
+            if (!World.a((IBlockAccess)world, blockpos.b()) && !this.e(world, blockpos)) {
                 world.g(blockpos);
             }
             else {
-                world.a(blockpos, (Block) this, this.a(world) + world.s.nextInt(10));
+                world.a(blockpos, (Block)this, this.a(world) + world.s.nextInt(10));
             }
         }
     }
@@ -338,11 +332,10 @@ public class BlockFire extends Block {
     }
 
     public int c(IBlockState iblockstate) {
-        return ((Integer) iblockstate.b(a)).intValue();
+        return ((Integer)iblockstate.b(a)).intValue();
     }
 
     protected BlockState e() {
-        return new BlockState(this, new IProperty[]{a, N, O, P, Q, R, b, M});
+        return new BlockState(this, new IProperty[]{ a, N, O, P, Q, R, b, M });
     }
-
 }

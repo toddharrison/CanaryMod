@@ -1,8 +1,6 @@
 package net.minecraft.item;
 
-import net.canarymod.api.world.blocks.BlockFace;
 import net.canarymod.api.world.blocks.CanaryBlock;
-import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.player.BlockPlaceHook;
 import net.minecraft.block.BlockStandingSign;
 import net.minecraft.block.BlockWallSign;
@@ -35,12 +33,8 @@ public class ItemSign extends Item {
         else {
             blockpos = blockpos.a(enumfacing);
             // CanaryMod: BlockPlaceHook
-            BlockPosition cbp = new BlockPosition(blockpos); // Translate native block pos
-            CanaryBlock clicked = (CanaryBlock)world.getCanaryWorld().getBlockAt(cbp); // Store Clicked
-            BlockFace cbf = BlockFace.fromByte((byte)enumfacing.a()); // Get the click face
-            clicked.setFaceClicked(cbf); // Set face clicked
-            cbp = cbp.safeClone(); // Remake BlockPosition
-            cbp.transform(cbf); // Adjust position based on face
+            CanaryBlock clicked = new CanaryBlock(world.p(blockpos), blockpos, world); // Store Clicked
+            clicked.setFaceClicked(enumfacing.asBlockFace()); // Set face clicked
             //
 
             if (!entityplayer.a(blockpos, enumfacing, itemstack)) {
@@ -53,20 +47,20 @@ public class ItemSign extends Item {
                 return true;
             }
             else {
-                // Create and call
+                // CanaryMod: Create and call
                 int i0 = MathHelper.c((double)((entityplayer.y + 180.0F) * 16.0F / 360.0F) + 0.5D) & 15;
                 IBlockState iblockstate = Blocks.an.P().a(BlockStandingSign.a, i0);
                 if (enumfacing != EnumFacing.UP) {
                     iblockstate = Blocks.ax.P().a(BlockWallSign.a, enumfacing);
                 }
 
-                CanaryBlock placed = new CanaryBlock(iblockstate, new BlockPosition(blockpos), world.getCanaryWorld());
-                BlockPlaceHook hook = (BlockPlaceHook)new BlockPlaceHook(((EntityPlayerMP)entityplayer).getPlayer(), clicked, placed).call();
-                if (hook.isCanceled()) {
+                if (new BlockPlaceHook(((EntityPlayerMP)entityplayer).getPlayer(), clicked, new CanaryBlock(iblockstate, blockpos, world)).call().isCanceled()) {
                     return false;
                 }
                 world.a(blockpos, iblockstate, 3);
-                /* CanaryMod: Moved above mostly
+                //
+
+                /* CanaryMod: Moved all but the world calls above
                 if (enumfacing == EnumFacing.UP) {
                     int i0 = MathHelper.c((double)((entityplayer.y + 180.0F) * 16.0F / 360.0F) + 0.5D) & 15;
 

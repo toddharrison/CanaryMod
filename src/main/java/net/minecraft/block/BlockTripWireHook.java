@@ -1,11 +1,8 @@
 package net.minecraft.block;
 
-
 import com.google.common.base.Objects;
 import com.google.common.base.Predicate;
-import java.util.Iterator;
-import java.util.Random;
-import net.canarymod.api.world.position.BlockPosition;
+import net.canarymod.api.world.blocks.CanaryBlock;
 import net.canarymod.hook.world.BlockPhysicsHook;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -23,10 +20,12 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import java.util.Iterator;
+import java.util.Random;
 
 public class BlockTripWireHook extends Block {
 
-    public static final PropertyDirection a = PropertyDirection.a("facing", (Predicate) EnumFacing.Plane.HORIZONTAL);
+    public static final PropertyDirection a = PropertyDirection.a("facing", (Predicate)EnumFacing.Plane.HORIZONTAL);
     public static final PropertyBool b = PropertyBool.a("powered");
     public static final PropertyBool M = PropertyBool.a("attached");
     public static final PropertyBool N = PropertyBool.a("suspended");
@@ -68,8 +67,9 @@ public class BlockTripWireHook extends Block {
                 return false;
             }
 
-            enumfacing = (EnumFacing) iterator.next();
-        } while (!world.p(blockpos.a(enumfacing)).c().t());
+            enumfacing = (EnumFacing)iterator.next();
+        }
+        while (!world.p(blockpos.a(enumfacing)).c().t());
 
         return true;
     }
@@ -85,35 +85,33 @@ public class BlockTripWireHook extends Block {
     }
 
     public void a(World world, BlockPos blockpos, IBlockState iblockstate, EntityLivingBase entitylivingbase, ItemStack itemstack) {
-        this.a(world, blockpos, iblockstate, false, false, -1, (IBlockState) null);
+        this.a(world, blockpos, iblockstate, false, false, -1, (IBlockState)null);
     }
 
     public void a(World world, BlockPos blockpos, IBlockState iblockstate, Block block) {
         if (block != this) {
             if (this.e(world, blockpos, iblockstate)) {
-                EnumFacing enumfacing = (EnumFacing) iblockstate.b(a);
+                EnumFacing enumfacing = (EnumFacing)iblockstate.b(a);
 
                 if (!world.p(blockpos.a(enumfacing.d())).c().t()) {
                     this.b(world, blockpos, iblockstate, 0);
                     world.g(blockpos);
                 }
             }
-
         }
     }
 
     public void a(World world, BlockPos blockpos, IBlockState iblockstate, boolean flag0, boolean flag1, int i0, IBlockState iblockstate1) {
         // CanaryMod: Block Physics
-        BlockPhysicsHook blockPhysics = (BlockPhysicsHook) new BlockPhysicsHook(world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos)), false).call();
-        if (blockPhysics.isCanceled()) {
+        if (new BlockPhysicsHook(new CanaryBlock(iblockstate, blockpos, world), false).call().isCanceled()) {
             return;
         }
         //
 
-        EnumFacing enumfacing = (EnumFacing) iblockstate.b(a);
-        boolean flag2 = ((Boolean) iblockstate.b(M)).booleanValue();
-        boolean flag3 = ((Boolean) iblockstate.b(b)).booleanValue();
-        boolean flag4 = !World.a((IBlockAccess) world, blockpos.b());
+        EnumFacing enumfacing = (EnumFacing)iblockstate.b(a);
+        boolean flag2 = ((Boolean)iblockstate.b(M)).booleanValue();
+        boolean flag3 = ((Boolean)iblockstate.b(b)).booleanValue();
+        boolean flag4 = !World.a((IBlockAccess)world, blockpos.b());
         boolean flag5 = !flag0;
         boolean flag6 = false;
         int i1 = 0;
@@ -138,18 +136,18 @@ public class BlockTripWireHook extends Block {
             }
             else {
                 if (i2 == i0) {
-                    iblockstate2 = (IBlockState) Objects.firstNonNull(iblockstate1, iblockstate2);
+                    iblockstate2 = (IBlockState)Objects.firstNonNull(iblockstate1, iblockstate2);
                 }
 
-                boolean flag7 = !((Boolean) iblockstate2.b(BlockTripWire.N)).booleanValue();
-                boolean flag8 = ((Boolean) iblockstate2.b(BlockTripWire.a)).booleanValue();
-                boolean flag9 = ((Boolean) iblockstate2.b(BlockTripWire.b)).booleanValue();
+                boolean flag7 = !((Boolean)iblockstate2.b(BlockTripWire.N)).booleanValue();
+                boolean flag8 = ((Boolean)iblockstate2.b(BlockTripWire.a)).booleanValue();
+                boolean flag9 = ((Boolean)iblockstate2.b(BlockTripWire.b)).booleanValue();
 
                 flag5 &= flag9 == flag4;
                 flag6 |= flag7 && flag8;
                 aiblockstate[i2] = iblockstate2;
                 if (i2 == i0) {
-                    world.a(blockpos, (Block) this, this.a(world));
+                    world.a(blockpos, (Block)this, this.a(world));
                     flag5 &= flag7;
                 }
             }
@@ -186,35 +184,33 @@ public class BlockTripWireHook extends Block {
                 }
             }
         }
-
     }
 
     public void a(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {
     }
 
     public void b(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {
-        this.a(world, blockpos, iblockstate, false, true, -1, (IBlockState) null);
+        this.a(world, blockpos, iblockstate, false, true, -1, (IBlockState)null);
     }
 
     private void a(World world, BlockPos blockpos, boolean flag0, boolean flag1, boolean flag2, boolean flag3) {
         if (flag1 && !flag3) {
-            world.a((double) blockpos.n() + 0.5D, (double) blockpos.o() + 0.1D, (double) blockpos.p() + 0.5D, "random.click", 0.4F, 0.6F);
+            world.a((double)blockpos.n() + 0.5D, (double)blockpos.o() + 0.1D, (double)blockpos.p() + 0.5D, "random.click", 0.4F, 0.6F);
         }
         else if (!flag1 && flag3) {
-            world.a((double) blockpos.n() + 0.5D, (double) blockpos.o() + 0.1D, (double) blockpos.p() + 0.5D, "random.click", 0.4F, 0.5F);
+            world.a((double)blockpos.n() + 0.5D, (double)blockpos.o() + 0.1D, (double)blockpos.p() + 0.5D, "random.click", 0.4F, 0.5F);
         }
         else if (flag0 && !flag2) {
-            world.a((double) blockpos.n() + 0.5D, (double) blockpos.o() + 0.1D, (double) blockpos.p() + 0.5D, "random.click", 0.4F, 0.7F);
+            world.a((double)blockpos.n() + 0.5D, (double)blockpos.o() + 0.1D, (double)blockpos.p() + 0.5D, "random.click", 0.4F, 0.7F);
         }
         else if (!flag0 && flag2) {
-            world.a((double) blockpos.n() + 0.5D, (double) blockpos.o() + 0.1D, (double) blockpos.p() + 0.5D, "random.bowhit", 0.4F, 1.2F / (world.s.nextFloat() * 0.2F + 0.9F));
+            world.a((double)blockpos.n() + 0.5D, (double)blockpos.o() + 0.1D, (double)blockpos.p() + 0.5D, "random.bowhit", 0.4F, 1.2F / (world.s.nextFloat() * 0.2F + 0.9F));
         }
-
     }
 
     private void b(World world, BlockPos blockpos, EnumFacing enumfacing) {
-        world.c(blockpos, (Block) this);
-        world.c(blockpos.a(enumfacing.d()), (Block) this);
+        world.c(blockpos, (Block)this);
+        world.c(blockpos.a(enumfacing.d()), (Block)this);
     }
 
     private boolean e(World world, BlockPos blockpos, IBlockState iblockstate) {
@@ -231,7 +227,7 @@ public class BlockTripWireHook extends Block {
     public void a(IBlockAccess iblockaccess, BlockPos blockpos) {
         float f0 = 0.1875F;
 
-        switch (BlockTripWireHook.SwitchEnumFacing.a[((EnumFacing) iblockaccess.p(blockpos).b(a)).ordinal()]) {
+        switch (BlockTripWireHook.SwitchEnumFacing.a[((EnumFacing)iblockaccess.p(blockpos).b(a)).ordinal()]) {
             case 1:
                 this.a(0.0F, 0.2F, 0.5F - f0, f0 * 2.0F, 0.8F, 0.5F + f0);
                 break;
@@ -247,31 +243,30 @@ public class BlockTripWireHook extends Block {
             case 4:
                 this.a(0.5F - f0, 0.2F, 1.0F - f0 * 2.0F, 0.5F + f0, 0.8F, 1.0F);
         }
-
     }
 
     public void b(World world, BlockPos blockpos, IBlockState iblockstate) {
-        boolean flag0 = ((Boolean) iblockstate.b(M)).booleanValue();
-        boolean flag1 = ((Boolean) iblockstate.b(b)).booleanValue();
+        boolean flag0 = ((Boolean)iblockstate.b(M)).booleanValue();
+        boolean flag1 = ((Boolean)iblockstate.b(b)).booleanValue();
 
         if (flag0 || flag1) {
-            this.a(world, blockpos, iblockstate, true, false, -1, (IBlockState) null);
+            this.a(world, blockpos, iblockstate, true, false, -1, (IBlockState)null);
         }
 
         if (flag1) {
-            world.c(blockpos, (Block) this);
-            world.c(blockpos.a(((EnumFacing) iblockstate.b(a)).d()), (Block) this);
+            world.c(blockpos, (Block)this);
+            world.c(blockpos.a(((EnumFacing)iblockstate.b(a)).d()), (Block)this);
         }
 
         super.b(world, blockpos, iblockstate);
     }
 
     public int a(IBlockAccess iblockaccess, BlockPos blockpos, IBlockState iblockstate, EnumFacing enumfacing) {
-        return ((Boolean) iblockstate.b(b)).booleanValue() ? 15 : 0;
+        return ((Boolean)iblockstate.b(b)).booleanValue() ? 15 : 0;
     }
 
     public int b(IBlockAccess iblockaccess, BlockPos blockpos, IBlockState iblockstate, EnumFacing enumfacing) {
-        return !((Boolean) iblockstate.b(b)).booleanValue() ? 0 : (iblockstate.b(a) == enumfacing ? 15 : 0);
+        return !((Boolean)iblockstate.b(b)).booleanValue() ? 0 : (iblockstate.b(a) == enumfacing ? 15 : 0);
     }
 
     public boolean g() {
@@ -284,13 +279,13 @@ public class BlockTripWireHook extends Block {
 
     public int c(IBlockState iblockstate) {
         byte b0 = 0;
-        int i0 = b0 | ((EnumFacing) iblockstate.b(a)).b();
+        int i0 = b0 | ((EnumFacing)iblockstate.b(a)).b();
 
-        if (((Boolean) iblockstate.b(b)).booleanValue()) {
+        if (((Boolean)iblockstate.b(b)).booleanValue()) {
             i0 |= 8;
         }
 
-        if (((Boolean) iblockstate.b(M)).booleanValue()) {
+        if (((Boolean)iblockstate.b(M)).booleanValue()) {
             i0 |= 4;
         }
 
@@ -298,7 +293,7 @@ public class BlockTripWireHook extends Block {
     }
 
     protected BlockState e() {
-        return new BlockState(this, new IProperty[]{a, b, M, N});
+        return new BlockState(this, new IProperty[]{ a, b, M, N });
     }
 
     static final class SwitchEnumFacing {
@@ -333,7 +328,6 @@ public class BlockTripWireHook extends Block {
             catch (NoSuchFieldError nosuchfielderror3) {
                 ;
             }
-
         }
     }
 }

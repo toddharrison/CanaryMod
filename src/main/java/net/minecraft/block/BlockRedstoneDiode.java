@@ -1,7 +1,6 @@
 package net.minecraft.block;
 
-import java.util.Random;
-import net.canarymod.api.world.position.BlockPosition;
+import net.canarymod.api.world.blocks.CanaryBlock;
 import net.canarymod.hook.world.RedstoneChangeHook;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -12,6 +11,8 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import java.util.Random;
 
 public abstract class BlockRedstoneDiode extends BlockDirectional {
 
@@ -32,24 +33,26 @@ public abstract class BlockRedstoneDiode extends BlockDirectional {
     }
 
     public boolean c(World world, BlockPos blockpos) {
-        return World.a((IBlockAccess) world, blockpos.b()) ? super.c(world, blockpos) : false;
+        return World.a((IBlockAccess)world, blockpos.b()) ? super.c(world, blockpos) : false;
     }
 
     public boolean d(World world, BlockPos blockpos) {
-        return World.a((IBlockAccess) world, blockpos.b());
+        return World.a((IBlockAccess)world, blockpos.b());
     }
 
     public void a(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {
     }
 
     public void b(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {
-        if (!this.b((IBlockAccess) world, blockpos, iblockstate)) {
+        if (!this.b((IBlockAccess)world, blockpos, iblockstate)) {
             boolean flag0 = this.e(world, blockpos, iblockstate);
+
+            // CanaryMod
+            CanaryBlock changing = new CanaryBlock(iblockstate, blockpos, world);
 
             if (this.M && !flag0) {
                 // CanaryMod: RedstoneChange; turning off
-                RedstoneChangeHook hook = (RedstoneChangeHook) new RedstoneChangeHook(world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos)), 15, 0).call();
-                if (hook.isCanceled()) {
+                if (new RedstoneChangeHook(changing, 15, 0).call().isCanceled()) {
                     return;
                 }
                 //
@@ -57,8 +60,7 @@ public abstract class BlockRedstoneDiode extends BlockDirectional {
             }
             else if (!this.M) {
                 // CanaryMod: RedstoneChange; turning on
-                RedstoneChangeHook hook = (RedstoneChangeHook) new RedstoneChangeHook(world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos)), 0, 15).call();
-                if (hook.isCanceled()) {
+                if (new RedstoneChangeHook(changing, 0, 15).call().isCanceled()) {
                     return;
                 }
                 //
@@ -67,7 +69,6 @@ public abstract class BlockRedstoneDiode extends BlockDirectional {
                     world.a(blockpos, this.e(iblockstate).c(), this.m(iblockstate), -1);
                 }
             }
-
         }
     }
 
@@ -96,17 +97,16 @@ public abstract class BlockRedstoneDiode extends BlockDirectional {
             for (int i1 = 0; i1 < i0; ++i1) {
                 EnumFacing enumfacing = aenumfacing[i1];
 
-                world.c(blockpos.a(enumfacing), (Block) this);
+                world.c(blockpos.a(enumfacing), (Block)this);
             }
-
         }
     }
 
     protected void g(World world, BlockPos blockpos, IBlockState iblockstate) {
-        if (!this.b((IBlockAccess) world, blockpos, iblockstate)) {
+        if (!this.b((IBlockAccess)world, blockpos, iblockstate)) {
             boolean flag0 = this.e(world, blockpos, iblockstate);
 
-            if ((this.M && !flag0 || !this.M && flag0) && !world.a(blockpos, (Block) this)) {
+            if ((this.M && !flag0 || !this.M && flag0) && !world.a(blockpos, (Block)this)) {
                 byte b0 = -1;
 
                 if (this.i(world, blockpos, iblockstate)) {
@@ -118,7 +118,6 @@ public abstract class BlockRedstoneDiode extends BlockDirectional {
 
                 world.a(blockpos, this, this.d(iblockstate), b0);
             }
-
         }
     }
 
@@ -131,7 +130,7 @@ public abstract class BlockRedstoneDiode extends BlockDirectional {
     }
 
     protected int f(World world, BlockPos blockpos, IBlockState iblockstate) {
-        EnumFacing enumfacing = (EnumFacing) iblockstate.b(N);
+        EnumFacing enumfacing = (EnumFacing)iblockstate.b(N);
         BlockPos blockpos1 = blockpos.a(enumfacing);
         int i0 = world.c(blockpos1, enumfacing);
 
@@ -141,12 +140,12 @@ public abstract class BlockRedstoneDiode extends BlockDirectional {
         else {
             IBlockState iblockstate1 = world.p(blockpos1);
 
-            return Math.max(i0, iblockstate1.c() == Blocks.af ? ((Integer) iblockstate1.b(BlockRedstoneWire.O)).intValue() : 0);
+            return Math.max(i0, iblockstate1.c() == Blocks.af ? ((Integer)iblockstate1.b(BlockRedstoneWire.O)).intValue() : 0);
         }
     }
 
     protected int c(IBlockAccess iblockaccess, BlockPos blockpos, IBlockState iblockstate) {
-        EnumFacing enumfacing = (EnumFacing) iblockstate.b(N);
+        EnumFacing enumfacing = (EnumFacing)iblockstate.b(N);
         EnumFacing enumfacing1 = enumfacing.e();
         EnumFacing enumfacing2 = enumfacing.f();
 
@@ -157,7 +156,7 @@ public abstract class BlockRedstoneDiode extends BlockDirectional {
         IBlockState iblockstate = iblockaccess.p(blockpos);
         Block block = iblockstate.c();
 
-        return this.c(block) ? (block == Blocks.af ? ((Integer) iblockstate.b(BlockRedstoneWire.O)).intValue() : iblockaccess.a(blockpos, enumfacing)) : 0;
+        return this.c(block) ? (block == Blocks.af ? ((Integer)iblockstate.b(BlockRedstoneWire.O)).intValue() : iblockaccess.a(blockpos, enumfacing)) : 0;
     }
 
     public boolean g() {
@@ -170,9 +169,8 @@ public abstract class BlockRedstoneDiode extends BlockDirectional {
 
     public void a(World world, BlockPos blockpos, IBlockState iblockstate, EntityLivingBase entitylivingbase, ItemStack itemstack) {
         if (this.e(world, blockpos, iblockstate)) {
-            world.a(blockpos, (Block) this, 1);
+            world.a(blockpos, (Block)this, 1);
         }
-
     }
 
     public void c(World world, BlockPos blockpos, IBlockState iblockstate) {
@@ -180,11 +178,11 @@ public abstract class BlockRedstoneDiode extends BlockDirectional {
     }
 
     protected void h(World world, BlockPos blockpos, IBlockState iblockstate) {
-        EnumFacing enumfacing = (EnumFacing) iblockstate.b(N);
+        EnumFacing enumfacing = (EnumFacing)iblockstate.b(N);
         BlockPos blockpos1 = blockpos.a(enumfacing.d());
 
         world.d(blockpos1, this);
-        world.a(blockpos1, (Block) this, enumfacing);
+        world.a(blockpos1, (Block)this, enumfacing);
     }
 
     public void d(World world, BlockPos blockpos, IBlockState iblockstate) {
@@ -195,7 +193,7 @@ public abstract class BlockRedstoneDiode extends BlockDirectional {
             for (int i1 = 0; i1 < i0; ++i1) {
                 EnumFacing enumfacing = aenumfacing[i1];
 
-                world.c(blockpos.a(enumfacing), (Block) this);
+                world.c(blockpos.a(enumfacing), (Block)this);
             }
         }
 
@@ -219,7 +217,7 @@ public abstract class BlockRedstoneDiode extends BlockDirectional {
     }
 
     public boolean i(World world, BlockPos blockpos, IBlockState iblockstate) {
-        EnumFacing enumfacing = ((EnumFacing) iblockstate.b(N)).d();
+        EnumFacing enumfacing = ((EnumFacing)iblockstate.b(N)).d();
         BlockPos blockpos1 = blockpos.a(enumfacing);
 
         return d(world.p(blockpos1).c()) ? world.p(blockpos1).b(N) != enumfacing : false;

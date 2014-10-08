@@ -1,8 +1,6 @@
 package net.minecraft.block;
 
-import java.util.Random;
 import net.canarymod.api.world.blocks.CanaryBlock;
-import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.world.IgnitionHook;
 import net.canarymod.hook.world.IgnitionHook.IgnitionCause;
 import net.minecraft.block.material.Material;
@@ -12,6 +10,8 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
+import java.util.Random;
+
 public class BlockStaticLiquid extends BlockLiquid {
 
     protected BlockStaticLiquid(Material material) {
@@ -20,21 +20,19 @@ public class BlockStaticLiquid extends BlockLiquid {
         if (material == Material.i) {
             this.a(true);
         }
-
     }
 
     public void a(World world, BlockPos blockpos, IBlockState iblockstate, Block block) {
         if (!this.e(world, blockpos, iblockstate)) {
             this.f(world, blockpos, iblockstate);
         }
-
     }
 
     private void f(World world, BlockPos blockpos, IBlockState iblockstate) {
         BlockDynamicLiquid blockdynamicliquid = a(this.J);
 
         world.a(blockpos, blockdynamicliquid.P().a(b, iblockstate.b(b)), 2);
-        world.a(blockpos, (Block) blockdynamicliquid, this.a(world));
+        world.a(blockpos, (Block)blockdynamicliquid, this.a(world));
     }
 
     public void b(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {
@@ -43,15 +41,10 @@ public class BlockStaticLiquid extends BlockLiquid {
                 int i0 = random.nextInt(3);
 
                 // CanaryMod: Ignition
-                CanaryBlock ignited = (CanaryBlock) world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos));
-
-                ignited.setStatus((byte) 1); // Lava Status 1
-                IgnitionHook hook = (IgnitionHook) new IgnitionHook(ignited, null, null, IgnitionCause.LAVA).call();
-                if (hook.isCanceled()) {
+                if (new IgnitionHook(new CanaryBlock(iblockstate, blockpos, world, (byte)1), null, null, IgnitionCause.LAVA).call().isCanceled()) {
                     return;
                 }
                 //
-
 
                 if (i0 > 0) {
                     BlockPos blockpos1 = blockpos;
@@ -79,7 +72,6 @@ public class BlockStaticLiquid extends BlockLiquid {
                             world.a(blockpos2.a(), Blocks.ab.P());
                         }
                     }
-
                 }
             }
         }

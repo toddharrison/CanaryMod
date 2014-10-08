@@ -1,8 +1,6 @@
 package net.minecraft.item;
 
-import net.canarymod.api.world.blocks.BlockFace;
 import net.canarymod.api.world.blocks.CanaryBlock;
-import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.player.ItemUseHook;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -33,12 +31,9 @@ public class ItemHangingEntity extends Item {
         }
         else {
             // CanaryMod: ItemUse
-            BlockPosition cbp = new BlockPosition(blockpos); // Translate native block pos
-            CanaryBlock clicked = (CanaryBlock)world.getCanaryWorld().getBlockAt(cbp); // Store Clicked
-            BlockFace cbf = BlockFace.fromByte((byte)enumfacing.a()); // Get the click face
-            clicked.setFaceClicked(cbf); // Set face clicked
-            ItemUseHook hook = (ItemUseHook)new ItemUseHook(((EntityPlayerMP)entityplayer).getPlayer(), itemstack.getCanaryItem(), clicked).call();
-            if (hook.isCanceled()) {
+            CanaryBlock clicked = new CanaryBlock(world.p(blockpos), blockpos, world); // Store clicked
+            clicked.setFaceClicked(enumfacing.asBlockFace()); // Set face clicked
+            if (new ItemUseHook(((EntityPlayerMP)entityplayer).getPlayer(), itemstack.getCanaryItem(), clicked).call().isCanceled()) {
                 return false;
             }
             //

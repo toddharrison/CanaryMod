@@ -1,8 +1,6 @@
 package net.minecraft.item;
 
-import net.canarymod.api.world.blocks.BlockFace;
 import net.canarymod.api.world.blocks.CanaryBlock;
-import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.player.ItemUseHook;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.BlockLiquid;
@@ -45,18 +43,15 @@ public class ItemMonsterPlacer extends Item {
             return false;
         }
         else {
+            IBlockState iblockstate = world.p(blockpos);
+
             // CanaryMod: ItemUse
-            BlockPosition cbp = new BlockPosition(blockpos); // Translate native block pos
-            CanaryBlock clicked = (CanaryBlock)world.getCanaryWorld().getBlockAt(cbp); // Store Clicked
-            BlockFace cbf = BlockFace.fromByte((byte)enumfacing.a()); // Get the click face
-            clicked.setFaceClicked(cbf); // Set face clicked
-            ItemUseHook hook = (ItemUseHook)new ItemUseHook(((EntityPlayerMP)entityplayer).getPlayer(), itemstack.getCanaryItem(), clicked).call();
-            if (hook.isCanceled()) {
+            CanaryBlock clicked = new CanaryBlock(iblockstate, blockpos, world); // Store Clicked
+            clicked.setFaceClicked(enumfacing.asBlockFace()); // Set face clicked
+            if (new ItemUseHook(((EntityPlayerMP)entityplayer).getPlayer(), itemstack.getCanaryItem(), clicked).call().isCanceled()) {
                 return false;
             }
             //
-
-            IBlockState iblockstate = world.p(blockpos);
 
             if (iblockstate.c() == Blocks.ac) {
                 TileEntity tileentity = world.s(blockpos);

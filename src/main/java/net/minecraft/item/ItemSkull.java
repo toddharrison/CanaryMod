@@ -1,9 +1,7 @@
 package net.minecraft.item;
 
 import com.mojang.authlib.GameProfile;
-import net.canarymod.api.world.blocks.BlockFace;
 import net.canarymod.api.world.blocks.CanaryBlock;
-import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.player.BlockPlaceHook;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSkull;
@@ -45,12 +43,8 @@ public class ItemSkull extends Item {
             boolean flag0 = block.f(world, blockpos);
 
             // CanaryMod: BlockPlaceHook
-            BlockPosition cbp = new BlockPosition(blockpos); // Translate native block pos
-            CanaryBlock clicked = (CanaryBlock)world.getCanaryWorld().getBlockAt(cbp); // Store Clicked
-            BlockFace cbf = BlockFace.fromByte((byte)enumfacing.a()); // Get the click face
-            clicked.setFaceClicked(cbf); // Set face clicked
-            cbp = cbp.safeClone(); // Remake BlockPosition
-            cbp.transform(cbf); // Adjust position based on face
+            CanaryBlock clicked = new CanaryBlock(world.p(blockpos), blockpos, world); // Store Clicked
+            clicked.setFaceClicked(enumfacing.asBlockFace()); // Set face clicked
             //
 
             if (!flag0) {
@@ -70,13 +64,11 @@ public class ItemSkull extends Item {
             else {
                 if (!world.D) {
                     // CanaryMod: BlockPlace cont...
-                    IBlockState skulliblockstate = Blocks.ce.P().a(BlockSkull.a, enumfacing);
-                    CanaryBlock placed = new CanaryBlock(skulliblockstate, cbp, world.getCanaryWorld());
-                    BlockPlaceHook hook = (BlockPlaceHook)new BlockPlaceHook(((EntityPlayerMP)entityplayer).getPlayer(), clicked, placed).call();
-                    if (hook.isCanceled()) {
+                    CanaryBlock placed = new CanaryBlock(Blocks.ce.P().a(BlockSkull.a, enumfacing), blockpos.a(), world);
+                    if (new BlockPlaceHook(((EntityPlayerMP)entityplayer).getPlayer(), clicked, placed).call().isCanceled()) {
                         return false;
                     }
-                    world.a(blockpos, skulliblockstate, 3);
+                    world.a(blockpos, Blocks.ce.P().a(BlockSkull.a, enumfacing), 3);
                     //
                     int i0 = 0;
 

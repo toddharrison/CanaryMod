@@ -1,10 +1,8 @@
 package net.minecraft.block;
 
-import java.util.List;
-import net.canarymod.api.world.blocks.BlockType;
+import net.canarymod.api.world.blocks.BlockFace;
 import net.canarymod.api.world.blocks.CanaryBlock;
 import net.canarymod.api.world.position.BlockPosition;
-import net.canarymod.api.world.position.Position;
 import net.canarymod.hook.world.PistonExtendHook;
 import net.canarymod.hook.world.PistonRetractHook;
 import net.minecraft.block.material.Material;
@@ -27,6 +25,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class BlockPistonBase extends Block {
 
@@ -54,14 +54,12 @@ public class BlockPistonBase extends Block {
         if (!world.D) {
             this.e(world, blockpos, iblockstate);
         }
-
     }
 
     public void a(World world, BlockPos blockpos, IBlockState iblockstate, Block block) {
         if (!world.D) {
             this.e(world, blockpos, iblockstate);
         }
-
     }
 
     public void c(World world, BlockPos blockpos, IBlockState iblockstate) {
@@ -75,35 +73,28 @@ public class BlockPistonBase extends Block {
     }
 
     private void e(World world, BlockPos blockpos, IBlockState iblockstate) {
-        EnumFacing enumfacing = (EnumFacing) iblockstate.b(a);
+        EnumFacing enumfacing = (EnumFacing)iblockstate.b(a);
         boolean flag0 = this.b(world, blockpos, enumfacing);
 
         // CanaryMod: Get Blocks
-        BlockPosition bp = new BlockPosition(blockpos);
-        CanaryBlock piston = new CanaryBlock((this.M ? BlockType.StickyPiston.getId() : BlockType.Piston.getId()), (byte) 0, bp.getBlockX(), bp.getBlockY(), bp.getBlockZ(), world.getCanaryWorld());
-        Position bp2 = new Position(bp.getBlockX() + enumfacing.g(), bp.getBlockY() + enumfacing.h(), bp.getBlockZ() + enumfacing.i());
-        net.canarymod.api.world.blocks.Block block = world.getCanaryWorld().getBlockAt(bp2);
-        CanaryBlock moving = new CanaryBlock(block.getData(), (byte) 0, bp2.getBlockX(), bp2.getBlockY(), bp2.getBlockZ(), world.getCanaryWorld());
+        CanaryBlock piston = new CanaryBlock(iblockstate, blockpos, world);
+        BlockPosition cbp = new BlockPosition(blockpos);
+        cbp.transform(BlockFace.fromByte((byte)enumfacing.a()));
+        CanaryBlock moving = new CanaryBlock(world.p(cbp.asNative()), cbp, world.getCanaryWorld());
         //
 
-        if (flag0 && !((Boolean) iblockstate.b(b)).booleanValue()) {
+        if (flag0 && !((Boolean)iblockstate.b(b)).booleanValue()) {
             if ((new BlockPistonStructureHelper(world, blockpos, enumfacing, true)).a()) {
                 // CanaryMod: PistonExtend
-                PistonExtendHook hook = (PistonExtendHook) new PistonExtendHook(piston, moving).call();
-                if (!hook.isCanceled()) {
+                if (!new PistonExtendHook(piston, moving).call().isCanceled()) {
                     world.c(blockpos, this, 0, enumfacing.a());
                 }
                 //
             }
         }
-        else if (!flag0 && ((Boolean) iblockstate.b(b)).booleanValue()) {
-
+        else if (!flag0 && ((Boolean)iblockstate.b(b)).booleanValue()) {
             // CanaryMod: PistonRetract
-            Position bp3 = new Position(bp2.getBlockX() * 2, bp2.getBlockY() * 2, bp2.getBlockZ() * 2);
-            net.canarymod.api.world.blocks.Block block2 = world.getCanaryWorld().getBlockAt(bp3);
-            moving = new CanaryBlock(block2.getData(), (byte) 0,  bp2.getBlockX(), bp2.getBlockY(), bp2.getBlockZ(), world.getCanaryWorld());
-            PistonRetractHook hook = (PistonRetractHook) new PistonRetractHook(piston, moving).call();
-            attemptRetract = !hook.isCanceled();
+            attemptRetract = !new PistonRetractHook(piston, moving).call().isCanceled();
             //
             world.a(blockpos, iblockstate.a(b, Boolean.valueOf(false)), 2);
             world.c(blockpos, this, 1, enumfacing.a());
@@ -146,7 +137,7 @@ public class BlockPistonBase extends Block {
     }
 
     public boolean a(World world, BlockPos blockpos, IBlockState iblockstate, int i0, int i1) {
-        EnumFacing enumfacing = (EnumFacing) iblockstate.b(a);
+        EnumFacing enumfacing = (EnumFacing)iblockstate.b(a);
 
         if (!world.D) {
             boolean flag0 = this.b(world, blockpos, enumfacing);
@@ -167,13 +158,13 @@ public class BlockPistonBase extends Block {
             }
 
             world.a(blockpos, iblockstate.a(b, Boolean.valueOf(true)), 2);
-            world.a((double) blockpos.n() + 0.5D, (double) blockpos.o() + 0.5D, (double) blockpos.p() + 0.5D, "tile.piston.out", 0.5F, world.s.nextFloat() * 0.25F + 0.6F);
+            world.a((double)blockpos.n() + 0.5D, (double)blockpos.o() + 0.5D, (double)blockpos.p() + 0.5D, "tile.piston.out", 0.5F, world.s.nextFloat() * 0.25F + 0.6F);
         }
         else if (i0 == 1) {
             TileEntity tileentity = world.s(blockpos.a(enumfacing));
 
             if (tileentity instanceof TileEntityPiston) {
-                ((TileEntityPiston) tileentity).h();
+                ((TileEntityPiston)tileentity).h();
             }
 
             world.a(blockpos, Blocks.M.P().a(BlockPistonMoving.a, enumfacing).a(BlockPistonMoving.b, this.M ? BlockPistonExtension.EnumPistonType.STICKY : BlockPistonExtension.EnumPistonType.DEFAULT), 3);
@@ -187,7 +178,7 @@ public class BlockPistonBase extends Block {
                     TileEntity tileentity1 = world.s(blockpos1);
 
                     if (tileentity1 instanceof TileEntityPiston) {
-                        TileEntityPiston tileentitypiston = (TileEntityPiston) tileentity1;
+                        TileEntityPiston tileentitypiston = (TileEntityPiston)tileentity1;
 
                         if (tileentitypiston.e() == enumfacing && tileentitypiston.d()) {
                             tileentitypiston.h();
@@ -197,8 +188,7 @@ public class BlockPistonBase extends Block {
                 }
 
                 // CanaryMod: check attemptRetract
-                if (attemptRetract && !flag1 && block.r() != Material.a && a(block, world, blockpos1, enumfacing.d(), false) && (block.i() == 0 || block == Blocks.J || block == Blocks.F))
-                {
+                if (attemptRetract && !flag1 && block.r() != Material.a && a(block, world, blockpos1, enumfacing.d(), false) && (block.i() == 0 || block == Blocks.J || block == Blocks.F)) {
                     this.a(world, blockpos, enumfacing, false);
                 }
             }
@@ -206,7 +196,7 @@ public class BlockPistonBase extends Block {
                 world.g(blockpos.a(enumfacing));
             }
 
-            world.a((double) blockpos.n() + 0.5D, (double) blockpos.o() + 0.5D, (double) blockpos.p() + 0.5D, "tile.piston.in", 0.5F, world.s.nextFloat() * 0.15F + 0.6F);
+            world.a((double)blockpos.n() + 0.5D, (double)blockpos.o() + 0.5D, (double)blockpos.p() + 0.5D, "tile.piston.in", 0.5F, world.s.nextFloat() * 0.15F + 0.6F);
         }
 
         return true;
@@ -215,9 +205,9 @@ public class BlockPistonBase extends Block {
     public void a(IBlockAccess iblockaccess, BlockPos blockpos) {
         IBlockState iblockstate = iblockaccess.p(blockpos);
 
-        if (iblockstate.c() == this && ((Boolean) iblockstate.b(b)).booleanValue()) {
+        if (iblockstate.c() == this && ((Boolean)iblockstate.b(b)).booleanValue()) {
             float f0 = 0.25F;
-            EnumFacing enumfacing = (EnumFacing) iblockstate.b(a);
+            EnumFacing enumfacing = (EnumFacing)iblockstate.b(a);
 
             if (enumfacing != null) {
                 switch (BlockPistonBase.SwitchEnumFacing.a[enumfacing.ordinal()]) {
@@ -249,7 +239,6 @@ public class BlockPistonBase extends Block {
         else {
             this.a(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
         }
-
     }
 
     public void h() {
@@ -277,14 +266,14 @@ public class BlockPistonBase extends Block {
     }
 
     public static EnumFacing a(World world, BlockPos blockpos, EntityLivingBase entitylivingbase) {
-        if (MathHelper.e((float) entitylivingbase.s - (float) blockpos.n()) < 2.0F && MathHelper.e((float) entitylivingbase.u - (float) blockpos.p()) < 2.0F) {
-            double d0 = entitylivingbase.t + (double) entitylivingbase.aR();
+        if (MathHelper.e((float)entitylivingbase.s - (float)blockpos.n()) < 2.0F && MathHelper.e((float)entitylivingbase.u - (float)blockpos.p()) < 2.0F) {
+            double d0 = entitylivingbase.t + (double)entitylivingbase.aR();
 
-            if (d0 - (double) blockpos.o() > 2.0D) {
+            if (d0 - (double)blockpos.o() > 2.0D) {
                 return EnumFacing.UP;
             }
 
-            if ((double) blockpos.o() - d0 > 0.0D) {
+            if ((double)blockpos.o() - d0 > 0.0D) {
                 return EnumFacing.DOWN;
             }
         }
@@ -318,7 +307,7 @@ public class BlockPistonBase extends Block {
                         return true;
                     }
                 }
-                else if (((Boolean) world.p(blockpos).b(b)).booleanValue()) {
+                else if (((Boolean)world.p(blockpos).b(b)).booleanValue()) {
                     return false;
                 }
 
@@ -354,7 +343,7 @@ public class BlockPistonBase extends Block {
             BlockPos blockpos1;
 
             for (i1 = list1.size() - 1; i1 >= 0; --i1) {
-                blockpos1 = (BlockPos) list1.get(i1);
+                blockpos1 = (BlockPos)list1.get(i1);
                 Block block = world.p(blockpos1).c();
 
                 block.b(world, blockpos1, world.p(blockpos1), 0);
@@ -366,7 +355,7 @@ public class BlockPistonBase extends Block {
             IBlockState iblockstate;
 
             for (i1 = list.size() - 1; i1 >= 0; --i1) {
-                blockpos1 = (BlockPos) list.get(i1);
+                blockpos1 = (BlockPos)list.get(i1);
                 iblockstate = world.p(blockpos1);
                 Block block1 = iblockstate.c();
 
@@ -394,16 +383,16 @@ public class BlockPistonBase extends Block {
             int i2;
 
             for (i2 = list1.size() - 1; i2 >= 0; --i2) {
-                world.c((BlockPos) list1.get(i2), ablock[i0++]);
+                world.c((BlockPos)list1.get(i2), ablock[i0++]);
             }
 
             for (i2 = list.size() - 1; i2 >= 0; --i2) {
-                world.c((BlockPos) list.get(i2), ablock[i0++]);
+                world.c((BlockPos)list.get(i2), ablock[i0++]);
             }
 
             if (flag0) {
-                world.c(blockpos2, (Block) Blocks.K);
-                world.c(blockpos, (Block) this);
+                world.c(blockpos2, (Block)Blocks.K);
+                world.c(blockpos, (Block)this);
             }
 
             return true;
@@ -416,9 +405,9 @@ public class BlockPistonBase extends Block {
 
     public int c(IBlockState iblockstate) {
         byte b0 = 0;
-        int i0 = b0 | ((EnumFacing) iblockstate.b(a)).a();
+        int i0 = b0 | ((EnumFacing)iblockstate.b(a)).a();
 
-        if (((Boolean) iblockstate.b(b)).booleanValue()) {
+        if (((Boolean)iblockstate.b(b)).booleanValue()) {
             i0 |= 8;
         }
 
@@ -426,7 +415,7 @@ public class BlockPistonBase extends Block {
     }
 
     protected BlockState e() {
-        return new BlockState(this, new IProperty[]{a, b});
+        return new BlockState(this, new IProperty[]{ a, b });
     }
 
     static final class SwitchEnumFacing {

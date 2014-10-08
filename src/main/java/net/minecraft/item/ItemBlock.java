@@ -1,8 +1,6 @@
 package net.minecraft.item;
 
-import net.canarymod.api.world.blocks.BlockFace;
 import net.canarymod.api.world.blocks.CanaryBlock;
-import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.player.BlockPlaceHook;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSnow;
@@ -37,12 +35,8 @@ public class ItemBlock extends Item {
         Block block = iblockstate.c();
 
         // CanaryMod: BlockPlaceHook
-        BlockPosition cbp = new BlockPosition(blockpos); // Translate native block pos
-        CanaryBlock clicked = (CanaryBlock)world.getCanaryWorld().getBlockAt(cbp); // Store Clicked
-        BlockFace cbf = BlockFace.fromByte((byte)enumfacing.a()); // Get the click face
-        clicked.setFaceClicked(cbf); // Set face clicked
-        cbp = cbp.safeClone(); // Remake BlockPosition
-        cbp.transform(cbf); // Adjust position based on face
+        CanaryBlock clicked = new CanaryBlock(iblockstate, blockpos, world); // Store Clicked
+        clicked.setFaceClicked(enumfacing.asBlockFace()); // Set face clicked
         //
 
         if (block == Blocks.aH && ((Integer)iblockstate.b(BlockSnow.a)).intValue() < 1) {
@@ -65,18 +59,17 @@ public class ItemBlock extends Item {
             int i0 = this.a(itemstack.i());
             IBlockState iblockstate1 = this.a.a(world, blockpos, enumfacing, f0, f1, f2, i0, entityplayer);
 
-            if (!handled) { // if ItemSlab didn't call BlockPlace
-                // set placed
-                CanaryBlock placed = new CanaryBlock(iblockstate1, cbp, world.getCanaryWorld());
-                // Create and Call
-                BlockPlaceHook hook = (BlockPlaceHook)new BlockPlaceHook(((EntityPlayerMP)entityplayer).getPlayer(), clicked, placed).call();
-                if (hook.isCanceled()) {
-                    return false;
+            if (world.a(blockpos, iblockstate1, 3)) {
+
+                // CanaryMod: if ItemSlab didn't call BlockPlace
+                if (!handled) {
+                    // Create and Call
+                    if (new BlockPlaceHook(((EntityPlayerMP)entityplayer).getPlayer(), clicked, new CanaryBlock(iblockstate1, blockpos, world)).call().isCanceled()) {
+                        return false;
+                    }
                 }
                 //
-            }
 
-            if (world.a(blockpos, iblockstate1, 3)) {
                 iblockstate1 = world.p(blockpos);
                 if (iblockstate1.c() == this.a) {
                     a(world, blockpos, itemstack);

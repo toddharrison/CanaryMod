@@ -23,7 +23,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-
 public class ItemPotion extends Item {
 
     private Map a = Maps.newHashMap();
@@ -53,7 +52,7 @@ public class ItemPotion extends Item {
             return arraylist;
         }
         else {
-            List list = (List) this.a.get(Integer.valueOf(itemstack.i()));
+            List list = (List)this.a.get(Integer.valueOf(itemstack.i()));
 
             if (list == null) {
                 list = PotionHelper.b(itemstack.i(), false);
@@ -65,7 +64,7 @@ public class ItemPotion extends Item {
     }
 
     public List e(int i0) {
-        List list = (List) this.a.get(Integer.valueOf(i0));
+        List list = (List)this.a.get(Integer.valueOf(i0));
 
         if (list == null) {
             list = PotionHelper.b(i0, false);
@@ -89,7 +88,7 @@ public class ItemPotion extends Item {
                 int index = 0;
 
                 while (iterator.hasNext()) {
-                    PotionEffect potioneffect = (PotionEffect) iterator.next();
+                    PotionEffect potioneffect = (PotionEffect)iterator.next();
 
                     // entityplayer.c(new PotionEffect(potioneffect));
                     // add to the array first
@@ -101,7 +100,7 @@ public class ItemPotion extends Item {
         }
 
         // Call Hook
-        EatHook hook = (EatHook) new EatHook(((EntityPlayerMP) entityplayer).getPlayer(), itemstack.getCanaryItem(), 0, 0, effects).call();
+        EatHook hook = (EatHook)new EatHook(((EntityPlayerMP)entityplayer).getPlayer(), itemstack.getCanaryItem(), 0, 0, effects).call();
         if (hook.isCanceled()) {
             return itemstack;
         }
@@ -111,7 +110,7 @@ public class ItemPotion extends Item {
         if (hook.getPotionEffects() != null) {
             for (net.canarymod.api.potion.PotionEffect effect : hook.getPotionEffects()) {
                 if (effect != null) {
-                    entityplayer.c(((CanaryPotionEffect) effect).getHandle());
+                    entityplayer.c(((CanaryPotionEffect)effect).getHandle());
                 }
             }
         }
@@ -121,7 +120,7 @@ public class ItemPotion extends Item {
             --itemstack.b;
         }
 
-        entityplayer.b(StatList.J[Item.b((Item) this)]);
+        entityplayer.b(StatList.J[Item.b((Item)this)]);
         if (!entityplayer.by.d) {
             if (itemstack.b <= 0) {
                 return new ItemStack(Items.bA);
@@ -147,12 +146,12 @@ public class ItemPotion extends Item {
                 --itemstack.b;
             }
 
-            world.a((Entity) entityplayer, "random.bow", 0.5F, 0.4F / (g.nextFloat() * 0.4F + 0.8F));
+            world.a((Entity)entityplayer, "random.bow", 0.5F, 0.4F / (g.nextFloat() * 0.4F + 0.8F));
             if (!world.D) {
-                world.d((Entity) (new EntityPotion(world, entityplayer, itemstack)));
+                world.d((Entity)(new EntityPotion(world, entityplayer, itemstack)));
             }
 
-            entityplayer.b(StatList.J[Item.b((Item) this)]);
+            entityplayer.b(StatList.J[Item.b((Item)this)]);
             return itemstack;
         }
         else {
@@ -180,7 +179,7 @@ public class ItemPotion extends Item {
             String s1;
 
             if (list != null && !list.isEmpty()) {
-                s1 = ((PotionEffect) list.get(0)).g();
+                s1 = ((PotionEffect)list.get(0)).g();
                 s1 = s1 + ".postfix";
                 return s0 + StatCollector.a(s1).trim();
             }
@@ -190,5 +189,4 @@ public class ItemPotion extends Item {
             }
         }
     }
-
 }

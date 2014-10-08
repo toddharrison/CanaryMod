@@ -1,11 +1,7 @@
 package net.minecraft.block;
 
-
 import com.google.common.base.Predicate;
-import java.util.Iterator;
-import java.util.Random;
 import net.canarymod.api.world.blocks.CanaryBlock;
-import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.world.BlockGrowHook;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -24,20 +20,23 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import java.util.Iterator;
+import java.util.Random;
 
 public class BlockStem extends BlockBush implements IGrowable {
 
     public static final PropertyInteger a = PropertyInteger.a("age", 0, 7);
     public static final PropertyDirection b = PropertyDirection.a("facing", new Predicate() {
 
-        public boolean a(EnumFacing p_a_1_) {
-            return p_a_1_ != EnumFacing.DOWN;
-        }
+                                                                      public boolean a(EnumFacing p_a_1_) {
+                                                                          return p_a_1_ != EnumFacing.DOWN;
+                                                                      }
 
-        public boolean apply(Object p_apply_1_) {
-            return this.a((EnumFacing) p_apply_1_);
-        }
-    });
+                                                                      public boolean apply(Object p_apply_1_) {
+                                                                          return this.a((EnumFacing)p_apply_1_);
+                                                                      }
+                                                                  }
+                                                                 );
     private final Block M;
 
     protected BlockStem(Block block) {
@@ -47,7 +46,7 @@ public class BlockStem extends BlockBush implements IGrowable {
         float f0 = 0.125F;
 
         this.a(0.5F - f0, 0.0F, 0.5F - f0, 0.5F + f0, 0.25F, 0.5F + f0);
-        this.a((CreativeTabs) null);
+        this.a((CreativeTabs)null);
     }
 
     public IBlockState a(IBlockState iblockstate, IBlockAccess iblockaccess, BlockPos blockpos) {
@@ -55,7 +54,7 @@ public class BlockStem extends BlockBush implements IGrowable {
         Iterator iterator = EnumFacing.Plane.HORIZONTAL.iterator();
 
         while (iterator.hasNext()) {
-            EnumFacing enumfacing = (EnumFacing) iterator.next();
+            EnumFacing enumfacing = (EnumFacing)iterator.next();
 
             if (iblockaccess.p(blockpos.a(enumfacing)).c() == this.M) {
                 iblockstate = iblockstate.a(b, enumfacing);
@@ -75,21 +74,17 @@ public class BlockStem extends BlockBush implements IGrowable {
         if (world.l(blockpos.a()) >= 9) {
             float f0 = BlockCrops.a(this, world, blockpos);
 
-            if (random.nextInt((int) (25.0F / f0) + 1) == 0) {
-                int i0 = ((Integer) iblockstate.b(a)).intValue();
+            if (random.nextInt((int)(25.0F / f0) + 1) == 0) {
+                int i0 = ((Integer)iblockstate.b(a)).intValue();
 
                 // CanaryMod: Grab the original stuff
-                CanaryBlock original = (CanaryBlock) world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos));
+                CanaryBlock original = new CanaryBlock(iblockstate, blockpos, world);
                 CanaryBlock growth;
-                BlockGrowHook blockGrowHook;
                 //
                 if (i0 < 7) {
                     iblockstate = iblockstate.a(a, Integer.valueOf(i0 + 1));
                     // Growth is original with new data
-                    growth = (CanaryBlock) world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos));
-                    growth.setData((short) i0);
-                    blockGrowHook = (BlockGrowHook) new BlockGrowHook(original, growth).call();
-                    if (!blockGrowHook.isCanceled()) {
+                    if (!new BlockGrowHook(original, new CanaryBlock(iblockstate, blockpos, world)).call().isCanceled()) {
                         world.a(blockpos, iblockstate, 2);
                     }
                     //
@@ -98,7 +93,7 @@ public class BlockStem extends BlockBush implements IGrowable {
                     Iterator iterator = EnumFacing.Plane.HORIZONTAL.iterator();
 
                     while (iterator.hasNext()) {
-                        EnumFacing enumfacing = (EnumFacing) iterator.next();
+                        EnumFacing enumfacing = (EnumFacing)iterator.next();
 
                         if (world.p(blockpos.a(enumfacing)).c() == this.M) {
                             return;
@@ -110,22 +105,18 @@ public class BlockStem extends BlockBush implements IGrowable {
 
                     if (world.p(blockpos).c().J == Material.a && (block == Blocks.ak || block == Blocks.d || block == Blocks.c)) {
                         // A Melon/Pumpkin has spawned
-                        BlockPosition bp = new BlockPosition(blockpos);
-                        growth = new CanaryBlock(this.M, (short) 0, bp.getBlockX(), bp.getBlockY(), bp.getBlockZ(), world.getCanaryWorld());
-                        blockGrowHook = (BlockGrowHook) new BlockGrowHook(original, growth);
-                        if (!blockGrowHook.isCanceled()) {
+                        if (!new BlockGrowHook(original, new CanaryBlock(this.M.P(), blockpos, world)).call().isCanceled()) {
                             world.a(blockpos, this.M.P());
                         }
                         //
                     }
                 }
             }
-
         }
     }
 
     public void g(World world, BlockPos blockpos, IBlockState iblockstate) {
-        int i0 = ((Integer) iblockstate.b(a)).intValue() + MathHelper.a(world.s, 2, 5);
+        int i0 = ((Integer)iblockstate.b(a)).intValue() + MathHelper.a(world.s, 2, 5);
 
         world.a(blockpos, iblockstate.a(a, Integer.valueOf(Math.min(7, i0))), 2);
     }
@@ -137,10 +128,10 @@ public class BlockStem extends BlockBush implements IGrowable {
     }
 
     public void a(IBlockAccess iblockaccess, BlockPos blockpos) {
-        this.F = (double) ((float) (((Integer) iblockaccess.p(blockpos).b(a)).intValue() * 2 + 2) / 16.0F);
+        this.F = (double)((float)(((Integer)iblockaccess.p(blockpos).b(a)).intValue() * 2 + 2) / 16.0F);
         float f0 = 0.125F;
 
-        this.a(0.5F - f0, 0.0F, 0.5F - f0, 0.5F + f0, (float) this.F, 0.5F + f0);
+        this.a(0.5F - f0, 0.0F, 0.5F - f0, 0.5F + f0, (float)this.F, 0.5F + f0);
     }
 
     public void a(World world, BlockPos blockpos, IBlockState iblockstate, float f0, int i0) {
@@ -149,14 +140,13 @@ public class BlockStem extends BlockBush implements IGrowable {
             Item item = this.j();
 
             if (item != null) {
-                int i1 = ((Integer) iblockstate.b(a)).intValue();
+                int i1 = ((Integer)iblockstate.b(a)).intValue();
 
                 for (int i2 = 0; i2 < 3; ++i2) {
                     if (world.s.nextInt(15) <= i1) {
                         a(world, blockpos, new ItemStack(item));
                     }
                 }
-
             }
         }
     }
@@ -170,7 +160,7 @@ public class BlockStem extends BlockBush implements IGrowable {
     }
 
     public boolean a(World world, BlockPos blockpos, IBlockState iblockstate, boolean flag0) {
-        return ((Integer) iblockstate.b(a)).intValue() != 7;
+        return ((Integer)iblockstate.b(a)).intValue() != 7;
     }
 
     public boolean a(World world, Random random, BlockPos blockpos, IBlockState iblockstate) {
@@ -186,11 +176,10 @@ public class BlockStem extends BlockBush implements IGrowable {
     }
 
     public int c(IBlockState iblockstate) {
-        return ((Integer) iblockstate.b(a)).intValue();
+        return ((Integer)iblockstate.b(a)).intValue();
     }
 
     protected BlockState e() {
-        return new BlockState(this, new IProperty[]{a, b});
+        return new BlockState(this, new IProperty[]{ a, b });
     }
-
 }

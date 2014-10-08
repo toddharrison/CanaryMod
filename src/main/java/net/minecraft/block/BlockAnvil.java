@@ -1,6 +1,5 @@
 package net.minecraft.block;
 
-
 import com.google.common.base.Predicate;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -24,10 +23,9 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.IInteractionObject;
 import net.minecraft.world.World;
 
-
 public class BlockAnvil extends BlockFalling {
 
-    public static final PropertyDirection a = PropertyDirection.a("facing", (Predicate) EnumFacing.Plane.HORIZONTAL);
+    public static final PropertyDirection a = PropertyDirection.a("facing", (Predicate)EnumFacing.Plane.HORIZONTAL);
     public static final PropertyInteger b = PropertyInteger.a("damage", 0, 2);
 
     protected BlockAnvil() {
@@ -53,18 +51,18 @@ public class BlockAnvil extends BlockFalling {
 
     public boolean a(World world, BlockPos blockpos, IBlockState iblockstate, EntityPlayer entityplayer, EnumFacing enumfacing, float f0, float f1, float f2) {
         if (!world.D) {
-            entityplayer.a((IInteractionObject) (new BlockAnvil.Anvil(world, blockpos)));
+            entityplayer.a((IInteractionObject)(new BlockAnvil.Anvil(world, blockpos)));
         }
 
         return true;
     }
 
     public int a(IBlockState iblockstate) {
-        return ((Integer) iblockstate.b(b)).intValue();
+        return ((Integer)iblockstate.b(b)).intValue();
     }
 
     public void a(IBlockAccess iblockaccess, BlockPos blockpos) {
-        EnumFacing enumfacing = (EnumFacing) iblockaccess.p(blockpos).b(a);
+        EnumFacing enumfacing = (EnumFacing)iblockaccess.p(blockpos).b(a);
 
         if (enumfacing.k() == EnumFacing.Axis.X) {
             this.a(0.0F, 0.0F, 0.125F, 1.0F, 1.0F, 0.875F);
@@ -72,7 +70,6 @@ public class BlockAnvil extends BlockFalling {
         else {
             this.a(0.125F, 0.0F, 0.0F, 0.875F, 1.0F, 1.0F);
         }
-
     }
 
     protected void a(EntityFallingBlock entityfallingblock) {
@@ -89,14 +86,14 @@ public class BlockAnvil extends BlockFalling {
 
     public int c(IBlockState iblockstate) {
         byte b0 = 0;
-        int i0 = b0 | ((EnumFacing) iblockstate.b(a)).b();
+        int i0 = b0 | ((EnumFacing)iblockstate.b(a)).b();
 
-        i0 |= ((Integer) iblockstate.b(b)).intValue() << 2;
+        i0 |= ((Integer)iblockstate.b(b)).intValue() << 2;
         return i0;
     }
 
     protected BlockState e() {
-        return new BlockState(this, new IProperty[]{a, b});
+        return new BlockState(this, new IProperty[]{ a, b });
     }
 
     public static class Anvil implements IInteractionObject {

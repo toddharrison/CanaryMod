@@ -25,7 +25,7 @@ public class BlockPosition extends Position {
         return (BlockPosition)super.clone();
     }
 
-    public BlockPosition safeClone() {
+    public BlockPosition copy() {
         try {
             return this.clone();
         }

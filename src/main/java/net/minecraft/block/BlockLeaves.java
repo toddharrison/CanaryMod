@@ -1,8 +1,6 @@
 package net.minecraft.block;
 
-import java.util.Random;
 import net.canarymod.api.world.blocks.CanaryBlock;
-import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.world.LeafDecayHook;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
@@ -14,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
+import java.util.Random;
 
 public abstract class BlockLeaves extends BlockLeavesBase {
 
@@ -44,19 +43,18 @@ public abstract class BlockLeaves extends BlockLeavesBase {
                         BlockPos blockpos1 = blockpos.a(i4, i5, i6);
                         IBlockState iblockstate1 = world.p(blockpos1);
 
-                        if (iblockstate1.c().r() == Material.j && !((Boolean) iblockstate1.b(b)).booleanValue()) {
+                        if (iblockstate1.c().r() == Material.j && !((Boolean)iblockstate1.b(b)).booleanValue()) {
                             world.a(blockpos1, iblockstate1.a(b, Boolean.valueOf(true)), 4);
                         }
                     }
                 }
             }
         }
-
     }
 
     public void b(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {
         if (!world.D) {
-            if (((Boolean) iblockstate.b(b)).booleanValue() && ((Boolean) iblockstate.b(a)).booleanValue()) {
+            if (((Boolean)iblockstate.b(b)).booleanValue() && ((Boolean)iblockstate.b(a)).booleanValue()) {
                 byte b0 = 4;
                 int i0 = b0 + 1;
                 int i1 = blockpos.n();
@@ -139,15 +137,12 @@ public abstract class BlockLeaves extends BlockLeavesBase {
                     this.d(world, blockpos);
                 }
             }
-
         }
     }
 
     private void d(World world, BlockPos blockpos) {
         // CanaryMod: LeafDecay
-        CanaryBlock leaves = (CanaryBlock) world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos));
-        LeafDecayHook hook = (LeafDecayHook) new LeafDecayHook(leaves).call();
-        if (!hook.isCanceled()) {
+        if (!new LeafDecayHook(new CanaryBlock(world.p(blockpos), blockpos, world)).call().isCanceled()) {
             this.b(world, blockpos, world.p(blockpos), 0);
             world.g(blockpos);
         }
@@ -189,7 +184,6 @@ public abstract class BlockLeaves extends BlockLeavesBase {
 
             this.a(world, blockpos, iblockstate, i1);
         }
-
     }
 
     protected void a(World world, BlockPos blockpos, IBlockState iblockstate, int i0) {
@@ -208,5 +202,4 @@ public abstract class BlockLeaves extends BlockLeavesBase {
     }
 
     public abstract BlockPlanks.EnumType b(int i0);
-
 }

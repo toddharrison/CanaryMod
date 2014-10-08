@@ -72,10 +72,33 @@ public class CanaryBlock implements Block {
         this(type, data, position.getBlockX(), position.getBlockY(), position.getBlockZ(), world);
     }
 
+    /*
+     * Pure Native
+     */
+    public CanaryBlock(IBlockState state, BlockPos blockpos, net.minecraft.world.World world) {
+        this(state, new BlockPosition(blockpos), world.getCanaryWorld());
+    }
+
+    public CanaryBlock(IBlockState state, BlockPos blockpos, net.minecraft.world.World world, byte status) {
+        this(state, new BlockPosition(blockpos), world.getCanaryWorld(), status);
+    }
+
+    /*
+     * Some wrap
+     */
     public CanaryBlock(IBlockState state, Position position, World world) {
         this.state = state;
         this.position = position;
         this.world = world;
+
+        this.type = BlockType.fromIdAndData(net.minecraft.block.Block.a(state.c()), state.c().c(state));
+    }
+
+    public CanaryBlock(IBlockState state, Position position, World world, byte status) {
+        this.state = state;
+        this.position = position;
+        this.world = world;
+        this.status = status;
 
         this.type = BlockType.fromIdAndData(net.minecraft.block.Block.a(state.c()), state.c().c(state));
     }
@@ -295,7 +318,7 @@ public class CanaryBlock implements Block {
             }
         }
 
-        return net.minecraft.block.Block.b(getType().getMachineName()).a(((CanaryWorld) getWorld()).getHandle(), new BlockPos(getX(), getY(), getZ()), getBlock().P(), player != null ? ((CanaryPlayer) player).getHandle() : null, enumfacing, 0, 0, 0); // last four parameters aren't even used by lever or button
+        return net.minecraft.block.Block.b(getType().getMachineName()).a(((CanaryWorld)getWorld()).getHandle(), new BlockPos(getX(), getY(), getZ()), getBlock().P(), player != null ? ((CanaryPlayer)player).getHandle() : null, enumfacing, 0, 0, 0); // last four parameters aren't even used by lever or button
     }
 
     public void sendUpdateToPlayers(Player... players) {
@@ -316,7 +339,7 @@ public class CanaryBlock implements Block {
         }
         Collection<BlockProperty> blockProperties = Collections.emptyList();
         for (Object nativeProperty : state.a()) {
-            blockProperties.add(CanaryBlockProperty.wrapAs((IProperty) nativeProperty));
+            blockProperties.add(CanaryBlockProperty.wrapAs((IProperty)nativeProperty));
         }
         return blockProperties;
     }
@@ -339,7 +362,7 @@ public class CanaryBlock implements Block {
         if (state == null) {
             throw new NotYetImplementedException("CanaryBlock was formed missing the IBlockState, this is a bug and should be reported");
         }
-        return state.b(((CanaryBlockProperty) property).getNative());
+        return state.b(((CanaryBlockProperty)property).getNative());
     }
 
     @Override
@@ -390,12 +413,11 @@ public class CanaryBlock implements Block {
         hash = 97 * hash + this.position.hashCode();
         return hash;
     }
-    
+
     /**
      * Convenience Method
      */
     public net.minecraft.block.Block getBlock() {
         return net.minecraft.block.Block.b(getType().getMachineName());
     }
-    
 }

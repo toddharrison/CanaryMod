@@ -1,8 +1,6 @@
 package net.minecraft.block;
 
-
 import net.canarymod.api.world.blocks.CanaryBlock;
-import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.world.BlockGrowHook;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -22,7 +20,6 @@ import net.minecraft.world.World;
 
 import java.util.Random;
 
-
 public class BlockCocoa extends BlockDirectional implements IGrowable {
 
     public static final PropertyInteger a = PropertyInteger.a("age", 0, 2);
@@ -38,27 +35,21 @@ public class BlockCocoa extends BlockDirectional implements IGrowable {
             this.f(world, blockpos, iblockstate);
         }
         else if (world.s.nextInt(5) == 0) {
-            int i0 = ((Integer) iblockstate.b(a)).intValue();
+            int i0 = ((Integer)iblockstate.b(a)).intValue();
 
             if (i0 < 2) {
                 ++i0;
                 // CanaryMod: BlockGrow
-                BlockPosition cbp = new BlockPosition(blockpos);
-                CanaryBlock original = (CanaryBlock) world.getCanaryWorld().getBlockAt(cbp);
-                CanaryBlock growth = (CanaryBlock) world.getCanaryWorld().getBlockAt(cbp);
-                //growth.setData((short) (i0 << 2 | l(i3))); // FIXME
-                BlockGrowHook blockGrowHook = (BlockGrowHook) new BlockGrowHook(original, growth).call();
-                if (!blockGrowHook.isCanceled()) {
+                if (!new BlockGrowHook(new CanaryBlock(iblockstate, blockpos, world), new CanaryBlock(iblockstate.a(a, i0 + 1), blockpos, world)).call().isCanceled()) {
                     world.a(blockpos, iblockstate.a(a, Integer.valueOf(i0 + 1)), 2);
                 }
                 //
             }
         }
-
     }
 
     public boolean e(World world, BlockPos blockpos, IBlockState iblockstate) {
-        blockpos = blockpos.a((EnumFacing) iblockstate.b(N));
+        blockpos = blockpos.a((EnumFacing)iblockstate.b(N));
         IBlockState iblockstate1 = world.p(blockpos);
 
         return iblockstate1.c() == Blocks.r && iblockstate1.b(BlockPlanks.a) == BlockPlanks.EnumType.JUNGLE;
@@ -79,33 +70,32 @@ public class BlockCocoa extends BlockDirectional implements IGrowable {
 
     public void a(IBlockAccess iblockaccess, BlockPos blockpos) {
         IBlockState iblockstate = iblockaccess.p(blockpos);
-        EnumFacing enumfacing = (EnumFacing) iblockstate.b(N);
-        int i0 = ((Integer) iblockstate.b(a)).intValue();
+        EnumFacing enumfacing = (EnumFacing)iblockstate.b(N);
+        int i0 = ((Integer)iblockstate.b(a)).intValue();
         int i1 = 4 + i0 * 2;
         int i2 = 5 + i0 * 2;
-        float f0 = (float) i1 / 2.0F;
+        float f0 = (float)i1 / 2.0F;
 
         switch (BlockCocoa.SwitchEnumFacing.a[enumfacing.ordinal()]) {
             case 1:
-                this.a((8.0F - f0) / 16.0F, (12.0F - (float) i2) / 16.0F, (15.0F - (float) i1) / 16.0F, (8.0F + f0) / 16.0F, 0.75F, 0.9375F);
+                this.a((8.0F - f0) / 16.0F, (12.0F - (float)i2) / 16.0F, (15.0F - (float)i1) / 16.0F, (8.0F + f0) / 16.0F, 0.75F, 0.9375F);
                 break;
 
             case 2:
-                this.a((8.0F - f0) / 16.0F, (12.0F - (float) i2) / 16.0F, 0.0625F, (8.0F + f0) / 16.0F, 0.75F, (1.0F + (float) i1) / 16.0F);
+                this.a((8.0F - f0) / 16.0F, (12.0F - (float)i2) / 16.0F, 0.0625F, (8.0F + f0) / 16.0F, 0.75F, (1.0F + (float)i1) / 16.0F);
                 break;
 
             case 3:
-                this.a(0.0625F, (12.0F - (float) i2) / 16.0F, (8.0F - f0) / 16.0F, (1.0F + (float) i1) / 16.0F, 0.75F, (8.0F + f0) / 16.0F);
+                this.a(0.0625F, (12.0F - (float)i2) / 16.0F, (8.0F - f0) / 16.0F, (1.0F + (float)i1) / 16.0F, 0.75F, (8.0F + f0) / 16.0F);
                 break;
 
             case 4:
-                this.a((15.0F - (float) i1) / 16.0F, (12.0F - (float) i2) / 16.0F, (8.0F - f0) / 16.0F, 0.9375F, 0.75F, (8.0F + f0) / 16.0F);
+                this.a((15.0F - (float)i1) / 16.0F, (12.0F - (float)i2) / 16.0F, (8.0F - f0) / 16.0F, 0.9375F, 0.75F, (8.0F + f0) / 16.0F);
         }
-
     }
 
     public void a(World world, BlockPos blockpos, IBlockState iblockstate, EntityLivingBase entitylivingbase, ItemStack itemstack) {
-        EnumFacing enumfacing = EnumFacing.a((double) entitylivingbase.y);
+        EnumFacing enumfacing = EnumFacing.a((double)entitylivingbase.y);
 
         world.a(blockpos, iblockstate.a(N, enumfacing), 2);
     }
@@ -122,7 +112,6 @@ public class BlockCocoa extends BlockDirectional implements IGrowable {
         if (!this.e(world, blockpos, iblockstate)) {
             this.f(world, blockpos, iblockstate);
         }
-
     }
 
     private void f(World world, BlockPos blockpos, IBlockState iblockstate) {
@@ -131,7 +120,7 @@ public class BlockCocoa extends BlockDirectional implements IGrowable {
     }
 
     public void a(World world, BlockPos blockpos, IBlockState iblockstate, float f0, int i0) {
-        int i1 = ((Integer) iblockstate.b(a)).intValue();
+        int i1 = ((Integer)iblockstate.b(a)).intValue();
         byte b0 = 1;
 
         if (i1 >= 2) {
@@ -141,7 +130,6 @@ public class BlockCocoa extends BlockDirectional implements IGrowable {
         for (int i2 = 0; i2 < b0; ++i2) {
             a(world, blockpos, new ItemStack(Items.aW, 1, EnumDyeColor.BROWN.b()));
         }
-
     }
 
     public int j(World world, BlockPos blockpos) {
@@ -149,7 +137,7 @@ public class BlockCocoa extends BlockDirectional implements IGrowable {
     }
 
     public boolean a(World world, BlockPos blockpos, IBlockState iblockstate, boolean flag0) {
-        return ((Integer) iblockstate.b(a)).intValue() < 2;
+        return ((Integer)iblockstate.b(a)).intValue() < 2;
     }
 
     public boolean a(World world, Random random, BlockPos blockpos, IBlockState iblockstate) {
@@ -157,7 +145,7 @@ public class BlockCocoa extends BlockDirectional implements IGrowable {
     }
 
     public void b(World world, Random random, BlockPos blockpos, IBlockState iblockstate) {
-        world.a(blockpos, iblockstate.a(a, Integer.valueOf(((Integer) iblockstate.b(a)).intValue() + 1)), 2);
+        world.a(blockpos, iblockstate.a(a, Integer.valueOf(((Integer)iblockstate.b(a)).intValue() + 1)), 2);
     }
 
     public IBlockState a(int i0) {
@@ -166,14 +154,14 @@ public class BlockCocoa extends BlockDirectional implements IGrowable {
 
     public int c(IBlockState iblockstate) {
         byte b0 = 0;
-        int i0 = b0 | ((EnumFacing) iblockstate.b(N)).b();
+        int i0 = b0 | ((EnumFacing)iblockstate.b(N)).b();
 
-        i0 |= ((Integer) iblockstate.b(a)).intValue() << 2;
+        i0 |= ((Integer)iblockstate.b(a)).intValue() << 2;
         return i0;
     }
 
     protected BlockState e() {
-        return new BlockState(this, new IProperty[]{N, a});
+        return new BlockState(this, new IProperty[]{ N, a });
     }
 
     static final class SwitchEnumFacing {
@@ -208,7 +196,6 @@ public class BlockCocoa extends BlockDirectional implements IGrowable {
             catch (NoSuchFieldError nosuchfielderror3) {
                 ;
             }
-
         }
     }
 }

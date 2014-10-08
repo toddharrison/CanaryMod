@@ -1,9 +1,6 @@
 package net.minecraft.block;
 
-
-import java.util.Random;
 import net.canarymod.api.world.blocks.CanaryBlock;
-import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.world.BlockGrowHook;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyInteger;
@@ -17,6 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
+import java.util.Random;
 
 public class BlockNetherWart extends BlockBush {
 
@@ -28,7 +26,7 @@ public class BlockNetherWart extends BlockBush {
         float f0 = 0.5F;
 
         this.a(0.5F - f0, 0.0F, 0.5F - f0, 0.5F + f0, 0.25F, 0.5F + f0);
-        this.a((CreativeTabs) null);
+        this.a((CreativeTabs)null);
     }
 
     protected boolean c(Block block) {
@@ -40,17 +38,13 @@ public class BlockNetherWart extends BlockBush {
     }
 
     public void b(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {
-        int i0 = ((Integer) iblockstate.b(a)).intValue();
+        int i0 = ((Integer)iblockstate.b(a)).intValue();
 
         if (i0 < 3 && random.nextInt(10) == 0) {
-            iblockstate = iblockstate.a(a, Integer.valueOf(i0 + 1));
+            IBlockState iblockstate1 = iblockstate.a(a, Integer.valueOf(i0 + 1)); // CanaryMod: make new state to reuse old state in hook
             // CanaryMod: BlockGrow
-            CanaryBlock original = (CanaryBlock) world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos));
-            CanaryBlock growth = (CanaryBlock) world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos));
-            growth.setData((short) i0);
-            BlockGrowHook blockGrowHook = (BlockGrowHook) new BlockGrowHook(original, growth).call();
-            if (!blockGrowHook.isCanceled()) {
-                world.a(blockpos, iblockstate, 2);
+            if (!new BlockGrowHook(new CanaryBlock(iblockstate, blockpos, world), new CanaryBlock(iblockstate1, blockpos, world)).call().isCanceled()) {
+                world.a(blockpos, iblockstate1, 2);
             }
             //
         }
@@ -62,7 +56,7 @@ public class BlockNetherWart extends BlockBush {
         if (!world.D) {
             int i1 = 1;
 
-            if (((Integer) iblockstate.b(a)).intValue() >= 3) {
+            if (((Integer)iblockstate.b(a)).intValue() >= 3) {
                 i1 = 2 + world.s.nextInt(3);
                 if (i0 > 0) {
                     i1 += world.s.nextInt(i0 + 1);
@@ -72,7 +66,6 @@ public class BlockNetherWart extends BlockBush {
             for (int i2 = 0; i2 < i1; ++i2) {
                 a(world, blockpos, new ItemStack(Items.by));
             }
-
         }
     }
 
@@ -89,11 +82,10 @@ public class BlockNetherWart extends BlockBush {
     }
 
     public int c(IBlockState iblockstate) {
-        return ((Integer) iblockstate.b(a)).intValue();
+        return ((Integer)iblockstate.b(a)).intValue();
     }
 
     protected BlockState e() {
-        return new BlockState(this, new IProperty[]{a});
+        return new BlockState(this, new IProperty[]{ a });
     }
-
 }

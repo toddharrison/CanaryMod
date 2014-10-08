@@ -28,7 +28,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-
 public class Block {
 
     public static final ObjectIntIdentityMap d = new ObjectIntIdentityMap();
@@ -130,7 +129,7 @@ public class Block {
     }
 
     public static Block c(int i0) {
-        return (Block) c.a(i0);
+        return (Block)c.a(i0);
     }
 
     public static IBlockState d(int i0) {
@@ -141,18 +140,18 @@ public class Block {
     }
 
     public static Block a(Item item) {
-        return item instanceof ItemBlock ? ((ItemBlock) item).d() : null;
+        return item instanceof ItemBlock ? ((ItemBlock)item).d() : null;
     }
 
     public static Block b(String s0) {
         ResourceLocation resourcelocation = new ResourceLocation(s0);
 
         if (c.d(resourcelocation)) {
-            return (Block) c.a(resourcelocation);
+            return (Block)c.a(resourcelocation);
         }
         else {
             try {
-                return (Block) c.a(Integer.parseInt(s0));
+                return (Block)c.a(Integer.parseInt(s0));
             }
             catch (NumberFormatException numberformatexception) {
                 return null;
@@ -163,13 +162,13 @@ public class Block {
     public static void a(World world, BlockPos blockpos, ItemStack itemstack) {
         if (!world.D && world.Q().b("doTileDrops")) {
             float f0 = 0.5F;
-            double d0 = (double) (world.s.nextFloat() * f0) + (double) (1.0F - f0) * 0.5D;
-            double d1 = (double) (world.s.nextFloat() * f0) + (double) (1.0F - f0) * 0.5D;
-            double d2 = (double) (world.s.nextFloat() * f0) + (double) (1.0F - f0) * 0.5D;
-            EntityItem entityitem = new EntityItem(world, (double) blockpos.n() + d0, (double) blockpos.o() + d1, (double) blockpos.p() + d2, itemstack);
+            double d0 = (double)(world.s.nextFloat() * f0) + (double)(1.0F - f0) * 0.5D;
+            double d1 = (double)(world.s.nextFloat() * f0) + (double)(1.0F - f0) * 0.5D;
+            double d2 = (double)(world.s.nextFloat() * f0) + (double)(1.0F - f0) * 0.5D;
+            EntityItem entityitem = new EntityItem(world, (double)blockpos.n() + d0, (double)blockpos.o() + d1, (double)blockpos.p() + d2, itemstack);
 
             entityitem.p();
-            world.d((Entity) entityitem);
+            world.d((Entity)entityitem);
         }
     }
 
@@ -408,7 +407,7 @@ public class Block {
         Block block13;
 
         while (iterator.hasNext()) {
-            block13 = (Block) iterator.next();
+            block13 = (Block)iterator.next();
             if (block13.J == Material.a) {
                 block13.v = false;
             }
@@ -431,17 +430,16 @@ public class Block {
         iterator = c.iterator();
 
         while (iterator.hasNext()) {
-            block13 = (Block) iterator.next();
+            block13 = (Block)iterator.next();
             Iterator iterator1 = block13.O().a().iterator();
 
             while (iterator1.hasNext()) {
-                IBlockState iblockstate = (IBlockState) iterator1.next();
+                IBlockState iblockstate = (IBlockState)iterator1.next();
                 int i0 = c.b(block13) << 4 | block13.c(iblockstate);
 
                 d.a(iblockstate, i0);
             }
         }
-
     }
 
     private static void a(int i0, ResourceLocation resourcelocation, Block block) {
@@ -504,7 +502,7 @@ public class Block {
     }
 
     protected Block a(float f0) {
-        this.u = (int) (15.0F * f0);
+        this.u = (int)(15.0F * f0);
         return this;
     }
 
@@ -573,12 +571,12 @@ public class Block {
     }
 
     protected final void a(float f0, float f1, float f2, float f3, float f4, float f5) {
-        this.B = (double) f0;
-        this.C = (double) f1;
-        this.D = (double) f2;
-        this.E = (double) f3;
-        this.F = (double) f4;
-        this.G = (double) f5;
+        this.B = (double)f0;
+        this.C = (double)f1;
+        this.D = (double)f2;
+        this.E = (double)f3;
+        this.F = (double)f4;
+        this.G = (double)f5;
     }
 
     public boolean b(IBlockAccess iblockaccess, BlockPos blockpos, EnumFacing enumfacing) {
@@ -591,11 +589,10 @@ public class Block {
         if (axisalignedbb1 != null && axisalignedbb.b(axisalignedbb1)) {
             list.add(axisalignedbb1);
         }
-
     }
 
     public AxisAlignedBB a(World world, BlockPos blockpos, IBlockState iblockstate) {
-        return new AxisAlignedBB((double) blockpos.n() + this.B, (double) blockpos.o() + this.C, (double) blockpos.p() + this.D, (double) blockpos.n() + this.E, (double) blockpos.o() + this.F, (double) blockpos.p() + this.G);
+        return new AxisAlignedBB((double)blockpos.n() + this.B, (double)blockpos.o() + this.C, (double)blockpos.p() + this.D, (double)blockpos.n() + this.E, (double)blockpos.o() + this.F, (double)blockpos.p() + this.G);
     }
 
     public boolean c() {
@@ -664,7 +661,6 @@ public class Block {
                     }
                 }
             }
-
         }
     }
 
@@ -672,7 +668,7 @@ public class Block {
         if (!world.D) {
             // CanaryMod: BlockDropXpHook
             net.canarymod.api.world.blocks.Block block = world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos));
-            BlockDropXpHook hook = (BlockDropXpHook) new BlockDropXpHook(block, i0).call();
+            BlockDropXpHook hook = (BlockDropXpHook)new BlockDropXpHook(block, i0).call();
             if (hook.isCanceled()) {
                 return;
             }
@@ -683,10 +679,9 @@ public class Block {
                 int i1 = EntityXPOrb.a(i0);
 
                 i0 -= i1;
-                world.d((Entity) (new EntityXPOrb(world, (double) blockpos.n() + 0.5D, (double) blockpos.o() + 0.5D, (double) blockpos.p() + 0.5D, i1)));
+                world.d((Entity)(new EntityXPOrb(world, (double)blockpos.n() + 0.5D, (double)blockpos.o() + 0.5D, (double)blockpos.p() + 0.5D, i1)));
             }
         }
-
     }
 
     public int a(IBlockState iblockstate) {
@@ -698,9 +693,9 @@ public class Block {
     }
 
     public MovingObjectPosition a(World world, BlockPos blockpos, Vec3 vec3, Vec3 vec31) {
-        this.a((IBlockAccess) world, blockpos);
-        vec3 = vec3.b((double) (-blockpos.n()), (double) (-blockpos.o()), (double) (-blockpos.p()));
-        vec31 = vec31.b((double) (-blockpos.n()), (double) (-blockpos.o()), (double) (-blockpos.p()));
+        this.a((IBlockAccess)world, blockpos);
+        vec3 = vec3.b((double)(-blockpos.n()), (double)(-blockpos.o()), (double)(-blockpos.p()));
+        vec31 = vec31.b((double)(-blockpos.n()), (double)(-blockpos.o()), (double)(-blockpos.p()));
         Vec3 vec32 = vec3.a(vec31, this.B);
         Vec3 vec33 = vec3.a(vec31, this.E);
         Vec3 vec34 = vec3.b(vec31, this.C);
@@ -788,7 +783,7 @@ public class Block {
                 enumfacing = EnumFacing.SOUTH;
             }
 
-            return new MovingObjectPosition(vec38.b((double) blockpos.n(), (double) blockpos.o(), (double) blockpos.p()), enumfacing, blockpos);
+            return new MovingObjectPosition(vec38.b((double)blockpos.n(), (double)blockpos.o(), (double)blockpos.p()), enumfacing, blockpos);
         }
     }
 
@@ -897,7 +892,6 @@ public class Block {
 
             this.b(world, blockpos, iblockstate, i0);
         }
-
     }
 
     protected boolean G() {

@@ -1,8 +1,6 @@
 package net.minecraft.item;
 
-import net.canarymod.api.world.blocks.BlockFace;
 import net.canarymod.api.world.blocks.CanaryBlock;
-import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.player.BlockPlaceHook;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoor;
@@ -31,6 +29,11 @@ public class ItemDoor extends Item {
             IBlockState iblockstate = world.p(blockpos);
             Block block = iblockstate.c();
 
+            //CanaryMod: BlockPlace Hook (clicked)
+            CanaryBlock clicked = new CanaryBlock(iblockstate, blockpos, world);
+            clicked.setFaceClicked(enumfacing.asBlockFace()); // Set face clicked
+            //
+
             if (!block.f(world, blockpos)) {
                 blockpos = blockpos.a(enumfacing);
             }
@@ -43,15 +46,7 @@ public class ItemDoor extends Item {
             }
             else {
                 // CanaryMod: BlockPlaceHook
-                BlockPosition cbp = new BlockPosition(blockpos);
-                CanaryBlock clicked = (CanaryBlock)world.getCanaryWorld().getBlockAt(cbp);
-                BlockFace cbf = BlockFace.fromByte((byte)enumfacing.a());
-                clicked.setFaceClicked(cbf); // Set face clicked
-                cbp = cbp.safeClone(); // clone the original BlockPosition
-                cbp.transform(cbf); // Adjust BlockPostiion according to clicked face
-                CanaryBlock placed = new CanaryBlock(iblockstate, cbp, world.getCanaryWorld());
-                BlockPlaceHook hook = (BlockPlaceHook)new BlockPlaceHook(((EntityPlayerMP)entityplayer).getPlayer(), clicked, placed).call();
-                if (hook.isCanceled()) {
+                if (new BlockPlaceHook(((EntityPlayerMP)entityplayer).getPlayer(), clicked, new CanaryBlock(iblockstate, blockpos, world)).call().isCanceled()) {
                     return false;
                 }
                 //

@@ -1,7 +1,6 @@
 package net.minecraft.block;
 
 import net.canarymod.api.CanaryDamageSource;
-import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.blocks.CanaryBlock;
 import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.entity.DamageHook;
@@ -45,27 +44,33 @@ public class BlockCactus extends Block {
             }
 
             if (i0 < 3) {
-                int i1 = ((Integer) iblockstate.b(a)).intValue();
+                int i1 = ((Integer)iblockstate.b(a)).intValue();
 
+                // CanaryMod: BlockGrow
+                BlockPosition cbp = new BlockPosition(blockpos);
+                CanaryBlock original = (CanaryBlock)world.getCanaryWorld().getBlockAt(cbp);
+                CanaryBlock growth;
                 if (i1 == 15) {
-                    // CanaryMod: BlockGrow
-                    BlockPosition cbp = new BlockPosition(blockpos);
-                    CanaryBlock original = (CanaryBlock) world.getCanaryWorld().getBlockAt(cbp);
-                    CanaryBlock growth = new CanaryBlock(BlockType.Cactus, cbp.getBlockX(), cbp.getBlockY() + 1, cbp.getBlockZ(), world.getCanaryWorld());
-                    BlockGrowHook blockGrowHook = (BlockGrowHook) new BlockGrowHook(original, growth).call();
-                    if (!blockGrowHook.isCanceled()) {
+                    // New Cactus forming
+                    growth = new CanaryBlock(this.P(), new BlockPosition(blockpos1), world.getCanaryWorld());
+                    if (!new BlockGrowHook(original, growth).call().isCanceled()) {
                         world.a(blockpos1, this.P());
-                        IBlockState iblockstate1 = iblockstate.a(a, Integer.valueOf(0));
+                        IBlockState iblockstate1 = iblockstate.a(a, 0);
 
                         world.a(blockpos, iblockstate1, 4);
-                        this.a(world, blockpos1, iblockstate1, (Block) this);
+                        this.a(world, blockpos1, iblockstate1, (Block)this);
                     }
                     //
                 }
                 else {
-                    world.a(blockpos, iblockstate.a(a, Integer.valueOf(i1 + 1)), 4);
+                    // Ticking
+                    IBlockState grownstate = iblockstate.a(a, i1 + 1);
+                    growth = new CanaryBlock(grownstate, new BlockPosition(blockpos), world.getCanaryWorld());
+                    if (!new BlockGrowHook(original, growth).call().isCanceled()) {
+                        world.a(blockpos, grownstate, 4);
+                    }
+                    // CanaryMod: end
                 }
-
             }
         }
     }
@@ -73,7 +78,7 @@ public class BlockCactus extends Block {
     public AxisAlignedBB a(World world, BlockPos blockpos, IBlockState iblockstate) {
         float f0 = 0.0625F;
 
-        return new AxisAlignedBB((double) ((float) blockpos.n() + f0), (double) blockpos.o(), (double) ((float) blockpos.p() + f0), (double) ((float) (blockpos.n() + 1) - f0), (double) ((float) (blockpos.o() + 1) - f0), (double) ((float) (blockpos.p() + 1) - f0));
+        return new AxisAlignedBB((double)((float)blockpos.n() + f0), (double)blockpos.o(), (double)((float)blockpos.p() + f0), (double)((float)(blockpos.n() + 1) - f0), (double)((float)(blockpos.o() + 1) - f0), (double)((float)(blockpos.p() + 1) - f0));
     }
 
     public boolean d() {
@@ -92,14 +97,13 @@ public class BlockCactus extends Block {
         if (!this.d(world, blockpos)) {
             world.b(blockpos, true);
         }
-
     }
 
     public boolean d(World world, BlockPos blockpos) {
         Iterator iterator = EnumFacing.Plane.HORIZONTAL.iterator();
 
         while (iterator.hasNext()) {
-            EnumFacing enumfacing = (EnumFacing) iterator.next();
+            EnumFacing enumfacing = (EnumFacing)iterator.next();
 
             if (world.p(blockpos.a(enumfacing)).c().r().a()) {
                 return false;
@@ -113,8 +117,7 @@ public class BlockCactus extends Block {
 
     public void a(World world, BlockPos blockpos, IBlockState iblockstate, Entity entity) {
         // CanaryMod: Damage (Craptus)
-        DamageHook hook = (DamageHook) new DamageHook(null, entity.getCanaryEntity(), new CanaryDamageSource(DamageSource.g), 1.0F).call();
-        if (!hook.isCanceled()) {
+        if (!new DamageHook(null, entity.getCanaryEntity(), new CanaryDamageSource(DamageSource.g), 1.0F).call().isCanceled()) {
             entity.a(DamageSource.h, 1.0F);
         }
         //
@@ -125,11 +128,10 @@ public class BlockCactus extends Block {
     }
 
     public int c(IBlockState iblockstate) {
-        return ((Integer) iblockstate.b(a)).intValue();
+        return ((Integer)iblockstate.b(a)).intValue();
     }
 
     protected BlockState e() {
-        return new BlockState(this, new IProperty[]{a});
+        return new BlockState(this, new IProperty[]{ a });
     }
-
 }

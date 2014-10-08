@@ -1,9 +1,6 @@
 package net.minecraft.block;
 
-
-import java.util.Random;
 import net.canarymod.api.world.blocks.CanaryBlock;
-import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.world.BlockGrowHook;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyInteger;
@@ -18,6 +15,7 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
+import java.util.Random;
 
 public class BlockCrops extends BlockBush implements IGrowable {
 
@@ -29,7 +27,7 @@ public class BlockCrops extends BlockBush implements IGrowable {
         float f0 = 0.5F;
 
         this.a(0.5F - f0, 0.0F, 0.5F - f0, 0.5F + f0, 0.25F, 0.5F + f0);
-        this.a((CreativeTabs) null);
+        this.a((CreativeTabs)null);
         this.c(0.0F);
         this.a(h);
         this.J();
@@ -42,30 +40,24 @@ public class BlockCrops extends BlockBush implements IGrowable {
     public void b(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {
         super.b(world, blockpos, iblockstate, random);
         if (world.l(blockpos.a()) >= 9) {
-            int i0 = ((Integer) iblockstate.b(a)).intValue();
+            int i0 = ((Integer)iblockstate.b(a)).intValue();
 
             if (i0 < 7) {
                 float f0 = a(this, world, blockpos);
 
-                if (random.nextInt((int) (25.0F / f0) + 1) == 0) {
+                if (random.nextInt((int)(25.0F / f0) + 1) == 0) {
                     // CanaryMod: BlockGrow
-                    BlockPosition cbp = new BlockPosition(blockpos);
-                    CanaryBlock original = (CanaryBlock) world.getCanaryWorld().getBlockAt(cbp);
-                    CanaryBlock growth = (CanaryBlock) world.getCanaryWorld().getBlockAt(cbp);
-                    growth.setData((short) (i0 + 1));
-                    BlockGrowHook blockGrowHook = (BlockGrowHook) new BlockGrowHook(original, growth).call();
-                    if (!blockGrowHook.isCanceled()) {
+                    if (!new BlockGrowHook(new CanaryBlock(iblockstate, blockpos, world), new CanaryBlock(iblockstate.a(a, i0 + 1), blockpos, world)).call().isCanceled()) {
                         world.a(blockpos, iblockstate.a(a, Integer.valueOf(i0 + 1)), 2);
                     }
                     //
                 }
             }
         }
-
     }
 
     public void g(World world, BlockPos blockpos, IBlockState iblockstate) {
-        int i0 = ((Integer) iblockstate.b(a)).intValue() + MathHelper.a(world.s, 2, 5);
+        int i0 = ((Integer)iblockstate.b(a)).intValue() + MathHelper.a(world.s, 2, 5);
 
         if (i0 > 7) {
             i0 = 7;
@@ -85,7 +77,7 @@ public class BlockCrops extends BlockBush implements IGrowable {
 
                 if (iblockstate.c() == Blocks.ak) {
                     f1 = 1.0F;
-                    if (((Integer) iblockstate.b(BlockFarmland.a)).intValue() > 0) {
+                    if (((Integer)iblockstate.b(BlockFarmland.a)).intValue() > 0) {
                         f1 = 3.0F;
                     }
                 }
@@ -134,7 +126,7 @@ public class BlockCrops extends BlockBush implements IGrowable {
     public void a(World world, BlockPos blockpos, IBlockState iblockstate, float f0, int i0) {
         super.a(world, blockpos, iblockstate, f0, 0);
         if (!world.D) {
-            int i1 = ((Integer) iblockstate.b(a)).intValue();
+            int i1 = ((Integer)iblockstate.b(a)).intValue();
 
             if (i1 >= 7) {
                 int i2 = 3 + i0;
@@ -145,16 +137,15 @@ public class BlockCrops extends BlockBush implements IGrowable {
                     }
                 }
             }
-
         }
     }
 
     public Item a(IBlockState iblockstate, Random random, int i0) {
-        return ((Integer) iblockstate.b(a)).intValue() == 7 ? this.l() : this.j();
+        return ((Integer)iblockstate.b(a)).intValue() == 7 ? this.l() : this.j();
     }
 
     public boolean a(World world, BlockPos blockpos, IBlockState iblockstate, boolean flag0) {
-        return ((Integer) iblockstate.b(a)).intValue() < 7;
+        return ((Integer)iblockstate.b(a)).intValue() < 7;
     }
 
     public boolean a(World world, Random random, BlockPos blockpos, IBlockState iblockstate) {
@@ -170,11 +161,10 @@ public class BlockCrops extends BlockBush implements IGrowable {
     }
 
     public int c(IBlockState iblockstate) {
-        return ((Integer) iblockstate.b(a)).intValue();
+        return ((Integer)iblockstate.b(a)).intValue();
     }
 
     protected BlockState e() {
-        return new BlockState(this, new IProperty[]{a});
+        return new BlockState(this, new IProperty[]{ a });
     }
-
 }
