@@ -34,23 +34,23 @@ public class Chunk {
 
     private static final Logger c = LogManager.getLogger();
     private final ExtendedBlockStorage[] d;
-    public byte[] e; //CanaryMod private => public
-    private final int[] f;
+    public byte[] e; //CanaryMod private => public (bime bytes)
+    public final int[] f; // snow-heightmap CanaryMod private => public
     private final boolean[] g;
     private boolean h;
     public final World i; // CanaryMod private => public
-    private final int[] j;
+    private final int[] j; // Heightmap
     public final int a;
     public final int b;
-    public boolean k; // CanaryMod private => public
+    public boolean k; // CanaryMod private => public (is loaded)
     private final Map l;
     private final ClassInheratanceMultiMap[] m;
-    private boolean n;
-    private boolean o;
-    private boolean p;
+    private boolean n; // is populated
+    private boolean o; // is modified
+    private boolean p; // has entities
     private boolean q;
     private boolean r;
-    private long s;
+    private long s; // time last saved
     private int t;
     private long u;
     private int v;
@@ -66,7 +66,7 @@ public class Chunk {
         this.l = Maps.newHashMap();
         this.v = 4096;
         this.w = Queues.newConcurrentLinkedQueue();
-        this.m = (ClassInheratanceMultiMap[]) (new ClassInheratanceMultiMap[16]);
+        this.m = new ClassInheratanceMultiMap[16];
         this.i = world;
         this.a = i0;
         this.b = i1;
@@ -1037,6 +1037,7 @@ public class Chunk {
         this.v = 0;
     }
 
+    // skylightmap update
     public void m() {
         BlockPos blockpos = new BlockPos(this.a << 4, 0, this.b << 4);
 
@@ -1074,6 +1075,7 @@ public class Chunk {
         }
     }
 
+    // Force skylightmap update
     public void n() {
         this.n = true;
         this.o = true;
@@ -1268,6 +1270,18 @@ public class Chunk {
     // CanaryMod start
     public CanaryChunk getCanaryChunk() {
         return canaryChunk;
+    }
+
+    /**
+     * Time last save happened for this chunk
+     * @return
+     */
+    public long getTimeSaved() {
+        return this.s;
+    }
+
+    public boolean hasEntities() {
+        return this.p;
     }
     // CanaryMod end
 }

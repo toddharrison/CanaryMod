@@ -7,7 +7,10 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockPos;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Chunk implementation
@@ -56,7 +59,8 @@ public class CanaryChunk implements Chunk {
 
     @Override
     public void setBlockDataAt(int x, int y, int z, int data) {
-//        IBlockState state = handle.g(new BlockPos(x, y, z));
+        IBlockState state = handle.g(new BlockPos(x, y, z));
+//        state.a()
 //        handle.a(x, y, z, data);
     }
 
@@ -67,7 +71,7 @@ public class CanaryChunk implements Chunk {
 
     @Override
     public boolean isLoaded() {
-        return handle.d;
+        return handle.k;
     }
 
     @Override
@@ -77,14 +81,12 @@ public class CanaryChunk implements Chunk {
 
     @Override
     public byte[] getBiomeByteData() {
-        return handle.m();
+        return handle.k();
     }
 
     @Override
     public BiomeType[] getBiomeData() {
-        BiomeType[] data = BiomeType.fromIdArray(handle.m());
-
-        return data;
+        return BiomeType.fromIdArray(getBiomeByteData());
     }
 
     @Override
@@ -115,7 +117,7 @@ public class CanaryChunk implements Chunk {
         synchronized (handle.r()) {
             for (BlockPos pos : (Set<BlockPos>) handle.r().keySet()) {
                 Position cPos = new Position(pos.n(), pos.o(), pos.p());
-                net.minecraft.tileentity.TileEntity te = (net.minecraft.tileentity.TileEntity) handle.i.get(pos);
+                net.minecraft.tileentity.TileEntity te = (net.minecraft.tileentity.TileEntity) handle.r().get(pos);
                 if (te.complexBlock != null) {
                     toRet.put(cPos, te.complexBlock);
                 }
@@ -126,44 +128,47 @@ public class CanaryChunk implements Chunk {
 
     @Override
     public boolean hasEntities() {
-        return handle.m;
+        return handle.hasEntities();
     }
 
     @SuppressWarnings("unchecked")
+    @Deprecated
     public List<Entity>[] getEntityLists() {
-        List<Entity>[] toRet = new List[handle.j.length];
-        for (int index = 0; index < handle.j.length; index++) {
-            toRet[index] = new ArrayList<Entity>();
-            for (Object e : handle.j[index]) {
-                toRet[index].add(((net.minecraft.entity.Entity) e).getCanaryEntity());
-            }
-        }
-        return toRet;
+        // FIXME: Chunk doesn't have a list of its entities anymore
+//        List<Entity>[] toRet = new List[handle.j.length];
+//        for (int index = 0; index < handle.j.length; index++) {
+//            toRet[index] = new ArrayList<Entity>();
+//            for (Object e : handle.j[index]) {
+//                toRet[index].add(((net.minecraft.entity.Entity) e).getCanaryEntity());
+//            }
+//        }
+//        return toRet;
+        return null;
     }
 
     @Override
     public int[] getHeightMap() {
-        return handle.f;
+        return handle.q();
     }
 
     @Override
     public int[] getPrecipitationHeightMap() {
-        return handle.b;
+        return handle.f;
     }
 
     @Override
     public long getLastSaveTime() {
-        return handle.p;
+        return handle.getTimeSaved();
     }
 
     @Override
     public boolean isTerrainPopulated() {
-        return handle.k;
+        return handle.t();
     }
 
     @Override
     public boolean isModified() {
-        return handle.l;
+        return handle.u();
     }
 
     @Override
@@ -174,20 +179,19 @@ public class CanaryChunk implements Chunk {
     @Override
     public void updateSkyLightMap(boolean force) {
         if (force) {
-            handle.p();
+            handle.n();
         } else {
-            handle.o();
+            handle.m();
         }
     }
 
     @Override
     public void relightBlock(int x, int y, int z) {
-        handle.h(x, y, z);
-
+        handle.d(x, y, z);
     }
 
     @Override
     public Biome getBiome(int x, int z) {
-        return this.getHandle().a(x, z, this.getHandle().e.v()).getCanaryBiome();
+        return handle.a(new BlockPos(x, 0, z), handle.i.v()).getCanaryBiome();
     }
 }
