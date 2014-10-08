@@ -1,6 +1,7 @@
 package net.canarymod.api.world;
 
 import net.minecraft.world.ChunkCoordIntPair;
+import net.minecraft.world.chunk.IChunkProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -96,7 +97,7 @@ public class CanaryChunkProviderServer implements ChunkProvider {
 
     @Override
     public void populate(ChunkProvider provider, int x, int z) {
-        handle.a(null, x, z);
+        handle.a((IChunkProvider)null, x, z);
     }
 
     @Override

@@ -45,17 +45,15 @@ public class CanaryChunkProviderCustom implements IChunkProvider {
         return handle.a(blockPos);
     }
 
-    // TODO whatthe fark?
-    @Override
-    public void a(IChunkProvider iChunkProvider, int i, int i2) {
-
-    }
-
     //populate (distribute ores, flowers and detail structures etc)
     @Override
+    public void a(IChunkProvider iChunkProvider, int i, int i2) {
+        this.provider.populate(i, i2);
+    }
+
+
+    @Override
     public boolean a(IChunkProvider iChunkProvider, Chunk chunk, int i, int i2) {
-        // TODO: Change chunk provider interface in canary to accept the chunk that is populated
-        // provider.populate(i0, i1);
         return handle.a(iChunkProvider, chunk, i, i2);
     }
 

@@ -3,8 +3,10 @@ package net.minecraft.world.gen;
 import com.google.common.collect.Lists;
 import net.canarymod.api.world.CanaryChunkProviderServer;
 import net.canarymod.hook.world.ChunkCreatedHook;
+import net.canarymod.hook.world.ChunkCreationHook;
 import net.canarymod.hook.world.ChunkLoadedHook;
 import net.canarymod.hook.world.ChunkUnloadHook;
+import net.canarymod.util.NMSToolBox;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.entity.EnumCreatureType;
@@ -17,6 +19,7 @@ import net.minecraft.world.MinecraftException;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.chunk.EmptyChunk;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.chunk.storage.IChunkLoader;
@@ -102,20 +105,7 @@ public class ChunkProviderServer implements IChunkProvider {
             chunk = this.e(i0, i1);
             boolean newchunk = chunk == null; // CanaryMod: Tracking on new chunks
             if (chunk == null) {
-                /* FIXME
-                // CanaryMod: ChunkCreation
-                ChunkCreationHook hook = (ChunkCreationHook) new ChunkCreationHook(i0, i1, i.getCanaryWorld()).call();
-                int[] blocks = hook.getBlockData();
-                if (blocks != null) {
-                    chunk = new Chunk(i, NMSToolBox.blockIdsToBlocks(blocks), i0, i1);
-                    chunk.k = true; // is populated
-                    chunk.b(); // lighting update
-                    if (hook.getBiomeData() != null) {
-                        chunk.getCanaryChunk().setBiomeData(hook.getBiomeData());
-                    }
-                }
-                //
-                else */
+
                 if (this.e == null) {
                     chunk = this.d;
                 }
@@ -128,15 +118,16 @@ public class ChunkProviderServer implements IChunkProvider {
                         CrashReportCategory crashreportcategory = crashreport.a("Chunk to be generated");
 
                         //TODO: Remove casts?
-                        crashreportcategory.a("Location", (Object) String.format("%d,%d", new Object[]{Integer.valueOf(i0), Integer.valueOf(i1)}));
-                        crashreportcategory.a("Position hash", (Object) Long.valueOf(i2));
-                        crashreportcategory.a("Generator", (Object) this.e.f());
+                        crashreportcategory.a("Location", String.format("%d,%d", new Object[]{Integer.valueOf(i0), Integer.valueOf(i1)}));
+                        crashreportcategory.a("Position hash", Long.valueOf(i2));
+                        crashreportcategory.a("Generator", this.e.f());
                         throw new ReportedException(crashreport);
                     }
                     // CanaryMod: ChunkCreated
                     new ChunkCreatedHook(chunk.getCanaryChunk(), i.getCanaryWorld()).call();
                     //
                 }
+
             }
 
             this.g.a(i2, chunk);

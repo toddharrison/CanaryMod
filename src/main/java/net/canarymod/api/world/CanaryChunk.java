@@ -134,7 +134,7 @@ public class CanaryChunk implements Chunk {
     @SuppressWarnings("unchecked")
     @Deprecated
     public List<Entity>[] getEntityLists() {
-        // FIXME: Chunk doesn't have a list of its entities anymore
+        // FIXME: look in chunk.c() (classinharatancelist thing)
 //        List<Entity>[] toRet = new List[handle.j.length];
 //        for (int index = 0; index < handle.j.length; index++) {
 //            toRet[index] = new ArrayList<Entity>();
