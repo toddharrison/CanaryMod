@@ -1,7 +1,6 @@
 package net.minecraft.item;
 
 import net.canarymod.api.world.blocks.BlockFace;
-import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.blocks.CanaryBlock;
 import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.player.BlockPlaceHook;
@@ -50,7 +49,7 @@ public class ItemDoor extends Item {
                 clicked.setFaceClicked(cbf); // Set face clicked
                 cbp = cbp.safeClone(); // clone the original BlockPosition
                 cbp.transform(cbf); // Adjust BlockPostiion according to clicked face
-                CanaryBlock placed = new CanaryBlock(BlockType.fromId((short)Block.a(block)), (short)0, cbp, world.getCanaryWorld());
+                CanaryBlock placed = new CanaryBlock(iblockstate, cbp, world.getCanaryWorld());
                 BlockPlaceHook hook = (BlockPlaceHook)new BlockPlaceHook(((EntityPlayerMP)entityplayer).getPlayer(), clicked, placed).call();
                 if (hook.isCanceled()) {
                     return false;

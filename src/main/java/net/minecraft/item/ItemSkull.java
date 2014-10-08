@@ -2,7 +2,6 @@ package net.minecraft.item;
 
 import com.mojang.authlib.GameProfile;
 import net.canarymod.api.world.blocks.BlockFace;
-import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.blocks.CanaryBlock;
 import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.player.BlockPlaceHook;
@@ -70,13 +69,15 @@ public class ItemSkull extends Item {
             }
             else {
                 if (!world.D) {
-                    CanaryBlock placed = new CanaryBlock(BlockType.SkeletonHead, (short)itemstack.h(), cbp, world.getCanaryWorld());
+                    // CanaryMod: BlockPlace cont...
+                    IBlockState skulliblockstate = Blocks.ce.P().a(BlockSkull.a, enumfacing);
+                    CanaryBlock placed = new CanaryBlock(skulliblockstate, cbp, world.getCanaryWorld());
                     BlockPlaceHook hook = (BlockPlaceHook)new BlockPlaceHook(((EntityPlayerMP)entityplayer).getPlayer(), clicked, placed).call();
                     if (hook.isCanceled()) {
                         return false;
                     }
+                    world.a(blockpos, skulliblockstate, 3);
                     //
-                    world.a(blockpos, Blocks.ce.P().a(BlockSkull.a, enumfacing), 3);
                     int i0 = 0;
 
                     if (enumfacing == EnumFacing.UP) {

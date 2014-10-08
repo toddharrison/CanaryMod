@@ -1,7 +1,6 @@
 package net.minecraft.item;
 
 import net.canarymod.api.world.blocks.BlockFace;
-import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.blocks.CanaryBlock;
 import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.player.BlockPlaceHook;
@@ -65,7 +64,7 @@ public class ItemReed extends Item {
                     if (world.a(blockpos, iblockstate1, 3)) {
                         iblockstate1 = world.p(blockpos);
                         // set placed
-                        CanaryBlock placed = new CanaryBlock(BlockType.fromId(Block.a(this.a)), (short)0, cbp, world.getCanaryWorld());
+                        CanaryBlock placed = new CanaryBlock(iblockstate1, cbp, world.getCanaryWorld());
                         // Create and Call
                         BlockPlaceHook hook = (BlockPlaceHook)new BlockPlaceHook(((EntityPlayerMP)entityplayer).getPlayer(), clicked, placed).call();
                         if (hook.isCanceled()) {

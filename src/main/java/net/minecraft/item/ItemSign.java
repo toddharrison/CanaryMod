@@ -1,12 +1,12 @@
 package net.minecraft.item;
 
 import net.canarymod.api.world.blocks.BlockFace;
-import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.blocks.CanaryBlock;
 import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.player.BlockPlaceHook;
 import net.minecraft.block.BlockStandingSign;
 import net.minecraft.block.BlockWallSign;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -54,13 +54,19 @@ public class ItemSign extends Item {
             }
             else {
                 // Create and call
-                CanaryBlock placed = new CanaryBlock(enumfacing == EnumFacing.UP ? BlockType.SignPost : BlockType.WallSign, (short)0, new BlockPosition(blockpos), world.getCanaryWorld());
+                int i0 = MathHelper.c((double)((entityplayer.y + 180.0F) * 16.0F / 360.0F) + 0.5D) & 15;
+                IBlockState iblockstate = Blocks.an.P().a(BlockStandingSign.a, i0);
+                if (enumfacing != EnumFacing.UP) {
+                    iblockstate = Blocks.ax.P().a(BlockWallSign.a, enumfacing);
+                }
+
+                CanaryBlock placed = new CanaryBlock(iblockstate, new BlockPosition(blockpos), world.getCanaryWorld());
                 BlockPlaceHook hook = (BlockPlaceHook)new BlockPlaceHook(((EntityPlayerMP)entityplayer).getPlayer(), clicked, placed).call();
                 if (hook.isCanceled()) {
                     return false;
                 }
-                //
-
+                world.a(blockpos, iblockstate, 3);
+                /* CanaryMod: Moved above mostly
                 if (enumfacing == EnumFacing.UP) {
                     int i0 = MathHelper.c((double)((entityplayer.y + 180.0F) * 16.0F / 360.0F) + 0.5D) & 15;
 
@@ -69,6 +75,8 @@ public class ItemSign extends Item {
                 else {
                     world.a(blockpos, Blocks.ax.P().a(BlockWallSign.a, enumfacing), 3);
                 }
+                */
+                //
 
                 --itemstack.b;
                 TileEntity tileentity = world.s(blockpos);

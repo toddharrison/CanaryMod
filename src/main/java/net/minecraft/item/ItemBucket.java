@@ -1,7 +1,6 @@
 package net.minecraft.item;
 
 import net.canarymod.api.entity.living.humanoid.Player;
-import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.blocks.CanaryBlock;
 import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.player.BlockDestroyHook;
@@ -161,7 +160,7 @@ public class ItemBucket extends Item {
                     if (entityplayer != null) {
                         BlockPosition cbp = new BlockPosition(blockpos);
                         CanaryBlock clicked = (CanaryBlock)world.getCanaryWorld().getBlockAt(cbp);
-                        CanaryBlock placed = new CanaryBlock(BlockType.fromId(Block.a(this.a)), (short)0, cbp, world.getCanaryWorld());
+                        CanaryBlock placed = new CanaryBlock(this.a.P(), cbp, world.getCanaryWorld());
                         Player player = ((EntityPlayerMP)entityplayer).getPlayer();
                         BlockPlaceHook hook = (BlockPlaceHook)new BlockPlaceHook(player, clicked, placed).call();
                         if (hook.isCanceled()) {

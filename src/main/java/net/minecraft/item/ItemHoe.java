@@ -41,7 +41,10 @@ public class ItemHoe extends Item {
             CanaryBlock clicked = (CanaryBlock)world.getCanaryWorld().getBlockAt(cbp); // Store Clicked
             BlockFace cbf = BlockFace.fromByte((byte)enumfacing.a()); // Get the click face
             clicked.setFaceClicked(cbf); // Set face clicked
-            ItemUseHook hook = (ItemUseHook)new ItemUseHook(((EntityPlayerMP)entityplayer).getPlayer(), itemstack.getCanaryItem(), clicked).call();
+            if (((ItemUseHook)new ItemUseHook(((EntityPlayerMP)entityplayer).getPlayer(), itemstack.getCanaryItem(), clicked).call()).isCanceled()) {
+                return false;
+            }
+
             //
 
             if (enumfacing != EnumFacing.DOWN && world.p(blockpos.a()).c().r() == Material.a) {

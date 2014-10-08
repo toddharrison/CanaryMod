@@ -1,7 +1,6 @@
 package net.minecraft.item;
 
 import net.canarymod.api.world.blocks.BlockFace;
-import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.blocks.CanaryBlock;
 import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.player.BlockPlaceHook;
@@ -38,7 +37,7 @@ public class ItemRedstone extends Item {
         }
         else {
             // set placed
-            CanaryBlock placed = new CanaryBlock(BlockType.RedstoneWire, (short)0, cbp, world.getCanaryWorld());
+            CanaryBlock placed = new CanaryBlock(Blocks.af.P(), cbp, world.getCanaryWorld());
             // Create and Call
             BlockPlaceHook hook = (BlockPlaceHook)new BlockPlaceHook(((EntityPlayerMP)entityplayer).getPlayer(), clicked, placed).call();
             if (hook.isCanceled()) {

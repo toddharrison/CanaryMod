@@ -1,7 +1,6 @@
 package net.minecraft.item;
 
 import net.canarymod.api.world.blocks.BlockFace;
-import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.blocks.CanaryBlock;
 import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.player.BlockPlaceHook;
@@ -58,10 +57,10 @@ public class ItemBed extends Item {
             if (entityplayer.a(blockpos, enumfacing, itemstack) && entityplayer.a(blockpos1, enumfacing, itemstack)) {
                 if (flag2 && flag3 && World.a((IBlockAccess)world, blockpos.b()) && World.a((IBlockAccess)world, blockpos1.b())) {
                     int i1 = enumfacing1.b();
-                    IBlockState iblockstate1 = Blocks.C.P().a(BlockBed.b, Boolean.valueOf(false)).a(BlockBed.N, enumfacing1).a(BlockBed.a, BlockBed.EnumPartType.FOOT);
+                    IBlockState iblockstate1 = Blocks.C.P().a(BlockBed.b, false).a(BlockBed.N, enumfacing1).a(BlockBed.a, BlockBed.EnumPartType.FOOT);
 
                     // CanaryMod: BlockPlaceHook continued
-                    CanaryBlock placed = new CanaryBlock(BlockType.BedBlock, (short)0, cbp, world.getCanaryWorld());
+                    CanaryBlock placed = new CanaryBlock(iblockstate1, cbp, world.getCanaryWorld());
                     // CanaryMod: Create Hook and call it
                     BlockPlaceHook hook = (BlockPlaceHook)new BlockPlaceHook(((EntityPlayerMP)entityplayer).getPlayer(), clicked, placed).call();
                     if (hook.isCanceled()) {

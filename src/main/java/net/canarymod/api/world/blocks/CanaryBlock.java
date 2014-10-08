@@ -20,16 +20,16 @@ import net.minecraft.util.EnumFacing;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Map;
 import java.util.Random;
 
 public class CanaryBlock implements Block {
     private final static Random rndm = new Random(); // Passed to the idDropped method
-    protected BlockType type; // Going away
-    protected int x, y, z; // Going away
 
     protected IBlockState state;
-    protected BlockPosition position;
+    protected Position position;
     protected World world;
+    protected BlockType type;
     protected BlockFace faceClicked;
     protected short data;
     protected byte status = 0;
@@ -38,45 +38,46 @@ public class CanaryBlock implements Block {
         return (String)net.minecraft.block.Block.c.c(nmsBlock);
     }
 
+    @Deprecated
     public CanaryBlock(short typeId, short data, int x, int y, int z, World world) {
         this(BlockType.fromIdAndData(typeId, data), x, y, z, world);
     }
 
+    @Deprecated
     public CanaryBlock(net.minecraft.block.Block nmsBlock, short data, int x, int y, int z, World world) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
+        this.position = new BlockPosition(x, y, z);
         this.world = world;
         this.type = BlockType.fromStringAndData(machineNameOfBlock(nmsBlock), data);
         this.data = data;
     }
 
+    @Deprecated
     public CanaryBlock(BlockType type, int x, int y, int z, World world) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
+        this.position = new BlockPosition(x, y, z);
         this.world = world;
         this.type = type;
         this.data = type.getData();
     }
 
+    @Deprecated
     public CanaryBlock(BlockType type, int data, int x, int y, int z, World world) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
+        this.position = new BlockPosition(x, y, z);
         this.world = world;
         this.type = type;
         this.data = (short)data;
     }
 
-    public CanaryBlock(BlockType type, int data, BlockPosition blockPosition, World world) {
-        this(type, data, blockPosition.getBlockX(), blockPosition.getBlockY(), blockPosition.getBlockZ(), world);
+    @Deprecated
+    public CanaryBlock(BlockType type, int data, Position position, World world) {
+        this(type, data, position.getBlockX(), position.getBlockY(), position.getBlockZ(), world);
     }
 
-    public CanaryBlock(IBlockState state, BlockPosition position, World world) {
+    public CanaryBlock(IBlockState state, Position position, World world) {
         this.state = state;
         this.position = position;
         this.world = world;
+
+        this.type = BlockType.fromIdAndData(net.minecraft.block.Block.a(state.c()), state.c().c(state));
     }
 
     @Override
@@ -137,37 +138,37 @@ public class CanaryBlock implements Block {
     @Override
     public void update() {
         world.setBlock(this);
-        world.markBlockNeedsUpdate(x, y, z);
+        world.markBlockNeedsUpdate(getX(), getY(), getZ());
     }
 
     @Override
     public int getX() {
-        return x;
+        return position.getBlockX();
     }
 
     @Override
     public int getY() {
-        return y;
+        return position.getBlockY();
     }
 
     @Override
     public int getZ() {
-        return z;
+        return position.getBlockZ();
     }
 
     @Override
     public void setX(int x) {
-        this.x = x;
+        this.position.setX(x);
     }
 
     @Override
     public void setY(int y) {
-        this.y = y;
+        this.position.setY(y);
     }
 
     @Override
     public void setZ(int z) {
-        this.z = z;
+        this.position.setZ(z);
     }
 
     @Override
@@ -195,12 +196,12 @@ public class CanaryBlock implements Block {
 
     @Override
     public Location getLocation() {
-        return new Location(world, x, y, z, 0.0F, 0.0F);
+        return new Location(world, position.getX(), position.getY(), position.getZ(), 0.0F, 0.0F);
     }
 
     @Override
     public Position getPosition() {
-        return new BlockPosition(x, y, z);
+        return position;
     }
 
     @Override
@@ -322,7 +323,15 @@ public class CanaryBlock implements Block {
 
     @Override
     public ImmutableMap<BlockProperty, Comparable> getProperties() {
-        throw new NotYetImplementedException("BlockProperties are not yet implemented");
+        if (state == null) {
+            throw new NotYetImplementedException("CanaryBlock was formed missing the IBlockState, this is a bug and should be reported");
+        }
+        ImmutableMap.Builder<BlockProperty, Comparable> mapbuild = ImmutableMap.builder();
+        for (Object obj : state.b().entrySet()) {
+            Map.Entry<IProperty, Comparable> entry = (Map.Entry<IProperty, Comparable>)obj;
+            mapbuild.put(CanaryBlockProperty.wrapAs(entry.getKey()), entry.getValue());
+        }
+        return mapbuild.build();
     }
 
     @Override
@@ -335,12 +344,12 @@ public class CanaryBlock implements Block {
 
     @Override
     public void setPropertyValue(BlockProperty property, Comparable comparable) {
-        throw new NotYetImplementedException("BlockProperties are not yet implemented");
+        state = state.a(((CanaryBlockProperty)property).getNative(), comparable);
     }
 
     @Override
     public String toString() {
-        return String.format("Block[Type=%s, data=%d, x=%d, y=%d, z=%d, world=%s, dim=%s]", getType().getMachineName(), this.data, this.x, this.y, this.z, this.world.getName(), this.world.getType().getName());
+        return String.format("Block[Type=%s, data=%d, x=%d, y=%d, z=%d, world=%s, dim=%s]", getType().getMachineName(), this.data, this.getX(), this.getY(), this.getZ(), this.world.getName(), this.world.getType().getName());
     }
 
     /**
@@ -364,7 +373,7 @@ public class CanaryBlock implements Block {
         if (!this.getWorld().equals(other.getWorld())) {
             return false;
         }
-        return this.x == other.getX() && this.y == other.getY() && this.z == other.getZ();
+        return this.position.equals(other.position);
     }
 
     /**
@@ -378,9 +387,7 @@ public class CanaryBlock implements Block {
 
         hash = 97 * hash + getType().getMachineName().hashCode();
         hash = 97 * hash + this.data;
-        hash = 97 * hash + this.x;
-        hash = 97 * hash + this.y;
-        hash = 97 * hash + this.z;
+        hash = 97 * hash + this.position.hashCode();
         return hash;
     }
     
