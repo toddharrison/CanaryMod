@@ -1,5 +1,6 @@
 package net.canarymod.api.world;
 
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.biome.BiomeGenBase;
 
 import java.util.Random;
@@ -52,7 +53,7 @@ public class CanaryBiome implements Biome {
      */
     @Override
     public float getTemperature() {
-        return handle.ao;
+        return handle.ap;
     }
 
     /**
@@ -60,7 +61,7 @@ public class CanaryBiome implements Biome {
      */
     @Override
     public void decorate(World world, Random rnd, int x, int z) {
-        handle.a(((CanaryWorld) world).getHandle(), rnd, x, z);
+        handle.a(((CanaryWorld) world).getHandle(), rnd, new BlockPos(x, 0, z));
     }
 
     /**
@@ -68,7 +69,7 @@ public class CanaryBiome implements Biome {
      */
     @Override
     public BiomeType getBiomeType() {
-        return BiomeType.fromId((byte) handle.ay);
+        return BiomeType.fromId((byte) handle.az);
     }
 
     /**
@@ -100,7 +101,7 @@ public class CanaryBiome implements Biome {
      */
     @Override
     public boolean canSnow() {
-        return handle.d();
+        return handle.j();
     }
 
     /**

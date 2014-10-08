@@ -97,16 +97,16 @@ public abstract class BiomeGenBase {
     public int am;
     public float an;
     public float ao;
-    public float ap;
-    public float aq;
+    public float ap; // temperature
+    public float aq; // humidity ?
     public int ar;
     public BiomeDecorator as;
     protected List at;
     protected List au;
     protected List av;
     protected List aw;
-    protected boolean ax;
-    protected boolean ay;
+    protected boolean ax; // can rain
+    protected boolean ay; // can snow
     public final int az;
     protected WorldGenTrees aA;
     protected WorldGenBigTree aB;
@@ -526,15 +526,15 @@ public abstract class BiomeGenBase {
      * Convenience Methods
      */
     public void setCanSnow(boolean bool) {
-        this.ax = bool;
-    }
-
-    public void setCanRain(boolean bool) {
         this.ay = bool;
     }
 
+    public void setCanRain(boolean bool) {
+        this.ax = bool;
+    }
+
     public boolean canRain() {
-        return this.ay;
+        return this.ax;
     }
 
     public void setTemperatureAndPrecipitation(float temp, float precipitation) {
