@@ -395,7 +395,8 @@ public class CanaryWorld implements World {
     }
 
     public long getTotalTime() {
-        return world.J();
+        // TODO: This returns what is stored in DayTime in the world.dat ... but is that the total time?
+        return world.L();
     }
 
     @Override
@@ -462,12 +463,15 @@ public class CanaryWorld implements World {
 
     @Override
     public void playAUXEffect(AuxiliarySoundEffect effect) {
-        world.c(effect.type.getDigits(), effect.x, effect.y, effect.z, effect.extra);
+        playAUXEffectAt(null, effect);
     }
 
     @Override
     public void playAUXEffectAt(Player player, AuxiliarySoundEffect effect) {
-        world.a(player != null ? ((CanaryPlayer) player).getHandle() : null, effect.type.getDigits(), effect.x, effect.y, effect.z, effect.extra);
+        world.a(player != null ? ((CanaryPlayer) player).getHandle() : null,
+                effect.type.getDigits(),
+                new BlockPos(effect.x, effect.y, effect.z),
+                effect.extra);
     }
 
     @Override
@@ -482,7 +486,7 @@ public class CanaryWorld implements World {
 
     @Override
     public int getBlockPower(int x, int y, int z) {
-        return world.u(x, y, z);
+        return world.y(new BlockPos(x, y, z));
     }
 
     @Override
@@ -497,7 +501,7 @@ public class CanaryWorld implements World {
 
     @Override
     public boolean isBlockPowered(int x, int y, int z) {
-        return world.u(x, y, z) > 0; //TODO: This may not function as intended
+        return getBlockPower(x, y, z) > 0; //TODO: This may not function as intended
     }
 
     @Override
@@ -512,7 +516,7 @@ public class CanaryWorld implements World {
 
     @Override
     public boolean isBlockIndirectlyPowered(int x, int y, int z) {
-        return world.v(x, y, z);
+        return world.z(new BlockPos(x, y, z));
     }
 
     @Override
@@ -601,7 +605,7 @@ public class CanaryWorld implements World {
 
     @Override
     public long getWorldSeed() {
-        return world.H();
+        return world.J();
     }
 
     @Override
@@ -633,7 +637,7 @@ public class CanaryWorld implements World {
 
     @Override
     public void setSpawnLocation(Location p) {
-        world.x.a((int) p.getX(), (int) p.getY(), (int) p.getZ());
+        world.x.setSpawn(p.getBlockX(), p.getBlockY(), p.getBlockZ());
     }
 
     @Override
@@ -665,7 +669,7 @@ public class CanaryWorld implements World {
 
     @Override
     public TileEntity getOnlyTileEntityAt(int x, int y, int z) {
-        net.minecraft.tileentity.TileEntity tileentity = world.o(x, y, z);
+        net.minecraft.tileentity.TileEntity tileentity = world.s(new BlockPos(x, y, z));
 
         if (tileentity != null) {
             if (tileentity instanceof TileEntityBrewingStand) {
@@ -725,7 +729,7 @@ public class CanaryWorld implements World {
         }
         int xx = x - ((x >> 4) * 16);
         int zz = z - ((z >> 4) * 16);
-        return BiomeType.fromId((byte) c.getHandle().a(xx, zz, this.getHandle().v()).ay);
+        return c.getHandle().a(new BlockPos(xx, 0, zz), this.getHandle().v()).getCanaryBiome().getBiomeType();
     }
 
     @Override
@@ -769,7 +773,7 @@ public class CanaryWorld implements World {
         }
         int xx = x - ((x >> 4) * 16);
         int zz = z - ((z >> 4) * 16);
-        return c.getHandle().a(xx, zz, this.getHandle().v()).getCanaryBiome();
+        return c.getHandle().a(new BlockPos(xx, 0, zz), this.getHandle().v()).getCanaryBiome();
     }
 
     public net.minecraft.world.World getHandle() {

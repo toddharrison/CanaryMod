@@ -665,4 +665,12 @@ public class WorldInfo {
             }
         });
     }
+
+    // CanaryMod Start
+    public void setSpawn(int x, int y, int z) {
+        this.e = x;
+        this.f = y;
+        this.g = z;
+    }
+    // CanaryMod End
 }

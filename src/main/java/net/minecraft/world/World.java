@@ -2493,11 +2493,11 @@ public abstract class World implements IBlockAccess {
         this.w.c();
     }
 
-    public long J() {
+    public long J() { // Seed
         return this.x.b();
     }
 
-    public long K() {
+    public long K() { // raw time
         return this.x.f();
     }
 
