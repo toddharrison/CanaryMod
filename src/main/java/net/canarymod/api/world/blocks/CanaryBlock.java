@@ -83,6 +83,10 @@ public class CanaryBlock implements Block {
         this(state, new BlockPosition(blockpos), world.getCanaryWorld(), status);
     }
 
+    public CanaryBlock(BlockPos blockpos, net.minecraft.world.World world) {
+        this(world.p(blockpos), blockpos, world);
+    }
+
     /*
      * Some wrap
      */
