@@ -4,7 +4,6 @@ import net.canarymod.api.inventory.CanaryItem;
 import net.canarymod.api.inventory.Inventory;
 import net.canarymod.api.inventory.InventoryType;
 import net.canarymod.api.inventory.Item;
-import net.canarymod.api.world.World;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryLargeChest;
 import net.minecraft.item.ItemStack;
@@ -87,14 +86,6 @@ public class CanaryHopperBlock extends CanaryLockableTileEntity implements Hoppe
     @Override
     public boolean isOutputConnected() {
         return this.getOutputInventory() != null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public World getWorld() {
-        return this.getTileEntity().z().getCanaryWorld();
     }
 
     /**
