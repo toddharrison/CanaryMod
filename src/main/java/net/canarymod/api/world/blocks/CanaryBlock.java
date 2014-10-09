@@ -8,6 +8,8 @@ import net.canarymod.api.packet.BlockChangePacket;
 import net.canarymod.api.packet.CanaryBlockChangePacket;
 import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.api.world.World;
+import net.canarymod.api.world.blocks.properties.BlockBooleanProperty;
+import net.canarymod.api.world.blocks.properties.BlockIntegerProperty;
 import net.canarymod.api.world.blocks.properties.BlockProperty;
 import net.canarymod.api.world.blocks.properties.CanaryBlockProperty;
 import net.canarymod.api.world.position.BlockPosition;
@@ -371,7 +373,28 @@ public class CanaryBlock implements Block {
 
     @Override
     public void setPropertyValue(BlockProperty property, Comparable comparable) {
+        if (state == null) {
+            throw new NotYetImplementedException("CanaryBlock was formed missing the IBlockState, this is a bug and should be reported");
+        }
         state = state.a(((CanaryBlockProperty)property).getNative(), comparable);
+    }
+
+    public void setIntegerPropertyValue(BlockIntegerProperty property, int value) {
+        if (state == null) {
+            throw new NotYetImplementedException("CanaryBlock was formed missing the IBlockState, this is a bug and should be reported");
+        }
+        setPropertyValue(property, value);
+    }
+
+    public void setBooleanPropertyValue(BlockBooleanProperty property, boolean value) {
+        if (state == null) {
+            throw new NotYetImplementedException("CanaryBlock was formed missing the IBlockState, this is a bug and should be reported");
+        }
+        setPropertyValue(property, value);
+    }
+
+    public boolean canApply(BlockProperty property) {
+        return state.b().containsKey(((CanaryBlockProperty)property).getNative());
     }
 
     @Override

@@ -22,7 +22,7 @@ public class CanaryBlockProperty implements BlockProperty {
     }
 
     @Override
-    public Collection<?> getAllowedValues() {
+    public Collection<Comparable> getAllowedValues() {
         return property.c();
     }
 
@@ -31,9 +31,8 @@ public class CanaryBlockProperty implements BlockProperty {
         return property.b();
     }
 
-    @Override
-    public String getName(Comparable comparable) {
-        return property.a(comparable);
+    public boolean canApply(Comparable comparable) {
+        return getAllowedValues().contains(comparable);
     }
 
     public IProperty getNative() {
