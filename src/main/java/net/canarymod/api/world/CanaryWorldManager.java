@@ -8,7 +8,7 @@ import net.canarymod.config.WorldConfiguration;
 import net.canarymod.hook.system.LoadWorldHook;
 import net.canarymod.hook.system.UnloadWorldHook;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.*;
 import net.minecraft.world.chunk.storage.AnvilSaveHandler;
 import net.minecraft.world.storage.WorldInfo;
@@ -33,20 +33,6 @@ public class CanaryWorldManager implements WorldManager {
     private Map<String, Boolean> markedForUnload;
     private static final Object worldLock = new Object();
 
-    private final FileFilter worldFilter = new FileFilter() {
-        @Override
-        public boolean accept(File pathname) {
-            return pathname.isDirectory();
-        }
-    };
-
-    private final FileFilter dimensionFilter = new FileFilter() {
-        @Override
-        public boolean accept(File pathname) {
-            return pathname.isDirectory() && pathname.getName().contains("_");
-        }
-    };
-
     public CanaryWorldManager() {
         markedForUnload = new HashMap<String, Boolean>(1);
         File worldsFolders = new File("worlds");
@@ -58,6 +44,12 @@ public class CanaryWorldManager implements WorldManager {
             loadedWorlds = new HashMap<String, World>(3);
             return;
         }
+        FileFilter worldFilter = new FileFilter() {
+            @Override
+            public boolean accept(File pathname) {
+                return pathname.isDirectory();
+            }
+        };
         File[] worlds = worldsFolders.listFiles(worldFilter);
         if (worlds == null) {
             // Resonable defaults
@@ -74,6 +66,12 @@ public class CanaryWorldManager implements WorldManager {
         existingWorlds = new ArrayList<String>(worldNum);
         loadedWorlds = new HashMap<String, World>(worldNum);
         for (File world : worlds) {
+            FileFilter dimensionFilter = new FileFilter() {
+                @Override
+                public boolean accept(File pathname) {
+                    return pathname.isDirectory() && pathname.getName().contains("_");
+                }
+            };
             File[] dimensions = world.listFiles(dimensionFilter);
             if (dimensions == null) {
                 log.warn("No dimensions found for World - ".concat(world.getName()));
@@ -200,21 +198,21 @@ public class CanaryWorldManager implements WorldManager {
         worldsettings.a(configuration.getGeneratorSettings());
 
         if (dimType == DimensionType.NORMAL) {
-            world = new WorldServer(mcserver, isavehandler, configuration.getWorldName(), dimType.getId(), worldsettings, mcserver.b);
+            world = new WorldServer(mcserver, isavehandler, worldinfo, dimType.getId(), mcserver.b);
         }
         else {
-            world = new WorldServerMulti(mcserver, isavehandler, configuration.getWorldName(), dimType.getId(), worldsettings, (WorldServer) ((CanaryWorld) getWorld(configuration.getWorldName(), net.canarymod.api.world.DimensionType.NORMAL, true)).getHandle(), mcserver.b);
+            world = new WorldServerMulti(mcserver, isavehandler, dimType.getId(), (WorldServer) ((CanaryWorld) getWorld(configuration.getWorldName(), net.canarymod.api.world.DimensionType.NORMAL, true)).getHandle(), mcserver.b);
         }
 
-        world.a((IWorldAccess) (new net.minecraft.world.WorldManager(mcserver, world)));
-        world.N().a(WorldSettings.GameType.a(configuration.getGameMode().getId()));
-        mcserver.u.a(new WorldServer[]{world}); // Init player data files
-        world.r = EnumDifficulty.a(configuration.getDifficulty().getId()); // Set difficulty directly based on WorldConfiguration setting
+        world.a((new net.minecraft.world.WorldManager(mcserver, world)));
+        world.P().a(WorldSettings.GameType.a(configuration.getGameMode().getId()));
+        mcserver.an().a(new WorldServer[]{world}); // Init player data files
+        world.x.a(EnumDifficulty.a(configuration.getDifficulty().getId())); // Set difficulty directly based on WorldConfiguration setting
         // Recreating generate terrain
-        ChunkCoordinates chunkcoordinates = world.K();
-        for (int i2 = -192; i2 <= 192 && mcserver.q(); i2 += 16) {
-            for (int i3 = -192; i3 <= 192 && mcserver.q(); i3 += 16) {
-                world.b.c(chunkcoordinates.a + i2 >> 4, chunkcoordinates.c + i3 >> 4);
+        BlockPos spawn = world.M();
+        for (int i2 = -192; i2 <= 192 && mcserver.isRunning(); i2 += 16) {
+            for (int i3 = -192; i3 <= 192 && mcserver.isRunning(); i3 += 16) {
+                world.b.c(spawn.n() + i2 >> 4, spawn.p() + i3 >> 4);
             }
         }
         addWorld(world.getCanaryWorld());
