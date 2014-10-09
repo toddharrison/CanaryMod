@@ -1,12 +1,8 @@
 package net.minecraft.command;
 
 import net.canarymod.api.world.CanaryWorld;
-import net.canarymod.api.world.DimensionType;
-import net.canarymod.commandsys.TabCompleteHelper;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.storage.WorldInfo;
-
-import java.util.List;
 
 public class CommandToggleDownfall extends CommandBase {
 
@@ -22,16 +18,16 @@ public class CommandToggleDownfall extends CommandBase {
         return "commands.downfall.usage";
     }
 
-    public void b(ICommandSender icommandsender, String[] astring) {
+    public void a(ICommandSender icommandsender, String[] astring) throws CommandException {
         //this.d(); // CanaryMod: logic reimplemented below
-        WorldInfo worldinfo = icommandsender.d().N();
+        WorldInfo worldinfo = icommandsender.e().P();
         if (astring.length == 1) { // CanaryMod: inject world selection
-            boolean loaded = MinecraftServer.I().worldManager.worldIsLoaded(astring[0]);
+            boolean loaded = MinecraftServer.M().worldManager.worldIsLoaded(astring[0]);
             if (!loaded) {
                 a(icommandsender, this, "No world loaded of Name: '%s'", new Object[]{astring[0]});
                 return;
             }
-            worldinfo = ((CanaryWorld) MinecraftServer.I().worldManager.getWorld(astring[0], false)).getHandle().N();
+            worldinfo = ((CanaryWorld)MinecraftServer.M().worldManager.getWorld(astring[0], false)).getHandle().P();
         }
         worldinfo.b(!worldinfo.p());
 

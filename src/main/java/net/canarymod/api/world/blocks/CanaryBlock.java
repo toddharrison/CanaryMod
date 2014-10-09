@@ -27,13 +27,13 @@ import java.util.Random;
 
 public class CanaryBlock implements Block {
     private final static Random rndm = new Random(); // Passed to the idDropped method
+    protected short data; // going away
 
     protected IBlockState state;
     protected Position position;
     protected World world;
     protected BlockType type;
     protected BlockFace faceClicked;
-    protected short data;
     protected byte status = 0;
 
     private static String machineNameOfBlock(net.minecraft.block.Block nmsBlock) {
@@ -74,11 +74,8 @@ public class CanaryBlock implements Block {
         this(type, data, position.getBlockX(), position.getBlockY(), position.getBlockZ(), world);
     }
 
-    /*
-     * Pure Native
-     */
     public CanaryBlock(IBlockState state, BlockPos blockpos, net.minecraft.world.World world) {
-        this(state, new BlockPosition(blockpos), world.getCanaryWorld());
+        this(state, new BlockPosition(blockpos), world.getCanaryWorld(), (byte)0);
     }
 
     public CanaryBlock(IBlockState state, BlockPos blockpos, net.minecraft.world.World world, byte status) {
@@ -86,18 +83,11 @@ public class CanaryBlock implements Block {
     }
 
     public CanaryBlock(BlockPos blockpos, net.minecraft.world.World world) {
-        this(world.p(blockpos), blockpos, world);
+        this(world.p(blockpos), blockpos, world, (byte)0);
     }
 
-    /*
-     * Some wrap
-     */
     public CanaryBlock(IBlockState state, Position position, World world) {
-        this.state = state;
-        this.position = position;
-        this.world = world;
-
-        this.type = BlockType.fromIdAndData(net.minecraft.block.Block.a(state.c()), state.c().c(state));
+        this(state, position, world, (byte)0);
     }
 
     public CanaryBlock(IBlockState state, Position position, World world, byte status) {
@@ -131,6 +121,8 @@ public class CanaryBlock implements Block {
     public void setType(BlockType type) {
         this.type = type;
         this.data = type.getData();
+
+        this.state = net.minecraft.block.Block.d(type.getId());
     }
 
     @Override
@@ -379,6 +371,7 @@ public class CanaryBlock implements Block {
         state = state.a(((CanaryBlockProperty)property).getNative(), comparable);
     }
 
+    @Override
     public void setIntegerPropertyValue(BlockIntegerProperty property, int value) {
         if (state == null) {
             throw new NotYetImplementedException("CanaryBlock was formed missing the IBlockState, this is a bug and should be reported");
@@ -386,6 +379,7 @@ public class CanaryBlock implements Block {
         setPropertyValue(property, value);
     }
 
+    @Override
     public void setBooleanPropertyValue(BlockBooleanProperty property, boolean value) {
         if (state == null) {
             throw new NotYetImplementedException("CanaryBlock was formed missing the IBlockState, this is a bug and should be reported");
@@ -393,8 +387,19 @@ public class CanaryBlock implements Block {
         setPropertyValue(property, value);
     }
 
+    @Override
     public boolean canApply(BlockProperty property) {
         return state.b().containsKey(((CanaryBlockProperty)property).getNative());
+    }
+
+    /**
+     * Convenience Method
+     */
+    public net.minecraft.block.Block getBlock() {
+        if (state != null) {
+            return state.c();
+        }
+        return net.minecraft.block.Block.b(getType().getMachineName());
     }
 
     public IBlockState getNativeState() {
@@ -443,12 +448,5 @@ public class CanaryBlock implements Block {
         hash = 97 * hash + this.data;
         hash = 97 * hash + this.position.hashCode();
         return hash;
-    }
-
-    /**
-     * Convenience Method
-     */
-    public net.minecraft.block.Block getBlock() {
-        return net.minecraft.block.Block.b(getType().getMachineName());
     }
 }
