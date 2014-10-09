@@ -133,7 +133,7 @@ public class EntityAITasks {
         return this.manager;
     }
 
-    class EntityAITaskEntry {
+    public class EntityAITaskEntry { // CanaryMod: protected>>public
 
         public EntityAIBase a;
         public int b;

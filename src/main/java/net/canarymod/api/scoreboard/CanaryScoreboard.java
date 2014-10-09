@@ -111,7 +111,7 @@ public class CanaryScoreboard implements Scoreboard {
 
     @Override
     public Score getScore(String name, ScoreObjective scoreObjective) {
-        return handle.a(name, ((CanaryScoreObjective) scoreObjective).getHandle()).getCanaryScore();
+        return handle.c(name, ((CanaryScoreObjective) scoreObjective).getHandle()).getCanaryScore();
     }
 
     @Override

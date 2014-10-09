@@ -71,7 +71,7 @@ public class CanaryScoreboardManager implements ScoreboardManager {
                 return s;
         }
         /* Not loaded, Create a Scoreboard */
-        ServerScoreboard serverScoreboard = new ServerScoreboard(MinecraftServer.I());
+        ServerScoreboard serverScoreboard = new ServerScoreboard(MinecraftServer.M());
         serverScoreboard.getCanaryScoreboard().saveName = name;
         /* Load the scoreboard (will be null if it doesn't exist */
         ScoreboardSaveData scoreboardSaveData = (ScoreboardSaveData)this.mapStorage.a(ScoreboardSaveData.class, name);
