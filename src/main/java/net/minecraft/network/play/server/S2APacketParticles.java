@@ -28,7 +28,7 @@ public class S2APacketParticles implements Packet {
 
     // CanaryMod: our special constructor
     public S2APacketParticles(Particle particle) {
-        this.a = particle.type.getMcName();
+        this.a = EnumParticleTypes.a(particle.type.ordinal());
         this.b = (float)particle.x;
         this.c = (float)particle.y;
         this.d = (float)particle.z;

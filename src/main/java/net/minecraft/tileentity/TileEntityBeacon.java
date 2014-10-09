@@ -355,15 +355,15 @@ public class TileEntityBeacon extends TileEntityLockable implements IUpdatePlaye
 
     // CanaryMod
     public void setPrimaryEffectDirectly(int effect) {
-        this.m = effect;
+        this.k = effect;
     }
 
     public void setSecondaryEffectDirectly(int effect) {
-        this.n = effect;
+        this.l = effect;
     }
 
     public void setLevels(int levels) {
-        this.e = levels;
+        this.j = levels;
     }
 
     public CanaryBeacon getCanaryBeacon() {

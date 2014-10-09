@@ -12,10 +12,4 @@ public class CanaryBlockEnumProperty extends CanaryBlockProperty implements Bloc
     protected CanaryBlockEnumProperty(PropertyEnum property) {
         super(property);
     }
-
-    @Override
-    public String getName(Enum value) {
-        //Im not sure how this will work yet honestly...
-        return ((PropertyEnum) getNative()).a(value);
-    }
 }
