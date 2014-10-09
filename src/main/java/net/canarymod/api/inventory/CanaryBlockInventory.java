@@ -177,6 +177,14 @@ public abstract class CanaryBlockInventory extends CanaryTileEntity implements I
      * {@inheritDoc}
      */
     @Override
+    public int getInventoryStackLimit() {
+        return inventory.p_();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public Item getItem(ItemType type) {
         return getItem(type, -1, true);
     }
@@ -240,6 +248,14 @@ public abstract class CanaryBlockInventory extends CanaryTileEntity implements I
             }
         }
         return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int getSize() {
+        return inventory.n_();
     }
 
     /**
