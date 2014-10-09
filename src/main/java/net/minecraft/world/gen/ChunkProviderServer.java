@@ -77,12 +77,13 @@ public class ChunkProviderServer implements IChunkProvider {
     public void b(int i0, int i1) {
         if (this.i.t.e()) {
             if (!this.i.c(i0, i1)) {
-                this.c.add(ChunkCoordIntPair.a(i0, i1));
+                this.c.add(Long.valueOf(ChunkCoordIntPair.a(i0, i1)));
             }
-        }
+        } 
         else {
-            this.c.add(ChunkCoordIntPair.a(i0, i1));
+            this.c.add(Long.valueOf(ChunkCoordIntPair.a(i0, i1)));
         }
+
     }
 
     public void b() {
@@ -93,6 +94,7 @@ public class ChunkProviderServer implements IChunkProvider {
 
             this.b(chunk.a, chunk.b);
         }
+
     }
 
     public Chunk c(int i0, int i1) {
@@ -117,10 +119,9 @@ public class ChunkProviderServer implements IChunkProvider {
                         CrashReport crashreport = CrashReport.a(throwable, "Exception generating new chunk");
                         CrashReportCategory crashreportcategory = crashreport.a("Chunk to be generated");
 
-                        //TODO: Remove casts?
-                        crashreportcategory.a("Location", String.format("%d,%d", new Object[]{Integer.valueOf(i0), Integer.valueOf(i1)}));
-                        crashreportcategory.a("Position hash", Long.valueOf(i2));
-                        crashreportcategory.a("Generator", this.e.f());
+                        crashreportcategory.a("Location", (Object) String.format("%d,%d", new Object[] { Integer.valueOf(i0), Integer.valueOf(i1)}));
+                        crashreportcategory.a("Position hash", (Object) Long.valueOf(i2));
+                        crashreportcategory.a("Generator", (Object) this.e.f());
                         throw new ReportedException(crashreport);
                     }
                     // CanaryMod: ChunkCreated
@@ -139,7 +140,7 @@ public class ChunkProviderServer implements IChunkProvider {
                 //
 
                 if (chunk.k && this.a(i0 + 1, i1 + 1) && this.a(i0, i1 + 1) && this.a(i0 + 1, i1)) {
-                    this.a(this, i0, i1);
+                    chunk.a(this, this, i0, i1);
                 }
             }
 

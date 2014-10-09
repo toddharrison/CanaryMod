@@ -432,6 +432,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
                     }
 
                     i0 += i2;
+                    this.ab = i1;
                     // CanaryMod start: multiworld sleeping
                     boolean allSleeping = true;
 
