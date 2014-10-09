@@ -4,6 +4,7 @@ import net.canarymod.api.entity.living.humanoid.CanaryPlayer;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.api.world.World;
+import net.minecraft.util.BlockPos;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,25 +20,25 @@ public class CanaryPlayerManager implements PlayerManager {
 
     @Override
     public void updateMountedMovingPlayer(Player player) {
-        pm.c((net.minecraft.entity.player.EntityPlayerMP) ((CanaryPlayer) player).getHandle());
+        pm.c(((CanaryPlayer)player).getHandle());
 
     }
 
     @Override
     public void addPlayer(Player player) {
-        pm.a((net.minecraft.entity.player.EntityPlayerMP) ((CanaryPlayer) player).getHandle());
+        pm.a(((CanaryPlayer)player).getHandle());
 
     }
 
     @Override
     public void removePlayer(Player player) {
-        pm.b((net.minecraft.entity.player.EntityPlayerMP) ((CanaryPlayer) player).getHandle());
+        pm.b(((CanaryPlayer)player).getHandle());
 
     }
 
     @Override
     public void markBlockNeedsUpdate(int x, int y, int z) {
-        pm.a(x, y, z);
+        pm.a(new BlockPos(x, y, z));
     }
 
     @Override

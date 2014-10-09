@@ -19,19 +19,19 @@ import java.util.List;
 
 public abstract class MobSpawnerBaseLogic {
 
-    public int a = 20;
+    public int a = 20; // CanaryMod: private => public; spawnDelay
     private String b = "Pig";
     private final List c = Lists.newArrayList();
     private WeightedRandomMinecart d;
     public double e;
     public double f;
-    public int g = 200; // CanaryMod: private >> public
-    public int h = 800; // CanaryMod: private >> public
-    public int i = 4; // CanaryMod: private >> public
+    public int g = 200; // CanaryMod: private => public; minDelay
+    public int h = 800; // CanaryMod: private => public; maxDelay
+    public int i = 4; // CanaryMod: private => public; spawnCount
     private Entity j;
-    public int k = 6; // CanaryMod: private >> public
-    public int l = 16; // CanaryMod: private >> public
-    public int m = 4; // CanaryMod: private >> public
+    public int k = 6; // CanaryMod: private => public; maxNearBy
+    public int l = 16; // CanaryMod: private => public; Activation Distance
+    public int m = 4; // CanaryMod: private => public; spawn range
 
     // CanaryMod: Variable Declaration
     public MobSpawnerLogic logic = (MobSpawnerLogic) new CanaryMobSpawnerLogic(this);

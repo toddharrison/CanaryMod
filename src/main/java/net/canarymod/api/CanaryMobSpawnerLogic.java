@@ -36,7 +36,7 @@ public class CanaryMobSpawnerLogic implements MobSpawnerLogic {
         ListTag list = tag.getListTag("SpawnPotentials");
 
         if (list.isEmpty()) {
-            return new String[]{ logic.e() };
+            return new String[]{ logic.f() };
         }
 
         for (int i = 0; i < list.size(); i++) {
@@ -47,7 +47,7 @@ public class CanaryMobSpawnerLogic implements MobSpawnerLogic {
 
     @Override
     public void setDelay(int delay) {
-        logic.b = delay;
+        logic.a = delay;
     }
 
     @Override
