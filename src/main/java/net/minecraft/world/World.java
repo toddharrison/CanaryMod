@@ -190,6 +190,7 @@ public abstract class World implements IBlockAccess {
         return blockpos.n() >= -30000000 && blockpos.p() >= -30000000 && blockpos.n() < 30000000 && blockpos.p() < 30000000 && blockpos.o() >= 0 && blockpos.o() < 256;
     }
 
+    // Check if block at pos is air
     public boolean d(BlockPos blockpos) {
         return this.p(blockpos).c().r() == Material.a;
     }
@@ -272,7 +273,7 @@ public abstract class World implements IBlockAccess {
             Block block = iblockstate.c();
             IBlockState iblockstate1 = chunk.a(blockpos, iblockstate);
 
-            // CanaryMod: BlockUpdate FIXME
+            // CanaryMod: BlockUpdate
             CanaryBlock cblock;
             if (canaryDimension != null) {
                 cblock = new CanaryBlock(blockpos, this);
@@ -2614,14 +2615,15 @@ public abstract class World implements IBlockAccess {
 
     }
 
+    // (BlockPos, int, int) wasn't cool enough, eh?
     public void b(int i0, BlockPos blockpos, int i1) {
-        this.a((EntityPlayer) null, i0, blockpos, i1);
+        this.a(null, i0, blockpos, i1);
     }
 
     public void a(EntityPlayer entityplayer, int i0, BlockPos blockpos, int i1) {
         try {
-            for (int i2 = 0; i2 < this.u.size(); ++i2) {
-                ((IWorldAccess) this.u.get(i2)).a(entityplayer, i0, blockpos, i1);
+            for (Object anU : this.u) {
+                ((IWorldAccess) anU).a(entityplayer, i0, blockpos, i1);
             }
 
         }
@@ -2629,10 +2631,10 @@ public abstract class World implements IBlockAccess {
             CrashReport crashreport = CrashReport.a(throwable, "Playing level event");
             CrashReportCategory crashreportcategory = crashreport.a("Level event being played");
 
-            crashreportcategory.a("Block coordinates", (Object) CrashReportCategory.a(blockpos));
-            crashreportcategory.a("Event source", (Object) entityplayer);
-            crashreportcategory.a("Event type", (Object) Integer.valueOf(i0));
-            crashreportcategory.a("Event data", (Object) Integer.valueOf(i1));
+            crashreportcategory.a("Block coordinates", CrashReportCategory.a(blockpos));
+            crashreportcategory.a("Event source", entityplayer);
+            crashreportcategory.a("Event type", i0);
+            crashreportcategory.a("Event data", i1);
             throw new ReportedException(crashreport);
         }
     }
