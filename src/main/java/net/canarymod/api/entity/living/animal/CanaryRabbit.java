@@ -21,6 +21,6 @@ public class CanaryRabbit extends CanaryAnimal implements Rabbit {
 
     @Override
     public EntityType getEntityType() {
-        return null;
+        return EntityType.RABBIT;
     }
 }
