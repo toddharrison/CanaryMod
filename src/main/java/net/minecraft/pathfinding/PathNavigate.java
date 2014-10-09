@@ -17,7 +17,7 @@ public abstract class PathNavigate {
     protected EntityLiving b;
     protected World c;
     protected PathEntity d;
-    protected double e;
+    public double e; //CanaryMod: protected>>public
     private final IAttributeInstance a;
     private int f;
     private int g;

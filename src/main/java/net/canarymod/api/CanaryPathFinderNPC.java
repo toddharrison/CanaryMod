@@ -22,7 +22,7 @@ public class CanaryPathFinderNPC implements PathFinder {
      */
     @Override
     public boolean setPathToXYZ(double x, double y, double z, World world) {
-        return nav.a(x, y, z, nav.d);
+        return nav.a(x, y, z, nav.e);
     }
 
     /**
@@ -30,7 +30,7 @@ public class CanaryPathFinderNPC implements PathFinder {
      */
     @Override
     public boolean setPathToLocation(Location location) {
-        return nav.a(location.getX(), location.getY(), location.getZ(), nav.d);
+        return nav.a(location.getX(), location.getY(), location.getZ(), nav.e);
     }
 
     /**
@@ -38,7 +38,7 @@ public class CanaryPathFinderNPC implements PathFinder {
      */
     @Override
     public boolean setPathToEntity(Entity entity) {
-        return nav.a(entity.getX(), entity.getY(), entity.getZ(), nav.d);
+        return nav.a(entity.getX(), entity.getY(), entity.getZ(), nav.e);
     }
 
     /**
@@ -46,47 +46,7 @@ public class CanaryPathFinderNPC implements PathFinder {
      */
     @Override
     public boolean setPathToBlock(Block block) {
-        return nav.a(block.getX(), block.getY(), block.getZ(), nav.d);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setWaterPathing(boolean bool) {
-        nav.a(bool);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setCanSwim(boolean bool) {
-        nav.e(bool);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setCanPassOpenDoors(boolean bool) {
-        nav.c(bool);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setCanPassClosedDoors(boolean bool) {
-        nav.b(bool);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setAvoidSun(boolean bool) {
-        nav.d(bool);
+        return nav.a(block.getX(), block.getY(), block.getZ(), nav.e);
     }
 
     /**
