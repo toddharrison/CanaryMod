@@ -241,11 +241,11 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
                 world = new DemoWorldServer(this, isavehandler, worldinfo, dimType.getId(), this.b);
             }
             else {
-                world = new WorldServer(this, isavehandler, worldinfo, dimType.getId(), this.b);
+                world = (WorldServer)new WorldServer(this, isavehandler, worldinfo, dimType.getId(), this.b).b();
             }
         }
         else {
-            world = new WorldServerMulti(this, isavehandler, dimType.getId(), (WorldServer)((CanaryWorld)worldManager.getWorld(name, net.canarymod.api.world.DimensionType.NORMAL, true)).getHandle(), this.b);
+            world = (WorldServer)new WorldServerMulti(this, isavehandler, dimType.getId(), (WorldServer)((CanaryWorld)worldManager.getWorld(name, net.canarymod.api.world.DimensionType.NORMAL, true)).getHandle(), this.b).b();
         }
 
         world.a((IWorldAccess)(new WorldManager(this, world)));
@@ -254,7 +254,6 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
         //}
 
         this.v.a(new WorldServer[]{ world }); // Init player data files
-
         this.k(world); // Generate terrain
         worldManager.addWorld(world.getCanaryWorld());
         new LoadWorldHook(world.getCanaryWorld()).call();
