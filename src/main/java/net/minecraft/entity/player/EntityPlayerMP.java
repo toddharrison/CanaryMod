@@ -127,6 +127,8 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
         while (!worldserver.a((Entity)this, this.aQ()).isEmpty() && this.t < 255.0D) {
             this.b(this.s, this.t + 1.0D, this.u);
         }
+
+        this.entity = new CanaryPlayer(this);
     }
 
     /* Special Constructor to keep a wrapper reference intact */

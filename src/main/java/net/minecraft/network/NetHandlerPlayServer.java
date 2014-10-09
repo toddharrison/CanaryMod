@@ -114,8 +114,8 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, IUpdatePlaye
             --this.m;
         }
 
-        long timeIdle = MinecraftServer.ax() - this.d.D(); // CanaryMod: reduce, reuse, recycle
-        if (this.d.D() > 0L && this.d.ay() > 0 && timeIdle > (long) (this.d.ay() * 1000 * 60) && !this.b.getPlayer().canIgnoreRestrictions()) { // CanaryMod: If IgnoreRestrictions/no idle kick
+        long timeIdle = MinecraftServer.ax() - this.b.D(); // CanaryMod: reduce, reuse, recycle
+        if (this.b.D() > 0L && this.d.ay() > 0 && timeIdle > (long)(this.d.ay() * 1000 * 60) && !this.b.getPlayer().canIgnoreRestrictions()) { // CanaryMod: If IgnoreRestrictions/no idle kick
             // Player Idle Hook
             if (!((PlayerIdleHook) new PlayerIdleHook(this.b.getPlayer(), timeIdle).call()).isCanceled()) {
                 this.c("You have been idle for too long!");
