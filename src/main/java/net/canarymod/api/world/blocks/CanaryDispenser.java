@@ -1,8 +1,6 @@
 package net.canarymod.api.world.blocks;
 
-import java.util.Arrays;
 import net.canarymod.api.entity.Entity;
-import net.canarymod.api.inventory.CanaryBlockInventory;
 import net.canarymod.api.inventory.CanaryItem;
 import net.canarymod.api.inventory.InventoryType;
 import net.canarymod.api.inventory.Item;
@@ -14,12 +12,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityDispenser;
 import net.minecraft.util.BlockPos;
 
+import java.util.Arrays;
+
 /**
  * Dispenser wrapper implementation
  *
  * @author Jason (darkdiplomat)
  */
-public class CanaryDispenser extends CanaryBlockInventory implements Dispenser {
+public class CanaryDispenser extends CanaryLockableTileEntity implements Dispenser {
     // private Random random = new Random();
 
     /**
@@ -56,18 +56,18 @@ public class CanaryDispenser extends CanaryBlockInventory implements Dispenser {
         Item stack = getSlot(slot);
 
         if (stack != null) {
-            return dispense(((CanaryItem) stack).getHandle(), slot);
+            return dispense(((CanaryItem)stack).getHandle(), slot);
         }
         else {
-            ((CanaryWorld) getWorld()).getHandle().c(1001, new BlockPos(this.getX(), this.getY(), this.getZ()), 0);
+            ((CanaryWorld)getWorld()).getHandle().c(1001, new BlockPos(this.getX(), this.getY(), this.getZ()), 0);
         }
         return null;
     }
 
     private Entity dispense(ItemStack item, int slot) {
         if (item != null) {
-            BlockSourceImpl blocksourceimpl = new BlockSourceImpl(((CanaryWorld) getWorld()).getHandle(), new BlockPos(getX(), getY(), getZ()));
-            IBehaviorDispenseItem ibehaviordispenseitem = (IBehaviorDispenseItem) ((BlockDispenser) net.minecraft.block.Block.c(BlockType.Dispenser.getId())).a(item);
+            BlockSourceImpl blocksourceimpl = new BlockSourceImpl(((CanaryWorld)getWorld()).getHandle(), new BlockPos(getX(), getY(), getZ()));
+            IBehaviorDispenseItem ibehaviordispenseitem = (IBehaviorDispenseItem)((BlockDispenser)net.minecraft.block.Block.c(BlockType.Dispenser.getId())).a(item);
 
             if (ibehaviordispenseitem != IBehaviorDispenseItem.a) {
                 ItemStack itemstack1 = ibehaviordispenseitem.a(blocksourceimpl, item);
@@ -128,6 +128,6 @@ public class CanaryDispenser extends CanaryBlockInventory implements Dispenser {
      */
     @Override
     public TileEntityDispenser getTileEntity() {
-        return (TileEntityDispenser) tileentity;
+        return (TileEntityDispenser)tileentity;
     }
 }

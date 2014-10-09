@@ -1,6 +1,5 @@
 package net.canarymod.api.world.blocks;
 
-import net.canarymod.api.inventory.CanaryBlockInventory;
 import net.canarymod.api.inventory.CanaryItem;
 import net.canarymod.api.inventory.InventoryType;
 import net.canarymod.api.inventory.Item;
@@ -14,7 +13,7 @@ import java.util.Arrays;
  *
  * @author Jason (darkdiplomat)
  */
-public class CanaryFurnace extends CanaryBlockInventory implements Furnace {
+public class CanaryFurnace extends CanaryLockableTileEntity implements Furnace {
 
     /**
      * Constructs a new wrapper for TileEntityFurnace
@@ -39,7 +38,7 @@ public class CanaryFurnace extends CanaryBlockInventory implements Furnace {
      */
     @Override
     public short getBurnTime() {
-        return (short) getTileEntity().a_(0);
+        return (short)getTileEntity().a_(0);
     }
 
     /**
@@ -55,7 +54,7 @@ public class CanaryFurnace extends CanaryBlockInventory implements Furnace {
      */
     @Override
     public short getCookTime() {
-        return (short) getTileEntity().a_(1);
+        return (short)getTileEntity().a_(1);
     }
 
     /**
@@ -114,6 +113,6 @@ public class CanaryFurnace extends CanaryBlockInventory implements Furnace {
      */
     @Override
     public TileEntityFurnace getTileEntity() {
-        return (TileEntityFurnace) tileentity;
+        return (TileEntityFurnace)tileentity;
     }
 }

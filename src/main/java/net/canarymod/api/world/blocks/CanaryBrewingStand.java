@@ -1,6 +1,5 @@
 package net.canarymod.api.world.blocks;
 
-import net.canarymod.api.inventory.CanaryBlockInventory;
 import net.canarymod.api.inventory.CanaryItem;
 import net.canarymod.api.inventory.InventoryType;
 import net.canarymod.api.inventory.Item;
@@ -14,7 +13,7 @@ import java.util.Arrays;
  *
  * @author Jason (darkdiplomat)
  */
-public class CanaryBrewingStand extends CanaryBlockInventory implements BrewingStand {
+public class CanaryBrewingStand extends CanaryLockableTileEntity implements BrewingStand {
 
     /**
      * Constructs a new wrapper for TileEntityBrewingStand
@@ -82,6 +81,6 @@ public class CanaryBrewingStand extends CanaryBlockInventory implements BrewingS
      */
     @Override
     public TileEntityBrewingStand getTileEntity() {
-        return (TileEntityBrewingStand) tileentity;
+        return (TileEntityBrewingStand)tileentity;
     }
 }

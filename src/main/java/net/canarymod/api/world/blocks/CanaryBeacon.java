@@ -1,6 +1,5 @@
 package net.canarymod.api.world.blocks;
 
-import net.canarymod.api.inventory.CanaryBlockInventory;
 import net.canarymod.api.inventory.CanaryItem;
 import net.canarymod.api.inventory.InventoryType;
 import net.canarymod.api.inventory.Item;
@@ -13,7 +12,7 @@ import net.minecraft.tileentity.TileEntityBeacon;
  *
  * @author Jason (darkdiplomat)
  */
-public class CanaryBeacon extends CanaryBlockInventory implements Beacon {
+public class CanaryBeacon extends CanaryLockableTileEntity implements Beacon {
 
     /**
      * Constructs a new wrapper for TileEntityBeacon
@@ -157,7 +156,7 @@ public class CanaryBeacon extends CanaryBlockInventory implements Beacon {
      */
     @Override
     public void setContents(Item[] items) {
-        getTileEntity().a(0, items[0] != null ? ((CanaryItem) items[0]).getHandle() : null);
+        getTileEntity().a(0, items[0] != null ? ((CanaryItem)items[0]).getHandle() : null);
     }
 
     /**
@@ -173,6 +172,6 @@ public class CanaryBeacon extends CanaryBlockInventory implements Beacon {
      */
     @Override
     public TileEntityBeacon getTileEntity() {
-        return (TileEntityBeacon) tileentity;
+        return (TileEntityBeacon)tileentity;
     }
 }

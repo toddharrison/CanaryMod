@@ -1,12 +1,12 @@
 package net.canarymod.api.world.blocks;
 
-import net.canarymod.api.inventory.CanaryBlockInventory;
 import net.canarymod.api.inventory.CanaryItem;
 import net.canarymod.api.inventory.InventoryType;
 import net.canarymod.api.inventory.Item;
 import net.minecraft.inventory.InventoryLargeChest;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityChest;
+import net.minecraft.world.ILockableContainer;
 
 import java.util.Arrays;
 
@@ -15,7 +15,7 @@ import java.util.Arrays;
  *
  * @author Jason (darkdiplomat)
  */
-public class CanaryChest extends CanaryBlockInventory implements Chest {
+public class CanaryChest extends CanaryLockableTileEntity implements Chest {
 
     /**
      * Constructs a new wrapper for TileEntityChest
@@ -72,9 +72,9 @@ public class CanaryChest extends CanaryBlockInventory implements Chest {
             TileEntity cblock = getWorld().getOnlyTileEntity(block);
 
             if ((cblock != null) && (cblock instanceof Chest)) {
-                Chest chest = (Chest) cblock;
+                Chest chest = (Chest)cblock;
 
-                return new CanaryDoubleChest(new InventoryLargeChest(getInventoryName(), this.inventory, ((CanaryChest) chest).getInventoryHandle()));
+                return new CanaryDoubleChest(new InventoryLargeChest(getInventoryName(), (ILockableContainer)this.inventory, (ILockableContainer)((CanaryChest)chest).getInventoryHandle()));
             }
         }
 
@@ -129,7 +129,7 @@ public class CanaryChest extends CanaryBlockInventory implements Chest {
      */
     @Override
     public TileEntityChest getTileEntity() {
-        return (TileEntityChest) tileentity;
+        return (TileEntityChest)tileentity;
     }
 
     @Override

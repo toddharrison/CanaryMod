@@ -1,6 +1,5 @@
 package net.canarymod.api.world.blocks;
 
-import net.canarymod.api.inventory.CanaryBlockInventory;
 import net.canarymod.api.inventory.CanaryItem;
 import net.canarymod.api.inventory.Inventory;
 import net.canarymod.api.inventory.InventoryType;
@@ -16,7 +15,7 @@ import java.util.Arrays;
 /**
  * @author Somners
  */
-public class CanaryHopperBlock extends CanaryBlockInventory implements HopperBlock {
+public class CanaryHopperBlock extends CanaryLockableTileEntity implements HopperBlock {
 
     public CanaryHopperBlock(TileEntityHopper hopper) {
         super(hopper);
@@ -49,17 +48,17 @@ public class CanaryHopperBlock extends CanaryBlockInventory implements HopperBlo
     /**
      * Gets the Inventory from the inventory instance.
      *
-     * @param oiinventory
-     *         OIInventory instance to get Inventory wrapper for.
+     * @param iinventory
+     *         IInventory instance to get Inventory wrapper for.
      *
      * @return The inventory or null if none.
      */
     private Inventory getBaseContainerBlock(IInventory iinventory) {
         if (iinventory instanceof net.minecraft.tileentity.TileEntity) {
-            return (Inventory) ((net.minecraft.tileentity.TileEntity) iinventory).complexBlock;
+            return (Inventory)((net.minecraft.tileentity.TileEntity)iinventory).complexBlock;
         }
         else if (iinventory instanceof InventoryLargeChest) {
-            return new CanaryDoubleChest((InventoryLargeChest) iinventory);
+            return new CanaryDoubleChest((InventoryLargeChest)iinventory);
         }
         else {
             return null;
@@ -143,7 +142,7 @@ public class CanaryHopperBlock extends CanaryBlockInventory implements HopperBlo
      */
     @Override
     public TileEntityHopper getTileEntity() {
-        return (TileEntityHopper) this.tileentity;
+        return (TileEntityHopper)this.tileentity;
     }
 
     /**
