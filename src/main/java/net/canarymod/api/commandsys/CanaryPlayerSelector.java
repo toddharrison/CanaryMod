@@ -50,13 +50,13 @@ public class CanaryPlayerSelector implements PlayerSelector {
             return this.toCanaryPlayers(net.minecraft.command.PlayerSelector.b(((CanaryServer) caller).getHandle(), pattern, EntityPlayerMP.class));
         }
         else if (caller instanceof CanaryPlayer) {
-            return this.toCanaryPlayers(net.minecraft.command.PlayerSelector.b(((CanaryServer) caller).getHandle(), pattern, EntityPlayerMP.class));
+            return this.toCanaryPlayers(net.minecraft.command.PlayerSelector.b(((CanaryPlayer) caller).getHandle(), pattern, EntityPlayerMP.class));
         }
         else if (caller instanceof CanaryCommandBlock) {
-            return this.toCanaryPlayers(net.minecraft.command.PlayerSelector.b(((CanaryServer) caller).getHandle(), pattern, EntityPlayerMP.class));
+            return this.toCanaryPlayers(net.minecraft.command.PlayerSelector.b(((CanaryCommandBlock) caller).getLogic(), pattern, EntityPlayerMP.class));
         }
         else if (caller instanceof CanaryCommandBlockMinecart) {
-            return this.toCanaryPlayers(net.minecraft.command.PlayerSelector.b(((CanaryServer) caller).getHandle(), pattern, EntityPlayerMP.class));
+            return this.toCanaryPlayers(net.minecraft.command.PlayerSelector.b(((CanaryCommandBlockMinecart) caller).getHandle(), pattern, EntityPlayerMP.class));
         }
         else
             return null;
