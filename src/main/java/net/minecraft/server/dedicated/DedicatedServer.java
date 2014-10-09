@@ -273,7 +273,7 @@ public class DedicatedServer extends MinecraftServer implements IServer {
                 this.k(Configuration.getServerConfig().getDefaultWorldName()); // CanaryMod use our world config
             }
             // CanaryMod use or configurations instead of native ones
-            WorldConfiguration worldcfg = Configuration.getWorldConfig(this.O() + "_NORMAL");
+            WorldConfiguration worldcfg = Configuration.getWorldConfig(this.T() + "_NORMAL");
 
             String s1 = worldcfg.getWorldSeed(); // this.n.a("level-seed", "");
             String s2 = worldcfg.getWorldType().toString(); // this.n.a("level-type", "DEFAULT");
