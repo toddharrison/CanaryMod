@@ -12,4 +12,9 @@ public class CanaryBlockIntegerProperty extends CanaryBlockProperty implements B
     protected CanaryBlockIntegerProperty(PropertyInteger property) {
         super(property);
     }
+
+    @Override
+    public boolean canApply(Integer value) {
+        return super.canApply(value);
+    }
 }

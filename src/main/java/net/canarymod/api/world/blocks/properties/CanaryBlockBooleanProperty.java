@@ -11,4 +11,8 @@ public class CanaryBlockBooleanProperty extends CanaryBlockProperty implements B
         super(property);
     }
 
+    @Override
+    public boolean canApply(Boolean value) {
+        return super.canApply(value);
+    }
 }
