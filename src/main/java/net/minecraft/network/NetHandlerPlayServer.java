@@ -142,8 +142,8 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, IUpdatePlaye
                     public void operationComplete(Future future) {
                         NetHandlerPlayServer.this.a.a((IChatComponent) chatcomponenttext);
                     }
-                }
-        );
+                },
+        new GenericFutureListener[0]);
         this.a.k();
         Futures.getUnchecked(this.d.a(
                         new Runnable() {

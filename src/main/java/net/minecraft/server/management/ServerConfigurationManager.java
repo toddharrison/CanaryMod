@@ -1030,9 +1030,15 @@ public abstract class ServerConfigurationManager {
         // CanaryMod shutdown hook
         ServerShutdownHook hook = (ServerShutdownHook)new ServerShutdownHook(msg != null ? msg : "Server closed").call();
         //
-        for (int i0 = 0; i0 < this.e.size(); ++i0) {
-            ((EntityPlayerMP)this.e.get(i0)).a.c(hook.getReason());
+        //for (int i0 = 0; i0 < this.e.size(); ++i0) { // CanaryMod: switch out for iterator
+        // CanaryMod
+        Iterator itr = this.e.iterator();
+        while(itr.hasNext()){
+            EntityPlayerMP emp = (EntityPlayerMP)itr.next();
+            itr.remove(); // For some reason, the players aren't cleaned up causing the server to hang...
+            emp.a.c(hook.getReason());
         }
+        //
     }
 
     public void a(IChatComponent ichatcomponent, boolean flag0) {
