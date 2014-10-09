@@ -397,6 +397,10 @@ public class CanaryBlock implements Block {
         return state.b().containsKey(((CanaryBlockProperty)property).getNative());
     }
 
+    public IBlockState getNativeState() {
+        return state;
+    }
+
     @Override
     public String toString() {
         return String.format("Block[Type=%s, data=%d, x=%d, y=%d, z=%d, world=%s, dim=%s]", getType().getMachineName(), this.data, this.getX(), this.getY(), this.getZ(), this.world.getName(), this.world.getType().getName());

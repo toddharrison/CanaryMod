@@ -1,7 +1,8 @@
 package net.canarymod.api.entity.living.monster;
 
 import net.canarymod.api.entity.EntityType;
-import net.minecraft.block.Block;
+import net.canarymod.api.world.blocks.Block;
+import net.canarymod.api.world.blocks.CanaryBlock;
 import net.minecraft.entity.monster.EntityEnderman;
 
 /**
@@ -34,12 +35,22 @@ public class CanaryEnderman extends CanaryEntityMob implements Enderman {
         return "Enderman";
     }
 
+    @Override
+    public Block getCarriedBlock() {
+        return new CanaryBlock(getHandle().ck(), getPosition(), getWorld());
+    }
+
+    @Override
+    public void setCarriedBlock(Block block) {
+        getHandle().a(((CanaryBlock)block).getNativeState());
+    }
+
     /**
      * {@inheritDoc}
      */
     @Override
     public short getCarriedBlockID() {
-        return (short) Block.a(getHandle().ck().c());
+        return (short)net.minecraft.block.Block.a(getHandle().ck().c());
     }
 
     /**
@@ -63,7 +74,7 @@ public class CanaryEnderman extends CanaryEntityMob implements Enderman {
      */
     @Override
     public void setCarriedBlockMetaData(short metadata) {
-        getHandle().a(metadata);
+        //getHandle().a(metadata);
     }
 
     /**
