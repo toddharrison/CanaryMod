@@ -1,6 +1,8 @@
 package net.canarymod.api.entity;
 
+import net.canarymod.api.world.blocks.Block;
 import net.canarymod.api.world.blocks.BlockType;
+import net.canarymod.api.world.blocks.CanaryBlock;
 import net.minecraft.entity.item.EntityFallingBlock;
 
 /**
@@ -33,12 +35,22 @@ public class CanaryFallingBlock extends CanaryEntity implements FallingBlock {
         return "FallingBlock";
     }
 
+    @Override
+    public Block getBlock() {
+        return new CanaryBlock(getHandle().l(), this.getPosition(), this.getWorld());
+    }
+
+    @Override
+    public void setBlock(Block block) {
+        getHandle().setBlockState(((CanaryBlock)block).getNativeState());
+    }
+
     /**
      * {@inheritDoc}
      */
     @Override
     public short getBlockID() {
-        return (short) net.minecraft.block.Block.a(getHandle().l());
+        return (short)net.minecraft.block.Block.a(getHandle().l().c());
     }
 
     /**
@@ -47,7 +59,7 @@ public class CanaryFallingBlock extends CanaryEntity implements FallingBlock {
     @Override
     public void setBlockID(short id) {
         if (BlockType.fromId(id) != null) { // Safety
-            getHandle().setBlock(net.minecraft.block.Block.c(id));
+            getHandle().setBlockState(net.minecraft.block.Block.c(id).P());
         }
     }
 
