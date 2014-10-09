@@ -27,7 +27,7 @@ public class CanaryItem implements Item {
     }
 
     private static net.minecraft.item.Item getItemFromId(int id) {
-        return net.minecraft.item.Item.d(id);
+        return net.minecraft.item.Item.b(id);
     }
 
     /**
@@ -37,10 +37,10 @@ public class CanaryItem implements Item {
      *         the native Minecraft item stack to wrap
      */
     public CanaryItem(ItemStack itemStack) {
-        this.type = ItemType.fromIdAndData(getItemId(itemStack), itemStack.k());
+        this.type = ItemType.fromIdAndData(getItemId(itemStack), itemStack.i());
         if (this.type == null) {
             // Seems to be an unregistered item type, go ahead an pass an new unnamed itemtype
-            this.type = new ItemType(getItemId(itemStack), itemStack.k());
+            this.type = new ItemType(getItemId(itemStack), itemStack.i());
         }
         this.item = itemStack;
     }
@@ -101,7 +101,7 @@ public class CanaryItem implements Item {
      */
     @Override
     public int getDamage() {
-        return item.k();
+        return item.i();
     }
 
     /**
@@ -173,7 +173,7 @@ public class CanaryItem implements Item {
      */
     @Override
     public boolean hasDisplayName() {
-        return item.u();
+        return item.s();
     }
 
     /**
@@ -181,7 +181,7 @@ public class CanaryItem implements Item {
      */
     @Override
     public String getDisplayName() {
-        return item.s();
+        return item.q();
     }
 
     /**
@@ -205,7 +205,7 @@ public class CanaryItem implements Item {
      */
     @Override
     public int getRepairCost() {
-        return item.C();
+        return item.A();
     }
 
     /**
@@ -276,7 +276,7 @@ public class CanaryItem implements Item {
      */
     @Override
     public boolean isEnchanted() {
-        return item.y();
+        return item.w();
     }
 
     /**
@@ -284,7 +284,7 @@ public class CanaryItem implements Item {
      */
     @Override
     public boolean isEnchantable() {
-        return item.x();
+        return item.v();
     }
 
     /**
@@ -301,12 +301,12 @@ public class CanaryItem implements Item {
     @Override
     public Enchantment getEnchantment(int index) {
         if (isEnchanted()) {
-            int size = getHandle().r().c();
+            int size = getHandle().p().c();
 
             if (index >= size) {
                 index = 0;
             }
-            CompoundTag tag = new CanaryCompoundTag((NBTTagCompound) getHandle().r().b(index));
+            CompoundTag tag = new CanaryCompoundTag((NBTTagCompound) getHandle().p().b(index));
 
             return new CanaryEnchantment(Enchantment.Type.fromId(tag.getShort("id")), tag.getShort("lvl"));
         }
@@ -321,10 +321,10 @@ public class CanaryItem implements Item {
         Enchantment[] enchantments = null;
 
         if (isEnchanted()) {
-            int size = getHandle().r().c();
+            int size = getHandle().p().c();
 
             enchantments = new Enchantment[size];
-            CanaryListTag<CompoundTag> nbtTagList = new CanaryListTag<CompoundTag>(getHandle().r());
+            CanaryListTag<CompoundTag> nbtTagList = new CanaryListTag<CompoundTag>(getHandle().p());
 
             for (int i = 0; i < size; i++) {
                 CompoundTag tag = nbtTagList.get(i);
@@ -385,7 +385,7 @@ public class CanaryItem implements Item {
      */
     @Override
     public boolean hasDataTag() {
-        return item.p();
+        return item.n();
     }
 
     /**
@@ -393,7 +393,7 @@ public class CanaryItem implements Item {
      */
     @Override
     public CompoundTag getDataTag() {
-        return item.p() ? new CanaryCompoundTag(item.q()) : null;
+        return item.n() ? new CanaryCompoundTag(item.o()) : null;
     }
 
     /**
@@ -450,7 +450,7 @@ public class CanaryItem implements Item {
 
     @Override
     public Multimap<String, AttributeModifier> getAttributes() {
-        Multimap rawAttributes = getHandle().D();
+        Multimap rawAttributes = getHandle().B();
         Multimap<String, AttributeModifier> toRet = HashMultimap.create();
         for (Map.Entry entry : (Collection<Map.Entry>) rawAttributes.entries()) {
             toRet.put((String) entry.getKey(), ((net.minecraft.entity.ai.attributes.AttributeModifier) entry.getValue()).getWrapper());
@@ -460,7 +460,7 @@ public class CanaryItem implements Item {
 
     @Override
     public void updateAttributes(Multimap<String, AttributeModifier> attributes) {
-        Multimap rawAttributes = getHandle().D();
+        Multimap rawAttributes = getHandle().B();
         rawAttributes.clear(); // Clear out the old stuff
         for (Map.Entry<String, AttributeModifier> entry : attributes.entries()) {
             rawAttributes.put(entry.getKey(), ((CanaryAttributeModifier) entry.getValue()).getNative());
@@ -507,7 +507,7 @@ public class CanaryItem implements Item {
 
     @Override
     public Item clone() {
-        return getHandle().m().getCanaryItem();
+        return getHandle().k().getCanaryItem();
     }
 
     /**

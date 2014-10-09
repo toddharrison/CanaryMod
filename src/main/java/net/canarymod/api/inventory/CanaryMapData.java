@@ -9,6 +9,7 @@ import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.api.world.CanaryWorldManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S34PacketMaps;
 import net.minecraft.world.World;
 
@@ -26,42 +27,42 @@ public class CanaryMapData implements MapData {
 
     @Override
     public String getMapName() {
-        return getNative().h;
-    }
-
-    @Override
-    public int getXCenter() {
         return getNative().a;
     }
 
     @Override
-    public int getZCenter() {
+    public int getXCenter() {
         return getNative().b;
     }
 
     @Override
+    public int getZCenter() {
+        return getNative().c;
+    }
+
+    @Override
     public void setXCenter(int xCenter) {
-        getNative().a = xCenter;
+        getNative().b = xCenter;
     }
 
     @Override
     public void setZCenter(int zCenter) {
-        getNative().b = zCenter;
+        getNative().c = zCenter;
     }
 
     @Override
     public byte getScale() {
-        return getNative().d;
+        return getNative().e;
     }
 
     @Override
     public void setScale(byte scale) {
-        getNative().d = (byte)MathHelp.setInRange(scale, 1, 4);
+        getNative().e = (byte)MathHelp.setInRange(scale, 1, 4);
     }
 
     @Override
     public byte[] getColors() {
-        return getNative().e;
+        return getNative().f;
     }
 
     @Override
@@ -69,7 +70,7 @@ public class CanaryMapData implements MapData {
         if (bytes.length != 16384) {
             return;
         }
-        getNative().e = bytes;
+        getNative().f = bytes;
         getNative().mapUpdating = false; // Probably don't want the new colors overridden do we
     }
 
@@ -89,9 +90,9 @@ public class CanaryMapData implements MapData {
             EntityPlayer entityPlayer = (EntityPlayer)getNative().i.keySet().iterator().next(); // grab the first player
 
             if (entityPlayer != null) {
-                byte[] data = getNative().a(((CanaryItem)entityPlayer.getCanaryHuman().getItemHeld()).getHandle(), entityPlayer.o, entityPlayer);
+                Packet data = getNative().a(((CanaryItem)entityPlayer.getCanaryHuman().getItemHeld()).getHandle(), entityPlayer.o, entityPlayer);
                 if (data != null) {
-                    Canary.getServer().getConfigurationManager().sendPacketToAllInWorld(entityPlayer.getCanaryWorld().getFqName(), new CanaryPacket(new S34PacketMaps(entityPlayer.getCanaryHuman().getItemHeld().getDamage(), data)));
+                    Canary.getServer().getConfigurationManager().sendPacketToAllInWorld(entityPlayer.getCanaryWorld().getFqName(), new CanaryPacket(data));
                 }
             }
         }

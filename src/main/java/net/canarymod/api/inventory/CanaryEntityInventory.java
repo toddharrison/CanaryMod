@@ -171,16 +171,8 @@ public abstract class CanaryEntityInventory implements Inventory {
      * {@inheritDoc}
      */
     @Override
-    public String getInventoryName() {
-        return inventory.b();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public int getInventoryStackLimit() {
-        return inventory.d();
+        return inventory.p_();
     }
 
     /**
@@ -257,7 +249,7 @@ public abstract class CanaryEntityInventory implements Inventory {
      */
     @Override
     public int getSize() {
-        return inventory.a();
+        return inventory.n_();
     }
 
     /**

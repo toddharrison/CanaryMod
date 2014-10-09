@@ -15,7 +15,7 @@ public class CanaryEnchantment implements Enchantment {
     private short level;
 
     public CanaryEnchantment(Type type, short level) {
-        this.handle = net.minecraft.enchantment.Enchantment.b[type.getId()];
+        this.handle = net.minecraft.enchantment.Enchantment.c(type.getId());
         this.level = level;
     }
 
@@ -33,7 +33,7 @@ public class CanaryEnchantment implements Enchantment {
      */
     @Override
     public int getWeight() {
-        return getHandle().c();
+        return getHandle().d();
     }
 
     /**
@@ -41,7 +41,7 @@ public class CanaryEnchantment implements Enchantment {
      */
     @Override
     public int getMinEnchantmentLevel() {
-        return getHandle().d();
+        return getHandle().e();
     }
 
     /**

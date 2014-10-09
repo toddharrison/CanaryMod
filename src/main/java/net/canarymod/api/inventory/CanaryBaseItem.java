@@ -25,7 +25,7 @@ public class CanaryBaseItem implements BaseItem {
      */
     @Override
     public int getMaxStackSize() {
-        return item.m();
+        return item.j();
     }
 
     /**
@@ -33,7 +33,7 @@ public class CanaryBaseItem implements BaseItem {
      */
     @Override
     public int getMaxDamage() {
-        return item.o();
+        return item.l();
     }
 
     /**
@@ -41,7 +41,7 @@ public class CanaryBaseItem implements BaseItem {
      */
     @Override
     public void setMaxDamage(int damage) {
-        item.e(damage);
+        item.c(damage);
     }
 
     /**
@@ -49,7 +49,7 @@ public class CanaryBaseItem implements BaseItem {
      */
     @Override
     public boolean isDamageable() {
-        return item.p();
+        return item.m();
     }
 
 }
