@@ -105,7 +105,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
         BlockPos blockpos = worldserver.M();
 
         if (!worldserver.t.o() && worldserver.P().r() != WorldSettings.GameType.ADVENTURE) {
-            int i0 = Math.max(5, minecraftserver.au() - 6);
+            int i0 = Math.max(5, cfg.getSpawnProtectionSize() - 6); // CanaryMod: Use the world spawn protection size
             int i1 = MathHelper.c(worldserver.af().b((double)blockpos.n(), (double)blockpos.p()));
 
             if (i1 < i0) {
