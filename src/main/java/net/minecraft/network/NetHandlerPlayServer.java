@@ -9,6 +9,11 @@ import net.canarymod.Canary;
 import net.canarymod.ToolBox;
 import net.canarymod.api.CanaryNetServerHandler;
 import net.canarymod.api.entity.living.humanoid.Player;
+import net.canarymod.api.inventory.slot.ButtonPress;
+import net.canarymod.api.inventory.slot.GrabMode;
+import net.canarymod.api.inventory.slot.SecondarySlotType;
+import net.canarymod.api.inventory.slot.SlotHelper;
+import net.canarymod.api.inventory.slot.SlotType;
 import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.api.world.blocks.BlockFace;
 import net.canarymod.api.world.blocks.CanaryBlock;
@@ -919,17 +924,18 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, IUpdatePlaye
             else {
                 // CanaryMod: SlotClick
                 ItemStack itemstack = this.b.bi.a(c0epacketclickwindow.b(), c0epacketclickwindow.c(), c0epacketclickwindow.f(), this.b);
-                /* FIXME
-                SlotType slot_type = SlotHelper.getSlotType(this.b.bi, c0epacketclickwindow.d());
-                SecondarySlotType finer_slot = SlotHelper.getSpecificSlotType(this.b.bi, c0epacketclickwindow.d());
-                GrabMode grab_mode = GrabMode.fromInt(c0epacketclickwindow.f());
-                ButtonPress mouse_click = ButtonPress.matchButton(grab_mode, c0epacketclickwindow.f(), c0epacketclickwindow.d());
-                SlotClickHook sch = (SlotClickHook)new SlotClickHook(this.b.getPlayer(), this.b.bo.getInventory(), itemstack != null ? itemstack.getCanaryItem() : null, slot_type, finer_slot, grab_mode, mouse_click, (short)c0epacketclickwindow.d(), c0epacketclickwindow.f()).call();
-                if (sch.isCanceled()) {
+//                /* FIXME
+                SlotType slotType = SlotHelper.getSlotType(this.b.bi, c0epacketclickwindow.b());
+                SecondarySlotType secondarySlotType = SlotHelper.getSpecificSlotType(this.b.bi, c0epacketclickwindow.b());
+                GrabMode grabMode = GrabMode.fromInt(c0epacketclickwindow.f());
+
+                ButtonPress mouseClick = ButtonPress.matchButton(grabMode, c0epacketclickwindow.c(), c0epacketclickwindow.b());
+                SlotClickHook sch = (SlotClickHook)new SlotClickHook(this.b.getPlayer(), this.b.bi.getInventory(), itemstack != null ? itemstack.getCanaryItem() : null, slotType, secondarySlotType, grabMode, mouseClick, (short)c0epacketclickwindow.b(), c0epacketclickwindow.d()).call();
+                if (sch.isCanceled()||true) { //  true dev
                     if (sch.doUpdate()) {
                         if (c0epacketclickwindow.f() == 0) {
-                            this.b.bi.updateSlot(c0epacketclickwindow.d());
-                            this.b.updateSlot(-1, -1, this.b.bh.n());
+                            this.b.bi.updateSlot(c0epacketclickwindow.b());
+                            this.b.updateSlot(c0epacketclickwindow.a(), c0epacketclickwindow.b(), this.b.bg.p());
                         }
                         else {
                             ArrayList arraylist = Lists.newArrayList();
@@ -943,7 +949,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, IUpdatePlaye
                     }
                     return;
                 }
-                */
+//                */
                 //
 
                 if (ItemStack.b(c0epacketclickwindow.e(), itemstack)) {
