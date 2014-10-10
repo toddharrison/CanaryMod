@@ -561,6 +561,10 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
         }
     }
 
+    public boolean a(EntityPlayerMP entityplayermp) {
+        return entityplayermp.v() ? this.C() == this : (this.v() ? false : super.a(entityplayermp));
+    }
+
     private void a(TileEntity tileentity) {
         if (tileentity != null) {
             // CanaryMod: SignShowHook

@@ -95,8 +95,7 @@ public class ServerCommandManager extends CommandHandler implements IAdminComman
         MinecraftServer minecraftserver = MinecraftServer.M();
         WorldServer default0 = (WorldServer)((CanaryWorld)Canary.getServer().getDefaultWorld()).getHandle();
 
-        // CanaryMod: Fix for MultiWorld
-        if (icommandsender instanceof CommandBlockLogic && !default0.Q().b("commandBlockOutput")) {
+        if (!icommandsender.t_()) {
             flag0 = false;
         }
 
