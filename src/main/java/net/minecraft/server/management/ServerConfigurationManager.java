@@ -576,6 +576,11 @@ public abstract class ServerConfigurationManager {
             entityplayermp1.u += 1D;
         }
 
+        // Find a safe place to actually spawn into
+        while (!worldserver.a((Entity) entityplayermp1, entityplayermp1.aQ()).isEmpty() && entityplayermp1.t < 256.0D) {
+            entityplayermp1.b(entityplayermp1.s, entityplayermp1.t + 1.0D, entityplayermp1.u);
+        }
+
         //sending 2 respawn packets seems to force the client to clear its chunk cache. Removes ghosting blocks
         entityplayermp1.a.a((new S07PacketRespawn(entityplayermp1.am, entityplayermp1.o.aa(), entityplayermp1.o.P().u(), entityplayermp1.c.b())));
         entityplayermp1.a.a((new S07PacketRespawn(entityplayermp1.am, entityplayermp1.o.aa(), entityplayermp1.o.P().u(), entityplayermp1.c.b())));
@@ -588,8 +593,9 @@ public abstract class ServerConfigurationManager {
         worldserver.t().a(entityplayermp1);
         worldserver.d(entityplayermp1); //Tracks new entity
         this.e.add(entityplayermp1);
-        entityplayermp1.d_();
-        entityplayermp1.g(entityplayermp1.aS());
+        this.f.put(entityplayermp1.aJ(), entityplayermp1);
+        entityplayermp1.f_();
+        entityplayermp1.h(entityplayermp1.bm());
         new PlayerRespawnedHook(entityplayermp1.getPlayer(), new Location(
                                                                                  entityplayermp1.getPlayer().getWorld(),
                                                                                  entityplayermp1.s,
