@@ -26,7 +26,7 @@ public class EntityMinecartMobSpawner extends EntityMinecart {
             return new BlockPos(EntityMinecartMobSpawner.this);
         }
     };
-   
+
     public EntityMinecartMobSpawner(World world) {
         super(world);
         this.entity = new CanaryMobSpawnerMinecart(this); // Wrap entity
