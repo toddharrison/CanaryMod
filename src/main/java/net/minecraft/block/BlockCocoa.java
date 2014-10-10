@@ -40,8 +40,8 @@ public class BlockCocoa extends BlockDirectional implements IGrowable {
             if (i0 < 2) {
                 ++i0;
                 // CanaryMod: BlockGrow
-                if (!new BlockGrowHook(new CanaryBlock(iblockstate, blockpos, world), new CanaryBlock(iblockstate.a(a, i0 + 1), blockpos, world)).call().isCanceled()) {
-                    world.a(blockpos, iblockstate.a(a, Integer.valueOf(i0 + 1)), 2);
+                if (!new BlockGrowHook(new CanaryBlock(iblockstate, blockpos, world), new CanaryBlock(iblockstate.a(a, i0), blockpos, world)).call().isCanceled()) {
+                    world.a(blockpos, iblockstate.a(a, Integer.valueOf(i0)), 2);
                 }
                 //
             }
