@@ -7,6 +7,7 @@ import com.google.common.collect.ComparisonChain;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import net.canarymod.Canary;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
@@ -20,7 +21,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSettings;
-
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
@@ -113,7 +113,10 @@ public class PlayerSelector {
             arraylist.add(icommandsender.e());
         }
         else {
-            Collections.addAll(arraylist/*, TODO NEED (NMS) WORLDS */);
+            // fixing the c field call (array of the 3 worlds)
+            for (net.canarymod.api.world.World world : Canary.getServer().getWorldManager().getAllWorlds())
+                arraylist.add(((net.canarymod.api.world.CanaryWorld) world).getHandle());
+            // Collections.addAll(arraylist, MinecraftServer.M().c)
         }
 
         return arraylist;
