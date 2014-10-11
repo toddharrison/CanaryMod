@@ -9,8 +9,10 @@ import net.canarymod.api.CanaryNetServerHandler;
 import net.canarymod.api.PlayerListAction;
 import net.canarymod.api.PlayerListData;
 import net.canarymod.api.PlayerListEntry;
+import net.canarymod.api.entity.living.animal.CanaryAnimal;
 import net.canarymod.api.entity.living.humanoid.CanaryPlayer;
 import net.canarymod.api.entity.living.humanoid.Player;
+import net.canarymod.api.inventory.CanaryAnimalInventory;
 import net.canarymod.api.inventory.CanaryBlockInventory;
 import net.canarymod.api.inventory.CanaryEntityInventory;
 import net.canarymod.api.inventory.Inventory;
@@ -36,6 +38,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IMerchant;
+import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Items;
@@ -731,9 +734,16 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
             this.n();
         }
 
+        // CanaryMod: Inventory hook
+        Inventory inv = new CanaryAnimalInventory((AnimalChest) iinventory, (CanaryAnimal) entityhorse.getCanaryEntity());
+        if(new InventoryHook(getPlayer(), inv, false).call().isCanceled()){
+            return;
+        }
+
         this.cr();
         this.a.a((Packet)(new S2DPacketOpenWindow(this.bT, "EntityHorse", iinventory.e_(), iinventory.n_(), entityhorse.F())));
         this.bi = new ContainerHorseInventory(this.bg, iinventory, entityhorse, this);
+        ((ContainerHorseInventory)this.bi).setInventory(inv); // CanaryMod: set our inventory
         this.bi.d = this.bT;
         this.bi.a((ICrafting)this);
     }
