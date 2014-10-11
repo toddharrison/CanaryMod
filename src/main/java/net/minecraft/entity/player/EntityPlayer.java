@@ -50,8 +50,10 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S06PacketUpdateHealth;
 import net.minecraft.network.play.server.S12PacketEntityVelocity;
 import net.minecraft.network.play.server.S1FPacketSetExperience;
+import net.minecraft.network.play.server.S38PacketPlayerListItem;
 import net.minecraft.potion.Potion;
 import net.minecraft.scoreboard.*;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.stats.AchievementList;
 import net.minecraft.stats.StatBase;
 import net.minecraft.stats.StatList;
@@ -104,6 +106,8 @@ public abstract class EntityPlayer extends EntityLivingBase {
     private boolean bG = false;
     public EntityFishHook bE;
 
+    // CanaryMod
+    protected IChatComponent displayName;
     private String respawnWorld; // CanaryMod: Respawn world (for bed spawns)
     private long currentSessionStart = ToolBox.getUnixTimestamp(); // CanaryMod: current session tracking.
     //Darkdiplomat Note: Fields are non-persistant between respawns and world switching. Use the Meta tag for persistance.
@@ -1900,19 +1904,33 @@ public abstract class EntityPlayer extends EntityLivingBase {
 
     // End: Inventory getters
 
-    // Start: Custom Display Name
     public String getDisplayName() {
-        if (metadata == null) {
-            return this.d_(); // For when metadata isn't initialized yet
+        if(displayName == null && metadata != null) {
+            if(metadata.containsKey("displayName") && !metadata.getString("displayName").isEmpty()) {
+                displayName = IChatComponent.Serializer.a(metadata.getString("displayName"));
+                if (metadata.containsKey("CustomName")){
+                    metadata.remove("CustomName"); // No sense keeping this attached
+                }
+            }
+            else if (metadata.containsKey("CustomName") && !metadata.getString("CustomName").isEmpty()){
+                setDisplayName(metadata.getString("CustomName"));
+            }
         }
-        return metadata.getString("CustomName").isEmpty() ? this.d_() : metadata.getString("CustomName");
+        return displayName != null ? displayName.e() : null;
     }
 
     public void setDisplayName(String name) {
-        metadata.put("CustomName", name != null ? name : "");
+       this.setDisplayNameComponent(name != null && !name.isEmpty() ? new ChatComponentText(name) : null);
     }
 
-    // End: Custom Display Name
+    public void setDisplayNameComponent(IChatComponent iChatComponent){
+        this.displayName = iChatComponent;
+        String serial = "";
+        if(iChatComponent != null){
+            serial = IChatComponent.Serializer.a(iChatComponent);
+        }
+        metadata.put("displayName", serial);
+    }
 
     /**
      * Returns a respawn location for this player.

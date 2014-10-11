@@ -6,6 +6,8 @@ import com.mojang.authlib.GameProfile;
 import io.netty.buffer.Unpooled;
 import net.canarymod.Canary;
 import net.canarymod.api.CanaryNetServerHandler;
+import net.canarymod.api.PlayerListAction;
+import net.canarymod.api.PlayerListData;
 import net.canarymod.api.PlayerListEntry;
 import net.canarymod.api.entity.living.humanoid.CanaryPlayer;
 import net.canarymod.api.entity.living.humanoid.Player;
@@ -21,6 +23,7 @@ import net.canarymod.config.WorldConfiguration;
 import net.canarymod.hook.CancelableHook;
 import net.canarymod.hook.entity.DimensionSwitchHook;
 import net.canarymod.hook.player.*;
+import net.canarymod.util.NMSToolBox;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.BlockFenceGate;
@@ -848,11 +851,11 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
     }
 
     public void b(IChatComponent ichatcomponent) {
-        this.a.a((Packet)(new S02PacketChat(ichatcomponent)));
+        this.a.a((Packet) (new S02PacketChat(ichatcomponent)));
     }
 
     protected void s() {
-        this.a.a((Packet)(new S19PacketEntityStatus(this, (byte)9)));
+        this.a.a((Packet) (new S19PacketEntityStatus(this, (byte) 9)));
         super.s();
     }
 
@@ -868,7 +871,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
         this.bN = -1;
         this.bK = -1.0F;
         this.bL = -1;
-        this.bH.addAll(((EntityPlayerMP)entityplayer).bH);
+        this.bH.addAll(((EntityPlayerMP) entityplayer).bH);
     }
 
     protected void a(PotionEffect potioneffect) {
@@ -996,7 +999,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
 
     public void d(Entity entity) {
         if (entity instanceof EntityPlayer) {
-            this.a.a((Packet)(new S13PacketDestroyEntities(new int[]{ entity.F() })));
+            this.a.a((Packet) (new S13PacketDestroyEntities(new int[]{entity.F()})));
         }
         else {
             this.bH.add(Integer.valueOf(entity.F()));
@@ -1043,34 +1046,36 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
     }
 
     public IChatComponent E() {
-        return null;
+        // CanaryMod: Mojang provides it, we'll abuse it.
+        getDisplayName(); // Initialize it if it wasn't already; call super or this will cause
+        return displayName;
     }
 
-    // TODO update below here
-    // CanaryMod: Override
+    // CanayMod: Start
     @Override
-    public GameProfile cc() {
-        if (!this.getDisplayName().equals(this.d_())) {
-            // We need a new GameProfile to change the display name
-            return new GameProfile(this.aJ(), this.getDisplayName());
-        }
-        return super.bF;
+    public void setDisplayName(String name) { // Old way
+        this.setDisplayNameComponent(name != null && !name.isEmpty() ? new ChatComponentText(name) : null);
     }
 
     @Override
-    public void setDisplayName(String name) {
-        PlayerListEntry entryOld = getPlayer().getPlayerListEntry(false);
-        PlayerListEntry entryNew = entryOld.clone();
-        entryNew.setName(name);
-        entryNew.setShown(true);
-        super.setDisplayName(name); // Change name
-        for (Player player : Canary.getServer().getPlayerList()) {
-            if (!player.equals(getPlayer())) {
-                player.sendPacket(new CanaryPacket(new S0CPacketSpawnPlayer(this)));
+    public void setDisplayNameComponent(IChatComponent iChatComponent){
+        super.setDisplayNameComponent(iChatComponent);
+        if(getDisplayName() != null && !getDisplayName().isEmpty()) {
+            MinecraftServer.M().an().a(new S38PacketPlayerListItem(S38PacketPlayerListItem.Action.REMOVE_PLAYER, this));
+            for (Player player : Canary.getServer().getPlayerList()) {
+                if (!player.equals(getPlayer())) {
+                    player.sendPacket(new CanaryPacket(new S13PacketDestroyEntities(F())));
+                }
+            }
+            PlayerListData data = getPlayer().getPlayerListData(PlayerListAction.ADD_PLAYER);
+            data.setProfile(NMSToolBox.spoofNameAndTexture(this.cc(), iChatComponent.e()));
+            MinecraftServer.M().an().a(new S38PacketPlayerListItem(PlayerListAction.ADD_PLAYER, data));
+            for (Player player : Canary.getServer().getPlayerList()) {
+                if (!player.equals(getPlayer())) {
+                    player.sendPacket(new CanaryPacket(new S0CPacketSpawnPlayer(this)));
+                }
             }
         }
-        Canary.getServer().sendPlayerListEntry(entryNew);
-        Canary.getServer().sendPlayerListEntry(entryOld);
     }
 
     public void updateSlot(int windowId, int slotIndex, ItemStack item) {

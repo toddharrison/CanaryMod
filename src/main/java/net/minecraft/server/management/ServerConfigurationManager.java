@@ -9,6 +9,8 @@ import net.canarymod.Canary;
 import net.canarymod.ToolBox;
 import net.canarymod.Translator;
 import net.canarymod.api.CanaryConfigurationManager;
+import net.canarymod.api.PlayerListAction;
+import net.canarymod.api.PlayerListData;
 import net.canarymod.api.entity.living.humanoid.CanaryPlayer;
 import net.canarymod.api.nbt.CanaryCompoundTag;
 import net.canarymod.api.packet.CanaryPacket;
@@ -202,7 +204,7 @@ public abstract class ServerConfigurationManager {
 
         // CanaryMod: Send Message of the Day
         Canary.motd().sendMOTD(entityplayermp.getPlayer());
-        entityplayermp.getPlayer().setDisplayName(entityplayermp.getDisplayName()); // Login DisplayName work around
+        entityplayermp.getDisplayName(); // initialize display name
         //
     }
 
@@ -331,16 +333,31 @@ public abstract class ServerConfigurationManager {
     public void c(EntityPlayerMP entityplayermp) {
         this.e.add(entityplayermp);
         this.f.put(entityplayermp.aJ(), entityplayermp);
-        this.a((Packet)(new S38PacketPlayerListItem(S38PacketPlayerListItem.Action.ADD_PLAYER, entityplayermp)));
-        WorldServer worldserver = (WorldServer)entityplayermp.getCanaryWorld().getHandle(); // CanaryMod: fix //this.j.a(entityplayermp.am);
 
+        // CanaryMod: Fire hook each time this data is sent
+        PlayerListData playerListData = entityplayermp.getPlayer().getPlayerListData(PlayerListAction.ADD_PLAYER);
+        for (int i0 = 0; i0 < this.e.size(); ++i0) {
+            EntityPlayerMP entityplayermp1 = (EntityPlayerMP) this.e.get(i0);
+            PlayerListData playerListData1 = playerListData.copy();
+            new PlayerListHook(playerListData1, entityplayermp1.getPlayer()).call();
+            if(!new PlayerListHook(playerListData1, entityplayermp.getPlayer()).call().isCanceled()) {
+                entityplayermp1.a.a(new S38PacketPlayerListItem(PlayerListAction.ADD_PLAYER, playerListData1));
+            }
+        }
+        //
+
+        WorldServer worldserver = (WorldServer)entityplayermp.getCanaryWorld().getHandle(); // CanaryMod: fix //this.j.a(entityplayermp.am);
         worldserver.d(entityplayermp);
         this.a(entityplayermp, (WorldServer)null);
 
+        // CanaryMod: PlayerListHook part 2
         for (int i0 = 0; i0 < this.e.size(); ++i0) {
             EntityPlayerMP entityplayermp1 = (EntityPlayerMP)this.e.get(i0);
-
-            entityplayermp.a.a((Packet)(new S38PacketPlayerListItem(S38PacketPlayerListItem.Action.ADD_PLAYER, entityplayermp1)));
+            // CanaryMod: PlayerListHook
+            PlayerListData playerListData1 = entityplayermp1.getPlayer().getPlayerListData(PlayerListAction.ADD_PLAYER);
+            if(!new PlayerListHook(playerListData1, entityplayermp.getPlayer()).call().isCanceled()){
+                entityplayermp.a.a(new S38PacketPlayerListItem(PlayerListAction.ADD_PLAYER, playerListData1));
+            }
         }
     }
 
@@ -364,7 +381,17 @@ public abstract class ServerConfigurationManager {
         this.f.remove(entityplayermp.aJ());
         this.o.remove(entityplayermp.aJ());
 
-        this.a((Packet)(new S38PacketPlayerListItem(S38PacketPlayerListItem.Action.REMOVE_PLAYER, new EntityPlayerMP[]{ entityplayermp })));
+        // CanaryMod: Fire hook each time this data is sent
+        PlayerListData playerListData = entityplayermp.getPlayer().getPlayerListData(PlayerListAction.REMOVE_PLAYER);
+        for (int i0 = 0; i0 < this.e.size(); ++i0) {
+            EntityPlayerMP entityplayermp1 = (EntityPlayerMP) this.e.get(i0);
+            PlayerListData playerListData1 = playerListData.copy();
+            new PlayerListHook(playerListData1, entityplayermp1.getPlayer()).call();
+            if(!new PlayerListHook(playerListData1, entityplayermp.getPlayer()).call().isCanceled()) {
+                entityplayermp1.a.a(new S38PacketPlayerListItem(PlayerListAction.REMOVE_PLAYER, playerListData1));
+            }
+        }
+        //
     }
 
     public String a(SocketAddress socketaddress, GameProfile gameprofile) {
@@ -901,7 +928,7 @@ public abstract class ServerConfigurationManager {
 
     public void k() {
         for (int i0 = 0; i0 < this.e.size(); ++i0) {
-            this.b((EntityPlayerMP)this.e.get(i0));
+            this.b((EntityPlayerMP) this.e.get(i0));
         }
     }
 

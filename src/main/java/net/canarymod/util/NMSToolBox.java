@@ -13,6 +13,7 @@ import org.json.simple.parser.JSONParser;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.UUID;
 
@@ -123,5 +124,29 @@ public class NMSToolBox extends ToolBox {
 
     private static String restoreEscapedEqual(String property) {
         return property.replaceAll("\\[]", "=");
+    }
+
+    public static GameProfile spoofNameAndTexture(GameProfile original, String newName){
+        GameProfile newProfile = new GameProfile(original.getId(), newName);
+        for(Map.Entry<String, Property> entry : original.getProperties().entries()){
+            if(entry.getKey() == null){
+                Canary.log.debug("GameProfile Property had null key it seems... weird...");
+                continue;
+            }
+            if(entry.getKey().equals("textures")){
+                Property property =  getSkinProperty(newName);
+                if(property != null) {
+                    newProfile.getProperties().put("textures", property);
+                }
+                else {
+                    // No Skin Data found
+                    newProfile.getProperties().put(entry.getKey(), entry.getValue());
+                }
+            }
+            else{
+                newProfile.getProperties().put(entry.getKey(), entry.getValue());
+            }
+        }
+        return newProfile;
     }
 }

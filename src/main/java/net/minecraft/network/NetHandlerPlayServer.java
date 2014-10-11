@@ -391,6 +391,10 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, IUpdatePlaye
         if (hook.isCanceled()) {
             return;
         }
+        //// CanaryMod: InterWorld/InterDimensional Travel
+        if (this.b.getCanaryWorld() != dim) {
+            Canary.getServer().getConfigurationManager().switchDimension(this.b.getPlayer(), (CanaryWorld)dim, false);
+        }
         //
         this.r = false;
         this.o = d0;
@@ -421,9 +425,10 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, IUpdatePlaye
 
         // CanaryMod: InterWorld/InterDimensional Travel
         if (this.b.getCanaryWorld() != dim) {
-            this.b.setDimension((CanaryWorld)dim);
+            Canary.getServer().getConfigurationManager().switchDimension(this.b.getPlayer(), (CanaryWorld)dim, false);
         }
         //
+
         this.b.a(this.o, this.p, this.q, f2, f3);
         this.b.a.a((Packet) (new S08PacketPlayerPosLook(d0, d1, d2, f0, f1, set)));
     }
@@ -924,14 +929,13 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, IUpdatePlaye
             else {
                 // CanaryMod: SlotClick
                 ItemStack itemstack = this.b.bi.a(c0epacketclickwindow.b(), c0epacketclickwindow.c(), c0epacketclickwindow.f(), this.b);
-//                /* FIXME
                 SlotType slotType = SlotHelper.getSlotType(this.b.bi, c0epacketclickwindow.b());
                 SecondarySlotType secondarySlotType = SlotHelper.getSpecificSlotType(this.b.bi, c0epacketclickwindow.b());
                 GrabMode grabMode = GrabMode.fromInt(c0epacketclickwindow.f());
 
                 ButtonPress mouseClick = ButtonPress.matchButton(grabMode, c0epacketclickwindow.c(), c0epacketclickwindow.b());
                 SlotClickHook sch = (SlotClickHook)new SlotClickHook(this.b.getPlayer(), this.b.bi.getInventory(), itemstack != null ? itemstack.getCanaryItem() : null, slotType, secondarySlotType, grabMode, mouseClick, (short)c0epacketclickwindow.b(), c0epacketclickwindow.d()).call();
-                if (sch.isCanceled()||true) { //  true dev
+                if (sch.isCanceled()) {
                     if (sch.doUpdate()) {
                         if (c0epacketclickwindow.f() == 0) {
                             this.b.bi.updateSlot(c0epacketclickwindow.b());
@@ -949,7 +953,6 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, IUpdatePlaye
                     }
                     return;
                 }
-//                */
                 //
 
                 if (ItemStack.b(c0epacketclickwindow.e(), itemstack)) {
@@ -1288,9 +1291,8 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, IUpdatePlaye
                 containerrepair.a("");
             }
         }
-
         // CanaryMod: Custom Payload implementation!
-        if ("REGISTER".equals(c17packetcustompayload.a())) {
+        else if ("REGISTER".equals(c17packetcustompayload.a())) {
             try {
                 packetbuffer = new PacketBuffer(Unpooled.wrappedBuffer(c17packetcustompayload.b()));
                 String channel = packetbuffer.c(packetbuffer.readableBytes());

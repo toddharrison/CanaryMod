@@ -3,6 +3,9 @@ package net.minecraft.network.play.server;
 import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+import net.canarymod.api.PlayerListAction;
+import net.canarymod.api.PlayerListData;
+import net.canarymod.api.chat.CanaryChatComponent;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.INetHandler;
 import net.minecraft.network.Packet;
@@ -44,6 +47,14 @@ public class S38PacketPlayerListItem implements Packet {
 
             this.b.add(new S38PacketPlayerListItem.AddPlayerData(entityplayermp.cc(), entityplayermp.h, entityplayermp.c.b(), entityplayermp.E()));
         }
+    }
+
+    // CanaryMod: New construct to just pass an AddPlayerData
+    public S38PacketPlayerListItem(PlayerListAction action, PlayerListData data){
+        this.a = S38PacketPlayerListItem.Action.valueOf(action.name());
+        WorldSettings.GameType gameType = WorldSettings.GameType.a(data.getMode().getId());
+        IChatComponent iChatComponent = data.displayNameSet() ? ((CanaryChatComponent)data.getDisplayName()).getNative() : null;
+        this.b.add(new AddPlayerData(data.getProfile(), data.getPing(), gameType, iChatComponent));
     }
 
     public void a(PacketBuffer packetbuffer) throws IOException {

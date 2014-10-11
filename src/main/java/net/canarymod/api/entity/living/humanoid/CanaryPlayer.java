@@ -1,11 +1,10 @@
 package net.canarymod.api.entity.living.humanoid;
 
+import com.mojang.authlib.GameProfile;
 import net.canarymod.Canary;
 import net.canarymod.MathHelp;
 import net.canarymod.ToolBox;
-import net.canarymod.api.GameMode;
-import net.canarymod.api.NetServerHandler;
-import net.canarymod.api.PlayerListEntry;
+import net.canarymod.api.*;
 import net.canarymod.api.chat.CanaryChatComponent;
 import net.canarymod.api.chat.ChatComponent;
 import net.canarymod.api.entity.EntityType;
@@ -37,8 +36,10 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.*;
 import net.minecraft.network.play.server.S02PacketChat;
 import net.minecraft.network.play.server.S2BPacketChangeGameState;
+import net.minecraft.network.play.server.S38PacketPlayerListItem;
 import net.minecraft.network.play.server.S39PacketPlayerAbilities;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.IChatComponent;
 import net.minecraft.world.WorldSettings;
 import net.visualillusionsent.utils.StringUtils;
 
@@ -636,15 +637,22 @@ public class CanaryPlayer extends CanaryHuman implements Player {
         return new PlayerListEntry(this, shown);
     }
 
+    @Override
+    public PlayerListData getPlayerListData(PlayerListAction playerListAction) {
+        return new PlayerListData(playerListAction, getGameProfile(), getPing(), getMode(), getDisplayNameComponent());
+    }
+
     /**
      * {@inheritDoc}
      */
     @Override
     public void sendPlayerListEntry(PlayerListEntry plentry) {
-        if (Configuration.getServerConfig().isPlayerListEnabled()) {
-            // TODO Need to redo how PlayerListEntry is constructed
-            //getHandle().a.a(new S38PacketPlayerListItem(plentry.getName(), plentry.isShown(), plentry.getPing()));
-        }
+        // AND dead...
+    }
+
+    @Override
+    public void sendPlayerListData(PlayerListData playerListData) {
+        getHandle().a.a(new S38PacketPlayerListItem(playerListData.getAction(), playerListData));
     }
 
     /**
@@ -1085,6 +1093,20 @@ public class CanaryPlayer extends CanaryHuman implements Player {
         this.sendPacket(new CanaryPacket(new net.minecraft.network.play.server.S05PacketSpawnPosition(new BlockPos(x, y, z))));
     }
 
+    @Override
+    public GameProfile getGameProfile() {
+        return getHandle().cc();
+    }
+
+    @Override
+    public ChatComponent getDisplayNameComponent() {
+        return getHandle().E() == null ? null : getHandle().E().getWrapper();
+    }
+
+    @Override
+    public void setDisplayNameComponent(ChatComponent chatComponent){
+        getHandle().setDisplayNameComponent(chatComponent != null ? ((CanaryChatComponent)chatComponent).getNative() : null);
+    }
     /**
      * {@inheritDoc}
      */
