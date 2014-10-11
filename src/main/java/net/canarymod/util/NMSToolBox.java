@@ -6,7 +6,20 @@ import com.mojang.authlib.properties.Property;
 import net.canarymod.Canary;
 import net.canarymod.ToolBox;
 import net.canarymod.api.CanaryServer;
+import net.canarymod.api.entity.vehicle.CanaryChestMinecart;
+import net.canarymod.api.inventory.CanaryEnderChestInventory;
+import net.canarymod.api.inventory.Inventory;
+import net.canarymod.api.inventory.NativeCustomStorageInventory;
+import net.canarymod.api.world.blocks.CanaryDoubleChest;
+import net.canarymod.api.world.blocks.CanaryWorkbench;
+import net.canarymod.hook.player.InventoryHook;
+import net.minecraft.block.BlockWorkbench;
+import net.minecraft.entity.item.EntityMinecartChest;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.inventory.*;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.tileentity.TileEntityChest;
+import net.minecraft.world.IInteractionObject;
 import net.visualillusionsent.utils.PropertiesFile;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -148,5 +161,55 @@ public class NMSToolBox extends ToolBox {
             }
         }
         return newProfile;
+    }
+
+    public static Container doInventoryHook(IInventory iinventory, EntityPlayerMP entityplayermp){
+        Container container = null;
+        Inventory inventory;
+        if(iinventory instanceof IInteractionObject){
+            container = ((IInteractionObject)iinventory).a(entityplayermp.bg, entityplayermp);
+
+            if (iinventory instanceof TileEntityChest) {
+                inventory = ((TileEntityChest) iinventory).getCanaryChest();
+                ((ContainerChest) container).setInventory(inventory);
+            }
+            else if (iinventory instanceof EntityMinecartChest) {
+                inventory = (CanaryChestMinecart) ((EntityMinecartChest) iinventory).getCanaryEntity();
+                ((ContainerChest) container).setInventory(inventory);
+            }
+        }
+        else {
+            container = new ContainerChest(entityplayermp.bg, iinventory, entityplayermp);
+            if (iinventory instanceof InventoryLargeChest) {
+                inventory = new CanaryDoubleChest((InventoryLargeChest) iinventory);
+                ((ContainerChest) container).setInventory(inventory);
+            }else if (iinventory instanceof InventoryEnderChest) {
+                inventory = new CanaryEnderChestInventory((InventoryEnderChest) iinventory, entityplayermp.getPlayer());
+                ((ContainerChest) container).setInventory(inventory);
+            }
+            else if (iinventory instanceof NativeCustomStorageInventory) {
+                inventory = ((NativeCustomStorageInventory) iinventory).getCanaryCustomInventory();
+                ((ContainerChest) container).setInventory(inventory);
+            }
+
+        }
+
+        if(container != null) {
+            if (!new InventoryHook(entityplayermp.getPlayer(), container.getInventory(), false).call().isCanceled()) {
+                return container;
+            }
+        }
+        return null;
+    }
+
+    public static Container doInventoryHook(IInteractionObject iinteractionobject, EntityPlayerMP entityplayermp){
+        Container container = iinteractionobject.a(entityplayermp.bg, entityplayermp);
+
+        if(container != null) {
+            if (!new InventoryHook(entityplayermp.getPlayer(), container.getInventory(), false).call().isCanceled()) {
+                return container;
+            }
+        }
+        return null;
     }
 }

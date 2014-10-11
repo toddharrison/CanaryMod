@@ -652,15 +652,20 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
         this.a.a((Packet)(new S36PacketSignEditorOpen(tileentitysign.v())));
     }
 
-    // TODO : remimplement inventory hooks
     private void cr() {
         this.bT = this.bT % 100 + 1;
     }
 
     public void a(IInteractionObject iinteractionobject) {
+        // CanaryMod: InventoryHook
+        Container container = NMSToolBox.doInventoryHook(iinteractionobject, this);
+        if(container == null){
+            return;
+        }
+        //
         this.cr();
         this.a.a((Packet)(new S2DPacketOpenWindow(this.bT, iinteractionobject.k(), iinteractionobject.e_())));
-        this.bi = iinteractionobject.a(this.bg, this);
+        this.bi = container; // CanaryMod: replace with pass back container
         this.bi.d = this.bT;
         this.bi.a((ICrafting)this);
     }
@@ -680,14 +685,21 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
             }
         }
 
+        // CanaryMod: InventoryHook
+        Container container = NMSToolBox.doInventoryHook(iinventory, this);
+        if(container == null){
+            return;
+        }
+        //
+
         this.cr();
         if (iinventory instanceof IInteractionObject) {
             this.a.a((Packet)(new S2DPacketOpenWindow(this.bT, ((IInteractionObject)iinventory).k(), iinventory.e_(), iinventory.n_())));
-            this.bi = ((IInteractionObject)iinventory).a(this.bg, this);
+            this.bi = container; // CanaryMod: Use passed back container
         }
         else {
             this.a.a((Packet)(new S2DPacketOpenWindow(this.bT, "minecraft:container", iinventory.e_(), iinventory.n_())));
-            this.bi = new ContainerChest(this.bg, iinventory, this);
+            this.bi = container; // CanaryMod: Use passed back container
         }
 
         this.bi.d = this.bT;

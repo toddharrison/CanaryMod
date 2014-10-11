@@ -38,8 +38,8 @@ public class ContainerChest extends Container {
     }
 
     public boolean a(EntityPlayer entityplayer) {
-        // CanaryMod: remote inventories
-        if (this.inventory.canOpenRemote()) {
+        // CanaryMod: remote inventories; add null check just incase
+        if (this.inventory != null && this.inventory.canOpenRemote()) {
             return true;
         }
         //
