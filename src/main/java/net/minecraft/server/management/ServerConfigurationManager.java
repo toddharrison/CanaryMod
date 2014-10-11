@@ -573,6 +573,7 @@ public abstract class ServerConfigurationManager {
         EntityPlayerMP entityplayermp1 = new EntityPlayerMP(this.j, worldserver, entityplayermp.cc(), itemInWorldManager, entityplayermp.getPlayer());
         // Copy nethandlerplayserver as the connection is still the same
         entityplayermp1.a = entityplayermp.a;
+        entityplayermp1.a.b = entityplayermp1;
         entityplayermp1.a((EntityPlayer)entityplayermp, flag0);
         entityplayermp1.d(entityplayermp.F());
         entityplayermp1.o(entityplayermp);

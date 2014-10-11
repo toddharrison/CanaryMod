@@ -391,7 +391,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, IUpdatePlaye
         if (hook.isCanceled()) {
             return;
         }
-        //// CanaryMod: InterWorld/InterDimensional Travel
+        // CanaryMod: InterWorld/InterDimensional Travel
         if (this.b.getCanaryWorld() != dim) {
             Canary.getServer().getConfigurationManager().switchDimension(this.b.getPlayer(), (CanaryWorld)dim, false);
         }
@@ -422,12 +422,6 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, IUpdatePlaye
         if (set.contains(S08PacketPlayerPosLook.EnumFlags.X_ROT)) {
             f3 = f1 + this.b.z;
         }
-
-        // CanaryMod: InterWorld/InterDimensional Travel
-        if (this.b.getCanaryWorld() != dim) {
-            Canary.getServer().getConfigurationManager().switchDimension(this.b.getPlayer(), (CanaryWorld)dim, false);
-        }
-        //
 
         this.b.a(this.o, this.p, this.q, f2, f3);
         this.b.a.a((Packet) (new S08PacketPlayerPosLook(d0, d1, d2, f0, f1, set)));
