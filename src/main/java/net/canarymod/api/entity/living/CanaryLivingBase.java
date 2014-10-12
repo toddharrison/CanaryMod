@@ -34,7 +34,7 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
      */
     @Override
     public float getHealth() {
-        return getHandle().bM();
+        return getHandle().bm();
     }
 
     /**

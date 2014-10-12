@@ -242,7 +242,7 @@ public abstract class CanaryEntity implements Entity {
 
     @Override
     public void setSprinting(boolean sprinting) {
-        entity.c(sprinting);
+        entity.d(sprinting);
     }
 
     @Override
@@ -252,7 +252,7 @@ public abstract class CanaryEntity implements Entity {
 
     @Override
     public void setSneaking(boolean sneaking) {
-        entity.b(sneaking);
+        entity.c(sneaking);
     }
 
     @Override
@@ -262,7 +262,7 @@ public abstract class CanaryEntity implements Entity {
 
     @Override
     public void setInvisible(boolean invisible) {
-        entity.d(invisible);
+        entity.e(invisible);
     }
 
     @Override
