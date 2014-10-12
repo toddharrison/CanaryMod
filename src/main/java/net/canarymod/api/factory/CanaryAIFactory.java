@@ -1,7 +1,9 @@
 package net.canarymod.api.factory;
 
 import com.google.common.base.Predicate;
+import com.google.common.collect.Lists;
 import java.lang.reflect.Method;
+import java.util.List;
 import net.canarymod.api.ai.*;
 import net.canarymod.api.entity.living.*;
 import net.canarymod.api.entity.living.animal.CanaryWolf;
@@ -23,7 +25,7 @@ import net.minecraft.entity.passive.EntityWolf;
  * @author Aaron
  */
 public class CanaryAIFactory implements AIFactory {
-    //return () new EntityAI(((Canary)).getHandle()).getCanaryAIBase();
+    //return (AI) new EntityAI(((Canary)).getHandle()).getCanaryAIBase();
     
     /**
      * Helper method to get the nms class that corellates to our cms class
@@ -46,6 +48,14 @@ public class CanaryAIFactory implements AIFactory {
             }
         }
         return method == null ? null : method.getReturnType();
+    }
+    
+    private Class[] getNMSClasses(Class... clazz) {
+        List<Class> classes = Lists.newArrayList();
+        for (Class c : clazz) {
+            classes.add(getNMSClass(c));
+        }
+        return classes.toArray(new Class[classes.size()]);
     }
 
     @Override
@@ -122,6 +132,61 @@ public class CanaryAIFactory implements AIFactory {
     @Override
     public AIFollowParent newAIFollowParent(EntityAnimal animal, double speed) {
         return (AIFollowParent) new EntityAIFollowParent((net.minecraft.entity.passive.EntityAnimal)((CanaryEntityLiving)animal).getHandle(), speed).getCanaryAIBase();
+    }
+
+    @Override
+    public AIHarvestFarmland newAIHarvestFarmland(Villager villager, double speed) {
+        return (AIHarvestFarmland) new EntityAIHarvestFarmland(((CanaryVillager) villager).getHandle(), speed).getCanaryAIBase();
+    }
+
+    @Override
+    public AIHurtByTarget newAIHurtByTarget(EntityMob entity, boolean callForHelp, Class<? extends net.canarymod.api.entity.Entity>... targets) {
+        return (AIHurtByTarget) new EntityAIHurtByTarget((EntityCreature) ((CanaryEntityMob)entity).getHandle(), callForHelp, getNMSClasses(targets)).getCanaryAIBase();
+    }
+
+    @Override
+    public AILeapAtTarget newAILeapAtTarget(EntityLiving entity, float leapMotionY) {
+        return (AILeapAtTarget) new EntityAILeapAtTarget(((CanaryEntityLiving)entity).getHandle(), leapMotionY).getCanaryAIBase();
+    }
+
+    @Override
+    public AILookAtTradePlayer newAILookAtTradePlayer(Villager villager) {
+        return (AILookAtTradePlayer) new EntityAILookAtTradePlayer(((CanaryVillager)villager).getHandle()).getCanaryAIBase();
+    }
+
+    @Override
+    public AILookAtVillager newAILookAtVillager(IronGolem golem) {
+        return (AILookAtVillager) new EntityAILookAtVillager(((CanaryIronGolem)golem).getHandle()).getCanaryAIBase();
+    }
+
+    @Override
+    public AILookIdle newAILookIdle(EntityLiving entity) {
+        return (AILookIdle) new EntityAILookIdle(((CanaryEntityLiving)entity).getHandle()).getCanaryAIBase();
+    }
+
+    @Override
+    public AIMate newAIMate(EntityAnimal animal, double speed) {
+        return (AIMate) new EntityAIMate((net.minecraft.entity.passive.EntityAnimal) ((CanaryEntityLiving)animal).getHandle(), speed).getCanaryAIBase();
+    }
+
+    @Override
+    public AIMoveIndoors newAIMoveIndoors(EntityMob entity) {
+        return (AIMoveIndoors) new EntityAIMoveIndoors((EntityCreature) ((CanaryEntityMob)entity).getHandle()).getCanaryAIBase();
+    }
+
+    @Override
+    public AIMoveThroughVillage newAIMoveThroughVillage(EntityMob entity, double speed, boolean isNoctournal) {
+        return (AIMoveThroughVillage) new EntityAIMoveThroughVillage((EntityCreature) ((CanaryEntityMob)entity).getHandle(), speed, isNoctournal).getCanaryAIBase();
+    }
+
+    @Override
+    public AIMoveTowardsRestriction newAIMoveTowardsRestriction(EntityMob entity, double speed) {
+        return (AIMoveTowardsRestriction) new EntityAIMoveTowardsRestriction((EntityCreature) ((CanaryEntityMob)entity).getHandle(), speed).getCanaryAIBase();
+    }
+
+    @Override
+    public AIMoveTowardsTarget newAIMoveTowardsTarget(EntityMob entity, double speed, float maxDistance) {
+        return (AIMoveTowardsTarget) new EntityAIMoveTowardsTarget((EntityCreature) ((CanaryEntityMob)entity).getHandle(), speed, maxDistance).getCanaryAIBase();
     }
     
     private class WrappedPredicate implements Predicate {
