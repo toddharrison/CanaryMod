@@ -8,10 +8,7 @@ import net.canarymod.api.packet.BlockChangePacket;
 import net.canarymod.api.packet.CanaryBlockChangePacket;
 import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.api.world.World;
-import net.canarymod.api.world.blocks.properties.BlockBooleanProperty;
-import net.canarymod.api.world.blocks.properties.BlockIntegerProperty;
-import net.canarymod.api.world.blocks.properties.BlockProperty;
-import net.canarymod.api.world.blocks.properties.CanaryBlockProperty;
+import net.canarymod.api.world.blocks.properties.*;
 import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.api.world.position.Location;
 import net.canarymod.api.world.position.Position;
@@ -360,7 +357,12 @@ public class CanaryBlock implements Block {
         if (state == null) {
             throw new NotYetImplementedException("CanaryBlock was formed missing the IBlockState, this is a bug and should be reported");
         }
-        return state.b(((CanaryBlockProperty)property).getNative());
+        Comparable comparable = state.b(((CanaryBlockProperty)property).getNative());
+        if(property instanceof BlockEnumProperty){
+            return CanaryBlockEnumProperty.convertNative((Enum)comparable);
+        }
+
+        return comparable;
     }
 
     @Override
@@ -368,7 +370,12 @@ public class CanaryBlock implements Block {
         if (state == null) {
             throw new NotYetImplementedException("CanaryBlock was formed missing the IBlockState, this is a bug and should be reported");
         }
-        state = state.a(((CanaryBlockProperty)property).getNative(), comparable);
+        if(property instanceof CanaryBlockEnumProperty){
+            state = state.a(((CanaryBlockEnumProperty)property).getNative(), CanaryBlockEnumProperty.convertCanary((Enum)comparable, state.c()));
+        }
+        else {
+            state = state.a(((CanaryBlockProperty) property).getNative(), comparable);
+        }
     }
 
     @Override
