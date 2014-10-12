@@ -253,7 +253,7 @@ public class CanaryWorld implements World {
 
     @Override
     public void setBlock(Block block) {
-        setBlockAt(block.getX(), block.getY(), block.getZ(), block.getTypeId(), block.getData());
+        world.a(new BlockPos(block.getX(), block.getY(), block.getZ()), ((CanaryBlock)block).getNativeState());
     }
 
     @Override
