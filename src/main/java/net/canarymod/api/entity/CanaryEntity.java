@@ -140,7 +140,7 @@ public abstract class CanaryEntity implements Entity {
 
     @Override
     public float getEyeHeight() {
-        return entity.aD();
+        return entity.aR();
     }
 
     @Override
@@ -361,7 +361,7 @@ public abstract class CanaryEntity implements Entity {
     /** Destroys this entity */
     @Override
     public void destroy() {
-        entity.F();
+        entity.J();
     }
 
     @Override
