@@ -959,6 +959,9 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
     public boolean a(int i0, String s0) {
         // CanaryMod: replace permission checking with ours
         // return "seed".equals(s0) && !this.b.V() ? true : (!"tell".equals(s0) && !"help".equals(s0) && !"me".equals(s0) ? this.b.af().e(this.bu) ? this.b.k() >= i0 : false) : true);
+        if (i0 == 1 && s0.equals("@")) { // PlayerSelector is checking permission before providing entities
+            getPlayer().hasPermission("canary.commands.selector");
+        }
         if (s0.trim().isEmpty()) { // Purely checking for permission level
             return getPlayer().hasPermission("canary.world.commandblock");
         }
@@ -974,7 +977,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
         if (icommand == null) {
             return false;
         }
-        return Canary.ops().isOpped(getPlayer().getName()) || getPlayer().hasPermission("canary.commands.vanilla.".concat(icommand.c()));
+        return getPlayer().hasPermission("canary.commands.".concat(icommand.c()));
         //
     }
 
