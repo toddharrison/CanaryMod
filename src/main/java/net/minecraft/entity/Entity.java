@@ -1693,11 +1693,11 @@ public abstract class Entity implements ICommandSender {
                 return;
             }//
 
-            this.ap = i0;
+            this.am = i0;
             if (i1 == 1 && i0 == 1) {
                 //worldserver1 = minecraftserver.a(0);
                 worldserver1 = minecraftserver.getWorld(getCanaryWorld().getName(), 0); // CanaryMod: world name required
-                this.am= 0;
+                this.am = 0;
             }
 
             this.o.e(this);
