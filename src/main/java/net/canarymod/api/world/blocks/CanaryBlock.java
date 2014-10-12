@@ -12,6 +12,7 @@ import net.canarymod.api.world.blocks.properties.*;
 import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.api.world.position.Location;
 import net.canarymod.api.world.position.Position;
+import net.minecraft.block.*;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockPos;
@@ -30,11 +31,11 @@ public class CanaryBlock implements Block {
     protected Position position;
     protected World world;
     protected BlockType type;
-    protected BlockFace faceClicked;
+    protected BlockFace faceClicked = BlockFace.UNKNOWN;
     protected byte status = 0;
 
     private static String machineNameOfBlock(net.minecraft.block.Block nmsBlock) {
-        return (String)net.minecraft.block.Block.c.c(nmsBlock);
+        return net.minecraft.block.Block.c.c(nmsBlock).toString();
     }
 
     @Deprecated
@@ -93,7 +94,7 @@ public class CanaryBlock implements Block {
         this.world = world;
         this.status = status;
 
-        this.type = BlockType.fromIdAndData(net.minecraft.block.Block.a(state.c()), state.c().c(state));
+        this.type = BlockType.fromStringAndData(machineNameOfBlock(state.c()), convertPropertyTypeData(state));
     }
 
     @Override
@@ -117,19 +118,16 @@ public class CanaryBlock implements Block {
     @Override
     public void setType(BlockType type) {
         this.type = type;
-        this.data = type.getData();
-
-        this.state = net.minecraft.block.Block.d(type.getId());
+        this.state = net.minecraft.block.Block.b(type.getMachineName()).P();
     }
 
     @Override
     public short getData() {
-        return data;
+        return type.getData();
     }
 
     @Override
     public void setData(short data) {
-        this.data = data;
         this.type = BlockType.fromStringAndData(type.getMachineName(), data);
     }
 
@@ -274,9 +272,14 @@ public class CanaryBlock implements Block {
 
     @Override
     public void dropBlockAsItem(boolean remove) {
-        net.minecraft.block.Block.b(getType().getMachineName()).a(((CanaryWorld)getWorld()).getHandle(), new BlockPos(getX(), getY(), getZ()), getBlock().P(), 1.0F, 0);
+        if(this.state != null){
+            getBlock().a(((CanaryWorld) getWorld()).getHandle(), new BlockPos(getX(), getY(), getZ()), state, 1.0F, 0);
+        }
+        else {
+            net.minecraft.block.Block.b(getType().getMachineName()).a(((CanaryWorld) getWorld()).getHandle(), new BlockPos(getX(), getY(), getZ()), getBlock().P(), 1.0F, 0);
+        }
         if (remove) {
-            this.setTypeId((short)0);
+            this.setType(BlockType.Air);
             this.update();
         }
     }
@@ -413,9 +416,82 @@ public class CanaryBlock implements Block {
         return state;
     }
 
+    // This is until we can make a better BlockType
+    private int convertPropertyTypeData(IBlockState state){
+        net.minecraft.block.Block nmsBlock = state.c();
+        if (nmsBlock instanceof BlockStone){
+            return ((Enum)state.b(BlockStone.a)).ordinal();
+        }
+        else if (nmsBlock instanceof BlockDirt){
+            return ((Enum)state.b(BlockDirt.a)).ordinal();
+        }
+        else if (nmsBlock instanceof BlockPlanks
+              || nmsBlock instanceof BlockSapling
+              || nmsBlock instanceof BlockLeaves
+              || nmsBlock instanceof BlockLog){
+            return ((Enum)state.b(BlockPlanks.a)).ordinal();
+        }
+        else if (nmsBlock instanceof BlockSand) {
+            return ((Enum)state.b(BlockSand.a)).ordinal();
+        }
+        else if (nmsBlock instanceof BlockSandStone){
+            return ((Enum)state.b(BlockSandStone.a)).ordinal();
+        }
+        else if (nmsBlock instanceof BlockTallGrass){
+            return ((Enum)state.b(BlockTallGrass.a)).ordinal();
+        }
+        else if(nmsBlock instanceof BlockColored){
+            return ((Enum)state.b(BlockColored.a)).ordinal();
+        }
+        else if (nmsBlock instanceof BlockFlower){
+            return ((Enum)state.b(((BlockFlower)state.c()).l())).ordinal();
+        }
+        else if (nmsBlock instanceof BlockStoneSlab){
+            return ((Enum)state.b(BlockStoneSlab.M)).ordinal();
+        }
+        else if (nmsBlock instanceof BlockStainedGlass){
+            return ((Enum)state.b(BlockStainedGlass.a)).ordinal();
+        }
+        else if (nmsBlock instanceof BlockStainedGlassPane){
+            return ((Enum)state.b(BlockStainedGlassPane.a)).ordinal();
+        }
+        else if (nmsBlock instanceof BlockSilverfish){
+            return ((Enum)state.b(BlockSilverfish.a)).ordinal();
+        }
+        else if (nmsBlock instanceof BlockStoneBrick){
+            return ((Enum)state.b(BlockStoneBrick.a)).ordinal();
+        }
+        else if (nmsBlock instanceof BlockWoodSlab){
+            return ((Enum)state.b(BlockWoodSlab.b)).ordinal();
+        }
+        else if (nmsBlock instanceof BlockWall){
+            return ((Enum)state.b(BlockWall.P)).ordinal();
+        }
+        else if (nmsBlock instanceof BlockSkull){
+            // CRAP
+            return 0;
+        }
+        else if (nmsBlock instanceof BlockQuartz){
+            return ((Enum)state.b(BlockQuartz.a)).ordinal();
+        }
+        else if (nmsBlock instanceof BlockPrismarine){
+            return ((Enum)state.b(BlockPrismarine.a)).ordinal();
+        }
+        else if (nmsBlock instanceof BlockCarpet){
+            return ((Enum)state.b(BlockCarpet.a)).ordinal();
+        }
+        else if (nmsBlock instanceof BlockDoublePlant){
+            return ((Enum)state.b(BlockDoublePlant.a)).ordinal();
+        }
+        else if (nmsBlock instanceof BlockRedSandstone) {
+            return ((Enum)state.b(BlockRedSandstone.a)).ordinal();
+        }
+        return 0;
+    }
+
     @Override
     public String toString() {
-        return String.format("Block[Type=%s, data=%d, x=%d, y=%d, z=%d, world=%s, dim=%s]", getType().getMachineName(), this.data, this.getX(), this.getY(), this.getZ(), this.world.getName(), this.world.getType().getName());
+        return String.format("Block[Type=%s, data=%d, x=%d, y=%d, z=%d, world=%s, dim=%s]", getType().getMachineName(), getType().getData(), this.getX(), this.getY(), this.getZ(), this.world.getName(), this.world.getType().getName());
     }
 
     /**
