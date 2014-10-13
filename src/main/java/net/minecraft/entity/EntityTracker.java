@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.Callable;
+import net.canarymod.api.entity.living.humanoid.EntityNonPlayableCharacter;
 
 public class EntityTracker {
 
@@ -105,6 +106,10 @@ public class EntityTracker {
             this.a(entity, 160, 20, true);
         } else if (entity instanceof EntityEnderCrystal) {
             this.a(entity, 256, Integer.MAX_VALUE, false);
+        }
+        // CanaryMod
+        else if (entity instanceof EntityNonPlayableCharacter) {
+            this.a(entity, 512, 2);
         }
 
     }
