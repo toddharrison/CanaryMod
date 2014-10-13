@@ -1204,5 +1204,12 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
             super.initializeNewMeta();
         }
     }
+    // CanaryMod fixing spectator mode
+    @Override
+    public void c(boolean flag0) {
+        if(this.v())
+            this.e((Entity) null);
+        super.c(flag0);
+    }
     //
 }
