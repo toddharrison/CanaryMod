@@ -37,8 +37,8 @@ public class ContainerEnchantment extends Container {
         }
     };
     public int f; // CanaryMod: private => public
-    public int[] g; // CanaryMod: private => public
-    public int[] h; // CanaryMod: private => public
+    public int[] g = new int[3]; // CanaryMod: private => public
+    public int[] h = new int[]{ -1, -1, -1 }; // CanaryMod: private => public
     public World i; // CanaryMod: private => public
     public BlockPos j; // CanaryMod: private => public
     private Random k = new Random();
