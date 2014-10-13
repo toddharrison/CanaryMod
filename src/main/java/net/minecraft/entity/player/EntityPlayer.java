@@ -277,7 +277,7 @@ public abstract class EntityPlayer extends EntityLivingBase {
             this.e = null;
         }
 
-        if (!this.o.D) {
+        if (!this.o.D && this instanceof EntityPlayerMP) { // CanaryMod: check if actually a Player
             this.bj.a(this);
             this.b(StatList.g);
             if (this.ai()) {
