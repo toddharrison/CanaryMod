@@ -203,6 +203,14 @@ public abstract class CanaryEntityLiving extends CanaryLivingBase implements Ent
      * {@inheritDoc}
      */
     @Override
+    public AIManager getAITargetTaskManager() {
+        return getHandle().getTargetTasks().getAIManager();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public boolean hasDisplayName() {
         return getHandle().k_();
     }

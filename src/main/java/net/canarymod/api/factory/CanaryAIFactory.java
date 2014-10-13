@@ -4,6 +4,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 import java.lang.reflect.Method;
 import java.util.List;
+import net.canarymod.Canary;
 import net.canarymod.api.ai.*;
 import net.canarymod.api.entity.living.*;
 import net.canarymod.api.entity.living.animal.CanaryWolf;
@@ -43,7 +44,7 @@ public class CanaryAIFactory implements AIFactory {
             try {
                 canaryClazz = Class.forName(sb.toString() , true, this.getClass().getClassLoader());
                 method = canaryClazz.getMethod("getHandle");
-                break;
+                if (method != null) break;
             } catch (Exception ex) {
             }
         }
@@ -187,6 +188,18 @@ public class CanaryAIFactory implements AIFactory {
     @Override
     public AIMoveTowardsTarget newAIMoveTowardsTarget(EntityMob entity, double speed, float maxDistance) {
         return (AIMoveTowardsTarget) new EntityAIMoveTowardsTarget((EntityCreature) ((CanaryEntityMob)entity).getHandle(), speed, maxDistance).getCanaryAIBase();
+    }
+
+    @Override
+    public AINearestAttackableTarget newAINearestAttackableTarget(EntityMob entity, Class<? extends net.canarymod.api.entity.Entity> target, int targetChanve, boolean shouldCheckSight, boolean nearbyOnly) {
+        Predicate p = new Predicate() {
+
+            @Override
+            public boolean apply(Object t) {
+                return true;
+            }
+        };
+        return (AINearestAttackableTarget) new EntityAINearestAttackableTarget((EntityCreature) ((CanaryEntityMob)entity).getHandle(), this.getNMSClass(target), targetChanve, shouldCheckSight, nearbyOnly, p).getCanaryAIBase();
     }
     
     private class WrappedPredicate implements Predicate {

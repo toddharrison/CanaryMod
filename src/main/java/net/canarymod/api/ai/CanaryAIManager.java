@@ -3,6 +3,7 @@ package net.canarymod.api.ai;
 import net.minecraft.entity.ai.EntityAITasks;
 
 import java.util.Iterator;
+import net.canarymod.Canary;
 
 /**
  * @author Somners
@@ -25,14 +26,14 @@ public class CanaryAIManager implements AIManager {
             while (it.hasNext()) {
                 EntityAITasks.EntityAITaskEntry entry = (EntityAITasks.EntityAITaskEntry) it.next();
                 if (entry.a instanceof EntityAICanary) {
-                    if (((EntityAICanary) entry.a).getAIBase().getClass().equals(ai)) {
+                    if (ai.isAssignableFrom(((EntityAICanary) entry.a).getAIBase().getClass())) {
                         tasks.a(entry.a);
                         return true;
                     }
                 }
                 // Make sure its not null because we don't wrap ALL ai
                 else if (entry.a.getCanaryAIBase() != null) {
-                    if (entry.a.getCanaryAIBase().getClass().equals(ai)) {
+                    if (ai.isAssignableFrom(entry.a.getCanaryAIBase().getClass())) {
                         tasks.a(entry.a);
                         return true;
                     }
@@ -51,13 +52,13 @@ public class CanaryAIManager implements AIManager {
         while (it.hasNext()) {
             EntityAITasks.EntityAITaskEntry entry = (EntityAITasks.EntityAITaskEntry) it.next();
             if (entry.a instanceof EntityAICanary) {
-                if (((EntityAICanary) entry.a).getAIBase().getClass().equals(ai)) {
+                if (ai.isAssignableFrom(((EntityAICanary) entry.a).getAIBase().getClass())) {
                     return true;
                 }
             }
             // Make sure its not null because we don't wrap ALL ai
             else if (entry.a.getCanaryAIBase() != null) {
-                if (entry.a.getCanaryAIBase().getClass().equals(ai)) {
+                if (ai.isAssignableFrom(entry.a.getCanaryAIBase().getClass())) {
                     return true;
                 }
             }
@@ -74,13 +75,13 @@ public class CanaryAIManager implements AIManager {
         while (it.hasNext()) {
             EntityAITasks.EntityAITaskEntry entry = (EntityAITasks.EntityAITaskEntry) it.next();
             if (entry.a instanceof EntityAICanary) {
-                if (((EntityAICanary) entry.a).getAIBase().getClass().equals(ai)) {
+                if (((EntityAICanary) entry.a).getAIBase().getClass().isAssignableFrom(ai)) {
                     return ((EntityAICanary) entry.a).getAIBase();
                 }
             }
             // Make sure its not null because we don't wrap ALL ai
             else if (entry.a.getCanaryAIBase() != null) {
-                if (entry.a.getCanaryAIBase().getClass().equals(ai)) {
+                if (entry.a.getCanaryAIBase().getClass().isAssignableFrom(ai)) {
                     return entry.a.getCanaryAIBase();
                 }
             }
@@ -96,6 +97,7 @@ public class CanaryAIManager implements AIManager {
                 return true;
             }
             else {
+                        
                 tasks.a(priority, new EntityAICanary(ai));
                 return true;
             }

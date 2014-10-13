@@ -908,4 +908,8 @@ public abstract class EntityLiving extends EntityLivingBase {
     public EntityAITasks getTasks() {
         return this.i;
     }
+
+    public EntityAITasks getTargetTasks() {
+        return this.bg;
+    }
 }
