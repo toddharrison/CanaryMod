@@ -229,7 +229,7 @@ public class EntityArrow extends Entity implements IProjectile {
             if (movingobjectposition != null) {
                 // CanaryMod: ProjectileHit
                 ProjectileHitHook hook = (ProjectileHitHook) new ProjectileHitHook(this.getCanaryEntity(), movingobjectposition.d == null ? null : movingobjectposition.d.getCanaryEntity()).call();
-                if (!hook.isCanceled() && movingobjectposition.d != null) { //
+                if (movingobjectposition.d != null) { //
                     f2 = MathHelper.a(this.v * this.v + this.w * this.w + this.x * this.x);
                     int i2 = MathHelper.f((double) f2 * this.ar);
 
@@ -249,7 +249,7 @@ public class EntityArrow extends Entity implements IProjectile {
                         movingobjectposition.d.e(5);
                     }
 
-                    if (movingobjectposition.d.a(damagesource, (float) i2)) {
+                    if (!hook.isCanceled() && movingobjectposition.d.a(damagesource, (float) i2)) { //
                         if (movingobjectposition.d instanceof EntityLivingBase) {
                             EntityLivingBase entitylivingbase = (EntityLivingBase) movingobjectposition.d;
 
