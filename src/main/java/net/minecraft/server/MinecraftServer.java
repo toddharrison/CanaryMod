@@ -1428,4 +1428,8 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
             MinecraftServer.notHeadless = !state;
         }
     }
+
+    public void loadStartArea(WorldServer world){
+        this.k(world);
+    }
 }

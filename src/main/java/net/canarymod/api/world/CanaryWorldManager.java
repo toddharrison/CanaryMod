@@ -163,58 +163,62 @@ public class CanaryWorldManager implements WorldManager {
 
     @Override
     public boolean createWorld(String name, long seed, DimensionType type) {
-        ((CanaryServer) Canary.getServer()).getHandle().loadWorld(name, seed, type);
-        updateExistingWorldsList(name, type);
-        return true;
+        return createWorld(name, seed, type, WorldType.DEFAULT);
     }
 
     @Override
     public boolean createWorld(String name, DimensionType type) {
-        log.debug("Creating a new world! " + name + "_" + type.getName());
-        ((CanaryServer) Canary.getServer()).getHandle().loadWorld(name, System.currentTimeMillis(), type);
-        updateExistingWorldsList(name, type);
-        return true;
+        return createWorld(name, System.currentTimeMillis(), type, WorldType.DEFAULT);
     }
 
     @Override
     public boolean createWorld(String name, long seed, DimensionType dimType, WorldType genType) {
-        ((CanaryServer) Canary.getServer()).getHandle().loadWorld(name, seed, dimType, genType);
-        updateExistingWorldsList(name, dimType);
-        return true;
+        WorldConfiguration cfg = WorldConfiguration.create(name, dimType);
+        if (cfg == null) {
+            Canary.log.debug("Config already exists for " + name + "_" + dimType.getName());
+            cfg = Configuration.getWorldConfig(name.concat("_").concat(dimType.getName()));
+        }
+        else {
+            Canary.log.debug("Updating new config for " + name + "_" + dimType.getName());
+            cfg.getFile().setLong("world-seed", seed);
+            cfg.getFile().setString("world-type", genType.toString());
+        }
+        return createWorld(cfg);
     }
 
     @Override
     public boolean createWorld(WorldConfiguration configuration) {
+        if(configuration == null){
+            return false;
+        }
         MinecraftServer mcserver = ((CanaryServer) Canary.getServer()).getHandle();
         String worldFqName = configuration.getFile().getFileName().replace(".cfg", "");
+        String name = worldFqName.replaceAll("_.+", "");
         DimensionType dimType = DimensionType.fromName(worldFqName.replaceAll(".+_", ""));
-        AnvilSaveHandler isavehandler = new AnvilSaveHandler(new File("worlds/"), worldFqName, true, dimType);
-        WorldInfo worldinfo = isavehandler.d();
+        AnvilSaveHandler isavehandler = new AnvilSaveHandler(new File("worlds/"), name, true, dimType);
         WorldSettings worldsettings;
         WorldServer world;
 
         long seed = configuration.getWorldSeed().matches("\\d+") ? Long.valueOf(configuration.getWorldSeed()) : configuration.getWorldSeed().hashCode();
         worldsettings = new WorldSettings(seed, WorldSettings.GameType.a(configuration.getGameMode().getId()), configuration.generatesStructures(), false, net.minecraft.world.WorldType.a(configuration.getWorldType().toString()));
         worldsettings.a(configuration.getGeneratorSettings());
+        WorldInfo worldinfo = new WorldInfo(worldsettings, name);
 
         if (dimType == DimensionType.NORMAL) {
-            world = new WorldServer(mcserver, isavehandler, worldinfo, dimType.getId(), mcserver.b);
+            world = (WorldServer) new WorldServer(mcserver, isavehandler, worldinfo, dimType.getId(), mcserver.b).b();
         }
         else {
-            world = new WorldServerMulti(mcserver, isavehandler, dimType.getId(), (WorldServer) ((CanaryWorld) getWorld(configuration.getWorldName(), net.canarymod.api.world.DimensionType.NORMAL, true)).getHandle(), mcserver.b);
+            world = (WorldServer) new WorldServerMulti(mcserver, isavehandler, dimType.getId(), (WorldServer) ((CanaryWorld) getWorld(name, net.canarymod.api.world.DimensionType.NORMAL, true)).getHandle(), mcserver.b).b();
         }
 
         world.a((new net.minecraft.world.WorldManager(mcserver, world)));
         world.P().a(WorldSettings.GameType.a(configuration.getGameMode().getId()));
         mcserver.an().a(new WorldServer[]{world}); // Init player data files
         world.x.a(EnumDifficulty.a(configuration.getDifficulty().getId())); // Set difficulty directly based on WorldConfiguration setting
-        // Recreating generate terrain
-        BlockPos spawn = world.M();
-        for (int i2 = -192; i2 <= 192 && mcserver.isRunning(); i2 += 16) {
-            for (int i3 = -192; i3 <= 192 && mcserver.isRunning(); i3 += 16) {
-                world.b.c(spawn.n() + i2 >> 4, spawn.p() + i3 >> 4);
-            }
-        }
+
+        mcserver.loadStartArea(world);
+
+        updateExistingWorldsList(name, dimType);
         addWorld(world.getCanaryWorld());
         new LoadWorldHook(world.getCanaryWorld()).call();
         return true;
