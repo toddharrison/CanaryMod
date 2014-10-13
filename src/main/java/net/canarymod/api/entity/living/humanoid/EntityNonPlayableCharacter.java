@@ -54,9 +54,8 @@ public final class EntityNonPlayableCharacter extends EntityPlayer {
         this.path_navigate.d(false);
         this.path_navigate.e(true);*/
         this.S = 0.0F;
-        this.J = 0.0F;
         this.b((double) location.getX(), location.getY(), location.getZ(), location.getRotation(), location.getPitch());
-        while (!world.a(this, this.aQ()).isEmpty()) {
+        while (!world.a((Entity)this, this.aQ()).isEmpty() && this.t < 255.0D) {
             this.b(this.s, this.t + 1.0D, this.u);
         }
         this.entity = new CanaryNonPlayableCharacter(this);
