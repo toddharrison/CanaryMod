@@ -1317,4 +1317,8 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
         }
     }
 
+    public void loadStartArea(WorldServer world) {
+        this.g(world);
+    }
+
 }
