@@ -425,11 +425,23 @@ public class CanaryBlock implements Block {
         else if (nmsBlock instanceof BlockDirt){
             return ((Enum)state.b(BlockDirt.a)).ordinal();
         }
-        else if (nmsBlock instanceof BlockPlanks
-              || nmsBlock instanceof BlockSapling
-              || nmsBlock instanceof BlockLeaves
-              || nmsBlock instanceof BlockLog){
+        else if (nmsBlock instanceof BlockPlanks){
             return ((Enum)state.b(BlockPlanks.a)).ordinal();
+        }
+        else if (nmsBlock instanceof BlockOldLeaf){
+            return ((Enum)state.b(BlockOldLeaf.P)).ordinal();
+        }
+        else if (nmsBlock instanceof BlockNewLeaf){
+            return ((Enum)state.b(BlockNewLeaf.P)).ordinal();
+        }
+        else if (nmsBlock instanceof BlockSapling){
+            return ((Enum)state.b(BlockSapling.a)).ordinal();
+        }
+        else if (nmsBlock instanceof BlockNewLog){
+            return ((Enum)state.b(BlockNewLog.b)).ordinal();
+        }
+        else if (nmsBlock instanceof BlockOldLog){
+            return ((Enum)state.b(BlockOldLog.b)).ordinal();
         }
         else if (nmsBlock instanceof BlockSand) {
             return ((Enum)state.b(BlockSand.a)).ordinal();
