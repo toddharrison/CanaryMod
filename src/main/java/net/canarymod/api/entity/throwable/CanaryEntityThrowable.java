@@ -1,7 +1,7 @@
 package net.canarymod.api.entity.throwable;
 
 import net.canarymod.api.entity.CanaryEntity;
-import net.canarymod.api.entity.living.EntityLiving;
+import net.canarymod.api.entity.living.LivingBase;
 
 /**
  * EntityThrowable wrapper implementation
@@ -40,8 +40,8 @@ public abstract class CanaryEntityThrowable extends CanaryEntity implements Enti
      * {@inheritDoc}
      */
     @Override
-    public EntityLiving getThrower() {
-        return (EntityLiving) getHandle().j().getCanaryEntity();
+    public LivingBase getThrower() {
+        return (LivingBase) getHandle().j().getCanaryEntity();
     }
 
     /**
