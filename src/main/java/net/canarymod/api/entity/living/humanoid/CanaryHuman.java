@@ -30,7 +30,8 @@ public abstract class CanaryHuman extends CanaryLivingBase implements Human {
      * {@inheritDoc}
      */
     public String getDisplayName() {
-        return getHandle().getDisplayName();
+        String displayName = getHandle().getDisplayName();
+        return displayName != null ? displayName : getName();
     }
 
     /**
