@@ -10,7 +10,8 @@ import net.minecraft.util.IChatComponent;
 import net.minecraft.world.ILockableContainer;
 import net.minecraft.world.LockCode;
 
-public class InventoryLargeChest implements IInventory {
+
+public class InventoryLargeChest implements ILockableContainer {
 
     private String a;
     public ILockableContainer b; // CanaryMod: private -> public
