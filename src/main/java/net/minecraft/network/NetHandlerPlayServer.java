@@ -9,11 +9,7 @@ import net.canarymod.Canary;
 import net.canarymod.ToolBox;
 import net.canarymod.api.CanaryNetServerHandler;
 import net.canarymod.api.entity.living.humanoid.Player;
-import net.canarymod.api.inventory.slot.ButtonPress;
-import net.canarymod.api.inventory.slot.GrabMode;
-import net.canarymod.api.inventory.slot.SecondarySlotType;
-import net.canarymod.api.inventory.slot.SlotHelper;
-import net.canarymod.api.inventory.slot.SlotType;
+import net.canarymod.api.inventory.slot.*;
 import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.api.world.blocks.BlockFace;
 import net.canarymod.api.world.blocks.CanaryBlock;
@@ -1066,7 +1062,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, IUpdatePlaye
             System.arraycopy(c12packetupdatesign.b(), 0, tileentitysign.a, 0, 4);
             // CanaryMod: SignChange Hook
             SignChangeHook hook = (SignChangeHook) new SignChangeHook(b.getPlayer(), tileentitysign.getCanarySign()).call();
-            if (!hook.isCanceled()) {
+            if (hook.isCanceled()) {
                 System.arraycopy(old, 0, tileentitysign.a, 0, 4); // Restore old text
             }
             //
