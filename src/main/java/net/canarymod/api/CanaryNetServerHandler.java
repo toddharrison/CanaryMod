@@ -1,5 +1,7 @@
 package net.canarymod.api;
 
+import java.util.Arrays;
+import java.util.List;
 import net.canarymod.api.chat.CanaryChatComponent;
 import net.canarymod.api.chat.CanaryChatStyle;
 import net.canarymod.api.entity.living.humanoid.Player;
@@ -15,6 +17,7 @@ import net.minecraft.util.EnumChatFormatting;
 
 import java.util.StringTokenizer;
 import java.util.regex.Pattern;
+import net.canarymod.Canary;
 
 /**
  * Wrap up NetServerHandler to minimize entry point to notch code
@@ -116,11 +119,11 @@ public class CanaryNetServerHandler implements NetServerHandler {
                 }
 
                 if (workingMsg.length() > 1) { // Only reset things if there was something beyond the style
-                    urlFormat(toSend, working, workingMsg, true);
+                    eventFormat(toSend, working, workingMsg, true);   
                 }
             }
             else if (workingMsg.length() > 1) {
-                urlFormat(toSend, working, workingMsg, false);
+                eventFormat(toSend, working, workingMsg, false);
             }
             else {
                 toSend.appendSibling(working.appendText(workingMsg));
@@ -169,19 +172,39 @@ public class CanaryNetServerHandler implements NetServerHandler {
                 return null;
         }
     }
-
-    private void urlFormat(CanaryChatComponent toSend, CanaryChatComponent working, String workingMsg, boolean styleSet) {
+    
+    private void eventFormat(CanaryChatComponent toSend, CanaryChatComponent working, String workingMsg, boolean styleSet) {
+        List<String> playerNames = Arrays.asList(Canary.getServer().getPlayerNameList()); // store this so we aren't converting every check.
         String[] subWorking = styleSet ? workingMsg.substring(1).split(" ") : workingMsg.split(" "); // Find the URL
         boolean addSpaces = workingMsg.contains(" "); // if its only one string then there probably was no spaces
         StringBuilder subRebuild = new StringBuilder(); // Rebuild everything before and after the URL
         net.canarymod.api.chat.ChatStyle workingStyle = working.getChatStyle().clone();
         for (String sub : subWorking) {
+            /* check for urls */
             if (urlPattern.matcher(sub).matches()) {
                 net.canarymod.api.chat.ChatStyle urlStyle = new ChatStyle().getWrapper();
                 toSend.appendSibling(working.appendText(subRebuild.toString())); // append everything before the URL
                 working = new ChatComponentText("").getWrapper(); // reset working
 
                 ClickEvent clickEvent = new ClickEvent(ClickEvent.Action.OPEN_URL, sub); // Create the ClickEvent Action for the URL
+                if (styleSet) {
+                    urlStyle = workingStyle.clone(); // Need to pull the formatting in as well
+                }
+                urlStyle.setChatClickEvent(clickEvent.getWrapper()); // Append the action
+                toSend.appendSibling(working.setChatStyle(urlStyle).appendText(sub.concat(addSpaces ? " " : ""))); // Append URL
+
+                working = new ChatComponentText("").getWrapper(); // reset working again
+                working.setChatStyle(workingStyle.clone()); // reset working style
+
+                subRebuild.delete(0, subRebuild.length()); // Reset the subRebuilder to handle things after the URL
+            }
+            /* check for playername */
+            else if (sub.matches("([a-zA-Z0-9]|[_]){1,20}$") && playerNames.contains(sub)) {
+                net.canarymod.api.chat.ChatStyle urlStyle = new ChatStyle().getWrapper();
+                toSend.appendSibling(working.appendText(subRebuild.toString())); // append everything before the URL
+                working = new ChatComponentText("").getWrapper(); // reset working
+
+                ClickEvent clickEvent = new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/msg " + sub); // Create the ClickEvent Action for the URL
                 if (styleSet) {
                     urlStyle = workingStyle.clone(); // Need to pull the formatting in as well
                 }
@@ -203,5 +226,6 @@ public class CanaryNetServerHandler implements NetServerHandler {
         if (subRebuild.length() > 0) {
             toSend.appendSibling(working.appendText(subRebuild.toString())); // Append whats left over
         }
-    }
+    }    
+    
 }
