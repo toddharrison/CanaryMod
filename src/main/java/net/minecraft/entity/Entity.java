@@ -297,7 +297,7 @@ public abstract class Entity implements ICommandSender {
             } else {
                 if (this.i % 20 == 0) {
                     // CanaryMod: call DamageHook (FireTick)
-                    DamageHook hook = (DamageHook) new DamageHook(null, entity, new CanaryDamageSource(DamageSource.b), 1.0F).call();
+                    DamageHook hook = (DamageHook) new DamageHook(null, entity, new CanaryDamageSource(DamageSource.c), 1.0F).call();
                     if (!hook.isCanceled()) {
                         this.a((((CanaryDamageSource) hook.getDamageSource()).getHandle()), hook.getDamageDealt());
                     }
@@ -332,7 +332,7 @@ public abstract class Entity implements ICommandSender {
     protected void M() {
         if (!this.ab) {
             // CanaryMod: call DamageHook (Lava)
-            DamageHook hook = (DamageHook) new DamageHook(null, entity, new CanaryDamageSource(DamageSource.c), 4.0F).call();
+            DamageHook hook = (DamageHook) new DamageHook(null, entity, new CanaryDamageSource(DamageSource.d), 4.0F).call();
             if (!hook.isCanceled()) {
                 this.a(DamageSource.d, 4.0F);
                 this.e(15);

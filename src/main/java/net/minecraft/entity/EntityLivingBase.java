@@ -168,7 +168,7 @@ public abstract class EntityLivingBase extends Entity {
         if (this.ai()) {
             if (this.aj()) {
                 // CanaryMod: call DamageHook (Suffocation)
-                DamageHook hook = (DamageHook) new DamageHook(null, entity, new CanaryDamageSource(DamageSource.e), 1.0F).call();
+                DamageHook hook = (DamageHook) new DamageHook(null, entity, new CanaryDamageSource(DamageSource.f), 1.0F).call();
                 if (!hook.isCanceled()) {
                     this.a((((CanaryDamageSource) hook.getDamageSource()).getHandle()), hook.getDamageDealt());
                 }
@@ -179,7 +179,7 @@ public abstract class EntityLivingBase extends Entity {
 
                 if (d0 < 0.0D) {
                     // CanaryMod: call DamageHook (Suffocation)
-                    DamageHook hook = (DamageHook) new DamageHook(null, entity, new CanaryDamageSource(DamageSource.e), 1.0F).call();
+                    DamageHook hook = (DamageHook) new DamageHook(null, entity, new CanaryDamageSource(DamageSource.f), 1.0F).call();
                     if (!hook.isCanceled()) {
                         this.a((((CanaryDamageSource) hook.getDamageSource()).getHandle()), hook.getDamageDealt());
                     }
@@ -202,7 +202,7 @@ public abstract class EntityLivingBase extends Entity {
                     this.h(0);
 
                     // CanaryMod - drowning damage.
-                    DamageHook hook = (DamageHook) new DamageHook(null, entity, new CanaryDamageSource(DamageSource.e), 2.0F).call();
+                    DamageHook hook = (DamageHook) new DamageHook(null, entity, new CanaryDamageSource(DamageSource.f), 2.0F).call();
                     if (!hook.isCanceled()) {
                         for (int i0 = 0; i0 < 8; ++i0) {
                             float f0 = this.V.nextFloat() - this.V.nextFloat();
@@ -865,7 +865,7 @@ public abstract class EntityLivingBase extends Entity {
         if (i0 > 0) {
             this.a(this.n(i0), 1.0F, 1.0F);
             // CanaryMod: call DamageHook (Fall)
-            DamageHook hook = (DamageHook) new DamageHook(null, entity, new CanaryDamageSource(DamageSource.h), i0).call();
+            DamageHook hook = (DamageHook) new DamageHook(null, entity, new CanaryDamageSource(DamageSource.i), i0).call();
 
             if (!hook.isCanceled()) {
                 this.a((((CanaryDamageSource) hook.getDamageSource()).getHandle()), hook.getDamageDealt());
