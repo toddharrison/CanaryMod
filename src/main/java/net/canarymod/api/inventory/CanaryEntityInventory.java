@@ -299,7 +299,7 @@ public abstract class CanaryEntityInventory implements Inventory {
     private boolean hasItem(ItemType type, boolean doDamage) {
         for (int index = 0; index < getSize(); index++) {
             Item test = getSlot(index);
-            if (test != null && doDamage ? test.getType().equals(type) : test.getType().getId() == type.getId()) {
+            if (test != null && (doDamage ? test.getType().equals(type) : test.getType().getId() == type.getId())) {
                 return true;
             }
         }
@@ -363,7 +363,7 @@ public abstract class CanaryEntityInventory implements Inventory {
         for (int index = 0; index < getSize(); index++) {
             Item toCheck = getSlot(index);
 
-            if (toCheck != null && doDamage ? toCheck.getType().equals(type) : toCheck.getType().getId() == type.getId()) {
+            if (toCheck != null && (doDamage ? toCheck.getType().equals(type) : toCheck.getType().getId() == type.getId())) {
                 int am = toCheck.getAmount();
 
                 if (am > minAmount && am < maxAmount) {
@@ -524,7 +524,7 @@ public abstract class CanaryEntityInventory implements Inventory {
         for (int index = 0; index < getSize(); index++) {
             Item toCheck = getSlot(index);
 
-            if (toCheck != null && doDamage ? toCheck.getType().equals(type) : toCheck.getId() == type.getId()) {
+            if (toCheck != null && (doDamage ? toCheck.getType().equals(type) : toCheck.getId() == type.getId())) {
                 setSlot(index, null);
                 return toCheck;
             }
