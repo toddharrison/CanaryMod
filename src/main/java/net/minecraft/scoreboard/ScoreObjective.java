@@ -51,4 +51,8 @@ public class ScoreObjective {
     public CanaryScoreObjective getCanaryScoreObjective() {
         return this.scoreObjective;
     }
+    
+    public Scoreboard getScoreboard() {
+        return this.a;
+    }
 }

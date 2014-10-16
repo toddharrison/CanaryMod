@@ -8,6 +8,7 @@ import net.minecraft.network.play.server.S3DPacketDisplayScoreboard;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import net.canarymod.api.world.World;
 
 /**
  * @author Somners
@@ -36,7 +37,7 @@ public class CanaryScoreboard implements Scoreboard {
     public ScoreObjective addScoreObjective(String name) {
         ScoreObjective so = getScoreObjective(name);
         if (so == null) {
-            so = this.handle.a(name, net.minecraft.scoreboard.IScoreObjectiveCriteria.b).getCanaryScoreObjective();
+            so = this.handle.a(String.format("%s_%s", getSaveName(), name), net.minecraft.scoreboard.IScoreObjectiveCriteria.b).getCanaryScoreObjective();
         }
         return so;
     }
@@ -45,7 +46,7 @@ public class CanaryScoreboard implements Scoreboard {
     public ScoreObjective addScoreObjective(String name, ScoreObjectiveCriteria criteria) {
         ScoreObjective so = getScoreObjective(name);
         if (so == null) {
-            so = this.handle.a(name, ((CanaryScoreDummyCriteria) criteria).getHandle()).getCanaryScoreObjective();
+            so = this.handle.a(String.format("%s_%s", getSaveName(), name), ((CanaryScoreDummyCriteria) criteria).getHandle()).getCanaryScoreObjective();
         }
         return so;
     }
@@ -57,7 +58,7 @@ public class CanaryScoreboard implements Scoreboard {
 
     @Override
     public ScoreObjective getScoreObjective(String name) {
-        net.minecraft.scoreboard.ScoreObjective so = handle.getScoreObjective(name);
+        net.minecraft.scoreboard.ScoreObjective so = handle.getScoreObjective(String.format("%s_%s", getSaveName(), name));
         if (so!= null) {
             return so.getCanaryScoreObjective();
         }
@@ -66,7 +67,7 @@ public class CanaryScoreboard implements Scoreboard {
 
     @Override
     public void removeScoreObjective(String name) {
-        net.minecraft.scoreboard.ScoreObjective obj = handle.getScoreObjective(name);
+        net.minecraft.scoreboard.ScoreObjective obj = handle.getScoreObjective(String.format("%s_%s", getSaveName(), name));
         if (obj != null) {
             handle.k(obj);
         }
@@ -163,5 +164,12 @@ public class CanaryScoreboard implements Scoreboard {
     @Override
     public String getSaveName() {
         return saveName;
+    }
+
+    @Override
+    public void setScoreboardPosition(ScorePosition type, ScoreObjective objective, World world) {
+        for (Player player : world.getPlayerList()) {
+            this.setScoreboardPosition(type, objective, player);
+        }
     }
 }
