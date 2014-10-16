@@ -1,6 +1,5 @@
 package net.minecraft.block;
 
-import net.canarymod.Canary;
 import net.canarymod.api.entity.living.LivingBase;
 import net.canarymod.api.world.blocks.CanaryBlock;
 import net.canarymod.hook.world.TNTActivateHook;
@@ -51,7 +50,6 @@ public class BlockTNT extends Block {
     public void a(World world, BlockPos blockpos, Explosion explosion) {
         if (!world.D) {
             // CanaryMod: TNTActivateHook
-            Canary.log.info("#1");
             if (!new TNTActivateHook(new CanaryBlock(world.p(blockpos), blockpos, world), null, ActivationCause.EXPLOSION).call().isCanceled()) {
                 EntityTNTPrimed entitytntprimed = new EntityTNTPrimed(world, (double)((float)blockpos.n() + 0.5F), (double)((float)blockpos.o() + 0.5F), (double)((float)blockpos.p() + 0.5F), explosion.c());
 
@@ -68,7 +66,6 @@ public class BlockTNT extends Block {
 
     public void a(World world, BlockPos blockpos, IBlockState iblockstate, EntityLivingBase entitylivingbase, ActivationCause cause) {
         if (!world.D) {
-            Canary.log.info(String.format("#2 %s", ((Boolean)iblockstate.b(a)).booleanValue()));
             if (((Boolean)iblockstate.b(a)).booleanValue()) {
                 // CanaryMod: TNTActivateHook
                 if (!new TNTActivateHook(new CanaryBlock(iblockstate, blockpos, world), (LivingBase)(entitylivingbase == null ? null : entitylivingbase.getCanaryEntity()), cause).call().isCanceled()) {
