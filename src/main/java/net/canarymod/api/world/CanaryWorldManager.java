@@ -206,6 +206,7 @@ public class CanaryWorldManager implements WorldManager {
 
         if (dimType == DimensionType.NORMAL) {
             world = (WorldServer) new WorldServer(mcserver, isavehandler, worldinfo, dimType.getId(), mcserver.b).b();
+            world.a(worldsettings);
         }
         else {
             world = (WorldServer) new WorldServerMulti(mcserver, isavehandler, dimType.getId(), (WorldServer) ((CanaryWorld) getWorld(name, net.canarymod.api.world.DimensionType.NORMAL, true)).getHandle(), mcserver.b).b();

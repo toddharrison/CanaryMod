@@ -243,6 +243,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
             else {
                 world = (WorldServer)new WorldServer(this, isavehandler, worldinfo, dimType.getId(), this.b).b();
             }
+            world.a(worldsettings);
         }
         else {
             world = (WorldServer)new WorldServerMulti(this, isavehandler, dimType.getId(), (WorldServer)((CanaryWorld)worldManager.getWorld(name, net.canarymod.api.world.DimensionType.NORMAL, true)).getHandle(), this.b).b();

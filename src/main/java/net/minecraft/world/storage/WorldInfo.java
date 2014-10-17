@@ -3,6 +3,8 @@ package net.minecraft.world.storage;
 
 import net.canarymod.Canary;
 import net.canarymod.api.world.CanaryWorld;
+import net.canarymod.api.world.DimensionType;
+import net.canarymod.api.world.position.Location;
 import net.canarymod.hook.world.TimeChangeHook;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.nbt.NBTBase;
@@ -56,6 +58,11 @@ public class WorldInfo {
     private int I;
     private int J;
     private GameRules K;
+
+    // CanaryMod: Add Rotation/Pitch for Spawn Point
+    private float rotX = 0.0F;
+    private float rotY = 0.0F;
+    // CanaryMod: end
 
     protected WorldInfo() {
         this.c = WorldType.b;
@@ -119,6 +126,16 @@ public class WorldInfo {
         this.e = nbttagcompound.f("SpawnX");
         this.f = nbttagcompound.f("SpawnY");
         this.g = nbttagcompound.f("SpawnZ");
+
+        // CanaryMod: Rotation/Pitch for SpawnPoint
+        if(nbttagcompound.c("SpawnRotX")){
+            this.rotX = nbttagcompound.h("SpawnRotX");
+        }
+        if(nbttagcompound.c("SpawnRotY")){
+            this.rotY = nbttagcompound.h("SpawnRotY");
+        }
+        // CanaryMod: end
+
         this.h = nbttagcompound.g("Time");
         if (nbttagcompound.b("DayTime", 99)) {
             this.i = nbttagcompound.g("DayTime");
@@ -283,6 +300,11 @@ public class WorldInfo {
         this.H = worldinfo.H;
         this.J = worldinfo.J;
         this.I = worldinfo.I;
+
+        // CanaryMod: Spawn Rotation/Pitch
+        this.rotX = worldinfo.rotX;
+        this.rotY = worldinfo.rotY;
+        // CanaryMod: end
     }
 
     public NBTTagCompound a() {
@@ -309,6 +331,12 @@ public class WorldInfo {
         nbttagcompound.a("SpawnX", this.e);
         nbttagcompound.a("SpawnY", this.f);
         nbttagcompound.a("SpawnZ", this.g);
+
+        // CanaryMod: Store Spawn Rotation/Pitch
+        nbttagcompound.a("SpawnRotX", this.rotX);
+        nbttagcompound.a("SpawnRotY", this.rotY);
+        // CanaryMod: end
+
         nbttagcompound.a("Time", this.h);
         nbttagcompound.a("DayTime", this.i);
         nbttagcompound.a("SizeOnDisk", this.k);
@@ -667,10 +695,19 @@ public class WorldInfo {
     }
 
     // CanaryMod Start
-    public void setSpawn(int x, int y, int z) {
-        this.e = x;
-        this.f = y;
-        this.g = z;
+    public void setSpawn(Location location) {
+        this.e = location.getBlockX();
+        this.f = location.getBlockY();
+        this.g = location.getBlockZ();
+        this.rotX = location.getRotation();
+        this.rotY = location.getPitch();
+    }
+
+    public Location getSpawnLocation(){
+        Location spawn = new Location(null, this.e, this.f, this.g, rotX, rotY);
+        spawn.setType(DimensionType.fromId(this.m)); // Need to set Dimension
+        spawn.setWorldName(this.n); // Need to set World
+        return spawn;
     }
     // CanaryMod End
 }

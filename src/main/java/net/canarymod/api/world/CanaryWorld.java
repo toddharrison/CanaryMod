@@ -621,23 +621,12 @@ public class CanaryWorld implements World {
 
     @Override
     public Location getSpawnLocation() {
-        // More structure ftw
-        WorldInfo info = world.x;
-        Location spawn = new Location(0, 0, 0);
-
-        spawn.setX(info.c() + 0.5D);
-        spawn.setY(info.d());
-        spawn.setZ(info.e() + 0.5D);
-        spawn.setRotation(0.0F);
-        spawn.setPitch(0.0F);
-        spawn.setType(type);
-        spawn.setWorldName(world.getCanaryWorld().getName());
-        return spawn;
+        return world.x.getSpawnLocation();
     }
 
     @Override
-    public void setSpawnLocation(Location p) {
-        world.x.setSpawn(p.getBlockX(), p.getBlockY(), p.getBlockZ());
+    public void setSpawnLocation(Location location) {
+        world.x.setSpawn(location);
     }
 
     @Override
