@@ -35,14 +35,16 @@ public class BlockTNT extends Block {
     public void c(World world, BlockPos blockpos, IBlockState iblockstate) {
         super.c(world, blockpos, iblockstate);
         if (world.z(blockpos)) {
-            this.d(world, blockpos, iblockstate.a(a, Boolean.valueOf(true)));
+            //this.d(world, blockpos, iblockstate.a(a, Boolean.valueOf(true)));
+            this.a(world, blockpos, iblockstate.a(a, Boolean.valueOf(true)), (EntityLivingBase)null, ActivationCause.REDSTONE); // CanaryMod: REDSTONE cause
             world.g(blockpos);
         }
     }
 
     public void a(World world, BlockPos blockpos, IBlockState iblockstate, Block block) {
         if (world.z(blockpos)) {
-            this.d(world, blockpos, iblockstate.a(a, Boolean.valueOf(true)));
+            //this.d(world, blockpos, iblockstate.a(a, Boolean.valueOf(true)));
+            this.a(world, blockpos, iblockstate.a(a, Boolean.valueOf(true)), (EntityLivingBase)null, ActivationCause.REDSTONE); // CanaryMod: REDSTONE cause
             world.g(blockpos);
         }
     }
@@ -61,9 +63,16 @@ public class BlockTNT extends Block {
     }
 
     public void d(World world, BlockPos blockpos, IBlockState iblockstate) {
-        this.a(world, blockpos, iblockstate, (EntityLivingBase)null);
+        // CanaryMod: Can't say for sure what calls this...
+        this.a(world, blockpos, iblockstate, (EntityLivingBase)null, ActivationCause.UNKNOWN);
     }
 
+    // CanaryMod: Original Method forwarding
+    public void a(World world, BlockPos blockpos, IBlockState iblockstate, EntityLivingBase entitylivingbase) {
+        this.a(world, blockpos, iblockstate, (EntityLivingBase)null, ActivationCause.UNKNOWN);
+    }
+
+    // CanaryMod: Signature Change to incorporate ActivationCause
     public void a(World world, BlockPos blockpos, IBlockState iblockstate, EntityLivingBase entitylivingbase, ActivationCause cause) {
         if (!world.D) {
             if (((Boolean)iblockstate.b(a)).booleanValue()) {
@@ -84,7 +93,7 @@ public class BlockTNT extends Block {
             Item item = entityplayer.bY().b();
 
             if (item == Items.d || item == Items.bL) {
-                this.a(world, blockpos, iblockstate.a(a, Boolean.valueOf(true)), (EntityLivingBase)entityplayer);
+                this.a(world, blockpos, iblockstate.a(a, Boolean.valueOf(true)), (EntityLivingBase)entityplayer, ActivationCause.FIRE);// CanaryMod: Add FIRE cause
                 world.g(blockpos);
                 if (item == Items.d) {
                     entityplayer.bY().a(1, (EntityLivingBase)entityplayer);
