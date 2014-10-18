@@ -136,6 +136,8 @@ public class CanaryPlayer extends CanaryHuman implements Player {
                 List<Player> receivers = Canary.getServer().getPlayerList();
                 defaultChatpattern.put("%name", getDisplayName()); // Safe to get name now
                 defaultChatpattern.put("%message", out);
+                defaultChatpattern.put("%group",getGroup().getName());
+               
                 ChatHook hook = (ChatHook) new ChatHook(this, chatFormat, receivers, defaultChatpattern).call();
                 if (hook.isCanceled()) {
                     return;
