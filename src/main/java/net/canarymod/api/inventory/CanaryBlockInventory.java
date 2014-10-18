@@ -389,10 +389,16 @@ public abstract class CanaryBlockInventory extends CanaryTileEntity implements I
         int maxAmount = item.getMaxAmount();
 
         while (amount > 0) {
+
             // Get an existing item with at least 1 spot free
             for (Item i : getContents()) {
-                if (i != null && item.getId() == i.getId() && item.getDamage() == i.getDamage()
-                        && i.getAmount() < i.getMaxAmount()) {
+                if (i != null && i.getType().equals(item.getType()) && i.getAmount() < i.getMaxAmount()) {
+                    if((i.hasDataTag() && !item.hasDataTag()) || (!i.hasDataTag() && item.hasDataTag())){
+                        continue;
+                    }
+                    else if (!i.getDataTag().equals(item.getDataTag())){
+                        continue;
+                    }
                     itemExisting = i;
                 }
             }
@@ -400,21 +406,25 @@ public abstract class CanaryBlockInventory extends CanaryTileEntity implements I
             // Add the items to the existing stack of items
             if (itemExisting != null && (!item.isEnchanted() || Configuration.getServerConfig().allowEnchantmentStacking())) {
                 // Add as much items as possible to the stack
-                int k = Math.min(maxAmount - itemExisting.getAmount(), item.getAmount());
+                int k = Math.min(itemExisting.getMaxAmount() - itemExisting.getAmount(), item.getAmount());
                 itemExisting.setAmount(itemExisting.getAmount() + k);
                 amount -= k;
+                // make sure to set itemExisting to null, else we will loop infinitely
+                itemExisting = null;
                 continue;
             }
             // We still have slots, but no stack, create a new stack.
             int eslot = getEmptySlot();
 
             if (eslot != -1) {
-                CanaryCompoundTag nbt = new CanaryCompoundTag();
-
-                ((CanaryItem) item).getHandle().b(nbt.getHandle());
+                // Set the amount on item so the NBT copies the correct amounts.
+                item.setAmount(amount);
+                // Create new Item
                 CanaryItem tempItem = new CanaryItem(item.getId(), amount, item.getDamage(), -1);
-
-                tempItem.getHandle().c(nbt.getHandle());
+                // Create NBT Tags and new Item, then copy NBT from existing item to new item
+                CanaryCompoundTag nbt = item.hasDataTag() ? (CanaryCompoundTag) ((CanaryItem) item).getDataTag().copy() : null;
+                // Set NBT on new Item
+                tempItem.setDataTag(nbt);
                 this.setSlot(eslot, tempItem);
                 amount = 0;
                 continue;

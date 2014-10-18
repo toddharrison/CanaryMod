@@ -17,7 +17,7 @@ public class CanaryChatStyle implements ChatStyle {
      */
     @Override
     public ChatFormatting getColor() {
-        return getNative().a().getWrapper();
+        return getNative().a() != null ? getNative().a().getWrapper() : null;
     }
 
     /**

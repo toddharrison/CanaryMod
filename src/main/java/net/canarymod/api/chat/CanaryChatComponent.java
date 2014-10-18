@@ -1,6 +1,8 @@
 package net.canarymod.api.chat;
 
 import com.google.common.collect.Lists;
+import net.minecraft.util.ChatComponentStyle;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IChatComponent;
 
 import java.util.ArrayList;
@@ -33,6 +35,17 @@ public final class CanaryChatComponent implements ChatComponent {
     @Override
     public ChatStyle getChatStyle() {
         return getNative().b().getWrapper();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ChatComponent setText(String text){
+        if(getNative() instanceof ChatComponentText) {
+            ((ChatComponentText)getNative()).setText(text);
+        }
+        return this;
     }
 
     /**
@@ -77,6 +90,11 @@ public final class CanaryChatComponent implements ChatComponent {
             components.add(iChatComponent1.getWrapper());
         }
         return components;
+    }
+
+    @Override
+    public String serialize() {
+        return IChatComponent.Serializer.a(getNative());
     }
 
     /**
