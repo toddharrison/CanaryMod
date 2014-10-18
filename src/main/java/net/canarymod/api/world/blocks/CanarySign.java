@@ -3,9 +3,12 @@ package net.canarymod.api.world.blocks;
 import java.util.Arrays;
 import net.canarymod.api.entity.living.humanoid.CanaryPlayer;
 import net.canarymod.api.entity.living.humanoid.Player;
+import net.minecraft.block.BlockStandingSign;
+import net.minecraft.block.BlockWallSign;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntitySign;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IChatComponent;
 
 /**
@@ -94,14 +97,14 @@ public class CanarySign extends CanaryTileEntity implements Sign {
         if (isSignPost()) {
             return getWorld().getBlockAt(getX(), getY() - 1, getZ());
         }
-        switch (getBlock().getData()) {
-            case 2: // Facing North / Attached is South
+        switch ((EnumFacing)((CanaryBlock)getBlock()).getNativeState().b(BlockWallSign.a)) {
+            case NORTH: // Facing North / Attached is South
                 return getWorld().getBlockAt(getX(), getY(), getZ() + 1);
-            case 3: // Facing South / Attached is North
+            case SOUTH: // Facing South / Attached is North
                 return getWorld().getBlockAt(getX(), getY(), getZ() - 1);
-            case 4: // Facing West / Attached is East
+            case WEST: // Facing West / Attached is East
                 return getWorld().getBlockAt(getX() + 1, getY(), getZ());
-            case 5: // Facing East / Attached is West
+            case EAST: // Facing East / Attached is West
                 return getWorld().getBlockAt(getX() - 1, getY(), getZ());
             default:
                 return null;
