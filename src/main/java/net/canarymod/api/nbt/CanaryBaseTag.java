@@ -30,6 +30,11 @@ public abstract class CanaryBaseTag implements BaseTag {
         return tag.hashCode();
     }
 
+    @Override
+    public String toString() {
+        return tag.toString();
+    }
+
     protected abstract NBTBase getHandle();
 
     /**
