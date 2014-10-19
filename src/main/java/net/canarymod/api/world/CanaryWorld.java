@@ -53,7 +53,6 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.WorldSettings;
-import net.minecraft.world.storage.WorldInfo;
 import net.visualillusionsent.utils.TaskManager;
 
 import java.util.ArrayList;
@@ -63,7 +62,7 @@ public class CanaryWorld implements World {
     private WorldServer world;
     private DimensionType type;
     public long[] nanoTicks;
-    private WorldConfiguration wrld_cfg;
+    private WorldConfiguration worldConfig;
     /**
      * The world name
      */
@@ -76,7 +75,6 @@ public class CanaryWorld implements World {
         fqName = name + "_" + this.type.getName();
         // Init nanotick size
         nanoTicks = new long[100];
-        wrld_cfg = Configuration.getWorldConfig(this.fqName);
         if (Configuration.getServerConfig().isWorldCacheTimerEnabled()) {
             TaskManager.scheduleContinuedTaskInMinutes(new WorldCacheTimer(this), Configuration.getServerConfig().getWorldCacheTimeout(), Configuration.getServerConfig().getWorldCacheTimeout());
         }
@@ -347,7 +345,7 @@ public class CanaryWorld implements World {
 
     @Override
     public int getHeight() {
-        return wrld_cfg.getMaxBuildHeight();
+        return worldConfig.getMaxBuildHeight();
     }
 
     @Override

@@ -907,7 +907,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, IUpdatePlaye
         PacketThreadUtil.a(c0epacketclickwindow, this, this.b.u());
         this.b.z();
         if (this.b.bi.d == c0epacketclickwindow.a() && this.b.bi.c(this.b)) {
-            if (this.b.v()) {
+            if (this.b.v()) { // Is Spectator
                 ArrayList arraylist = Lists.newArrayList();
 
                 for (int i0 = 0; i0 < this.b.bi.c.size(); ++i0) {
@@ -918,7 +918,11 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, IUpdatePlaye
             }
             else {
                 // CanaryMod: SlotClick
-                ItemStack itemstack = this.b.bi.a(c0epacketclickwindow.b(), c0epacketclickwindow.c(), c0epacketclickwindow.f(), this.b);
+                // This already updates the inventory, don't use it when we wanna cancel this transaction just now (look further down)
+//                ItemStack itemstack = this.b.bi.a(c0epacketclickwindow.b(), c0epacketclickwindow.c(), c0epacketclickwindow.f(), this.b);
+
+                // Temporary item
+                ItemStack itemstack = this.b.bi.getSlot(c0epacketclickwindow.b()).d();
                 SlotType slotType = SlotHelper.getSlotType(this.b.bi, c0epacketclickwindow.b());
                 SecondarySlotType secondarySlotType = SlotHelper.getSpecificSlotType(this.b.bi, c0epacketclickwindow.b());
                 GrabMode grabMode = GrabMode.fromInt(c0epacketclickwindow.f());
@@ -929,7 +933,6 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, IUpdatePlaye
                     if (sch.doUpdate()) {
                         if (c0epacketclickwindow.f() == 0) {
                             this.b.bi.updateSlot(c0epacketclickwindow.b());
-                            this.b.updateSlot(c0epacketclickwindow.a(), c0epacketclickwindow.b(), this.b.bg.p());
                         }
                         else {
                             ArrayList arraylist = Lists.newArrayList();
@@ -940,9 +943,12 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, IUpdatePlaye
 
                             this.b.a(this.b.bi, (List)arraylist);
                         }
+                        this.b.o(); // Update item in hand
                     }
                     return;
                 }
+                // Not cancelled, properly handle the item now
+                itemstack = this.b.bi.a(c0epacketclickwindow.b(), c0epacketclickwindow.c(), c0epacketclickwindow.f(), this.b);
                 //
 
                 if (ItemStack.b(c0epacketclickwindow.e(), itemstack)) {
