@@ -73,7 +73,7 @@ public class CanaryChatStyle implements ChatStyle {
      */
     @Override
     public ClickEvent getChatClickEvent() {
-        return getNative().h().getWrapper();
+        return getNative().h() != null ? getNative().h().getWrapper() : null;
     }
 
     /**
@@ -81,7 +81,7 @@ public class CanaryChatStyle implements ChatStyle {
      */
     @Override
     public HoverEvent getChatHoverEvent() {
-        return getNative().i().getWrapper();
+        return getNative().i() != null ? getNative().i().getWrapper() : null;
     }
 
     /**
@@ -89,7 +89,10 @@ public class CanaryChatStyle implements ChatStyle {
      */
     @Override
     public ChatStyle setColor(ChatFormatting color) {
-        getNative().a(((CanaryChatFormatting) color).getNative());
+        if(color == null)
+            getNative().a((net.minecraft.util.EnumChatFormatting) null);
+        else
+            getNative().a(((CanaryChatFormatting) color).getNative());
         return this;
     }
 
@@ -143,7 +146,10 @@ public class CanaryChatStyle implements ChatStyle {
      */
     @Override
     public ChatStyle setChatClickEvent(ClickEvent clickEvent) {
-        getNative().a(((CanaryClickEvent) clickEvent).getNative());
+        if(clickEvent == null)
+            getNative().a((net.minecraft.event.ClickEvent) null);
+        else
+            getNative().a(((CanaryClickEvent) clickEvent).getNative());
         return this;
     }
 
@@ -152,7 +158,10 @@ public class CanaryChatStyle implements ChatStyle {
      */
     @Override
     public ChatStyle setChatHoverEvent(HoverEvent hoverEvent) {
-        getNative().a(((CanaryHoverEvent) hoverEvent).getNative());
+        if(hoverEvent == null)
+            getNative().a((net.minecraft.event.HoverEvent) null);
+        else
+            getNative().a(((CanaryHoverEvent) hoverEvent).getNative());
         return this;
     }
 
@@ -161,7 +170,10 @@ public class CanaryChatStyle implements ChatStyle {
      */
     @Override
     public ChatStyle setParentStyle(ChatStyle chatStyle) {
-        getNative().a(((CanaryChatStyle) chatStyle).getNative());
+        if(chatStyle == null)
+            getNative().a((net.minecraft.util.ChatStyle) null);
+        else
+            getNative().a(((CanaryChatStyle) chatStyle).getNative());
         return this;
     }
 
@@ -170,7 +182,7 @@ public class CanaryChatStyle implements ChatStyle {
      */
     @Override
     public ChatStyle getParentStyle() {
-        return getNative().n().getWrapper();
+        return getNative().n() != null ? getNative().n().getWrapper() : null;
     }
 
     @Override
