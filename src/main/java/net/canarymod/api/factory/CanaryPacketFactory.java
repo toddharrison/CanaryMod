@@ -207,6 +207,7 @@ public class CanaryPacketFactory implements PacketFactory {
                 return new CanaryPacket(new S29PacketSoundEffect((String) args[0], (Double) args[1], (Double) args[2], (Double) args[3], (Float) args[4], (Float) args[5]));
             case 0x2A: // 42
                 verify(id, "Particles", 9, args, test(String.class, 1), test(Float.class, 7), test(Integer.class, 1));
+                return new CanaryPacket(new S2APacketParticles((String) args[0], (Float) args[1], (Float) args[2], (Float) args[3], (Float) args[4], (Float) args[5], (Float) args[6], (Float) args[7], (Integer) args[8]));
             case 0x2B: // 43
                 verify(id, "ChangeGameState", 2, args, test(Integer.class, 1), test(Float.class, 1));
                 return new CanaryPacket(new S2BPacketChangeGameState((Integer) args[0], (Float) args[1]));
@@ -709,7 +710,7 @@ public class CanaryPacketFactory implements PacketFactory {
     }
 
     @Override
-    public Packet changeGameState(int state, int mode) {
+    public Packet changeGameState(int state, float mode) {
         try {
             return createPacket(43, state, mode);
         }
