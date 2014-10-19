@@ -98,7 +98,7 @@ public abstract class CommandBlockLogic implements ICommandSender {
                 CommandBlockCommandHook hook = new CommandBlockCommandHook(getReference(), this.e.split(" "));
                 hook.call();
 
-                if (!hook.isCanceled() && (Configuration.getServerConfig().isCommandBlockOpped() || this.getReference().hasPermission("canary.command.".concat(this.e.split(" ")[0])))) {
+                if (!hook.isCanceled() && (Configuration.getServerConfig().isCommandBlockOpped() || this.getReference().hasPermission("canary.command.".concat(this.e.split(" ")[0].replaceFirst("/", ""))))) {
                     this.b = icommandmanager.a(this, this.e);
                     if (this.b == 0) {
                         // Means in NMS there was nothing processing this command, we shall try canary commands now
