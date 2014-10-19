@@ -94,12 +94,17 @@ public abstract class CommandBlockLogic implements ICommandSender {
 
             try {
                 // CanaryMod: CommandBlockCommand
-                new CommandBlockCommandHook(getReference(), this.e.split(" ")).call();
-                if (Canary.getServer().consoleCommand(this.e, this.getReference())) { // Redirect for Canary Console Commands too
-                    this.b = 1;
-                }
-                else if (Configuration.getServerConfig().isCommandBlockOpped() || this.getReference().hasPermission("canary.command.vanilla.".concat(this.e.split(" ")[0]))) {
+                // NOTE: in CanaryServer is, again, a CommandHook called. Might wanna not call one of those
+                CommandBlockCommandHook hook = new CommandBlockCommandHook(getReference(), this.e.split(" "));
+                hook.call();
+
+                if (!hook.isCanceled() && (Configuration.getServerConfig().isCommandBlockOpped() || this.getReference().hasPermission("canary.command.".concat(this.e.split(" ")[0])))) {
                     this.b = icommandmanager.a(this, this.e);
+                    if (this.b == 0) {
+                        // Means in NMS there was nothing processing this command, we shall try canary commands now
+                        Canary.getServer().consoleCommand(this.e, this.getReference());
+                        // NOTE: the successCount is not updated on purpose as this is something inherent to command block logic specifically.
+                    }
                 }
                 else {
                     this.b = 0;

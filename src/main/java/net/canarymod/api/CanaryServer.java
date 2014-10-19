@@ -189,7 +189,7 @@ public class CanaryServer implements Server {
     public boolean consoleCommand(String command, CommandBlockLogic cmdBlockLogic) {
         ConsoleCommandHook hook = new ConsoleCommandHook(cmdBlockLogic, command);
 
-        Canary.hooks().callHook(hook);
+        hook.call();
         if (hook.isCanceled()) {
             return true;
         }
@@ -200,6 +200,7 @@ public class CanaryServer implements Server {
         }
 
         // Don't pass off to Vanilla as that is already handled in NMS.CommandBlockLogic
+        // Means, this is only called in CommandBlockLogic, if NMS didn't do anything with the command.
         return Canary.commands().parseCommand(cmdBlockLogic, cmdName, args);
     }
 
