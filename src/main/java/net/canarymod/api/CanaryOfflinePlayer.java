@@ -662,9 +662,26 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
      * {@inheritDoc}
      */
     @Override
+    public void setStat(Statistics statistics, int value) {
+        setStat(statistics.getInstance(), value);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void increaseStat(Stat stat, int value) {
         if (value < 0) return;
         setStat(stat, getStat(stat) + value);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void increaseStat(Statistics statistics, int value) {
+        if (value < 0) return;
+        setStat(statistics, getStat(statistics) + value);
     }
 
     /**
@@ -680,8 +697,25 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
      * {@inheritDoc}
      */
     @Override
+    public void decreaseStat(Statistics statistics, int value) {
+        if (value < 0) return;
+        setStat(statistics, getStat(statistics) - value);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public int getStat(Stat stat) {
         return statisticsFile.a(((CanaryStat) stat).getHandle());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int getStat(Statistics statistics) {
+        return getStat(statistics.getInstance());
     }
 
     /**
@@ -695,6 +729,14 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
         }
         statisticsFile.b(null, ((CanaryAchievement) achievement).getHandle(), 1);
         statisticsFile.b((EntityPlayerMP) null);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void awardAchievement(Achievements achievements) {
+        awardAchievement(achievements.getInstance());
     }
 
     /**
@@ -716,8 +758,24 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
      * {@inheritDoc}
      */
     @Override
+    public void removeAchievement(Achievements achievements) {
+        removeAchievement(achievements.getInstance());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public boolean hasAchievement(Achievement achievement) {
         return statisticsFile.a(((CanaryAchievement) achievement).getHandle());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean hasAchievement(Achievements achievements) {
+        return hasAchievement(achievements.getInstance());
     }
 
 }
