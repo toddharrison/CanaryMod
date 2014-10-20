@@ -658,6 +658,11 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
         statisticsFile.a(null, ((CanaryStat)stat).getHandle(), value);
     }
 
+    @Override
+    public void setStat(Statistics statistics, int value) {
+        setStat(statistics.getInstance(), value);
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -667,6 +672,11 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
             return;
         }
         setStat(stat, getStat(stat) + value);
+    }
+
+    @Override
+    public void increaseStat(Statistics statistics, int value) {
+        increaseStat(statistics.getInstance(), value);
     }
 
     /**
@@ -680,12 +690,22 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
         setStat(stat, getStat(stat) - value);
     }
 
+    @Override
+    public void decreaseStat(Statistics statistics, int value) {
+        decreaseStat(statistics.getInstance(), value);
+    }
+
     /**
      * {@inheritDoc}
      */
     @Override
     public int getStat(Stat stat) {
         return statisticsFile.a(((CanaryStat)stat).getHandle());
+    }
+
+    @Override
+    public int getStat(Statistics statistics) {
+        return getStat(statistics.getInstance());
     }
 
     /**
@@ -698,7 +718,12 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
             awardAchievement(achievement.getParent());
         }
         statisticsFile.b(null, ((CanaryAchievement)achievement).getHandle(), 1);
-        statisticsFile.b((EntityPlayerMP)null);
+        statisticsFile.b((EntityPlayerMP) null);
+    }
+
+    @Override
+    public void awardAchievement(Achievements achievements) {
+        awardAchievement(achievements.getInstance());
     }
 
     /**
@@ -713,7 +738,12 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
                 removeAchievement(child);
             }
         }
-        statisticsFile.a(null, ((CanaryAchievement)achievement).getHandle(), 0);
+        statisticsFile.a(null, ((CanaryAchievement) achievement).getHandle(), 0);
+    }
+
+    @Override
+    public void removeAchievement(Achievements achievements) {
+        removeAchievement(achievements.getInstance());
     }
 
     /**
@@ -722,5 +752,10 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
     @Override
     public boolean hasAchievement(Achievement achievement) {
         return statisticsFile.a(((CanaryAchievement)achievement).getHandle());
+    }
+
+    @Override
+    public boolean hasAchievement(Achievements achievements) {
+        return hasAchievement(achievements.getInstance());
     }
 }

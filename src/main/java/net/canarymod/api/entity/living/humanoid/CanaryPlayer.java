@@ -1107,7 +1107,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
 
     @Override
     public void setDisplayNameComponent(ChatComponent chatComponent){
-        getHandle().setDisplayNameComponent(chatComponent != null ? ((CanaryChatComponent)chatComponent).getNative() : null);
+        getHandle().setDisplayNameComponent(chatComponent != null ? ((CanaryChatComponent) chatComponent).getNative() : null);
     }
     /**
      * {@inheritDoc}
@@ -1115,6 +1115,11 @@ public class CanaryPlayer extends CanaryHuman implements Player {
     @Override
     public void setStat(Stat stat, int value) {
         getHandle().A().a(getHandle(), ((CanaryStat) stat).getHandle(), value);
+    }
+
+    @Override
+    public void setStat(Statistics statistics, int value) {
+        setStat(statistics.getInstance(), value);
     }
 
     /**
@@ -1126,6 +1131,11 @@ public class CanaryPlayer extends CanaryHuman implements Player {
         getHandle().a(((CanaryStat) stat).getHandle(), value);
     }
 
+    @Override
+    public void increaseStat(Statistics statistics, int value) {
+        increaseStat(statistics.getInstance(), value);
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -1135,12 +1145,22 @@ public class CanaryPlayer extends CanaryHuman implements Player {
         setStat(stat, getStat(stat) - value);
     }
 
+    @Override
+    public void decreaseStat(Statistics statistics, int value) {
+        decreaseStat(statistics.getInstance(), value);
+    }
+
     /**
      * {@inheritDoc}
      */
     @Override
     public int getStat(Stat stat) {
         return getHandle().A().a(((CanaryStat) stat).getHandle());
+    }
+
+    @Override
+    public int getStat(Statistics statistics) {
+        return getStat(statistics.getInstance());
     }
 
     /**
@@ -1154,6 +1174,11 @@ public class CanaryPlayer extends CanaryHuman implements Player {
         }
         getHandle().A().b(getHandle(), ((CanaryAchievement) achievement).getHandle(), 1);
         getHandle().A().b(getHandle());
+    }
+
+    @Override
+    public void awardAchievement(Achievements achievements) {
+        awardAchievement(achievements.getInstance());
     }
 
     /**
@@ -1171,12 +1196,22 @@ public class CanaryPlayer extends CanaryHuman implements Player {
         getHandle().A().a(getHandle(), ((CanaryAchievement) achievement).getHandle(), 0);
     }
 
+    @Override
+    public void removeAchievement(Achievements achievements) {
+        removeAchievement(achievements.getInstance());
+    }
+
     /**
      * {@inheritDoc}
      */
     @Override
     public boolean hasAchievement(Achievement achievement) {
         return getHandle().A().a(((CanaryAchievement) achievement).getHandle());
+    }
+
+    @Override
+    public boolean hasAchievement(Achievements achievements) {
+        return hasAchievement(achievements.getInstance());
     }
 
     /**
