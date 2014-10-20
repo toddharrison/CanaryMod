@@ -3,8 +3,11 @@ package net.canarymod.api.world;
 import net.canarymod.Canary;
 import net.canarymod.api.CanaryServer;
 import net.canarymod.api.entity.living.humanoid.Player;
+import net.canarymod.backbone.PermissionDataAccess;
 import net.canarymod.config.Configuration;
 import net.canarymod.config.WorldConfiguration;
+import net.canarymod.database.Database;
+import net.canarymod.database.exceptions.DatabaseWriteException;
 import net.canarymod.hook.system.LoadWorldHook;
 import net.canarymod.hook.system.UnloadWorldHook;
 import net.minecraft.server.MinecraftServer;
@@ -198,6 +201,14 @@ public class CanaryWorldManager implements WorldManager {
         AnvilSaveHandler isavehandler = new AnvilSaveHandler(new File("worlds/"), name, true, dimType);
         WorldSettings worldsettings;
         WorldServer world;
+
+        // initialize new perm file
+        try {
+            Database.get().updateSchema(new PermissionDataAccess(worldFqName));
+        }
+        catch (DatabaseWriteException e) {
+            Canary.log.error("Failed to update database schema", e);
+        }
 
         long seed = configuration.getWorldSeed().matches("\\d+") ? Long.valueOf(configuration.getWorldSeed()) : configuration.getWorldSeed().hashCode();
         worldsettings = new WorldSettings(seed, WorldSettings.GameType.a(configuration.getGameMode().getId()), configuration.generatesStructures(), false, net.minecraft.world.WorldType.a(configuration.getWorldType().toString()));
