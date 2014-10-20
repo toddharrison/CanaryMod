@@ -234,7 +234,7 @@ public class Bootstrap {
                     DispenseHook hook = (DispenseHook) new DispenseHook(((TileEntityDispenser) iblocksource.h()).getCanaryDispenser(), null).call();
                     if (!hook.isCanceled()) {
                         itembucket.a(iblocksource.i(), blockpos); // now do it
-                        itemstack.a(Items.ar);
+                        itemstack.a(Items.aw);
                         itemstack.b = 1;
                     }
                     return itemstack;
