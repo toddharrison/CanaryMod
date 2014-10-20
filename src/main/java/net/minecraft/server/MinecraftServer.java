@@ -21,8 +21,11 @@ import net.canarymod.api.world.CanarySaveConverter;
 import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.api.world.CanaryWorldManager;
 import net.canarymod.api.world.DimensionType;
+import net.canarymod.backbone.PermissionDataAccess;
 import net.canarymod.config.Configuration;
 import net.canarymod.config.WorldConfiguration;
+import net.canarymod.database.Database;
+import net.canarymod.database.exceptions.DatabaseWriteException;
 import net.canarymod.hook.system.LoadWorldHook;
 import net.canarymod.hook.system.ServerTickHook;
 import net.canarymod.tasks.ServerTaskManager;
@@ -221,6 +224,14 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
             }
             //
             worldinfo = new WorldInfo(worldsettings, name);
+
+            // initialize new perm file
+            try {
+                Database.get().updateSchema(new PermissionDataAccess(name + "_" + dimType.getName()));
+            }
+            catch (DatabaseWriteException e) {
+                Canary.log.error("Failed to update database schema", e);
+            }
         }
         else {
             worldinfo.a(name);
