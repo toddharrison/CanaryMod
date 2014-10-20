@@ -402,6 +402,11 @@ public class CanaryBlock implements Block {
         return state.b().containsKey(((CanaryBlockProperty)property).getNative());
     }
 
+    @Override
+    public BlockBase getBlockBase() {
+        return state.c().getWrapper();
+    }
+
     /**
      * Convenience Method
      */

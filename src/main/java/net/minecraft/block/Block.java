@@ -1,5 +1,6 @@
 package net.minecraft.block;
 
+import net.canarymod.api.world.blocks.CanaryBlockBase;
 import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.world.BlockDropXpHook;
 import net.minecraft.block.material.MapColor;
@@ -107,6 +108,9 @@ public class Block {
     private IBlockState M;
     private String N;
 
+    // CanaryMod
+    private CanaryBlockBase cbb;
+
     protected Block(Material material) {
         this.H = e;
         this.I = 1.0F;
@@ -118,6 +122,9 @@ public class Block {
         this.t = !material.b();
         this.L = this.e();
         this.j(this.L.b());
+
+        // CanaryMod
+        this.cbb = new CanaryBlockBase(this);
     }
 
     public static int a(Block block) {
@@ -1003,6 +1010,11 @@ public class Block {
 
     public final IBlockState P() {
         return this.M;
+    }
+
+    // CanaryMod
+    public final CanaryBlockBase getWrapper(){
+        return this.cbb;
     }
 
     public static class SoundType {
