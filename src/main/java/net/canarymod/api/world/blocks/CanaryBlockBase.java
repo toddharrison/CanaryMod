@@ -7,6 +7,8 @@ import net.canarymod.api.world.position.Position;
 
 import java.util.Random;
 
+import static net.canarymod.util.Unwrapper.unwrap;
+
 /**
  * Block wrapper implementation
  *
@@ -47,152 +49,152 @@ public class CanaryBlockBase implements BlockBase {
     }
 
     @Override
-    public MapColor getMapColor() {
-        return null;
+    public MapColor getMapColor(Block block) {
+        return nmsBlock.g(((CanaryBlock)block).getNativeState()).wrapper;
     }
 
     @Override
     public boolean isSolidFullCube() {
-        return false;
+        return nmsBlock.s();
     }
 
     @Override
     public boolean isNormalCube() {
-        return false;
+        return nmsBlock.t();
     }
 
     @Override
     public boolean isVisuallyOpaque() {
-        return false;
+        return nmsBlock.u();
     }
 
     @Override
     public boolean isFullCube() {
-        return false;
+        return nmsBlock.d();
     }
 
     @Override
     public boolean isPassable(Block block, Position position) {
-        return false;
+        return nmsBlock.b(unwrap(block.getWorld()), unwrap(position));
     }
 
     @Override
     public int getRenderType() {
-        return 0;
+        return nmsBlock.b();
     }
 
     @Override
     public boolean isReplaceable(World world, Position position) {
-        return false;
+        return nmsBlock.f(unwrap(world), unwrap(position));
     }
 
     @Override
     public float getBlockHardness(World world, Position position) {
-        return 0;
+        return nmsBlock.g(unwrap(world), unwrap(position));
     }
 
     @Override
     public boolean ticksRandomly() {
-        return false;
+        return nmsBlock.w();
     }
 
     @Override
     public boolean hasTileEntity() {
-        return false;
+        return nmsBlock.x();
     }
 
     @Override
     public boolean isOpaqueCube() {
-        return false;
+        return nmsBlock.c();
     }
 
     @Override
     public boolean isCollidable() {
-        return false;
+        return nmsBlock.y();
     }
 
     @Override
     public int tickRate(World world) {
-        return 0;
+        return nmsBlock.a(unwrap(world));
     }
 
     @Override
     public int quantityDropped(Random random) {
-        return 0;
+        return nmsBlock.a(random);
     }
 
     @Override
     public int damageDropped(Block block) {
-        return 0;
+        return nmsBlock.a(unwrap(block));
     }
 
     @Override
     public float getExplosionResistance(Entity entity) {
-        return 0;
+        return nmsBlock.a(unwrap(entity));
     }
 
     @Override
     public double getBlockBoundsMinX() {
-        return 0;
+        return nmsBlock.z();
     }
 
     @Override
     public double getBlockBoundsMaxX() {
-        return 0;
+        return nmsBlock.A();
     }
 
     @Override
     public double getBlockBoundsMinY() {
-        return 0;
+        return nmsBlock.B();
     }
 
     @Override
     public double getBlockBoundsMaxY() {
-        return 0;
+        return nmsBlock.C();
     }
 
     @Override
     public double getBlockBoundsMinZ() {
-        return 0;
+        return nmsBlock.D();
     }
 
     @Override
     public double getBlockBoundsMaxZ() {
-        return 0;
+        return nmsBlock.E();
     }
 
     @Override
     public boolean canProvidePower() {
-        return false;
+        return nmsBlock.g();
     }
 
     @Override
     public String getLocalizedName() {
-        return null;
+        return nmsBlock.a();
     }
 
     @Override
     public boolean getEnableStats() {
-        return false;
+        return nmsBlock.I();
     }
 
     @Override
     public int getMobilityFlag() {
-        return 0;
+        return nmsBlock.i();
     }
 
     @Override
     public boolean requiresUpdates() {
-        return false;
+        return nmsBlock.M();
     }
 
     @Override
     public boolean hasComparatorInputOverride() {
-        return false;
+        return nmsBlock.N();
     }
 
     @Override
     public int getComparatorInputOverride(World world, Position position) {
-        return 0;
+        return nmsBlock.l(unwrap(world), unwrap(position));
     }
 }

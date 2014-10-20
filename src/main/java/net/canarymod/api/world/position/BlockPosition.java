@@ -21,6 +21,10 @@ public class BlockPosition extends Position {
         super(templ);
     }
 
+    public BlockPosition(Position pos) {
+        super(pos);
+    }
+
     public BlockPosition clone() throws CloneNotSupportedException {
         return (BlockPosition)super.clone();
     }
