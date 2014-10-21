@@ -50,6 +50,7 @@ import net.minecraft.tileentity.TileEntityNote;
 import net.minecraft.tileentity.TileEntitySign;
 import net.minecraft.tileentity.TileEntitySkull;
 import net.minecraft.util.BlockPos;
+import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.WorldSettings;
@@ -395,6 +396,23 @@ public class CanaryWorld implements World {
     public long getTotalTime() {
         // TODO: This returns what is stored in DayTime in the world.dat ... but is that the total time?
         return world.L();
+    }
+
+    @Override
+    public Difficulty getDifficulty() {
+        return World.Difficulty.fromId(this.world.x.y().a());
+    }
+
+    @Override
+    public void setDifficulty(Difficulty difficulty) {
+        // Update canary config and worldconfig so that change will stick
+        worldConfig.getFile().setInt("difficulty", difficulty.getId());
+        this.world.x.a(EnumDifficulty.a(difficulty.getId()));
+    }
+
+    @Override
+    public WorldType getWorldType() {
+        return WorldType.fromString(world.x.u().a());
     }
 
     @Override
