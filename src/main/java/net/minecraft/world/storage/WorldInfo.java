@@ -704,7 +704,9 @@ public class WorldInfo {
     }
 
     public Location getSpawnLocation(){
-        Location spawn = new Location(null, this.e, this.f, this.g, rotX, rotY);
+        Location spawn = new Location(this.e, this.f, this.g);
+        spawn.setPitch(rotX);
+        spawn.setRotation(rotY);
         spawn.setType(DimensionType.fromId(this.m)); // Need to set Dimension
         spawn.setWorldName(this.n); // Need to set World
         return spawn;
