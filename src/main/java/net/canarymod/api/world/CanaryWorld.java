@@ -369,11 +369,11 @@ public class CanaryWorld implements World {
 
     @Override
     public long getRawTime() {
-        return world.I();
+        return world.J();
     }
 
     public long getTotalTime() {
-        return world.H();
+        return world.I();
     }
 
     @Override
