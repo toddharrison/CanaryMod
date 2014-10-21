@@ -260,7 +260,19 @@ public class CanaryChatComponentFactory implements ChatComponentFactory {
     public ChatFormatting getFormattingByName(String name) {
         return EnumChatFormatting.b(name).getWrapper();
     }
-
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ChatFormatting getStyleByChar(char charcode) {
+        for (EnumChatFormatting temp : EnumChatFormatting.values()) {
+            if (temp.z == charcode)
+                return temp.getWrapper();
+        }
+        return null;
+    }
+    
     /**
      * {@inheritDoc}
      */
