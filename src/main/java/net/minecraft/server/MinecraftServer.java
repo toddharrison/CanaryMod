@@ -398,7 +398,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
             // CanaryMod disable plugins:
             Logger canaryLogger = log == j ? Canary.log : new ShutdownLogger("CanaryMod");
             canaryLogger.info("Disabling Plugins ...");
-            Canary.manager().disableAllPlugins(canaryLogger);
+            Canary.pluginManager().disableAllPlugins(canaryLogger);
         }
     }
 

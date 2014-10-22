@@ -17,7 +17,7 @@ import net.canarymod.kit.KitProvider;
 import net.canarymod.motd.CanaryMessageOfTheDayListener;
 import net.canarymod.motd.MessageOfTheDay;
 import net.canarymod.permissionsystem.PermissionManager;
-import net.canarymod.plugin.PluginManager;
+import net.canarymod.plugin.DefaultPluginManager;
 import net.canarymod.user.OperatorsProvider;
 import net.canarymod.user.ReservelistProvider;
 import net.canarymod.user.UserAndGroupsProvider;
@@ -64,7 +64,7 @@ public class CanaryMod extends Canary {
         this.playerSelector = new CanaryPlayerSelector();
         this.channelManager = new CanaryChannelManager();
         // Initialize the plugin loader and scan for plugins
-        this.pluginManager = new PluginManager();
+        this.pluginManager = new DefaultPluginManager();
         this.scoreboardManager = new CanaryScoreboardManager();
 
         pluginManager.scanForPlugins();
