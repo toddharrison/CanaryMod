@@ -601,9 +601,6 @@ public class CanaryPlayer extends CanaryHuman implements Player {
      */
     @Override
     public boolean removeGroup(Group group) {
-        if (groups.get(0).equals(group)) {
-            return false;
-        }
         boolean success = groups.remove(group);
         if (success) {
             Canary.usersAndGroups().addOrUpdatePlayerData(this);

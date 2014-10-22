@@ -222,9 +222,6 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
      */
     @Override
     public boolean removeGroup(Group g) {
-        if (groups.get(0).equals(g)) {
-            return false;
-        }
         boolean success = groups.remove(g);
         if (success) {
             Canary.usersAndGroups().addOrUpdateOfflinePlayer(this);
