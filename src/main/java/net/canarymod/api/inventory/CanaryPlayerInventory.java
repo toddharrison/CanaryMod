@@ -171,4 +171,21 @@ public class CanaryPlayerInventory extends CanaryEntityInventory implements Play
     public InventoryPlayer getHandle() {
         return (InventoryPlayer) inventory;
     }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public Item getItemOnCursor() {
+        return getHandle().p() != null ? getHandle().p().getCanaryItem() : null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setItemOnCursor(Item item) {
+        if (item == null)
+            getHandle().b((ItemStack) null);
+        else
+            getHandle().b(((CanaryItem) item).getHandle());
+    }
 }
