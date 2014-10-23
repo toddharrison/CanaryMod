@@ -5,6 +5,7 @@ import jline.console.ConsoleReader;
 import jline.console.UserInterruptException;
 import jline.console.completer.Completer;
 import net.canarymod.Canary;
+import net.canarymod.CanaryMod;
 import net.canarymod.Main;
 import net.canarymod.api.CanaryServer;
 import net.canarymod.config.Configuration;
@@ -36,7 +37,11 @@ import net.visualillusionsent.utils.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.Proxy;
 import java.net.URL;
@@ -156,7 +161,6 @@ public class DedicatedServer extends MinecraftServer implements IServer {
         bufferedreader.setDaemon(true);
         bufferedreader.start();
 
-        // CanaryMod start: logging stuff. Much useful. Hello CraftBukkit!
         java.util.logging.Logger global = java.util.logging.Logger.getLogger("");
         global.setUseParentHandlers(false);
         for (java.util.logging.Handler handler : global.getHandlers()) {
@@ -308,6 +312,8 @@ public class DedicatedServer extends MinecraftServer implements IServer {
             this.c((this.al() + 8) / 16 << 4);
             this.c(MathHelper.a(this.al(), 64, 256));
             worldcfg.getFile().setInt("max-build-height", this.al());
+            // Init subsystems before plugins load
+            ((CanaryMod)Canary.instance()).lateInitialisation();
             // CanaryMod enable plugins here, before the first world is loaded.
             // At this point all bootstrapping should be done and systems should be running
             Canary.enablePlugins();

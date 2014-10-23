@@ -9,6 +9,7 @@ import net.canarymod.bansystem.BanManager;
 import net.canarymod.commandsys.CommandDependencyException;
 import net.canarymod.commandsys.CommandList;
 import net.canarymod.commandsys.CommandManager;
+import net.canarymod.commandsys.DuplicateCommandException;
 import net.canarymod.config.Configuration;
 import net.canarymod.database.DatabaseLoader;
 import net.canarymod.help.HelpManager;
@@ -38,12 +39,11 @@ import org.apache.logging.log4j.core.config.LoggerConfig;
  */
 public class CanaryMod extends Canary {
 
+    private boolean isInitialised;
     /**
      * Creates a new CanaryMod
      */
     public CanaryMod() {
-        Canary.instance = this;
-
         // This must be the first thing to call!
         DatabaseLoader.load();
         NativeTranslate.initialize(); // Intialize native translation bridge
@@ -93,8 +93,10 @@ public class CanaryMod extends Canary {
             this.commandManager.registerCommands(new CommandList(), Canary.getServer(), false);
         }
         catch (CommandDependencyException e) {
-            // Silently ignore this. If that happens someone intended to override system commands,
-            // which is perfectly fine.
+            log.error("Failed to set up system commands! Dependency reolution failed!", e);
+        }
+        catch (DuplicateCommandException f) {
+            log.error("Failed to set up system commands! A command already exists!", f);
         }
     }
 
@@ -104,6 +106,29 @@ public class CanaryMod extends Canary {
 
     public void initMOTDListener() {
         motd().registerMOTDListener(new CanaryMessageOfTheDayListener(), (net.canarymod.motd.MOTDOwner) getServer(), false);
+    }
+
+    /**
+     * Initialises all subsystems that need the native Minecraft server to be bootstrapped.
+     * Must be called before plugins initialise.
+     */
+    public void lateInitialisation() {
+        if (isInitialised) {
+            return;
+        }
+        // They need the server to be set
+        this.initPermissions();
+        // Initialize providers that require Canary to be set already
+        this.initUserAndGroupsManager();
+        this.initKits();
+        // Warps need the DimensionType data which is created upon servre start
+        this.initWarps();
+        // commands require a valid commandOwner which is the server.
+        // That means for commands to work, we gotta load Minecraft first
+        this.initCommands();
+        // and finally throw in the MOTDListner
+        this.initMOTDListener();
+        isInitialised = true;
     }
 
     @Override
