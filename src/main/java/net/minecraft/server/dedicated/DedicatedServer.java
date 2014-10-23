@@ -5,6 +5,7 @@ import jline.console.ConsoleReader;
 import jline.console.UserInterruptException;
 import jline.console.completer.Completer;
 import net.canarymod.Canary;
+import net.canarymod.CanaryMod;
 import net.canarymod.Main;
 import net.canarymod.api.CanaryServer;
 import net.canarymod.config.Configuration;
@@ -273,6 +274,7 @@ public class DedicatedServer extends MinecraftServer implements IServer {
                 this.c((this.af() + 8) / 16 << 4);
                 this.c(MathHelper.a(this.af(), 64, 256));
                 worldcfg.getFile().setInt("max-build-height", this.af());
+                ((CanaryMod)Canary.instance()).lateInitialisation();
                 // CanaryMod enable plugins here, before the first world is loaded.
                 // At this point all bootstrapping should be done and systems should be running
                 Canary.enablePlugins();

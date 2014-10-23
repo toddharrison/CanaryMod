@@ -123,18 +123,6 @@ public class Main {
             }
             MinecraftServer.main(args); // Boot up the native server
 
-            // They need the server to be set
-            mod.initPermissions();
-            // Initialize providers that require Canary to be set already
-            mod.initUserAndGroupsManager();
-            mod.initKits();
-            // Warps need the DimensionType data which is created upon servre start
-            mod.initWarps();
-            // commands require a valid commandOwner which is the server.
-            // That means for commands to work, we gotta load Minecraft first
-            mod.initCommands();
-            // and finally throw in the MOTDListner
-            mod.initMOTDListener();
         }
         catch (Throwable t) {
             log.fatal("Error occurred during start up, unable to continue... ", t);

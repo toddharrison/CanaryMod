@@ -38,6 +38,7 @@ import org.apache.logging.log4j.core.config.LoggerConfig;
  */
 public class CanaryMod extends Canary {
 
+    private boolean isInitialised;
     /**
      * Creates a new CanaryMod
      */
@@ -104,6 +105,24 @@ public class CanaryMod extends Canary {
 
     public void initMOTDListener() {
         motd().registerMOTDListener(new CanaryMessageOfTheDayListener(), (net.canarymod.motd.MOTDOwner) getServer(), false);
+    }
+
+    public void lateInitialisation() {
+        if (isInitialised) {
+            return;
+        }
+        // They need the server to be set
+        this.initPermissions();
+        // Initialize providers that require Canary to be set already
+        this.initUserAndGroupsManager();
+        this.initKits();
+        this.initWarps();
+        // commands require a valid commandOwner which is the server.
+        // That means for commands to work, we gotta load Minecraft first
+        this.initCommands();
+        // and finally throw in the MOTDListner
+        this.initMOTDListener();
+        isInitialised = true;
     }
 
     @Override
