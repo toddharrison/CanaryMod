@@ -2,6 +2,7 @@ package net.minecraft.inventory;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.inventory.Inventory;
 import net.canarymod.hook.player.InventoryHook;
 import net.minecraft.entity.player.EntityPlayer;
@@ -11,7 +12,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -461,6 +461,7 @@ public abstract class Container {
         if (entityplayer instanceof EntityPlayerMP) { // CanaryMod: NPC somehow called this causing a crash
             // CanaryMod: Inventory closing
             if (inventory != null) {
+                ((Player)entityplayer.getCanaryHuman()).message("called me?");
                 new InventoryHook(((EntityPlayerMP)entityplayer).getPlayer(), inventory, true).call();
             }
             //

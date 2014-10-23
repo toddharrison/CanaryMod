@@ -1,6 +1,7 @@
 package net.minecraft.inventory;
 
 
+import net.canarymod.api.world.blocks.CanaryDoubleChest;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
@@ -136,7 +137,9 @@ public class InventoryLargeChest implements ILockableContainer {
     }
 
     public Container a(InventoryPlayer inventoryplayer, EntityPlayer entityplayer) {
-        return new ContainerChest(inventoryplayer, this, entityplayer);
+        ContainerChest chest =  new ContainerChest(inventoryplayer, this, entityplayer);
+        chest.setInventory(new CanaryDoubleChest(this)); // CanaryMod fix
+        return chest;
     }
 
     public void l() {

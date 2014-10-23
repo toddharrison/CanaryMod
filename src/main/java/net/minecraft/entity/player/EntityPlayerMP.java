@@ -710,8 +710,14 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
     }
 
     public void a(IMerchant imerchant) {
+        // CanaryMod: InventoryHook
+        Container container = NMSToolBox.doInventoryHook(imerchant, this);
+        if(container == null){
+            return;
+        }
+        //
         this.cr();
-        this.bi = new ContainerMerchant(this.bg, imerchant, this.o);
+        this.bi = container; // CanaryMod: Use passed back container
         this.bi.d = this.bT;
         this.bi.a((ICrafting)this);
         InventoryMerchant inventorymerchant = ((ContainerMerchant)this.bi).e();

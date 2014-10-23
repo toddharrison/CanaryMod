@@ -199,4 +199,19 @@ public class InventoryMerchant implements IInventory {
         }
 
     }
+    
+    // CanaryMod
+    public IMerchant getMerchant() {
+        return this.a;
+    }
+
+    public EntityPlayer getPlayer() {
+        return this.c;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    //
 }

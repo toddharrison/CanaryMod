@@ -1,6 +1,7 @@
 package net.minecraft.inventory;
 
 
+import net.canarymod.api.inventory.CanaryVillagerInventory;
 import net.minecraft.entity.IMerchant;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -34,6 +35,7 @@ public class ContainerMerchant extends Container {
             this.a(new Slot(inventoryplayer, i0, 8 + i0 * 18, 142));
         }
 
+        this.inventory = new CanaryVillagerInventory(this.f); // CanaryMod
     }
 
     public InventoryMerchant e() {
@@ -108,7 +110,7 @@ public class ContainerMerchant extends Container {
     }
 
     public void b(EntityPlayer entityplayer) {
-        super.b(entityplayer);
+        // super.b(entityplayer); - CanaryMod removal in order to not send 2 InventoryHooks
         this.a.a_((EntityPlayer) null);
         super.b(entityplayer);
         if (!this.g.D) {

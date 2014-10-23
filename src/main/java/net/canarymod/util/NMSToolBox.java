@@ -14,7 +14,9 @@ import net.canarymod.api.world.blocks.CanaryDoubleChest;
 import net.canarymod.api.world.blocks.CanaryWorkbench;
 import net.canarymod.hook.player.InventoryHook;
 import net.minecraft.block.BlockWorkbench;
+import net.minecraft.entity.IMerchant;
 import net.minecraft.entity.item.EntityMinecartChest;
+import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.*;
 import net.minecraft.server.MinecraftServer;
@@ -205,6 +207,17 @@ public class NMSToolBox extends ToolBox {
     public static Container doInventoryHook(IInteractionObject iinteractionobject, EntityPlayerMP entityplayermp){
         Container container = iinteractionobject.a(entityplayermp.bg, entityplayermp);
 
+        if(container != null) {
+            if (!new InventoryHook(entityplayermp.getPlayer(), container.getInventory(), false).call().isCanceled()) {
+                return container;
+            }
+        }
+        return null;
+    }
+    
+    public static Container doInventoryHook(IMerchant merchant, EntityPlayerMP entityplayermp){
+        ContainerMerchant container = null;
+        container = new ContainerMerchant(entityplayermp.bg, merchant, entityplayermp.o);
         if(container != null) {
             if (!new InventoryHook(entityplayermp.getPlayer(), container.getInventory(), false).call().isCanceled()) {
                 return container;
