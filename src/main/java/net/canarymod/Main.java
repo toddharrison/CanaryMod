@@ -52,7 +52,7 @@ public class Main {
 
     private static void initBird() {
         // Initialize the bird
-        Canary.setCanary(new CanaryMod());
+        new CanaryMod();
         // Add system internal serializers
         Canary.addSerializer(new ItemSerializer(), CanaryItem.class);
         Canary.addSerializer(new ItemSerializer(), Item.class);
