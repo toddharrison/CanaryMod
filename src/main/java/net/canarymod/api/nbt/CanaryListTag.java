@@ -177,7 +177,7 @@ public class CanaryListTag<E extends BaseTag> extends CanaryBaseTag implements L
      */
     @Override
     public E remove(int index) {
-        return (E)getHandle().c.remove(index);
+        return (E)CanaryBaseTag.wrap((NBTBase) getHandle().c.remove(index));
     }
 
     /**
@@ -201,7 +201,7 @@ public class CanaryListTag<E extends BaseTag> extends CanaryBaseTag implements L
      */
     @Override
     public E set(int index, E element) {
-        return (E)getHandle().c.set(index, ((CanaryBaseTag)element).getHandle()); // Need to pass handle, not element
+        return (E)CanaryBaseTag.wrap((NBTBase) getHandle().c.set(index, ((CanaryBaseTag)element).getHandle())); // Need to pass handle, not element
     }
 
     /**
