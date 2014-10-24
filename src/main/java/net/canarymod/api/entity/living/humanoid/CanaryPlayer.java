@@ -1210,6 +1210,17 @@ public class CanaryPlayer extends CanaryHuman implements Player {
     public boolean hasAchievement(Achievements achievements) {
         return hasAchievement(achievements.getInstance());
     }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Inventory getSecondInventory() {
+        if (getHandle().bi == getHandle().bh) {
+            return null;
+        }
+        return getHandle().bi.getInventory();
+    }
 
     /**
      * {@inheritDoc}
