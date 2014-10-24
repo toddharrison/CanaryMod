@@ -76,6 +76,7 @@ public class CanaryWorld implements World {
         fqName = name + "_" + this.type.getName();
         // Init nanotick size
         nanoTicks = new long[100];
+        worldConfig = Configuration.getWorldConfig(this.fqName);
         if (Configuration.getServerConfig().isWorldCacheTimerEnabled()) {
             TaskManager.scheduleContinuedTaskInMinutes(new WorldCacheTimer(this), Configuration.getServerConfig().getWorldCacheTimeout(), Configuration.getServerConfig().getWorldCacheTimeout());
         }
