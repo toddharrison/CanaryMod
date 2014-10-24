@@ -172,4 +172,14 @@ public class CanaryScoreboard implements Scoreboard {
             this.setScoreboardPosition(type, objective, player);
         }
     }
+    
+    @Override
+    public void removeScore(String name) {
+        handle.d(name, null);
+    }
+
+    @Override
+    public void removeScore(String name, ScoreObjective objective) {
+        handle.d(name, ((CanaryScoreObjective) objective).getHandle());
+    }
 }

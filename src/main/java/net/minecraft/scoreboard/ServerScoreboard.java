@@ -98,9 +98,11 @@ public class ServerScoreboard extends Scoreboard {
 
     public void b(ScoreObjective scoreobjective) {
         super.b(scoreobjective);
-        if (this.b.contains(scoreobjective)) {
+        // CanaryMod: Don't Check This
+        //if (this.b.contains(scoreobjective)) {
             this.a.an().a((Packet) (new S3BPacketScoreboardObjective(scoreobjective, 2)));
-        }
+        //}
+        // CanaryMod: End
 
         this.b();
     }
