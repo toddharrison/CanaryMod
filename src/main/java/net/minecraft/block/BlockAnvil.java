@@ -32,7 +32,7 @@ public class BlockAnvil extends BlockFalling {
     }
 
     public void a(World world, int i0, int i1, int i2, EntityLivingBase entitylivingbase, ItemStack itemstack) {
-        int i3 = MathHelper.c((double) (entitylivingbase.z * 4.0F / 360.0F) + 0.5D) & 3;
+        int i3 = MathHelper.c((double) (entitylivingbase.y * 4.0F / 360.0F) + 0.5D) & 3;
         int i4 = world.e(i0, i1, i2) >> 2;
 
         ++i3;
