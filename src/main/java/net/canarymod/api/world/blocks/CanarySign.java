@@ -34,7 +34,7 @@ public class CanarySign extends CanaryTileEntity implements Sign {
     @Override
     public String[] getText() {
         String[] strings = new String[4];
-        for (int i = 0 ; i < 5 ; i++) {
+        for (int i = 0 ; i < 4 ; i++) {
             strings[i] = getTileEntity().a[i].getWrapper().getFullText();
         }
         return strings;
