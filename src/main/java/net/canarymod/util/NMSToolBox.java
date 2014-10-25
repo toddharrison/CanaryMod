@@ -55,6 +55,22 @@ public class NMSToolBox extends ToolBox {
     }
 
     /**
+     * Converts a byte array of Block Ids into an array of native IBlockState's
+     *
+     * @param ids
+     *         the byte array of ids
+     *
+     * @return native IBlockState array
+     */
+    public static net.minecraft.block.state.IBlockState[] blockIdsToBlockStates(int[] ids) {
+        net.minecraft.block.state.IBlockState[] blocks = new net.minecraft.block.state.IBlockState[ids.length];
+        for (int index = 0; index < ids.length; index++) {
+            blocks[index] = net.minecraft.block.Block.d(ids[index]);
+        }
+        return blocks;
+    }
+
+    /**
      * Due to the nature of this, it is stored outside of Lib
      * Calling this should be extremely limited as Mojang sets a API call limit
      *

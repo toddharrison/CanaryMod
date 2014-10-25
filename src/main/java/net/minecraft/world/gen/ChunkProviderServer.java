@@ -32,6 +32,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import net.minecraft.block.Block;
 
 
 public class ChunkProviderServer implements IChunkProvider {
@@ -107,8 +108,23 @@ public class ChunkProviderServer implements IChunkProvider {
             chunk = this.e(i0, i1);
             boolean newchunk = chunk == null; // CanaryMod: Tracking on new chunks
             if (chunk == null) {
-
-                if (this.e == null) {
+                // CanaryMod: ChunkCreation
+                ChunkCreationHook hook = (ChunkCreationHook) new ChunkCreationHook(i0, i1, i.getCanaryWorld()).call();
+                int[] blocks = hook.getBlockData();
+                if (blocks != null) {
+                    ChunkPrimer primer = new ChunkPrimer();
+                    for (int i = 0 ; i < 65536 ; i++) {
+                        primer.a(i, Block.d(blocks[i]));
+                    }
+                    chunk = new Chunk(i, primer, i0, i1);
+                    chunk.k = true; // is populated
+                    chunk.b(); // lighting update
+                    if (hook.getBiomeData() != null) {
+                        chunk.getCanaryChunk().setBiomeData(hook.getBiomeData());
+                    }
+                }
+                //
+                else if (this.e == null) {
                     chunk = this.d;
                 }
                 else {
