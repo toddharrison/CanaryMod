@@ -21,6 +21,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -30,7 +31,7 @@ public class EntityTracker {
 
     private static final Logger a = LogManager.getLogger();
     private final WorldServer b;
-    private Set c = new HashSet();
+    private final Set<EntityTrackerEntry> c = Collections.synchronizedSet(new HashSet<EntityTrackerEntry>()); // CanaryMod: synchronize, add final
     private IntHashMap d = new IntHashMap();
     private int e;
 
@@ -46,13 +47,16 @@ public class EntityTracker {
         if (entity instanceof EntityPlayerMP) {
             this.a(entity, 512, 2);
             EntityPlayerMP entityplayermp = (EntityPlayerMP) entity;
-            Iterator iterator = this.c.iterator();
 
-            while (iterator.hasNext()) {
-                EntityTrackerEntry entitytrackerentry = (EntityTrackerEntry) iterator.next();
+            synchronized(c) { // CanaryMod: synchronize set access
+                Iterator iterator = this.c.iterator();
 
-                if (entitytrackerentry.a != entityplayermp) {
-                    entitytrackerentry.b(entityplayermp);
+                while (iterator.hasNext()) {
+                    EntityTrackerEntry entitytrackerentry = (EntityTrackerEntry) iterator.next();
+
+                    if (entitytrackerentry.a != entityplayermp) {
+                        entitytrackerentry.b(entityplayermp);
+                    }
                 }
             }
         } else if (entity instanceof EntityFishHook) {
@@ -167,14 +171,17 @@ public class EntityTracker {
     public void b(Entity entity) {
         if (entity instanceof EntityPlayerMP) {
             EntityPlayerMP entityplayermp = (EntityPlayerMP) entity;
-            Iterator iterator = this.c.iterator();
-            // CanaryMod: update hidden player tracking state
-            canaryTracker.clearHiddenPlayerData(entityplayermp.getPlayer());
 
-            while (iterator.hasNext()) {
-                EntityTrackerEntry entitytrackerentry = (EntityTrackerEntry) iterator.next();
+            synchronized (c) { // CanaryMod: synchronize set access
+                Iterator iterator = this.c.iterator();
+                // CanaryMod: update hidden player tracking state
+                canaryTracker.clearHiddenPlayerData(entityplayermp.getPlayer());
 
-                entitytrackerentry.a(entityplayermp);
+                while (iterator.hasNext()) {
+                    EntityTrackerEntry entitytrackerentry = (EntityTrackerEntry) iterator.next();
+
+                    entitytrackerentry.a(entityplayermp);
+                }
             }
         }
 
@@ -188,26 +195,32 @@ public class EntityTracker {
 
     public void a() {
         ArrayList arraylist = new ArrayList();
-        Iterator iterator = this.c.iterator();
 
-        while (iterator.hasNext()) {
-            EntityTrackerEntry entitytrackerentry = (EntityTrackerEntry) iterator.next();
+        synchronized (c) { // CanaryMod: synchronize set access
+            Iterator iterator = this.c.iterator();
 
-            entitytrackerentry.a(this.b.h);
-            if (entitytrackerentry.n && entitytrackerentry.a instanceof EntityPlayerMP) {
-                arraylist.add((EntityPlayerMP) entitytrackerentry.a);
+            while (iterator.hasNext()) {
+                EntityTrackerEntry entitytrackerentry = (EntityTrackerEntry) iterator.next();
+
+                entitytrackerentry.a(this.b.h);
+                if (entitytrackerentry.n && entitytrackerentry.a instanceof EntityPlayerMP) {
+                    arraylist.add((EntityPlayerMP) entitytrackerentry.a);
+                }
             }
         }
 
         for (int i0 = 0; i0 < arraylist.size(); ++i0) {
             EntityPlayerMP entityplayermp = (EntityPlayerMP) arraylist.get(i0);
-            Iterator iterator1 = this.c.iterator();
 
-            while (iterator1.hasNext()) {
-                EntityTrackerEntry entitytrackerentry1 = (EntityTrackerEntry) iterator1.next();
+            synchronized (c) { // CanaryMod: synchronize set access
+                Iterator iterator1 = this.c.iterator();
 
-                if (entitytrackerentry1.a != entityplayermp) {
-                    entitytrackerentry1.b(entityplayermp);
+                while (iterator1.hasNext()) {
+                    EntityTrackerEntry entitytrackerentry1 = (EntityTrackerEntry) iterator1.next();
+
+                    if (entitytrackerentry1.a != entityplayermp) {
+                        entitytrackerentry1.b(entityplayermp);
+                    }
                 }
             }
         }
@@ -230,12 +243,14 @@ public class EntityTracker {
     }
 
     public void a(EntityPlayerMP entityplayermp) {
-        Iterator iterator = this.c.iterator();
+        synchronized (c) { // CanaryMod: synchronize set access
+            Iterator iterator = this.c.iterator();
 
-        while (iterator.hasNext()) {
-            EntityTrackerEntry entitytrackerentry = (EntityTrackerEntry) iterator.next();
+            while (iterator.hasNext()) {
+                EntityTrackerEntry entitytrackerentry = (EntityTrackerEntry) iterator.next();
 
-            entitytrackerentry.c(entityplayermp);
+                entitytrackerentry.c(entityplayermp);
+            }
         }
     }
 
@@ -261,7 +276,9 @@ public class EntityTracker {
     }
 
     /**
-     * Get the HashSet of tracked entity entries
+     * Get the HashSet of tracked entity entries.
+     * <strong>NOTE:</strong> You <em>must</em> synchronize on this
+     * set when iterating over it.
      *
      * @return
      */
