@@ -15,15 +15,16 @@ import net.minecraft.network.play.server.S13PacketDestroyEntities;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import static net.canarymod.Canary.log;
 
 public class CanaryEntityTracker implements EntityTracker {
-    private net.minecraft.entity.EntityTracker tracker;
+    private final net.minecraft.entity.EntityTracker tracker;
     private final List<Player> hiddenGlobal;
     private final HashMap<Player, List<Player>> hiddenPlayersMap;
 
-    private CanaryWorld dim;
+    private final CanaryWorld dim;
 
     public CanaryEntityTracker(net.minecraft.entity.EntityTracker tracker, CanaryWorld dim) {
         this.hiddenGlobal = new ArrayList<Player>();
@@ -77,8 +78,11 @@ public class CanaryEntityTracker implements EntityTracker {
     public List<Entity> getTrackedEntities() {
         List<Entity> entities = new ArrayList<Entity>();
 
-        for (net.minecraft.entity.EntityTrackerEntry e : tracker.getTrackedEntities()) {
-            entities.add(e.getCanaryTrackerEntry().getEntity());
+        Set<net.minecraft.entity.EntityTrackerEntry> trackedEntities = tracker.getTrackedEntities();
+        synchronized (trackedEntities) { // Synchronize set access
+            for (net.minecraft.entity.EntityTrackerEntry e : trackedEntities) {
+                entities.add(e.getCanaryTrackerEntry().getEntity());
+            }
         }
         return entities;
     }
