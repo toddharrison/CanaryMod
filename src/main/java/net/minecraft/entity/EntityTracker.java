@@ -20,7 +20,6 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -33,7 +32,7 @@ public class EntityTracker {
 
     private static final Logger a = LogManager.getLogger();
     private final WorldServer b;
-    private final Set<EntityTrackerEntry> c = Collections.synchronizedSet(Sets.<EntityTrackerEntry>newHashSet()); // CanaryMod: synchronize, add final
+    private final Set<EntityTrackerEntry> c = Collections.synchronizedSet(Sets.<EntityTrackerEntry> newHashSet()); // CanaryMod: synchronize, add final
     private IntHashMap d = new IntHashMap();
     private int e;
 
@@ -50,7 +49,7 @@ public class EntityTracker {
             this.a(entity, 512, 2);
             EntityPlayerMP entityplayermp = (EntityPlayerMP) entity;
 
-            synchronized(c) { // CanaryMod: synchronize set access
+            synchronized (c) { // CanaryMod: synchronize set access
                 Iterator iterator = this.c.iterator();
 
                 while (iterator.hasNext()) {
@@ -214,25 +213,25 @@ public class EntityTracker {
                 entitytrackerentry.a(this.b.j);
                 if (entitytrackerentry.n && entitytrackerentry.a instanceof EntityPlayerMP) {
                     arraylist.add((EntityPlayerMP) entitytrackerentry.a);
+                }
             }
-        }
 
-        for (int i0 = 0; i0 < arraylist.size(); ++i0) {
-            EntityPlayerMP entityplayermp = (EntityPlayerMP) arraylist.get(i0);
+            for (int i0 = 0; i0 < arraylist.size(); ++i0) {
+                EntityPlayerMP entityplayermp = (EntityPlayerMP) arraylist.get(i0);
 
-            synchronized (c) { // CanaryMod: synchronize set access
-                Iterator iterator1 = this.c.iterator();
+                synchronized (c) { // CanaryMod: synchronize set access
+                    Iterator iterator1 = this.c.iterator();
 
-                while (iterator1.hasNext()) {
-                    EntityTrackerEntry entitytrackerentry1 = (EntityTrackerEntry) iterator1.next();
+                    while (iterator1.hasNext()) {
+                        EntityTrackerEntry entitytrackerentry1 = (EntityTrackerEntry) iterator1.next();
 
-                    if (entitytrackerentry1.a != entityplayermp) {
-                        entitytrackerentry1.b(entityplayermp);
+                        if (entitytrackerentry1.a != entityplayermp) {
+                            entitytrackerentry1.b(entityplayermp);
+                        }
                     }
                 }
             }
         }
-
     }
 
     public void a(EntityPlayerMP entityplayermp) {
