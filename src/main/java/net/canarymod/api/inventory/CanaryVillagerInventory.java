@@ -9,6 +9,11 @@ import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.inventory.InventoryMerchant;
 import net.minecraft.item.ItemStack;
 
+/**
+ * Villager inventory implementation
+ *
+ * @author Almog (JrSwift)
+ */
 public class CanaryVillagerInventory extends CanaryEntityInventory implements VillagerInventory {
 
     VillagerTrade trade;

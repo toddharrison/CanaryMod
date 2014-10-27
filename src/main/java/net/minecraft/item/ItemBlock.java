@@ -19,7 +19,6 @@ import net.minecraft.world.World;
 public class ItemBlock extends Item {
 
     protected final Block a;
-    protected boolean handled = false; // CanaryMod: for ItemSlab inconsistency...
 
     public ItemBlock(Block block) {
         this.a = block;
@@ -59,16 +58,12 @@ public class ItemBlock extends Item {
             int i0 = this.a(itemstack.i());
             IBlockState iblockstate1 = this.a.a(world, blockpos, enumfacing, f0, f1, f2, i0, entityplayer);
 
+            // CanaryMod: BlockPlaceHook
+            if (new BlockPlaceHook(((EntityPlayerMP)entityplayer).getPlayer(), clicked, new CanaryBlock(iblockstate1, blockpos, world)).call().isCanceled()) {
+                return false;
+            }
+            //
             if (world.a(blockpos, iblockstate1, 3)) {
-
-                // CanaryMod: if ItemSlab didn't call BlockPlace
-                if (!handled) {
-                    // Create and Call
-                    if (new BlockPlaceHook(((EntityPlayerMP)entityplayer).getPlayer(), clicked, new CanaryBlock(iblockstate1, blockpos, world)).call().isCanceled()) {
-                        return false;
-                    }
-                }
-                //
 
                 iblockstate1 = world.p(blockpos);
                 if (iblockstate1.c() == this.a) {
