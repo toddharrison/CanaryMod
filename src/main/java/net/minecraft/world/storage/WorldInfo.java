@@ -134,6 +134,10 @@ public class WorldInfo {
         if(nbttagcompound.c("SpawnRotY")){
             this.rotY = nbttagcompound.h("SpawnRotY");
         }
+
+        if(nbttagcompound.c("Dimension")){
+            this.m = nbttagcompound.f("Dimension");
+        }
         // CanaryMod: end
 
         this.h = nbttagcompound.g("Time");
@@ -223,7 +227,7 @@ public class WorldInfo {
 
     }
 
-    public WorldInfo(WorldSettings worldsettings, String s0) {
+    public WorldInfo(WorldSettings worldsettings, String s0, DimensionType type) {
         this.c = WorldType.b;
         this.d = "";
         this.B = 0.0D;
@@ -240,6 +244,7 @@ public class WorldInfo {
         this.n = s0;
         this.z = a;
         this.y = false;
+        this.m = type.getId();
     }
 
     public void a(WorldSettings worldsettings) {
@@ -335,6 +340,7 @@ public class WorldInfo {
         // CanaryMod: Store Spawn Rotation/Pitch
         nbttagcompound.a("SpawnRotX", this.rotX);
         nbttagcompound.a("SpawnRotY", this.rotY);
+        nbttagcompound.a("Dimension", this.m);
         // CanaryMod: end
 
         nbttagcompound.a("Time", this.h);
@@ -710,6 +716,14 @@ public class WorldInfo {
         spawn.setType(DimensionType.fromId(this.m)); // Need to set Dimension
         spawn.setWorldName(this.n); // Need to set World
         return spawn;
+    }
+
+    /**
+     * Return the dimension ID defined via this WorldInfo
+     * @return the dim ID
+     */
+    public int getDimId() {
+        return this.m;
     }
     // CanaryMod End
 }
