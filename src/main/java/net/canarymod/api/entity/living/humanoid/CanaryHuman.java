@@ -84,7 +84,7 @@ public abstract class CanaryHuman extends CanaryLivingBase implements Human {
     @Override
     public boolean isShooting() {
         /* mimics the isBlocking method above only with BOW Action*/
-        return getHandle().bR() && getHandle().g.b().e(getHandle().g) == EnumAction.BLOCK;
+        return getHandle().bR() && getHandle().g.b().e(getHandle().g) == EnumAction.BOW;
     }
 
     /**
