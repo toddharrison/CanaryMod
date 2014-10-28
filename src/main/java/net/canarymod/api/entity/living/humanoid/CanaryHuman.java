@@ -5,6 +5,7 @@ import net.canarymod.api.entity.living.CanaryLivingBase;
 import net.canarymod.api.inventory.Item;
 import net.canarymod.api.inventory.PlayerInventory;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.EnumAction;
 
 /**
  * Human implementation
@@ -75,6 +76,15 @@ public abstract class CanaryHuman extends CanaryLivingBase implements Human {
     @Override
     public boolean isBlocking() {
         return getHandle().bV();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isShooting() {
+        /* mimics the isBlocking method above only with BOW Action*/
+        return getHandle().bR() && getHandle().g.b().e(getHandle().g) == EnumAction.BLOCK;
     }
 
     /**

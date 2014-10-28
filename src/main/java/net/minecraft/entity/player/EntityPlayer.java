@@ -97,7 +97,7 @@ public abstract class EntityPlayer extends EntityLivingBase {
     public int bA; // total points
     public float bB;
     private int f;
-    private ItemStack g;
+    public ItemStack g; // CanaryMod: private -> public (item in hand)
     private int h;
     protected float bC = 0.1F;
     protected float bD = 0.02F;
