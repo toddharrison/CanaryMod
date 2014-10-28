@@ -661,48 +661,49 @@ public class WorldServer extends World implements IThreadListener {
     }
 
     private void b(WorldSettings worldsettings) {
-        if (!this.t.e()) {
-            this.x.a(BlockPos.a.b(this.t.i()));
-        }
-        else if (this.x.u() == WorldType.g) {
-            this.x.a(BlockPos.a.a());
+        // CanaryMod: Always find spawn
+//        if (!this.t.e()) {
+//            this.x.a(BlockPos.a.b(this.t.i()));
+//        }
+//        else if (this.x.u() == WorldType.g) {
+//            this.x.a(BlockPos.a.a());
+//        }
+//        else {
+        this.y = true;
+        WorldChunkManager worldchunkmanager = this.t.m();
+        List list = worldchunkmanager.a();
+        Random random = new Random(this.J());
+        BlockPos blockpos = worldchunkmanager.a(0, 0, 256, list, random);
+        int i0 = 0;
+        int i1 = this.t.i();
+        int i2 = 0;
+
+        if (blockpos != null) {
+            i0 = blockpos.n();
+            i2 = blockpos.p();
         }
         else {
-            this.y = true;
-            WorldChunkManager worldchunkmanager = this.t.m();
-            List list = worldchunkmanager.a();
-            Random random = new Random(this.J());
-            BlockPos blockpos = worldchunkmanager.a(0, 0, 256, list, random);
-            int i0 = 0;
-            int i1 = this.t.i();
-            int i2 = 0;
-
-            if (blockpos != null) {
-                i0 = blockpos.n();
-                i2 = blockpos.p();
-            }
-            else {
-                a.warn("Unable to find spawn biome");
-            }
-
-            int i3 = 0;
-
-            while (!this.t.a(i0, i2)) {
-                i0 += random.nextInt(64) - random.nextInt(64);
-                i2 += random.nextInt(64) - random.nextInt(64);
-                ++i3;
-                if (i3 == 1000) {
-                    break;
-                }
-            }
-
-            this.x.a(new BlockPos(i0, i1, i2));
-            this.y = false;
-            if (worldsettings.c()) {
-                this.l();
-            }
-
+            a.warn("Unable to find spawn biome");
         }
+
+        int i3 = 0;
+
+        while (!this.t.a(i0, i2)) {
+            i0 += random.nextInt(64) - random.nextInt(64);
+            i2 += random.nextInt(64) - random.nextInt(64);
+            ++i3;
+            if (i3 == 1000) {
+                break;
+            }
+        }
+
+        this.x.a(new BlockPos(i0, i1, i2));
+        this.y = false;
+        if (worldsettings.c()) {
+            this.l();
+        }
+
+//        }
     }
 
     protected void l() {

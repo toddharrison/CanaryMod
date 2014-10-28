@@ -223,7 +223,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
                 worldsettings.a(generatorSettings);
             }
             //
-            worldinfo = new WorldInfo(worldsettings, name);
+            worldinfo = new WorldInfo(worldsettings, name, dimType);
 
             // initialize new perm file
             try {
@@ -257,7 +257,9 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
             world.a(worldsettings);
         }
         else {
-            world = (WorldServer)new WorldServerMulti(this, isavehandler, dimType.getId(), (WorldServer)((CanaryWorld)worldManager.getWorld(name, net.canarymod.api.world.DimensionType.NORMAL, true)).getHandle(), this.b).b();
+            world = (WorldServer)new WorldServerMulti(this, isavehandler, dimType.getId(), (WorldServer)((CanaryWorld)worldManager.getWorld(name, net.canarymod.api.world.DimensionType.NORMAL, true)).getHandle(), this.b, worldinfo).b();
+            // CanaryMod: Spawnpoints for everybody!
+            world.a(worldsettings);
         }
 
         world.a((IWorldAccess)(new WorldManager(this, world)));
@@ -281,7 +283,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
         this.b("menu.generatingTerrain");
         byte b0 = 0;
 
-        j.info("Preparing start region for level " + worldserver.getCanaryWorld().getName());
+        j.info("Preparing start region for level " + worldserver.getCanaryWorld().getFqName() + " ("+worldserver.P().getDimId()+")");
         BlockPos blockpos = worldserver.M();
         long i1 = ax();
 

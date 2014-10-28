@@ -11,14 +11,25 @@ import net.canarymod.database.exceptions.DatabaseWriteException;
 import net.canarymod.hook.system.LoadWorldHook;
 import net.canarymod.hook.system.UnloadWorldHook;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.BlockPos;
-import net.minecraft.world.*;
+import net.minecraft.world.EnumDifficulty;
+import net.minecraft.world.WorldServer;
+import net.minecraft.world.WorldServerMulti;
+import net.minecraft.world.WorldSettings;
 import net.minecraft.world.chunk.storage.AnvilSaveHandler;
 import net.minecraft.world.storage.WorldInfo;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
 
 import static net.canarymod.Canary.log;
 
@@ -213,14 +224,15 @@ public class CanaryWorldManager implements WorldManager {
         long seed = configuration.getWorldSeed().matches("\\d+") ? Long.valueOf(configuration.getWorldSeed()) : configuration.getWorldSeed().hashCode();
         worldsettings = new WorldSettings(seed, WorldSettings.GameType.a(configuration.getGameMode().getId()), configuration.generatesStructures(), false, net.minecraft.world.WorldType.a(configuration.getWorldType().toString()));
         worldsettings.a(configuration.getGeneratorSettings());
-        WorldInfo worldinfo = new WorldInfo(worldsettings, name);
+        WorldInfo worldinfo = new WorldInfo(worldsettings, name, dimType);
 
         if (dimType == DimensionType.NORMAL) {
             world = (WorldServer) new WorldServer(mcserver, isavehandler, worldinfo, dimType.getId(), mcserver.b).b();
             world.a(worldsettings);
         }
         else {
-            world = (WorldServer) new WorldServerMulti(mcserver, isavehandler, dimType.getId(), (WorldServer) ((CanaryWorld) getWorld(name, net.canarymod.api.world.DimensionType.NORMAL, true)).getHandle(), mcserver.b).b();
+            world = (WorldServer) new WorldServerMulti(mcserver, isavehandler, dimType.getId(), (WorldServer) ((CanaryWorld) getWorld(name, net.canarymod.api.world.DimensionType.NORMAL, true)).getHandle(), mcserver.b, worldinfo).b();
+            world.a(worldsettings);
         }
 
         world.a((new net.minecraft.world.WorldManager(mcserver, world)));

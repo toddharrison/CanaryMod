@@ -6,15 +6,16 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.village.VillageCollection;
 import net.minecraft.world.border.IBorderListener;
 import net.minecraft.world.border.WorldBorder;
-import net.minecraft.world.storage.DerivedWorldInfo;
 import net.minecraft.world.storage.ISaveHandler;
+import net.minecraft.world.storage.WorldInfo;
 
 public class WorldServerMulti extends WorldServer {
 
     private WorldServer a;
 
-    public WorldServerMulti(MinecraftServer minecraftserver, ISaveHandler isavehandler, int i0, WorldServer worldserver, Profiler profiler) {
-        super(minecraftserver, isavehandler, new DerivedWorldInfo(worldserver.P()), i0, profiler);
+    // CanaryMod added extra worldinfo to signature
+    public WorldServerMulti(MinecraftServer minecraftserver, ISaveHandler isavehandler, int i0, WorldServer worldserver, Profiler profiler, WorldInfo worldInfo) {
+        super(minecraftserver, isavehandler, worldInfo, i0, profiler);
         this.a = worldserver;
         worldserver.af().a(new IBorderListener() {
 
