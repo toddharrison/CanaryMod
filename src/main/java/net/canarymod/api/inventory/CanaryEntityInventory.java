@@ -391,7 +391,7 @@ public abstract class CanaryEntityInventory implements Inventory {
                     if((i.hasDataTag() && !item.hasDataTag()) || (!i.hasDataTag() && item.hasDataTag())){
                         continue;
                     }
-                    else if (!i.getDataTag().equals(item.getDataTag())){
+                    else if (i.hasDataTag() && !i.getDataTag().equals(item.getDataTag())){
                         continue;
                     }
                     itemExisting = i;

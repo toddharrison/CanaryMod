@@ -17,7 +17,7 @@ public class ItemSlab extends ItemBlock {
 
     private final BlockSlab b;
     private final BlockSlab c;
-    private BlockPlaceHook hook; // CanaryMod: helper
+    protected byte status = 0; // CanaryMod: mitigate double hook calls when calling super methods
 
     public ItemSlab(Block block, BlockSlab blockslab, BlockSlab blockslab1) {
         super(block);
@@ -36,9 +36,8 @@ public class ItemSlab extends ItemBlock {
     }
 
     public boolean a(ItemStack itemstack, EntityPlayer entityplayer, World world, BlockPos blockpos, EnumFacing enumfacing, float f0, float f1, float f2) {
-        this.hook = null; // CanaryMod: Clean up
-        this.handled = false; // CanaryMod: Clean up
         // CanaryMod: BlockPlaceHook
+        status = 0; // Clear status
         CanaryBlock clicked = new CanaryBlock(world.p(blockpos), blockpos, world); // Store Clicked
         clicked.setFaceClicked(enumfacing.asBlockFace()); // Set face clicked
         //
@@ -62,8 +61,7 @@ public class ItemSlab extends ItemBlock {
                     IBlockState iblockstate1 = this.c.P().a(iproperty, comparable);
 
                     // CanaryMod: BlockPlace
-                    hook = (BlockPlaceHook)new BlockPlaceHook(((EntityPlayerMP)entityplayer).getPlayer(), clicked, new CanaryBlock(iblockstate1, blockpos.a(enumfacing), world)).call();
-                    if (hook.isCanceled()) {
+                    if (new BlockPlaceHook(((EntityPlayerMP)entityplayer).getPlayer(), clicked, new CanaryBlock(iblockstate1, blockpos.a(enumfacing), world)).call().isCanceled()) {
                         return false;
                     }
                     //
@@ -78,9 +76,7 @@ public class ItemSlab extends ItemBlock {
             }
             else {
                 boolean ret = this.a(itemstack, world, blockpos, object, ((EntityPlayerMP)entityplayer).getPlayer(), clicked); // Moved up to call hook before the return
-
-                this.handled = hook != null; // Let super know we got this shit
-                return (!(hook != null && hook.isCanceled())) && (ret || super.a(itemstack, entityplayer, world, blockpos, enumfacing, f0, f1, f2));
+                return status != 1 && (ret || super.a(itemstack, entityplayer, world, blockpos, enumfacing, f0, f1, f2));
             }
         }
     }
@@ -96,8 +92,8 @@ public class ItemSlab extends ItemBlock {
                 IBlockState iblockstate1 = this.c.P().a(this.b.l(), comparable);
 
                 // Call hook
-                hook = (BlockPlaceHook)new BlockPlaceHook(player, clicked, new CanaryBlock(iblockstate1, blockpos, world)).call();
-                if (hook.isCanceled()) {
+                if (new BlockPlaceHook(player, clicked, new CanaryBlock(iblockstate1, blockpos, world)).call().isCanceled()) {
+                    status = 1; // Killed
                     return false;
                 }
                 //
@@ -110,8 +106,7 @@ public class ItemSlab extends ItemBlock {
                 return true;
             }
         }
-        // CanaryMod: clear dead hook
-        hook = null;
+
         return false;
     }
 }
