@@ -352,12 +352,7 @@ public class CanaryWorld implements World {
 
     @Override
     public int getHighestBlockAt(int x, int z) {
-        for (int i = 0; i < this.getHeight(); i++) {
-            if (world.d(new BlockPos(x, i, z))) {
-                return i;
-            }
-        }
-        return getHeight();
+        return world.m(new BlockPos(x,0,z)).o();
     }
 
     @Override
