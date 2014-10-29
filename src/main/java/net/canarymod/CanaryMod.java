@@ -19,6 +19,7 @@ import net.canarymod.motd.CanaryMessageOfTheDayListener;
 import net.canarymod.motd.MessageOfTheDay;
 import net.canarymod.permissionsystem.PermissionManager;
 import net.canarymod.plugin.DefaultPluginManager;
+import net.canarymod.plugin.PluginLangLoader;
 import net.canarymod.user.OperatorsProvider;
 import net.canarymod.user.ReservelistProvider;
 import net.canarymod.user.UserAndGroupsProvider;
@@ -44,11 +45,12 @@ public class CanaryMod extends Canary {
      * Creates a new CanaryMod
      */
     public CanaryMod() {
+        setLoggerLevelDynamic(); //Once we know if debug is enabled, you can change the level accordingly
         Canary.setCanary(this);
         // This must be the first thing to call!
         DatabaseLoader.load();
+        PluginLangLoader.load(); // Load the plugin language libraries
         NativeTranslate.initialize(); // Intialize native translation bridge
-        setLoggerLevelDynamic(); //Once we know if debug is enabled, you can change the level accordingly
 
         this.jsonNBT = new CanaryJsonNBTUtility(); // Set up the Json to/from NBT utility
         this.motd = new MessageOfTheDay();

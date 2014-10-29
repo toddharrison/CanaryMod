@@ -171,6 +171,7 @@
                             <Server-Version>${minecraft.server.version}</Server-Version>
                             <Main-Class>net.canarymod.Main</Main-Class>
                             <Sealed>true</Sealed>
+                            <Class-Path>lib/</Class-Path>
                         </manifestEntries>
                         <manifestSections>
                             <manifestSection>
