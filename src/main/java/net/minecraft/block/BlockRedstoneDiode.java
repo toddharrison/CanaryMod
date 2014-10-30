@@ -48,7 +48,7 @@ public abstract class BlockRedstoneDiode extends BlockDirectional {
             boolean flag0 = this.e(world, blockpos, iblockstate);
 
             // CanaryMod
-            CanaryBlock changing = new CanaryBlock(iblockstate, blockpos, world);
+            CanaryBlock changing = CanaryBlock.getPooledBlock(iblockstate, blockpos, world);
 
             if (this.M && !flag0) {
                 // CanaryMod: RedstoneChange; turning off

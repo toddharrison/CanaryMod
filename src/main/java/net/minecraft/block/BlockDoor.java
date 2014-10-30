@@ -116,7 +116,7 @@ public class BlockDoor extends Block {
         }
         else {
             // CanaryMod: Block Physics
-            if (new BlockPhysicsHook(new CanaryBlock(iblockstate, blockpos, world), false).call().isCanceled()) {
+            if (new BlockPhysicsHook(CanaryBlock.getPooledBlock(iblockstate, blockpos, world), false).call().isCanceled()) {
                 return true;
             }
             //
@@ -142,7 +142,7 @@ public class BlockDoor extends Block {
 
         if (iblockstate.c() == this) {
             // CanaryMod: Block Physics
-            if (new BlockPhysicsHook(new CanaryBlock(iblockstate, blockpos, world), false).call().isCanceled()) {
+            if (new BlockPhysicsHook(CanaryBlock.getPooledBlock(iblockstate, blockpos, world), false).call().isCanceled()) {
                 return;
             }
             //

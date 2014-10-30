@@ -288,39 +288,39 @@ public class BlockVine extends Block {
                                 BlockPos blockpos3 = blockpos1.a(enumfacing2);
 
                                 // CanaryMod: Grab the original stuff
-                                CanaryBlock original = new CanaryBlock(iblockstate, blockpos, world);
+                                CanaryBlock original = CanaryBlock.getPooledBlock(iblockstate, blockpos, world);
                                 //
                                 if (flag1 && this.c(world.p(blockpos2).c())) {
                                     // CanaryMod: set data, call hook
-                                    if (!new BlockGrowHook(original, new CanaryBlock(this.P().a(a(enumfacing1)), blockpos1, world)).call().isCanceled()) {
+                                    if (!new BlockGrowHook(original, CanaryBlock.getPooledBlock(this.P().a(a(enumfacing1)), blockpos1, world)).call().isCanceled()) {
                                         world.a(blockpos1, this.P().a(a(enumfacing1), Boolean.valueOf(true)), 2);
                                     }
                                     //
                                 }
                                 else if (flag2 && this.c(world.p(blockpos3).c())) {
                                     // CanaryMod: set data, call hook
-                                    if (!new BlockGrowHook(original, new CanaryBlock(this.P().a(a(enumfacing2)), blockpos1, world)).call().isCanceled()) {
+                                    if (!new BlockGrowHook(original, CanaryBlock.getPooledBlock(this.P().a(a(enumfacing2)), blockpos1, world)).call().isCanceled()) {
                                         world.a(blockpos1, this.P().a(a(enumfacing2), Boolean.valueOf(true)), 2);
                                     }
                                     //
                                 }
                                 else if (flag1 && world.d(blockpos2) && this.c(world.p(blockpos.a(enumfacing1)).c())) {
                                     // CanaryMod: set data, call hook
-                                    if (!new BlockGrowHook(original, new CanaryBlock(this.P().a(a(enumfacing.d())), blockpos2, world)).call().isCanceled()) {
+                                    if (!new BlockGrowHook(original, CanaryBlock.getPooledBlock(this.P().a(a(enumfacing.d())), blockpos2, world)).call().isCanceled()) {
                                         world.a(blockpos2, this.P().a(a(enumfacing.d()), Boolean.valueOf(true)), 2);
                                     }
                                     //
                                 }
                                 else if (flag2 && world.d(blockpos3) && this.c(world.p(blockpos.a(enumfacing2)).c())) {
                                     // CanaryMod: set data, call hook
-                                    if (!new BlockGrowHook(original, new CanaryBlock(this.P().a(a(enumfacing.d())), blockpos3, world)).call().isCanceled()) {
+                                    if (!new BlockGrowHook(original, CanaryBlock.getPooledBlock(this.P().a(a(enumfacing.d())), blockpos3, world)).call().isCanceled()) {
                                         world.a(blockpos3, this.P().a(a(enumfacing.d()), Boolean.valueOf(true)), 2);
                                     }
                                     //
                                 }
                                 else if (this.c(world.p(blockpos1.a()).c())) {
                                     // CanaryMod: call hook
-                                    if (!new BlockGrowHook(original, new CanaryBlock(this.P(), blockpos1, world)).call().isCanceled()) {
+                                    if (!new BlockGrowHook(original, CanaryBlock.getPooledBlock(this.P(), blockpos1, world)).call().isCanceled()) {
                                         world.a(blockpos1, this.P(), 2);
                                     }
                                     //

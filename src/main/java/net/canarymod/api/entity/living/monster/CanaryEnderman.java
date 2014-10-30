@@ -3,6 +3,7 @@ package net.canarymod.api.entity.living.monster;
 import net.canarymod.api.entity.EntityType;
 import net.canarymod.api.world.blocks.Block;
 import net.canarymod.api.world.blocks.CanaryBlock;
+import net.canarymod.api.world.position.BlockPosition;
 import net.minecraft.entity.monster.EntityEnderman;
 
 /**
@@ -37,7 +38,7 @@ public class CanaryEnderman extends CanaryEntityMob implements Enderman {
 
     @Override
     public Block getCarriedBlock() {
-        return new CanaryBlock(getHandle().ck(), getPosition(), getWorld());
+        return CanaryBlock.getPooledBlock(getHandle().ck(), new BlockPosition(this.getPosition()).asNative(), this.entity.e());
     }
 
     @Override

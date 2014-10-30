@@ -208,7 +208,9 @@ public class BlockFire extends Block {
 
                                         // CanaryMod: Ignition
                                         // Spread Status 3
-                                        if (!new IgnitionHook(new CanaryBlock(world.p(blockpos1), blockpos1, world, (byte)3), null, null, IgnitionCause.FIRE_SPREAD).call().isCanceled()) {
+                                        CanaryBlock b = CanaryBlock.getPooledBlock(world.p(blockpos1), blockpos1, world);
+                                        b.setStatus((byte)3);
+                                        if (!new IgnitionHook(b, null, null, IgnitionCause.FIRE_SPREAD).call().isCanceled()) {
                                             world.a(blockpos1, iblockstate.a(a, Integer.valueOf(i7)), 3);
                                         }
                                         //
@@ -245,7 +247,7 @@ public class BlockFire extends Block {
     private void a(World world, BlockPos blockpos, int i0, Random random, int i1) {
         int i2 = this.c(world.p(blockpos).c());
         // CanaryBlock: Ignition
-        CanaryBlock ignited = new CanaryBlock(world.p(blockpos), blockpos, world);
+        CanaryBlock ignited = CanaryBlock.getPooledBlock(world.p(blockpos), blockpos, world);
         //
 
         if (random.nextInt(i0) < i2) {

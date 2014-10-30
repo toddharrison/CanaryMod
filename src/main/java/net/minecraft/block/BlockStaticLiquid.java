@@ -41,7 +41,9 @@ public class BlockStaticLiquid extends BlockLiquid {
                 int i0 = random.nextInt(3);
 
                 // CanaryMod: Ignition
-                if (new IgnitionHook(new CanaryBlock(iblockstate, blockpos, world, (byte)1), null, null, IgnitionCause.LAVA).call().isCanceled()) {
+                CanaryBlock b = CanaryBlock.getPooledBlock(iblockstate, blockpos, world);
+                b.setStatus((byte)1);
+                if (new IgnitionHook(b, null, null, IgnitionCause.LAVA).call().isCanceled()) {
                     return;
                 }
                 //

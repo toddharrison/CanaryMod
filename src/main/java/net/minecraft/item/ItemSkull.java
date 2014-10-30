@@ -43,7 +43,7 @@ public class ItemSkull extends Item {
             boolean flag0 = block.f(world, blockpos);
 
             // CanaryMod: BlockPlaceHook
-            CanaryBlock clicked = new CanaryBlock(world.p(blockpos), blockpos, world); // Store Clicked
+            CanaryBlock clicked = CanaryBlock.getPooledBlock(world.p(blockpos), blockpos, world); // Store Clicked
             clicked.setFaceClicked(enumfacing.asBlockFace()); // Set face clicked
             //
 
@@ -64,7 +64,7 @@ public class ItemSkull extends Item {
             else {
                 if (!world.D) {
                     // CanaryMod: BlockPlace cont...
-                    CanaryBlock placed = new CanaryBlock(Blocks.ce.P().a(BlockSkull.a, enumfacing), blockpos.a(), world);
+                    CanaryBlock placed = CanaryBlock.getPooledBlock(Blocks.ce.P().a(BlockSkull.a, enumfacing), blockpos.a(), world);
                     if (new BlockPlaceHook(((EntityPlayerMP)entityplayer).getPlayer(), clicked, placed).call().isCanceled()) {
                         return false;
                     }

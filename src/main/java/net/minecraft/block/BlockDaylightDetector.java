@@ -62,7 +62,7 @@ public class BlockDaylightDetector extends BlockContainer {
 
             if (((Integer)iblockstate.b(a)).intValue() != i0) {
                 // CanaryMod: RedstoneChange; Comparator change
-                if (new RedstoneChangeHook(new CanaryBlock(iblockstate, blockpos, world), ((Integer)iblockstate.b(a)), i0).call().isCanceled()) {
+                if (new RedstoneChangeHook(CanaryBlock.getPooledBlock(iblockstate, blockpos, world), ((Integer)iblockstate.b(a)), i0).call().isCanceled()) {
                     return;
                 }
                 //
@@ -73,7 +73,7 @@ public class BlockDaylightDetector extends BlockContainer {
 
     // CanaryMod: pull break method in to do RedstoneChange
     public void b(World world, BlockPos blockpos, IBlockState iblockstate) {
-        new RedstoneChangeHook(new CanaryBlock(iblockstate, blockpos, world), ((Integer)iblockstate.b(a)), 0); //Can't really cancel this here...
+        new RedstoneChangeHook(CanaryBlock.getPooledBlock(iblockstate, blockpos, world), ((Integer)iblockstate.b(a)), 0); //Can't really cancel this here...
         super.b(world, blockpos, iblockstate);
     }
     //

@@ -166,7 +166,7 @@ public class BlockLever extends Block {
         else {
             // CanaryMod: RedstoneChange
             int newLvl = !(Boolean)iblockstate.b(b) ? 0 : 15;
-            if (new RedstoneChangeHook(new CanaryBlock(iblockstate, blockpos, world), ~newLvl & 15, newLvl).call().isCanceled()) {
+            if (new RedstoneChangeHook(CanaryBlock.getPooledBlock(iblockstate, blockpos, world), ~newLvl & 15, newLvl).call().isCanceled()) {
                 return true;
             }
             // CanaryMod: end
@@ -186,7 +186,7 @@ public class BlockLever extends Block {
     public void b(World world, BlockPos blockpos, IBlockState iblockstate) {
         if (((Boolean)iblockstate.b(b)).booleanValue()) {
             // CanaryMod: RedstoneChange (pretty sure allowing canceling could cause issues)
-            new RedstoneChangeHook(new CanaryBlock(iblockstate, blockpos, world), 15, 0).call();
+            new RedstoneChangeHook(CanaryBlock.getPooledBlock(iblockstate, blockpos, world), 15, 0).call();
             // CanaryMod: end
             world.c(blockpos, (Block)this);
             EnumFacing enumfacing = ((BlockLever.EnumOrientation)iblockstate.b(a)).c();

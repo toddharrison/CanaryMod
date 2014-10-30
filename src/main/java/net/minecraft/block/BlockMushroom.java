@@ -50,7 +50,7 @@ public class BlockMushroom extends BlockBush implements IGrowable {
 
             if (world.d(blockpos2) && this.f(world, blockpos2, this.P())) {
                 // CanaryMod: BlockGrow
-                if (!new BlockGrowHook(new CanaryBlock(iblockstate, blockpos, world), new CanaryBlock(this.P(), blockpos2, world)).call().isCanceled()) {
+                if (!new BlockGrowHook(CanaryBlock.getPooledBlock(iblockstate, blockpos, world), CanaryBlock.getPooledBlock(this.P(), blockpos2, world)).call().isCanceled()) {
                     world.a(blockpos2, this.P(), 2);
                 }
                 //

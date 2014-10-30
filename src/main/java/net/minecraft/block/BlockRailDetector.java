@@ -83,7 +83,7 @@ public class BlockRailDetector extends BlockRailBase {
         List list = this.a(world, blockpos, EntityMinecart.class, new Predicate[0]);
 
         // CanaryMod
-        CanaryBlock changing = new CanaryBlock(iblockstate, blockpos, world);
+        CanaryBlock changing = CanaryBlock.getPooledBlock(iblockstate, blockpos, world);
 
         if (!list.isEmpty()) {
             flag1 = true;

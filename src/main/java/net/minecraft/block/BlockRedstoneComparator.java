@@ -139,7 +139,7 @@ public class BlockRedstoneComparator extends BlockRedstoneDiode implements ITile
 
     public boolean a(World world, BlockPos blockpos, IBlockState iblockstate, EntityPlayer entityplayer, EnumFacing enumfacing, float f0, float f1, float f2) {
         // CanaryMod: Block Physics
-        if (new BlockPhysicsHook(new CanaryBlock(iblockstate, blockpos, world), false).call().isCanceled()) {
+        if (new BlockPhysicsHook(CanaryBlock.getPooledBlock(iblockstate, blockpos, world), false).call().isCanceled()) {
             return false;
         }
         //
@@ -189,7 +189,7 @@ public class BlockRedstoneComparator extends BlockRedstoneDiode implements ITile
             boolean flag1 = this.l(iblockstate);
 
             // CanaryMod: RedstoneChange; Comparator change
-            if (new RedstoneChangeHook(new CanaryBlock(iblockstate, blockpos, world), i0, i1).call().isCanceled()) {
+            if (new RedstoneChangeHook(CanaryBlock.getPooledBlock(iblockstate, blockpos, world), i0, i1).call().isCanceled()) {
                 return;
             }
             //
@@ -221,7 +221,7 @@ public class BlockRedstoneComparator extends BlockRedstoneDiode implements ITile
         // CanaryMod: Comparator break
         int oldLvl = ((TileEntityComparator)world.s(blockpos)).b();
         if (oldLvl != 0) {
-            new RedstoneChangeHook(new CanaryBlock(iblockstate, blockpos, world), oldLvl, 0).call();
+            new RedstoneChangeHook(CanaryBlock.getPooledBlock(iblockstate, blockpos, world), oldLvl, 0).call();
         }
         //
         super.b(world, blockpos, iblockstate);

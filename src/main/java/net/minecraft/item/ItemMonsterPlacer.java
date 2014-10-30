@@ -46,7 +46,7 @@ public class ItemMonsterPlacer extends Item {
             IBlockState iblockstate = world.p(blockpos);
 
             // CanaryMod: ItemUse
-            CanaryBlock clicked = new CanaryBlock(iblockstate, blockpos, world); // Store Clicked
+            CanaryBlock clicked = CanaryBlock.getPooledBlock(iblockstate, blockpos, world); // Store Clicked
             clicked.setFaceClicked(enumfacing.asBlockFace()); // Set face clicked
             if (new ItemUseHook(((EntityPlayerMP)entityplayer).getPlayer(), itemstack.getCanaryItem(), clicked).call().isCanceled()) {
                 return false;

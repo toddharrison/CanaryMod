@@ -32,7 +32,7 @@ public class BlockDynamicLiquid extends BlockLiquid {
     public void b(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {
 
         // CanaryMod: Flow from
-        CanaryBlock from = new CanaryBlock(iblockstate, blockpos, world);
+        CanaryBlock from = CanaryBlock.getPooledBlock(iblockstate, blockpos, world);
         //
 
         int i0 = ((Integer)iblockstate.b(b)).intValue();
@@ -117,7 +117,7 @@ public class BlockDynamicLiquid extends BlockLiquid {
             }
 
             // CanaryMod: Flow (down)
-            if (!new FlowHook(from, new CanaryBlock(iblockstate, blockpos.b(), world)).call().isCanceled()) {
+            if (!new FlowHook(from, CanaryBlock.getPooledBlock(iblockstate, blockpos.b(), world)).call().isCanceled()) {
                 if (i0 >= 8) {
                     this.a(world, blockpos.b(), iblockstate2, i0);
                 }
@@ -145,7 +145,7 @@ public class BlockDynamicLiquid extends BlockLiquid {
                 EnumFacing enumfacing1 = (EnumFacing)iterator1.next();
 
                 // CanaryMod: Flow
-                if (!new FlowHook(from, new CanaryBlock(iblockstate, blockpos.a(enumfacing1), world)).call().isCanceled()) {
+                if (!new FlowHook(from, CanaryBlock.getPooledBlock(iblockstate, blockpos.a(enumfacing1), world)).call().isCanceled()) {
                     this.a(world, blockpos.a(enumfacing1), world.p(blockpos.a(enumfacing1)), i2);
                 }
                 //
@@ -262,7 +262,7 @@ public class BlockDynamicLiquid extends BlockLiquid {
         boolean ret = material != this.J && material != Material.i && !this.g(world, blockpos, iblockstate);
 
         // CanaryMod: LiquidDestroy
-        CanaryBlock dest = new CanaryBlock(iblockstate, blockpos, world);
+        CanaryBlock dest = CanaryBlock.getPooledBlock(iblockstate, blockpos, world);
         BlockType liquid = this.J == Material.i ? BlockType.LavaFlowing : BlockType.WaterFlowing;
         LiquidDestroyHook hook = (LiquidDestroyHook)new LiquidDestroyHook(liquid, dest).call();
 

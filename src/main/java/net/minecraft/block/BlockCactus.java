@@ -52,7 +52,7 @@ public class BlockCactus extends Block {
                 CanaryBlock growth;
                 if (i1 == 15) {
                     // New Cactus forming
-                    growth = new CanaryBlock(this.P(), new BlockPosition(blockpos1), world.getCanaryWorld());
+                    growth = CanaryBlock.getPooledBlock(this.P(), blockpos1, world);
                     if (!new BlockGrowHook(original, growth).call().isCanceled()) {
                         world.a(blockpos1, this.P());
                         IBlockState iblockstate1 = iblockstate.a(a, 0);
@@ -65,7 +65,7 @@ public class BlockCactus extends Block {
                 else {
                     // Ticking
                     IBlockState grownstate = iblockstate.a(a, i1 + 1);
-                    growth = new CanaryBlock(grownstate, new BlockPosition(blockpos), world.getCanaryWorld());
+                    growth = CanaryBlock.getPooledBlock(grownstate, blockpos, world);
                     if (!new BlockGrowHook(original, growth).call().isCanceled()) {
                         world.a(blockpos, grownstate, 4);
                     }

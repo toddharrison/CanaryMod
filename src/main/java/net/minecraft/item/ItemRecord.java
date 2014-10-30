@@ -30,7 +30,7 @@ public class ItemRecord extends Item {
     public boolean a(ItemStack itemstack, EntityPlayer entityplayer, World world, BlockPos blockpos, EnumFacing enumfacing, float f0, float f1, float f2) {
         IBlockState iblockstate = world.p(blockpos);
         // CanaryMod: ItemUse
-        CanaryBlock clicked = new CanaryBlock(iblockstate, blockpos, world); // Store Clicked
+        CanaryBlock clicked = CanaryBlock.getPooledBlock(iblockstate, blockpos, world); // Store Clicked
         clicked.setFaceClicked(enumfacing.asBlockFace()); // Set face clicked
         if (new ItemUseHook(((EntityPlayerMP)entityplayer).getPlayer(), itemstack.getCanaryItem(), clicked).call().isCanceled()) {
             return false;

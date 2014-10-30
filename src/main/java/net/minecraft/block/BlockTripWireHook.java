@@ -103,7 +103,7 @@ public class BlockTripWireHook extends Block {
 
     public void a(World world, BlockPos blockpos, IBlockState iblockstate, boolean flag0, boolean flag1, int i0, IBlockState iblockstate1) {
         // CanaryMod: Block Physics
-        if (new BlockPhysicsHook(new CanaryBlock(iblockstate, blockpos, world), false).call().isCanceled()) {
+        if (new BlockPhysicsHook(CanaryBlock.getPooledBlock(iblockstate, blockpos, world), false).call().isCanceled()) {
             return;
         }
         //

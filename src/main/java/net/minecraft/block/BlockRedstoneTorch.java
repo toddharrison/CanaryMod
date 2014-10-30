@@ -63,7 +63,7 @@ public class BlockRedstoneTorch extends BlockTorch {
     public void c(World world, BlockPos blockpos, IBlockState iblockstate) {
         if (this.M) {
             // CanaryMod: RedstoneChange; Torch put in
-            if (new RedstoneChangeHook(new CanaryBlock(iblockstate, blockpos, world), 0, 15).call().isCanceled()) {
+            if (new RedstoneChangeHook(CanaryBlock.getPooledBlock(iblockstate, blockpos, world), 0, 15).call().isCanceled()) {
                 return;
             }
             //
@@ -81,7 +81,7 @@ public class BlockRedstoneTorch extends BlockTorch {
     public void b(World world, BlockPos blockpos, IBlockState iblockstate) {
         if (this.M) {
             // CanaryMod: RedstoneChange; Torch broke
-            new RedstoneChangeHook(new CanaryBlock(iblockstate, blockpos, world), 15, 0).call();
+            new RedstoneChangeHook(CanaryBlock.getPooledBlock(iblockstate, blockpos, world), 15, 0).call();
             //
             EnumFacing[] aenumfacing = EnumFacing.values();
             int i0 = aenumfacing.length;
@@ -118,7 +118,7 @@ public class BlockRedstoneTorch extends BlockTorch {
         if (this.M) {
             if (flag0) {
                 // CanaryMod: RedstoneChange; Torch off
-                if (new RedstoneChangeHook(new CanaryBlock(iblockstate, blockpos, world), 15, 0).call().isCanceled()) {
+                if (new RedstoneChangeHook(CanaryBlock.getPooledBlock(iblockstate, blockpos, world), 15, 0).call().isCanceled()) {
                     return;
                 }
                 //
@@ -140,7 +140,7 @@ public class BlockRedstoneTorch extends BlockTorch {
         }
         else if (!flag0 && !this.a(world, blockpos, false)) {
             // CanaryMod: RedstoneChange; Torch on
-            if (new RedstoneChangeHook(new CanaryBlock(iblockstate, blockpos, world), 15, 0).call().isCanceled()) {
+            if (new RedstoneChangeHook(CanaryBlock.getPooledBlock(iblockstate, blockpos, world), 15, 0).call().isCanceled()) {
                 return;
             }
             //

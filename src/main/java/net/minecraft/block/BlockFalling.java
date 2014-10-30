@@ -29,7 +29,7 @@ public class BlockFalling extends Block {
     public void c(World world, BlockPos blockpos, IBlockState iblockstate) {
         // CanaryMod: BlockPhysics
         if (world.getCanaryWorld() != null) {
-            if (new BlockPhysicsHook(new CanaryBlock(iblockstate, blockpos, world), true).call().isCanceled()) {
+            if (new BlockPhysicsHook(CanaryBlock.getPooledBlock(iblockstate, blockpos, world), true).call().isCanceled()) {
                 return;
             }
         }
@@ -39,7 +39,7 @@ public class BlockFalling extends Block {
 
     public void a(World world, BlockPos blockpos, IBlockState iblockstate, Block block) {
         // CanaryMod: BlockPhysics
-        if (new BlockPhysicsHook(new CanaryBlock(iblockstate, blockpos, world), true).call().isCanceled()) {
+        if (new BlockPhysicsHook(CanaryBlock.getPooledBlock(iblockstate, blockpos, world), true).call().isCanceled()) {
             return;
         }
         //

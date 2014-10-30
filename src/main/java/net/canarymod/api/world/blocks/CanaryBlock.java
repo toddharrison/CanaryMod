@@ -8,15 +8,47 @@ import net.canarymod.api.packet.BlockChangePacket;
 import net.canarymod.api.packet.CanaryBlockChangePacket;
 import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.api.world.World;
-import net.canarymod.api.world.blocks.properties.*;
+import net.canarymod.api.world.blocks.properties.BlockBooleanProperty;
+import net.canarymod.api.world.blocks.properties.BlockEnumProperty;
+import net.canarymod.api.world.blocks.properties.BlockIntegerProperty;
+import net.canarymod.api.world.blocks.properties.BlockProperty;
+import net.canarymod.api.world.blocks.properties.CanaryBlockEnumProperty;
+import net.canarymod.api.world.blocks.properties.CanaryBlockProperty;
 import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.api.world.position.Location;
 import net.canarymod.api.world.position.Position;
-import net.minecraft.block.*;
+import net.canarymod.util.ObjectPool;
+import net.minecraft.block.BlockCarpet;
+import net.minecraft.block.BlockColored;
+import net.minecraft.block.BlockDirt;
+import net.minecraft.block.BlockDoublePlant;
+import net.minecraft.block.BlockFlower;
+import net.minecraft.block.BlockNewLeaf;
+import net.minecraft.block.BlockNewLog;
+import net.minecraft.block.BlockOldLeaf;
+import net.minecraft.block.BlockOldLog;
+import net.minecraft.block.BlockPlanks;
+import net.minecraft.block.BlockPrismarine;
+import net.minecraft.block.BlockQuartz;
+import net.minecraft.block.BlockRedSandstone;
+import net.minecraft.block.BlockSand;
+import net.minecraft.block.BlockSandStone;
+import net.minecraft.block.BlockSapling;
+import net.minecraft.block.BlockSilverfish;
+import net.minecraft.block.BlockSkull;
+import net.minecraft.block.BlockStainedGlass;
+import net.minecraft.block.BlockStainedGlassPane;
+import net.minecraft.block.BlockStone;
+import net.minecraft.block.BlockStoneBrick;
+import net.minecraft.block.BlockStoneSlab;
+import net.minecraft.block.BlockTallGrass;
+import net.minecraft.block.BlockWall;
+import net.minecraft.block.BlockWoodSlab;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import org.omg.CORBA.UNKNOWN;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -25,6 +57,7 @@ import java.util.Random;
 
 public class CanaryBlock implements Block {
     private final static Random rndm = new Random(); // Passed to the idDropped method
+    private final static ObjectPool<BlockPos, CanaryBlock> blockPool = new ObjectPool<BlockPos, CanaryBlock>(25000, 25000, 105000000); // default: 105000000, profiler timeout: 305000000
     protected short data; // going away
 
     protected IBlockState state;
@@ -36,6 +69,20 @@ public class CanaryBlock implements Block {
 
     private static String machineNameOfBlock(net.minecraft.block.Block nmsBlock) {
         return net.minecraft.block.Block.c.c(nmsBlock).toString();
+    }
+
+    public static CanaryBlock getPooledBlock(IBlockState state, BlockPos pos, net.minecraft.world.World world) {
+        CanaryBlock block = blockPool.get(pos);
+        if (block == null) {
+            return blockPool.add(pos, new CanaryBlock(state, pos, world));
+        }
+        if (!block.world.equals(world.getCanaryWorld())) {
+            // We're querying from a different world, change the reference in the pool
+            return blockPool.add(pos, new CanaryBlock(state, pos, world));
+        }
+        // Update block state, it might has changed
+        block.state = state;
+        return block;
     }
 
     @Deprecated
@@ -72,23 +119,11 @@ public class CanaryBlock implements Block {
         this(type, data, position.getBlockX(), position.getBlockY(), position.getBlockZ(), world);
     }
 
-    public CanaryBlock(IBlockState state, BlockPos blockpos, net.minecraft.world.World world) {
+    private CanaryBlock(IBlockState state, BlockPos blockpos, net.minecraft.world.World world) {
         this(state, new BlockPosition(blockpos), world.getCanaryWorld(), (byte)0);
     }
 
-    public CanaryBlock(IBlockState state, BlockPos blockpos, net.minecraft.world.World world, byte status) {
-        this(state, new BlockPosition(blockpos), world.getCanaryWorld(), status);
-    }
-
-    public CanaryBlock(BlockPos blockpos, net.minecraft.world.World world) {
-        this(world.p(blockpos), blockpos, world, (byte)0);
-    }
-
-    public CanaryBlock(IBlockState state, Position position, World world) {
-        this(state, position, world, (byte)0);
-    }
-
-    public CanaryBlock(IBlockState state, Position position, World world, byte status) {
+    private CanaryBlock(IBlockState state, Position position, World world, byte status) {
         this.state = state;
         this.position = position;
         this.world = world;

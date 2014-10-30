@@ -52,7 +52,7 @@ public class ItemBucket extends Item {
                     IBlockState iblockstate = world.p(blockpos);
                     Material material = iblockstate.c().r();
                     // CanaryMod: BlockDestroyHook
-                    BlockDestroyHook hook = new BlockDestroyHook(((EntityPlayerMP)entityplayer).getPlayer(), new CanaryBlock(iblockstate, blockpos, world));
+                    BlockDestroyHook hook = new BlockDestroyHook(((EntityPlayerMP)entityplayer).getPlayer(), CanaryBlock.getPooledBlock(iblockstate, blockpos, world));
                     //
 
                     if (material == Material.h && ((Integer)iblockstate.b(BlockLiquid.b)).intValue() == 0) {
@@ -156,7 +156,7 @@ public class ItemBucket extends Item {
                         // CanaryMod: BlockPlaceHook water/lava bucket
                         if (entityplayer != null) {
                             BlockPos temp = blockpos.a(EnumFacing.DOWN); // Since we lose track of the original, assume placing on top
-                            if (new BlockPlaceHook(((EntityPlayerMP)entityplayer).getPlayer(), new CanaryBlock(world.p(blockpos), blockpos, world), new CanaryBlock(this.a.P(), blockpos, world)).call().isCanceled()) {
+                            if (new BlockPlaceHook(((EntityPlayerMP)entityplayer).getPlayer(), CanaryBlock.getPooledBlock(world.p(blockpos), blockpos, world), CanaryBlock.getPooledBlock(this.a.P(), blockpos, world)).call().isCanceled()) {
                                 return false;
                             }
                         }

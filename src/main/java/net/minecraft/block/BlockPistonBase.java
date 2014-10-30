@@ -77,10 +77,10 @@ public class BlockPistonBase extends Block {
         boolean flag0 = this.b(world, blockpos, enumfacing);
 
         // CanaryMod: Get Blocks
-        CanaryBlock piston = new CanaryBlock(iblockstate, blockpos, world);
+        CanaryBlock piston = CanaryBlock.getPooledBlock(iblockstate, blockpos, world);
         BlockPosition cbp = new BlockPosition(blockpos);
         cbp.transform(BlockFace.fromByte((byte)enumfacing.a()));
-        CanaryBlock moving = new CanaryBlock(world.p(cbp.asNative()), cbp, world.getCanaryWorld());
+        CanaryBlock moving = CanaryBlock.getPooledBlock(world.p(cbp.asNative()), cbp.asNative(), world);
         //
 
         if (flag0 && !((Boolean)iblockstate.b(b)).booleanValue()) {

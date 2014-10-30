@@ -52,7 +52,7 @@ public class BlockTNT extends Block {
     public void a(World world, BlockPos blockpos, Explosion explosion) {
         if (!world.D) {
             // CanaryMod: TNTActivateHook
-            if (!new TNTActivateHook(new CanaryBlock(world.p(blockpos), blockpos, world), null, ActivationCause.EXPLOSION).call().isCanceled()) {
+            if (!new TNTActivateHook(CanaryBlock.getPooledBlock(world.p(blockpos), blockpos, world), null, ActivationCause.EXPLOSION).call().isCanceled()) {
                 EntityTNTPrimed entitytntprimed = new EntityTNTPrimed(world, (double)((float)blockpos.n() + 0.5F), (double)((float)blockpos.o() + 0.5F), (double)((float)blockpos.p() + 0.5F), explosion.c());
 
                 entitytntprimed.a = world.s.nextInt(entitytntprimed.a / 4) + entitytntprimed.a / 8;
@@ -77,7 +77,7 @@ public class BlockTNT extends Block {
         if (!world.D) {
             if (((Boolean)iblockstate.b(a)).booleanValue()) {
                 // CanaryMod: TNTActivateHook
-                if (!new TNTActivateHook(new CanaryBlock(iblockstate, blockpos, world), (LivingBase)(entitylivingbase == null ? null : entitylivingbase.getCanaryEntity()), cause).call().isCanceled()) {
+                if (!new TNTActivateHook(CanaryBlock.getPooledBlock(iblockstate, blockpos, world), (LivingBase)(entitylivingbase == null ? null : entitylivingbase.getCanaryEntity()), cause).call().isCanceled()) {
                     EntityTNTPrimed entitytntprimed = new EntityTNTPrimed(world, (double)((float)blockpos.n() + 0.5F), (double)((float)blockpos.o() + 0.5F), (double)((float)blockpos.p() + 0.5F), entitylivingbase);
 
                     world.d((Entity)entitytntprimed);

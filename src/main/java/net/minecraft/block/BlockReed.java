@@ -43,12 +43,12 @@ public class BlockReed extends Block {
                 if (i0 < 3) {
                     int i1 = ((Integer)iblockstate.b(a)).intValue();
                     // CanaryMod: Grab the original block
-                    CanaryBlock original = new CanaryBlock(iblockstate, blockpos, world);
+                    CanaryBlock original = CanaryBlock.getPooledBlock(iblockstate, blockpos, world);
                     //
 
                     if (i1 == 15) {
                         // Call hook for spawning new
-                        if (!new BlockGrowHook(original, new CanaryBlock(this.P(), blockpos, world)).isCanceled()) {
+                        if (!new BlockGrowHook(original, CanaryBlock.getPooledBlock(this.P(), blockpos, world)).isCanceled()) {
                             world.a(blockpos.a(), this.P());
                             world.a(blockpos, iblockstate.a(a, Integer.valueOf(0)), 4);
                         }
@@ -56,7 +56,7 @@ public class BlockReed extends Block {
                     }
                     else {
                         // Call hook for just growing in place
-                        if (!new BlockGrowHook(original, new CanaryBlock(iblockstate.a(a, i1 + 1), blockpos, world)).isCanceled()) {
+                        if (!new BlockGrowHook(original, CanaryBlock.getPooledBlock(iblockstate.a(a, i1 + 1), blockpos, world)).isCanceled()) {
                             world.a(blockpos, iblockstate.a(a, Integer.valueOf(i1 + 1)), 4);
                         }
                         //

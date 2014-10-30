@@ -30,9 +30,9 @@ public class ItemSeeds extends Item {
         }
         else if (world.p(blockpos).c() == this.b && world.d(blockpos.a())) {
             // CanaryMod: BlockPlaceHook
-            CanaryBlock clicked = new CanaryBlock(world.p(blockpos), blockpos, world);
+            CanaryBlock clicked = CanaryBlock.getPooledBlock(world.p(blockpos), blockpos, world);
             clicked.setFaceClicked(enumfacing.asBlockFace()); // Set face clicked
-            if (new BlockPlaceHook(((EntityPlayerMP)entityplayer).getPlayer(), clicked, new CanaryBlock(this.a.P(), blockpos.a(), world)).call().isCanceled()) {
+            if (new BlockPlaceHook(((EntityPlayerMP)entityplayer).getPlayer(), clicked, CanaryBlock.getPooledBlock(this.a.P(), blockpos.a(), world)).call().isCanceled()) {
                 return false;
             }
             //

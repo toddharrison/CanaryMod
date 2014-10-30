@@ -33,7 +33,7 @@ public class ItemSign extends Item {
         else {
             blockpos = blockpos.a(enumfacing);
             // CanaryMod: BlockPlaceHook
-            CanaryBlock clicked = new CanaryBlock(world.p(blockpos), blockpos, world); // Store Clicked
+            CanaryBlock clicked = CanaryBlock.getPooledBlock(world.p(blockpos), blockpos, world); // Store Clicked
             clicked.setFaceClicked(enumfacing.asBlockFace()); // Set face clicked
             //
 
@@ -54,7 +54,7 @@ public class ItemSign extends Item {
                     iblockstate = Blocks.ax.P().a(BlockWallSign.a, enumfacing);
                 }
 
-                if (new BlockPlaceHook(((EntityPlayerMP)entityplayer).getPlayer(), clicked, new CanaryBlock(iblockstate, blockpos, world)).call().isCanceled()) {
+                if (new BlockPlaceHook(((EntityPlayerMP)entityplayer).getPlayer(), clicked, CanaryBlock.getPooledBlock(iblockstate, blockpos, world)).call().isCanceled()) {
                     return false;
                 }
                 world.a(blockpos, iblockstate, 3);

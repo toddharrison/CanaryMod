@@ -144,7 +144,7 @@ public class BlockRedstoneWire extends Block {
 
         // CanaryMod: RedstoneChange
         if (i0 != i1) {
-            if (new RedstoneChangeHook(new CanaryBlock(iblockstate, blockpos, world), i0, i1).call().isCanceled()) {
+            if (new RedstoneChangeHook(CanaryBlock.getPooledBlock(iblockstate, blockpos, world), i0, i1).call().isCanceled()) {
                 return iblockstate;
             }
         }
@@ -225,7 +225,7 @@ public class BlockRedstoneWire extends Block {
             // CanaryMod: RedstoneChange (Wire Destroy)
             int lvl = world.A(blockpos) - 1; // Subtract 1 from current in
             if (lvl > 0) {
-                new RedstoneChangeHook(new CanaryBlock(iblockstate, blockpos, world), lvl, 0).call();
+                new RedstoneChangeHook(CanaryBlock.getPooledBlock(iblockstate, blockpos, world), lvl, 0).call();
             }
             //
             EnumFacing[] aenumfacing = EnumFacing.values();

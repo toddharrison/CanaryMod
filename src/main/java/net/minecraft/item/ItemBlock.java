@@ -34,7 +34,7 @@ public class ItemBlock extends Item {
         Block block = iblockstate.c();
 
         // CanaryMod: BlockPlaceHook
-        CanaryBlock clicked = new CanaryBlock(iblockstate, blockpos, world); // Store Clicked
+        CanaryBlock clicked = CanaryBlock.getPooledBlock(iblockstate, blockpos, world); // Store Clicked
         clicked.setFaceClicked(enumfacing.asBlockFace()); // Set face clicked
         //
 
@@ -59,7 +59,7 @@ public class ItemBlock extends Item {
             IBlockState iblockstate1 = this.a.a(world, blockpos, enumfacing, f0, f1, f2, i0, entityplayer);
 
             // CanaryMod: BlockPlaceHook
-            if (new BlockPlaceHook(((EntityPlayerMP)entityplayer).getPlayer(), clicked, new CanaryBlock(iblockstate1, blockpos, world)).call().isCanceled()) {
+            if (new BlockPlaceHook(((EntityPlayerMP)entityplayer).getPlayer(), clicked, CanaryBlock.getPooledBlock(iblockstate1, blockpos, world)).call().isCanceled()) {
                 return false;
             }
             //

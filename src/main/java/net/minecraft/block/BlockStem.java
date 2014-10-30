@@ -78,13 +78,13 @@ public class BlockStem extends BlockBush implements IGrowable {
                 int i0 = ((Integer)iblockstate.b(a)).intValue();
 
                 // CanaryMod: Grab the original stuff
-                CanaryBlock original = new CanaryBlock(iblockstate, blockpos, world);
+                CanaryBlock original = CanaryBlock.getPooledBlock(iblockstate, blockpos, world);
                 CanaryBlock growth;
                 //
                 if (i0 < 7) {
                     iblockstate = iblockstate.a(a, Integer.valueOf(i0 + 1));
                     // Growth is original with new data
-                    if (!new BlockGrowHook(original, new CanaryBlock(iblockstate, blockpos, world)).call().isCanceled()) {
+                    if (!new BlockGrowHook(original, CanaryBlock.getPooledBlock(iblockstate, blockpos, world)).call().isCanceled()) {
                         world.a(blockpos, iblockstate, 2);
                     }
                     //
@@ -105,7 +105,7 @@ public class BlockStem extends BlockBush implements IGrowable {
 
                     if (world.p(blockpos).c().J == Material.a && (block == Blocks.ak || block == Blocks.d || block == Blocks.c)) {
                         // A Melon/Pumpkin has spawned
-                        if (!new BlockGrowHook(original, new CanaryBlock(this.M.P(), blockpos, world)).call().isCanceled()) {
+                        if (!new BlockGrowHook(original, CanaryBlock.getPooledBlock(this.M.P(), blockpos, world)).call().isCanceled()) {
                             world.a(blockpos, this.M.P());
                         }
                         //

@@ -38,7 +38,7 @@ public class ItemSlab extends ItemBlock {
     public boolean a(ItemStack itemstack, EntityPlayer entityplayer, World world, BlockPos blockpos, EnumFacing enumfacing, float f0, float f1, float f2) {
         // CanaryMod: BlockPlaceHook
         status = 0; // Clear status
-        CanaryBlock clicked = new CanaryBlock(world.p(blockpos), blockpos, world); // Store Clicked
+        CanaryBlock clicked = CanaryBlock.getPooledBlock(world.p(blockpos), blockpos, world); // Store Clicked
         clicked.setFaceClicked(enumfacing.asBlockFace()); // Set face clicked
         //
 
@@ -61,7 +61,7 @@ public class ItemSlab extends ItemBlock {
                     IBlockState iblockstate1 = this.c.P().a(iproperty, comparable);
 
                     // CanaryMod: BlockPlace
-                    if (new BlockPlaceHook(((EntityPlayerMP)entityplayer).getPlayer(), clicked, new CanaryBlock(iblockstate1, blockpos.a(enumfacing), world)).call().isCanceled()) {
+                    if (new BlockPlaceHook(((EntityPlayerMP)entityplayer).getPlayer(), clicked, CanaryBlock.getPooledBlock(iblockstate1, blockpos.a(enumfacing), world)).call().isCanceled()) {
                         return false;
                     }
                     //
@@ -92,7 +92,7 @@ public class ItemSlab extends ItemBlock {
                 IBlockState iblockstate1 = this.c.P().a(this.b.l(), comparable);
 
                 // Call hook
-                if (new BlockPlaceHook(player, clicked, new CanaryBlock(iblockstate1, blockpos, world)).call().isCanceled()) {
+                if (new BlockPlaceHook(player, clicked, CanaryBlock.getPooledBlock(iblockstate1, blockpos, world)).call().isCanceled()) {
                     status = 1; // Killed
                     return false;
                 }

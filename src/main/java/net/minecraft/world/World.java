@@ -249,14 +249,9 @@ public abstract class World implements IBlockAccess {
             return false;
         }
         else {
-            Chunk chunk = this.f(blockpos);
-            Block block = iblockstate.c();
-            IBlockState iblockstate1 = chunk.a(blockpos, iblockstate);
-
-            // CanaryMod: BlockUpdate
-            CanaryBlock cblock;
+            // CanaryMod BlockUpdate - get the old block before it is changed, iblockstate is the target state
+            CanaryBlock cblock = CanaryBlock.getPooledBlock(this.p(blockpos), blockpos, this);
             if (canaryDimension != null) {
-                cblock = new CanaryBlock(blockpos, this);
                 String name = Block.c.c(iblockstate.c()).toString();
                 BlockUpdateHook hook = (BlockUpdateHook) new BlockUpdateHook(cblock, BlockType.fromString(name)).call();
                 if (hook.isCanceled()) {
@@ -264,6 +259,13 @@ public abstract class World implements IBlockAccess {
                 }
             }
             //
+            Chunk chunk = this.f(blockpos);
+            Block block = iblockstate.c();
+            IBlockState iblockstate1 = chunk.a(blockpos, iblockstate); // Set block state
+
+
+
+
 
             if (iblockstate1 == null) {
                 return false;

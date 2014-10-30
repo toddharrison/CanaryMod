@@ -3,6 +3,7 @@ package net.canarymod.api.entity;
 import net.canarymod.api.world.blocks.Block;
 import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.blocks.CanaryBlock;
+import net.canarymod.api.world.position.BlockPosition;
 import net.minecraft.entity.item.EntityFallingBlock;
 
 /**
@@ -37,7 +38,7 @@ public class CanaryFallingBlock extends CanaryEntity implements FallingBlock {
 
     @Override
     public Block getBlock() {
-        return new CanaryBlock(getHandle().l(), this.getPosition(), this.getWorld());
+        return CanaryBlock.getPooledBlock(getHandle().l(), new BlockPosition(this.getPosition()).asNative(), this.entity.e());
     }
 
     @Override

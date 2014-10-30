@@ -43,7 +43,7 @@ public class BlockNetherWart extends BlockBush {
         if (i0 < 3 && random.nextInt(10) == 0) {
             IBlockState iblockstate1 = iblockstate.a(a, Integer.valueOf(i0 + 1)); // CanaryMod: make new state to reuse old state in hook
             // CanaryMod: BlockGrow
-            if (!new BlockGrowHook(new CanaryBlock(iblockstate, blockpos, world), new CanaryBlock(iblockstate1, blockpos, world)).call().isCanceled()) {
+            if (!new BlockGrowHook(CanaryBlock.getPooledBlock(iblockstate, blockpos, world), CanaryBlock.getPooledBlock(iblockstate1, blockpos, world)).call().isCanceled()) {
                 world.a(blockpos, iblockstate1, 2);
             }
             //

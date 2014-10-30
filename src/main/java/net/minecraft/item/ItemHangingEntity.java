@@ -31,7 +31,7 @@ public class ItemHangingEntity extends Item {
         }
         else {
             // CanaryMod: ItemUse
-            CanaryBlock clicked = new CanaryBlock(world.p(blockpos), blockpos, world); // Store clicked
+            CanaryBlock clicked = CanaryBlock.getPooledBlock(world.p(blockpos), blockpos, world); // Store clicked
             clicked.setFaceClicked(enumfacing.asBlockFace()); // Set face clicked
             if (new ItemUseHook(((EntityPlayerMP)entityplayer).getPlayer(), itemstack.getCanaryItem(), clicked).call().isCanceled()) {
                 return false;

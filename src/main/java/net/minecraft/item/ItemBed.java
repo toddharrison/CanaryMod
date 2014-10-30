@@ -33,7 +33,7 @@ public class ItemBed extends Item {
             Block block = iblockstate.c();
             boolean flag0 = block.f(world, blockpos);
             // CanaryMod: BlockPlaceHook
-            CanaryBlock clicked = new CanaryBlock(iblockstate, blockpos, world);
+            CanaryBlock clicked = CanaryBlock.getPooledBlock(iblockstate, blockpos, world);
             clicked.setFaceClicked(enumfacing.asBlockFace()); // Set face clicked
             //
 
@@ -55,7 +55,7 @@ public class ItemBed extends Item {
 
                     // CanaryMod: BlockPlaceHook continued
                     // CanaryMod: Create Hook and call it
-                    if (new BlockPlaceHook(((EntityPlayerMP)entityplayer).getPlayer(), clicked, new CanaryBlock(iblockstate1, blockpos1, world)).call().isCanceled()) {
+                    if (new BlockPlaceHook(((EntityPlayerMP)entityplayer).getPlayer(), clicked, CanaryBlock.getPooledBlock(iblockstate1, blockpos1, world)).call().isCanceled()) {
                         return false;
                     }
                     //

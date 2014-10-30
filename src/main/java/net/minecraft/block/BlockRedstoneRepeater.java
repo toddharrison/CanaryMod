@@ -35,7 +35,7 @@ public class BlockRedstoneRepeater extends BlockRedstoneDiode {
 
     public boolean a(World world, BlockPos blockpos, IBlockState iblockstate, EntityPlayer entityplayer, EnumFacing enumfacing, float f0, float f1, float f2) {
         // CanaryMod: Block Physics
-        if (new BlockPhysicsHook(new CanaryBlock(iblockstate, blockpos, world), false).call().isCanceled()) {
+        if (new BlockPhysicsHook(CanaryBlock.getPooledBlock(iblockstate, blockpos, world), false).call().isCanceled()) {
             return false;
         }
         //
@@ -84,7 +84,7 @@ public class BlockRedstoneRepeater extends BlockRedstoneDiode {
     public void b(World world, BlockPos blockpos, IBlockState iblockstate) {
         // CanaryMod: RedstoneChange
         if (this.M) {
-            new RedstoneChangeHook(new CanaryBlock(iblockstate, blockpos, world), 15, 0).call();
+            new RedstoneChangeHook(CanaryBlock.getPooledBlock(iblockstate, blockpos, world), 15, 0).call();
         }
         // CanaryMod: end
         super.b(world, blockpos, iblockstate);

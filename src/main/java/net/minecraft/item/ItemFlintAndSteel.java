@@ -25,7 +25,8 @@ public class ItemFlintAndSteel extends Item {
     public boolean a(ItemStack itemstack, EntityPlayer entityplayer, World world, BlockPos blockpos, EnumFacing enumfacing, float f0, float f1, float f2) {
         blockpos = blockpos.a(enumfacing);
         // CanaryMod: get clicked
-        CanaryBlock clicked = new CanaryBlock(world.p(blockpos), blockpos, world, (byte)2); // Store Clicked, Status 2
+        CanaryBlock clicked = CanaryBlock.getPooledBlock(world.p(blockpos), blockpos, world); // Store clicked, Status 2
+        clicked.setStatus((byte)2);
         clicked.setFaceClicked(enumfacing.asBlockFace()); // Set face clicked
         //
 
@@ -35,7 +36,7 @@ public class ItemFlintAndSteel extends Item {
         else {
 
             // CanaryMod: ItemUse/Ignition
-            CanaryBlock ignited = new CanaryBlock(world.p(blockpos), blockpos, world);
+            CanaryBlock ignited = CanaryBlock.getPooledBlock(world.p(blockpos), blockpos, world);
             // If item use gets canceled then no ignition would really take place
             if (new ItemUseHook(((EntityPlayerMP)entityplayer).getPlayer(), itemstack.getCanaryItem(), clicked).call().isCanceled()
                         || new IgnitionHook(ignited, ((EntityPlayerMP)entityplayer).getPlayer(), clicked, IgnitionCause.FIREBALL_CLICK).call().isCanceled()) {

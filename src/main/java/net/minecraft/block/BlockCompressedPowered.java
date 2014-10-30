@@ -27,13 +27,13 @@ public class BlockCompressedPowered extends BlockCompressed {
 
     // CanaryMod: pull place method in to do RedstoneChange
     public void c(World world, BlockPos blockpos, IBlockState iblockstate) {
-        new RedstoneChangeHook(new CanaryBlock(iblockstate, blockpos, world), 0, 15); //Can't really cancel this here...
+        new RedstoneChangeHook(CanaryBlock.getPooledBlock(iblockstate, blockpos, world), 0, 15); //Can't really cancel this here...
         super.c(world, blockpos, iblockstate);
     }
 
     // CanaryMod: pull break method in to do RedstoneChange
     public void b(World world, BlockPos blockpos, IBlockState iblockstate) {
-        new RedstoneChangeHook(new CanaryBlock(iblockstate, blockpos, world), 15, 0); //Can't really cancel this here...
+        new RedstoneChangeHook(CanaryBlock.getPooledBlock(iblockstate, blockpos, world), 15, 0); //Can't really cancel this here...
         super.b(world, blockpos, iblockstate);
     }
     //

@@ -144,7 +144,7 @@ public abstract class BlockButton extends Block {
         }
 
         // CanaryMod: Block Physics
-        CanaryBlock changing = new CanaryBlock(iblockstate, blockpos, world);
+        CanaryBlock changing = CanaryBlock.getPooledBlock(iblockstate, blockpos, world);
         if (new BlockPhysicsHook(changing, false).call().isCanceled()) {
             return false;
         }
@@ -168,7 +168,7 @@ public abstract class BlockButton extends Block {
     public void b(World world, BlockPos blockpos, IBlockState iblockstate) {
         if (((Boolean)iblockstate.b(b)).booleanValue()) {
             // CanaryMod: RedstoneChangeHook (Button broke)
-            new RedstoneChangeHook(new CanaryBlock(iblockstate, blockpos, world), 15, 0).call();
+            new RedstoneChangeHook(CanaryBlock.getPooledBlock(iblockstate, blockpos, world), 15, 0).call();
             //
 
             this.b(world, blockpos, (EnumFacing)iblockstate.b(a));
@@ -200,7 +200,7 @@ public abstract class BlockButton extends Block {
                 }
                 else {
                     // CanaryMod: Block Physics
-                    CanaryBlock changing = new CanaryBlock(iblockstate, blockpos, world);
+                    CanaryBlock changing = CanaryBlock.getPooledBlock(iblockstate, blockpos, world);
                     if (new BlockPhysicsHook(changing, false).call().isCanceled()) {
                         return;
                     }
@@ -245,7 +245,7 @@ public abstract class BlockButton extends Block {
         boolean flag1 = ((Boolean)iblockstate.b(b)).booleanValue();
 
         // CanaryMod: BlockPhysics/RedstoneChange
-        CanaryBlock changing = new CanaryBlock(iblockstate, blockpos, world);
+        CanaryBlock changing = CanaryBlock.getPooledBlock(iblockstate, blockpos, world);
         //
 
         if (flag0 && !flag1) {

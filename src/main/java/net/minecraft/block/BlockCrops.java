@@ -47,7 +47,7 @@ public class BlockCrops extends BlockBush implements IGrowable {
 
                 if (random.nextInt((int)(25.0F / f0) + 1) == 0) {
                     // CanaryMod: BlockGrow
-                    if (!new BlockGrowHook(new CanaryBlock(iblockstate, blockpos, world), new CanaryBlock(iblockstate.a(a, i0 + 1), blockpos, world)).call().isCanceled()) {
+                    if (!new BlockGrowHook(CanaryBlock.getPooledBlock(iblockstate, blockpos, world), CanaryBlock.getPooledBlock(iblockstate.a(a, i0 + 1), blockpos, world)).call().isCanceled()) {
                         world.a(blockpos, iblockstate.a(a, Integer.valueOf(i0 + 1)), 2);
                     }
                     //

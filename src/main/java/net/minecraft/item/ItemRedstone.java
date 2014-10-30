@@ -33,9 +33,9 @@ public class ItemRedstone extends Item {
             }
             else if (Blocks.af.c(world, blockpos1)) {
                 // CanaryMod: BlockPlaceHook
-                CanaryBlock clicked = new CanaryBlock(world.p(blockpos), blockpos, world); // Store Clicked
+                CanaryBlock clicked = CanaryBlock.getPooledBlock(world.p(blockpos), blockpos, world); // Store Clicked
                 clicked.setFaceClicked(enumfacing.asBlockFace()); // Set face clicked
-                if (new BlockPlaceHook(((EntityPlayerMP)entityplayer).getPlayer(), clicked, new CanaryBlock(Blocks.af.P(), blockpos1, world)).call().isCanceled()) {
+                if (new BlockPlaceHook(((EntityPlayerMP)entityplayer).getPlayer(), clicked, CanaryBlock.getPooledBlock(Blocks.af.P(), blockpos1, world)).call().isCanceled()) {
                     return false;
                 }
                 //

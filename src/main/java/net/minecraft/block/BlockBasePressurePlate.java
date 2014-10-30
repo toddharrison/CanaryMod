@@ -103,7 +103,7 @@ public abstract class BlockBasePressurePlate extends Block {
         // CanaryMod: RedstoneChange
         if (i0 != i1) {
             // CanaryMod: Block Physics
-            CanaryBlock changing = new CanaryBlock(iblockstate, blockpos, world);
+            CanaryBlock changing = CanaryBlock.getPooledBlock(iblockstate, blockpos, world);
             if (new BlockPhysicsHook(changing, false).call().isCanceled()) {
                 world.a(blockpos, this, this.a(world));  // Reschedule
                 return;
@@ -146,7 +146,7 @@ public abstract class BlockBasePressurePlate extends Block {
 
     public void b(World world, BlockPos blockpos, IBlockState iblockstate) {
         // CanaryMod: Block Physics
-        CanaryBlock changing = new CanaryBlock(iblockstate, blockpos, world);
+        CanaryBlock changing = CanaryBlock.getPooledBlock(iblockstate, blockpos, world);
         if (new BlockPhysicsHook(changing, false).call().isCanceled()) {
             return;
         }

@@ -232,7 +232,8 @@ public class CanaryWorld implements World {
 
     @Override
     public Block getBlockAt(int x, int y, int z) {
-        return new CanaryBlock(new BlockPos(x, y, z), this.getHandle());
+        BlockPos pos = new BlockPos(x, y, z);
+        return CanaryBlock.getPooledBlock(this.getHandle().p(pos), pos, this.getHandle());
     }
 
     @Override

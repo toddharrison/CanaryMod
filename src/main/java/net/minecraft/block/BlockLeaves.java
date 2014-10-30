@@ -142,7 +142,7 @@ public abstract class BlockLeaves extends BlockLeavesBase {
 
     private void d(World world, BlockPos blockpos) {
         // CanaryMod: LeafDecay
-        if (!new LeafDecayHook(new CanaryBlock(world.p(blockpos), blockpos, world)).call().isCanceled()) {
+        if (!new LeafDecayHook(CanaryBlock.getPooledBlock(world.p(blockpos), blockpos, world)).call().isCanceled()) {
             this.b(world, blockpos, world.p(blockpos), 0);
             world.g(blockpos);
         }

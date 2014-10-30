@@ -27,7 +27,7 @@ public class ItemReed extends Item {
         Block block = iblockstate.c();
 
         // CanaryMod: BlockPlaceHook
-        CanaryBlock clicked = new CanaryBlock(world.p(blockpos), blockpos, world); // Store Clicked
+        CanaryBlock clicked = CanaryBlock.getPooledBlock(world.p(blockpos), blockpos, world); // Store Clicked
         clicked.setFaceClicked(enumfacing.asBlockFace()); // Set face clicked
         //
 
@@ -59,7 +59,7 @@ public class ItemReed extends Item {
                         iblockstate1 = world.p(blockpos);
 
                         // CanaryMod: create and call
-                        BlockPlaceHook hook = (BlockPlaceHook)new BlockPlaceHook(((EntityPlayerMP)entityplayer).getPlayer(), clicked, new CanaryBlock(iblockstate1, blockpos, world)).call();
+                        BlockPlaceHook hook = (BlockPlaceHook)new BlockPlaceHook(((EntityPlayerMP)entityplayer).getPlayer(), clicked, CanaryBlock.getPooledBlock(iblockstate1, blockpos, world)).call();
                         if (hook.isCanceled()) {
                             return false;
                         }

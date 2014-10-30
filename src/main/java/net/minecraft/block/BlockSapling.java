@@ -41,14 +41,14 @@ public class BlockSapling extends BlockBush implements IGrowable {
     public void d(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {
         if (((Integer)iblockstate.b(b)).intValue() == 0) {
             // CanaryMod: BlockGrowHook
-            if (!new BlockGrowHook(new CanaryBlock(iblockstate, blockpos, world), new CanaryBlock(iblockstate.a(b), blockpos, world)).isCanceled()) {
+            if (!new BlockGrowHook(CanaryBlock.getPooledBlock(iblockstate, blockpos, world), CanaryBlock.getPooledBlock(iblockstate.a(b), blockpos, world)).isCanceled()) {
                 world.a(blockpos, iblockstate.a(b), 4);
             }
             //
         }
         else {
             // CanaryMod: TreeGrow; If someone figures out how to get more information into this, let me know - darkdiplomat;
-            if (!new TreeGrowHook(new CanaryBlock(iblockstate, blockpos, world)).call().isCanceled()) {
+            if (!new TreeGrowHook(CanaryBlock.getPooledBlock(iblockstate, blockpos, world)).call().isCanceled()) {
                 this.e(world, blockpos, iblockstate, random);
             }
             //
