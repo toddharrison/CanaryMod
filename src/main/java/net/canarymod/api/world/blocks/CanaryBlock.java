@@ -207,19 +207,20 @@ public class CanaryBlock implements Block {
         return position.getBlockZ();
     }
 
+    // position is read only as of mc 1.8
     @Override
     public void setX(int x) {
-        this.position.setX(x);
+//        this.position.setX(x);
     }
 
     @Override
     public void setY(int y) {
-        this.position.setY(y);
+//        this.position.setY(y);
     }
 
     @Override
     public void setZ(int z) {
-        this.position.setZ(z);
+//        this.position.setZ(z);
     }
 
     @Override
