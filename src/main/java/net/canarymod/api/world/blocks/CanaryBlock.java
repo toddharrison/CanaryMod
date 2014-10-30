@@ -81,7 +81,7 @@ public class CanaryBlock implements Block {
             return blockPool.add(pos, new CanaryBlock(state, pos, world));
         }
         // Update block state, it might has changed
-        block.state = state;
+        block.setNativeType(state);
         return block;
     }
 
@@ -455,6 +455,14 @@ public class CanaryBlock implements Block {
 
     public IBlockState getNativeState() {
         return state;
+    }
+
+    private void setNativeType(IBlockState state) {
+        String newMachineName = machineNameOfBlock(state.c());
+        if (!type.getMachineName().equals(newMachineName)) {
+            this.type = BlockType.fromStringAndData(newMachineName, convertPropertyTypeData(state));
+        }
+        this.state = state;
     }
 
     // This is until we can make a better BlockType
