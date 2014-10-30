@@ -1,15 +1,16 @@
 package net.canarymod.api.world.blocks;
 
-import java.util.Arrays;
+import net.canarymod.api.chat.CanaryChatComponent;
+import net.canarymod.api.chat.ChatComponent;
 import net.canarymod.api.entity.living.humanoid.CanaryPlayer;
 import net.canarymod.api.entity.living.humanoid.Player;
-import net.minecraft.block.BlockStandingSign;
 import net.minecraft.block.BlockWallSign;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntitySign;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IChatComponent;
+
+import java.util.Arrays;
 
 /**
  * Sign wrapper implementation
@@ -40,6 +41,15 @@ public class CanarySign extends CanaryTileEntity implements Sign {
         return strings;
     }
 
+    @Override
+    public ChatComponent[] getLines() {
+        ChatComponent[] components = new ChatComponent[4];
+        for (int index = 0; index < 4; index++) {
+            components[index] = getTileEntity().a[index].getWrapper();
+        }
+        return components;
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -51,16 +61,31 @@ public class CanarySign extends CanaryTileEntity implements Sign {
         return null;
     }
 
+    @Override
+    public ChatComponent getComponentOnLine(int line) {
+        if (line >= 0 && line <= 3) {
+            return getTileEntity().a[line].getWrapper();
+        }
+        return null;
+    }
+
     /**
      * {@inheritDoc}
      */
     @Override
     public void setText(String[] text) {
         String[] data = insureData(text);
-        for (int i = 0 ; i < 5 ; i++) {
-            getTileEntity().a[i] = new ChatComponentText(data[i]);
+        for (int line = 0; line < 4; line++) {
+            getTileEntity().a[line] = new ChatComponentText(data[line]);
         }
         
+    }
+
+    @Override
+    public void setComponents(ChatComponent[] chatComponents) {
+        for (int line = 0; line < 4; line++) {
+            getTileEntity().a[line] = chatComponents[line] != null ? ((CanaryChatComponent)chatComponents[line]).getNative() : new ChatComponentText("");
+        }
     }
 
     /**
@@ -70,6 +95,13 @@ public class CanarySign extends CanaryTileEntity implements Sign {
     public void setTextOnLine(String text, int line) {
         if (line >= 0 && line <= 3) {
             getTileEntity().a[line] = new ChatComponentText(text == null ? "" : text.length() > 15 ? text.substring(0, 15) : text);
+        }
+    }
+
+    @Override
+    public void setComponentOnLine(ChatComponent chatComponent, int line) {
+        if (line >= 0 && line <= 3) {
+            getTileEntity().a[line] = chatComponent != null ? ((CanaryChatComponent)chatComponent).getNative() : new ChatComponentText("");
         }
     }
 
@@ -90,7 +122,7 @@ public class CanarySign extends CanaryTileEntity implements Sign {
     }
 
     /**
-     * {@inheirtDoc}
+     * {@inheritDoc}
      */
     @Override
     public Block getBlockAttached() {
