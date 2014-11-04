@@ -922,7 +922,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, IUpdatePlaye
 //                ItemStack itemstack = this.b.bi.a(c0epacketclickwindow.b(), c0epacketclickwindow.c(), c0epacketclickwindow.f(), this.b);
 
                 // Temporary item
-                ItemStack itemstack = this.b.bi.getSlot(c0epacketclickwindow.b()).d();
+                ItemStack itemstack = c0epacketclickwindow.b() > -1 ? this.b.bi.getSlot(c0epacketclickwindow.b()).d() : null;
                 SlotType slotType = SlotHelper.getSlotType(this.b.bi, c0epacketclickwindow.b());
                 SecondarySlotType secondarySlotType = SlotHelper.getSpecificSlotType(this.b.bi, c0epacketclickwindow.b());
                 GrabMode grabMode = GrabMode.fromInt(c0epacketclickwindow.f());
