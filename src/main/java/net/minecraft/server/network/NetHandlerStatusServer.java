@@ -1,6 +1,7 @@
 package net.minecraft.server.network;
 
 import com.mojang.authlib.GameProfile;
+import net.canarymod.api.chat.CanaryChatComponent;
 import net.canarymod.hook.system.ServerListPingHook;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
@@ -11,7 +12,6 @@ import net.minecraft.network.status.client.C01PacketPing;
 import net.minecraft.network.status.server.S00PacketServerInfo;
 import net.minecraft.network.status.server.S01PacketPong;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IChatComponent;
 
 import java.net.InetSocketAddress;
@@ -44,7 +44,7 @@ public class NetHandlerStatusServer implements INetHandlerStatusServer {
         ServerStatusResponse.PlayerCountData ssrpcd = new ServerStatusResponse.PlayerCountData(hook.getMaxPlayers(), hook.getCurrentPlayers());
         ssrpcd.a(hook.getProfiles().toArray(new GameProfile[hook.getProfiles().size()]));
         ssr.a(ssrpcd); //Max/Online Players & GameProfiles
-        ssr.a((IChatComponent) (new ChatComponentText(hook.getMotd()))); //MOTD
+        ssr.a(((CanaryChatComponent) hook.getMotd()).getNative()); // MOTD
         ssr.a(hook.getFavicon()); // Server Favicon
 
         this.b.a((Packet)new S00PacketServerInfo(ssr));
