@@ -776,7 +776,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, IUpdatePlaye
         PacketThreadUtil.a(c0apacketanimation, this, this.b.u());
         this.b.z();
         // CanaryMod: ArmSwingHook
-        if (!this.b.ap) { // Best guess at a replacement for animation state
+        if (this.b.showAnimation()) { // Best guess at a replacement for animation state
             new PlayerArmSwingHook(this.b.getPlayer()).call();
         }
         //

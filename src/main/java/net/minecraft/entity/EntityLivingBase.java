@@ -1635,4 +1635,9 @@ public abstract class EntityLivingBase extends Entity {
             this.b(potioneffect);
         }
     }
+
+    //CanaryMod: Used to check if a ArmSwing animation is allowed to play (look above for S0BPacketAnimation)
+    public boolean showAnimation() {
+        return !this.ap || this.aq >= this.n() / 2 || this.aq < 0;
+    }
 }
