@@ -100,19 +100,19 @@ public abstract class CanaryEntity implements Entity {
     @Override
     public void setMotionX(double motionX) {
         entity.v = motionX;
-        entity.H = true;
+        entity.G = true;
     }
 
     @Override
     public void setMotionY(double motionY) {
         entity.w = motionY;
-        entity.H = true;
+        entity.G = true;
     }
 
     @Override
     public void setMotionZ(double motionZ) {
         entity.x = motionZ;
-        entity.H = true;
+        entity.G = true;
     }
 
     @Override
@@ -125,7 +125,7 @@ public abstract class CanaryEntity implements Entity {
         entity.v = motionX;
         entity.w = motionY;
         entity.x = motionZ;
-        entity.H = true;
+        entity.G = true;
     }
 
     @Override
