@@ -466,6 +466,14 @@ public class CanaryItem implements Item {
             rawAttributes.put(entry.getKey(), ((CanaryAttributeModifier) entry.getValue()).getNative());
         }
     }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equalsIgnoreSize(Item item) {
+        return item == null ? false : this.getId() == item.getId() && this.getDamage() == item.getDamage() && (this.getDataTag() == null ? item.getDataTag() == null : this.getDataTag().equals(item.getDataTag()));
+    }
 
     /**
      * {@inheritDoc}
