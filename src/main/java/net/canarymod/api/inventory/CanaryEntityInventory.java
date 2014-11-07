@@ -102,7 +102,7 @@ public abstract class CanaryEntityInventory implements Inventory {
             if (item == null) continue;
             if (item.getId() == itemId) {
                 if (item.getAmount() == remaining) {
-                    removeItem(item.getSlot());
+                    setSlot(item.getSlot(), null);
                     return;
                 }
                 else if (item.getAmount() > remaining) {
@@ -111,7 +111,7 @@ public abstract class CanaryEntityInventory implements Inventory {
                     return;
                 }
                 else {
-                    removeItem(item.getSlot());
+                    setSlot(item.getSlot(), null);
                     remaining -= item.getAmount();
                 }
             }
@@ -136,9 +136,9 @@ public abstract class CanaryEntityInventory implements Inventory {
 
         for (Item it : items) {
             if (it == null) continue;
-            if (it.getId() == item.getId() && it.getDamage() == item.getDamage()) {
+            if (it.equalsIgnoreSize(item)) {
                 if (it.getAmount() == remaining) {
-                    removeItem(it.getSlot());
+                    setSlot(it.getSlot(), null);
                     return;
                 }
                 else if (it.getAmount() > remaining) {
@@ -147,7 +147,7 @@ public abstract class CanaryEntityInventory implements Inventory {
                     return;
                 }
                 else {
-                    removeItem(it.getSlot());
+                    setSlot(it.getSlot(), null);
                     remaining -= it.getAmount();
                 }
             }
@@ -486,7 +486,7 @@ public abstract class CanaryEntityInventory implements Inventory {
         for (int index = 0; index < getSize(); index++) {
             Item toCheck = getSlot(index);
 
-            if (toCheck != null && toCheck.getType().equals(item.getType())) {
+            if (toCheck != null && item.equalsIgnoreSize(toCheck)) {
                 setSlot(index, null);
                 return toCheck;
             }
