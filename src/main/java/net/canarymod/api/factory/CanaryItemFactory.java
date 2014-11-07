@@ -20,7 +20,7 @@ public class CanaryItemFactory implements ItemFactory {
      */
     @Override
     public Item newItem(int id) {
-        return this.newItem(id, 0, 0);
+        return this.newItem(id, 0, 1);
     }
 
     /**
@@ -28,7 +28,7 @@ public class CanaryItemFactory implements ItemFactory {
      */
     @Override
     public Item newItem(int id, int damage) {
-        return this.newItem(id, damage, 0);
+        return this.newItem(id, damage, 1);
     }
 
     /**
@@ -45,7 +45,7 @@ public class CanaryItemFactory implements ItemFactory {
      */
     @Override
     public Item newItem(ItemType type) {
-        return type == null ? null : new CanaryItem(type.getId(), 0, type.getData());
+        return type == null ? null : new CanaryItem(type.getId(), 1, type.getData());
     }
 
     /**
@@ -53,7 +53,7 @@ public class CanaryItemFactory implements ItemFactory {
      */
     @Override
     public Item newItem(ItemType type, int damage) {
-        return type == null ? null : new CanaryItem(type.getId(), 0, damage);
+        return type == null ? null : new CanaryItem(type.getId(), 1, damage);
     }
 
     /**
@@ -110,7 +110,7 @@ public class CanaryItemFactory implements ItemFactory {
      */
     @Override
     public Item newItem(int id, int damage, Enchantment[] enchantments) {
-        CanaryItem item = new CanaryItem(id, 0, damage);
+        CanaryItem item = new CanaryItem(id, 1, damage);
         item.setEnchantments(enchantments);
         return item;
     }
