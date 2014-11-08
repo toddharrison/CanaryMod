@@ -70,14 +70,11 @@ public class ItemSlab extends ItemBlock {
                         world.a((double)((float)blockpos.n() + 0.5F), (double)((float)blockpos.o() + 0.5F), (double)((float)blockpos.p() + 0.5F), this.c.H.b(), (this.c.H.d() + 1.0F) / 2.0F, this.c.H.e() * 0.8F);
                         --itemstack.b;
                     }
+                    return true;
                 }
-
-                return true;
             }
-            else {
-                boolean ret = this.a(itemstack, world, blockpos, object, ((EntityPlayerMP)entityplayer).getPlayer(), clicked); // Moved up to call hook before the return
-                return status != 1 && (ret || super.a(itemstack, entityplayer, world, blockpos, enumfacing, f0, f1, f2));
-            }
+            boolean ret = this.a(itemstack, world, blockpos.a(enumfacing), object, ((EntityPlayerMP)entityplayer).getPlayer(), clicked); // Moved up to call hook before the return
+            return status != 1 && (ret || super.a(itemstack, entityplayer, world, blockpos, enumfacing, f0, f1, f2));
         }
     }
 
