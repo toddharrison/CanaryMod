@@ -254,23 +254,26 @@ public class CanaryWorld implements World {
 
     @Override
     public void setBlock(Block block) {
-        world.a(new BlockPos(block.getX(), block.getY(), block.getZ()), ((CanaryBlock)block).getNativeState());
+        BlockPos blockpos = new BlockPos(block.getX(), block.getY(), block.getZ());
+        world.a(blockpos, ((CanaryBlock)block).getNativeState());
+        // Notify clients (markBlockNeedsUpdate)
+        world.h(blockpos);
     }
 
     @Override
     public void setBlockAt(Position vector, Block block) {
-        setBlockAt(vector.getBlockX(), vector.getBlockY(), vector.getBlockZ(), block.getTypeId(), block.getData());
+        setBlockAt(vector.getBlockX(), vector.getBlockY(), vector.getBlockZ(), block.getType());
     }
 
     @Override
     public void setBlockAt(int x, int y, int z, short type) {
-        setBlockAt(x, y, z, type, (byte) 0);
+        setBlockAt(x, y, z, BlockType.fromId(type));
 
     }
 
     @Override
     public void setBlockAt(Position position, short type) {
-        setBlockAt(position.getBlockX(), position.getBlockY(), position.getBlockZ(), type);
+        setBlockAt(position.getBlockX(), position.getBlockY(), position.getBlockZ(), BlockType.fromId(type));
     }
 
     @Override
@@ -285,14 +288,17 @@ public class CanaryWorld implements World {
 
     @Override
     public void setBlockAt(int x, int y, int z, short type, short data) {
-        // FIXME: The last argument is not data!
-        world.a(new BlockPos(x, y, z), net.minecraft.block.Block.d(type), data);
+        setBlockAt(x, y, z, BlockType.fromId(type));
     }
 
     @Override
     public void setBlockAt(int x, int y, int z, BlockType blockType) {
-        // FIXME: The last argument is not data!
-        world.a(new BlockPos(x, y, z), net.minecraft.block.Block.b(blockType.getMachineName()), blockType.getData());
+        BlockPos blockpos = new BlockPos(x, y, z);
+        // Set the block
+        world.a(blockpos, net.minecraft.block.Block.b(blockType.getMachineName()).P(), 0);
+        // Notify clients (markBlockNeedsUpdate)
+        world.h(blockpos);
+
     }
 
     @Override

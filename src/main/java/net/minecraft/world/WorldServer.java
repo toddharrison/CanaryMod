@@ -9,6 +9,8 @@ import net.canarymod.Canary;
 import net.canarymod.api.CanaryEntityTracker;
 import net.canarymod.api.CanaryPlayerManager;
 import net.canarymod.api.scoreboard.CanaryScoreboard;
+import net.canarymod.api.world.blocks.BlockType;
+import net.canarymod.api.world.position.Position;
 import net.canarymod.hook.world.WeatherChangeHook;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEventData;
@@ -393,8 +395,8 @@ public class WorldServer extends World implements IThreadListener {
         NextTickListEntry nextticklistentry = new NextTickListEntry(blockpos, block);
         byte b0 = 0;
 
-        if (this.e && block.r() != Material.a) {
-            if (block.M()) {
+        if (this.e && block.r() != Material.a) { // immediante update if not air
+            if (block.M()) { // block needs update
                 b0 = 8;
                 if (this.a(nextticklistentry.a.a(-b0, -b0, -b0), nextticklistentry.a.a(b0, b0, b0))) {
                     IBlockState iblockstate = this.p(nextticklistentry.a);
