@@ -389,4 +389,19 @@ public class Scoreboard {
     public Collection getAllScoreObjective() {
         return this.a.values();
     }
+    
+    public ScorePlayerTeam addTeam(ScorePlayerTeam team)
+    {
+        ScorePlayerTeam scoreplayerteam = this.d(team.b());
+
+        if (scoreplayerteam != null) {
+            throw new IllegalArgumentException("A team with the name \'" + team.b() + "\' already exists!");
+        }
+        else {
+            scoreplayerteam = team;
+            this.e.put(team.b(), scoreplayerteam);
+            this.a(scoreplayerteam);
+            return scoreplayerteam;
+        }
+    }
 }

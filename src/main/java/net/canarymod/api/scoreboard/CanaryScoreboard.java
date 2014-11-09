@@ -5,6 +5,7 @@ import net.canarymod.api.entity.living.humanoid.CanaryPlayer;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.minecraft.network.play.server.S3DPacketDisplayScoreboard;
 
+import net.minecraft.scoreboard.ScorePlayerTeam;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -86,12 +87,12 @@ public class CanaryScoreboard implements Scoreboard {
 
     @Override
     public void addTeam(Team team) {
-        handle.a(((CanaryTeam) team).getHandle());
+        handle.addTeam(((CanaryTeam) team).getHandle());
     }
 
     @Override
     public void removeTeam(Team team) {
-        handle.c(((CanaryTeam) team).getHandle());
+        handle.d(((CanaryTeam) team).getHandle());
     }
 
     @Override
@@ -99,7 +100,7 @@ public class CanaryScoreboard implements Scoreboard {
         for (Object o : handle.g()) {
             net.minecraft.scoreboard.ScorePlayerTeam team = (net.minecraft.scoreboard.ScorePlayerTeam) o;
             if (team.b().equalsIgnoreCase(name)) {
-                handle.c(team);
+                handle.d(team);
                 return;
             }
         }
@@ -181,5 +182,16 @@ public class CanaryScoreboard implements Scoreboard {
     @Override
     public void removeScore(String name, ScoreObjective objective) {
         handle.d(name, ((CanaryScoreObjective) objective).getHandle());
+    }
+    
+    @Override
+    public Team getTeam(String name) {
+        ScorePlayerTeam team = handle.d(name);
+        return team != null ? team.getCanaryTeam() : null;
+    }
+    
+    @Override
+    public Team addTeam(String name) throws IllegalArgumentException {
+        return handle.e(name).getCanaryTeam();
     }
 }

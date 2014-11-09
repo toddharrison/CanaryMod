@@ -77,7 +77,7 @@ public class CanaryTeam implements Team {
 
     @Override
     public void addPlayer(Player player) {
-        handle.a.a(player.getName(), handle);
+        handle.a.a(player.getName(), handle.b());
     }
 
     @Override
