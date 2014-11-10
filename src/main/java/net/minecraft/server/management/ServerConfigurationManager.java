@@ -527,119 +527,121 @@ public abstract class ServerConfigurationManager {
 
     // XXX IMPORTANT, HERE IS WORLD SWITCHING GOING ON!
     public EntityPlayerMP a(EntityPlayerMP entityplayermp, int i0, boolean flag0, Location loc) {
-        entityplayermp.u().s().b(entityplayermp);
-        entityplayermp.u().s().b((Entity)entityplayermp);
-        entityplayermp.u().t().c(entityplayermp);
+        entityplayermp.u().s().b(entityplayermp); // remove from trackers
+        entityplayermp.u().s().b((Entity) entityplayermp); // untrack from entity tracker
+        entityplayermp.u().t().c(entityplayermp); // untrack from player manager
         this.e.remove(entityplayermp);
-//        this.f.getWorld(entityplayermp.getCanaryWorld().getName(), entityplayermp.aq).f(entityplayermp); // CanaryMod: added multiworld support
-        entityplayermp.getCanaryWorld().getHandle().f(entityplayermp);
-        // ChunkCoordinates chunkcoordinates = entityplayermp.bL(); //CanaryMod removed in favor of a real location
-        Location respawnLocation = entityplayermp.getRespawnLocation();
-        boolean flag1 = entityplayermp.ch();
-        boolean isBedSpawn = respawnLocation != null;
-        entityplayermp.am = i0;
+        entityplayermp.e().f(entityplayermp);
+        Location respawnLocation;// = loc == null ? entityplayermp.getRespawnLocation() : loc;
+        boolean spawnWasForced;// = entityplayermp.ch();
+        boolean nativeSpawn;
+        if (loc != null) {
+            respawnLocation = loc;
+            spawnWasForced = true; // lets see what works best
+            nativeSpawn = false;
+        }
+        else {
+            respawnLocation = entityplayermp.getRespawnLocation();
+            spawnWasForced = entityplayermp.ch();
+            nativeSpawn = true;
+        }
+
+        entityplayermp.am = i0; // update dimension
+
         String name = entityplayermp.getCanaryWorld().getName();
         net.canarymod.api.world.DimensionType type = net.canarymod.api.world.DimensionType.fromId(i0);
         // CanaryMod: PlayerRespawn
-        PlayerRespawningHook hook = (PlayerRespawningHook)new PlayerRespawningHook(entityplayermp.getPlayer(), loc, isBedSpawn).call();
+        PlayerRespawningHook hook = (PlayerRespawningHook)new PlayerRespawningHook(entityplayermp.getPlayer(), respawnLocation, spawnWasForced).call();
         loc = hook.getRespawnLocation();
-        WorldServer worldserver = (WorldServer)(loc == null ? (WorldServer)((CanaryWorld)Canary.getServer().getWorldManager().getWorld(name, type, true)).getHandle() : ((CanaryWorld)loc.getWorld()).getHandle());
+        WorldServer targetWorld = (WorldServer)(loc == null ? (WorldServer)((CanaryWorld)Canary.getServer().getWorldManager().getWorld(name, type, true)).getHandle() : ((CanaryWorld)loc.getWorld()).getHandle());
 
         // CanaryMod changes to accommodate multiworld bed spawns
-        BlockPos blockpos = null;
-        if (respawnLocation != null) {
-            blockpos = new BlockPos(respawnLocation.getBlockX(), respawnLocation.getBlockY(), respawnLocation.getBlockZ());
-            // Check if the spawn world differs from the expected one and adjust
-            if (!worldserver.equals(((CanaryWorld)respawnLocation.getWorld()).getHandle())) {
-                worldserver = (WorldServer)((CanaryWorld)respawnLocation.getWorld()).getHandle();
-            }
-        }
+        BlockPos playerSpawn = null;
         if (loc != null) {
-            blockpos = new BlockPos(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
+            playerSpawn = new BlockPos(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
             // Check if the spawn world differs from the expected one and adjust
-            if (!worldserver.equals(((CanaryWorld)loc.getWorld()).getHandle())) {
-                worldserver = (WorldServer)((CanaryWorld)loc.getWorld()).getHandle();
+            if (!targetWorld.equals(((CanaryWorld)loc.getWorld()).getHandle())) {
+                targetWorld = (WorldServer)((CanaryWorld)loc.getWorld()).getHandle();
             }
         }
         //
         ItemInWorldManager itemInWorldManager;
         if (this.j.W()) {
-            itemInWorldManager = new DemoWorldManager(worldserver);
+            itemInWorldManager = new DemoWorldManager(targetWorld);
         }
         else {
-            itemInWorldManager = new ItemInWorldManager(worldserver);
+            itemInWorldManager = new ItemInWorldManager(targetWorld);
         }
         // Use the wrapper keeper constructor
-        EntityPlayerMP entityplayermp1 = new EntityPlayerMP(this.j, worldserver, entityplayermp.cc(), itemInWorldManager, entityplayermp.getPlayer());
+        EntityPlayerMP newPlayer = new EntityPlayerMP(this.j, targetWorld, entityplayermp.cc(), itemInWorldManager, entityplayermp.getPlayer());
         // Copy nethandlerplayserver as the connection is still the same
-        entityplayermp1.a = entityplayermp.a;
-        entityplayermp1.a.b = entityplayermp1;
-        entityplayermp1.a((EntityPlayer)entityplayermp, flag0);
-        entityplayermp1.d(entityplayermp.F());
-        entityplayermp1.o(entityplayermp);
+        newPlayer.a = entityplayermp.a;
+        newPlayer.a.b = newPlayer;
+        newPlayer.a((EntityPlayer) entityplayermp, flag0);
+        newPlayer.d(entityplayermp.F());
+        newPlayer.o(entityplayermp);
 
         // CanaryMod: metadata persistance
         entityplayermp.saveMeta();
-        entityplayermp1.setMetaData(entityplayermp.getMetaData());
+        newPlayer.setMetaData(entityplayermp.getMetaData());
         //
 
-        this.a(entityplayermp1, entityplayermp, worldserver); // GameMode changing
-        BlockPos blockpos1;
-        if (blockpos != null) {
-            blockpos1 = loc != null ? blockpos : EntityPlayer.a(worldserver, blockpos, flag1); // Is it overridden?
-            if (blockpos1 != null) {
-                float rot = 0.0F, yaw = 0.0F;
-                if (loc != null) {
-                    rot = loc.getRotation();
-                    yaw = loc.getPitch();
-                }
-                entityplayermp1.b((double)((float)blockpos1.n() + 0.5F), (double)((float)blockpos1.o() + 0.1F), (double)((float)blockpos1.p() + 0.5F), rot, yaw);
-                entityplayermp1.a(blockpos, flag1);
-            }
-            else if (isBedSpawn) {
-                entityplayermp1.a.a(new S2BPacketChangeGameState(0, 0.0F));
-            }
-        }
-        while (worldserver.getCanaryWorld().getBlockAt(ToolBox.floorToBlock(entityplayermp1.t), ToolBox.floorToBlock(entityplayermp1.u + 1), ToolBox.floorToBlock(entityplayermp1.v)).getTypeId() != 0) {
-            entityplayermp1.u += 1D;
-        }
+        this.a(newPlayer, entityplayermp, targetWorld); // GameMode changing
+        BlockPos worldSpawn;
 
+        if (playerSpawn != null) {
+//            worldSpawn = playerSpawn;
+            worldSpawn = EntityPlayer.a(targetWorld, playerSpawn, spawnWasForced);
+            if (worldSpawn != null) {
+                float rot = loc.getRotation();
+                float yaw = loc.getPitch();
+                newPlayer.b((double) ((float) worldSpawn.n() + 0.5F), (double) ((float) worldSpawn.o() + 0.1F), (double) ((float) worldSpawn.p() + 0.5F), rot, yaw);
+                newPlayer.a(playerSpawn, spawnWasForced);
+                // Add back spawn location to new entity to avoid loss of bed spawns
+                if (!nativeSpawn) {
+                    newPlayer.setRespawnLocation(entityplayermp.getRespawnLocation());
+                }
+            }
+            else {
+                newPlayer.a.a(new S2BPacketChangeGameState(0, 0.0F));
+            }
+        }
         // Find a safe place to actually spawn into
-        while (!worldserver.a((Entity) entityplayermp1, entityplayermp1.aQ()).isEmpty() && entityplayermp1.t < 256.0D) {
-            entityplayermp1.b(entityplayermp1.s, entityplayermp1.t + 1.0D, entityplayermp1.u);
+        while (!targetWorld.a((Entity) newPlayer, newPlayer.aQ()).isEmpty() && newPlayer.t < 256.0D) {
+            newPlayer.b(newPlayer.s, newPlayer.t + 1.0D, newPlayer.u);
         }
 
         // CanaryMod Addition: Update Weather
-        entityplayermp1.a.a(new S2BPacketChangeGameState(7, worldserver.getRainStrength())); // rain
-        entityplayermp1.a.a(new S2BPacketChangeGameState(8, worldserver.getThunderStrength())); // thunder
+        newPlayer.a.a(new S2BPacketChangeGameState(7, targetWorld.getRainStrength())); // rain
+        newPlayer.a.a(new S2BPacketChangeGameState(8, targetWorld.getThunderStrength())); // thunder
         // End Addition
 
         //sending 2 respawn packets seems to force the client to clear its chunk cache. Removes ghosting blocks
-        entityplayermp1.a.a((new S07PacketRespawn(entityplayermp1.am, entityplayermp1.o.aa(), entityplayermp1.o.P().u(), entityplayermp1.c.b())));
-        entityplayermp1.a.a((new S07PacketRespawn(entityplayermp1.am, entityplayermp1.o.aa(), entityplayermp1.o.P().u(), entityplayermp1.c.b())));
+        newPlayer.a.a((new S07PacketRespawn(newPlayer.am, newPlayer.o.aa(), newPlayer.o.P().u(), newPlayer.c.b())));
+        newPlayer.a.a((new S07PacketRespawn(newPlayer.am, newPlayer.o.aa(), newPlayer.o.P().u(), newPlayer.c.b())));
 
-        entityplayermp1.a.a(entityplayermp1.s, entityplayermp1.t, entityplayermp1.u, entityplayermp1.y, entityplayermp1.z, entityplayermp1.am, worldserver.getCanaryWorld().getName(), TeleportHook.TeleportCause.RESPAWN);
+        newPlayer.a.a(newPlayer.s, newPlayer.t, newPlayer.u, newPlayer.y, newPlayer.z, newPlayer.am, targetWorld.getCanaryWorld().getName(), TeleportHook.TeleportCause.RESPAWN);
         // ChanaryMod: Changed to use Player Coordinates instead of the give chunk coords \/
-        entityplayermp1.a.a((new S05PacketSpawnPosition(new BlockPos(entityplayermp1.s, entityplayermp1.t, entityplayermp1.u))));
-        entityplayermp1.a.a((new S1FPacketSetExperience(entityplayermp1.bB, entityplayermp1.bA, entityplayermp1.bz)));
-        this.b(entityplayermp1, worldserver);
-        worldserver.t().a(entityplayermp1);
-        worldserver.d(entityplayermp1); //Tracks new entity
-        this.e.add(entityplayermp1);
-        this.f.put(entityplayermp1.aJ(), entityplayermp1);
-        entityplayermp1.f_();
-        entityplayermp1.h(entityplayermp1.bm());
-        new PlayerRespawnedHook(entityplayermp1.getPlayer(), new Location(
-                                                                                 entityplayermp1.getPlayer().getWorld(),
-                                                                                 entityplayermp1.s,
-                                                                                 entityplayermp1.t,
-                                                                                 entityplayermp1.u,
-                                                                                 entityplayermp1.z,
-                                                                                 entityplayermp1.y
+        newPlayer.a.a((new S05PacketSpawnPosition(new BlockPos(newPlayer.s, newPlayer.t, newPlayer.u))));
+        newPlayer.a.a((new S1FPacketSetExperience(newPlayer.bB, newPlayer.bA, newPlayer.bz)));
+        this.b(newPlayer, targetWorld);
+        targetWorld.t().a(newPlayer);
+        targetWorld.d(newPlayer); //Tracks new entity
+        this.e.add(newPlayer);
+        this.f.put(newPlayer.aJ(), newPlayer);
+        newPlayer.f_();
+        newPlayer.h(newPlayer.bm());
+        new PlayerRespawnedHook(newPlayer.getPlayer(), new Location(
+                                                                                 newPlayer.getPlayer().getWorld(),
+                                                                                 newPlayer.s,
+                                                                                 newPlayer.t,
+                                                                                 newPlayer.u,
+                                                                                 newPlayer.z,
+                                                                                 newPlayer.y
         )
         ).call();
         //
-        return entityplayermp1;
+        return newPlayer;
     }
 
     @Deprecated
