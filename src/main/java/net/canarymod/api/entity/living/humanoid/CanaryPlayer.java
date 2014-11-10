@@ -609,7 +609,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
         UserAndGroupsProvider provider = Canary.usersAndGroups();
         String uuid = getUUIDString();
 
-        boolean isNew = provider.playerExists(uuid);
+        boolean isNew = !provider.playerExists(uuid);
         String[] data = provider.getPlayerData(uuid);
         Group[] subs = provider.getModuleGroupsForPlayer(uuid);
         groups = new LinkedList<Group>();
