@@ -536,7 +536,9 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
         else {
             if (this.am == 0 && i0 == 1) {
                 this.b((StatBase)AchievementList.C);
-                BlockPos blockpos = this.b.a(i0).m();
+                // CanaryMod get the current world instead!
+                Location l = getCanaryWorld().getSpawnLocation();
+                BlockPos blockpos = new BlockPos(l.getBlockX(), l.getBlockY(), l.getBlockZ());
 
                 if (blockpos != null) {
                     // CanaryMod: Teleport Cause added

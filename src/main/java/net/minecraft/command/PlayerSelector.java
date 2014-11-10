@@ -8,6 +8,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import net.canarymod.Canary;
+import net.canarymod.api.scoreboard.CanaryScoreboard;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
@@ -17,12 +18,24 @@ import net.minecraft.scoreboard.Score;
 import net.minecraft.scoreboard.ScoreObjective;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.Team;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.*;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.IChatComponent;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSettings;
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -279,7 +292,8 @@ public class PlayerSelector {
             arraylist.add(new Predicate() {
 
                 public boolean a(Entity p_a_1_) {
-                    Scoreboard scoreboardx = MinecraftServer.M().a(0).Z();
+                    // CanaryMod: Get the default scoreboard from us instead!
+                    Scoreboard scoreboardx = ((CanaryScoreboard)Canary.scoreboards().getScoreboard()).getHandle();
                     Iterator iterator = scoreboard.entrySet().iterator();
 
                     Entry entry;
