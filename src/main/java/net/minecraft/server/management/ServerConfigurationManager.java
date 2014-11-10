@@ -609,6 +609,11 @@ public abstract class ServerConfigurationManager {
             entityplayermp1.b(entityplayermp1.s, entityplayermp1.t + 1.0D, entityplayermp1.u);
         }
 
+        // CanaryMod Addition: Update Weather
+        entityplayermp1.a.a(new S2BPacketChangeGameState(7, worldserver.getRainStrength())); // rain
+        entityplayermp1.a.a(new S2BPacketChangeGameState(8, worldserver.getThunderStrength())); // thunder
+        // End Addition
+
         //sending 2 respawn packets seems to force the client to clear its chunk cache. Removes ghosting blocks
         entityplayermp1.a.a((new S07PacketRespawn(entityplayermp1.am, entityplayermp1.o.aa(), entityplayermp1.o.P().u(), entityplayermp1.c.b())));
         entityplayermp1.a.a((new S07PacketRespawn(entityplayermp1.am, entityplayermp1.o.aa(), entityplayermp1.o.P().u(), entityplayermp1.c.b())));

@@ -9,8 +9,6 @@ import net.canarymod.Canary;
 import net.canarymod.api.CanaryEntityTracker;
 import net.canarymod.api.CanaryPlayerManager;
 import net.canarymod.api.scoreboard.CanaryScoreboard;
-import net.canarymod.api.world.blocks.BlockType;
-import net.canarymod.api.world.position.Position;
 import net.canarymod.hook.world.WeatherChangeHook;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEventData;
@@ -29,14 +27,27 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.*;
+import net.minecraft.network.play.server.S19PacketEntityStatus;
+import net.minecraft.network.play.server.S24PacketBlockAction;
+import net.minecraft.network.play.server.S27PacketExplosion;
+import net.minecraft.network.play.server.S2APacketParticles;
+import net.minecraft.network.play.server.S2BPacketChangeGameState;
+import net.minecraft.network.play.server.S2CPacketSpawnGlobalEntity;
 import net.minecraft.profiler.Profiler;
 import net.minecraft.scoreboard.ScoreboardSaveData;
 import net.minecraft.scoreboard.ServerScoreboard;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.PlayerManager;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.IProgressUpdate;
+import net.minecraft.util.IThreadListener;
+import net.minecraft.util.ReportedException;
+import net.minecraft.util.Vec3;
+import net.minecraft.util.WeightedRandom;
+import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.village.VillageCollection;
 import net.minecraft.village.VillageSiege;
 import net.minecraft.world.biome.BiomeGenBase;
@@ -54,7 +65,14 @@ import net.minecraft.world.storage.WorldInfo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.UUID;
 
 
 public class WorldServer extends World implements IThreadListener {
@@ -895,25 +913,26 @@ public class WorldServer extends World implements IThreadListener {
         boolean flag0 = this.S();
 
         super.p();
+        // CanaryMod Send weather updates only to the dimension we are in
         if (this.o != this.p) {
-            // CanaryMod: method change
-            this.I.an().sendPacketToDimension((Packet) (new S2BPacketChangeGameState(7, this.p)), getCanaryWorld().getName(), this.t.q());
+            this.I.an().sendPacketToDimension((new S2BPacketChangeGameState(7, this.p)), getCanaryWorld().getName(), this.t.q());
         }
         if (this.q != this.r) {
-            // CanaryMod: method change
-            this.I.an().sendPacketToDimension((Packet) (new S2BPacketChangeGameState(8, this.r)), getCanaryWorld().getName(), this.t.q());
+            this.I.an().sendPacketToDimension((new S2BPacketChangeGameState(8, this.r)), getCanaryWorld().getName(), this.t.q());
         }
         if (flag0 != this.S()) {
+
             if (flag0) {
-                this.I.an().a((Packet) (new S2BPacketChangeGameState(2, 0.0F)));
+                this.I.an().sendPacketToDimension(new S2BPacketChangeGameState(2, 0.0F), getCanaryWorld().getName(), this.t.q());
             }
             else {
-                this.I.an().a((Packet) (new S2BPacketChangeGameState(1, 0.0F)));
+                this.I.an().sendPacketToDimension(new S2BPacketChangeGameState(1, 0.0F), getCanaryWorld().getName(), this.t.q());
             }
 
-            this.I.an().a((Packet) (new S2BPacketChangeGameState(7, this.p)));
-            this.I.an().a((Packet) (new S2BPacketChangeGameState(8, this.r)));
+            this.I.an().sendPacketToDimension(new S2BPacketChangeGameState(7, this.p), getCanaryWorld().getName(), this.t.q());
+            this.I.an().sendPacketToDimension(new S2BPacketChangeGameState(8, this.r), getCanaryWorld().getName(), this.t.q());
         }
+        // End CanaryMod
     }
 
     protected int q() {
@@ -988,5 +1007,21 @@ public class WorldServer extends World implements IThreadListener {
      */
     public CanaryPlayerManager getPlayerManager() {
         return K.getPlayerManager();
+    }
+
+    public float getRainStrength() {
+        return this.p;
+    }
+
+    public float getThunderStrength() {
+        return this.r;
+    }
+
+    public void setRainStrength(float value) {
+        this.p = value;
+    }
+
+    public void setThunderStrength(float value) {
+        this.r = value;
     }
 }

@@ -554,6 +554,16 @@ public class CanaryWorld implements World {
     }
 
     @Override
+    public void setThunderStrength(float strength) {
+        world.setThunderStrength(strength);
+    }
+
+    @Override
+    public float getThunderStrength() {
+        return world.getThunderStrength();
+    }
+
+    @Override
     public void setThunderTime(int ticks) {
         world.x.f(ticks);
     }
@@ -570,6 +580,16 @@ public class CanaryWorld implements World {
         else {
             setRainTime(world.s.nextInt(168000) + 12000);
         }
+    }
+
+    @Override
+    public void setRainStrength(float strength) {
+        world.setRainStrength(strength);
+    }
+
+    @Override
+    public float getRainStrength() {
+        return world.getRainStrength();
     }
 
     @Override

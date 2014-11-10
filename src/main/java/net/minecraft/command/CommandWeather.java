@@ -37,7 +37,7 @@ public class CommandWeather extends CommandBase {
                 if (astring.length > 2) {
                     boolean loaded = MinecraftServer.M().worldManager.worldIsLoaded(astring[1]);
                     if (!loaded) {
-                        a(icommandsender, this, "No world loaded of Name: '%s'", new Object[]{astring[1]});
+                        a(icommandsender, this, "No world loaded of Name: '%s'", astring[1]);
                         return;
                     }
                     worldserver = (WorldServer)((CanaryWorld)MinecraftServer.M().worldManager.getWorld(astring[1], false)).getHandle();
@@ -47,7 +47,7 @@ public class CommandWeather extends CommandBase {
                 } else {
                     boolean loaded = MinecraftServer.M().worldManager.worldIsLoaded(astring[1]);
                     if (!loaded) {
-                        a(icommandsender, this, "No world loaded of Name: '%s'", new Object[]{astring[1]});
+                        a(icommandsender, this, "No world loaded of Name: '%s'", astring[1]);
                         return;
                     }
                     worldserver = (WorldServer) ((CanaryWorld) MinecraftServer.M().worldManager.getWorld(astring[1], false)).getHandle();
