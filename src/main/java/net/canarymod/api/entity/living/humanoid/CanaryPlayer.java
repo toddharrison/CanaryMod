@@ -4,21 +4,44 @@ import com.mojang.authlib.GameProfile;
 import net.canarymod.Canary;
 import net.canarymod.MathHelp;
 import net.canarymod.ToolBox;
-import net.canarymod.api.*;
+import net.canarymod.api.GameMode;
+import net.canarymod.api.NetServerHandler;
+import net.canarymod.api.PlayerListAction;
+import net.canarymod.api.PlayerListData;
+import net.canarymod.api.PlayerListEntry;
 import net.canarymod.api.chat.CanaryChatComponent;
 import net.canarymod.api.chat.ChatComponent;
 import net.canarymod.api.entity.EntityType;
 import net.canarymod.api.entity.living.animal.CanaryHorse;
-import net.canarymod.api.inventory.*;
+import net.canarymod.api.inventory.CanaryAnimalInventory;
+import net.canarymod.api.inventory.CanaryBlockInventory;
+import net.canarymod.api.inventory.CanaryEntityInventory;
+import net.canarymod.api.inventory.EnderChestInventory;
+import net.canarymod.api.inventory.Inventory;
 import net.canarymod.api.packet.CanaryPacket;
 import net.canarymod.api.packet.Packet;
-import net.canarymod.api.statistics.*;
+import net.canarymod.api.statistics.Achievement;
+import net.canarymod.api.statistics.Achievements;
+import net.canarymod.api.statistics.CanaryAchievement;
+import net.canarymod.api.statistics.CanaryStat;
+import net.canarymod.api.statistics.Stat;
+import net.canarymod.api.statistics.Statistics;
 import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.api.world.World;
-import net.canarymod.api.world.blocks.*;
+import net.canarymod.api.world.blocks.CanaryAnvil;
+import net.canarymod.api.world.blocks.CanaryBeacon;
+import net.canarymod.api.world.blocks.CanaryBrewingStand;
+import net.canarymod.api.world.blocks.CanaryDispenser;
+import net.canarymod.api.world.blocks.CanaryEnchantmentTable;
+import net.canarymod.api.world.blocks.CanaryFurnace;
+import net.canarymod.api.world.blocks.CanaryHopperBlock;
+import net.canarymod.api.world.blocks.CanarySign;
+import net.canarymod.api.world.blocks.CanaryWorkbench;
+import net.canarymod.api.world.blocks.Sign;
 import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.api.world.position.Direction;
 import net.canarymod.api.world.position.Location;
+import net.canarymod.chat.ChatFormat;
 import net.canarymod.chat.Colors;
 import net.canarymod.chat.ReceiverType;
 import net.canarymod.chat.TextFormat;
@@ -30,16 +53,25 @@ import net.canarymod.hook.player.TeleportHook.TeleportCause;
 import net.canarymod.hook.system.PermissionCheckHook;
 import net.canarymod.permissionsystem.PermissionProvider;
 import net.canarymod.user.Group;
+import net.canarymod.user.UserAndGroupsProvider;
 import net.canarymod.warp.Warp;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.*;
+import net.minecraft.inventory.ContainerBeacon;
+import net.minecraft.inventory.ContainerBrewingStand;
+import net.minecraft.inventory.ContainerChest;
+import net.minecraft.inventory.ContainerDispenser;
+import net.minecraft.inventory.ContainerEnchantment;
+import net.minecraft.inventory.ContainerFurnace;
+import net.minecraft.inventory.ContainerHopper;
+import net.minecraft.inventory.ContainerHorseInventory;
+import net.minecraft.inventory.ContainerRepair;
+import net.minecraft.inventory.ContainerWorkbench;
 import net.minecraft.network.play.server.S02PacketChat;
 import net.minecraft.network.play.server.S2BPacketChangeGameState;
 import net.minecraft.network.play.server.S38PacketPlayerListItem;
 import net.minecraft.network.play.server.S39PacketPlayerAbilities;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.IChatComponent;
 import net.minecraft.world.WorldSettings;
 import net.visualillusionsent.utils.StringUtils;
 
@@ -574,8 +606,12 @@ public class CanaryPlayer extends CanaryHuman implements Player {
      */
     @Override
     public void initPlayerData() {
-        String[] data = Canary.usersAndGroups().getPlayerData(getUUIDString());
-        Group[] subs = Canary.usersAndGroups().getModuleGroupsForPlayer(getUUIDString());
+        UserAndGroupsProvider provider = Canary.usersAndGroups();
+        String uuid = getUUIDString();
+
+        boolean isNew = provider.playerExists(uuid);
+        String[] data = provider.getPlayerData(uuid);
+        Group[] subs = provider.getModuleGroupsForPlayer(uuid);
         groups = new LinkedList<Group>();
         groups.add(Canary.usersAndGroups().getGroup(data[1]));
         for (Group g : subs) {
@@ -584,7 +620,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
             }
         }
 
-        permissions = Canary.permissionManager().getPlayerProvider(getUUIDString(), getWorld().getFqName());
+        permissions = Canary.permissionManager().getPlayerProvider(uuid, getWorld().getFqName());
         if (data[0] != null && (!data[0].isEmpty() && !data[0].equals(" "))) {
             prefix = ToolBox.stringToNull(data[0]);
         }
@@ -594,6 +630,9 @@ public class CanaryPlayer extends CanaryHuman implements Player {
         }
         //defaultChatpattern.put("%name", getDisplayName()); // Display name not initialized at this time
         defaultChatpattern.put("%prefix", getPrefix());
+        if (isNew) {
+            provider.addOrUpdatePlayerData(this);
+        }
     }
 
     /**
@@ -872,10 +911,12 @@ public class CanaryPlayer extends CanaryHuman implements Player {
     public String getPrefix() {
         if (prefix != null) {
             return prefix;
-        } else if (groups.get(0).getPrefix() != null) {
+        }
+        else if (groups.get(0).getPrefix() != null) {
             return groups.get(0).getPrefix();
-        } else {
-            return Colors.WHITE;
+        }
+        else {
+            return ChatFormat.WHITE.toString();
         }
     }
 
