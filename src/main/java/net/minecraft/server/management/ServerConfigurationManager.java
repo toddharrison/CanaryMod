@@ -21,10 +21,16 @@ import net.canarymod.api.world.position.Location;
 import net.canarymod.bansystem.Ban;
 import net.canarymod.config.Configuration;
 import net.canarymod.config.ServerConfiguration;
-import net.canarymod.hook.player.*;
+import net.canarymod.hook.player.ConnectionHook;
+import net.canarymod.hook.player.PlayerListHook;
+import net.canarymod.hook.player.PlayerRespawnedHook;
+import net.canarymod.hook.player.PlayerRespawningHook;
+import net.canarymod.hook.player.PreConnectionHook;
+import net.canarymod.hook.player.TeleportHook;
 import net.canarymod.hook.system.ServerShutdownHook;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -32,7 +38,21 @@ import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.network.play.server.*;
+import net.minecraft.network.play.server.S01PacketJoinGame;
+import net.minecraft.network.play.server.S02PacketChat;
+import net.minecraft.network.play.server.S03PacketTimeUpdate;
+import net.minecraft.network.play.server.S05PacketSpawnPosition;
+import net.minecraft.network.play.server.S07PacketRespawn;
+import net.minecraft.network.play.server.S09PacketHeldItemChange;
+import net.minecraft.network.play.server.S1DPacketEntityEffect;
+import net.minecraft.network.play.server.S1FPacketSetExperience;
+import net.minecraft.network.play.server.S2BPacketChangeGameState;
+import net.minecraft.network.play.server.S38PacketPlayerListItem;
+import net.minecraft.network.play.server.S39PacketPlayerAbilities;
+import net.minecraft.network.play.server.S3EPacketTeams;
+import net.minecraft.network.play.server.S3FPacketCustomPayload;
+import net.minecraft.network.play.server.S41PacketServerDifficulty;
+import net.minecraft.network.play.server.S44PacketWorldBorder;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.scoreboard.ScoreObjective;
 import net.minecraft.scoreboard.ScorePlayerTeam;
@@ -41,7 +61,11 @@ import net.minecraft.scoreboard.Team;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.stats.StatList;
 import net.minecraft.stats.StatisticsFile;
-import net.minecraft.util.*;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.IChatComponent;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.WorldSettings;
@@ -59,7 +83,14 @@ import java.io.File;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public abstract class ServerConfigurationManager {
 
@@ -534,16 +565,13 @@ public abstract class ServerConfigurationManager {
         entityplayermp.e().f(entityplayermp);
         Location respawnLocation;// = loc == null ? entityplayermp.getRespawnLocation() : loc;
         boolean spawnWasForced;// = entityplayermp.ch();
-        boolean nativeSpawn;
         if (loc != null) {
             respawnLocation = loc;
             spawnWasForced = true; // lets see what works best
-            nativeSpawn = false;
         }
         else {
-            respawnLocation = entityplayermp.getRespawnLocation();
             spawnWasForced = entityplayermp.ch();
-            nativeSpawn = true;
+            respawnLocation = entityplayermp.getRespawnLocation();
         }
 
         entityplayermp.am = i0; // update dimension
@@ -577,12 +605,24 @@ public abstract class ServerConfigurationManager {
         // Copy nethandlerplayserver as the connection is still the same
         newPlayer.a = entityplayermp.a;
         newPlayer.a.b = newPlayer;
-        newPlayer.a((EntityPlayer) entityplayermp, flag0);
+        newPlayer.a(entityplayermp, flag0);
         newPlayer.d(entityplayermp.F());
         newPlayer.o(entityplayermp);
 
         // CanaryMod: metadata persistance
         entityplayermp.saveMeta();
+        NBTTagCompound nbtdata = new NBTTagCompound();
+
+        entityplayermp.b(nbtdata);
+        // Override health / hurth / death values so we won't get trapped in an insta-death loop
+        // On Update: Check with EntityLivingBase if they added more tags that need overriding
+        nbtdata.a("HealF", (float)entityplayermp.a(SharedMonsterAttributes.a).e());
+        nbtdata.a("Health", (short)(int)Math.ceil(entityplayermp.a(SharedMonsterAttributes.a).e()));
+        nbtdata.a("HurtTime", (short)0);
+        nbtdata.a("HurtByTimestamp", 0);
+        nbtdata.a("DeathTime", (short)0);
+
+        newPlayer.a(nbtdata);
         newPlayer.setMetaData(entityplayermp.getMetaData());
         //
 
@@ -596,11 +636,8 @@ public abstract class ServerConfigurationManager {
                 float rot = loc.getRotation();
                 float yaw = loc.getPitch();
                 newPlayer.b((double) ((float) worldSpawn.n() + 0.5F), (double) ((float) worldSpawn.o() + 0.1F), (double) ((float) worldSpawn.p() + 0.5F), rot, yaw);
-                newPlayer.a(playerSpawn, spawnWasForced);
-                // Add back spawn location to new entity to avoid loss of bed spawns
-                if (!nativeSpawn) {
-                    newPlayer.setRespawnLocation(entityplayermp.getRespawnLocation());
-                }
+                // Set new spawn location
+                newPlayer.a(playerSpawn, spawnWasForced, false); // Do not update spawn location here, it will confuzzle bed spawns
             }
             else {
                 newPlayer.a.a(new S2BPacketChangeGameState(0, 0.0F));

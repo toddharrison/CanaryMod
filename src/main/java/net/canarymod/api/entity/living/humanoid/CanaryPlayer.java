@@ -252,7 +252,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
     public void setSpawnPosition(Location spawn) {
         BlockPos loc = new BlockPos((int) spawn.getX(), (int) spawn.getY(), (int) spawn.getZ());
 
-        getHandle().a(loc, true);
+        getHandle().a(loc, true, true);
     }
 
     /**

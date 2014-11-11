@@ -16,6 +16,7 @@ import net.canarymod.api.inventory.EnderChestInventory;
 import net.canarymod.api.inventory.PlayerInventory;
 import net.canarymod.api.nbt.CanaryCompoundTag;
 import net.canarymod.api.packet.CanaryPacket;
+import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.api.world.position.Location;
 import net.canarymod.hook.player.BedEnterHook;
@@ -143,7 +144,7 @@ public abstract class EntityPlayer extends EntityLivingBase {
 
     // CanaryMod
     protected IChatComponent displayName;
-    private String respawnWorld; // CanaryMod: Respawn world (for bed spawns)
+    protected Location canaryRespawn;
     private long currentSessionStart = ToolBox.getUnixTimestamp(); // CanaryMod: current session tracking.
     //Darkdiplomat Note: Fields are non-persistant between respawns and world switching. Use the Meta tag for persistance.
 
@@ -759,8 +760,12 @@ public abstract class EntityPlayer extends EntityLivingBase {
         if (nbttagcompound.b("SpawnX", 99) && nbttagcompound.b("SpawnY", 99) && nbttagcompound.b("SpawnZ", 99)) {
             this.c = new BlockPos(nbttagcompound.f("SpawnX"), nbttagcompound.f("SpawnY"), nbttagcompound.f("SpawnZ"));
             this.d = nbttagcompound.n("SpawnForced");
+            String fqWorld = nbttagcompound.j("SpawnWorld");
+            net.canarymod.api.world.World world = Canary.getServer().getWorld(fqWorld);
             // CanaryMod added respawn world
-            this.respawnWorld = nbttagcompound.j("SpawnWorld");
+            if (world != null) {
+                this.canaryRespawn = new Location(world, c.n(), c.o(), c.p(), 0f, 0f);
+            }
         }
 
         this.bj.a(nbttagcompound);
@@ -783,10 +788,10 @@ public abstract class EntityPlayer extends EntityLivingBase {
         nbttagcompound.a("XpTotal", this.bA);
         nbttagcompound.a("XpSeed", this.f);
         nbttagcompound.a("Score", this.bW());
-        if (this.c != null) {
-            nbttagcompound.a("SpawnX", this.c.n());
-            nbttagcompound.a("SpawnY", this.c.o());
-            nbttagcompound.a("SpawnZ", this.c.p());
+        if (this.canaryRespawn != null) {
+            nbttagcompound.a("SpawnX", this.canaryRespawn.getBlockX());
+            nbttagcompound.a("SpawnY", this.canaryRespawn.getBlockY());
+            nbttagcompound.a("SpawnZ", this.canaryRespawn.getBlockZ());
             nbttagcompound.a("SpawnForced", this.d);
             // CanaryMod add world fq name
             nbttagcompound.a("SpawnWorld", getCanaryWorld().getFqName());
@@ -1264,7 +1269,7 @@ public abstract class EntityPlayer extends EntityLivingBase {
 
         this.b = flag0 ? 0 : 100;
         if (flag2) {
-            this.a(this.bv, false);
+            this.a(this.bv, false, true);
         }
     }
 
@@ -1272,6 +1277,7 @@ public abstract class EntityPlayer extends EntityLivingBase {
         return this.o.p(this.bv).c() == Blocks.C;
     }
 
+    // Get bed location or return given blockpos (if spawn is forced)
     public static BlockPos a(World world, BlockPos blockpos, boolean flag0) {
         if (world.p(blockpos).c() != Blocks.C) {
             if (!flag0) {
@@ -1310,14 +1316,21 @@ public abstract class EntityPlayer extends EntityLivingBase {
         return this.d;
     }
 
-    public void a(BlockPos blockpos, boolean flag0) {
+    // CanaryMod added boolean to signature to handle bed spawn updates cross-worlds
+    public void a(BlockPos blockpos, boolean spawnWasForced, boolean updateCanaryLocation) {
         if (blockpos != null) {
             this.c = blockpos;
-            this.d = flag0;
+            this.d = spawnWasForced;
+            if (updateCanaryLocation) {
+                this.canaryRespawn = new Location(getCanaryWorld(), c.n(), c.o(), c.p(), 0f, 0f);
+            }
         }
         else {
             this.c = null;
             this.d = false;
+            if (updateCanaryLocation) {
+                this.canaryRespawn = null;
+            }
         }
     }
 
@@ -1974,26 +1987,26 @@ public abstract class EntityPlayer extends EntityLivingBase {
      * @return
      */
     public Location getRespawnLocation() {
-        if (this.c != null) {
-            if (respawnWorld == null || respawnWorld.isEmpty()) {
-                // NOTE: Respawns may only be in the overworld.
-                respawnWorld = getCanaryWorld().getName(); // normal name will do, worldman will look up overworld by default
+        if (canaryRespawn != null) {
+            if (canaryRespawn.getWorld().getBlockAt(canaryRespawn).getType() == BlockType.BedBlock) {
+                return this.canaryRespawn;
             }
-            return new Location(Canary.getServer().getWorld(respawnWorld), c.n(), c.o(), c.p(), 0, 0);
         }
+        // There is no bed anymore, invalidate the spawn
+        this.canaryRespawn = null;
         return null;
     }
 
     public void setRespawnLocation(Location l) {
         if (l == null) {
             c = null;
-            respawnWorld = null;
+            canaryRespawn = null;
             return;
         }
         if (c == null) {
             c = new BlockPos(l.getBlockX(), l.getBlockY(), l.getBlockZ());
         }
-        respawnWorld = l.getWorld().getFqName();
+        canaryRespawn = l;
     }
 
     public String getFirstJoined() {
