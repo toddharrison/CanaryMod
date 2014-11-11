@@ -616,8 +616,13 @@ public abstract class ServerConfigurationManager {
         entityplayermp.b(nbtdata);
         // Override health / hurth / death values so we won't get trapped in an insta-death loop
         // On Update: Check with EntityLivingBase if they added more tags that need overriding
-        nbtdata.a("HealF", (float)entityplayermp.a(SharedMonsterAttributes.a).e());
-        nbtdata.a("Health", (short)(int)Math.ceil(entityplayermp.a(SharedMonsterAttributes.a).e()));
+        short maxHealth = (short)(int)Math.ceil(entityplayermp.a(SharedMonsterAttributes.a).e());
+        short currentHealth = (short)entityplayermp.bm();
+        // make sure player won't come out dead but also don't gift him extra health
+        nbtdata.a("Health", (currentHealth <= 0 ? maxHealth : currentHealth));
+        if (currentHealth <= 0) {
+            nbtdata.a("HealF", maxHealth);
+        }
         nbtdata.a("HurtTime", (short)0);
         nbtdata.a("HurtByTimestamp", 0);
         nbtdata.a("DeathTime", (short)0);
