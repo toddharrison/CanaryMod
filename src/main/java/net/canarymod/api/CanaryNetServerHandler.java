@@ -1,5 +1,6 @@
 package net.canarymod.api;
 
+import java.net.SocketAddress;
 import net.canarymod.api.chat.CanaryChatComponent;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.packet.CanaryPacket;
@@ -62,5 +63,11 @@ public class CanaryNetServerHandler implements NetServerHandler {
     @Override
     public Player getUser() {
         return handler.b.getPlayer();
+    }
+    
+    @Override
+    public SocketAddress getSocketAdress()
+    {
+        return handler.a.j;
     }
 }
