@@ -8,7 +8,7 @@ import net.minecraft.nbt.NBTTagDouble;
  * @author Greg (gregthegeek)
  * @author Jason (darkdiplomat)
  */
-public class CanaryDoubleTag extends CanaryPrimativeTag implements DoubleTag {
+public class CanaryDoubleTag extends CanaryPrimitiveTag<DoubleTag> implements DoubleTag {
 
     /**
      * Constructs a new wrapper for NBTTagDouble

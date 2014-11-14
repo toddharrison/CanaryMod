@@ -13,7 +13,7 @@ import java.util.Set;
  * @author Greg (gregthegeek)
  * @author Jason (darkdiplomat)
  */
-public class CanaryCompoundTag extends CanaryBaseTag implements CompoundTag {
+public class CanaryCompoundTag extends CanaryBaseTag<CompoundTag> implements CompoundTag {
 
     /**
      * Constructs a new wrapper for NBTTagCompound

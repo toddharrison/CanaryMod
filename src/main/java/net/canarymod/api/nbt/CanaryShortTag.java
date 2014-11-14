@@ -8,7 +8,7 @@ import net.minecraft.nbt.NBTTagShort;
  * @author Greg (gregthegeek)
  * @author Jason (darkdiplomat)
  */
-public class CanaryShortTag extends CanaryPrimativeTag implements ShortTag {
+public class CanaryShortTag extends CanaryPrimitiveTag<ShortTag> implements ShortTag {
 
     /**
      * Constructs a new wrapper for NBTTagShort

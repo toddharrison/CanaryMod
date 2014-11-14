@@ -12,7 +12,7 @@ import java.util.*;
  * @author Greg (gregthegeek)
  * @author Jason (darkdiplomat)
  */
-public class CanaryListTag<E extends BaseTag> extends CanaryBaseTag implements ListTag<E> {
+public class CanaryListTag<E extends BaseTag> extends CanaryBaseTag<ListTag<E>> implements ListTag<E> {
 
     /**
      * Constructs a new wrapper for NBTTagList

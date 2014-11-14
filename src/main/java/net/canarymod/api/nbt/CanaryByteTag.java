@@ -8,7 +8,7 @@ import net.minecraft.nbt.NBTTagByte;
  * @author Greg (gregthegeek)
  * @author Jason (darkdiplomat)
  */
-public class CanaryByteTag extends CanaryPrimativeTag implements ByteTag {
+public class CanaryByteTag extends CanaryPrimitiveTag<ByteTag> implements ByteTag {
 
     /**
      * Constructs a new wrapper for NBTTagByte

@@ -8,7 +8,7 @@ import net.minecraft.nbt.NBTTagIntArray;
  * @author Greg (gregthegeek)
  * @author Jason (darkdiplomat)
  */
-public class CanaryIntArrayTag extends CanaryBaseTag implements IntArrayTag {
+public class CanaryIntArrayTag extends CanaryBaseTag<IntArrayTag> implements IntArrayTag {
 
     /**
      * Constructs a new wrapper for NBTTagIntArray

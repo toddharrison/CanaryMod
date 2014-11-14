@@ -8,7 +8,7 @@ import net.minecraft.nbt.NBTTagString;
  * @author Greg (gregthegeek)
  * @author Jason (darkdiplomat)
  */
-public class CanaryStringTag extends CanaryBaseTag implements StringTag {
+public class CanaryStringTag extends CanaryBaseTag<StringTag> implements StringTag {
 
     /**
      * Constructs a new wrapper for NBTTagString

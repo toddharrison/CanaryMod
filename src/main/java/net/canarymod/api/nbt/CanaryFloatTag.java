@@ -8,7 +8,7 @@ import net.minecraft.nbt.NBTTagFloat;
  * @author Greg (gregthegeek)
  * @author Jason (darkdiplomat)
  */
-public class CanaryFloatTag extends CanaryPrimativeTag implements FloatTag {
+public class CanaryFloatTag extends CanaryPrimitiveTag<FloatTag> implements FloatTag {
 
     /**
      * Constructs a new wrapper for NBTTagFloat
