@@ -485,13 +485,41 @@ public class CanaryServer implements Server {
     }
 
     @Override
-    public void message(String message) {
+    public void message(CharSequence message) {
         log.info(Logman.MESSAGE, message);
     }
 
     @Override
-    public void notice(String message) {
+    public void message(CharSequence... messages) {
+        for (CharSequence message : messages) {
+            message(message);
+        }
+    }
+
+    @Override
+    public void message(Iterable<? extends CharSequence> messages) {
+        for (CharSequence message : messages) {
+            message(message);
+        }
+    }
+
+    @Override
+    public void notice(CharSequence message) {
         log.info(Logman.NOTICE, message);
+    }
+
+    @Override
+    public void notice(CharSequence... messages) {
+        for (CharSequence message : messages) {
+            notice(message);
+        }
+    }
+
+    @Override
+    public void notice(Iterable<? extends CharSequence> messages) {
+        for (CharSequence message : messages) {
+            notice(message);
+        }
     }
 
     /**

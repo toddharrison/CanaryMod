@@ -62,7 +62,7 @@ public class CanaryCommandBlockMinecart extends CanaryMinecart implements Comman
      * {@inheritDoc}
      */
     @Override
-    public void notice(String message) {
+    public void notice(CharSequence message) {
         log.info(Logman.NOTICE, String.format(cmdPrefix, getName(), message));
     }
 
@@ -70,8 +70,48 @@ public class CanaryCommandBlockMinecart extends CanaryMinecart implements Comman
      * {@inheritDoc}
      */
     @Override
-    public void message(String message) {
+    public void notice(CharSequence... messages) {
+        for (CharSequence message : messages) {
+            notice(message);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void notice(Iterable<? extends CharSequence> messages) {
+        for (CharSequence message : messages) {
+            notice(message);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void message(CharSequence message) {
         log.info(Logman.MESSAGE, String.format(cmdPrefix, getName(), message));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void message(CharSequence... messages) {
+        for (CharSequence message : messages) {
+            message(message);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void message(Iterable<? extends CharSequence> messages) {
+        for (CharSequence message : messages) {
+            message(message);
+        }
     }
 
     /**
