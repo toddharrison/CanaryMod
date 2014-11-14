@@ -12,7 +12,7 @@ import java.io.OutputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import jline.console.ConsoleReader;
-import net.canarymod.chat.TextFormat;
+import net.canarymod.chat.ChatFormat;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.fusesource.jansi.Ansi;
@@ -100,7 +100,7 @@ public class SysOutWriterThread extends Thread {
 
     private String replaceColours(String toProcess) throws IOException {
         if (!reader.getTerminal().isAnsiSupported()) {
-            return TextFormat.removeFormatting(toProcess);
+            return ChatFormat.removeFormatting(toProcess);
         } else {
             Matcher matcher = colourPattern.matcher(toProcess);
             boolean result = matcher.find();

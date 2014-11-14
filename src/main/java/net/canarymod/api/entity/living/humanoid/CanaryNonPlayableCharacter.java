@@ -6,7 +6,7 @@ import net.canarymod.api.entity.Entity;
 import net.canarymod.api.entity.EntityType;
 import net.canarymod.api.packet.CanaryPacket;
 import net.canarymod.api.world.CanaryWorld;
-import net.canarymod.chat.Colors;
+import net.canarymod.chat.ChatFormat;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.play.server.S0CPacketSpawnPlayer;
 import net.minecraft.network.play.server.S13PacketDestroyEntities;
@@ -23,7 +23,7 @@ import net.canarymod.api.entity.living.humanoid.npc.NPCBehaviorRegistry;
  * @author Jason (darkdiplomat)
  */
 public class CanaryNonPlayableCharacter extends CanaryHuman implements NonPlayableCharacter {
-    private String prefix = "<" + Colors.ORANGE + "NPC " + Colors.WHITE + "%name> ";
+    private String prefix = "<" + ChatFormat.GOLD + "NPC " + ChatFormat.WHITE + "%name> ";
 
     /**
      * Constructs a new wrapper for EntityNonPlayableCharacter

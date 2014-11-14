@@ -42,9 +42,7 @@ import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.api.world.position.Direction;
 import net.canarymod.api.world.position.Location;
 import net.canarymod.chat.ChatFormat;
-import net.canarymod.chat.Colors;
 import net.canarymod.chat.ReceiverType;
-import net.canarymod.chat.TextFormat;
 import net.canarymod.config.Configuration;
 import net.canarymod.hook.command.PlayerCommandHook;
 import net.canarymod.hook.player.ChatHook;
@@ -98,7 +96,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
     private String[] allowedIPs;
     private HashMap<String, String> defaultChatpattern = new HashMap<String, String>();
     //Global chat format setting
-    private static String chatFormat = Configuration.getServerConfig().getChatFormat().replace("&", Colors.MARKER);
+    private static String chatFormat = Configuration.getServerConfig().getChatFormat().replace("&", ChatFormat.MARKER.toString());
 
     public CanaryPlayer(EntityPlayerMP entity) {
         super(entity);
@@ -179,7 +177,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
                 for (Player player : receivers) {
                     player.message(formattedMessage);
                 }
-                log.info(TextFormat.consoleFormat(formattedMessage));
+                log.info(ChatFormat.consoleFormat(formattedMessage));
             }
         }
 
@@ -219,7 +217,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
      */
     @Override
     public void notice(CharSequence message) {
-        message(Colors.LIGHT_RED + message);
+        message(ChatFormat.RED.toString() + message);
     }
 
     /**
@@ -340,7 +338,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
         } catch (Throwable ex) {
             log.error("Exception in command handler: ", ex);
             if (isAdmin()) {
-                message(Colors.LIGHT_RED + "Exception occured. " + ex.getMessage());
+                message(ChatFormat.RED + "Exception occured. " + ex.getMessage());
             }
             return false;
         }
