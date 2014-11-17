@@ -552,4 +552,26 @@ public abstract class CanaryEntityInventory implements Inventory {
     }
 
     public abstract IInventory getHandle();
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean canInsertItems(Item item, int itemAmount) {
+        String itemType = item.getType().getMachineName();
+        int itemData = item.getType().getData();
+
+        for (final Item inventoryItem : getContents()) {
+            if (inventoryItem == null) {
+                itemAmount -= item.getMaxAmount();
+            }
+            else if (inventoryItem.getType().getMachineName().equalsIgnoreCase(itemType) && inventoryItem.getType().getData() == itemData) {
+                itemAmount -= (inventoryItem.getMaxAmount() - inventoryItem.getAmount());
+            }
+
+            if (itemAmount <= 0) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
