@@ -1,5 +1,6 @@
 package net.canarymod.api.inventory;
 
+import net.canarymod.Canary;
 import net.canarymod.api.nbt.CanaryCompoundTag;
 import net.canarymod.config.Configuration;
 import net.minecraft.inventory.IInventory;
@@ -556,22 +557,52 @@ public abstract class CanaryEntityInventory implements Inventory {
     /**
      * {@inheritDoc}
      */
-    public boolean canInsertItems(Item item, int itemAmount) {
-        String itemType = item.getType().getMachineName();
-        int itemData = item.getType().getData();
+    @Override
+    public boolean canInsertItems(Item item) {
+        return canInsertItems(item, true);
+    }
 
-        for (final Item inventoryItem : getContents()) {
-            if (inventoryItem == null) {
-                itemAmount -= item.getMaxAmount();
-            }
-            else if (inventoryItem.getType().getMachineName().equalsIgnoreCase(itemType) && inventoryItem.getType().getData() == itemData) {
-                itemAmount -= (inventoryItem.getMaxAmount() - inventoryItem.getAmount());
-            }
-
-            if (itemAmount <= 0) {
-                return true;
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean canInsertItems(Item item, boolean matchData) {
+        int totalSpace = 0;
+        for(Item inv : getContents()) {
+            if(inv == null) {
+                totalSpace += item.getMaxAmount();
+            } else {
+                if (inv.getType().equals(item.getType())) {
+                    if(matchData == true){
+                        if(inv.hasDataTag() && item.hasDataTag()) {
+                            if (inv.getDataTag().equals(item.getDataTag())) {
+                                totalSpace += inv.getMaxAmount() - inv.getAmount();
+                            }
+                        }
+                        else {
+                            if(inv.getDisplayName().equals(item.getDisplayName())) {
+                                if((inv.isEnchanted() || item.isEnchanted()) ) {
+                                    if(Configuration.getServerConfig().allowEnchantmentStacking()) {
+                                        totalSpace += inv.getMaxAmount() - inv.getAmount();
+                                    }
+                                }
+                                else {
+                                    totalSpace += inv.getMaxAmount() - inv.getAmount();
+                                }
+                            }
+                        }
+                    }
+                    else {
+                        totalSpace += inv.getMaxAmount() - inv.getAmount();
+                    }
+                }
             }
         }
+
+        if(totalSpace > 0) {
+            return true;
+        }
+
         return false;
     }
 }
