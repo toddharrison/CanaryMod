@@ -50,6 +50,7 @@ import net.minecraft.tileentity.TileEntityNote;
 import net.minecraft.tileentity.TileEntitySign;
 import net.minecraft.tileentity.TileEntitySkull;
 import net.minecraft.util.BlockPos;
+import net.minecraft.village.VillageCollection;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.WorldServer;
@@ -58,6 +59,7 @@ import net.visualillusionsent.utils.TaskManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import com.google.common.collect.ImmutableList;
 
 public class CanaryWorld implements World {
     private WorldServer world;
@@ -791,6 +793,40 @@ public class CanaryWorld implements World {
         for (Player player : getPlayerList()) {
             player.message(msg);
         }
+    }
+    
+    @Override
+    public List<Village> getVillages() {
+        VillageCollection collection = this.getHandle().ae();
+        if(collection == null) {
+            return null;
+        }
+        ImmutableList.Builder<Village> builder = ImmutableList.builder();
+        for(Object object : collection.b()) {
+            net.minecraft.village.Village village = (net.minecraft.village.Village) object;
+            builder.add(village.getCanaryVillage());
+        }
+        return builder.build();
+    }
+    
+    @Override
+    public Village getNearestVillage(Position position, int radius) {
+        return this.getNearestVillage(position.getBlockX(), position.getBlockY(), position.getBlockZ(), radius);
+    }
+    
+    @Override
+    public Village getNearestVillage(Location location, int radius) {
+        return this.getNearestVillage(location.getBlockX(), location.getBlockY(), location.getBlockZ(), radius);
+    }
+    
+    @Override
+    public Village getNearestVillage(int x, int y, int z, int radius) {
+        VillageCollection collection = this.getHandle().ae();
+        if(collection == null) {
+            return null;
+        }
+        net.minecraft.village.Village village = collection.a(new BlockPos(x, y, z), radius);
+        return village != null ? village.getCanaryVillage() : null;
     }
 
     @Override
