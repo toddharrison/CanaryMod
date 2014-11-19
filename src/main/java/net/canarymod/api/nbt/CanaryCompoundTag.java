@@ -45,6 +45,10 @@ public class CanaryCompoundTag extends CanaryBaseTag<CompoundTag> implements Com
         return values;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("unchecked")
     public Set<String> keySet() {
         return getHandle().c();
     }
@@ -159,6 +163,14 @@ public class CanaryCompoundTag extends CanaryBaseTag<CompoundTag> implements Com
     @Override
     public boolean containsKey(String key) {
         return getHandle().c(key);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean containsKey(String key, NBTTagType nbtTagType) {
+        return nbtTagType != NBTTagType.UNKNOWN && getHandle().b(key, nbtTagType == NBTTagType.ANY_NUMERIC ? 99 : nbtTagType.ordinal());
     }
 
     /**
