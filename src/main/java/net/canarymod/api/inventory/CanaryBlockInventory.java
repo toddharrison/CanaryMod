@@ -565,45 +565,20 @@ public abstract class CanaryBlockInventory extends CanaryTileEntity implements I
      */
     @Override
     public boolean canInsertItems(Item item) {
-        return canInsertItems(item, true);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean canInsertItems(Item item, boolean matchData) {
         int totalSpace = 0;
         for(Item inv : getContents()) {
-            if(inv == null) {
+            if (inv == null) {
                 totalSpace += item.getMaxAmount();
-            } else {
+            }
+            else {
                 if (inv.getType().equals(item.getType())) {
-                    if(matchData == true){
-                        if(inv.hasDataTag() && item.hasDataTag()) {
-                            if (inv.getDataTag().equals(item.getDataTag())) {
-                                totalSpace += inv.getMaxAmount() - inv.getAmount();
-                            }
-                        }
-                        else {
-                            if(inv.getDisplayName().equals(item.getDisplayName())) {
-                                if((inv.isEnchanted() || item.isEnchanted()) ) {
-                                    if(Configuration.getServerConfig().allowEnchantmentStacking()) {
-                                        totalSpace += inv.getMaxAmount() - inv.getAmount();
-                                    }
-                                }
-                                else {
-                                    totalSpace += inv.getMaxAmount() - inv.getAmount();
-                                }
-                            }
-                        }
-                    }
-                    else {
+                    if (item.hasDataTag() && !item.getDataTag().equals(inv.getDataTag())) {
                         totalSpace += inv.getMaxAmount() - inv.getAmount();
                     }
                 }
             }
         }
+
 
         if(totalSpace > 0) {
             return true;
