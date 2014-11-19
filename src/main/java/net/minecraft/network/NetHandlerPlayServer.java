@@ -9,14 +9,27 @@ import net.canarymod.Canary;
 import net.canarymod.ToolBox;
 import net.canarymod.api.CanaryNetServerHandler;
 import net.canarymod.api.entity.living.humanoid.Player;
-import net.canarymod.api.inventory.slot.*;
+import net.canarymod.api.inventory.slot.ButtonPress;
+import net.canarymod.api.inventory.slot.GrabMode;
+import net.canarymod.api.inventory.slot.SecondarySlotType;
+import net.canarymod.api.inventory.slot.SlotHelper;
+import net.canarymod.api.inventory.slot.SlotType;
 import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.api.world.blocks.BlockFace;
 import net.canarymod.api.world.blocks.CanaryBlock;
 import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.api.world.position.Location;
 import net.canarymod.config.Configuration;
-import net.canarymod.hook.player.*;
+import net.canarymod.hook.player.BlockRightClickHook;
+import net.canarymod.hook.player.BookEditHook;
+import net.canarymod.hook.player.DisconnectionHook;
+import net.canarymod.hook.player.KickHook;
+import net.canarymod.hook.player.PlayerArmSwingHook;
+import net.canarymod.hook.player.PlayerIdleHook;
+import net.canarymod.hook.player.PlayerMoveHook;
+import net.canarymod.hook.player.SignChangeHook;
+import net.canarymod.hook.player.SlotClickHook;
+import net.canarymod.hook.player.TeleportHook;
 import net.minecraft.block.material.Material;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.server.CommandBlockLogic;
@@ -32,7 +45,12 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Items;
-import net.minecraft.inventory.*;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ContainerBeacon;
+import net.minecraft.inventory.ContainerMerchant;
+import net.minecraft.inventory.ContainerRepair;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemEditableBook;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemWritableBook;
@@ -40,8 +58,39 @@ import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.network.play.INetHandlerPlayServer;
-import net.minecraft.network.play.client.*;
-import net.minecraft.network.play.server.*;
+import net.minecraft.network.play.client.C00PacketKeepAlive;
+import net.minecraft.network.play.client.C01PacketChatMessage;
+import net.minecraft.network.play.client.C02PacketUseEntity;
+import net.minecraft.network.play.client.C03PacketPlayer;
+import net.minecraft.network.play.client.C07PacketPlayerDigging;
+import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
+import net.minecraft.network.play.client.C09PacketHeldItemChange;
+import net.minecraft.network.play.client.C0APacketAnimation;
+import net.minecraft.network.play.client.C0BPacketEntityAction;
+import net.minecraft.network.play.client.C0CPacketInput;
+import net.minecraft.network.play.client.C0DPacketCloseWindow;
+import net.minecraft.network.play.client.C0EPacketClickWindow;
+import net.minecraft.network.play.client.C0FPacketConfirmTransaction;
+import net.minecraft.network.play.client.C10PacketCreativeInventoryAction;
+import net.minecraft.network.play.client.C11PacketEnchantItem;
+import net.minecraft.network.play.client.C12PacketUpdateSign;
+import net.minecraft.network.play.client.C13PacketPlayerAbilities;
+import net.minecraft.network.play.client.C14PacketTabComplete;
+import net.minecraft.network.play.client.C15PacketClientSettings;
+import net.minecraft.network.play.client.C16PacketClientStatus;
+import net.minecraft.network.play.client.C17PacketCustomPayload;
+import net.minecraft.network.play.client.C18PacketSpectate;
+import net.minecraft.network.play.client.C19PacketResourcePackStatus;
+import net.minecraft.network.play.server.S00PacketKeepAlive;
+import net.minecraft.network.play.server.S02PacketChat;
+import net.minecraft.network.play.server.S07PacketRespawn;
+import net.minecraft.network.play.server.S08PacketPlayerPosLook;
+import net.minecraft.network.play.server.S18PacketEntityTeleport;
+import net.minecraft.network.play.server.S23PacketBlockChange;
+import net.minecraft.network.play.server.S2FPacketSetSlot;
+import net.minecraft.network.play.server.S32PacketConfirmTransaction;
+import net.minecraft.network.play.server.S3APacketTabComplete;
+import net.minecraft.network.play.server.S40PacketDisconnect;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.stats.AchievementList;
@@ -49,7 +98,16 @@ import net.minecraft.stats.StatBase;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityCommandBlock;
 import net.minecraft.tileentity.TileEntitySign;
-import net.minecraft.util.*;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.ChatAllowedCharacters;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IChatComponent;
+import net.minecraft.util.IntHashMap;
+import net.minecraft.util.ReportedException;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.visualillusionsent.utils.DateUtils;
@@ -57,7 +115,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.Callable;
 
 public class NetHandlerPlayServer implements INetHandlerPlayServer, IUpdatePlayerListBox {
@@ -357,9 +420,9 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, IUpdatePlaye
                             }
                         }
                     }
-                }
-                else {
-                    this.g = 0;
+                    else {
+                        this.g = 0;
+                    }
                 }
 
                 this.b.C = c03packetplayer.f();
