@@ -135,6 +135,11 @@ public class CanaryCommandBlockMinecart extends CanaryMinecart implements Comman
         return ReceiverType.COMMANDBLOCKENTITY;
     }
 
+    @Override
+    public String getLocale() {
+        return Configuration.getServerConfig().getServerLocale();
+    }
+
     /**
      * {@inheritDoc}
      */

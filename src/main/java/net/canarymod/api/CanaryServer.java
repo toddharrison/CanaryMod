@@ -9,7 +9,11 @@ import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.entity.vehicle.CanaryCommandBlockMinecart;
 import net.canarymod.api.gui.GUIControl;
 import net.canarymod.api.inventory.CanaryItem;
-import net.canarymod.api.inventory.recipes.*;
+import net.canarymod.api.inventory.recipes.CanaryRecipe;
+import net.canarymod.api.inventory.recipes.CraftingRecipe;
+import net.canarymod.api.inventory.recipes.Recipe;
+import net.canarymod.api.inventory.recipes.ShapedRecipeHelper;
+import net.canarymod.api.inventory.recipes.SmeltRecipe;
 import net.canarymod.api.nbt.CanaryCompoundTag;
 import net.canarymod.api.world.World;
 import net.canarymod.api.world.WorldManager;
@@ -25,7 +29,11 @@ import net.canarymod.tasks.ServerTaskManager;
 import net.canarymod.util.NMSToolBox;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.*;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.FurnaceRecipes;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.ShapedRecipes;
+import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.gui.MinecraftServerGui;
@@ -35,7 +43,11 @@ import net.visualillusionsent.utils.TaskManager;
 import java.io.File;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import static net.canarymod.Canary.log;
 
@@ -460,6 +472,11 @@ public class CanaryServer implements Server {
     @Override
     public ReceiverType getReceiverType() {
         return ReceiverType.SERVER;
+    }
+
+    @Override
+    public String getLocale() {
+        return Configuration.getServerConfig().getServerLocale();
     }
 
     @Override

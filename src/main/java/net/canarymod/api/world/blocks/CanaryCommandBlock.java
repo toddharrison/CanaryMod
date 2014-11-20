@@ -124,6 +124,11 @@ public class CanaryCommandBlock extends CanaryTileEntity implements CommandBlock
         return ReceiverType.COMMANDBLOCK;
     }
 
+    @Override
+    public String getLocale() {
+        return Configuration.getServerConfig().getServerLocale();
+    }
+
     /**
      * {@inheritDoc}
      */
