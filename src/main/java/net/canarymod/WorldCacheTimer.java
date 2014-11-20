@@ -31,7 +31,8 @@ public class WorldCacheTimer implements Runnable {
         if (scheduledForRemove) {
             if (this.world.getPlayerList().isEmpty() && Canary.getServer().getWorldManager().getAllWorlds().size() > 1) {
                 Canary.getServer().getWorldManager().unloadWorld(world.getName(), world.getType(), false);
-            } else {
+            }
+            else {
                 scheduledForRemove = false;
                 resched = true;
             }

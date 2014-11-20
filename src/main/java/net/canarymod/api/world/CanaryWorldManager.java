@@ -1,6 +1,7 @@
 package net.canarymod.api.world;
 
 import net.canarymod.Canary;
+import net.canarymod.WorldCacheTimer;
 import net.canarymod.api.CanaryServer;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.backbone.PermissionDataAccess;
@@ -17,6 +18,7 @@ import net.minecraft.world.WorldServerMulti;
 import net.minecraft.world.WorldSettings;
 import net.minecraft.world.chunk.storage.AnvilSaveHandler;
 import net.minecraft.world.storage.WorldInfo;
+import net.visualillusionsent.utils.TaskManager;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -310,6 +312,12 @@ public class CanaryWorldManager implements WorldManager {
                     }
                     else {
                         log.warn(world.getFqName() + " was scheduled for unload but there were still players in it. Not unloading world!");
+                        iter.remove(); // Remove from unload list as its not going to be unloaded
+                        // if cachetask is null then timeout is probably disabled, otherwise check if the task has exited
+                        if (world.cachetask != null && world.cachetask.isDone()) {
+                            // Reschedule timeout as something has broken it
+                            world.cachetask = TaskManager.scheduleContinuedTaskInMinutes(new WorldCacheTimer(world), Configuration.getServerConfig().getWorldCacheTimeout(), Configuration.getServerConfig().getWorldCacheTimeout());
+                        }
                         continue;
                     }
                 }
@@ -375,6 +383,4 @@ public class CanaryWorldManager implements WorldManager {
         }
         return worlds.toArray(new String[worlds.size()]);
     }
-
-
 }

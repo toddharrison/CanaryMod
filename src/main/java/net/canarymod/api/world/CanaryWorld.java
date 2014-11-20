@@ -1,5 +1,6 @@
 package net.canarymod.api.world;
 
+import com.google.common.collect.ImmutableList;
 import net.canarymod.WorldCacheTimer;
 import net.canarymod.api.CanaryEntityTracker;
 import net.canarymod.api.GameMode;
@@ -59,13 +60,15 @@ import net.visualillusionsent.utils.TaskManager;
 
 import java.util.ArrayList;
 import java.util.List;
-import com.google.common.collect.ImmutableList;
+import java.util.concurrent.ScheduledFuture;
 
 public class CanaryWorld implements World {
     private WorldServer world;
     private DimensionType type;
     public long[] nanoTicks;
     private WorldConfiguration worldConfig;
+    ScheduledFuture cachetask;
+
     /**
      * The world name
      */
@@ -80,9 +83,8 @@ public class CanaryWorld implements World {
         nanoTicks = new long[100];
         worldConfig = Configuration.getWorldConfig(this.fqName);
         if (Configuration.getServerConfig().isWorldCacheTimerEnabled()) {
-            TaskManager.scheduleContinuedTaskInMinutes(new WorldCacheTimer(this), Configuration.getServerConfig().getWorldCacheTimeout(), Configuration.getServerConfig().getWorldCacheTimeout());
+            cachetask = TaskManager.scheduleContinuedTaskInMinutes(new WorldCacheTimer(this), Configuration.getServerConfig().getWorldCacheTimeout(), Configuration.getServerConfig().getWorldCacheTimeout());
         }
-
     }
 
     @Override
