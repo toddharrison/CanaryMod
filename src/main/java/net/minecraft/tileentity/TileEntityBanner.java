@@ -198,4 +198,17 @@ public class TileEntityBanner extends TileEntity {
         }
 
     }
+
+    // CanaryMod
+    public void setBaseColor(int color) {
+        this.a = color;
+    }
+
+    public NBTTagList getPatternsList() {
+        return this.f;
+    }
+
+    public void initializePatternsList() {
+        this.f = new NBTTagList();
+    }
 }
