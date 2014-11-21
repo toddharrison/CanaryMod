@@ -57,12 +57,15 @@ public class CanaryBanner extends CanaryTileEntity implements Banner {
 
     @Override
     public boolean addPattern(BannerPattern bannerPattern) {
+        if (getTileEntity().getPatternsList() == null) {
+            getTileEntity().initializePatternsList();
+        }
         return ((ListTag)CanaryBaseTag.wrap(getTileEntity().getPatternsList())).add(bannerPattern.asCompoundTag());
     }
 
     @Override
     public boolean removePattern(BannerPattern bannerPattern) {
-        return ((ListTag)CanaryBaseTag.wrap(getTileEntity().getPatternsList())).remove(bannerPattern.asCompoundTag());
+        return getTileEntity().getPatternsList() != null && ((ListTag)CanaryBaseTag.wrap(getTileEntity().getPatternsList())).remove(bannerPattern.asCompoundTag());
     }
 
     @Override
