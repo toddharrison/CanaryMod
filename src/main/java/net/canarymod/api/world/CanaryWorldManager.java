@@ -44,10 +44,9 @@ import static net.canarymod.Canary.log;
  */
 public class CanaryWorldManager implements WorldManager {
 
-    private Map<String, World> loadedWorlds;
-    private List<String> existingWorlds;
-    private Map<String, Boolean> markedForUnload;
-    private static final Object worldLock = new Object();
+    private final Map<String, World> loadedWorlds;
+    private final List<String> existingWorlds;
+    private final Map<String, Boolean> markedForUnload;
 
     public CanaryWorldManager() {
         markedForUnload = new HashMap<String, Boolean>(1);
@@ -298,20 +297,21 @@ public class CanaryWorldManager implements WorldManager {
      * This'll actually remove all marked worlds from the system so that they may get GC'd soon after
      */
     private void removeWorlds() {
-        Iterator<String> iter = markedForUnload.keySet().iterator();
-        synchronized (worldLock) {
+        synchronized (markedForUnload) {
+            Iterator<Map.Entry<String, Boolean>> iter = markedForUnload.entrySet().iterator();
             while (iter.hasNext()) {
-                String fqName = iter.next();
+                Map.Entry<String, Boolean> entry = iter.next();
+                String fqName = entry.getKey();
                 CanaryWorld world = (CanaryWorld) loadedWorlds.get(fqName);
-                boolean force = markedForUnload.get(fqName);
-                if (world.getPlayerList().size() > 0) {
+                boolean force = entry.getValue();
+                if (!world.getPlayerList().isEmpty()) {
                     if (force) {
                         for (Player p : world.getPlayerList()) {
                             p.kick("Server scheduled world shutdown");
                         }
                     }
                     else {
-                        log.warn(world.getFqName() + " was scheduled for unload but there were still players in it. Not unloading world!");
+                        log.warn(fqName + " was scheduled for unload but there were still players in it. Not unloading world!");
                         iter.remove(); // Remove from unload list as its not going to be unloaded
                         // if cachetask is null then timeout is probably disabled, otherwise check if the task has exited
                         if (world.cachetask != null && world.cachetask.isDone()) {
@@ -324,9 +324,9 @@ public class CanaryWorldManager implements WorldManager {
                 world.save();
                 ((WorldServer) world.getHandle()).n(); // close out the SaveHandler Session Lock
                 new UnloadWorldHook(world).call();
-                loadedWorlds.remove(world.getFqName());
-                world.dereference(); // prevent a leak
+                loadedWorlds.remove(fqName);
                 iter.remove();
+                Canary.log.info("Unloaded World: " + fqName + " (" + (force ? "force unloaded" : "cache timeout") + ")");
             }
         }
     }
