@@ -1,6 +1,7 @@
 package net.canarymod.api.world.blocks;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import net.canarymod.NotYetImplementedException;
 import net.canarymod.api.entity.living.humanoid.CanaryPlayer;
 import net.canarymod.api.entity.living.humanoid.Player;
@@ -371,7 +372,7 @@ public class CanaryBlock implements Block {
         if (state == null) {
             throw new NotYetImplementedException("CanaryBlock was formed missing the IBlockState, this is a bug and should be reported");
         }
-        Collection<BlockProperty> blockProperties = Collections.emptyList();
+        Collection<BlockProperty> blockProperties = Lists.newArrayList();
         for (Object nativeProperty : state.a()) {
             blockProperties.add(CanaryBlockProperty.wrapAs((IProperty)nativeProperty));
         }
