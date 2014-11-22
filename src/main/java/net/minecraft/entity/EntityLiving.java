@@ -2,7 +2,18 @@ package net.minecraft.entity;
 
 import net.canarymod.hook.entity.EntityDespawnHook;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.ai.*;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityBodyHelper;
+import net.minecraft.entity.EntityHanging;
+import net.minecraft.entity.EntityLeashKnot;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.IEntityLivingData;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.EntityAITasks;
+import net.minecraft.entity.ai.EntityJumpHelper;
+import net.minecraft.entity.ai.EntityLookHelper;
+import net.minecraft.entity.ai.EntityMoveHelper;
+import net.minecraft.entity.ai.EntitySenses;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityGhast;
@@ -756,7 +767,7 @@ public abstract class EntityLiving extends EntityLivingBase {
                     return true;
                 }
 
-                if (((EntityTameable) this).e(entityplayer)) {
+                if (((EntityTameable) this).e((EntityLivingBase)entityplayer)) {
                     this.a(entityplayer, true);
                     --itemstack.b;
                     return true;
