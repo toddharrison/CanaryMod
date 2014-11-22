@@ -137,7 +137,7 @@ public class EntityOcelot extends EntityTameable {
         ItemStack itemstack = entityplayer.bg.h();
 
         if (this.cj()) {
-            if (this.e(entityplayer) && !this.o.D && !this.d(itemstack)) {
+            if (this.e((EntityLivingBase)entityplayer) && !this.o.D && !this.d(itemstack)) {
                 this.bk.a(!this.cl());
             }
         }
