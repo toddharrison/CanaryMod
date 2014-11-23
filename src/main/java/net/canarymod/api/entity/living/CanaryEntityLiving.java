@@ -211,49 +211,6 @@ public abstract class CanaryEntityLiving extends CanaryLivingBase implements Ent
      * {@inheritDoc}
      */
     @Override
-    public boolean hasDisplayName() {
-        return getHandle().k_();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getDisplayName() {
-        return getHandle().aL();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setDisplayName(String display) {
-        if (display == null) {
-            display = "";
-        }
-        getHandle().a(display);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean showingDisplayName() { // TODO: checkthat this is actually right
-        return getHandle().aM();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setShowDisplayName(boolean show) {
-        getHandle().g(show);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public boolean canAttackEntity(EntityType type) {
         if (type == null || type.getEntityID() == 0) {
             return false;
