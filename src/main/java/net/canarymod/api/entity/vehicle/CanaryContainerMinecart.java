@@ -1,5 +1,6 @@
 package net.canarymod.api.entity.vehicle;
 
+import net.canarymod.Canary;
 import net.canarymod.api.inventory.CanaryItem;
 import net.canarymod.api.inventory.Item;
 import net.canarymod.api.inventory.ItemType;
@@ -587,5 +588,32 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
     @Override
     public EntityMinecartContainer getHandle() {
         return (EntityMinecartContainer) entity;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean canInsertItems(Item item) {
+        int totalSpace = 0;
+        for (Item inv : getContents()) {
+            if (inv == null) {
+                totalSpace += item.getMaxAmount();
+            }
+            else {
+                if (inv.getType().equals(item.getType())) {
+                    if (item.hasDataTag() && item.getDataTag().equals(inv.getDataTag())) {
+                        totalSpace += inv.getMaxAmount() - inv.getAmount();
+                    }
+                }
+            }
+        }
+
+
+        if (totalSpace > 0) {
+            return true;
+        }
+
+        return false;
     }
 }

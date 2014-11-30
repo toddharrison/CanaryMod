@@ -1,5 +1,6 @@
 package net.canarymod.api.inventory;
 
+import net.canarymod.Canary;
 import net.canarymod.api.nbt.CanaryCompoundTag;
 import net.canarymod.api.world.blocks.CanaryTileEntity;
 import net.canarymod.config.Configuration;
@@ -557,5 +558,32 @@ public abstract class CanaryBlockInventory extends CanaryTileEntity implements I
      */
     public IInventory getInventoryHandle() {
         return inventory;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean canInsertItems(Item item) {
+        int totalSpace = 0;
+        for (Item inv : getContents()) {
+            if (inv == null) {
+                totalSpace += item.getMaxAmount();
+            }
+            else {
+                if (inv.getType().equals(item.getType())) {
+                    if (item.hasDataTag() && item.getDataTag().equals(inv.getDataTag())) {
+                        totalSpace += inv.getMaxAmount() - inv.getAmount();
+                    }
+                }
+            }
+        }
+
+
+        if (totalSpace > 0) {
+            return true;
+        }
+
+        return false;
     }
 }
