@@ -596,13 +596,13 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
     @Override
     public boolean canInsertItems(Item item) {
         int totalSpace = 0;
-        for(Item inv : getContents()) {
+        for (Item inv : getContents()) {
             if (inv == null) {
                 totalSpace += item.getMaxAmount();
             }
             else {
                 if (inv.getType().equals(item.getType())) {
-                    if (item.hasDataTag() && !item.getDataTag().equals(inv.getDataTag())) {
+                    if (item.hasDataTag() && item.getDataTag().equals(inv.getDataTag())) {
                         totalSpace += inv.getMaxAmount() - inv.getAmount();
                     }
                 }
@@ -610,7 +610,7 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
         }
 
 
-        if(totalSpace > 0) {
+        if (totalSpace > 0) {
             return true;
         }
 
