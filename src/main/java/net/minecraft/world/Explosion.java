@@ -20,9 +20,19 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.*;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.Vec3;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 public class Explosion {
 
@@ -156,7 +166,7 @@ public class Explosion {
                         //        null     or                non-Explosive                     or                      Explosive can damage entities
                         if (this.h == null || !(this.h.getCanaryEntity() instanceof Explosive) || ((Explosive) this.h.getCanaryEntity()).canDamageEntities()) {
                             // CanaryMod Damage hook: Explosions
-                            float damage = (float) ((int) ((d10 * d10 + d10) / 2.0D * 8.0D * (double) this.g + 1.0D));
+                            float damage = (float)((int)((d13 * d13 + d13) / 2.0D * 8.0D * (double)f3 + 1.0D));
                             CanaryDamageSource source = DamageSource.a(this).getCanaryDamageSource();
                             DamageHook dmg = (DamageHook) new DamageHook(this.h != null ? this.h.getCanaryEntity() : null, entity.getCanaryEntity(), source, damage).call();
                             if (!dmg.isCanceled()) {
