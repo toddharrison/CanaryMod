@@ -58,6 +58,11 @@ public class CanaryCommandBlockMinecart extends CanaryMinecart implements Comman
         getLogic().b(name);
     }
 
+    @Override
+    public void notice(String message) {
+        log.info(Logman.NOTICE, String.format(cmdPrefix, getName(), message));
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -84,6 +89,11 @@ public class CanaryCommandBlockMinecart extends CanaryMinecart implements Comman
         for (CharSequence message : messages) {
             notice(message);
         }
+    }
+
+    @Override
+    public void message(String message) {
+        log.info(Logman.MESSAGE, String.format(cmdPrefix, getName(), message));
     }
 
     /**

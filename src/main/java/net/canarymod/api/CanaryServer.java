@@ -507,6 +507,11 @@ public class CanaryServer implements Server {
     }
 
     @Override
+    public void message(String message) {
+        log.info(Logman.MESSAGE, message);
+    }
+
+    @Override
     public void message(CharSequence... messages) {
         for (CharSequence message : messages) {
             message(message);
@@ -522,6 +527,11 @@ public class CanaryServer implements Server {
 
     @Override
     public void notice(CharSequence message) {
+        log.info(Logman.NOTICE, message);
+    }
+
+    @Override
+    public void notice(String message) {
         log.info(Logman.NOTICE, message);
     }
 

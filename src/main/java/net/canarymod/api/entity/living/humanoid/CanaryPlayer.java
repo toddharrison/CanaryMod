@@ -189,8 +189,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
      */
     @Override
     public void message(CharSequence message) {
-        getNetServerHandler().sendMessage(message.toString());
-        // Should cover all chat logging
+        message(message.toString());
     }
 
     /**
@@ -213,12 +212,17 @@ public class CanaryPlayer extends CanaryHuman implements Player {
         }
     }
 
+    @Override
+    public void notice(String message) {
+        message(ChatFormat.RED.toString() + message);
+    }
+
     /**
      * {@inheritDoc}
      */
     @Override
     public void notice(CharSequence message) {
-        message(ChatFormat.RED.toString() + message);
+        notice(message.toString());
     }
 
     /**
@@ -239,6 +243,12 @@ public class CanaryPlayer extends CanaryHuman implements Player {
         for (CharSequence message : messages) {
             notice(message);
         }
+    }
+
+    @Override
+    public void message(String message) {
+        getNetServerHandler().sendMessage(message);
+        // Should cover all chat logging
     }
 
     /**

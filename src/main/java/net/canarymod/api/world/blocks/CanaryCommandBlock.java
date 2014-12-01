@@ -39,6 +39,11 @@ public class CanaryCommandBlock extends CanaryTileEntity implements CommandBlock
         return getLogic().d_();
     }
 
+    @Override
+    public void notice(String message) {
+        log.info(Logman.NOTICE, String.format(cmdPrefix, getName(), message));
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -73,6 +78,11 @@ public class CanaryCommandBlock extends CanaryTileEntity implements CommandBlock
         for (CharSequence message : messages) {
             notice(message);
         }
+    }
+
+    @Override
+    public void message(String message) {
+        log.info(Logman.MESSAGE, String.format(cmdPrefix, getName(), message));
     }
 
     /**
