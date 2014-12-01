@@ -30,7 +30,6 @@ import net.canarymod.hook.player.TeleportHook;
 import net.canarymod.hook.system.ServerShutdownHook;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
-import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -611,23 +610,15 @@ public abstract class ServerConfigurationManager {
 
         // CanaryMod: metadata persistance
         entityplayermp.saveMeta();
-        NBTTagCompound nbtdata = new NBTTagCompound();
-
-        entityplayermp.b(nbtdata);
-        // Override health / hurth / death values so we won't get trapped in an insta-death loop
-        // On Update: Check with EntityLivingBase if they added more tags that need overriding
-        short maxHealth = (short)(int)Math.ceil(entityplayermp.a(SharedMonsterAttributes.a).e());
         short currentHealth = (short)entityplayermp.bm();
         // make sure player won't come out dead but also don't gift him extra health
-        nbtdata.a("Health", (currentHealth <= 0 ? maxHealth : currentHealth));
-        if (currentHealth <= 0) {
-            nbtdata.a("HealF", maxHealth);
+        if (currentHealth > 0) {
+            // Migrate data
+            NBTTagCompound nbtdata = new NBTTagCompound();
+            entityplayermp.b(nbtdata); // Save old data from old player
+            newPlayer.a(nbtdata); // Apply old data to new player
         }
-        nbtdata.a("HurtTime", (short)0);
-        nbtdata.a("HurtByTimestamp", 0);
-        nbtdata.a("DeathTime", (short)0);
 
-        newPlayer.a(nbtdata);
         newPlayer.setMetaData(entityplayermp.getMetaData());
         //
 
@@ -635,7 +626,7 @@ public abstract class ServerConfigurationManager {
         BlockPos worldSpawn;
 
         if (playerSpawn != null) {
-//            worldSpawn = playerSpawn;
+//          worldSpawn = playerSpawn;
             worldSpawn = EntityPlayer.a(targetWorld, playerSpawn, spawnWasForced);
             if (worldSpawn != null) {
                 float rot = loc.getRotation();
