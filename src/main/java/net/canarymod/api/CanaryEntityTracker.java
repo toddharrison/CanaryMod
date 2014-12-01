@@ -92,9 +92,9 @@ public class CanaryEntityTracker implements EntityTracker {
         if (player != null && toHide != null && !player.equals(toHide)) {
             if (hiddenPlayersMap.containsKey(player) && !hiddenPlayersMap.get(player).contains(toHide)) {
                 hiddenPlayersMap.get(player).add(toHide);
-                player.sendPacket(new CanaryPacket(new S13PacketDestroyEntities(new int[] {toHide.getID()})));
-                PlayerListEntry entry = toHide.getPlayerListEntry(false);
-                player.sendPlayerListEntry(entry);
+                player.sendPacket(new CanaryPacket(new S13PacketDestroyEntities(toHide.getID())));
+                PlayerListData entry = toHide.getPlayerListData(PlayerListAction.REMOVE_PLAYER);
+                player.sendPlayerListData(entry);
             }
         }
     }
@@ -119,8 +119,8 @@ public class CanaryEntityTracker implements EntityTracker {
                 net.minecraft.entity.EntityTrackerEntry t = tracker.getTrackerEntry(toShow.getID());
                 player.sendPacket(new CanaryPacket(new S0CPacketSpawnPlayer(((CanaryPlayer)toShow).getHandle())));
                 t.b(((CanaryPlayer)player).getHandle());
-                PlayerListEntry entry = toShow.getPlayerListEntry(true);
-                player.sendPlayerListEntry(entry);
+                PlayerListData entry = toShow.getPlayerListData(PlayerListAction.ADD_PLAYER);
+                player.sendPlayerListData(entry);
             }
         }
     }
@@ -150,17 +150,20 @@ public class CanaryEntityTracker implements EntityTracker {
     }
     
     public void forceHiddenPlayerUpdate(Player player) {
-        if (!hiddenPlayersMap.containsKey(player))
+        if (!hiddenPlayersMap.containsKey(player)) {
             hiddenPlayersMap.put(player, new ArrayList<Player>());
+        }
         for (Player p : hiddenGlobal) {
             this.hidePlayer(player, p);
         }
     }
     
     public void clearHiddenPlayerData(Player player) {
-        if (hiddenPlayersMap.containsKey(player))
+        if (hiddenPlayersMap.containsKey(player)) {
             hiddenPlayersMap.remove(player);
-        if (hiddenGlobal.contains(player))
+        }
+        if (hiddenGlobal.contains(player)) {
             hiddenGlobal.remove(player);
+        }
     }
 }
