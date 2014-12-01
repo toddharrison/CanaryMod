@@ -444,7 +444,10 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, IUpdatePlaye
     // CanaryMod: Add dimension world teleportCause
     public void a(double d0, double d1, double d2, float f0, float f1, Set set, int dimension, String world, TeleportHook.TeleportCause cause) {
         // CanaryMod: TeleportHook
-        net.canarymod.api.world.World dim = Canary.getServer().getWorldManager().getWorld(world, net.canarymod.api.world.DimensionType.fromId(dimension), true);
+        net.canarymod.api.world.DimensionType dType = net.canarymod.api.world.DimensionType.fromId(dimension);
+        String worldFq = world + "_" + dType.getName();
+        boolean doAutoLoad = cause.equals(TeleportHook.TeleportCause.WARP) && Configuration.getWorldConfig(worldFq).allowWarpAutoLoad();
+        net.canarymod.api.world.World dim = Canary.getServer().getWorldManager().getWorld(world, dType, doAutoLoad);
         Location location = new Location(dim, d0, d1, d2, f1, f0); // Remember rotation and pitch are swapped in Location constructor...
         TeleportHook hook = (TeleportHook) new TeleportHook(b.getPlayer(), location, cause).call();
         if (hook.isCanceled()) {
@@ -452,7 +455,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, IUpdatePlaye
         }
         // CanaryMod: InterWorld/InterDimensional Travel
         if (this.b.getCanaryWorld() != dim) {
-            Canary.getServer().getConfigurationManager().switchDimension(this.b.getPlayer(), (CanaryWorld)dim, false);
+            Canary.getServer().getConfigurationManager().switchDimension(this.b.getPlayer(), dim, false);
         }
         //
         this.r = false;

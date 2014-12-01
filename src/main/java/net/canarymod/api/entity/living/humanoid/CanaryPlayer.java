@@ -27,6 +27,7 @@ import net.canarymod.api.statistics.CanaryStat;
 import net.canarymod.api.statistics.Stat;
 import net.canarymod.api.statistics.Statistics;
 import net.canarymod.api.world.CanaryWorld;
+import net.canarymod.api.world.DimensionType;
 import net.canarymod.api.world.World;
 import net.canarymod.api.world.blocks.CanaryAnvil;
 import net.canarymod.api.world.blocks.CanaryBeacon;
@@ -927,19 +928,20 @@ public class CanaryPlayer extends CanaryHuman implements Player {
      */
     @Override
     public void teleportTo(Location location, TeleportCause cause) {
-        this.teleportTo(location.getX(), location.getY(), location.getZ(), location.getPitch(), location.getRotation(), location.getWorld(), cause);
+        this.teleportTo(location.getX(), location.getY(), location.getZ(), location.getPitch(), location.getRotation(), location.getWorldName(), location.getType(), cause);
     }
 
     protected void teleportTo(double x, double y, double z, float pitch, float rotation, World world, TeleportHook.TeleportCause cause) {
+        // Cause calling a getWorld through Location causes an issue with World loading and shit...
+        this.teleportTo(x, y, z, pitch, rotation, world.getName(), world.getType(), cause);
+    }
+
+    protected void teleportTo(double x, double y, double z, float pitch, float rotation, String worldname, DimensionType dimension, TeleportCause cause) {
         // If in a vehicle - eject before teleporting.
         if (isRiding()) {
             dismount();
         }
-        if (!world.equals(this.getWorld())) {
-            Canary.getServer().getConfigurationManager().switchDimension(this, world, cause == TeleportCause.WARP && Configuration.getWorldConfig(world.getFqName()).allowWarpAutoLoad());
-        }
-
-        getHandle().a.a(x, y, z, rotation, pitch, getWorld().getType().getId(), getWorld().getName(), cause);
+        getHandle().a.a(x, y, z, rotation, pitch, dimension.getId(), worldname, cause);
     }
 
     /**

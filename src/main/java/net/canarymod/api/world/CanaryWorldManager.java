@@ -290,6 +290,9 @@ public class CanaryWorldManager implements WorldManager {
         // This actually just schedules a world for unloading,
         // to prevent ConcurrentModificationExceptions as the values for world are iterated over constantly.
         // See getAllWorld for details
+        if (name.equals(Configuration.getServerConfig().getDefaultWorldName()) && type.equals(DimensionType.NORMAL) && !force) {
+            return; // Don't schedule the default world for unloading unless forced to do so
+        }
         markedForUnload.put(name + "_" + type.getName(), force);
     }
 
