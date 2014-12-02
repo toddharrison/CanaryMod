@@ -30,7 +30,11 @@ import net.canarymod.hook.system.LoadWorldHook;
 import net.canarymod.hook.system.ServerTickHook;
 import net.canarymod.tasks.ServerTaskManager;
 import net.canarymod.util.ShutdownLogger;
-import net.minecraft.command.*;
+import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandResultStats;
+import net.minecraft.command.ICommandManager;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.command.ServerCommandManager;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -47,8 +51,22 @@ import net.minecraft.server.dedicated.DedicatedServer;
 import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.server.management.PlayerProfileCache;
 import net.minecraft.server.management.ServerConfigurationManager;
-import net.minecraft.util.*;
-import net.minecraft.world.*;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.IChatComponent;
+import net.minecraft.util.IProgressUpdate;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.ReportedException;
+import net.minecraft.util.Vec3;
+import net.minecraft.world.EnumDifficulty;
+import net.minecraft.world.IWorldAccess;
+import net.minecraft.world.MinecraftException;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldManager;
+import net.minecraft.world.WorldServer;
+import net.minecraft.world.WorldServerMulti;
+import net.minecraft.world.WorldSettings;
+import net.minecraft.world.WorldType;
 import net.minecraft.world.chunk.storage.AnvilSaveConverter;
 import net.minecraft.world.chunk.storage.AnvilSaveHandler;
 import net.minecraft.world.demo.DemoWorldServer;
@@ -68,9 +86,15 @@ import java.io.IOException;
 import java.net.Proxy;
 import java.security.KeyPair;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Queue;
+import java.util.Random;
+import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
@@ -1445,5 +1469,9 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 
     public void loadStartArea(WorldServer world){
         this.k(world);
+    }
+
+    public WorldServer defaultWorld() {
+        return (WorldServer)((CanaryWorld)worldManager.getWorld(this.J, DimensionType.NORMAL, true)).getHandle();
     }
 }
