@@ -1,9 +1,11 @@
 package net.minecraft.entity;
 
 import com.google.common.collect.Maps;
+import net.canarymod.Canary;
 import net.canarymod.api.CanaryDamageSource;
 import net.canarymod.api.entity.living.CanaryLivingBase;
 import net.canarymod.api.potion.CanaryPotionEffect;
+import net.canarymod.api.scoreboard.CanaryScoreboard;
 import net.canarymod.hook.entity.DamageHook;
 import net.canarymod.hook.entity.EntityDeathHook;
 import net.canarymod.hook.entity.PotionEffectAppliedHook;
@@ -12,10 +14,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityTracker;
-import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.BaseAttributeMap;
 import net.minecraft.entity.ai.attributes.IAttribute;
@@ -44,7 +42,14 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.potion.PotionHelper;
 import net.minecraft.scoreboard.Team;
-import net.minecraft.util.*;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.CombatTracker;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSource;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -1620,7 +1625,9 @@ public abstract class EntityLivingBase extends Entity {
     }
 
     public Team bN() {
-        return this.o.Z().h(this.aJ().toString());
+        //return this.o.Z().h(this.aJ().toString());
+        // return Canary Master Scoreboard
+        return ((CanaryScoreboard)Canary.scoreboards().getScoreboard()).getHandle().h(this.aJ().toString());
     }
 
     public boolean c(EntityLivingBase entitylivingbase) {

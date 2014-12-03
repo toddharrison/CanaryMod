@@ -16,6 +16,7 @@ import net.canarymod.api.inventory.EnderChestInventory;
 import net.canarymod.api.inventory.PlayerInventory;
 import net.canarymod.api.nbt.CanaryCompoundTag;
 import net.canarymod.api.packet.CanaryPacket;
+import net.canarymod.api.scoreboard.CanaryScoreboard;
 import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.api.world.position.Location;
@@ -1680,7 +1681,9 @@ public abstract class EntityPlayer extends EntityLivingBase {
     }
 
     public Scoreboard co() {
-        return this.o.Z();
+        //return this.o.Z();
+        // return Canary Master Scoreboard
+        return ((CanaryScoreboard)Canary.scoreboards().getScoreboard()).getHandle();
     }
 
     public Team bN() {

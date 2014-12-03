@@ -261,23 +261,22 @@ public class PlayerSelector {
         if (s0 != null) {
             final String s1 = s0;
             arraylist.add(new Predicate() {
+              public boolean a(Entity entity) {
+                  if (!(entity instanceof EntityLivingBase)) {
+                      return false;
+                  }
+                  else {
+                      EntityLivingBase entitylivingbasex = (EntityLivingBase)entity;
+                      Team team = entitylivingbasex.bN();
+                      String s2 = team == null ? "" : team.b();
 
-                              public boolean a(Entity entity) {
-                                  if (!(entity instanceof EntityLivingBase)) {
-                        return false;
-                    }
-                    else {
-                                      EntityLivingBase entitylivingbasex = (EntityLivingBase)entity;
-                                      Team team = entitylivingbasex.bN();
-                                      String s2 = team == null ? "" : team.b();
+                      return s2.equals(s1) != flag0;
+                  }
+              }
 
-                                      return s2.equals(s1) != flag0;
-                    }
-                }
-
-                              public boolean apply(Object object) {
-                                  return this.a((Entity)object);
-                }
+              public boolean apply(Object object) {
+                  return this.a((Entity)object);
+              }
             });
         }
 
