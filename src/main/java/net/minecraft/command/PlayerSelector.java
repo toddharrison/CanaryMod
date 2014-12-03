@@ -252,9 +252,9 @@ public class PlayerSelector {
     private static List d(Map map) {
         ArrayList arraylist = Lists.newArrayList();
         String s0 = b(map, "team");
-        final boolean team = s0 != null && s0.startsWith("!");
+        final boolean flag0 = s0 != null && s0.startsWith("!");
 
-        if (team) {
+        if (flag0) {
             s0 = s0.substring(1);
         }
 
@@ -262,21 +262,21 @@ public class PlayerSelector {
             final String s1 = s0;
             arraylist.add(new Predicate() {
 
-                public boolean a(Entity p_a_1_) {
-                    if (!(p_a_1_ instanceof EntityLivingBase)) {
+                              public boolean a(Entity entity) {
+                                  if (!(entity instanceof EntityLivingBase)) {
                         return false;
                     }
                     else {
-                        EntityLivingBase entitylivingbasex = (EntityLivingBase) p_a_1_;
-                        Team teamx = entitylivingbasex.bN();
-                        String s1 = teamx == null ? "" : teamx.b();
+                                      EntityLivingBase entitylivingbasex = (EntityLivingBase)entity;
+                                      Team team = entitylivingbasex.bN();
+                                      String s2 = team == null ? "" : team.b();
 
-                        return s1.equals(s1) != team;
+                                      return s2.equals(s1) != flag0;
                     }
                 }
 
-                public boolean apply(Object p_apply_1_) {
-                    return this.a((Entity) p_apply_1_);
+                              public boolean apply(Object object) {
+                                  return this.a((Entity)object);
                 }
             });
         }
