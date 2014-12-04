@@ -730,7 +730,7 @@ public class CanaryServer implements Server {
      */
     @Override
     public int getCurrentTick() {
-        return server.al();
+        return server.ar();
     }
 
     public GameProfile gameprofileFromCache(UUID uuid) {
