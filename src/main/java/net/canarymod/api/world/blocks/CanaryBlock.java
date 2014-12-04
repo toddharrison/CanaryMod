@@ -49,10 +49,8 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import org.omg.CORBA.UNKNOWN;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Map;
 import java.util.Random;
 
@@ -260,31 +258,28 @@ public class CanaryBlock implements Block {
     @Override
     public Block getFacingBlock(BlockFace face) {
         switch (face) {
+            case TOP:
+                return getRelative(0, 1, 0);
+
             case BOTTOM:
                 return getRelative(0, -1, 0);
 
             case EAST:
-                return getRelative(0, 0, -1);
-
-            case NORTH:
                 return getRelative(1, 0, 0);
 
-            case SOUTH:
+            case WEST:
                 return getRelative(-1, 0, 0);
 
-            case TOP:
-                return getRelative(0, 1, 0);
+            case NORTH:
+                return getRelative(0, 0, -1);
 
-            case UNKNOWN:
-                break;
-
-            case WEST:
+            case SOUTH:
                 return getRelative(0, 0, 1);
 
+            case UNKNOWN:
             default:
-                break;
+                return null;
         }
-        return null;
     }
 
     @Override
