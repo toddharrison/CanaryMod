@@ -35,6 +35,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.play.server.S38PacketPlayerListItem;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.gui.MinecraftServerGui;
 import net.minecraft.server.management.ServerConfigurationManager;
@@ -725,6 +726,12 @@ public class CanaryServer implements Server {
         }
     }
 
+    @Override
+    public void sendPlayerListData(PlayerListData data) {
+        if (Configuration.getServerConfig().isPlayerListEnabled()) {
+            server.an().a(new S38PacketPlayerListItem(data.getAction(), data));
+        }
+    }
     /**
      * {@inheritDoc}
      */
