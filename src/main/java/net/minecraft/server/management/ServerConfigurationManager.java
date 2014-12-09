@@ -581,14 +581,6 @@ public abstract class ServerConfigurationManager {
         PlayerRespawningHook hook = (PlayerRespawningHook)new PlayerRespawningHook(entityplayermp.getPlayer(), respawnLocation, spawnWasForced).call();
         Location finalSpawn = hook.getRespawnLocation();
 
-
-        // CanaryMod changes to accommodate multiworld bed spawns
-        BlockPos playerSpawn = null;
-        if (respawnLocation != null) {
-            playerSpawn = new BlockPos(respawnLocation.getBlockX(), respawnLocation.getBlockY(), respawnLocation.getBlockZ());
-            // Check if the spawn world differs from the expected one and adjust
-        }
-
         // If a bed was obstructed, force a player to stay in the current world and respawn there
         WorldServer targetWorld;
         if ((finalSpawn != null && finalSpawn.equals(respawnLocation)) || finalSpawn == null) {
@@ -605,6 +597,13 @@ public abstract class ServerConfigurationManager {
             // Someone changed the spawn.
             respawnLocation = finalSpawn;
             targetWorld = (WorldServer)((CanaryWorld)respawnLocation.getWorld()).getHandle();
+        }
+
+        // CanaryMod changes to accommodate multiworld bed spawns
+        BlockPos playerSpawn = null;
+        if (respawnLocation != null) {
+            playerSpawn = new BlockPos(respawnLocation.getBlockX(), respawnLocation.getBlockY(), respawnLocation.getBlockZ());
+            // Check if the spawn world differs from the expected one and adjust
         }
 
         //
