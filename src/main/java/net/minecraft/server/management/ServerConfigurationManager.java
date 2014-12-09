@@ -579,18 +579,34 @@ public abstract class ServerConfigurationManager {
         net.canarymod.api.world.DimensionType type = net.canarymod.api.world.DimensionType.fromId(i0);
         // CanaryMod: PlayerRespawn
         PlayerRespawningHook hook = (PlayerRespawningHook)new PlayerRespawningHook(entityplayermp.getPlayer(), respawnLocation, spawnWasForced).call();
-        loc = hook.getRespawnLocation();
-        WorldServer targetWorld = (WorldServer)(loc == null ? (WorldServer)((CanaryWorld)Canary.getServer().getWorldManager().getWorld(name, type, true)).getHandle() : ((CanaryWorld)loc.getWorld()).getHandle());
+        Location finalSpawn = hook.getRespawnLocation();
+
 
         // CanaryMod changes to accommodate multiworld bed spawns
         BlockPos playerSpawn = null;
-        if (loc != null) {
-            playerSpawn = new BlockPos(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
+        if (respawnLocation != null) {
+            playerSpawn = new BlockPos(respawnLocation.getBlockX(), respawnLocation.getBlockY(), respawnLocation.getBlockZ());
             // Check if the spawn world differs from the expected one and adjust
-            if (!targetWorld.equals(((CanaryWorld)loc.getWorld()).getHandle())) {
-                targetWorld = (WorldServer)((CanaryWorld)loc.getWorld()).getHandle();
+        }
+
+        // If a bed was obstructed, force a player to stay in the current world and respawn there
+        WorldServer targetWorld;
+        if ((finalSpawn != null && finalSpawn.equals(respawnLocation)) || finalSpawn == null) {
+            // Noone changed the spawn, proceed with internal logic
+            if (entityplayermp.isBedObstructed(spawnWasForced)) {
+                targetWorld = (WorldServer)((CanaryWorld)Canary.getServer().getWorldManager().getWorld(name, type, true)).getHandle();
+            }
+            else {
+                // Otherwise check if there's something interesting in the respawn location
+                targetWorld = (WorldServer)(respawnLocation == null ? (WorldServer)((CanaryWorld)Canary.getServer().getWorldManager().getWorld(name, type, true)).getHandle() : ((CanaryWorld)respawnLocation.getWorld()).getHandle());
             }
         }
+        else {
+            // Someone changed the spawn.
+            respawnLocation = finalSpawn;
+            targetWorld = (WorldServer)((CanaryWorld)respawnLocation.getWorld()).getHandle();
+        }
+
         //
         ItemInWorldManager itemInWorldManager;
         if (this.j.W()) {
@@ -623,20 +639,22 @@ public abstract class ServerConfigurationManager {
         //
 
         this.a(newPlayer, entityplayermp, targetWorld); // GameMode changing
-        BlockPos worldSpawn;
 
+        newPlayer.setRespawnLocation(entityplayermp.getRespawnLocation());
         if (playerSpawn != null) {
-//          worldSpawn = playerSpawn;
-            worldSpawn = EntityPlayer.a(targetWorld, playerSpawn, spawnWasForced);
+            BlockPos worldSpawn = EntityPlayer.a(targetWorld, playerSpawn, spawnWasForced);
             if (worldSpawn != null) {
-                float rot = loc.getRotation();
-                float yaw = loc.getPitch();
+                float rot = respawnLocation.getRotation();
+                float yaw = respawnLocation.getPitch();
                 newPlayer.b((double) ((float) worldSpawn.n() + 0.5F), (double) ((float) worldSpawn.o() + 0.1F), (double) ((float) worldSpawn.p() + 0.5F), rot, yaw);
                 // Set new spawn location
                 newPlayer.a(playerSpawn, spawnWasForced, false); // Do not update spawn location here, it will confuzzle bed spawns
             }
             else {
-                newPlayer.a.a(new S2BPacketChangeGameState(0, 0.0F));
+                if (newPlayer.isBedObstructed(spawnWasForced)) {
+                    newPlayer.a.a(new S2BPacketChangeGameState(0, 0.0F));
+                    newPlayer.setRespawnLocation(null);
+                }
             }
         }
         // Find a safe place to actually spawn into

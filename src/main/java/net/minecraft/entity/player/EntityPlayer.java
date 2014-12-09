@@ -17,6 +17,7 @@ import net.canarymod.api.inventory.PlayerInventory;
 import net.canarymod.api.nbt.CanaryCompoundTag;
 import net.canarymod.api.packet.CanaryPacket;
 import net.canarymod.api.scoreboard.CanaryScoreboard;
+import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.api.world.position.Location;
@@ -1991,13 +1992,20 @@ public abstract class EntityPlayer extends EntityLivingBase {
      */
     public Location getRespawnLocation() {
         if (canaryRespawn != null) {
-            if (canaryRespawn.getWorld().getBlockAt(canaryRespawn).getType() == BlockType.BedBlock) {
-                return this.canaryRespawn;
-            }
+            return this.canaryRespawn;
         }
-        // There is no bed anymore, invalidate the spawn
-        this.canaryRespawn = null;
         return null;
+    }
+
+    public boolean isBedObstructed(boolean withForcedSpawn) {
+        if (this.canaryRespawn != null) {
+            return EntityPlayer.a(((CanaryWorld)canaryRespawn.getWorld()).getHandle(),
+                    new BlockPos(canaryRespawn.getBlockX(), canaryRespawn.getBlockY(), canaryRespawn.getBlockZ()),
+                    withForcedSpawn) == null;
+        }
+        else {
+            return false; // not obstructed as it does not exist
+        }
     }
 
     public void setRespawnLocation(Location l) {
@@ -2006,9 +2014,7 @@ public abstract class EntityPlayer extends EntityLivingBase {
             canaryRespawn = null;
             return;
         }
-        if (c == null) {
-            c = new BlockPos(l.getBlockX(), l.getBlockY(), l.getBlockZ());
-        }
+        c = new BlockPos(l.getBlockX(), l.getBlockY(), l.getBlockZ());
         canaryRespawn = l;
     }
 
