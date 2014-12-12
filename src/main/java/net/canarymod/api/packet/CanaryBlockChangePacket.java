@@ -94,7 +94,7 @@ public class CanaryBlockChangePacket extends CanaryPacket implements BlockChange
     @Override
     public void setTypeId(int id) {
         int data = getData();
-        getPacket().b = net.minecraft.block.Block.d(getTypeId()).c().a(data);
+        getPacket().b = net.minecraft.block.Block.d(id).c().a(data);
     }
 
     @Override

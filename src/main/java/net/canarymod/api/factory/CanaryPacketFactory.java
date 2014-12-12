@@ -173,7 +173,7 @@ public class CanaryPacketFactory implements PacketFactory {
             case 0x23: // 35
                 if (args.length > 1) {
                     verify(id, "BlockChange", 5, args, test(Integer.class, 5));
-                    return new CanaryBlockChangePacket(BlockType.fromId((Integer)args[0]), (Integer)args[1], new BlockPosition((Integer)args[2], (Integer)args[3], (Integer)args[4]));
+                    return new CanaryBlockChangePacket(BlockType.fromId((Integer)args[3]), (Integer)args[4], new BlockPosition((Integer)args[0], (Integer)args[1], (Integer)args[2]));
                 }
                 verify(id, "BlockChange", 1, args, test(CanaryBlock.class, 1));
                 return new CanaryBlockChangePacket((CanaryBlock)args[0]);
@@ -634,6 +634,17 @@ public class CanaryPacketFactory implements PacketFactory {
     public Packet blockChange(int x, int y, int z, int typeId, int data) {
         try {
             return createPacket(35, x, y, z, typeId, data);
+        }
+        catch (InvalidPacketConstructionException ipcex) {
+            log.trace(ipcex);
+        }
+        return null;
+    }
+
+    @Override
+    public Packet blockChange(int x, int y, int z, BlockType type) {
+        try {
+            return createPacket(35, x, y, z, (int)type.getId(), (int)type.getData());
         }
         catch (InvalidPacketConstructionException ipcex) {
             log.trace(ipcex);
