@@ -29,6 +29,7 @@ import net.canarymod.api.world.CanaryChunk;
 import net.canarymod.api.world.Chunk;
 import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.blocks.CanaryBlock;
+import net.canarymod.api.world.effects.Particle;
 import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.api.world.position.Position;
 import net.canarymod.api.world.position.Vector3D;
@@ -36,6 +37,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.server.*;
 import net.minecraft.stats.StatBase;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.Vec3;
 
 import java.util.*;
@@ -206,9 +208,9 @@ public class CanaryPacketFactory implements PacketFactory {
                 verify(id, "SoundEffect", 6, args, test(String.class, 1), test(Double.class, 3), test(Float.class, 2));
                 return new CanaryPacket(new S29PacketSoundEffect((String)args[0], (Double)args[1], (Double)args[2], (Double)args[3], (Float)args[4], (Float)args[5]));
             case 0x2A: // 42
-                //verify(id, "Particles", 9, args, test(String.class, 1), test(Float.class, 7), test(Integer.class, 1));
-                // Plus the fact that i lost this part of the factory somewhere...
-                throw new NotYetImplementedException("A Minecraft Update has broken this construction");
+                verify(id, "Particles", 9, args, test(String.class, 1), test(Float.class, 7), test(Integer.class, 1));
+                // name, x, y, z, velocityX, velocityY, velcityZ, speed, quantity
+                return new CanaryPacket(new S2APacketParticles(new Particle((Float) args[1], (Float) args[2], (Float) args[3], (Float) args[4], (Float) args[5], (Float) args[6], (Float) args[7], (Integer) args[8], Particle.Type.fromName((String) args[0]))));
             case 0x2B: // 43
                 verify(id, "ChangeGameState", 2, args, test(Integer.class, 1), test(Float.class, 1));
                 return new CanaryPacket(new S2BPacketChangeGameState((Integer)args[0], (Float)args[1]));
@@ -719,9 +721,9 @@ public class CanaryPacketFactory implements PacketFactory {
     }
 
     @Override
-    public Packet particles(String name, float f1, float f2, float f3, float f4, float f5, float f6, float f7, int i1) {
+    public Packet particles(String name, float x, float y, float z, float velocityX, float velocityY, float velcityZ, float speed, int quantity) {
         try {
-            return createPacket(42, name, f1, f2, f3, f4, f5, f6, f7, i1);
+            return createPacket(42, name, x, y, z, velocityX, velocityY, velcityZ, speed, quantity);
         }
         catch (InvalidPacketConstructionException ipcex) {
             log.trace(ipcex);
