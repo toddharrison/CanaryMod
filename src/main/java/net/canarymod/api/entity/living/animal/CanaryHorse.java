@@ -224,6 +224,12 @@ public class CanaryHorse extends CanaryAnimalVehicle implements Horse {
         return getHandle().cr();
     }
 
+    @Override
+    public String getOwnerID() {
+        // as proposed in EntityTameable.b()
+        return getHandle().H().e(17);
+    }
+
     /**
      * {@inheritDoc}
      */
