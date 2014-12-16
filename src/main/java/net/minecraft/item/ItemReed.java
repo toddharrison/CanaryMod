@@ -55,14 +55,15 @@ public class ItemReed extends Item {
                 if (world.a(this.a, blockpos, false, enumfacing, (Entity)null, itemstack)) {
                     IBlockState iblockstate1 = this.a.a(world, blockpos, enumfacing, f0, f1, f2, 0, entityplayer);
 
+                    // CanaryMod: create and call
+                    BlockPlaceHook hook = (BlockPlaceHook)new BlockPlaceHook(((EntityPlayerMP)entityplayer).getPlayer(), clicked, CanaryBlock.getPooledBlock(iblockstate1, blockpos, world)).call();
+                    if (hook.isCanceled()) {
+                        return false;
+                    }
                     if (world.a(blockpos, iblockstate1, 3)) {
                         iblockstate1 = world.p(blockpos);
 
-                        // CanaryMod: create and call
-                        BlockPlaceHook hook = (BlockPlaceHook)new BlockPlaceHook(((EntityPlayerMP)entityplayer).getPlayer(), clicked, CanaryBlock.getPooledBlock(iblockstate1, blockpos, world)).call();
-                        if (hook.isCanceled()) {
-                            return false;
-                        }
+
                         //
                         if (iblockstate1.c() == this.a) {
                             ItemBlock.a(world, blockpos, itemstack);
