@@ -158,6 +158,26 @@ public abstract class CanaryHuman extends CanaryLivingBase implements Human {
         return getHandle().by.getCanaryCapabilities();
     }
 
+    @Override
+    public boolean isSleeping() {
+        return getHandle().bI();
+    }
+
+    @Override
+    public boolean isDeeplySleeping() {
+        return getHandle().ce();
+    }
+
+    @Override
+    public boolean isSleepingIgnored() {
+        return getHandle().isSleepIgnored();
+    }
+
+    @Override
+    public void setSleepingIgnored(boolean ignored) {
+        getHandle().setSleepIgnored(ignored);
+    }
+
     /**
      * {@inheritDoc}
      */

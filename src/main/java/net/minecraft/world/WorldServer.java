@@ -227,7 +227,8 @@ public class WorldServer extends World implements IThreadListener {
                 if (entityplayer.v()) {
                     ++i0;
                 }
-                else if (entityplayer.bI()) {
+                // CanaryMod: sleeping ignored check added
+                else if (entityplayer.bI() || entityplayer.isSleepIgnored()) {
                     ++i1;
                 }
             }
@@ -271,15 +272,22 @@ public class WorldServer extends World implements IThreadListener {
         if (this.O && !this.D) {
             Iterator iterator = this.j.iterator();
 
+            // CanaryMod: bypass check
+            boolean deepSleepersFound = false;
             EntityPlayer entityplayer;
 
+            // CanaryMod: Rewrite checks for bypassing insomniacs and spectators
             do {
                 if (!iterator.hasNext()) {
-                    return true;
+                    return deepSleepersFound;
                 }
-
                 entityplayer = (EntityPlayer) iterator.next();
-            } while (!entityplayer.v() && entityplayer.ce());
+
+                if (entityplayer.ce()) {
+                    deepSleepersFound = true;
+                }
+            } while (entityplayer.v() || entityplayer.bI() || entityplayer.isSleepIgnored());
+            //
 
             return false;
         }

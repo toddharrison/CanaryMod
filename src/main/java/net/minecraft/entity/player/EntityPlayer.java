@@ -122,7 +122,7 @@ public abstract class EntityPlayer extends EntityLivingBase {
     public double br;
     public double bs;
     public double bt;
-    protected boolean bu;
+    protected boolean bu; // Sleeping
     public BlockPos bv;
     private int b;
     public float bw;
@@ -145,6 +145,7 @@ public abstract class EntityPlayer extends EntityLivingBase {
     public EntityFishHook bE;
 
     // CanaryMod
+    private boolean sleepIgnored; // Fake Sleeping
     protected IChatComponent displayName;
     protected Location canaryRespawn;
     private long currentSessionStart = ToolBox.getUnixTimestamp(); // CanaryMod: current session tracking.
@@ -2046,5 +2047,19 @@ public abstract class EntityPlayer extends EntityLivingBase {
             metadata.put("LastJoin", DateUtils.longToDateTime(System.currentTimeMillis()));
             metadata.put("TimePlayed", 1L); // Initialize to 1
         }
+    }
+
+    /**
+     * Gets if sleeping is ignored
+     */
+    public boolean isSleepIgnored(){
+        return this.sleepIgnored;
+    }
+
+    /**
+     * Sets if sleeping is ignored
+     */
+    public void setSleepIgnored(boolean ignored){
+        this.sleepIgnored = ignored;
     }
 }
