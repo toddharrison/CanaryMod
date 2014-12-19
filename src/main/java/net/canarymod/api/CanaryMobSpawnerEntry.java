@@ -81,10 +81,7 @@ public class CanaryMobSpawnerEntry implements MobSpawnerEntry {
      */
     @Override
     public boolean isValid() {
-        if (this.entity != null) {
-            return true;
-        }
-        return false;
+        return this.entity != null;
     }
 
     /**

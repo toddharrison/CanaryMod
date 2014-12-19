@@ -16,7 +16,8 @@ import java.util.List;
 /**
  * Implementation of MobSpawnerLogic
  *
- * @author Somners
+ * @author Aaron (somners)
+ * @author Jason Jones (darkdiplomat)
  */
 public class CanaryMobSpawnerLogic implements MobSpawnerLogic {
 
@@ -26,23 +27,19 @@ public class CanaryMobSpawnerLogic implements MobSpawnerLogic {
         logic = msbl;
     }
 
-    @SuppressWarnings("rawtypes")
     @Override
-    public String[] getSpawns() {
-        List<String> spawns = new ArrayList<String>();
-        CanaryCompoundTag tag = new CanaryCompoundTag(new NBTTagCompound());
+    public void setSpawnId(String mobName) {
+        logic.a(mobName);
+    }
 
-        logic.b(tag.getHandle());
-        ListTag list = tag.getListTag("SpawnPotentials");
+    @Override
+    public String getSpawnId() {
+        return logic.f();
+    }
 
-        if (list.isEmpty()) {
-            return new String[]{ logic.f() };
-        }
-
-        for (int i = 0; i < list.size(); i++) {
-            spawns.add(((CompoundTag) list.get(i)).getString("id"));
-        }
-        return spawns.toArray(new String[spawns.size()]);
+    @Override
+    public int getDelay() {
+        return logic.a;
     }
 
     @Override
@@ -108,6 +105,25 @@ public class CanaryMobSpawnerLogic implements MobSpawnerLogic {
     @Override
     public void setSpawnRange(int range) {
         this.logic.m = range;
+    }
+
+    @SuppressWarnings("rawtypes")
+    @Override
+    public String[] getSpawns() {
+        List<String> spawns = new ArrayList<String>();
+        CanaryCompoundTag tag = new CanaryCompoundTag(new NBTTagCompound());
+
+        logic.b(tag.getHandle());
+        ListTag list = tag.getListTag("SpawnPotentials");
+
+        if (list.isEmpty()) {
+            return new String[]{ logic.f() };
+        }
+
+        for (int i = 0; i < list.size(); i++) {
+            spawns.add(((CompoundTag)list.get(i)).getString("id"));
+        }
+        return spawns.toArray(new String[spawns.size()]);
     }
 
     @Override
