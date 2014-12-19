@@ -6,8 +6,8 @@ import net.canarymod.api.entity.hanging.CanaryLeashKnot;
 import net.canarymod.api.entity.hanging.HangingEntity;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.hook.entity.HangingEntityDestroyHook;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.block.BlockFence;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -34,6 +34,8 @@ public class EntityLeashKnot extends EntityHanging {
         float f2 = 0.25F;
 
         this.a(new AxisAlignedBB(this.s - 0.1875D, this.t - 0.25D + 0.125D, this.u - 0.1875D, this.s + 0.1875D, this.t + 0.25D + 0.125D, this.u + 0.1875D));
+
+        this.entity = new CanaryLeashKnot(this); // CanaryMod: wrap entity
     }
 
     protected void h() {
