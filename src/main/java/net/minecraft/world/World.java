@@ -1146,10 +1146,12 @@ public abstract class World implements IBlockAccess {
 
         for (i0 = 0; i0 < this.g.size(); ++i0) {
             entity = (Entity) this.g.get(i0);
-            i1 = entity.ae;
-            i2 = entity.ag;
-            if (entity.ad && this.a(i1, i2, true)) {
-                this.a(i1, i2).b(entity);
+            if(entity != null) { // CanaryMod: null check; crash suppression
+                i1 = entity.ae;
+                i2 = entity.ag;
+                if (entity.ad && this.a(i1, i2, true)) {
+                    this.a(i1, i2).b(entity);
+                }
             }
         }
 
