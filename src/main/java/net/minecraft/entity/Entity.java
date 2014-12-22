@@ -2007,4 +2007,8 @@ public abstract class Entity implements ICommandSender {
                 || ToolBox.floorToBlock(this.r) != ToolBox.floorToBlock(this.u);
     }
     //
+
+    public boolean isEating(){
+        return this.ac.a(4) == 1;
+    }
 }

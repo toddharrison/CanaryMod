@@ -336,12 +336,7 @@ public abstract class CanaryEntity implements Entity {
         return null;
     }
 
-    /**
-     * Mounts a specified {@code Entity}
-     *
-     * @param entity
-     *         the {@code Entity} to mount
-     */
+    @Override
     public void mount(Entity entity) {
         if (entity != null) {
             this.entity.a(((CanaryEntity) entity).getHandle());
@@ -351,14 +346,11 @@ public abstract class CanaryEntity implements Entity {
         }
     }
 
-    /**
-     * Dismount ridden {@code Entity}
-     */
+    @Override
     public void dismount() {
         mount(null);
     }
 
-    /** Destroys this entity */
     @Override
     public void destroy() {
         entity.J();
@@ -411,66 +403,41 @@ public abstract class CanaryEntity implements Entity {
         return entity.getMetaData();
     }
 
-
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean isAmbient() {
         return false;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean isOnGround() {
         return getHandle().C;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean isInWeb() {
         return getHandle().H;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean isInWater() {
         return getHandle().Y;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean isInLava() {
         return getHandle().ab();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean hasDisplayName() {
         return getHandle().k_();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String getDisplayName() {
         return getHandle().aL();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void setDisplayName(String display) {
         if (display == null) {
@@ -479,20 +446,19 @@ public abstract class CanaryEntity implements Entity {
         getHandle().a(display);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean showingDisplayName() { // TODO: checkthat this is actually right
         return getHandle().aM();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void setShowDisplayName(boolean show) {
         getHandle().g(show);
+    }
+
+    @Override
+    public boolean isEating(){
+        return getHandle().isEating();
     }
 
     @Override

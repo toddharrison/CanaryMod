@@ -135,7 +135,7 @@ public abstract class EntityPlayer extends EntityLivingBase {
     public int bA; // total points
     public float bB;
     private int f;
-    public ItemStack g; // CanaryMod: private -> public (item in hand)
+    public ItemStack g; // CanaryMod: private -> public (item in use)
     private int h;
     protected float bC = 0.1F;
     protected float bD = 0.02F;
@@ -746,6 +746,9 @@ public abstract class EntityPlayer extends EntityLivingBase {
         this.bg.c = nbttagcompound.f("SelectedItemSlot");
         this.bu = nbttagcompound.n("Sleeping");
         this.b = nbttagcompound.e("SleepTimer");
+        if(nbttagcompound.c("SleepingIgnored")){
+            this.sleepIgnored = nbttagcompound.n("SleepingIgnored");
+        }
         this.bB = nbttagcompound.h("XpP");
         this.bz = nbttagcompound.f("XpLevel");
         this.bA = nbttagcompound.f("XpTotal");
@@ -786,6 +789,7 @@ public abstract class EntityPlayer extends EntityLivingBase {
         nbttagcompound.a("SelectedItemSlot", this.bg.c);
         nbttagcompound.a("Sleeping", this.bu);
         nbttagcompound.a("SleepTimer", (short)this.b);
+        nbttagcompound.a("SleepingIgnored", this.sleepIgnored);
         nbttagcompound.a("XpP", this.bB);
         nbttagcompound.a("XpLevel", this.bz);
         nbttagcompound.a("XpTotal", this.bA);

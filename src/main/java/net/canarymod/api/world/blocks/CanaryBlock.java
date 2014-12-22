@@ -388,6 +388,16 @@ public class CanaryBlock implements Block {
     }
 
     @Override
+    public BlockProperty getPropertyForName(String name) {
+        for(BlockProperty property : getPropertyKeys()){
+            if(property.getName().equals(name)){
+                return property;
+            }
+        }
+        return null;
+    }
+
+    @Override
     public Comparable getValue(BlockProperty property) {
         if (state == null) {
             throw new NotYetImplementedException("CanaryBlock was formed missing the IBlockState, this is a bug and should be reported");
