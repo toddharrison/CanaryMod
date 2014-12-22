@@ -213,8 +213,15 @@ public class CanaryPlayer extends CanaryHuman implements Player {
     }
 
     @Override
+    public void message(ChatComponent... chatComponents) {
+        for(ChatComponent chatComponent : chatComponents){
+            getNetServerHandler().sendComponentMessage(chatComponent);
+        }
+    }
+
+    @Override
     public void notice(String message) {
-        message(ChatFormat.RED.toString() + message);
+        message(ChatFormat.RED + message);
     }
 
     /**

@@ -8,9 +8,14 @@ import net.canarymod.serialize.EnchantmentSerializer;
 import net.canarymod.serialize.ItemSerializer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.gui.MinecraftServerGui;
+import sun.management.ManagementFactory;
+import sun.management.VMManagement;
 
 import javax.swing.*;
 import java.awt.*;
+import java.lang.management.RuntimeMXBean;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 import static net.canarymod.Canary.log;
 
@@ -69,11 +74,13 @@ public class Main {
         log.info("Starting: " + Canary.getImplementationTitle() + " " + Canary.getImplementationVersion());
         log.info("Canary Path: " + Canary.getCanaryJarPath() + " & Working From: " + Canary.getWorkingPath());
 
+        // Need to initialize the SQLite driver for some reason, initialize here for plugin use as well
         try {
             Class.forName("org.sqlite.JDBC");
         }
         catch (ClassNotFoundException e) {
-        } // Need to initialize the SQLite driver for some reason, initialize here for plugin use as well
+        }
+
         try {
             // Sets the default state for the gui, true is off, false is on
             MinecraftServer.setHeadless(true);
@@ -82,7 +89,7 @@ public class Main {
                 String key = args[index].toLowerCase().replaceAll("\\-", "");
                 String value = index == args.length - 1 ? null : args[index + 1];
                 // Replace the nogui option with gui option so the gui is off by default
-                if (key.equals("gui")) {
+                if (key.equals("gui") && !headless) { // if environment is headless, this should have no effect
                     MinecraftServer.setHeadless(false);
                 }
                 else if (key.equals("nocontrol")) {
@@ -90,18 +97,11 @@ public class Main {
                 }
             }
 
-            // Check if there is a Console in use and if we should launch a GUI as replacement for no console
-            if (System.console() == null) {
-                if (!headless && !nocontrol) { //if not headless, no console, and not unControlled, launch the GUI
-                    MinecraftServer.setHeadless(false);
-                }
-                else if (nocontrol) { // If allowed to be unControlled, just log a warning
-                    log.warn("Server is starting with no Console or GUI be warned!");
-                }
-                else { // No graphics environment and not allowed to be uncontrolled? KILL IT!
-                    log.fatal("Server can not start. No Console or GUI is available to control the server. (If this is what you wanted, use the noControl argument [ie: ... -jar CanaryMod.jar noControl ...)");
-                    System.exit(42);
-                }
+            // Warn the user if there is no known way to control the server
+            if (System.console() == null && headless && !nocontrol) {
+                log.warn("Server is starting without a known Console or GUI.");
+                log.warn("If this is intentional, use the nocontrol argument to supress this warning.");
+                log.warn("The process Id of the server might be "+ processId());
             }
 
             if (!MinecraftServer.isHeadless()) {
@@ -138,5 +138,22 @@ public class Main {
 
     public static boolean canRunUncontrolled() {
         return nocontrol;
+    }
+
+    private static int processId(){
+        // Make an attempt at retrieving the process ID
+        try {
+            RuntimeMXBean runtimeMXBean = ManagementFactory.getRuntimeMXBean();
+            Field jvmField = runtimeMXBean.getClass().getDeclaredField("jvm");
+            jvmField.setAccessible(true);
+            VMManagement vmManagement = (VMManagement) jvmField.get(runtimeMXBean);
+            Method getProcessIdMethod = vmManagement.getClass().getDeclaredMethod("getProcessId");
+            getProcessIdMethod.setAccessible(true);
+            return (Integer) getProcessIdMethod.invoke(vmManagement);
+        } catch (Throwable thrown) {
+            // Probably not a Sun-compatible JVM
+        }
+
+        return -1;
     }
 }

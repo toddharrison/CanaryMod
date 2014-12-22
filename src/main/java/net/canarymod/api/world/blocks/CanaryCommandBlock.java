@@ -1,6 +1,7 @@
 package net.canarymod.api.world.blocks;
 
 import net.canarymod.Canary;
+import net.canarymod.api.chat.ChatComponent;
 import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.chat.ReceiverType;
 import net.canarymod.config.Configuration;
@@ -111,6 +112,11 @@ public class CanaryCommandBlock extends CanaryTileEntity implements CommandBlock
         for (CharSequence message : messages) {
             message(message);
         }
+    }
+
+    @Override
+    public void message(ChatComponent... chatComponents) {
+        // TODO
     }
 
     /**

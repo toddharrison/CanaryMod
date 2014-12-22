@@ -4,6 +4,7 @@ import com.mojang.authlib.GameProfile;
 import net.canarymod.Canary;
 import net.canarymod.Main;
 import net.canarymod.ToolBox;
+import net.canarymod.api.chat.ChatComponent;
 import net.canarymod.api.entity.living.humanoid.CanaryPlayer;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.entity.vehicle.CanaryCommandBlockMinecart;
@@ -524,6 +525,11 @@ public class CanaryServer implements Server {
         for (CharSequence message : messages) {
             message(message);
         }
+    }
+
+    @Override
+    public void message(ChatComponent... chatComponents) {
+        // TODO
     }
 
     @Override

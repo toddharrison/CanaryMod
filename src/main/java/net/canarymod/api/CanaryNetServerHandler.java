@@ -2,6 +2,7 @@ package net.canarymod.api;
 
 import java.net.SocketAddress;
 import net.canarymod.api.chat.CanaryChatComponent;
+import net.canarymod.api.chat.ChatComponent;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.packet.CanaryPacket;
 import net.canarymod.api.packet.Packet;
@@ -10,11 +11,13 @@ import net.minecraft.network.play.server.S02PacketChat;
 import net.minecraft.network.play.server.S07PacketRespawn;
 
 import net.canarymod.Canary;
+import net.minecraft.util.ChatComponentStyle;
 
 /**
  * Wrap up NetServerHandler to minimize entry point to notch code
  *
- * @author Chris Ksoll
+ * @author Chris Ksoll (damagefilter)
+ * @author Jason Jones (darkdiplomat)
  */
 public class CanaryNetServerHandler implements NetServerHandler {
 
@@ -38,13 +41,17 @@ public class CanaryNetServerHandler implements NetServerHandler {
         if (!(((CanaryPacket)chatPacket).getPacket() instanceof S02PacketChat)) {
             return;
         }
-        handler.a((S02PacketChat)((CanaryPacket)chatPacket).getPacket());
+        sendPacket(chatPacket);
     }
 
     @Override
     public void sendMessage(String msg) {
-        //The char limit no longer applies
-        handler.a(new S02PacketChat(((CanaryChatComponent)Canary.factory().getChatComponentFactory().compileChatComponent(msg)).getNative()));
+        sendMessage(Canary.factory().getChatComponentFactory().compileChatComponent(msg));
+    }
+
+    @Override
+    public void sendMessage(ChatComponent chatComponent){
+        sendPacket(new S02PacketChat(((CanaryChatComponent)chatComponent).getNative()));
     }
 
     @Override
@@ -57,7 +64,7 @@ public class CanaryNetServerHandler implements NetServerHandler {
         if (!(((CanaryPacket)respawnPacket).getPacket() instanceof S07PacketRespawn)) {
             return;
         }
-        handler.a((S07PacketRespawn)((CanaryPacket)respawnPacket).getPacket());
+        sendPacket(respawnPacket);
     }
 
     @Override
@@ -66,8 +73,7 @@ public class CanaryNetServerHandler implements NetServerHandler {
     }
     
     @Override
-    public SocketAddress getSocketAdress()
-    {
+    public SocketAddress getSocketAdress() {
         return handler.a.j;
     }
 }

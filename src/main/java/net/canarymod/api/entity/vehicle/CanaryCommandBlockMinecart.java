@@ -1,6 +1,7 @@
 package net.canarymod.api.entity.vehicle;
 
 import net.canarymod.Canary;
+import net.canarymod.api.chat.ChatComponent;
 import net.canarymod.api.entity.EntityType;
 import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.chat.ReceiverType;
@@ -122,6 +123,11 @@ public class CanaryCommandBlockMinecart extends CanaryMinecart implements Comman
         for (CharSequence message : messages) {
             message(message);
         }
+    }
+
+    @Override
+    public void message(ChatComponent... chatComponents) {
+        // TODO
     }
 
     /**
