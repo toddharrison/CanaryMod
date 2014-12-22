@@ -8,14 +8,9 @@ import net.canarymod.serialize.EnchantmentSerializer;
 import net.canarymod.serialize.ItemSerializer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.gui.MinecraftServerGui;
-import sun.management.ManagementFactory;
-import sun.management.VMManagement;
 
 import javax.swing.*;
 import java.awt.*;
-import java.lang.management.RuntimeMXBean;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 
 import static net.canarymod.Canary.log;
 
