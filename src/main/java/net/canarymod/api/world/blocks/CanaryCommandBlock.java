@@ -116,7 +116,9 @@ public class CanaryCommandBlock extends CanaryTileEntity implements CommandBlock
 
     @Override
     public void message(ChatComponent... chatComponents) {
-        // TODO
+        for(ChatComponent chatComponent : chatComponents){
+            log.info(Logman.MESSAGE, String.format(cmdPrefix, getName(), chatComponent.getFullText()));
+        }
     }
 
     /**

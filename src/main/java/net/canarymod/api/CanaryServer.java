@@ -529,7 +529,9 @@ public class CanaryServer implements Server {
 
     @Override
     public void message(ChatComponent... chatComponents) {
-        // TODO
+        for(ChatComponent chatComponent : chatComponents){
+            log.info(Logman.MESSAGE, chatComponent.getFullText());
+        }
     }
 
     @Override

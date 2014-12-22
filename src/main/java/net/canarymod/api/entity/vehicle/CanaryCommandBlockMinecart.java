@@ -127,7 +127,9 @@ public class CanaryCommandBlockMinecart extends CanaryMinecart implements Comman
 
     @Override
     public void message(ChatComponent... chatComponents) {
-        // TODO
+        for(ChatComponent chatComponent : chatComponents){
+            log.info(Logman.MESSAGE, String.format(cmdPrefix, getName(), chatComponent.getFullText()));
+        }
     }
 
     /**
