@@ -101,7 +101,6 @@ public class Main {
             if (System.console() == null && headless && !nocontrol) {
                 log.warn("Server is starting without a known Console or GUI.");
                 log.warn("If this is intentional, use the nocontrol argument to supress this warning.");
-                log.warn("The process Id of the server might be "+ processId());
             }
 
             if (!MinecraftServer.isHeadless()) {
@@ -138,22 +137,5 @@ public class Main {
 
     public static boolean canRunUncontrolled() {
         return nocontrol;
-    }
-
-    private static int processId(){
-        // Make an attempt at retrieving the process ID
-        try {
-            RuntimeMXBean runtimeMXBean = ManagementFactory.getRuntimeMXBean();
-            Field jvmField = runtimeMXBean.getClass().getDeclaredField("jvm");
-            jvmField.setAccessible(true);
-            VMManagement vmManagement = (VMManagement) jvmField.get(runtimeMXBean);
-            Method getProcessIdMethod = vmManagement.getClass().getDeclaredMethod("getProcessId");
-            getProcessIdMethod.setAccessible(true);
-            return (Integer) getProcessIdMethod.invoke(vmManagement);
-        } catch (Throwable thrown) {
-            // Probably not a Sun-compatible JVM
-        }
-
-        return -1;
     }
 }
