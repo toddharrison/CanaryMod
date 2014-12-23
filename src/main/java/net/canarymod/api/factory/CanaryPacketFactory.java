@@ -12,7 +12,11 @@ import net.canarymod.api.entity.hanging.CanaryPainting;
 import net.canarymod.api.entity.hanging.Painting;
 import net.canarymod.api.entity.living.CanaryLivingBase;
 import net.canarymod.api.entity.living.LivingBase;
-import net.canarymod.api.entity.living.humanoid.*;
+import net.canarymod.api.entity.living.humanoid.CanaryHuman;
+import net.canarymod.api.entity.living.humanoid.CanaryHumanCapabilities;
+import net.canarymod.api.entity.living.humanoid.Human;
+import net.canarymod.api.entity.living.humanoid.HumanCapabilities;
+import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.inventory.CanaryItem;
 import net.canarymod.api.inventory.Item;
 import net.canarymod.api.nbt.CanaryCompoundTag;
@@ -34,13 +38,60 @@ import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.api.world.position.Position;
 import net.canarymod.api.world.position.Vector3D;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.play.server.*;
+import net.minecraft.network.play.server.S02PacketChat;
+import net.minecraft.network.play.server.S03PacketTimeUpdate;
+import net.minecraft.network.play.server.S04PacketEntityEquipment;
+import net.minecraft.network.play.server.S05PacketSpawnPosition;
+import net.minecraft.network.play.server.S06PacketUpdateHealth;
+import net.minecraft.network.play.server.S07PacketRespawn;
+import net.minecraft.network.play.server.S08PacketPlayerPosLook;
+import net.minecraft.network.play.server.S09PacketHeldItemChange;
+import net.minecraft.network.play.server.S0APacketUseBed;
+import net.minecraft.network.play.server.S0BPacketAnimation;
+import net.minecraft.network.play.server.S0CPacketSpawnPlayer;
+import net.minecraft.network.play.server.S0DPacketCollectItem;
+import net.minecraft.network.play.server.S0EPacketSpawnObject;
+import net.minecraft.network.play.server.S0FPacketSpawnMob;
+import net.minecraft.network.play.server.S10PacketSpawnPainting;
+import net.minecraft.network.play.server.S11PacketSpawnExperienceOrb;
+import net.minecraft.network.play.server.S12PacketEntityVelocity;
+import net.minecraft.network.play.server.S13PacketDestroyEntities;
+import net.minecraft.network.play.server.S14PacketEntity;
+import net.minecraft.network.play.server.S18PacketEntityTeleport;
+import net.minecraft.network.play.server.S19PacketEntityStatus;
+import net.minecraft.network.play.server.S1BPacketEntityAttach;
+import net.minecraft.network.play.server.S1DPacketEntityEffect;
+import net.minecraft.network.play.server.S1EPacketRemoveEntityEffect;
+import net.minecraft.network.play.server.S1FPacketSetExperience;
+import net.minecraft.network.play.server.S21PacketChunkData;
+import net.minecraft.network.play.server.S22PacketMultiBlockChange;
+import net.minecraft.network.play.server.S25PacketBlockBreakAnim;
+import net.minecraft.network.play.server.S26PacketMapChunkBulk;
+import net.minecraft.network.play.server.S27PacketExplosion;
+import net.minecraft.network.play.server.S28PacketEffect;
+import net.minecraft.network.play.server.S29PacketSoundEffect;
+import net.minecraft.network.play.server.S2APacketParticles;
+import net.minecraft.network.play.server.S2BPacketChangeGameState;
+import net.minecraft.network.play.server.S2CPacketSpawnGlobalEntity;
+import net.minecraft.network.play.server.S2EPacketCloseWindow;
+import net.minecraft.network.play.server.S2FPacketSetSlot;
+import net.minecraft.network.play.server.S30PacketWindowItems;
+import net.minecraft.network.play.server.S31PacketWindowProperty;
+import net.minecraft.network.play.server.S32PacketConfirmTransaction;
+import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.network.play.server.S36PacketSignEditorOpen;
+import net.minecraft.network.play.server.S37PacketStatistics;
+import net.minecraft.network.play.server.S39PacketPlayerAbilities;
 import net.minecraft.stats.StatBase;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.Vec3;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static net.canarymod.Canary.log;
 
@@ -732,7 +783,7 @@ public class CanaryPacketFactory implements PacketFactory {
     }
 
     @Override
-    public Packet changeGameState(int state, float mode) {
+    public Packet changeGameState(int state, int mode) {
         try {
             return createPacket(43, state, mode);
         }

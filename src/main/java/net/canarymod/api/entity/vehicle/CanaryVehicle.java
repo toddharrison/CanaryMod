@@ -23,7 +23,7 @@ public abstract class CanaryVehicle extends CanaryEntity implements Vehicle {
     @Override
     public Entity getPassenger() {
         if (!isEmpty()) {
-            return entity.l.getCanaryEntity();
+            return entity.m.getCanaryEntity();
         }
         return null;
     }
@@ -40,6 +40,6 @@ public abstract class CanaryVehicle extends CanaryEntity implements Vehicle {
 
     @Override
     public boolean isEmpty() {
-        return entity.l == null;
+        return entity.m == null;
     }
 }
