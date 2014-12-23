@@ -1217,11 +1217,6 @@ public class CanaryPlayer extends CanaryHuman implements Player {
         setStat(statistics.getInstance(), value);
     }
 
-    @Override
-    public void setStat(Statistics statistics, int value) {
-        setStat(statistics.getInstance(), value);
-    }
-
     /**
      * {@inheritDoc}
      */
@@ -1263,11 +1258,6 @@ public class CanaryPlayer extends CanaryHuman implements Player {
         return getStat(statistics.getInstance());
     }
 
-    @Override
-    public int getStat(Statistics statistics) {
-        return getStat(statistics.getInstance());
-    }
-
     /**
      * {@inheritDoc}
      */
@@ -1279,11 +1269,6 @@ public class CanaryPlayer extends CanaryHuman implements Player {
         }
         getHandle().A().b(getHandle(), ((CanaryAchievement) achievement).getHandle(), 1);
         getHandle().A().b(getHandle());
-    }
-
-    @Override
-    public void awardAchievement(Achievements achievements) {
-        awardAchievement(achievements.getInstance());
     }
 
     @Override
@@ -1304,11 +1289,6 @@ public class CanaryPlayer extends CanaryHuman implements Player {
             }
         }
         getHandle().A().a(getHandle(), ((CanaryAchievement) achievement).getHandle(), 0);
-    }
-
-    @Override
-    public void removeAchievement(Achievements achievements) {
-        removeAchievement(achievements.getInstance());
     }
 
     @Override
@@ -1338,11 +1318,6 @@ public class CanaryPlayer extends CanaryHuman implements Player {
             return null;
         }
         return getHandle().bi.getInventory();
-    }
-
-    @Override
-    public boolean hasAchievement(Achievements achievements) {
-        return hasAchievement(achievements.getInstance());
     }
 
     /**

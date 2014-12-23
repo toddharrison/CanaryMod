@@ -732,7 +732,7 @@ public class CanaryPacketFactory implements PacketFactory {
     }
 
     @Override
-    public Packet changeGameState(int state, int mode) {
+    public Packet changeGameState(int state, float mode) {
         try {
             return createPacket(43, state, mode);
         }
