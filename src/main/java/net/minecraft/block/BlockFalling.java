@@ -1,12 +1,14 @@
 package net.minecraft.block;
 
-
+import net.canarymod.api.world.blocks.CanaryBlock;
 import net.canarymod.hook.world.BlockPhysicsHook;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.Random;
@@ -24,55 +26,55 @@ public class BlockFalling extends Block {
         super(material);
     }
 
-    public void b(World world, int i0, int i1, int i2) {
+    public void c(World world, BlockPos blockpos, IBlockState iblockstate) {
         // CanaryMod: BlockPhysics
         if (world.getCanaryWorld() != null) {
-            BlockPhysicsHook hook = (BlockPhysicsHook) new BlockPhysicsHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), true).call();
-            if (hook.isCanceled()) {
+            if (new BlockPhysicsHook(CanaryBlock.getPooledBlock(iblockstate, blockpos, world), true).call().isCanceled()) {
                 return;
             }
         }
         //
-        world.a(i0, i1, i2, this, this.a(world));
+        world.a(blockpos, (Block)this, this.a(world));
     }
 
-    public void a(World world, int i0, int i1, int i2, Block block) {
+    public void a(World world, BlockPos blockpos, IBlockState iblockstate, Block block) {
         // CanaryMod: BlockPhysics
-        BlockPhysicsHook hook = (BlockPhysicsHook) new BlockPhysicsHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), false).call();
-        if (hook.isCanceled()) {
+        if (new BlockPhysicsHook(CanaryBlock.getPooledBlock(iblockstate, blockpos, world), true).call().isCanceled()) {
             return;
         }
         //
-        world.a(i0, i1, i2, this, this.a(world));
+        world.a(blockpos, (Block)this, this.a(world));
     }
 
-    public void a(World world, int i0, int i1, int i2, Random random) {
-        if (!world.E) {
-            this.m(world, i0, i1, i2);
+    public void b(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {
+        if (!world.D) {
+            this.e(world, blockpos);
         }
     }
 
-    private void m(World world, int i0, int i1, int i2) {
-        if (e(world, i0, i1 - 1, i2) && i1 >= 0) {
+    private void e(World world, BlockPos blockpos) {
+        if (d(world, blockpos.b()) && blockpos.o() >= 0) {
             byte b0 = 32;
 
-            if (!M && world.b(i0 - b0, i1 - b0, i2 - b0, i0 + b0, i1 + b0, i2 + b0)) {
-                if (!world.E) {
-                    EntityFallingBlock entityfallingblock = new EntityFallingBlock(world, (double) ((float) i0 + 0.5F), (double) ((float) i1 + 0.5F), (double) ((float) i2 + 0.5F), this, world.e(i0, i1, i2));
+            if (!M && world.a(blockpos.a(-b0, -b0, -b0), blockpos.a(b0, b0, b0))) {
+                if (!world.D) {
+                    EntityFallingBlock entityfallingblock = new EntityFallingBlock(world, (double)blockpos.n() + 0.5D, (double)blockpos.o(), (double)blockpos.p() + 0.5D, world.p(blockpos));
 
                     this.a(entityfallingblock);
-                    world.d((Entity) entityfallingblock);
+                    world.d((Entity)entityfallingblock);
                 }
             }
             else {
-                world.f(i0, i1, i2);
+                world.g(blockpos);
 
-                while (e(world, i0, i1 - 1, i2) && i1 > 0) {
-                    --i1;
+                BlockPos blockpos1;
+
+                for (blockpos1 = blockpos.b(); d(world, blockpos1) && blockpos1.o() > 0; blockpos1 = blockpos1.b()) {
+                    ;
                 }
 
-                if (i1 > 0) {
-                    world.b(i0, i1, i2, (Block) this);
+                if (blockpos1.o() > 0) {
+                    world.a(blockpos1.a(), this.P());
                 }
             }
         }
@@ -85,22 +87,13 @@ public class BlockFalling extends Block {
         return 2;
     }
 
-    public static boolean e(World world, int i0, int i1, int i2) {
-        Block block = world.a(i0, i1, i2);
+    public static boolean d(World world, BlockPos blockpos) {
+        Block block = world.p(blockpos).c();
+        Material material = block.J;
 
-        if (block.J == Material.a) {
-            return true;
-        }
-        else if (block == Blocks.ab) {
-            return true;
-        }
-        else {
-            Material material = block.J;
-
-            return material == Material.h ? true : material == Material.i;
-        }
+        return block == Blocks.ab || material == Material.a || material == Material.h || material == Material.i;
     }
 
-    public void a(World world, int i0, int i1, int i2, int i3) {
+    public void a_(World world, BlockPos blockpos) {
     }
 }

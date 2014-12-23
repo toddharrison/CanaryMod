@@ -42,7 +42,7 @@ public class CanaryItemFrame extends CanaryHangingEntity implements ItemFrame {
      */
     @Override
     public Item getItemInFrame() {
-        return getHandle().j().getCanaryItem();
+        return getHandle().o().getCanaryItem();
     }
 
     /**
@@ -58,7 +58,7 @@ public class CanaryItemFrame extends CanaryHangingEntity implements ItemFrame {
      */
     @Override
     public int getItemRotation() {
-        return getHandle().k();
+        return getHandle().p();
     }
 
     /**
@@ -74,7 +74,7 @@ public class CanaryItemFrame extends CanaryHangingEntity implements ItemFrame {
      */
     @Override
     public float getItemDropChance() {
-        return getHandle().e;
+        return getHandle().c;
     }
 
     /**
@@ -82,7 +82,7 @@ public class CanaryItemFrame extends CanaryHangingEntity implements ItemFrame {
      */
     @Override
     public void setItemDropChance(float chance) {
-        getHandle().e = chance;
+        getHandle().c = chance;
     }
 
     /**

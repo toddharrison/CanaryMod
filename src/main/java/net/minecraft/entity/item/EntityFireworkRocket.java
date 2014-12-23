@@ -7,6 +7,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
@@ -22,21 +23,16 @@ public class EntityFireworkRocket extends Entity {
         this.entity = new CanaryFireworkRocket(this); // CanaryMod: Wrap Entity
     }
 
-    protected void c() {
-        this.af.a(8, 5);
-    }
-
     public EntityFireworkRocket(World world, double d0, double d1, double d2, ItemStack itemstack) {
         super(world);
         this.a = 0;
         this.a(0.25F, 0.25F);
         this.b(d0, d1, d2);
-        this.L = 0.0F;
         int i0 = 1;
 
-        if (itemstack != null && itemstack.p()) {
-            this.af.b(8, itemstack);
-            NBTTagCompound nbttagcompound = itemstack.q();
+        if (itemstack != null && itemstack.n()) {
+            this.ac.b(8, itemstack);
+            NBTTagCompound nbttagcompound = itemstack.o();
             NBTTagCompound nbttagcompound1 = nbttagcompound.m("Fireworks");
 
             if (nbttagcompound1 != null) {
@@ -44,18 +40,22 @@ public class EntityFireworkRocket extends Entity {
             }
         }
 
-        this.v = this.Z.nextGaussian() * 0.001D;
-        this.x = this.Z.nextGaussian() * 0.001D;
+        this.v = this.V.nextGaussian() * 0.001D;
+        this.x = this.V.nextGaussian() * 0.001D;
         this.w = 0.05D;
-        this.b = 10 * i0 + this.Z.nextInt(6) + this.Z.nextInt(7);
+        this.b = 10 * i0 + this.V.nextInt(6) + this.V.nextInt(7);
         this.entity = new CanaryFireworkRocket(this); // CanaryMod: Wrap Entity
     }
 
-    public void h() {
-        this.S = this.s;
-        this.T = this.t;
-        this.U = this.u;
-        super.h();
+    protected void h() {
+        this.ac.a(8, 5);
+    }
+
+    public void s_() {
+        this.P = this.s;
+        this.Q = this.t;
+        this.R = this.u;
+        super.s_();
         this.v *= 1.15D;
         this.x *= 1.15D;
         this.w += 0.04D;
@@ -82,30 +82,31 @@ public class EntityFireworkRocket extends Entity {
 
         this.z = this.B + (this.z - this.B) * 0.2F;
         this.y = this.A + (this.y - this.A) * 0.2F;
-        if (this.a == 0) {
+        if (this.a == 0 && !this.R()) {
             this.o.a((Entity) this, "fireworks.launch", 3.0F, 1.0F);
         }
 
         ++this.a;
-        if (this.o.E && this.a % 2 < 2) {
-            this.o.a("fireworksSpark", this.s, this.t - 0.3D, this.u, this.Z.nextGaussian() * 0.05D, -this.w * 0.5D, this.Z.nextGaussian() * 0.05D);
+        if (this.o.D && this.a % 2 < 2) {
+            this.o.a(EnumParticleTypes.FIREWORKS_SPARK, this.s, this.t - 0.3D, this.u, this.V.nextGaussian() * 0.05D, -this.w * 0.5D, this.V.nextGaussian() * 0.05D, new int[0]);
         }
 
-        if (!this.o.E && this.a > this.b) {
+        if (!this.o.D && this.a > this.b) {
             // CanaryMod: FireworkExplode
             FireworkExplodeHook hook = (FireworkExplodeHook) new FireworkExplodeHook((FireworkRocket) this.getCanaryEntity()).call();
             if (!hook.isCanceled()) {
-                this.o.a(this, (byte) 17);
-                this.B();
+                this.o.a((Entity) this, (byte) 17);
+                this.J();
             }
             //
         }
+
     }
 
     public void b(NBTTagCompound nbttagcompound) {
         nbttagcompound.a("Life", this.a);
         nbttagcompound.a("LifeTime", this.b);
-        ItemStack itemstack = this.af.f(8);
+        ItemStack itemstack = this.ac.f(8);
 
         if (itemstack != null) {
             NBTTagCompound nbttagcompound1 = new NBTTagCompound();
@@ -113,6 +114,7 @@ public class EntityFireworkRocket extends Entity {
             itemstack.b(nbttagcompound1);
             nbttagcompound.a("FireworksItem", (NBTBase) nbttagcompound1);
         }
+
     }
 
     public void a(NBTTagCompound nbttagcompound) {
@@ -124,31 +126,32 @@ public class EntityFireworkRocket extends Entity {
             ItemStack itemstack = ItemStack.a(nbttagcompound1);
 
             if (itemstack != null) {
-                this.af.b(8, itemstack);
+                this.ac.b(8, itemstack);
             }
         }
+
     }
 
-    public float d(float f0) {
-        return super.d(f0);
+    public float c(float f0) {
+        return super.c(f0);
     }
 
-    public boolean av() {
+    public boolean aE() {
         return false;
     }
 
     // CanaryMod
     public ItemStack getItemStack() {
-        return this.af.f(8);
+        return this.ac.f(8);
     }
 
     public void setItemStack(ItemStack stack) {
-        this.af.b(8, stack);
+        this.ac.b(8, stack);
         // Update Flight information
-        NBTTagCompound nbttagcompound = stack.q();
+        NBTTagCompound nbttagcompound = stack.o();
         NBTTagCompound nbttagcompound1 = nbttagcompound.m("Fireworks");
         if (nbttagcompound1 != null) {
-            this.b = 10 * nbttagcompound1.d("Flight") + this.Z.nextInt(6) + this.Z.nextInt(7);
+            this.b = 10 * nbttagcompound1.d("Flight") + this.V.nextInt(6) + this.V.nextInt(7);
         }
     }
 //

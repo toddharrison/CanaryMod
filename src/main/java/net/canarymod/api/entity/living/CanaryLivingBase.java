@@ -34,7 +34,7 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
      */
     @Override
     public float getHealth() {
-        return getHandle().aS();
+        return getHandle().bm();
     }
 
     /**
@@ -42,7 +42,7 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
      */
     @Override
     public void setHealth(float newHealth) {
-        getHandle().g(newHealth);
+        getHandle().h(newHealth);
     }
 
     /**
@@ -50,7 +50,7 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
      */
     @Override
     public void increaseHealth(float increase) {
-        getHandle().f(increase);
+        getHandle().g(increase);
     }
 
     /**
@@ -74,7 +74,7 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
      */
     @Override
     public boolean canSee(LivingBase livingbase) {
-        return getHandle().n(((CanaryEntity) livingbase).getHandle());
+        return getHandle().r(((CanaryEntity) livingbase).getHandle());
     }
 
     /**
@@ -82,7 +82,7 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
      */
     @Override
     public int getDeathTicks() {
-        return getHandle().aA;
+        return getHandle().av;
     }
 
     /**
@@ -90,7 +90,7 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
      */
     @Override
     public void setDeathTicks(int ticks) {
-        getHandle().aA = ticks;
+        getHandle().av = ticks;
     }
 
     /**
@@ -98,7 +98,7 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
      */
     @Override
     public int getInvulnerabilityTicks() {
-        return getHandle().aH;
+        return getHandle().aB;
     }
 
     /**
@@ -106,7 +106,7 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
      */
     @Override
     public void setInvulnerabilityTicks(int ticks) {
-        getHandle().aH = ticks;
+        getHandle().aB = ticks;
     }
 
     /**
@@ -114,7 +114,7 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
      */
     @Override
     public int getAge() {
-        return getHandle().aN();
+        return getHandle().bg();
     }
 
     /**
@@ -214,7 +214,7 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
     @SuppressWarnings("unchecked")
     @Override
     public List<PotionEffect> getAllActivePotionEffects() {
-        Collection<net.minecraft.potion.PotionEffect> effect_collection = ((net.minecraft.entity.EntityLivingBase) entity).aQ();
+        Collection<net.minecraft.potion.PotionEffect> effect_collection = ((net.minecraft.entity.EntityLivingBase) entity).bk();
         List<PotionEffect> list = new ArrayList<PotionEffect>();
 
         for (net.minecraft.potion.PotionEffect nms_effect : effect_collection) {
@@ -228,7 +228,7 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
      */
     @Override
     public LivingBase getRevengeTarget() {
-        net.minecraft.entity.EntityLivingBase target = getHandle().aJ();
+        net.minecraft.entity.EntityLivingBase target = getHandle().bc();
         if (target != null) {
             return (LivingBase) target.getCanaryEntity();
         }
@@ -253,7 +253,7 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
      */
     @Override
     public LivingBase getLastAssailant() {
-        net.minecraft.entity.EntityLivingBase target = ((net.minecraft.entity.EntityLivingBase) entity).aL();
+        net.minecraft.entity.EntityLivingBase target = ((net.minecraft.entity.EntityLivingBase) entity).be();
         if (target != null) {
             return (EntityLiving) target.getCanaryEntity();
         }
@@ -266,10 +266,10 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
     @Override
     public void setLastAssailant(LivingBase livingbase) {
         if (livingbase == null) {
-            getHandle().k((net.minecraft.entity.Entity) null);
+            getHandle().m((net.minecraft.entity.Entity) null);
         }
         else {
-            getHandle().k(((CanaryEntity) livingbase).getHandle());
+            getHandle().m(((CanaryEntity) livingbase).getHandle());
         }
     }
 
@@ -325,7 +325,7 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
      */
     @Override
     public int getArrowCountInEntity() {
-        return getHandle().aZ();
+        return getHandle().bu();
     }
 
     /**
@@ -333,7 +333,7 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
      */
     @Override
     public void setArrowCountInEntity(int arrows) {
-        getHandle().p(arrows);
+        getHandle().o(arrows);
     }
 
     /**
@@ -341,7 +341,7 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
      */
     @Override
     public void swingArm() {
-        getHandle().ba();
+        getHandle().bv();
     }
 
     @Override
@@ -355,17 +355,17 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
 
     @Override
     public float getHeadRotation() {
-        return getHandle().aP;
+        return getHandle().aJ;
     }
 
     @Override
     public void setHeadRotation(float rot) {
-        getHandle().aP = rot;
+        getHandle().aJ = rot;
     }
 
     @Override
     public AttributeMap getAttributeMap() {
-        return getHandle().bc().getWrapper();
+        return getHandle().bx().getWrapper();
     }
 
     /**
@@ -384,7 +384,7 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
         Entity toRet = null;
         
         // Get the vector that this entity is looking; Get our start position
-        Vec3 vec = ((CanaryLivingBase)this).getHandle().ag();
+        Vec3 vec = ((CanaryLivingBase)this).getHandle().ap();
         Position startPos = this.getPosition();
         Position nextPos = new Position((startPos.getX() + vec.a), (startPos.getY() + vec.b) + this.getEyeHeight(),(startPos.getZ() + vec.c));
 
@@ -392,7 +392,7 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
             // Get the nearest entity and check that its not null (i.e. isn't an entity in the BB)
             Entity near = this.getNearestEntity(this, nextPos.getX(), nextPos.getY(), nextPos.getZ());
             if (near != null) {
-                AxisAlignedBB bb = ((CanaryEntity)near).getHandle().C;
+                AxisAlignedBB bb = ((CanaryEntity)near).getHandle().aQ();
                 if ((nextPos.getX() > bb.a && nextPos.getX() < bb.d) && (nextPos.getY() > bb.b && nextPos.getY() < bb.e) && (nextPos.getZ() > bb.c && nextPos.getZ() < bb.f)) {
                     toRet = near;
                     break;

@@ -7,9 +7,9 @@ import net.minecraft.nbt.NBTBase;
  *
  * @author Jason (darkdiplomat)
  */
-public abstract class CanaryPrimativeTag extends CanaryBaseTag implements PrimativeTag {
+public abstract class CanaryPrimitiveTag<T> extends CanaryBaseTag<T> implements PrimitiveTag<T> {
 
-    protected CanaryPrimativeTag(NBTBase.NBTPrimitive tag) {
+    protected CanaryPrimitiveTag(NBTBase.NBTPrimitive tag) {
         super(tag);
     }
 

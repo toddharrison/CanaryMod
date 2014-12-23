@@ -12,5 +12,7 @@ public interface IAttribute {
 
     boolean c();
 
+    IAttribute d();
+
     CanaryAttribute getWrapper(); // CanaryMod
 }

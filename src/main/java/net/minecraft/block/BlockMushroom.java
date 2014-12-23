@@ -2,12 +2,14 @@ package net.minecraft.block;
 
 import net.canarymod.api.world.blocks.CanaryBlock;
 import net.canarymod.hook.world.BlockGrowHook;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenBigMushroom;
 
+import java.util.Iterator;
 import java.util.Random;
-
 
 public class BlockMushroom extends BlockBush implements IGrowable {
 
@@ -18,82 +20,65 @@ public class BlockMushroom extends BlockBush implements IGrowable {
         this.a(true);
     }
 
-    public void a(World world, int i0, int i1, int i2, Random random) {
+    public void b(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {
         if (random.nextInt(25) == 0) {
-            // CanaryMod: Grab the original stuff
-            CanaryBlock original = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
-            //
-            byte b0 = 4;
-            int i3 = 5;
 
-            int i4;
-            int i5;
-            int i6;
+            int i0 = 5;
+            boolean flag0 = true;
+            Iterator iterator = BlockPos.b(blockpos.a(-4, -1, -4), blockpos.a(4, 1, 4)).iterator();
 
-            for (i4 = i0 - b0; i4 <= i0 + b0; ++i4) {
-                for (i5 = i2 - b0; i5 <= i2 + b0; ++i5) {
-                    for (i6 = i1 - 1; i6 <= i1 + 1; ++i6) {
-                        if (world.a(i4, i6, i5) == this) {
-                            --i3;
-                            if (i3 <= 0) {
-                                return;
-                            }
-                        }
+            while (iterator.hasNext()) {
+                BlockPos blockpos1 = (BlockPos)iterator.next();
+
+                if (world.p(blockpos1).c() == this) {
+                    --i0;
+                    if (i0 <= 0) {
+                        return;
                     }
                 }
             }
 
-            i4 = i0 + random.nextInt(3) - 1;
-            i5 = i1 + random.nextInt(2) - random.nextInt(2);
-            i6 = i2 + random.nextInt(3) - 1;
+            BlockPos blockpos2 = blockpos.a(random.nextInt(3) - 1, random.nextInt(2) - random.nextInt(2), random.nextInt(3) - 1);
 
-            for (int i7 = 0; i7 < 4; ++i7) {
-                if (world.c(i4, i5, i6) && this.j(world, i4, i5, i6)) {
-                    i0 = i4;
-                    i1 = i5;
-                    i2 = i6;
+            for (int i1 = 0; i1 < 4; ++i1) {
+                if (world.d(blockpos2) && this.f(world, blockpos2, this.P())) {
+                    blockpos = blockpos2;
                 }
 
-                i4 = i0 + random.nextInt(3) - 1;
-                i5 = i1 + random.nextInt(2) - random.nextInt(2);
-                i6 = i2 + random.nextInt(3) - 1;
+                blockpos2 = blockpos.a(random.nextInt(3) - 1, random.nextInt(2) - random.nextInt(2), random.nextInt(3) - 1);
             }
 
-            if (world.c(i4, i5, i6) && this.j(world, i4, i5, i6)) {
+            if (world.d(blockpos2) && this.f(world, blockpos2, this.P())) {
                 // CanaryMod: BlockGrow
-                CanaryBlock growth = new CanaryBlock(this, (short) 0, i0, i1 + 1, i2, world.getCanaryWorld());
-                BlockGrowHook blockGrowHook = (BlockGrowHook) new BlockGrowHook(original, growth).call();
-                if (!blockGrowHook.isCanceled()) {
-                    world.d(i4, i5, i6, this, 0, 2);
+                if (!new BlockGrowHook(CanaryBlock.getPooledBlock(iblockstate, blockpos, world), CanaryBlock.getPooledBlock(this.P(), blockpos2, world)).call().isCanceled()) {
+                    world.a(blockpos2, this.P(), 2);
                 }
                 //
             }
         }
     }
 
-    public boolean c(World world, int i0, int i1, int i2) {
-        return super.c(world, i0, i1, i2) && this.j(world, i0, i1, i2);
+    public boolean c(World world, BlockPos blockpos) {
+        return super.c(world, blockpos) && this.f(world, blockpos, this.P());
     }
 
-    protected boolean a(Block block) {
-        return block.j();
+    protected boolean c(Block block) {
+        return block.m();
     }
 
-    public boolean j(World world, int i0, int i1, int i2) {
-        if (i1 >= 0 && i1 < 256) {
-            Block block = world.a(i0, i1 - 1, i2);
+    public boolean f(World world, BlockPos blockpos, IBlockState iblockstate) {
+        if (blockpos.o() >= 0 && blockpos.o() < 256) {
+            IBlockState iblockstate1 = world.p(blockpos.b());
 
-            return block == Blocks.bh || block == Blocks.d && world.e(i0, i1 - 1, i2) == 2 || world.j(i0, i1, i2) < 13 && this.a(block);
+            return iblockstate1.c() == Blocks.bw ? true : (iblockstate1.c() == Blocks.d && iblockstate1.b(BlockDirt.a) == BlockDirt.DirtType.PODZOL ? true : world.k(blockpos) < 13 && this.c(iblockstate1.c()));
         }
         else {
             return false;
         }
     }
 
-    public boolean c(World world, int i0, int i1, int i2, Random random) {
-        int i3 = world.e(i0, i1, i2);
-
-        world.f(i0, i1, i2);
+    public boolean d(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {
+        world.g(blockpos);
         WorldGenBigMushroom worldgenbigmushroom = null;
 
         if (this == Blocks.P) {
@@ -103,24 +88,24 @@ public class BlockMushroom extends BlockBush implements IGrowable {
             worldgenbigmushroom = new WorldGenBigMushroom(1);
         }
 
-        if (worldgenbigmushroom != null && worldgenbigmushroom.a(world, random, i0, i1, i2)) {
+        if (worldgenbigmushroom != null && worldgenbigmushroom.b(world, random, blockpos)) {
             return true;
         }
         else {
-            world.d(i0, i1, i2, this, i3, 3);
+            world.a(blockpos, iblockstate, 3);
             return false;
         }
     }
 
-    public boolean a(World world, int i0, int i1, int i2, boolean flag0) {
+    public boolean a(World world, BlockPos blockpos, IBlockState iblockstate, boolean flag0) {
         return true;
     }
 
-    public boolean a(World world, Random random, int i0, int i1, int i2) {
-        return (double) random.nextFloat() < 0.4D;
+    public boolean a(World world, Random random, BlockPos blockpos, IBlockState iblockstate) {
+        return (double)random.nextFloat() < 0.4D;
     }
 
-    public void b(World world, Random random, int i0, int i1, int i2) {
-        this.c(world, i0, i1, i2, random);
+    public void b(World world, Random random, BlockPos blockpos, IBlockState iblockstate) {
+        this.d(world, blockpos, iblockstate, random);
     }
 }

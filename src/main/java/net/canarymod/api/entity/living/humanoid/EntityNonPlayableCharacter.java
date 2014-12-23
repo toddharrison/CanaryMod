@@ -1,12 +1,14 @@
 package net.canarymod.api.entity.living.humanoid;
 
 import com.mojang.authlib.GameProfile;
+import java.util.UUID;
 import net.canarymod.api.entity.CanaryEntity;
 import net.canarymod.api.entity.living.LivingBase;
 import net.canarymod.api.entity.living.humanoid.npc.ai.*;
 import net.canarymod.api.entity.living.humanoid.npchelpers.EntityNPCJumpHelper;
 import net.canarymod.api.entity.living.humanoid.npchelpers.EntityNPCLookHelper;
 import net.canarymod.api.entity.living.humanoid.npchelpers.EntityNPCMoveHelper;
+import net.canarymod.api.entity.living.humanoid.npchelpers.PathNavigateGroundNPC;
 import net.canarymod.api.entity.living.humanoid.npchelpers.PathNavigateNPC;
 import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.api.world.position.Location;
@@ -17,13 +19,11 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-
-import java.util.UUID;
 
 /**
  * NonPlayableCharacter (NPC) Entity class
@@ -48,15 +48,14 @@ public final class EntityNonPlayableCharacter extends EntityPlayer {
         this.move_helper = new EntityNPCMoveHelper(this);
         this.jump_helper = new EntityNPCJumpHelper(this);
         this.look_helper = new EntityNPCLookHelper(this);
-        this.path_navigate = new PathNavigateNPC(this, ((CanaryWorld) location.getWorld()).getHandle());
-        this.path_navigate.a(false);
+        this.path_navigate = new PathNavigateGroundNPC(this, ((CanaryWorld) location.getWorld()).getHandle());
+        /*this.path_navigate.a(false);
         this.path_navigate.b(false);
         this.path_navigate.d(false);
-        this.path_navigate.e(true);
-        this.V = 0.0F;
-        this.L = 0.0F;
+        this.path_navigate.e(true);*/
+        this.S = 0.0F;
         this.b((double) location.getX(), location.getY(), location.getZ(), location.getRotation(), location.getPitch());
-        while (!world.a(this, this.C).isEmpty()) {
+        while (!world.a((Entity)this, this.aQ()).isEmpty() && this.t < 255.0D) {
             this.b(this.s, this.t + 1.0D, this.u);
         }
         this.entity = new CanaryNonPlayableCharacter(this);
@@ -67,7 +66,7 @@ public final class EntityNonPlayableCharacter extends EntityPlayer {
     }
 
     @Override
-    public void b(int i0) { // NO Portal Use
+    public void c(int i0) { // NO Portal Use
     }
 
     @Override
@@ -97,24 +96,24 @@ public final class EntityNonPlayableCharacter extends EntityPlayer {
     }
 
     @Override
-    public void h() {
-        if (!this.K) {
+    public void j() {
+        if (!this.I) {
             new Update().call(getNPC());
         }
-        super.h();
+        super.j();
     }
 
     @Override
-    protected void bn() {
-        this.getPathNavigate().f();
-        this.bp();
+    protected void bJ() {
+        this.getPathNavigate().k();
+        //this.E();
         this.getMoveHelper().c();
         this.getLook_helper().a();
         this.getJumpHelper().b();
     }
 
     @Override
-    public boolean c(EntityPlayer entityplayer) { // RightClicked
+    public boolean e(EntityPlayer entityplayer) { // RightClicked
         super.c(entityplayer);
         if (this.entity != null) {
             new Clicked(((EntityPlayerMP) entityplayer).getPlayer()).call(getNPC());
@@ -135,18 +134,19 @@ public final class EntityNonPlayableCharacter extends EntityPlayer {
     }
 
     @Override
-    public void B() {
+    public void J() {
         super.B();
         new Destroyed().call(getNPC());
     }
 
-    protected void bi() {
+    /*protected void bi() {
         this.move_helper.c();
-    }
+    }*/
 
-    public void entityliving_n_clone(float f0) {
-        this.be = f0;
-        super.i(f0);
+    public void entityliving_j_clone(float f0) {
+        super.j(f0);
+        //this.m(f0);
+        this.aY = f0;
     }
 
     public EntityNPCJumpHelper getJumpHelper() {
@@ -168,13 +168,11 @@ public final class EntityNonPlayableCharacter extends EntityPlayer {
     public void a(float f0) {
     } // Food Exhaustion stuff
 
-    public float g() { // Eye Height (in EntityPlayer its set to 0.12F so we need to override that
+    /*public float g() { // Eye Height (in EntityPlayer its set to 0.12F so we need to override that
         return 1.62F;
-    }
+    }*/
 
     // ICommandSender things
-    //String b_();
-    //IChatComponent c_();
     public void a(IChatComponent ichatcomponent) {
     }
 
@@ -182,18 +180,16 @@ public final class EntityNonPlayableCharacter extends EntityPlayer {
         return false;
     }
 
-    public ChunkCoordinates f_() {
-        return new ChunkCoordinates(MathHelper.c(this.t), MathHelper.c(this.u + 0.5D), MathHelper.c(this.v));
+    public BlockPos c() {
+        return new BlockPos(this.s, this.t + 0.5D, this.u);
     }
-    //World d();
-    //
 
     /*
     * onPickUp Method, used to call NPCAI implementation PickupItem
     */
     @Override
     public void a(Entity entity, int i0) {
-        if (!entity.K && !this.o.E) {
+        if (!entity.I && !this.o.D) {
             super.a(entity, i0);
             if (entity instanceof EntityItem) {
                 new PickupItem(((EntityItem) entity).getEntityItem().getItem()).call(this.getNPC());
@@ -213,24 +209,22 @@ public final class EntityNonPlayableCharacter extends EntityPlayer {
     */
 
 
-    public void n(float f0) {
-        this.be = f0;
+    public void m(float f0) {
+        this.aY = f0;
     }
 
-    public void i(float f0) {
-        super.i(f0);
-        this.n(f0);
+    public void j(float f0) {
+        super.j(f0);
+        this.m(f0);
     }
 
-    protected boolean bk() {
+    protected boolean b() {
         return true;
     }
 
-    protected void bq() {
-        super.bq();
-    }
+    //protected void E() { }
 
-    public int x() {
+    public int bP() {
         return 40;
     }
 
@@ -242,10 +236,9 @@ public final class EntityNonPlayableCharacter extends EntityPlayer {
         if (entity instanceof EntityLivingBase) {
             EntityLivingBase entitylivingbase = (EntityLivingBase) entity;
 
-            d2 = entitylivingbase.t + (double) entitylivingbase.g() - (this.t + (double) this.g());
-        }
-        else {
-            d2 = (entity.C.b + entity.C.e) / 2.0D - (this.t + (double) this.g());
+            d2 = entitylivingbase.t + (double) entitylivingbase.aR() - (this.t + (double) this.aR());
+        } else {
+            d2 = (entity.aQ().b + entity.aQ().e) / 2.0D - (this.t + (double) this.aR());
         }
 
         double d3 = (double) MathHelper.a(d0 * d0 + d1 * d1);
@@ -268,5 +261,11 @@ public final class EntityNonPlayableCharacter extends EntityPlayer {
         }
 
         return f0 + f3;
+    }
+
+    // RAndom method that needs to be overriden
+    @Override
+    public boolean v() {
+        return false;
     }
 }

@@ -1,5 +1,6 @@
 package net.canarymod.api.inventory;
 
+import net.canarymod.Canary;
 import net.canarymod.api.nbt.CanaryCompoundTag;
 import net.canarymod.api.world.blocks.CanaryTileEntity;
 import net.canarymod.config.Configuration;
@@ -18,6 +19,13 @@ public abstract class CanaryBlockInventory extends CanaryTileEntity implements I
         super(inventory);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getInventoryName() {
+        return inventory.d_();
+    }
 
     /**
      * {@inheritDoc}
@@ -102,7 +110,7 @@ public abstract class CanaryBlockInventory extends CanaryTileEntity implements I
         for (Item item : items) {
             if (item.getId() == itemId) {
                 if (item.getAmount() == remaining) {
-                    removeItem(item.getSlot());
+                    setSlot(item.getSlot(), null);
                     return;
                 }
                 else if (item.getAmount() > remaining) {
@@ -111,7 +119,7 @@ public abstract class CanaryBlockInventory extends CanaryTileEntity implements I
                     return;
                 }
                 else {
-                    removeItem(item.getSlot());
+                    setSlot(item.getSlot(), null);
                     remaining -= item.getAmount();
                 }
             }
@@ -135,9 +143,9 @@ public abstract class CanaryBlockInventory extends CanaryTileEntity implements I
         int remaining = item.getAmount();
 
         for (Item it : items) {
-            if (it.getId() == item.getId() && it.getDamage() == item.getDamage()) {
+            if (item.equalsIgnoreSize(it)) {
                 if (it.getAmount() == remaining) {
-                    removeItem(it.getSlot());
+                    setSlot(it.getSlot(), null);
                     return;
                 }
                 else if (it.getAmount() > remaining) {
@@ -146,7 +154,7 @@ public abstract class CanaryBlockInventory extends CanaryTileEntity implements I
                     return;
                 }
                 else {
-                    removeItem(it.getSlot());
+                    setSlot(it.getSlot(), null);
                     remaining -= it.getAmount();
                 }
             }
@@ -170,16 +178,8 @@ public abstract class CanaryBlockInventory extends CanaryTileEntity implements I
      * {@inheritDoc}
      */
     @Override
-    public String getInventoryName() {
-        return inventory.b();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public int getInventoryStackLimit() {
-        return inventory.d();
+        return inventory.p_();
     }
 
     /**
@@ -256,7 +256,7 @@ public abstract class CanaryBlockInventory extends CanaryTileEntity implements I
      */
     @Override
     public int getSize() {
-        return inventory.a();
+        return inventory.n_();
     }
 
     /**
@@ -390,10 +390,16 @@ public abstract class CanaryBlockInventory extends CanaryTileEntity implements I
         int maxAmount = item.getMaxAmount();
 
         while (amount > 0) {
+
             // Get an existing item with at least 1 spot free
             for (Item i : getContents()) {
-                if (i != null && item.getId() == i.getId() && item.getDamage() == i.getDamage()
-                        && i.getAmount() < i.getMaxAmount()) {
+                if (i != null && i.getType().equals(item.getType()) && i.getAmount() < i.getMaxAmount()) {
+                    if((i.hasDataTag() && !item.hasDataTag()) || (!i.hasDataTag() && item.hasDataTag())){
+                        continue;
+                    }
+                    else if (!i.getDataTag().equals(item.getDataTag())){
+                        continue;
+                    }
                     itemExisting = i;
                 }
             }
@@ -401,21 +407,25 @@ public abstract class CanaryBlockInventory extends CanaryTileEntity implements I
             // Add the items to the existing stack of items
             if (itemExisting != null && (!item.isEnchanted() || Configuration.getServerConfig().allowEnchantmentStacking())) {
                 // Add as much items as possible to the stack
-                int k = Math.min(maxAmount - itemExisting.getAmount(), item.getAmount());
+                int k = Math.min(itemExisting.getMaxAmount() - itemExisting.getAmount(), item.getAmount());
                 itemExisting.setAmount(itemExisting.getAmount() + k);
                 amount -= k;
+                // make sure to set itemExisting to null, else we will loop infinitely
+                itemExisting = null;
                 continue;
             }
             // We still have slots, but no stack, create a new stack.
             int eslot = getEmptySlot();
 
             if (eslot != -1) {
-                CanaryCompoundTag nbt = new CanaryCompoundTag();
-
-                ((CanaryItem) item).getHandle().b(nbt.getHandle());
+                // Set the amount on item so the NBT copies the correct amounts.
+                item.setAmount(amount);
+                // Create new Item
                 CanaryItem tempItem = new CanaryItem(item.getId(), amount, item.getDamage(), -1);
-
-                tempItem.getHandle().c(nbt.getHandle());
+                // Create NBT Tags and new Item, then copy NBT from existing item to new item
+                CanaryCompoundTag nbt = item.hasDataTag() ? (CanaryCompoundTag) ((CanaryItem) item).getDataTag().copy() : null;
+                // Set NBT on new Item
+                tempItem.setDataTag(nbt);
                 this.setSlot(eslot, tempItem);
                 amount = 0;
                 continue;
@@ -481,7 +491,7 @@ public abstract class CanaryBlockInventory extends CanaryTileEntity implements I
         for (int index = 0; index < getSize(); index++) {
             Item toCheck = getSlot(index);
 
-            if (toCheck != null && toCheck.getType().equals(item.getType())) {
+            if (toCheck != null && item.equalsIgnoreSize(toCheck)) {
                 setSlot(index, null);
                 return toCheck;
             }
@@ -548,5 +558,32 @@ public abstract class CanaryBlockInventory extends CanaryTileEntity implements I
      */
     public IInventory getInventoryHandle() {
         return inventory;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean canInsertItems(Item item) {
+        int totalSpace = 0;
+        for (Item inv : getContents()) {
+            if (inv == null) {
+                totalSpace += item.getMaxAmount();
+            }
+            else {
+                if (inv.getType().equals(item.getType())) {
+                    if (item.hasDataTag() && item.getDataTag().equals(inv.getDataTag())) {
+                        totalSpace += inv.getMaxAmount() - inv.getAmount();
+                    }
+                }
+            }
+        }
+
+
+        if (totalSpace > 0) {
+            return true;
+        }
+
+        return false;
     }
 }

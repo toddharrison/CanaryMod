@@ -6,7 +6,14 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.*;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -19,8 +26,8 @@ public abstract class EntityFireball extends Entity {
     private Block h;
     public boolean i; // CanaryMod: private => public; inGround
     public EntityLivingBase a;
-    public int at; // CanaryMod: private => public; ticksAlive
-    public int au; // CanaryMod: private => public; ticksInAir
+    public int ap; // CanaryMod: private => public; ticksAlive
+    public int aq; // CanaryMod: private => public; ticksInAir
     public double b;
     public double c;
     public double d;
@@ -31,8 +38,7 @@ public abstract class EntityFireball extends Entity {
         this.a(1.0F, 1.0F);
     }
 
-    protected void c() {
-    }
+    protected void h() {}
 
     public EntityFireball(World world, double d0, double d1, double d2, double d3, double d4, double d5) {
         super(world);
@@ -52,11 +58,10 @@ public abstract class EntityFireball extends Entity {
         this.a(1.0F, 1.0F);
         this.b(entitylivingbase.s, entitylivingbase.t, entitylivingbase.u, entitylivingbase.y, entitylivingbase.z);
         this.b(this.s, this.t, this.u);
-        this.L = 0.0F;
         this.v = this.w = this.x = 0.0D;
-        d0 += this.Z.nextGaussian() * 0.4D;
-        d1 += this.Z.nextGaussian() * 0.4D;
-        d2 += this.Z.nextGaussian() * 0.4D;
+        d0 += this.V.nextGaussian() * 0.4D;
+        d1 += this.V.nextGaussian() * 0.4D;
+        d2 += this.V.nextGaussian() * 0.4D;
         double d3 = (double) MathHelper.a(d0 * d0 + d1 * d1 + d2 * d2);
 
         this.b = d0 / d3 * 0.1D;
@@ -64,56 +69,56 @@ public abstract class EntityFireball extends Entity {
         this.d = d2 / d3 * 0.1D;
     }
 
-    public void h() {
-        if (!this.o.E && (this.a != null && this.a.K || !this.o.d((int) this.s, (int) this.t, (int) this.u))) {
-            this.B();
+    public void s_() {
+        if (!this.o.D && (this.a != null && this.a.I || !this.o.e(new BlockPos(this)))) {
+            this.J();
         } else {
-            super.h();
+            super.s_();
             this.e(1);
             if (this.i) {
-                if (this.o.a(this.e, this.f, this.g) == this.h) {
-                    ++this.at;
-                    if (this.at == 600) {
-                        this.B();
+                if (this.o.p(new BlockPos(this.e, this.f, this.g)).c() == this.h) {
+                    ++this.ap;
+                    if (this.ap == 600) {
+                        this.J();
                     }
 
                     return;
                 }
 
                 this.i = false;
-                this.v *= (double) (this.Z.nextFloat() * 0.2F);
-                this.w *= (double) (this.Z.nextFloat() * 0.2F);
-                this.x *= (double) (this.Z.nextFloat() * 0.2F);
-                this.at = 0;
-                this.au = 0;
+                this.v *= (double) (this.V.nextFloat() * 0.2F);
+                this.w *= (double) (this.V.nextFloat() * 0.2F);
+                this.x *= (double) (this.V.nextFloat() * 0.2F);
+                this.ap = 0;
+                this.aq = 0;
             } else {
-                ++this.au;
+                ++this.aq;
             }
 
-            Vec3 vec3 = Vec3.a(this.s, this.t, this.u);
-            Vec3 vec31 = Vec3.a(this.s + this.v, this.t + this.w, this.u + this.x);
+            Vec3 vec3 = new Vec3(this.s, this.t, this.u);
+            Vec3 vec31 = new Vec3(this.s + this.v, this.t + this.w, this.u + this.x);
             MovingObjectPosition movingobjectposition = this.o.a(vec3, vec31);
 
-            vec3 = Vec3.a(this.s, this.t, this.u);
-            vec31 = Vec3.a(this.s + this.v, this.t + this.w, this.u + this.x);
+            vec3 = new Vec3(this.s, this.t, this.u);
+            vec31 = new Vec3(this.s + this.v, this.t + this.w, this.u + this.x);
             if (movingobjectposition != null) {
-                vec31 = Vec3.a(movingobjectposition.f.a, movingobjectposition.f.b, movingobjectposition.f.c);
+                vec31 = new Vec3(movingobjectposition.c.a, movingobjectposition.c.b, movingobjectposition.c.c);
             }
 
             Entity entity = null;
-            List list = this.o.b((Entity) this, this.C.a(this.v, this.w, this.x).b(1.0D, 1.0D, 1.0D));
+            List list = this.o.b((Entity) this, this.aQ().a(this.v, this.w, this.x).b(1.0D, 1.0D, 1.0D));
             double d0 = 0.0D;
 
             for (int i0 = 0; i0 < list.size(); ++i0) {
                 Entity entity1 = (Entity) list.get(i0);
 
-                if (entity1.R() && (!entity1.i(this.a) || this.au >= 25)) {
+                if (entity1.ad() && (!entity1.k(this.a) || this.aq >= 25)) {
                     float f0 = 0.3F;
-                    AxisAlignedBB axisalignedbb = entity1.C.b((double) f0, (double) f0, (double) f0);
+                    AxisAlignedBB axisalignedbb = entity1.aQ().b((double) f0, (double) f0, (double) f0);
                     MovingObjectPosition movingobjectposition1 = axisalignedbb.a(vec3, vec31);
 
                     if (movingobjectposition1 != null) {
-                        double d1 = vec3.d(movingobjectposition1.f);
+                        double d1 = vec3.f(movingobjectposition1.c);
 
                         if (d1 < d0 || d0 == 0.0D) {
                             entity = entity1;
@@ -156,13 +161,13 @@ public abstract class EntityFireball extends Entity {
 
             this.z = this.B + (this.z - this.B) * 0.2F;
             this.y = this.A + (this.y - this.A) * 0.2F;
-            float f2 = this.e();
+            float f2 = this.j();
 
-            if (this.M()) {
+            if (this.V()) {
                 for (int i1 = 0; i1 < 4; ++i1) {
                     float f3 = 0.25F;
 
-                    this.o.a("bubble", this.s - this.v * (double) f3, this.t - this.w * (double) f3, this.u - this.x * (double) f3, this.v, this.w, this.x);
+                    this.o.a(EnumParticleTypes.WATER_BUBBLE, this.s - this.v * (double) f3, this.t - this.w * (double) f3, this.u - this.x * (double) f3, this.v, this.w, this.x, new int[0]);
                 }
 
                 // f2 = 0.8F;
@@ -175,12 +180,12 @@ public abstract class EntityFireball extends Entity {
             this.v *= (double) f2;
             this.w *= (double) f2;
             this.x *= (double) f2;
-            this.o.a("smoke", this.s, this.t + 0.5D, this.u, 0.0D, 0.0D, 0.0D);
+            this.o.a(EnumParticleTypes.SMOKE_NORMAL, this.s, this.t + 0.5D, this.u, 0.0D, 0.0D, 0.0D, new int[0]);
             this.b(this.s, this.t, this.u);
         }
     }
 
-    public float e() { // CanaryMod: protected => public
+    public float j() { // CanaryMod: protected => public
         return motionFactor; // CanaryMod: return custom factor
     }
 
@@ -190,17 +195,23 @@ public abstract class EntityFireball extends Entity {
         nbttagcompound.a("xTile", (short) this.e);
         nbttagcompound.a("yTile", (short) this.f);
         nbttagcompound.a("zTile", (short) this.g);
-        nbttagcompound.a("inTile", (byte) Block.b(this.h));
+        ResourceLocation resourcelocation = (ResourceLocation) Block.c.c(this.h);
+
+        nbttagcompound.a("inTile", resourcelocation == null ? "" : resourcelocation.toString());
         nbttagcompound.a("inGround", (byte) (this.i ? 1 : 0));
-        nbttagcompound.a("direction", (NBTBase) this.a(new double[]{this.v, this.w, this.x}));
-        nbttagcompound.a("motionFactor", this.motionFactor); // CanaryMod: store motionFactor
+        nbttagcompound.a("direction", (NBTBase) this.a(new double[] { this.v, this.w, this.x}));
     }
 
     public void a(NBTTagCompound nbttagcompound) {
         this.e = nbttagcompound.e("xTile");
         this.f = nbttagcompound.e("yTile");
-        this.g = nbttagcompound.e("zTile");
-        this.h = Block.e(nbttagcompound.d("inTile") & 255);
+        this.g = nbttagcompound.e("zTile");        
+        if (nbttagcompound.b("inTile", 8)) {
+            this.h = Block.b(nbttagcompound.j("inTile"));
+        } else {
+            this.h = Block.c(nbttagcompound.d("inTile") & 255);
+        }
+        
         this.i = nbttagcompound.d("inGround") == 1;
         if (nbttagcompound.c("motionFactor")) { // CanaryMod: If motionFactor is stored, retrive it
             this.motionFactor = nbttagcompound.h("motionFactor");
@@ -213,25 +224,26 @@ public abstract class EntityFireball extends Entity {
             this.w = nbttaglist.d(1);
             this.x = nbttaglist.d(2);
         } else {
-            this.B();
+            this.J();
         }
+
     }
 
-    public boolean R() {
+    public boolean ad() {
         return true;
     }
 
-    public float af() {
+    public float ao() {
         return 1.0F;
     }
 
     public boolean a(DamageSource damagesource, float f0) {
-        if (this.aw()) {
+        if (this.b(damagesource)) {
             return false;
         } else {
-            this.Q();
+            this.ac();
             if (damagesource.j() != null) {
-                Vec3 vec3 = damagesource.j().ag();
+                Vec3 vec3 = damagesource.j().ap();
 
                 if (vec3 != null) {
                     this.v = vec3.a;
@@ -253,7 +265,7 @@ public abstract class EntityFireball extends Entity {
         }
     }
 
-    public float d(float f0) {
+    public float c(float f0) {
         return 1.0F;
     }
 

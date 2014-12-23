@@ -44,18 +44,19 @@ public class Material {
     }
     ).f().n();
     public static final Material H = (new Material(MapColor.m)).o();
-    private boolean I;
-    public boolean J; // CanaryMod: private => public (translucent)
-    private boolean K;
-    public final MapColor L;
-    private boolean M = true;
-    private int N;
-    private boolean O;
+    public static final Material I = (new Material(MapColor.b)).f().o();
+    private boolean J;
+    public boolean K;// CanaryMod: private => public (translucent)
+    private boolean L;
+    private final MapColor M;
+    private boolean N = true;
+    private int O;
+    private boolean P;
 
     private final CanaryBlockMaterial cbm; // CanaryMod
 
     public Material(MapColor mapcolor) {
-        this.L = mapcolor;
+        this.M = mapcolor;
         this.cbm = new CanaryBlockMaterial(this);
     }
 
@@ -76,69 +77,69 @@ public class Material {
     }
 
     private Material s() {
-        this.K = true;
+        this.L = true;
         return this;
     }
 
     protected Material f() {
-        this.M = false;
+        this.N = false;
         return this;
     }
 
     protected Material g() {
-        this.I = true;
-        return this;
-    }
-
-    public boolean h() {
-        return this.I;
-    }
-
-    public Material i() {
         this.J = true;
         return this;
     }
 
-    public boolean j() {
+    public boolean h() {
         return this.J;
     }
 
+    public Material i() {
+        this.K = true;
+        return this;
+    }
+
+    public boolean j() {
+        return this.K;
+    }
+
     public boolean k() {
-        return this.K ? false : this.c();
+        return this.L ? false : this.c();
     }
 
     public boolean l() {
-        return this.M;
-    }
-
-    public int m() {
         return this.N;
     }
 
+    public int m() {
+        return this.O;
+    }
+
     protected Material n() {
-        this.N = 1;
+        this.O = 1;
         return this;
     }
 
     protected Material o() {
-        this.N = 2;
+        this.O = 2;
         return this;
     }
 
     protected Material p() {
-        this.O = true;
+        this.P = true;
         return this;
     }
 
-    public boolean q() {
-        return this.O;
-    }
-
     public MapColor r() {
-        return this.L;
+        return this.M;
     }
 
     // CanaryMod
+    public boolean isAlwaysHarvested() {
+        return this.P;
+    }
+
     public CanaryBlockMaterial getCanaryBlockMaterial() {
         return this.cbm;
     }

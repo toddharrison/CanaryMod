@@ -2,7 +2,7 @@ package net.canarymod.api.world;
 
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.world.position.Location;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.BlockPos;
 
 /**
  * Village wrapper implementation
@@ -75,9 +75,8 @@ public class CanaryVillage implements Village {
      */
     @Override
     public Location getCenter() {
-        ChunkCoordinates cc = getHandle().a();
-
-        return new Location(cc.a, cc.b, cc.c);
+        BlockPos cc = getHandle().a();
+        return new Location(cc.n(), cc.o(), cc.p());
     }
 
     /**

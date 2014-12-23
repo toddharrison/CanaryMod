@@ -3,9 +3,16 @@ package net.canarymod.api.world;
 import net.canarymod.api.entity.Entity;
 import net.canarymod.api.world.blocks.TileEntity;
 import net.canarymod.api.world.position.Position;
-import net.minecraft.world.ChunkPosition;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.ClassInheratanceMultiMap;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Chunk implementation
@@ -27,32 +34,36 @@ public class CanaryChunk implements Chunk {
 
     @Override
     public int getX() {
-        return handle.g;
+        return handle.a;
     }
 
     @Override
     public int getZ() {
-        return handle.h;
+        return handle.b;
     }
 
     @Override
     public int getBlockTypeAt(int x, int y, int z) {
-        return net.minecraft.block.Block.b(handle.a(x, y, z));
+        return net.minecraft.block.Block.a(handle.a(x, y, z));
     }
 
     @Override
     public void setBlockTypeAt(int x, int y, int z, int type) {
-        handle.a(x, y, z, net.minecraft.block.Block.e(type), 0);
+        // returns the new block state, do something with it?
+        handle.a(new BlockPos(x, y, z), Block.d(type));
     }
 
     @Override
     public int getBlockDataAt(int x, int y, int z) {
-        return handle.c(x, y, z);
+        IBlockState state = handle.g(new BlockPos(x, y, z));
+        return state.c().c(state);
     }
 
     @Override
     public void setBlockDataAt(int x, int y, int z, int data) {
-        handle.a(x, y, z, data);
+        IBlockState state = handle.g(new BlockPos(x, y, z));
+//        state.a()
+//        handle.a(x, y, z, data);
     }
 
     @Override
@@ -62,24 +73,22 @@ public class CanaryChunk implements Chunk {
 
     @Override
     public boolean isLoaded() {
-        return handle.d;
+        return handle.k;
     }
 
     @Override
     public World getDimension() {
-        return handle.e.getCanaryWorld();
+        return handle.i.getCanaryWorld();
     }
 
     @Override
     public byte[] getBiomeByteData() {
-        return handle.m();
+        return handle.k();
     }
 
     @Override
     public BiomeType[] getBiomeData() {
-        BiomeType[] data = BiomeType.fromIdArray(handle.m());
-
-        return data;
+        return BiomeType.fromIdArray(getBiomeByteData());
     }
 
     @Override
@@ -107,10 +116,10 @@ public class CanaryChunk implements Chunk {
     @SuppressWarnings("unchecked")
     public Map<Position, TileEntity> getTileEntityMap() {
         HashMap<Position, TileEntity> toRet = new HashMap<Position, TileEntity>();
-        synchronized (handle.i) {
-            for (ChunkPosition pos : (Set<ChunkPosition>) handle.i.keySet()) {
-                Position cPos = new Position(pos.a, pos.b, pos.c);
-                net.minecraft.tileentity.TileEntity te = (net.minecraft.tileentity.TileEntity) handle.i.get(pos);
+        synchronized (handle.r()) {
+            for (BlockPos pos : (Set<BlockPos>) handle.r().keySet()) {
+                Position cPos = new Position(pos.n(), pos.o(), pos.p());
+                net.minecraft.tileentity.TileEntity te = (net.minecraft.tileentity.TileEntity) handle.r().get(pos);
                 if (te.complexBlock != null) {
                     toRet.put(cPos, te.complexBlock);
                 }
@@ -121,15 +130,17 @@ public class CanaryChunk implements Chunk {
 
     @Override
     public boolean hasEntities() {
-        return handle.m;
+        return handle.hasEntities();
     }
 
     @SuppressWarnings("unchecked")
+    @Deprecated
     public List<Entity>[] getEntityLists() {
-        List<Entity>[] toRet = new List[handle.j.length];
-        for (int index = 0; index < handle.j.length; index++) {
+        ClassInheratanceMultiMap[] entities = handle.s();
+        List<Entity>[] toRet = new List[entities.length];
+        for (int index = 0; index < entities.length; index++) {
             toRet[index] = new ArrayList<Entity>();
-            for (Object e : handle.j[index]) {
+            for (Object e : entities[index]) {
                 toRet[index].add(((net.minecraft.entity.Entity) e).getCanaryEntity());
             }
         }
@@ -138,27 +149,27 @@ public class CanaryChunk implements Chunk {
 
     @Override
     public int[] getHeightMap() {
-        return handle.f;
+        return handle.q();
     }
 
     @Override
     public int[] getPrecipitationHeightMap() {
-        return handle.b;
+        return handle.f;
     }
 
     @Override
     public long getLastSaveTime() {
-        return handle.p;
+        return handle.getTimeSaved();
     }
 
     @Override
     public boolean isTerrainPopulated() {
-        return handle.k;
+        return handle.t();
     }
 
     @Override
     public boolean isModified() {
-        return handle.l;
+        return handle.u();
     }
 
     @Override
@@ -169,20 +180,19 @@ public class CanaryChunk implements Chunk {
     @Override
     public void updateSkyLightMap(boolean force) {
         if (force) {
-            handle.p();
+            handle.n();
         } else {
-            handle.o();
+            handle.m();
         }
     }
 
     @Override
     public void relightBlock(int x, int y, int z) {
-        handle.h(x, y, z);
-
+        handle.d(x, y, z);
     }
 
     @Override
     public Biome getBiome(int x, int z) {
-        return this.getHandle().a(x, z, this.getHandle().e.v()).getCanaryBiome();
+        return handle.a(new BlockPos(x, 0, z), handle.i.v()).getCanaryBiome();
     }
 }

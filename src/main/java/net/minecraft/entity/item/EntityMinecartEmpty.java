@@ -10,6 +10,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 
+
 public class EntityMinecartEmpty extends EntityMinecart {
 
     public EntityMinecartEmpty(World world) {
@@ -22,19 +23,22 @@ public class EntityMinecartEmpty extends EntityMinecart {
         this.entity = new CanaryEmptyMinecart(this); // CanaryMod: Wrap Entity
     }
 
-    public boolean c(EntityPlayer entityplayer) {
+    public boolean e(EntityPlayer entityplayer) {
         if (this.l != null && this.l instanceof EntityPlayer && this.l != entityplayer) {
             return true;
-        } else if (this.l != null && this.l != entityplayer) {
+        }
+        else if (this.l != null && this.l != entityplayer) {
             return false;
-        } else {
-            if (!this.o.E) {
+        }
+        else {
+            if (!this.o.D) {
                 // CanaryMod: VehicleEnter/VehicleExit
                 CancelableHook hook;
 
                 if (this.l == null) {
                     hook = new VehicleEnterHook((Vehicle) this.entity, (LivingBase) entityplayer.getCanaryEntity());
-                } else {
+                }
+                else {
                     hook = new VehicleExitHook((Vehicle) this.entity, (LivingBase) entityplayer.getCanaryEntity());
                 }
                 hook.call();
@@ -48,7 +52,23 @@ public class EntityMinecartEmpty extends EntityMinecart {
         }
     }
 
-    public int m() {
-        return 0;
+    public void a(int i0, int i1, int i2, boolean flag0) {
+        if (flag0) {
+            if (this.l != null) {
+                this.l.a((Entity) null);
+            }
+
+            if (this.q() == 0) {
+                this.k(-this.r());
+                this.j(10);
+                this.a(50.0F);
+                this.ac();
+            }
+        }
+
+    }
+
+    public EntityMinecart.EnumMinecartType s() {
+        return EntityMinecart.EnumMinecartType.RIDEABLE;
     }
 }

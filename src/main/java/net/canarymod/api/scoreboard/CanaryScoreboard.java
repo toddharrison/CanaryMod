@@ -5,9 +5,11 @@ import net.canarymod.api.entity.living.humanoid.CanaryPlayer;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.minecraft.network.play.server.S3DPacketDisplayScoreboard;
 
+import net.minecraft.scoreboard.ScorePlayerTeam;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import net.canarymod.api.world.World;
 
 /**
  * @author Somners
@@ -36,7 +38,7 @@ public class CanaryScoreboard implements Scoreboard {
     public ScoreObjective addScoreObjective(String name) {
         ScoreObjective so = getScoreObjective(name);
         if (so == null) {
-            so = this.handle.a(name, net.minecraft.scoreboard.IScoreObjectiveCriteria.b).getCanaryScoreObjective();
+            so = this.handle.a(String.format("%s_%s", getSaveName(), name), net.minecraft.scoreboard.IScoreObjectiveCriteria.b).getCanaryScoreObjective();
         }
         return so;
     }
@@ -45,7 +47,7 @@ public class CanaryScoreboard implements Scoreboard {
     public ScoreObjective addScoreObjective(String name, ScoreObjectiveCriteria criteria) {
         ScoreObjective so = getScoreObjective(name);
         if (so == null) {
-            so = this.handle.a(name, ((CanaryScoreDummyCriteria) criteria).getHandle()).getCanaryScoreObjective();
+            so = this.handle.a(String.format("%s_%s", getSaveName(), name), ((CanaryScoreDummyCriteria) criteria).getHandle()).getCanaryScoreObjective();
         }
         return so;
     }
@@ -57,7 +59,7 @@ public class CanaryScoreboard implements Scoreboard {
 
     @Override
     public ScoreObjective getScoreObjective(String name) {
-        net.minecraft.scoreboard.ScoreObjective so = handle.getScoreObjective(name);
+        net.minecraft.scoreboard.ScoreObjective so = handle.getScoreObjective(String.format("%s_%s", getSaveName(), name));
         if (so!= null) {
             return so.getCanaryScoreObjective();
         }
@@ -66,7 +68,7 @@ public class CanaryScoreboard implements Scoreboard {
 
     @Override
     public void removeScoreObjective(String name) {
-        net.minecraft.scoreboard.ScoreObjective obj = handle.getScoreObjective(name);
+        net.minecraft.scoreboard.ScoreObjective obj = handle.getScoreObjective(String.format("%s_%s", getSaveName(), name));
         if (obj != null) {
             handle.k(obj);
         }
@@ -85,12 +87,12 @@ public class CanaryScoreboard implements Scoreboard {
 
     @Override
     public void addTeam(Team team) {
-        handle.a(((CanaryTeam) team).getHandle());
+        handle.addTeam(((CanaryTeam) team).getHandle());
     }
 
     @Override
     public void removeTeam(Team team) {
-        handle.c(((CanaryTeam) team).getHandle());
+        handle.d(((CanaryTeam) team).getHandle());
     }
 
     @Override
@@ -98,7 +100,7 @@ public class CanaryScoreboard implements Scoreboard {
         for (Object o : handle.g()) {
             net.minecraft.scoreboard.ScorePlayerTeam team = (net.minecraft.scoreboard.ScorePlayerTeam) o;
             if (team.b().equalsIgnoreCase(name)) {
-                handle.c(team);
+                handle.d(team);
                 return;
             }
         }
@@ -111,7 +113,7 @@ public class CanaryScoreboard implements Scoreboard {
 
     @Override
     public Score getScore(String name, ScoreObjective scoreObjective) {
-        return handle.a(name, ((CanaryScoreObjective) scoreObjective).getHandle()).getCanaryScore();
+        return handle.c(name, ((CanaryScoreObjective) scoreObjective).getHandle()).getCanaryScore();
     }
 
     @Override
@@ -163,5 +165,33 @@ public class CanaryScoreboard implements Scoreboard {
     @Override
     public String getSaveName() {
         return saveName;
+    }
+
+    @Override
+    public void setScoreboardPosition(ScorePosition type, ScoreObjective objective, World world) {
+        for (Player player : world.getPlayerList()) {
+            this.setScoreboardPosition(type, objective, player);
+        }
+    }
+    
+    @Override
+    public void removeScore(String name) {
+        handle.d(name, null);
+    }
+
+    @Override
+    public void removeScore(String name, ScoreObjective objective) {
+        handle.d(name, ((CanaryScoreObjective) objective).getHandle());
+    }
+    
+    @Override
+    public Team getTeam(String name) {
+        ScorePlayerTeam team = handle.d(name);
+        return team != null ? team.getCanaryTeam() : null;
+    }
+    
+    @Override
+    public Team addTeam(String name) throws IllegalArgumentException {
+        return handle.e(name).getCanaryTeam();
     }
 }

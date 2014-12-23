@@ -27,7 +27,7 @@ public abstract class CanaryEntityLiving extends CanaryLivingBase implements Ent
     @Override
     public void moveEntityToXYZ(double x, double y, double z, float speed) {
         this.lookAt(x, y, z);
-        getHandle().k().a(x, y, z, speed);
+        getHandle().q().a(x, y, z, speed);
     }
 
     /**
@@ -35,7 +35,7 @@ public abstract class CanaryEntityLiving extends CanaryLivingBase implements Ent
      */
     @Override
     public void playLivingSound() {
-        ((net.minecraft.entity.EntityLiving) entity).r();
+        ((net.minecraft.entity.EntityLiving) entity).x();
     }
 
     /**
@@ -68,7 +68,7 @@ public abstract class CanaryEntityLiving extends CanaryLivingBase implements Ent
      */
     @Override
     public LivingBase getAttackTarget() {
-        net.minecraft.entity.EntityLivingBase target = getHandle().o();
+        net.minecraft.entity.EntityLivingBase target = getHandle().u();
         return target == null ? null : (CanaryLivingBase) target.getCanaryEntity();
     }
 
@@ -90,7 +90,7 @@ public abstract class CanaryEntityLiving extends CanaryLivingBase implements Ent
      */
     @Override
     public Item getItemInHand() {
-        return getHandle().be().getCanaryItem();
+        return getHandle().bz().getCanaryItem();
     }
 
     /**
@@ -98,7 +98,7 @@ public abstract class CanaryEntityLiving extends CanaryLivingBase implements Ent
      */
     @Override
     public Item[] getEquipment() {
-        return CanaryItem.stackArrayToItemArray(getHandle().ak());
+        return CanaryItem.stackArrayToItemArray(getHandle().at());
     }
 
     /**
@@ -164,7 +164,7 @@ public abstract class CanaryEntityLiving extends CanaryLivingBase implements Ent
      */
     @Override
     public boolean canPickUpLoot() {
-        return getHandle().bJ();
+        return getHandle().bX();
     }
 
     /**
@@ -180,7 +180,7 @@ public abstract class CanaryEntityLiving extends CanaryLivingBase implements Ent
      */
     @Override
     public boolean isPersistenceRequired() {
-        return getHandle().bK();
+        return getHandle().bY();
     }
 
     /**
@@ -188,7 +188,7 @@ public abstract class CanaryEntityLiving extends CanaryLivingBase implements Ent
      */
     @Override
     public PathFinder getPathFinder() {
-        return getHandle().m().getCanaryPathFinder();
+        return getHandle().s().getCanaryPathFinder();
     }
 
     /**
@@ -203,43 +203,8 @@ public abstract class CanaryEntityLiving extends CanaryLivingBase implements Ent
      * {@inheritDoc}
      */
     @Override
-    public boolean hasDisplayName() {
-        return getHandle().bI();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getDisplayName() {
-        return getHandle().bG();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setDisplayName(String display) {
-        if (display == null) {
-            display = "";
-        }
-        getHandle().a(display);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean showingDisplayName() { // TODO: checkthat this is actually right
-        return getHandle().bI();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setShowDisplayName(boolean show) {
-        getHandle().g(show);
+    public AIManager getAITargetTaskManager() {
+        return getHandle().getTargetTasks().getAIManager();
     }
 
     /**

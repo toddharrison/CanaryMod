@@ -1,6 +1,9 @@
 package net.canarymod.api.entity.living.monster;
 
 import net.canarymod.api.entity.EntityType;
+import net.canarymod.api.world.blocks.Block;
+import net.canarymod.api.world.blocks.CanaryBlock;
+import net.canarymod.api.world.position.BlockPosition;
 import net.minecraft.entity.monster.EntityEnderman;
 
 /**
@@ -33,12 +36,22 @@ public class CanaryEnderman extends CanaryEntityMob implements Enderman {
         return "Enderman";
     }
 
+    @Override
+    public Block getCarriedBlock() {
+        return CanaryBlock.getPooledBlock(getHandle().ck(), new BlockPosition(this.getPosition()).asNative(), this.entity.e());
+    }
+
+    @Override
+    public void setCarriedBlock(Block block) {
+        getHandle().a(((CanaryBlock)block).getNativeState());
+    }
+
     /**
      * {@inheritDoc}
      */
     @Override
     public short getCarriedBlockID() {
-        return (short) net.minecraft.block.Block.b(getHandle().cb());
+        return (short)net.minecraft.block.Block.a(getHandle().ck().c());
     }
 
     /**
@@ -46,7 +59,7 @@ public class CanaryEnderman extends CanaryEntityMob implements Enderman {
      */
     @Override
     public void setCarriedBlockID(short blockId) {
-        getHandle().a(net.minecraft.block.Block.e(blockId));
+        getHandle().a(net.minecraft.block.Block.d(blockId));
     }
 
     /**
@@ -54,7 +67,7 @@ public class CanaryEnderman extends CanaryEntityMob implements Enderman {
      */
     @Override
     public short getCarriedBlockMetaData() {
-        return (short) getHandle().cc();
+        return (short) getHandle().ck().c().c(getHandle().ck());
     }
 
     /**
@@ -62,7 +75,7 @@ public class CanaryEnderman extends CanaryEntityMob implements Enderman {
      */
     @Override
     public void setCarriedBlockMetaData(short metadata) {
-        getHandle().a(metadata);
+        //getHandle().a(metadata);
     }
 
     /**
@@ -70,7 +83,7 @@ public class CanaryEnderman extends CanaryEntityMob implements Enderman {
      */
     @Override
     public boolean randomTeleport() {
-        return getHandle().bZ();
+        return getHandle().n();
     }
 
     /**
@@ -78,7 +91,7 @@ public class CanaryEnderman extends CanaryEntityMob implements Enderman {
      */
     @Override
     public boolean isScreaming() {
-        return getHandle().cd();
+        return getHandle().cm();
     }
 
     /**

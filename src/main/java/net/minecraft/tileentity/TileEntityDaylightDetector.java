@@ -2,18 +2,19 @@ package net.minecraft.tileentity;
 
 import net.canarymod.api.world.blocks.CanaryDaylightDetector;
 import net.minecraft.block.BlockDaylightDetector;
+import net.minecraft.server.gui.IUpdatePlayerListBox;
 
-public class TileEntityDaylightDetector extends TileEntity {
+public class TileEntityDaylightDetector extends TileEntity implements IUpdatePlayerListBox {
 
     public TileEntityDaylightDetector() {
         this.complexBlock = new CanaryDaylightDetector(this); // CanaryMod: wrap tile entity
     }
 
-    public void h() {
-        if (this.b != null && !this.b.E && this.b.I() % 20L == 0L) {
-            this.h = this.q();
-            if (this.h instanceof BlockDaylightDetector) {
-                ((BlockDaylightDetector) this.h).e(this.b, this.c, this.d, this.e);
+    public void c() {
+        if (this.b != null && !this.b.D && this.b.K() % 20L == 0L) {
+            this.e = this.w();
+            if (this.e instanceof BlockDaylightDetector) {
+                ((BlockDaylightDetector) this.e).d(this.b, this.c);
             }
         }
     }

@@ -43,7 +43,7 @@ public class CanaryPainting extends CanaryHangingEntity implements Painting {
      */
     @Override
     public ArtType getArtType() {
-        return ArtType.values()[getHandle().e.ordinal()];
+        return ArtType.values()[getHandle().c.ordinal()];
     }
 
     /**
@@ -51,7 +51,7 @@ public class CanaryPainting extends CanaryHangingEntity implements Painting {
      */
     @Override
     public void setArtType(ArtType type) {
-        getHandle().e = EntityPainting.EnumArt.values()[type.ordinal()];
+        getHandle().c = EntityPainting.EnumArt.values()[type.ordinal()];
     }
 
     /**
@@ -59,7 +59,7 @@ public class CanaryPainting extends CanaryHangingEntity implements Painting {
      */
     @Override
     public int getSizeX() {
-        return getHandle().f();
+        return getHandle().l();
     }
 
     /**
@@ -67,7 +67,7 @@ public class CanaryPainting extends CanaryHangingEntity implements Painting {
      */
     @Override
     public int getSizeY() {
-        return getHandle().i();
+        return getHandle().m();
     }
 
     /**
@@ -75,7 +75,7 @@ public class CanaryPainting extends CanaryHangingEntity implements Painting {
      */
     @Override
     public int getOffsetX() {
-        return getHandle().e.E;
+        return getHandle().c.E;
     }
 
     /**
@@ -83,7 +83,7 @@ public class CanaryPainting extends CanaryHangingEntity implements Painting {
      */
     @Override
     public int getOffsetY() {
-        return getHandle().e.F;
+        return getHandle().c.F;
     }
 
     /**

@@ -8,7 +8,7 @@ import net.minecraft.nbt.NBTTagDouble;
  * @author Greg (gregthegeek)
  * @author Jason (darkdiplomat)
  */
-public class CanaryDoubleTag extends CanaryPrimativeTag implements DoubleTag {
+public class CanaryDoubleTag extends CanaryPrimitiveTag<DoubleTag> implements DoubleTag {
 
     /**
      * Constructs a new wrapper for NBTTagDouble
@@ -23,8 +23,6 @@ public class CanaryDoubleTag extends CanaryPrimativeTag implements DoubleTag {
     /**
      * Constructs a new CanaryDoubleTag and associated NBTTagDouble
      *
-     * @param name
-     *         the name of the tag
      * @param value
      *         the double to supply the tag
      */
@@ -53,7 +51,7 @@ public class CanaryDoubleTag extends CanaryPrimativeTag implements DoubleTag {
      */
     @Override
     public DoubleTag copy() {
-        return new CanaryDoubleTag((NBTTagDouble) getHandle().b());
+        return new CanaryDoubleTag((NBTTagDouble)getHandle().b());
     }
 
     /**
@@ -61,7 +59,6 @@ public class CanaryDoubleTag extends CanaryPrimativeTag implements DoubleTag {
      */
     @Override
     public NBTTagDouble getHandle() {
-        return (NBTTagDouble) tag;
+        return (NBTTagDouble)tag;
     }
-
 }

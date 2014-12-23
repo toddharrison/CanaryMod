@@ -29,7 +29,7 @@ public class AnvilSaveHandler extends SaveHandler {
 
     public void a() {
         try {
-            ThreadedFileIOBase.a.a();
+            ThreadedFileIOBase.a().b();
         }
         catch (InterruptedException interruptedexception) {
             interruptedexception.printStackTrace();

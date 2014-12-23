@@ -26,6 +26,7 @@ public class CanaryDoubleChest extends CanaryChest implements DoubleChest {
     public CanaryDoubleChest(InventoryLargeChest largechest) {
         super((TileEntityChest) largechest.b);
         this.largechest = largechest;
+        inventory = largechest;
     }
 
     /**

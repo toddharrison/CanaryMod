@@ -3,11 +3,12 @@ package net.minecraft.block;
 import net.canarymod.api.world.blocks.CanaryBlock;
 import net.canarymod.hook.world.RedstoneChangeHook;
 import net.minecraft.block.material.MapColor;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
-import static net.canarymod.api.world.blocks.BlockType.RedstoneBlock;
 
 public class BlockCompressedPowered extends BlockCompressed {
 
@@ -16,26 +17,24 @@ public class BlockCompressedPowered extends BlockCompressed {
         this.a(CreativeTabs.d);
     }
 
-    public boolean f() {
+    public boolean g() {
         return true;
     }
 
-    public int b(IBlockAccess iblockaccess, int i0, int i1, int i2, int i3) {
+    public int a(IBlockAccess iblockaccess, BlockPos blockpos, IBlockState iblockstate, EnumFacing enumfacing) {
         return 15;
     }
 
     // CanaryMod: pull place method in to do RedstoneChange
-    @Override
-    public void b(World world, int i0, int i1, int i2) {
-        new RedstoneChangeHook(new CanaryBlock(RedstoneBlock.getId(), (short) 0, i0, i1, i2, world.getCanaryWorld()), 0, 15).call();
-        super.a(world, i0, i1, i2);
+    public void c(World world, BlockPos blockpos, IBlockState iblockstate) {
+        new RedstoneChangeHook(CanaryBlock.getPooledBlock(iblockstate, blockpos, world), 0, 15); //Can't really cancel this here...
+        super.c(world, blockpos, iblockstate);
     }
 
     // CanaryMod: pull break method in to do RedstoneChange
-    @Override
-    public void a(World world, int i0, int i1, int i2, Block block, int i3) {
-        new RedstoneChangeHook(new CanaryBlock(RedstoneBlock.getId(), (short) 0, i0, i1, i2, world.getCanaryWorld()), 15, 0).call();
-        super.a(world, i0, i1, i2, block);
+    public void b(World world, BlockPos blockpos, IBlockState iblockstate) {
+        new RedstoneChangeHook(CanaryBlock.getPooledBlock(iblockstate, blockpos, world), 15, 0); //Can't really cancel this here...
+        super.b(world, blockpos, iblockstate);
     }
     //
 }

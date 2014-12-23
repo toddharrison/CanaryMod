@@ -5,6 +5,7 @@ import net.canarymod.api.inventory.CanaryItem;
 import net.canarymod.hook.player.ArmorBrokenHook;
 import net.canarymod.hook.player.ItemPickupHook;
 import net.minecraft.block.Block;
+import net.minecraft.command.server.CommandTestForBlock;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.entity.EntityLivingBase;
@@ -16,6 +17,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.IChatComponent;
 import net.minecraft.util.ReportedException;
 
 import java.util.concurrent.Callable;
@@ -26,7 +30,7 @@ public class InventoryPlayer implements IInventory {
     public ItemStack[] b = new ItemStack[4];
     public int c;
     public EntityPlayer d;
-    private ItemStack g;
+    private ItemStack f;
     public boolean e;
     private String name = "container.inventory"; // CanaryMod: custom inventory name
 
@@ -54,7 +58,7 @@ public class InventoryPlayer implements IInventory {
 
     private int d(ItemStack itemstack) {
         for (int i0 = 0; i0 < this.a.length; ++i0) {
-            if (this.a[i0] != null && this.a[i0].b() == itemstack.b() && this.a[i0].f() && this.a[i0].b < this.a[i0].e() && this.a[i0].b < this.d() && (!this.a[i0].h() || this.a[i0].k() == itemstack.k()) && ItemStack.a(this.a[i0], itemstack)) {
+            if (this.a[i0] != null && this.a[i0].b() == itemstack.b() && this.a[i0].d() && this.a[i0].b < this.a[i0].c() && this.a[i0].b < this.p_() && (!this.a[i0].f() || this.a[i0].i() == itemstack.i()) && ItemStack.a(this.a[i0], itemstack)) {
                 return i0;
             }
         }
@@ -72,94 +76,115 @@ public class InventoryPlayer implements IInventory {
         return -1;
     }
 
-    public int a(Item item, int i0) {
-        int i1 = 0;
+    public int a(Item item, int i0, int i1, NBTTagCompound nbttagcompound) {
+        int i2 = 0;
 
-        int i2;
+        int i3;
         ItemStack itemstack;
+        int i4;
 
-        for (i2 = 0; i2 < this.a.length; ++i2) {
-            itemstack = this.a[i2];
-            if (itemstack != null && (item == null || itemstack.b() == item) && (i0 <= -1 || itemstack.k() == i0)) {
-                i1 += itemstack.b;
-                this.a[i2] = null;
+        for (i3 = 0; i3 < this.a.length; ++i3) {
+            itemstack = this.a[i3];
+            if (itemstack != null && (item == null || itemstack.b() == item) && (i0 <= -1 || itemstack.i() == i0) && (nbttagcompound == null || CommandTestForBlock.a(nbttagcompound, itemstack.o(), true))) {
+                i4 = i1 <= 0 ? itemstack.b : Math.min(i1 - i2, itemstack.b);
+                i2 += i4;
+                if (i1 != 0) {
+                    this.a[i3].b -= i4;
+                    if (this.a[i3].b == 0) {
+                        this.a[i3] = null;
+                    }
+
+                    if (i1 > 0 && i2 >= i1) {
+                        return i2;
+                    }
+                }
             }
         }
 
-        for (i2 = 0; i2 < this.b.length; ++i2) {
-            itemstack = this.b[i2];
-            if (itemstack != null && (item == null || itemstack.b() == item) && (i0 <= -1 || itemstack.k() == i0)) {
-                i1 += itemstack.b;
-                this.b[i2] = null;
+        for (i3 = 0; i3 < this.b.length; ++i3) {
+            itemstack = this.b[i3];
+            if (itemstack != null && (item == null || itemstack.b() == item) && (i0 <= -1 || itemstack.i() == i0) && (nbttagcompound == null || CommandTestForBlock.a(nbttagcompound, itemstack.o(), false))) {
+                i4 = i1 <= 0 ? itemstack.b : Math.min(i1 - i2, itemstack.b);
+                i2 += i4;
+                if (i1 != 0) {
+                    this.b[i3].b -= i4;
+                    if (this.b[i3].b == 0) {
+                        this.b[i3] = null;
+                    }
+
+                    if (i1 > 0 && i2 >= i1) {
+                        return i2;
+                    }
+                }
             }
         }
 
-        if (this.g != null) {
-            if (item != null && this.g.b() != item) {
-                return i1;
+        if (this.f != null) {
+            if (item != null && this.f.b() != item) {
+                return i2;
             }
 
-            if (i0 > -1 && this.g.k() != i0) {
-                return i1;
+            if (i0 > -1 && this.f.i() != i0) {
+                return i2;
             }
 
-            i1 += this.g.b;
-            this.b((ItemStack) null);
+            if (nbttagcompound != null && !CommandTestForBlock.a(nbttagcompound, this.f.o(), false)) {
+                return i2;
+            }
+
+            i3 = i1 <= 0 ? this.f.b : Math.min(i1 - i2, this.f.b);
+            i2 += i3;
+            if (i1 != 0) {
+                this.f.b -= i3;
+                if (this.f.b == 0) {
+                    this.f = null;
+                }
+
+                if (i1 > 0 && i2 >= i1) {
+                    return i2;
+                }
+            }
         }
 
-        return i1;
+        return i2;
     }
 
     private int e(ItemStack itemstack) {
         Item item = itemstack.b();
         int i0 = itemstack.b;
-        int i1;
+        int i1 = this.d(itemstack);
 
-        if (itemstack.e() == 1) {
+        if (i1 < 0) {
             i1 = this.j();
-            if (i1 < 0) {
-                return i0;
-            } else {
-                if (this.a[i1] == null) {
-                    this.a[i1] = ItemStack.b(itemstack);
-                }
+        }
 
-                return 0;
-            }
+        if (i1 < 0) {
+            return i0;
         } else {
-            i1 = this.d(itemstack);
-            if (i1 < 0) {
-                i1 = this.j();
+            if (this.a[i1] == null) {
+                this.a[i1] = new ItemStack(item, 0, itemstack.i());
+                if (itemstack.n()) {
+                    this.a[i1].d((NBTTagCompound) itemstack.o().b());
+                }
             }
 
-            if (i1 < 0) {
+            int i2 = i0;
+
+            if (i0 > this.a[i1].c() - this.a[i1].b) {
+                i2 = this.a[i1].c() - this.a[i1].b;
+            }
+
+            if (i2 > this.p_() - this.a[i1].b) {
+                i2 = this.p_() - this.a[i1].b;
+            }
+
+            if (i2 == 0) {
                 return i0;
             } else {
-                if (this.a[i1] == null) {
-                    this.a[i1] = new ItemStack(item, 0, itemstack.k());
-                    if (itemstack.p()) {
-                        this.a[i1].d((NBTTagCompound) itemstack.q().b());
-                    }
-                }
-
-                int i2 = i0;
-
-                if (i0 > this.a[i1].e() - this.a[i1].b) {
-                    i2 = this.a[i1].e() - this.a[i1].b;
-                }
-
-                if (i2 > this.d() - this.a[i1].b) {
-                    i2 = this.d() - this.a[i1].b;
-                }
-
-                if (i2 == 0) {
-                    return i0;
-                } else {
-                    i0 -= i2;
-                    this.a[i1].b += i2;
-                    this.a[i1].c = 5;
-                    return i0;
-                }
+                i0 -= i2;
+                this.a[i1].b += i2;
+                this.a[i1].c = 5;
+                return i0;
             }
         }
     }
@@ -170,6 +195,7 @@ public class InventoryPlayer implements IInventory {
                 this.a[i0].a(this.d.o, this.d, i0, this.c == i0);
             }
         }
+
     }
 
     public boolean a(Item item) {
@@ -194,48 +220,52 @@ public class InventoryPlayer implements IInventory {
 
     // CanaryMod: Simulate Pickup (Its the same as a(ItemStack) but without altering the inventory
     public boolean canPickup(EntityItem entityitem) {
-        ItemStack itemstack = entityitem.f();
-        int i;
+        ItemStack itemstack = entityitem.l();
 
-        if (itemstack.i()) {
-            i = this.j();
-            if (i >= 0) {
-                // CanaryMod: ItemPickUp
-                ItemPickupHook hook = (ItemPickupHook) new ItemPickupHook(((EntityPlayerMP) this.d).getPlayer(), (net.canarymod.api.entity.EntityItem) entityitem.getCanaryEntity()).call();
-                return !hook.isCanceled();
-                //
-            } else if (this.d.bE.d) {
-                return true;
+        if (itemstack != null && itemstack.b != 0 && itemstack.b() != null) {
+            int i0;
+
+            if (itemstack.g()) {
+                i0 = this.j();
+                if (i0 >= 0) {
+                    // CanaryMod: ItemPickUp
+                    ItemPickupHook hook = (ItemPickupHook) new ItemPickupHook(((EntityPlayerMP) this.d).getPlayer(), (net.canarymod.api.entity.EntityItem) entityitem.getCanaryEntity()).call();
+                    return !hook.isCanceled();
+                    //
+                } else if (this.d.by.d) {
+                    return true;
+                } else {
+                    return false;
+                }
             } else {
-                return false;
+                int slot = 0;
+                int left = itemstack.b;
+                do {
+                    ItemStack itemstack1 = this.a[slot];
+                    int delta = 0;
+                    if (itemstack1 == null) {
+                        delta = Math.min(64, left);
+                    } else if (itemstack1.b < 64 && itemstack.c == itemstack1.c && itemstack.e() == itemstack1.e()) {
+                        delta = Math.min(64 - itemstack.b, left);
+                    }
+                    left -= delta;
+                    slot++;
+                }
+                while (left > 0 && slot < 36);
+
+                if (itemstack.b - left > 0) {
+                    // CanaryMod: ItemPickUp
+                    if (this.d instanceof EntityPlayerMP) { // Cause NPC may be picking something up...
+                        return !((ItemPickupHook) new ItemPickupHook(((EntityPlayerMP) this.d).getPlayer(), (net.canarymod.api.entity.EntityItem) entityitem.getCanaryEntity()).call()).isCanceled();
+                    }
+                    return true;
+                    //
+                } else {
+                    return false;
+                }
             }
         } else {
-            int slot = 0;
-            int left = itemstack.b;
-
-            do {
-                ItemStack itemstack1 = this.a[slot];
-                int delta = 0;
-
-                if (itemstack1 == null) {
-                    delta = Math.min(64, left);
-                } else if (itemstack1.b < 64 && itemstack.c == itemstack1.c && itemstack.e() == itemstack1.e()) {
-                    delta = Math.min(64 - itemstack.b, left);
-                }
-                left -= delta;
-                slot++;
-            }
-            while (left > 0 && slot < 36);
-            if (itemstack.b - left > 0) {
-                // CanaryMod: ItemPickUp
-                if (this.d instanceof EntityPlayerMP) { // Cause NPC may be picking something up...
-                    return !((ItemPickupHook) new ItemPickupHook(((EntityPlayerMP) this.d).getPlayer(), (net.canarymod.api.entity.EntityItem) entityitem.getCanaryEntity()).call()).isCanceled();
-                }
-                return true;
-                //
-            } else {
-                return false;
-            }
+            return false;
         }
     }
 
@@ -244,14 +274,14 @@ public class InventoryPlayer implements IInventory {
             try {
                 int i0;
 
-                if (itemstack.i()) {
+                if (itemstack.g()) {
                     i0 = this.j();
                     if (i0 >= 0) {
                         this.a[i0] = ItemStack.b(itemstack);
                         this.a[i0].c = 5;
                         itemstack.b = 0;
                         return true;
-                    } else if (this.d.bE.d) {
+                    } else if (this.d.by.d) {
                         itemstack.b = 0;
                         return true;
                     } else {
@@ -261,10 +291,9 @@ public class InventoryPlayer implements IInventory {
                     do {
                         i0 = itemstack.b;
                         itemstack.b = this.e(itemstack);
-                    }
-                    while (itemstack.b > 0 && itemstack.b < i0);
+                    } while (itemstack.b > 0 && itemstack.b < i0);
 
-                    if (itemstack.b == i0 && this.d.bE.d) {
+                    if (itemstack.b == i0 && this.d.by.d) {
                         itemstack.b = 0;
                         return true;
                     } else {
@@ -276,11 +305,11 @@ public class InventoryPlayer implements IInventory {
                 CrashReportCategory crashreportcategory = crashreport.a("Item being added");
 
                 crashreportcategory.a("Item ID", (Object) Integer.valueOf(Item.b(itemstack.b())));
-                crashreportcategory.a("Item data", (Object) Integer.valueOf(itemstack.k()));
+                crashreportcategory.a("Item data", (Object) Integer.valueOf(itemstack.i()));
                 crashreportcategory.a("Item name", new Callable() {
 
                     public String call() {
-                        return itemstack.s();
+                        return itemstack.q();
                     }
                 });
                 throw new ReportedException(crashreport);
@@ -318,7 +347,7 @@ public class InventoryPlayer implements IInventory {
         }
     }
 
-    public ItemStack a_(int i0) {
+    public ItemStack b(int i0) {
         ItemStack[] aitemstack = this.a;
 
         if (i0 >= this.a.length) {
@@ -401,9 +430,10 @@ public class InventoryPlayer implements IInventory {
                 }
             }
         }
+
     }
 
-    public int a() {
+    public int n_() {
         return this.a.length + 4;
     }
 
@@ -418,7 +448,7 @@ public class InventoryPlayer implements IInventory {
         return aitemstack[i0];
     }
 
-    public String b() {
+    public String d_() {
         return name; // CanaryMod: return name
     }
 
@@ -426,12 +456,16 @@ public class InventoryPlayer implements IInventory {
         return false;
     }
 
-    public int d() {
+    public IChatComponent e_() {
+        return (IChatComponent) (this.k_() ? new ChatComponentText(this.d_()) : new ChatComponentTranslation(this.d_(), new Object[0]));
+    }
+
+    public int p_() {
         return 64;
     }
 
     public boolean b(Block block) {
-        if (block.o().l()) {
+        if (block.r().l()) {
             return true;
         } else {
             ItemStack itemstack = this.a(this.c);
@@ -440,11 +474,11 @@ public class InventoryPlayer implements IInventory {
         }
     }
 
-    public ItemStack d(int i0) {
+    public ItemStack e(int i0) {
         return this.b[i0];
     }
 
-    public int l() {
+    public int m() {
         int i0 = 0;
 
         for (int i1 = 0; i1 < this.b.length; ++i1) {
@@ -479,9 +513,10 @@ public class InventoryPlayer implements IInventory {
                 }
             }
         }
+
     }
 
-    public void m() {
+    public void n() {
         int i0;
 
         for (i0 = 0; i0 < this.a.length; ++i0) {
@@ -497,22 +532,23 @@ public class InventoryPlayer implements IInventory {
                 this.b[i0] = null;
             }
         }
+
     }
 
-    public void e() {
+    public void o_() {
         this.e = true;
     }
 
     public void b(ItemStack itemstack) {
-        this.g = itemstack;
+        this.f = itemstack;
     }
 
-    public ItemStack o() {
-        return this.g;
+    public ItemStack p() {
+        return this.f;
     }
 
     public boolean a(EntityPlayer entityplayer) {
-        return this.d.K ? false : entityplayer.f(this.d) <= 64.0D;
+        return this.d.I ? false : entityplayer.h(this.d) <= 64.0D;
     }
 
     public boolean c(ItemStack itemstack) {
@@ -533,11 +569,9 @@ public class InventoryPlayer implements IInventory {
         return false;
     }
 
-    public void f() {
-    }
+    public void b(EntityPlayer entityplayer) {}
 
-    public void l_() {
-    }
+    public void c(EntityPlayer entityplayer) {}
 
     public boolean b(int i0, ItemStack itemstack) {
         return true;
@@ -555,6 +589,29 @@ public class InventoryPlayer implements IInventory {
         }
 
         this.c = inventoryplayer.c;
+    }
+
+    public int a_(int i0) {
+        return 0;
+    }
+
+    public void b(int i0, int i1) {}
+
+    public int g() {
+        return 0;
+    }
+
+    public void l() {
+        int i0;
+
+        for (i0 = 0; i0 < this.a.length; ++i0) {
+            this.a[i0] = null;
+        }
+
+        for (i0 = 0; i0 < this.b.length; ++i0) {
+            this.b[i0] = null;
+        }
+
     }
 
     // CanaryMod

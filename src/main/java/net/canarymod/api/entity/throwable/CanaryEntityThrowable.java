@@ -41,7 +41,7 @@ public abstract class CanaryEntityThrowable extends CanaryEntity implements Enti
      */
     @Override
     public LivingBase getThrower() {
-        return (LivingBase) getHandle().j().getCanaryEntity();
+        return (LivingBase) getHandle().n().getCanaryEntity();
     }
 
     /**

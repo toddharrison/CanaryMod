@@ -3,11 +3,15 @@ package net.minecraft.entity.item;
 import net.canarymod.api.entity.throwable.CanaryEnderPearl;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.monster.EntityEndermite;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+
 
 public class EntityEnderPearl extends EntityThrowable {
 
@@ -22,30 +26,53 @@ public class EntityEnderPearl extends EntityThrowable {
     }
 
     protected void a(MovingObjectPosition movingobjectposition) {
-        if (movingobjectposition.g != null) {
-            movingobjectposition.g.a(DamageSource.a((Entity) this, this.j()), 0.0F);
+        EntityLivingBase entitylivingbase = this.n();
+
+        if (movingobjectposition.d != null) {
+            movingobjectposition.d.a(DamageSource.a((Entity) this, entitylivingbase), 0.0F);
         }
 
         for (int i0 = 0; i0 < 32; ++i0) {
-            this.o.a("portal", this.s, this.t + this.Z.nextDouble() * 2.0D, this.u, this.Z.nextGaussian(), 0.0D, this.Z.nextGaussian());
+            this.o.a(EnumParticleTypes.PORTAL, this.s, this.t + this.V.nextDouble() * 2.0D, this.u, this.V.nextGaussian(), 0.0D, this.V.nextGaussian(), new int[0]);
         }
 
-        if (!this.o.E) {
-            if (this.j() != null && this.j() instanceof EntityPlayerMP) {
-                EntityPlayerMP entityplayermp = (EntityPlayerMP) this.j();
+        if (!this.o.D) {
+            if (entitylivingbase instanceof EntityPlayerMP) {
+                EntityPlayerMP entityplayermp = (EntityPlayerMP) entitylivingbase;
 
-                if (entityplayermp.a.b().d() && entityplayermp.o == this.o) {
-                    if (this.j().am()) {
-                        this.j().a((Entity) null);
+                if (entityplayermp.a.a().g() && entityplayermp.o == this.o && !entityplayermp.bI()) {
+                    if (this.V.nextFloat() < 0.05F && this.o.Q().b("doMobSpawning")) {
+                        EntityEndermite entityendermite = new EntityEndermite(this.o);
+
+                        entityendermite.a(true);
+                        entityendermite.b(entitylivingbase.s, entitylivingbase.t, entitylivingbase.u, entitylivingbase.y, entitylivingbase.z);
+                        this.o.d((Entity) entityendermite);
                     }
 
-                    this.j().a(this.s, this.t, this.u);
-                    this.j().R = 0.0F;
-                    this.j().a(DamageSource.h, 5.0F);
+                    if (entitylivingbase.av()) {
+                        entitylivingbase.a((Entity) null);
+                    }
+
+                    entitylivingbase.a(this.s, this.t, this.u);
+                    entitylivingbase.O = 0.0F;
+                    entitylivingbase.a(DamageSource.i, 5.0F);
                 }
             }
 
-            this.B();
+            this.J();
         }
+
+    }
+
+    public void s_() {
+        EntityLivingBase entitylivingbase = this.n();
+
+        if (entitylivingbase != null && entitylivingbase instanceof EntityPlayer && !entitylivingbase.ai()) {
+            this.J();
+        }
+        else {
+            super.s_();
+        }
+
     }
 }

@@ -1,5 +1,6 @@
 package net.canarymod.api.commandsys;
 
+import java.util.List;
 import net.canarymod.api.CanaryServer;
 import net.canarymod.api.entity.living.humanoid.CanaryPlayer;
 import net.canarymod.api.entity.living.humanoid.Player;
@@ -46,16 +47,16 @@ public class CanaryPlayerSelector implements PlayerSelector {
     @Override
     public Player[] matchPlayers(MessageReceiver caller, String pattern) {
         if (caller instanceof CanaryServer) {
-            return this.toCanaryPlayers(net.minecraft.command.PlayerSelector.c(((CanaryServer) caller).getHandle(), pattern));
+            return this.toCanaryPlayers(net.minecraft.command.PlayerSelector.b(((CanaryServer) caller).getHandle(), pattern, EntityPlayerMP.class));
         }
         else if (caller instanceof CanaryPlayer) {
-            return this.toCanaryPlayers(net.minecraft.command.PlayerSelector.c(((CanaryPlayer) caller).getHandle(), pattern));
+            return this.toCanaryPlayers(net.minecraft.command.PlayerSelector.b(((CanaryPlayer) caller).getHandle(), pattern, EntityPlayerMP.class));
         }
         else if (caller instanceof CanaryCommandBlock) {
-            return this.toCanaryPlayers(net.minecraft.command.PlayerSelector.c(((CanaryCommandBlock) caller).getLogic(), pattern));
+            return this.toCanaryPlayers(net.minecraft.command.PlayerSelector.b(((CanaryCommandBlock) caller).getLogic(), pattern, EntityPlayerMP.class));
         }
         else if (caller instanceof CanaryCommandBlockMinecart) {
-            return this.toCanaryPlayers(net.minecraft.command.PlayerSelector.c(((CanaryCommandBlockMinecart) caller).getLogic(), pattern));
+            return this.toCanaryPlayers(net.minecraft.command.PlayerSelector.b(((CanaryCommandBlockMinecart) caller).getHandle(), pattern, EntityPlayerMP.class));
         }
         else
             return null;
@@ -69,11 +70,11 @@ public class CanaryPlayerSelector implements PlayerSelector {
         return net.minecraft.command.PlayerSelector.a(pattern);
     }
 
-    private Player[] toCanaryPlayers(EntityPlayerMP[] players) {
+    private Player[] toCanaryPlayers(List players) {
         if (players != null) {
-            Player[] canaryPlayers = new Player[players.length];
-            for (int i = 0; i < players.length; i++) {
-                canaryPlayers[i] = players[i].getPlayer();
+            Player[] canaryPlayers = new Player[players.size()];
+            for (int i = 0; i < players.size(); i++) {
+                canaryPlayers[i] = ((EntityPlayerMP) players.get(i)).getPlayer();
             }
             return canaryPlayers;
         }

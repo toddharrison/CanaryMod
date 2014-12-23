@@ -1,32 +1,36 @@
 package net.minecraft.nbt;
 
 
+import com.google.common.collect.Lists;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 
 public class NBTTagList extends NBTBase {
 
-    public List b = new ArrayList(); // CanaryMod: private => public
-    private byte c = 0;
+    private static final Logger b = LogManager.getLogger();
+    public List c = Lists.newArrayList(); // CanaryMod: private => public
+    private byte d = 0;
 
     void a(DataOutput dataoutput) throws IOException {
-        if (!this.b.isEmpty()) {
-            this.c = ((NBTBase) this.b.get(0)).a();
+        if (!this.c.isEmpty()) {
+            this.d = ((NBTBase) this.c.get(0)).a();
         }
         else {
-            this.c = 0;
+            this.d = 0;
         }
 
-        dataoutput.writeByte(this.c);
-        dataoutput.writeInt(this.b.size());
+        dataoutput.writeByte(this.d);
+        dataoutput.writeInt(this.c.size());
 
-        for (int i0 = 0; i0 < this.b.size(); ++i0) {
-            ((NBTBase) this.b.get(i0)).a(dataoutput);
+        for (int i0 = 0; i0 < this.c.size(); ++i0) {
+            ((NBTBase) this.c.get(i0)).a(dataoutput);
         }
 
     }
@@ -37,16 +41,16 @@ public class NBTTagList extends NBTBase {
         }
         else {
             nbtsizetracker.a(8L);
-            this.c = datainput.readByte();
+            this.d = datainput.readByte();
             int i1 = datainput.readInt();
 
-            this.b = new ArrayList();
+            this.c = Lists.newArrayList();
 
             for (int i2 = 0; i2 < i1; ++i2) {
-                NBTBase nbtbase = NBTBase.a(this.c);
+                NBTBase nbtbase = NBTBase.a(this.d);
 
                 nbtbase.a(datainput, i0 + 1, nbtsizetracker);
-                this.b.add(nbtbase);
+                this.c.add(nbtbase);
             }
 
         }
@@ -60,7 +64,7 @@ public class NBTTagList extends NBTBase {
         String s0 = "[";
         int i0 = 0;
 
-        for (Iterator iterator = this.b.iterator(); iterator.hasNext(); ++i0) {
+        for (Iterator iterator = this.c.iterator(); iterator.hasNext(); ++i0) {
             NBTBase nbtbase = (NBTBase) iterator.next();
 
             s0 = s0 + "" + i0 + ':' + nbtbase + ',';
@@ -70,20 +74,45 @@ public class NBTTagList extends NBTBase {
     }
 
     public void a(NBTBase nbtbase) {
-        if (this.c == 0) {
-            this.c = nbtbase.a();
+        if (this.d == 0) {
+            this.d = nbtbase.a();
         }
-        else if (this.c != nbtbase.a()) {
-            System.err.println("WARNING: Adding mismatching tag types to tag list");
+        else if (this.d != nbtbase.a()) {
+            b.warn("Adding mismatching tag types to tag list");
             return;
         }
 
-        this.b.add(nbtbase);
+        this.c.add(nbtbase);
+    }
+
+    public void a(int i0, NBTBase nbtbase) {
+        if (i0 >= 0 && i0 < this.c.size()) {
+            if (this.d == 0) {
+                this.d = nbtbase.a();
+            }
+            else if (this.d != nbtbase.a()) {
+                b.warn("Adding mismatching tag types to tag list");
+                return;
+            }
+
+            this.c.set(i0, nbtbase);
+        }
+        else {
+            b.warn("index out of bounds to set tag in tag list");
+        }
+    }
+
+    public NBTBase a(int i0) {
+        return (NBTBase) this.c.remove(i0);
+    }
+
+    public boolean c_() {
+        return this.c.isEmpty();
     }
 
     public NBTTagCompound b(int i0) {
-        if (i0 >= 0 && i0 < this.b.size()) {
-            NBTBase nbtbase = (NBTBase) this.b.get(i0);
+        if (i0 >= 0 && i0 < this.c.size()) {
+            NBTBase nbtbase = (NBTBase) this.c.get(i0);
 
             return nbtbase.a() == 10 ? (NBTTagCompound) nbtbase : new NBTTagCompound();
         }
@@ -93,8 +122,8 @@ public class NBTTagList extends NBTBase {
     }
 
     public int[] c(int i0) {
-        if (i0 >= 0 && i0 < this.b.size()) {
-            NBTBase nbtbase = (NBTBase) this.b.get(i0);
+        if (i0 >= 0 && i0 < this.c.size()) {
+            NBTBase nbtbase = (NBTBase) this.c.get(i0);
 
             return nbtbase.a() == 11 ? ((NBTTagIntArray) nbtbase).c() : new int[0];
         }
@@ -104,8 +133,8 @@ public class NBTTagList extends NBTBase {
     }
 
     public double d(int i0) {
-        if (i0 >= 0 && i0 < this.b.size()) {
-            NBTBase nbtbase = (NBTBase) this.b.get(i0);
+        if (i0 >= 0 && i0 < this.c.size()) {
+            NBTBase nbtbase = (NBTBase) this.c.get(i0);
 
             return nbtbase.a() == 6 ? ((NBTTagDouble) nbtbase).g() : 0.0D;
         }
@@ -115,8 +144,8 @@ public class NBTTagList extends NBTBase {
     }
 
     public float e(int i0) {
-        if (i0 >= 0 && i0 < this.b.size()) {
-            NBTBase nbtbase = (NBTBase) this.b.get(i0);
+        if (i0 >= 0 && i0 < this.c.size()) {
+            NBTBase nbtbase = (NBTBase) this.c.get(i0);
 
             return nbtbase.a() == 5 ? ((NBTTagFloat) nbtbase).h() : 0.0F;
         }
@@ -126,8 +155,8 @@ public class NBTTagList extends NBTBase {
     }
 
     public String f(int i0) {
-        if (i0 >= 0 && i0 < this.b.size()) {
-            NBTBase nbtbase = (NBTBase) this.b.get(i0);
+        if (i0 >= 0 && i0 < this.c.size()) {
+            NBTBase nbtbase = (NBTBase) this.c.get(i0);
 
             return nbtbase.a() == 8 ? nbtbase.a_() : nbtbase.toString();
         }
@@ -136,21 +165,25 @@ public class NBTTagList extends NBTBase {
         }
     }
 
+    public NBTBase g(int i0) {
+        return (NBTBase) (i0 >= 0 && i0 < this.c.size() ? (NBTBase) this.c.get(i0) : new NBTTagEnd());
+    }
+
     public int c() {
-        return this.b.size();
+        return this.c.size();
     }
 
     public NBTBase b() {
         NBTTagList nbttaglist = new NBTTagList();
 
-        nbttaglist.c = this.c;
-        Iterator iterator = this.b.iterator();
+        nbttaglist.d = this.d;
+        Iterator iterator = this.c.iterator();
 
         while (iterator.hasNext()) {
             NBTBase nbtbase = (NBTBase) iterator.next();
             NBTBase nbtbase1 = nbtbase.b();
 
-            nbttaglist.b.add(nbtbase1);
+            nbttaglist.c.add(nbtbase1);
         }
 
         return nbttaglist;
@@ -160,8 +193,8 @@ public class NBTTagList extends NBTBase {
         if (super.equals(object)) {
             NBTTagList nbttaglist = (NBTTagList) object;
 
-            if (this.c == nbttaglist.c) {
-                return this.b.equals(nbttaglist.b);
+            if (this.d == nbttaglist.d) {
+                return this.c.equals(nbttaglist.c);
             }
         }
 
@@ -169,10 +202,10 @@ public class NBTTagList extends NBTBase {
     }
 
     public int hashCode() {
-        return super.hashCode() ^ this.b.hashCode();
+        return super.hashCode() ^ this.c.hashCode();
     }
 
-    public int d() {
-        return this.c;
+    public int f() {
+        return this.d;
     }
 }

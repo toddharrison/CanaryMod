@@ -20,8 +20,9 @@ public class ChatStyle {
     private Boolean g;
     private ClickEvent h;
     private HoverEvent i;
+    private String j;
     private CanaryChatStyle canaryChatStyle = new CanaryChatStyle(this); // CanaryMod
-    public static final ChatStyle j = new ChatStyle() { // CanaryMod: private => public
+    public static final ChatStyle k = new ChatStyle() { // CanaryMod: private => public
 
         public EnumChatFormatting a() {
             return null;
@@ -55,7 +56,11 @@ public class ChatStyle {
             return null;
         }
 
-        public ChatStyle a(EnumChatFormatting var1) {
+        public String j() {
+            return null;
+        }
+
+        public ChatStyle a(EnumChatFormatting enumchatformatting) {
             throw new UnsupportedOperationException();
         }
 
@@ -95,37 +100,37 @@ public class ChatStyle {
             return "Style.ROOT";
         }
 
-        public ChatStyle l() {
+        public ChatStyle m() {
             return this;
         }
 
-        public ChatStyle m() {
+        public ChatStyle n() {
             return this;
         }
     };
 
     public EnumChatFormatting a() {
-        return this.b == null ? this.n().a() : this.b;
+        return this.b == null ? this.o().a() : this.b;
     }
 
     public boolean b() {
-        return this.c == null ? this.n().b() : this.c.booleanValue();
+        return this.c == null ? this.o().b() : this.c.booleanValue();
     }
 
     public boolean c() {
-        return this.d == null ? this.n().c() : this.d.booleanValue();
+        return this.d == null ? this.o().c() : this.d.booleanValue();
     }
 
     public boolean d() {
-        return this.f == null ? this.n().d() : this.f.booleanValue();
+        return this.f == null ? this.o().d() : this.f.booleanValue();
     }
 
     public boolean e() {
-        return this.e == null ? this.n().e() : this.e.booleanValue();
+        return this.e == null ? this.o().e() : this.e.booleanValue();
     }
 
     public boolean f() {
-        return this.g == null ? this.n().f() : this.g.booleanValue();
+        return this.g == null ? this.o().f() : this.g.booleanValue();
     }
 
     public boolean g() {
@@ -133,11 +138,15 @@ public class ChatStyle {
     }
 
     public ClickEvent h() {
-        return this.h == null ? this.n().h() : this.h;
+        return this.h == null ? this.o().h() : this.h;
     }
 
     public HoverEvent i() {
-        return this.i == null ? this.n().i() : this.i;
+        return this.i == null ? this.o().i() : this.i;
+    }
+
+    public String j() {
+        return this.j == null ? this.o().j() : this.j;
     }
 
     public ChatStyle a(EnumChatFormatting enumchatformatting) {
@@ -180,13 +189,18 @@ public class ChatStyle {
         return this;
     }
 
+    public ChatStyle a(String s0) {
+        this.j = s0;
+        return this;
+    }
+
     public ChatStyle a(ChatStyle chatstyle) {
         this.a = chatstyle;
         return this;
     }
 
-    public ChatStyle n() { // CanaryMod: private => public
-        return this.a == null ? j : this.a;
+    public ChatStyle o() { // CanaryMod: private => public
+        return this.a == null ? k : this.a;
     }
 
     public CanaryChatStyle getWrapper() {
@@ -194,7 +208,7 @@ public class ChatStyle {
     }
 
     public String toString() {
-        return "Style{hasParent=" + (this.a != null) + ", color=" + this.b + ", bold=" + this.c + ", italic=" + this.d + ", underlined=" + this.e + ", obfuscated=" + this.g + ", clickEvent=" + this.h() + ", hoverEvent=" + this.i() + '}';
+        return "Style{hasParent=" + (this.a != null) + ", color=" + this.b + ", bold=" + this.c + ", italic=" + this.d + ", underlined=" + this.e + ", obfuscated=" + this.g + ", clickEvent=" + this.h() + ", hoverEvent=" + this.i() + ", insertion=" + this.j() + '}';
     }
 
     public boolean equals(Object object) {
@@ -209,24 +223,33 @@ public class ChatStyle {
             boolean flag0;
 
             if (this.b() == chatstyle.b() && this.a() == chatstyle.a() && this.c() == chatstyle.c() && this.f() == chatstyle.f() && this.d() == chatstyle.d() && this.e() == chatstyle.e()) {
-                label56:
+                label65:
                 {
                     if (this.h() != null) {
                         if (!this.h().equals(chatstyle.h())) {
-                            break label56;
+                            break label65;
                         }
                     }
                     else if (chatstyle.h() != null) {
-                        break label56;
+                        break label65;
                     }
 
                     if (this.i() != null) {
                         if (!this.i().equals(chatstyle.i())) {
-                            break label56;
+                            break label65;
                         }
                     }
                     else if (chatstyle.i() != null) {
-                        break label56;
+                        break label65;
+                    }
+
+                    if (this.j() != null) {
+                        if (!this.j().equals(chatstyle.j())) {
+                            break label65;
+                        }
+                    }
+                    else if (chatstyle.j() != null) {
+                        break label65;
                     }
 
                     flag0 = true;
@@ -249,10 +272,11 @@ public class ChatStyle {
         i0 = 31 * i0 + this.g.hashCode();
         i0 = 31 * i0 + this.h.hashCode();
         i0 = 31 * i0 + this.i.hashCode();
+        i0 = 31 * i0 + this.j.hashCode();
         return i0;
     }
 
-    public ChatStyle l() {
+    public ChatStyle m() {
         ChatStyle chatstyle = new ChatStyle();
 
         chatstyle.c = this.c;
@@ -264,10 +288,11 @@ public class ChatStyle {
         chatstyle.h = this.h;
         chatstyle.i = this.i;
         chatstyle.a = this.a;
+        chatstyle.j = this.j;
         return chatstyle;
     }
 
-    public ChatStyle m() {
+    public ChatStyle n() {
         ChatStyle chatstyle = new ChatStyle();
 
         chatstyle.a(Boolean.valueOf(this.b()));
@@ -278,6 +303,7 @@ public class ChatStyle {
         chatstyle.a(this.a());
         chatstyle.a(this.h());
         chatstyle.a(this.i());
+        chatstyle.a(this.j());
         return chatstyle;
     }
 
@@ -314,6 +340,10 @@ public class ChatStyle {
 
                     if (jsonobject3.has("color")) {
                         jsonobject2.b = (EnumChatFormatting) p_deserialize_3_.deserialize(jsonobject3.get("color"), EnumChatFormatting.class);
+                    }
+
+                    if (jsonobject3.has("insertion")) {
+                        jsonobject2.j = jsonobject3.get("insertion").getAsString();
                     }
 
                     JsonObject jsonobject1;

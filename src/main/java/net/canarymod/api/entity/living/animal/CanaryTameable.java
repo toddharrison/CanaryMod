@@ -1,7 +1,10 @@
 package net.canarymod.api.entity.living.animal;
 
+import net.canarymod.ToolBox;
 import net.canarymod.api.entity.living.LivingBase;
 import net.minecraft.entity.passive.EntityTameable;
+
+import java.util.UUID;
 
 /**
  * Tameable wrapper implementation
@@ -19,73 +22,66 @@ public abstract class CanaryTameable extends CanaryAgeableAnimal implements Tame
         super(entity);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public LivingBase getOwner() {
-        return (LivingBase) getHandle().cb().getCanaryEntity();
+        return getHandle().cm() == null ? null : (LivingBase)getHandle().cm().getCanaryEntity();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Deprecated
     @Override
     public String getOwnerName() {
         return getHandle().b();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
+    public String getOwnerID() {
+        return getHandle().b();
+    }
+
     @Override
     public void setOwner(LivingBase entity) {
-        setOwner(entity.getName());
+        setOwner(entity.getUUID().toString());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void setOwner(String name) {
-        getHandle().b(name);
+        if (name == null || name.trim().isEmpty()) {
+            getHandle().b("");
+            setTamed(false);
+        }
+        else if (ToolBox.isUUID(name)) {
+            getHandle().b(name);
+            setTamed(true);
+        }
+        else {
+            UUID uuid = ToolBox.uuidFromUsername(name);
+            if (uuid != null) {
+                getHandle().b(uuid.toString());
+                setTamed(true);
+            }
+        }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean isTamed() {
-        return getHandle().bZ();
+        return getHandle().cj();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void setTamed(boolean tamed) {
-        getHandle().j(tamed);
+        getHandle().m(tamed);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean isSitting() {
-        return getHandle().bY();
+        return getHandle().cl();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void setSitting(boolean sitting) {
-        getHandle().k(sitting);
+        getHandle().n(sitting);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public EntityTameable getHandle() {
         return (EntityTameable) entity;

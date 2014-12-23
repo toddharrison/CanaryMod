@@ -1,14 +1,15 @@
 package net.minecraft.item;
 
-import net.canarymod.api.world.blocks.BlockFace;
-import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.blocks.CanaryBlock;
 import net.canarymod.hook.player.BlockPlaceHook;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 public class ItemRedstone extends Item {
@@ -17,60 +18,35 @@ public class ItemRedstone extends Item {
         this.a(CreativeTabs.d);
     }
 
-    public boolean a(ItemStack itemstack, EntityPlayer entityplayer, World world, int i0, int i1, int i2, int i3, float f0, float f1, float f2) {
-        // CanaryMod: BlockPlaceHook
-        CanaryBlock clicked = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
-        clicked.setFaceClicked(BlockFace.fromByte((byte) i3));
-        //
+    public boolean a(ItemStack itemstack, EntityPlayer entityplayer, World world, BlockPos blockpos, EnumFacing enumfacing, float f0, float f1, float f2) {
+        boolean flag0 = world.p(blockpos).c().f(world, blockpos);
+        BlockPos blockpos1 = flag0 ? blockpos : blockpos.a(enumfacing);
 
-        if (world.a(i0, i1, i2) != Blocks.aC) {
-            if (i3 == 0) {
-                --i1;
-            }
-
-            if (i3 == 1) {
-                ++i1;
-            }
-
-            if (i3 == 2) {
-                --i2;
-            }
-
-            if (i3 == 3) {
-                ++i2;
-            }
-
-            if (i3 == 4) {
-                --i0;
-            }
-
-            if (i3 == 5) {
-                ++i0;
-            }
-
-            if (!world.c(i0, i1, i2)) {
-                return false;
-            }
-        }
-
-        if (!entityplayer.a(i0, i1, i2, i3, itemstack)) {
+        if (!entityplayer.a(blockpos1, enumfacing, itemstack)) {
             return false;
         }
         else {
-            // set placed
-            CanaryBlock placed = new CanaryBlock(BlockType.RedstoneBlock, i0, i1, i2, world.getCanaryWorld());
-            // Create and Call
-            BlockPlaceHook hook = (BlockPlaceHook) new BlockPlaceHook(((EntityPlayerMP) entityplayer).getPlayer(), clicked, placed).call();
-            if (hook.isCanceled()) {
+            Block block = world.p(blockpos1).c();
+
+            if (!world.a(block, blockpos1, false, enumfacing, (Entity)null, itemstack)) {
                 return false;
             }
-            //
-            if (Blocks.af.c(world, i0, i1, i2)) {
-                --itemstack.b;
-                world.b(i0, i1, i2, (Block) Blocks.af);
-            }
+            else if (Blocks.af.c(world, blockpos1)) {
+                // CanaryMod: BlockPlaceHook
+                CanaryBlock clicked = CanaryBlock.getPooledBlock(world.p(blockpos), blockpos, world); // Store Clicked
+                clicked.setFaceClicked(enumfacing.asBlockFace()); // Set face clicked
+                if (new BlockPlaceHook(((EntityPlayerMP)entityplayer).getPlayer(), clicked, CanaryBlock.getPooledBlock(Blocks.af.P(), blockpos1, world)).call().isCanceled()) {
+                    return false;
+                }
+                //
 
-            return true;
+                --itemstack.b;
+                world.a(blockpos1, Blocks.af.P());
+                return true;
+            }
+            else {
+                return false;
+            }
         }
     }
 }

@@ -24,7 +24,7 @@ public class CanaryComparator extends CanaryTileEntity implements Comparator {
      */
     @Override
     public int getOutputSignal() {
-        return getTileEntity().a();
+        return getTileEntity().b();
     }
 
     /**

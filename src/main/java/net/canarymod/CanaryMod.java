@@ -9,6 +9,7 @@ import net.canarymod.bansystem.BanManager;
 import net.canarymod.commandsys.CommandDependencyException;
 import net.canarymod.commandsys.CommandList;
 import net.canarymod.commandsys.CommandManager;
+import net.canarymod.commandsys.DuplicateCommandException;
 import net.canarymod.config.Configuration;
 import net.canarymod.database.DatabaseLoader;
 import net.canarymod.help.HelpManager;
@@ -17,7 +18,8 @@ import net.canarymod.kit.KitProvider;
 import net.canarymod.motd.CanaryMessageOfTheDayListener;
 import net.canarymod.motd.MessageOfTheDay;
 import net.canarymod.permissionsystem.PermissionManager;
-import net.canarymod.plugin.PluginManager;
+import net.canarymod.plugin.DefaultPluginManager;
+import net.canarymod.plugin.PluginLangLoader;
 import net.canarymod.user.OperatorsProvider;
 import net.canarymod.user.ReservelistProvider;
 import net.canarymod.user.UserAndGroupsProvider;
@@ -43,12 +45,12 @@ public class CanaryMod extends Canary {
      * Creates a new CanaryMod
      */
     public CanaryMod() {
-        Canary.instance = this;
-
+        setLoggerLevelDynamic(); //Once we know if debug is enabled, you can change the level accordingly
+        Canary.setCanary(this);
         // This must be the first thing to call!
         DatabaseLoader.load();
+        PluginLangLoader.load(); // Load the plugin language libraries
         NativeTranslate.initialize(); // Intialize native translation bridge
-        setLoggerLevelDynamic(); //Once we know if debug is enabled, you can change the level accordingly
 
         this.jsonNBT = new CanaryJsonNBTUtility(); // Set up the Json to/from NBT utility
         this.motd = new MessageOfTheDay();
@@ -65,7 +67,7 @@ public class CanaryMod extends Canary {
         this.playerSelector = new CanaryPlayerSelector();
         this.channelManager = new CanaryChannelManager();
         // Initialize the plugin loader and scan for plugins
-        this.pluginManager = new PluginManager();
+        this.pluginManager = new DefaultPluginManager();
         this.scoreboardManager = new CanaryScoreboardManager();
 
         pluginManager.scanForPlugins();
@@ -89,13 +91,15 @@ public class CanaryMod extends Canary {
         this.kitProvider = new KitProvider();
     }
 
-    public void initCommands() {
+    public void registerCanaryCommands() {
         try {
             this.commandManager.registerCommands(new CommandList(), Canary.getServer(), false);
         }
         catch (CommandDependencyException e) {
-            // Silently ignore this. If that happens someone intended to override system commands,
-            // which is perfectly fine.
+            log.error("Failed to set up system commands! Dependency reolution failed!", e);
+        }
+        catch (DuplicateCommandException f) {
+            log.error("Failed to set up system commands! A command already exists!", f);
         }
     }
 
@@ -107,6 +111,10 @@ public class CanaryMod extends Canary {
         motd().registerMOTDListener(new CanaryMessageOfTheDayListener(), (net.canarymod.motd.MOTDOwner) getServer(), false);
     }
 
+    /**
+     * Initialises all subsystems that need the native Minecraft server to be bootstrapped.
+     * Must be called before plugins initialise.
+     */
     public void lateInitialisation() {
         if (isInitialised) {
             return;
@@ -116,10 +124,11 @@ public class CanaryMod extends Canary {
         // Initialize providers that require Canary to be set already
         this.initUserAndGroupsManager();
         this.initKits();
+        // Warps need the DimensionType data which is created upon servre start
         this.initWarps();
         // commands require a valid commandOwner which is the server.
         // That means for commands to work, we gotta load Minecraft first
-        this.initCommands();
+        this.registerCanaryCommands();
         // and finally throw in the MOTDListner
         this.initMOTDListener();
         isInitialised = true;

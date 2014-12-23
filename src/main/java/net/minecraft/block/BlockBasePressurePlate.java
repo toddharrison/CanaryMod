@@ -4,9 +4,12 @@ import net.canarymod.api.world.blocks.CanaryBlock;
 import net.canarymod.hook.world.BlockPhysicsHook;
 import net.canarymod.hook.world.RedstoneChangeHook;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -14,29 +17,25 @@ import java.util.Random;
 
 public abstract class BlockBasePressurePlate extends Block {
 
-    private String a;
-
-    protected BlockBasePressurePlate(String s0, Material material) {
+    protected BlockBasePressurePlate(Material material) {
         super(material);
-        this.a = s0;
         this.a(CreativeTabs.d);
         this.a(true);
-        this.b(this.d(15));
     }
 
-    public void a(IBlockAccess iblockaccess, int i0, int i1, int i2) {
-        this.b(iblockaccess.e(i0, i1, i2));
+    public void a(IBlockAccess iblockaccess, BlockPos blockpos) {
+        this.d(iblockaccess.p(blockpos));
     }
 
-    protected void b(int i0) {
-        boolean flag0 = this.c(i0) > 0;
+    protected void d(IBlockState iblockstate) {
+        boolean flag0 = this.e(iblockstate) > 0;
         float f0 = 0.0625F;
 
         if (flag0) {
-            this.a(f0, 0.0F, f0, 1.0F - f0, 0.03125F, 1.0F - f0);
+            this.a(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.03125F, 0.9375F);
         }
         else {
-            this.a(f0, 0.0F, f0, 1.0F - f0, 0.0625F, 1.0F - f0);
+            this.a(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.0625F, 0.9375F);
         }
     }
 
@@ -44,7 +43,7 @@ public abstract class BlockBasePressurePlate extends Block {
         return 20;
     }
 
-    public AxisAlignedBB a(World world, int i0, int i1, int i2) {
+    public AxisAlignedBB a(World world, BlockPos blockpos, IBlockState iblockstate) {
         return null;
     }
 
@@ -56,145 +55,146 @@ public abstract class BlockBasePressurePlate extends Block {
         return false;
     }
 
-    public boolean b(IBlockAccess iblockaccess, int i0, int i1, int i2) {
+    public boolean b(IBlockAccess iblockaccess, BlockPos blockpos) {
         return true;
     }
 
-    public boolean c(World world, int i0, int i1, int i2) {
-        return World.a((IBlockAccess) world, i0, i1 - 1, i2) || BlockFence.a(world.a(i0, i1 - 1, i2));
+    public boolean c(World world, BlockPos blockpos) {
+        return this.m(world, blockpos.b());
     }
 
-    public void a(World world, int i0, int i1, int i2, Block block) {
-        boolean flag0 = false;
-
-        if (!World.a((IBlockAccess) world, i0, i1 - 1, i2) && !BlockFence.a(world.a(i0, i1 - 1, i2))) {
-            flag0 = true;
-        }
-
-        if (flag0) {
-            this.b(world, i0, i1, i2, world.e(i0, i1, i2), 0);
-            world.f(i0, i1, i2);
+    public void a(World world, BlockPos blockpos, IBlockState iblockstate, Block block) {
+        if (!this.m(world, blockpos.b())) {
+            this.b(world, blockpos, iblockstate, 0);
+            world.g(blockpos);
         }
     }
 
-    public void a(World world, int i0, int i1, int i2, Random random) {
-        if (!world.E) {
-            int i3 = this.c(world.e(i0, i1, i2));
+    private boolean m(World world, BlockPos blockpos) {
+        return World.a((IBlockAccess)world, blockpos) || world.p(blockpos).c() instanceof BlockFence;
+    }
 
-            if (i3 > 0) {
-                this.a(world, i0, i1, i2, i3);
+    public void a(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {
+    }
+
+    public void b(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {
+        if (!world.D) {
+            int i0 = this.e(iblockstate);
+
+            if (i0 > 0) {
+                this.a(world, blockpos, iblockstate, i0);
             }
         }
     }
 
-    public void a(World world, int i0, int i1, int i2, Entity entity) {
-        if (!world.E) {
-            int i3 = this.c(world.e(i0, i1, i2));
+    public void a(World world, BlockPos blockpos, IBlockState iblockstate, Entity entity) {
+        if (!world.D) {
+            int i0 = this.e(iblockstate);
 
-            if (i3 == 0) {
-                this.a(world, i0, i1, i2, i3);
+            if (i0 == 0) {
+                this.a(world, blockpos, iblockstate, i0);
             }
         }
     }
 
-    protected void a(World world, int i0, int i1, int i2, int i3) {
-        int i4 = this.e(world, i0, i1, i2);
+    protected void a(World world, BlockPos blockpos, IBlockState iblockstate, int i0) {
+        int i1 = this.e(world, blockpos);
 
         // CanaryMod: RedstoneChange
-        if (i3 != i4) {
+        if (i0 != i1) {
             // CanaryMod: Block Physics
-            BlockPhysicsHook blockPhysics = (BlockPhysicsHook) new BlockPhysicsHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), false).call();
-            if (blockPhysics.isCanceled()) {
-                world.a(i0, i1, i2, this, this.a(world));  // Reschedule
+            CanaryBlock changing = CanaryBlock.getPooledBlock(iblockstate, blockpos, world);
+            if (new BlockPhysicsHook(changing, false).call().isCanceled()) {
+                world.a(blockpos, this, this.a(world));  // Reschedule
                 return;
             }
             //
 
-            RedstoneChangeHook hook = (RedstoneChangeHook) new RedstoneChangeHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), i3, i4).call();
-            if (hook.isCanceled()) {
-                i4 = hook.getOldLevel();
+            if (new RedstoneChangeHook(changing, i0, i1).call().isCanceled()) {
+                return;
             }
         }
         //
 
-        boolean flag0 = i3 > 0;
-        boolean flag1 = i4 > 0;
+        boolean flag0 = i0 > 0;
+        boolean flag1 = i1 > 0;
 
-        if (i3 != i4) {
-            world.a(i0, i1, i2, this.d(i4), 2);
-            this.a_(world, i0, i1, i2);
-            world.c(i0, i1, i2, i0, i1, i2);
+        if (i0 != i1) {
+            iblockstate = this.a(iblockstate, i1);
+            world.a(blockpos, iblockstate, 2);
+            this.d(world, blockpos);
+            world.b(blockpos, blockpos);
         }
 
         if (!flag1 && flag0) {
-            world.a((double) i0 + 0.5D, (double) i1 + 0.1D, (double) i2 + 0.5D, "random.click", 0.3F, 0.5F);
+            world.a((double)blockpos.n() + 0.5D, (double)blockpos.o() + 0.1D, (double)blockpos.p() + 0.5D, "random.click", 0.3F, 0.5F);
         }
         else if (flag1 && !flag0) {
-            world.a((double) i0 + 0.5D, (double) i1 + 0.1D, (double) i2 + 0.5D, "random.click", 0.3F, 0.6F);
+            world.a((double)blockpos.n() + 0.5D, (double)blockpos.o() + 0.1D, (double)blockpos.p() + 0.5D, "random.click", 0.3F, 0.6F);
         }
 
         if (flag1) {
-            world.a(i0, i1, i2, this, this.a(world));
+            world.a(blockpos, (Block)this, this.a(world));
         }
     }
 
-    protected AxisAlignedBB a(int i0, int i1, int i2) {
+    protected AxisAlignedBB a(BlockPos blockpos) {
         float f0 = 0.125F;
 
-        return AxisAlignedBB.a((double) ((float) i0 + f0), (double) i1, (double) ((float) i2 + f0), (double) ((float) (i0 + 1) - f0), (double) i1 + 0.25D, (double) ((float) (i2 + 1) - f0));
+        return new AxisAlignedBB((double)((float)blockpos.n() + 0.125F), (double)blockpos.o(), (double)((float)blockpos.p() + 0.125F), (double)((float)(blockpos.n() + 1) - 0.125F), (double)blockpos.o() + 0.25D, (double)((float)(blockpos.p() + 1) - 0.125F));
     }
 
-    public void a(World world, int i0, int i1, int i2, Block block, int i3) {
+    public void b(World world, BlockPos blockpos, IBlockState iblockstate) {
         // CanaryMod: Block Physics
-        BlockPhysicsHook blockPhysics = (BlockPhysicsHook) new BlockPhysicsHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), false).call();
-        if (blockPhysics.isCanceled()) {
+        CanaryBlock changing = CanaryBlock.getPooledBlock(iblockstate, blockpos, world);
+        if (new BlockPhysicsHook(changing, false).call().isCanceled()) {
             return;
         }
         //
 
         // CanaryMod: RedstoneChange
-        int oldLvl = this.c(i3);
+        int oldLvl = this.e(iblockstate);
         if (oldLvl > 0) {
-            new RedstoneChangeHook(new CanaryBlock((short) Block.b(this), (short) i3, i0, i1, i2, world.getCanaryWorld()), oldLvl, 0).call();
-            this.a_(world, i0, i1, i2);
+            new RedstoneChangeHook(changing, oldLvl, 0).call();
+            this.d(world, blockpos);
         }
         //
 
-        super.a(world, i0, i1, i2, block, i3);
+        super.b(world, blockpos, iblockstate);
     }
 
-    protected void a_(World world, int i0, int i1, int i2) {
-        world.d(i0, i1, i2, this);
-        world.d(i0, i1 - 1, i2, this);
+    protected void d(World world, BlockPos blockpos) {
+        world.c(blockpos, (Block)this);
+        world.c(blockpos.b(), (Block)this);
     }
 
-    public int b(IBlockAccess iblockaccess, int i0, int i1, int i2, int i3) {
-        return this.c(iblockaccess.e(i0, i1, i2));
+    public int a(IBlockAccess iblockaccess, BlockPos blockpos, IBlockState iblockstate, EnumFacing enumfacing) {
+        return this.e(iblockstate);
     }
 
-    public int c(IBlockAccess iblockaccess, int i0, int i1, int i2, int i3) {
-        return i3 == 1 ? this.c(iblockaccess.e(i0, i1, i2)) : 0;
+    public int b(IBlockAccess iblockaccess, BlockPos blockpos, IBlockState iblockstate, EnumFacing enumfacing) {
+        return enumfacing == EnumFacing.UP ? this.e(iblockstate) : 0;
     }
 
-    public boolean f() {
+    public boolean g() {
         return true;
     }
 
-    public void g() {
+    public void h() {
         float f0 = 0.5F;
         float f1 = 0.125F;
         float f2 = 0.5F;
 
-        this.a(0.5F - f0, 0.5F - f1, 0.5F - f2, 0.5F + f0, 0.5F + f1, 0.5F + f2);
+        this.a(0.0F, 0.375F, 0.0F, 1.0F, 0.625F, 1.0F);
     }
 
-    public int h() {
+    public int i() {
         return 1;
     }
 
-    protected abstract int e(World world, int i0, int i1, int i2);
+    protected abstract int e(World world, BlockPos blockpos);
 
-    protected abstract int c(int i0);
+    protected abstract int e(IBlockState iblockstate);
 
-    protected abstract int d(int i0);
+    protected abstract IBlockState a(IBlockState iblockstate, int i0);
 }

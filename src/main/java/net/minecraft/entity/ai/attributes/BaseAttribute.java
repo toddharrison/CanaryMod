@@ -4,14 +4,17 @@ import net.canarymod.api.attributes.CanaryAttribute;
 
 public abstract class BaseAttribute implements IAttribute {
 
-    private final String a;
-    private final double b;
-    private boolean c;
+    private final IAttribute a;
+    private final String b;
+    private final double c;
+    // CanaryMod: our vars
     protected CanaryAttribute canaryAttribute;
+    private boolean d;
 
-    protected BaseAttribute(String s0, double d0) {
-        this.a = s0;
-        this.b = d0;
+    protected BaseAttribute(IAttribute iattribute, String s0, double d0) {
+        this.a = iattribute;
+        this.b = s0;
+        this.c = d0;
         if (s0 == null) {
             throw new IllegalArgumentException("Name cannot be null!");
         }
@@ -19,24 +22,32 @@ public abstract class BaseAttribute implements IAttribute {
     }
 
     public String a() {
-        return this.a;
-    }
-
-    public double b() {
         return this.b;
     }
 
-    public boolean c() {
+    public double b() {
         return this.c;
     }
 
+    public boolean c() {
+        return this.d;
+    }
+
     public BaseAttribute a(boolean flag0) {
-        this.c = flag0;
+        this.d = flag0;
         return this;
     }
 
+    public IAttribute d() {
+        return this.a;
+    }
+
     public int hashCode() {
-        return this.a.hashCode();
+        return this.b.hashCode();
+    }
+
+    public boolean equals(Object object) {
+        return object instanceof IAttribute && this.b.equals(((IAttribute) object).a());
     }
 
     public CanaryAttribute getWrapper() {

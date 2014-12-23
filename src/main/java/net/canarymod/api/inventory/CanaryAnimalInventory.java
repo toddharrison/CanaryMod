@@ -19,6 +19,14 @@ public class CanaryAnimalInventory extends CanaryEntityInventory implements Anim
         this.owner = owner;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getInventoryName() {
+        return inventory.d_();
+    }
+
     public InventoryType getInventoryType() {
         return InventoryType.ANIMAL;
     }
@@ -71,7 +79,7 @@ public class CanaryAnimalInventory extends CanaryEntityInventory implements Anim
      */
     @Override
     public void update() {
-        getHandle().l_();
+        getHandle().o_();
     }
 
     /**

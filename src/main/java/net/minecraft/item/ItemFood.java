@@ -8,6 +8,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.stats.StatList;
 import net.minecraft.world.World;
 
 public class ItemFood extends Item {
@@ -16,11 +17,11 @@ public class ItemFood extends Item {
     private final int b;
     private final float c;
     private final boolean d;
-    private boolean m;
+    private boolean k;
+    private int l;
+    private int m;
     private int n;
-    private int o;
-    private int p;
-    private float q;
+    private float o;
 
     public ItemFood(int i0, float f0, boolean flag0) {
         this.a = 32;
@@ -38,81 +39,83 @@ public class ItemFood extends Item {
         // CanaryMod: Eat
         net.canarymod.api.potion.PotionEffect[] effects = null;
 
-        if (this instanceof ItemAppleGold && !world.E) {
-            if (itemstack.k() > 0) {
+        if (this instanceof ItemAppleGold && !world.D) {
+            if (itemstack.i() > 0) {
                 effects = new net.canarymod.api.potion.PotionEffect[]{
-                        new CanaryPotionEffect(new PotionEffect(Potion.x.H, 2400, 0)), new CanaryPotionEffect(new PotionEffect(Potion.l.H, 600, 4)), new CanaryPotionEffect(new PotionEffect(Potion.m.H, 6000, 0)), new CanaryPotionEffect(new PotionEffect(Potion.n.H, 6000, 0))
+                                                                             new CanaryPotionEffect(new PotionEffect(Potion.x.H, 2400, 0)), new CanaryPotionEffect(new PotionEffect(Potion.l.H, 600, 4)), new CanaryPotionEffect(new PotionEffect(Potion.m.H, 6000, 0)), new CanaryPotionEffect(new PotionEffect(Potion.n.H, 6000, 0))
                 };
             }
             else {
-                effects = new net.canarymod.api.potion.PotionEffect[]{new CanaryPotionEffect(new PotionEffect(Potion.x.H, 2400, 0))};
+                effects = new net.canarymod.api.potion.PotionEffect[]{ new CanaryPotionEffect(new PotionEffect(Potion.x.H, 2400, 0)) };
             }
         }
-        else if (!world.E && this.n > 0 && world.s.nextFloat() < this.q) {
-            effects = new net.canarymod.api.potion.PotionEffect[]{new CanaryPotionEffect(new PotionEffect(this.n, this.o * 20, this.p))};
+        else if (!world.D && this.l > 0 && world.s.nextFloat() < this.o) {
+            effects = new net.canarymod.api.potion.PotionEffect[]{ new CanaryPotionEffect(new PotionEffect(this.l, this.m * 20, this.n)) };
         }
-        EatHook hook = (EatHook) new EatHook(((EntityPlayerMP) entityplayer).getPlayer(), itemstack.getCanaryItem(), this.b, this.c, effects).call();
+        EatHook hook = (EatHook)new EatHook(((EntityPlayerMP)entityplayer).getPlayer(), itemstack.getCanaryItem(), this.b, this.c, effects).call();
         if (!hook.isCanceled()) {
             --itemstack.b;
-            entityplayer.bQ().a(hook.getLevelGain(), hook.getSaturationGain());
-            world.a((Entity) entityplayer, "random.burp", 0.5F, world.s.nextFloat() * 0.1F + 0.9F);
+            entityplayer.ck().a(hook.getLevelGain(), hook.getSaturationGain());
+            world.a((Entity)entityplayer, "random.burp", 0.5F, world.s.nextFloat() * 0.1F + 0.9F);
             // this.c(itemstack, world, entityplayer); moved above and below
             if (hook.getPotionEffects() != null) {
                 for (net.canarymod.api.potion.PotionEffect effect : hook.getPotionEffects()) {
                     if (effect != null) {
-                        entityplayer.c(((CanaryPotionEffect) effect).getHandle());
+                        entityplayer.c(((CanaryPotionEffect)effect).getHandle());
                     }
                 }
             }
+            entityplayer.b(StatList.J[Item.b((Item)this)]);
         }
         //
+
         return itemstack;
     }
 
     protected void c(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-        if (!world.E && this.n > 0 && world.s.nextFloat() < this.q) {
-            entityplayer.c(new PotionEffect(this.n, this.o * 20, this.p));
+        if (!world.D && this.l > 0 && world.s.nextFloat() < this.o) {
+            entityplayer.c(new PotionEffect(this.l, this.m * 20, this.n));
         }
     }
 
-    public int d_(ItemStack itemstack) {
+    public int d(ItemStack itemstack) {
         return 32;
     }
 
-    public EnumAction d(ItemStack itemstack) {
-        return EnumAction.eat;
+    public EnumAction e(ItemStack itemstack) {
+        return EnumAction.EAT;
     }
 
     public ItemStack a(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-        if (entityplayer.g(this.m)) {
-            entityplayer.a(itemstack, this.d_(itemstack));
+        if (entityplayer.j(this.k)) {
+            entityplayer.a(itemstack, this.d(itemstack));
         }
 
         return itemstack;
     }
 
-    public int g(ItemStack itemstack) {
+    public int h(ItemStack itemstack) {
         return this.b;
     }
 
-    public float h(ItemStack itemstack) {
+    public float i(ItemStack itemstack) {
         return this.c;
     }
 
-    public boolean i() {
+    public boolean g() {
         return this.d;
     }
 
     public ItemFood a(int i0, int i1, int i2, float f0) {
-        this.n = i0;
-        this.o = i1;
-        this.p = i2;
-        this.q = f0;
+        this.l = i0;
+        this.m = i1;
+        this.n = i2;
+        this.o = f0;
         return this;
     }
 
-    public ItemFood j() {
-        this.m = true;
+    public ItemFood h() {
+        this.k = true;
         return this;
     }
 }

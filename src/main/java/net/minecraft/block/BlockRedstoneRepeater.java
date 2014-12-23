@@ -1,13 +1,19 @@
 package net.minecraft.block;
 
-import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.blocks.CanaryBlock;
 import net.canarymod.hook.world.BlockPhysicsHook;
 import net.canarymod.hook.world.RedstoneChangeHook;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.properties.PropertyInteger;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -15,64 +21,89 @@ import java.util.Random;
 
 public class BlockRedstoneRepeater extends BlockRedstoneDiode {
 
-    public static final double[] b = new double[]{-0.0625D, 0.0625D, 0.1875D, 0.3125D};
-    private static final int[] M = new int[]{1, 2, 3, 4};
+    public static final PropertyBool a = PropertyBool.a("locked");
+    public static final PropertyInteger b = PropertyInteger.a("delay", 1, 4);
 
     protected BlockRedstoneRepeater(boolean flag0) {
         super(flag0);
+        this.j(this.L.b().a(N, EnumFacing.NORTH).a(b, Integer.valueOf(1)).a(a, Boolean.valueOf(false)));
     }
 
-    public boolean a(World world, int i0, int i1, int i2, EntityPlayer entityplayer, int i3, float f0, float f1, float f2) {
+    public IBlockState a(IBlockState iblockstate, IBlockAccess iblockaccess, BlockPos blockpos) {
+        return iblockstate.a(a, Boolean.valueOf(this.b(iblockaccess, blockpos, iblockstate)));
+    }
+
+    public boolean a(World world, BlockPos blockpos, IBlockState iblockstate, EntityPlayer entityplayer, EnumFacing enumfacing, float f0, float f1, float f2) {
         // CanaryMod: Block Physics
-        BlockPhysicsHook blockPhysics = (BlockPhysicsHook) new BlockPhysicsHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), false).call();
-        if (blockPhysics.isCanceled()) {
+        if (new BlockPhysicsHook(CanaryBlock.getPooledBlock(iblockstate, blockpos, world), false).call().isCanceled()) {
             return false;
         }
         //
 
-        int i4 = world.e(i0, i1, i2);
-        int i5 = (i4 & 12) >> 2;
-
-        i5 = i5 + 1 << 2 & 12;
-        world.a(i0, i1, i2, i5 | i4 & 3, 3);
-        return true;
+        if (!entityplayer.by.e) {
+            return false;
+        }
+        else {
+            world.a(blockpos, iblockstate.a(b), 3);
+            return true;
+        }
     }
 
-    protected int b(int i0) {
-        return M[(i0 & 12) >> 2] * 2;
+    protected int d(IBlockState iblockstate) {
+        return ((Integer)iblockstate.b(b)).intValue() * 2;
     }
 
-    protected BlockRedstoneDiode e() {
-        return Blocks.aS;
+    protected IBlockState e(IBlockState iblockstate) {
+        Integer integer = (Integer)iblockstate.b(b);
+        Boolean obool = (Boolean)iblockstate.b(a);
+        EnumFacing enumfacing = (EnumFacing)iblockstate.b(N);
+
+        return Blocks.bc.P().a(N, enumfacing).a(b, integer).a(a, obool);
     }
 
-    protected BlockRedstoneDiode i() {
-        return Blocks.aR;
+    protected IBlockState k(IBlockState iblockstate) {
+        Integer integer = (Integer)iblockstate.b(b);
+        Boolean obool = (Boolean)iblockstate.b(a);
+        EnumFacing enumfacing = (EnumFacing)iblockstate.b(N);
+
+        return Blocks.bb.P().a(N, enumfacing).a(b, integer).a(a, obool);
     }
 
-    public Item a(int i0, Random random, int i1) {
-        return Items.aW;
+    public Item a(IBlockState iblockstate, Random random, int i0) {
+        return Items.bb;
     }
 
-    public int b() {
-        return 15;
+    public boolean b(IBlockAccess iblockaccess, BlockPos blockpos, IBlockState iblockstate) {
+        return this.c(iblockaccess, blockpos, iblockstate) > 0;
     }
 
-    public boolean g(IBlockAccess iblockaccess, int i0, int i1, int i2, int i3) {
-        return this.h(iblockaccess, i0, i1, i2, i3) > 0;
-    }
-
-    protected boolean a(Block block) {
+    protected boolean c(Block block) {
         return d(block);
     }
 
-    public void a(World world, int i0, int i1, int i2, Block block, int i3) {
+    public void b(World world, BlockPos blockpos, IBlockState iblockstate) {
         // CanaryMod: RedstoneChange
-        if (this.a) {
-            new RedstoneChangeHook(new CanaryBlock(BlockType.RedstoneRepeaterOn.getId(), (short) i3, i0, i1, i2, world.getCanaryWorld()), 15, 0).call();
+        if (this.M) {
+            new RedstoneChangeHook(CanaryBlock.getPooledBlock(iblockstate, blockpos, world), 15, 0).call();
         }
         // CanaryMod: end
-        super.a(world, i0, i1, i2, block, i3);
-        this.e(world, i0, i1, i2);
+        super.b(world, blockpos, iblockstate);
+        this.h(world, blockpos, iblockstate);
+    }
+
+    public IBlockState a(int i0) {
+        return this.P().a(N, EnumFacing.b(i0)).a(a, Boolean.valueOf(false)).a(b, Integer.valueOf(1 + (i0 >> 2)));
+    }
+
+    public int c(IBlockState iblockstate) {
+        byte b0 = 0;
+        int i0 = b0 | ((EnumFacing)iblockstate.b(N)).b();
+
+        i0 |= ((Integer)iblockstate.b(b)).intValue() - 1 << 2;
+        return i0;
+    }
+
+    protected BlockState e() {
+        return new BlockState(this, new IProperty[]{ N, b, a });
     }
 }

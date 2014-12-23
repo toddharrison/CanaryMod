@@ -1,24 +1,31 @@
 package net.minecraft.block;
 
-
+import com.google.common.base.Predicate;
+import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.world.RedstoneChangeHook;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.inventory.InventoryLargeChest;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.ILockableContainer;
 import net.minecraft.world.World;
 
 import java.util.Iterator;
@@ -26,13 +33,15 @@ import java.util.Random;
 
 public class BlockChest extends BlockContainer {
 
-    private final Random b = new Random();
-    public final int a;
+    public static final PropertyDirection a = PropertyDirection.a("facing", (Predicate)EnumFacing.Plane.HORIZONTAL);
+    private final Random M = new Random();
+    public final int b;
     private int oldLvl; // CanaryMod: store old
 
     protected BlockChest(int i0) {
         super(Material.d);
-        this.a = i0;
+        this.j(this.L.b().a(a, EnumFacing.NORTH));
+        this.b = i0;
         this.a(CreativeTabs.c);
         this.a(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
     }
@@ -46,20 +55,20 @@ public class BlockChest extends BlockContainer {
     }
 
     public int b() {
-        return 22;
+        return 2;
     }
 
-    public void a(IBlockAccess iblockaccess, int i0, int i1, int i2) {
-        if (iblockaccess.a(i0, i1, i2 - 1) == this) {
+    public void a(IBlockAccess iblockaccess, BlockPos blockpos) {
+        if (iblockaccess.p(blockpos.c()).c() == this) {
             this.a(0.0625F, 0.0F, 0.0F, 0.9375F, 0.875F, 0.9375F);
         }
-        else if (iblockaccess.a(i0, i1, i2 + 1) == this) {
+        else if (iblockaccess.p(blockpos.d()).c() == this) {
             this.a(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 1.0F);
         }
-        else if (iblockaccess.a(i0 - 1, i1, i2) == this) {
+        else if (iblockaccess.p(blockpos.e()).c() == this) {
             this.a(0.0F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
         }
-        else if (iblockaccess.a(i0 + 1, i1, i2) == this) {
+        else if (iblockaccess.p(blockpos.f()).c() == this) {
             this.a(0.0625F, 0.0F, 0.0625F, 1.0F, 0.875F, 0.9375F);
         }
         else {
@@ -67,334 +76,367 @@ public class BlockChest extends BlockContainer {
         }
     }
 
-    public void b(World world, int i0, int i1, int i2) {
-        super.b(world, i0, i1, i2);
-        this.e(world, i0, i1, i2);
-        Block block = world.a(i0, i1, i2 - 1);
-        Block block1 = world.a(i0, i1, i2 + 1);
-        Block block2 = world.a(i0 - 1, i1, i2);
-        Block block3 = world.a(i0 + 1, i1, i2);
+    public void c(World world, BlockPos blockpos, IBlockState iblockstate) {
+        this.e(world, blockpos, iblockstate);
+        Iterator iterator = EnumFacing.Plane.HORIZONTAL.iterator();
 
-        if (block == this) {
-            this.e(world, i0, i1, i2 - 1);
-        }
+        while (iterator.hasNext()) {
+            EnumFacing enumfacing = (EnumFacing)iterator.next();
+            BlockPos blockpos1 = blockpos.a(enumfacing);
+            IBlockState iblockstate1 = world.p(blockpos1);
 
-        if (block1 == this) {
-            this.e(world, i0, i1, i2 + 1);
-        }
-
-        if (block2 == this) {
-            this.e(world, i0 - 1, i1, i2);
-        }
-
-        if (block3 == this) {
-            this.e(world, i0 + 1, i1, i2);
+            if (iblockstate1.c() == this) {
+                this.e(world, blockpos1, iblockstate1);
+            }
         }
     }
 
-    public void a(World world, int i0, int i1, int i2, EntityLivingBase entitylivingbase, ItemStack itemstack) {
-        Block block = world.a(i0, i1, i2 - 1);
-        Block block1 = world.a(i0, i1, i2 + 1);
-        Block block2 = world.a(i0 - 1, i1, i2);
-        Block block3 = world.a(i0 + 1, i1, i2);
-        byte b0 = 0;
-        int i3 = MathHelper.c((double) (entitylivingbase.y * 4.0F / 360.0F) + 0.5D) & 3;
+    public IBlockState a(World world, BlockPos blockpos, EnumFacing enumfacing, float f0, float f1, float f2, int i0, EntityLivingBase entitylivingbase) {
+        return this.P().a(a, entitylivingbase.aO());
+    }
 
-        if (i3 == 0) {
-            b0 = 2;
+    public void a(World world, BlockPos blockpos, IBlockState iblockstate, EntityLivingBase entitylivingbase, ItemStack itemstack) {
+        EnumFacing enumfacing = EnumFacing.b(MathHelper.c((double)(entitylivingbase.y * 4.0F / 360.0F) + 0.5D) & 3).d();
+
+        iblockstate = iblockstate.a(a, enumfacing);
+        BlockPos blockpos1 = blockpos.c();
+        BlockPos blockpos2 = blockpos.d();
+        BlockPos blockpos3 = blockpos.e();
+        BlockPos blockpos4 = blockpos.f();
+        boolean flag0 = this == world.p(blockpos1).c();
+        boolean flag1 = this == world.p(blockpos2).c();
+        boolean flag2 = this == world.p(blockpos3).c();
+        boolean flag3 = this == world.p(blockpos4).c();
+
+        if (!flag0 && !flag1 && !flag2 && !flag3) {
+            world.a(blockpos, iblockstate, 3);
+        }
+        else if (enumfacing.k() == EnumFacing.Axis.X && (flag0 || flag1)) {
+            if (flag0) {
+                world.a(blockpos1, iblockstate, 3);
+            }
+            else {
+                world.a(blockpos2, iblockstate, 3);
+            }
+
+            world.a(blockpos, iblockstate, 3);
+        }
+        else if (enumfacing.k() == EnumFacing.Axis.Z && (flag2 || flag3)) {
+            if (flag2) {
+                world.a(blockpos3, iblockstate, 3);
+            }
+            else {
+                world.a(blockpos4, iblockstate, 3);
+            }
+
+            world.a(blockpos, iblockstate, 3);
         }
 
-        if (i3 == 1) {
-            b0 = 5;
-        }
+        if (itemstack.s()) {
+            TileEntity tileentity = world.s(blockpos);
 
-        if (i3 == 2) {
-            b0 = 3;
+            if (tileentity instanceof TileEntityChest) {
+                ((TileEntityChest)tileentity).a(itemstack.q());
+            }
         }
+    }
 
-        if (i3 == 3) {
-            b0 = 4;
-        }
-
-        if (block != this && block1 != this && block2 != this && block3 != this) {
-            world.a(i0, i1, i2, b0, 3);
+    public IBlockState e(World world, BlockPos blockpos, IBlockState iblockstate) {
+        if (world.D) {
+            return iblockstate;
         }
         else {
-            if ((block == this || block1 == this) && (b0 == 4 || b0 == 5)) {
-                if (block == this) {
-                    world.a(i0, i1, i2 - 1, b0, 3);
-                }
-                else {
-                    world.a(i0, i1, i2 + 1, b0, 3);
-                }
-
-                world.a(i0, i1, i2, b0, 3);
-            }
-
-            if ((block2 == this || block3 == this) && (b0 == 2 || b0 == 3)) {
-                if (block2 == this) {
-                    world.a(i0 - 1, i1, i2, b0, 3);
-                }
-                else {
-                    world.a(i0 + 1, i1, i2, b0, 3);
-                }
-
-                world.a(i0, i1, i2, b0, 3);
-            }
-        }
-
-        if (itemstack.u()) {
-            ((TileEntityChest) world.o(i0, i1, i2)).a(itemstack.s());
-        }
-    }
-
-    public void e(World world, int i0, int i1, int i2) {
-        if (!world.E) {
-            Block block = world.a(i0, i1, i2 - 1);
-            Block block1 = world.a(i0, i1, i2 + 1);
-            Block block2 = world.a(i0 - 1, i1, i2);
-            Block block3 = world.a(i0 + 1, i1, i2);
-            boolean flag0 = true;
-            int i3;
-            Block block4;
-            int i4;
-            Block block5;
-            boolean flag1;
-            byte b0;
-            int i5;
+            IBlockState iblockstate1 = world.p(blockpos.c());
+            IBlockState iblockstate2 = world.p(blockpos.d());
+            IBlockState iblockstate3 = world.p(blockpos.e());
+            IBlockState iblockstate4 = world.p(blockpos.f());
+            EnumFacing enumfacing = (EnumFacing)iblockstate.b(a);
+            Block block = iblockstate1.c();
+            Block block1 = iblockstate2.c();
+            Block block2 = iblockstate3.c();
+            Block block3 = iblockstate4.c();
 
             if (block != this && block1 != this) {
-                if (block2 != this && block3 != this) {
-                    b0 = 3;
-                    if (block.j() && !block1.j()) {
-                        b0 = 3;
-                    }
+                boolean flag0 = block.m();
+                boolean flag1 = block1.m();
 
-                    if (block1.j() && !block.j()) {
-                        b0 = 2;
-                    }
+                if (block2 == this || block3 == this) {
+                    BlockPos blockpos1 = block2 == this ? blockpos.e() : blockpos.f();
+                    IBlockState iblockstate5 = world.p(blockpos1.c());
+                    IBlockState iblockstate6 = world.p(blockpos1.d());
 
-                    if (block2.j() && !block3.j()) {
-                        b0 = 5;
-                    }
+                    enumfacing = EnumFacing.SOUTH;
+                    EnumFacing enumfacing1;
 
-                    if (block3.j() && !block2.j()) {
-                        b0 = 4;
-                    }
-                }
-                else {
-                    i3 = block2 == this ? i0 - 1 : i0 + 1;
-                    block4 = world.a(i3, i1, i2 - 1);
-                    i4 = block2 == this ? i0 - 1 : i0 + 1;
-                    block5 = world.a(i4, i1, i2 + 1);
-                    b0 = 3;
-                    flag1 = true;
                     if (block2 == this) {
-                        i5 = world.e(i0 - 1, i1, i2);
+                        enumfacing1 = (EnumFacing)iblockstate3.b(a);
                     }
                     else {
-                        i5 = world.e(i0 + 1, i1, i2);
+                        enumfacing1 = (EnumFacing)iblockstate4.b(a);
                     }
 
-                    if (i5 == 2) {
-                        b0 = 2;
+                    if (enumfacing1 == EnumFacing.NORTH) {
+                        enumfacing = EnumFacing.NORTH;
                     }
 
-                    if ((block.j() || block4.j()) && !block1.j() && !block5.j()) {
-                        b0 = 3;
+                    Block block4 = iblockstate5.c();
+                    Block block5 = iblockstate6.c();
+
+                    if ((flag0 || block4.m()) && !flag1 && !block5.m()) {
+                        enumfacing = EnumFacing.SOUTH;
                     }
 
-                    if ((block1.j() || block5.j()) && !block.j() && !block4.j()) {
-                        b0 = 2;
+                    if ((flag1 || block5.m()) && !flag0 && !block4.m()) {
+                        enumfacing = EnumFacing.NORTH;
                     }
                 }
             }
             else {
-                i3 = block == this ? i2 - 1 : i2 + 1;
-                block4 = world.a(i0 - 1, i1, i3);
-                i4 = block == this ? i2 - 1 : i2 + 1;
-                block5 = world.a(i0 + 1, i1, i4);
-                b0 = 5;
-                flag1 = true;
+                BlockPos blockpos2 = block == this ? blockpos.c() : blockpos.d();
+                IBlockState iblockstate7 = world.p(blockpos2.e());
+                IBlockState iblockstate8 = world.p(blockpos2.f());
+
+                enumfacing = EnumFacing.EAST;
+                EnumFacing enumfacing2;
+
                 if (block == this) {
-                    i5 = world.e(i0, i1, i2 - 1);
+                    enumfacing2 = (EnumFacing)iblockstate1.b(a);
                 }
                 else {
-                    i5 = world.e(i0, i1, i2 + 1);
+                    enumfacing2 = (EnumFacing)iblockstate2.b(a);
                 }
 
-                if (i5 == 4) {
-                    b0 = 4;
+                if (enumfacing2 == EnumFacing.WEST) {
+                    enumfacing = EnumFacing.WEST;
                 }
 
-                if ((block2.j() || block4.j()) && !block3.j() && !block5.j()) {
-                    b0 = 5;
+                Block block6 = iblockstate7.c();
+                Block block7 = iblockstate8.c();
+
+                if ((block2.m() || block6.m()) && !block3.m() && !block7.m()) {
+                    enumfacing = EnumFacing.EAST;
                 }
 
-                if ((block3.j() || block5.j()) && !block2.j() && !block4.j()) {
-                    b0 = 4;
+                if ((block3.m() || block7.m()) && !block2.m() && !block6.m()) {
+                    enumfacing = EnumFacing.WEST;
                 }
             }
 
-            world.a(i0, i1, i2, b0, 3);
+            iblockstate = iblockstate.a(a, enumfacing);
+            world.a(blockpos, iblockstate, 3);
+            return iblockstate;
         }
     }
 
-    public boolean c(World world, int i0, int i1, int i2) {
-        int i3 = 0;
+    public IBlockState f(World world, BlockPos blockpos, IBlockState iblockstate) {
+        EnumFacing enumfacing = null;
+        Iterator iterator = EnumFacing.Plane.HORIZONTAL.iterator();
 
-        if (world.a(i0 - 1, i1, i2) == this) {
-            ++i3;
+        while (iterator.hasNext()) {
+            EnumFacing enumfacing1 = (EnumFacing)iterator.next();
+            IBlockState iblockstate1 = world.p(blockpos.a(enumfacing1));
+
+            if (iblockstate1.c() == this) {
+                return iblockstate;
+            }
+
+            if (iblockstate1.c().m()) {
+                if (enumfacing != null) {
+                    enumfacing = null;
+                    break;
+                }
+
+                enumfacing = enumfacing1;
+            }
         }
 
-        if (world.a(i0 + 1, i1, i2) == this) {
-            ++i3;
+        if (enumfacing != null) {
+            return iblockstate.a(a, enumfacing.d());
         }
+        else {
+            EnumFacing enumfacing2 = (EnumFacing)iblockstate.b(a);
 
-        if (world.a(i0, i1, i2 - 1) == this) {
-            ++i3;
+            if (world.p(blockpos.a(enumfacing2)).c().m()) {
+                enumfacing2 = enumfacing2.d();
+            }
+
+            if (world.p(blockpos.a(enumfacing2)).c().m()) {
+                enumfacing2 = enumfacing2.e();
+            }
+
+            if (world.p(blockpos.a(enumfacing2)).c().m()) {
+                enumfacing2 = enumfacing2.d();
+            }
+
+            return iblockstate.a(a, enumfacing2);
         }
-
-        if (world.a(i0, i1, i2 + 1) == this) {
-            ++i3;
-        }
-
-        return i3 > 1 ? false : (this.n(world, i0 - 1, i1, i2) ? false : (this.n(world, i0 + 1, i1, i2) ? false : (this.n(world, i0, i1, i2 - 1) ? false : !this.n(world, i0, i1, i2 + 1))));
     }
 
-    private boolean n(World world, int i0, int i1, int i2) {
-        return world.a(i0, i1, i2) != this ? false : (world.a(i0 - 1, i1, i2) == this ? true : (world.a(i0 + 1, i1, i2) == this ? true : (world.a(i0, i1, i2 - 1) == this ? true : world.a(i0, i1, i2 + 1) == this)));
+    public boolean c(World world, BlockPos blockpos) {
+        int i0 = 0;
+        BlockPos blockpos1 = blockpos.e();
+        BlockPos blockpos2 = blockpos.f();
+        BlockPos blockpos3 = blockpos.c();
+        BlockPos blockpos4 = blockpos.d();
+
+        if (world.p(blockpos1).c() == this) {
+            if (this.e(world, blockpos1)) {
+                return false;
+            }
+
+            ++i0;
+        }
+
+        if (world.p(blockpos2).c() == this) {
+            if (this.e(world, blockpos2)) {
+                return false;
+            }
+
+            ++i0;
+        }
+
+        if (world.p(blockpos3).c() == this) {
+            if (this.e(world, blockpos3)) {
+                return false;
+            }
+
+            ++i0;
+        }
+
+        if (world.p(blockpos4).c() == this) {
+            if (this.e(world, blockpos4)) {
+                return false;
+            }
+
+            ++i0;
+        }
+
+        return i0 <= 1;
     }
 
-    public void a(World world, int i0, int i1, int i2, Block block) {
-        super.a(world, i0, i1, i2, block);
-        TileEntityChest tileentitychest = (TileEntityChest) world.o(i0, i1, i2);
+    private boolean e(World world, BlockPos blockpos) {
+        if (world.p(blockpos).c() != this) {
+            return false;
+        }
+        else {
+            Iterator iterator = EnumFacing.Plane.HORIZONTAL.iterator();
 
-        if (tileentitychest != null) {
-            tileentitychest.u();
+            EnumFacing enumfacing;
+
+            do {
+                if (!iterator.hasNext()) {
+                    return false;
+                }
+
+                enumfacing = (EnumFacing)iterator.next();
+            }
+            while (world.p(blockpos.a(enumfacing)).c() != this);
+
+            return true;
         }
     }
 
-    public void a(World world, int i0, int i1, int i2, Block block, int i3) {
-        TileEntityChest tileentitychest = (TileEntityChest) world.o(i0, i1, i2);
+    public void a(World world, BlockPos blockpos, IBlockState iblockstate, Block block) {
+        super.a(world, blockpos, iblockstate, block);
+        TileEntity tileentity = world.s(blockpos);
 
-        if (tileentitychest != null) {
-            for (int i4 = 0; i4 < tileentitychest.a(); ++i4) {
-                ItemStack itemstack = tileentitychest.a(i4);
+        if (tileentity instanceof TileEntityChest) {
+            tileentity.E();
+        }
+    }
 
-                if (itemstack != null) {
-                    float f0 = this.b.nextFloat() * 0.8F + 0.1F;
-                    float f1 = this.b.nextFloat() * 0.8F + 0.1F;
+    public void b(World world, BlockPos blockpos, IBlockState iblockstate) {
+        TileEntity tileentity = world.s(blockpos);
 
-                    EntityItem entityitem;
+        if (tileentity instanceof IInventory) {
+            InventoryHelper.a(world, blockpos, (IInventory)tileentity);
+            world.e(blockpos, this);
+        }
 
-                    for (float f2 = this.b.nextFloat() * 0.8F + 0.1F; itemstack.b > 0; world.d((Entity) entityitem)) {
-                        int i5 = this.b.nextInt(21) + 10;
+        super.b(world, blockpos, iblockstate);
+    }
 
-                        if (i5 > itemstack.b) {
-                            i5 = itemstack.b;
+    public boolean a(World world, BlockPos blockpos, IBlockState iblockstate, EntityPlayer entityplayer, EnumFacing enumfacing, float f0, float f1, float f2) {
+        if (world.D) {
+            return true;
+        }
+        else {
+            ILockableContainer ilockablecontainer = this.d(world, blockpos);
+
+            if (ilockablecontainer != null) {
+                entityplayer.a((IInventory)ilockablecontainer);
+            }
+
+            return true;
+        }
+    }
+
+    public ILockableContainer d(World world, BlockPos blockpos) {
+        TileEntity tileentity = world.s(blockpos);
+
+        if (!(tileentity instanceof TileEntityChest)) {
+            return null;
+        }
+        else {
+            Object object = (TileEntityChest)tileentity;
+
+            if (this.m(world, blockpos)) {
+                return null;
+            }
+            else {
+                Iterator iterator = EnumFacing.Plane.HORIZONTAL.iterator();
+
+                while (iterator.hasNext()) {
+                    EnumFacing enumfacing = (EnumFacing)iterator.next();
+                    BlockPos blockpos1 = blockpos.a(enumfacing);
+                    Block block = world.p(blockpos1).c();
+
+                    if (block == this) {
+                        if (this.m(world, blockpos1)) {
+                            return null;
                         }
 
-                        itemstack.b -= i5;
-                        entityitem = new EntityItem(world, (double) ((float) i0 + f0), (double) ((float) i1 + f1), (double) ((float) i2 + f2), new ItemStack(itemstack.b(), i5, itemstack.k()));
-                        float f3 = 0.05F;
+                        TileEntity tileentity1 = world.s(blockpos1);
 
-                        entityitem.v = (double) ((float) this.b.nextGaussian() * f3);
-                        entityitem.w = (double) ((float) this.b.nextGaussian() * f3 + 0.2F);
-                        entityitem.x = (double) ((float) this.b.nextGaussian() * f3);
-                        if (itemstack.p()) {
-                            entityitem.f().d((NBTTagCompound) itemstack.q().b());
+                        if (tileentity1 instanceof TileEntityChest) {
+                            if (enumfacing != EnumFacing.WEST && enumfacing != EnumFacing.NORTH) {
+                                object = new InventoryLargeChest("container.chestDouble", (ILockableContainer)object, (TileEntityChest)tileentity1);
+                            }
+                            else {
+                                object = new InventoryLargeChest("container.chestDouble", (TileEntityChest)tileentity1, (ILockableContainer)object);
+                            }
                         }
                     }
                 }
+
+                return (ILockableContainer)object;
             }
-
-            world.f(i0, i1, i2, block);
-        }
-
-        super.a(world, i0, i1, i2, block, i3);
-    }
-
-    public boolean a(World world, int i0, int i1, int i2, EntityPlayer entityplayer, int i3, float f0, float f1, float f2) {
-        if (world.E) {
-            return true;
-        }
-        else {
-            IInventory iinventory = this.m(world, i0, i1, i2);
-
-            if (iinventory != null) {
-                entityplayer.a(iinventory);
-            }
-
-            return true;
-        }
-    }
-
-    public IInventory m(World world, int i0, int i1, int i2) {
-        Object object = (TileEntityChest) world.o(i0, i1, i2);
-
-        if (object == null) {
-            return null;
-        }
-        else if (world.a(i0, i1 + 1, i2).r()) {
-            return null;
-        }
-        else if (o(world, i0, i1, i2)) {
-            return null;
-        }
-        else if (world.a(i0 - 1, i1, i2) == this && (world.a(i0 - 1, i1 + 1, i2).r() || o(world, i0 - 1, i1, i2))) {
-            return null;
-        }
-        else if (world.a(i0 + 1, i1, i2) == this && (world.a(i0 + 1, i1 + 1, i2).r() || o(world, i0 + 1, i1, i2))) {
-            return null;
-        }
-        else if (world.a(i0, i1, i2 - 1) == this && (world.a(i0, i1 + 1, i2 - 1).r() || o(world, i0, i1, i2 - 1))) {
-            return null;
-        }
-        else if (world.a(i0, i1, i2 + 1) == this && (world.a(i0, i1 + 1, i2 + 1).r() || o(world, i0, i1, i2 + 1))) {
-            return null;
-        }
-        else {
-            if (world.a(i0 - 1, i1, i2) == this) {
-                object = new InventoryLargeChest("container.chestDouble", (TileEntityChest) world.o(i0 - 1, i1, i2), (IInventory) object);
-            }
-
-            if (world.a(i0 + 1, i1, i2) == this) {
-                object = new InventoryLargeChest("container.chestDouble", (IInventory) object, (TileEntityChest) world.o(i0 + 1, i1, i2));
-            }
-
-            if (world.a(i0, i1, i2 - 1) == this) {
-                object = new InventoryLargeChest("container.chestDouble", (TileEntityChest) world.o(i0, i1, i2 - 1), (IInventory) object);
-            }
-
-            if (world.a(i0, i1, i2 + 1) == this) {
-                object = new InventoryLargeChest("container.chestDouble", (IInventory) object, (TileEntityChest) world.o(i0, i1, i2 + 1));
-            }
-
-            return (IInventory) object;
         }
     }
 
     public TileEntity a(World world, int i0) {
-        TileEntityChest tileentitychest = new TileEntityChest();
-
-        return tileentitychest;
+        return new TileEntityChest();
     }
 
-    public boolean f() {
-        return this.a == 1;
+    public boolean g() {
+        return this.b == 1;
     }
 
-    public int b(IBlockAccess iblockaccess, int i0, int i1, int i2, int i3) {
-        if (!this.f()) {
+    public int a(IBlockAccess iblockaccess, BlockPos blockpos, IBlockState iblockstate, EnumFacing enumfacing) {
+        if (!this.g()) {
             return 0;
         }
         else {
-            int i4 = ((TileEntityChest) iblockaccess.o(i0, i1, i2)).o;
+            int i0 = 0;
+            TileEntity tileentity = iblockaccess.s(blockpos);
+
+            if (tileentity instanceof TileEntityChest) {
+                i0 = ((TileEntityChest)tileentity).l;
+            }
             // CanaryMod: RedstoneChange
-            int newLvl = MathHelper.a(i4, 0, 15);
+            int newLvl = MathHelper.a(i0, 0, 15);
             if (newLvl != oldLvl) {
-                RedstoneChangeHook hook = (RedstoneChangeHook) new RedstoneChangeHook(((World) iblockaccess).getCanaryWorld().getBlockAt(i0, i1, i2), oldLvl, newLvl).call();
+                RedstoneChangeHook hook = (RedstoneChangeHook)new RedstoneChangeHook(((World)iblockaccess).getCanaryWorld().getBlockAt(new BlockPosition(blockpos)), oldLvl, newLvl).call();
                 if (hook.isCanceled()) {
                     return oldLvl;
                 }
@@ -404,12 +446,20 @@ public class BlockChest extends BlockContainer {
         }
     }
 
-    public int c(IBlockAccess iblockaccess, int i0, int i1, int i2, int i3) {
-        return i3 == 1 ? this.b(iblockaccess, i0, i1, i2, i3) : 0;
+    public int b(IBlockAccess iblockaccess, BlockPos blockpos, IBlockState iblockstate, EnumFacing enumfacing) {
+        return enumfacing == EnumFacing.UP ? this.a(iblockaccess, blockpos, iblockstate, enumfacing) : 0;
     }
 
-    private static boolean o(World world, int i0, int i1, int i2) {
-        Iterator iterator = world.a(EntityOcelot.class, AxisAlignedBB.a((double) i0, (double) (i1 + 1), (double) i2, (double) (i0 + 1), (double) (i1 + 2), (double) (i2 + 1))).iterator();
+    private boolean m(World world, BlockPos blockpos) {
+        return this.n(world, blockpos) || this.o(world, blockpos);
+    }
+
+    private boolean n(World world, BlockPos blockpos) {
+        return world.p(blockpos.a()).c().t();
+    }
+
+    private boolean o(World world, BlockPos blockpos) {
+        Iterator iterator = world.a(EntityOcelot.class, new AxisAlignedBB((double)blockpos.n(), (double)(blockpos.o() + 1), (double)blockpos.p(), (double)(blockpos.n() + 1), (double)(blockpos.o() + 2), (double)(blockpos.p() + 1))).iterator();
 
         EntityOcelot entityocelot;
 
@@ -418,19 +468,38 @@ public class BlockChest extends BlockContainer {
                 return false;
             }
 
-            Entity entity = (Entity) iterator.next();
+            Entity entity = (Entity)iterator.next();
 
-            entityocelot = (EntityOcelot) entity;
-        } while (!entityocelot.ca());
+            entityocelot = (EntityOcelot)entity;
+        }
+        while (!entityocelot.cl());
 
         return true;
     }
 
-    public boolean M() {
+    public boolean N() {
         return true;
     }
 
-    public int g(World world, int i0, int i1, int i2, int i3) {
-        return Container.b(this.m(world, i0, i1, i2));
+    public int l(World world, BlockPos blockpos) {
+        return Container.b((IInventory)this.d(world, blockpos));
+    }
+
+    public IBlockState a(int i0) {
+        EnumFacing enumfacing = EnumFacing.a(i0);
+
+        if (enumfacing.k() == EnumFacing.Axis.Y) {
+            enumfacing = EnumFacing.NORTH;
+        }
+
+        return this.P().a(a, enumfacing);
+    }
+
+    public int c(IBlockState iblockstate) {
+        return ((EnumFacing)iblockstate.b(a)).a();
+    }
+
+    protected BlockState e() {
+        return new BlockState(this, new IProperty[]{ a });
     }
 }

@@ -1,5 +1,6 @@
 package net.canarymod.api.world;
 
+import com.google.common.collect.ImmutableList;
 import net.canarymod.WorldCacheTimer;
 import net.canarymod.api.CanaryEntityTracker;
 import net.canarymod.api.GameMode;
@@ -17,7 +18,10 @@ import net.canarymod.api.entity.vehicle.Minecart;
 import net.canarymod.api.entity.vehicle.Vehicle;
 import net.canarymod.api.inventory.CanaryItem;
 import net.canarymod.api.inventory.Item;
-import net.canarymod.api.world.blocks.*;
+import net.canarymod.api.world.blocks.Block;
+import net.canarymod.api.world.blocks.BlockType;
+import net.canarymod.api.world.blocks.CanaryBlock;
+import net.canarymod.api.world.blocks.Chest;
 import net.canarymod.api.world.blocks.TileEntity;
 import net.canarymod.api.world.effects.AuxiliarySoundEffect;
 import net.canarymod.api.world.effects.Particle;
@@ -27,25 +31,44 @@ import net.canarymod.api.world.position.Position;
 import net.canarymod.config.Configuration;
 import net.canarymod.config.WorldConfiguration;
 import net.minecraft.block.BlockJukebox;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.play.server.S2APacketParticles;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.tileentity.*;
+import net.minecraft.tileentity.TileEntityBeacon;
+import net.minecraft.tileentity.TileEntityBrewingStand;
+import net.minecraft.tileentity.TileEntityChest;
+import net.minecraft.tileentity.TileEntityCommandBlock;
+import net.minecraft.tileentity.TileEntityComparator;
+import net.minecraft.tileentity.TileEntityDaylightDetector;
+import net.minecraft.tileentity.TileEntityDispenser;
+import net.minecraft.tileentity.TileEntityDropper;
+import net.minecraft.tileentity.TileEntityFurnace;
+import net.minecraft.tileentity.TileEntityHopper;
+import net.minecraft.tileentity.TileEntityMobSpawner;
+import net.minecraft.tileentity.TileEntityNote;
+import net.minecraft.tileentity.TileEntitySign;
+import net.minecraft.tileentity.TileEntitySkull;
+import net.minecraft.util.BlockPos;
+import net.minecraft.village.VillageCollection;
+import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.WorldSettings;
-import net.minecraft.world.storage.WorldInfo;
 import net.visualillusionsent.utils.TaskManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ScheduledFuture;
 
 public class CanaryWorld implements World {
     private WorldServer world;
     private DimensionType type;
     public long[] nanoTicks;
-    private WorldConfiguration wrld_cfg;
+    private WorldConfiguration worldConfig;
+    ScheduledFuture cachetask;
+
     /**
      * The world name
      */
@@ -58,11 +81,10 @@ public class CanaryWorld implements World {
         fqName = name + "_" + this.type.getName();
         // Init nanotick size
         nanoTicks = new long[100];
-        wrld_cfg = Configuration.getWorldConfig(this.fqName);
+        worldConfig = Configuration.getWorldConfig(this.fqName);
         if (Configuration.getServerConfig().isWorldCacheTimerEnabled()) {
-            TaskManager.scheduleContinuedTaskInMinutes(new WorldCacheTimer(this), Configuration.getServerConfig().getWorldCacheTimeout(), Configuration.getServerConfig().getWorldCacheTimeout());
+            cachetask = TaskManager.scheduleContinuedTaskInMinutes(new WorldCacheTimer(this), Configuration.getServerConfig().getWorldCacheTimeout(), Configuration.getServerConfig().getWorldCacheTimeout());
         }
-
     }
 
     @Override
@@ -87,12 +109,12 @@ public class CanaryWorld implements World {
 
     @Override
     public CanaryEntityTracker getEntityTracker() {
-        return world.r().getCanaryEntityTracker();
+        return world.getEntityTracker();
     }
 
     @Override
     public EntityItem dropItem(Position position, Item item) {
-        return dropItem((int) position.getX(), (int) position.getY(), (int) position.getZ(), item);
+        return dropItem((int)position.getX(), (int)position.getY(), (int)position.getZ(), item);
     }
 
     @Override
@@ -106,9 +128,9 @@ public class CanaryWorld implements World {
         double d2 = world.s.nextFloat() * 0.7F + (1.0F - 0.7F) * 0.5D;
         double d3 = world.s.nextFloat() * 0.7F + (1.0F - 0.7F) * 0.5D;
 
-        net.minecraft.entity.item.EntityItem oei = new net.minecraft.entity.item.EntityItem(world, x + d1, y + d2, z + d3, ((CanaryItem) item).getHandle());
+        net.minecraft.entity.item.EntityItem oei = new net.minecraft.entity.item.EntityItem(world, x + d1, y + d2, z + d3, ((CanaryItem)item).getHandle());
 
-        oei.b = 10;
+        oei.d = 10;
         world.d(oei);
         return oei.getEntityItem();
     }
@@ -118,9 +140,9 @@ public class CanaryWorld implements World {
     public List<EntityAnimal> getAnimalList() {
         List<EntityAnimal> animals = new ArrayList<EntityAnimal>();
 
-        for (Object o : (ArrayList) ((ArrayList) world.e).clone()) {
-            if (((net.minecraft.entity.Entity) o).getCanaryEntity() instanceof EntityAnimal) {
-                animals.add((EntityAnimal) ((net.minecraft.entity.Entity) o).getCanaryEntity());
+        for (Object o : (ArrayList)((ArrayList)world.f).clone()) {
+            if (((net.minecraft.entity.Entity)o).getCanaryEntity() instanceof EntityAnimal) {
+                animals.add((EntityAnimal)((net.minecraft.entity.Entity)o).getCanaryEntity());
             }
         }
         return animals;
@@ -131,9 +153,9 @@ public class CanaryWorld implements World {
     public List<EntityMob> getMobList() {
         List<EntityMob> mobs = new ArrayList<EntityMob>();
 
-        for (Object o : (ArrayList) ((ArrayList) world.e).clone()) {
-            if (((net.minecraft.entity.Entity) o).getCanaryEntity() instanceof EntityMob) {
-                mobs.add((EntityMob) ((net.minecraft.entity.Entity) o).getCanaryEntity());
+        for (Object o : (ArrayList)((ArrayList)world.f).clone()) {
+            if (((net.minecraft.entity.Entity)o).getCanaryEntity() instanceof EntityMob) {
+                mobs.add((EntityMob)((net.minecraft.entity.Entity)o).getCanaryEntity());
             }
         }
         return mobs;
@@ -144,9 +166,9 @@ public class CanaryWorld implements World {
     public List<Boat> getBoatList() {
         List<Boat> boats = new ArrayList<Boat>();
 
-        for (Object o : (ArrayList) ((ArrayList) world.e).clone()) {
-            if (((net.minecraft.entity.Entity) o).getCanaryEntity() instanceof Boat) {
-                boats.add((Boat) ((net.minecraft.entity.Entity) o).getCanaryEntity());
+        for (Object o : (ArrayList)((ArrayList)world.f).clone()) {
+            if (((net.minecraft.entity.Entity)o).getCanaryEntity() instanceof Boat) {
+                boats.add((Boat)((net.minecraft.entity.Entity)o).getCanaryEntity());
             }
         }
         return boats;
@@ -157,9 +179,9 @@ public class CanaryWorld implements World {
     public List<Minecart> getMinecartList() {
         List<Minecart> minecarts = new ArrayList<Minecart>();
 
-        for (Object o : (ArrayList) ((ArrayList) world.e).clone()) {
-            if (((net.minecraft.entity.Entity) o).getCanaryEntity() instanceof Minecart) {
-                minecarts.add((Minecart) ((net.minecraft.entity.Entity) o).getCanaryEntity());
+        for (Object o : (ArrayList)((ArrayList)world.f).clone()) {
+            if (((net.minecraft.entity.Entity)o).getCanaryEntity() instanceof Minecart) {
+                minecarts.add((Minecart)((net.minecraft.entity.Entity)o).getCanaryEntity());
             }
         }
         return minecarts;
@@ -170,9 +192,9 @@ public class CanaryWorld implements World {
     public List<Vehicle> getVehicleList() {
         List<Vehicle> vehicles = new ArrayList<Vehicle>();
 
-        for (Object o : (ArrayList) ((ArrayList) world.e).clone()) {
-            if (((net.minecraft.entity.Entity) o).getCanaryEntity() instanceof Vehicle) {
-                vehicles.add((Vehicle) ((net.minecraft.entity.Entity) o).getCanaryEntity());
+        for (Object o : (ArrayList)((ArrayList)world.f).clone()) {
+            if (((net.minecraft.entity.Entity)o).getCanaryEntity() instanceof Vehicle) {
+                vehicles.add((Vehicle)((net.minecraft.entity.Entity)o).getCanaryEntity());
             }
         }
         return vehicles;
@@ -183,9 +205,9 @@ public class CanaryWorld implements World {
     public List<EntityItem> getItemList() {
         List<EntityItem> items = new ArrayList<EntityItem>();
 
-        for (Object o : (ArrayList) ((ArrayList) world.e).clone()) {
-            if (((net.minecraft.entity.Entity) o).getCanaryEntity() instanceof EntityItem) {
-                items.add((EntityItem) ((net.minecraft.entity.Entity) o).getCanaryEntity());
+        for (Object o : (ArrayList)((ArrayList)world.f).clone()) {
+            if (((net.minecraft.entity.Entity)o).getCanaryEntity() instanceof EntityItem) {
+                items.add((EntityItem)((net.minecraft.entity.Entity)o).getCanaryEntity());
             }
         }
         return items;
@@ -201,7 +223,7 @@ public class CanaryWorld implements World {
         List<EntityLiving> list = new ArrayList<EntityLiving>();
         for (Entity e : getEntityTracker().getTrackedEntities()) {
             if (e instanceof EntityLiving && !list.contains(e)) {
-                list.add((EntityLiving) e);
+                list.add((EntityLiving)e);
             }
         }
         return list;
@@ -214,7 +236,8 @@ public class CanaryWorld implements World {
 
     @Override
     public Block getBlockAt(int x, int y, int z) {
-        return new CanaryBlock(world.a(x, y, z), getDataAt(x, y, z), x, y, z, this);
+        BlockPos pos = new BlockPos(x, y, z);
+        return CanaryBlock.getPooledBlock(this.getHandle().p(pos), pos, this.getHandle());
     }
 
     @Override
@@ -229,28 +252,31 @@ public class CanaryWorld implements World {
 
     @Override
     public short getDataAt(int x, int y, int z) {
-        return (short) world.e(x, y, z);
+        IBlockState state = world.p(new BlockPos(x, y, z));
+        return (short)state.c().c(state);
     }
 
     @Override
     public void setBlock(Block block) {
-        setBlockAt(block.getX(), block.getY(), block.getZ(), block.getTypeId(), block.getData());
+        BlockPos blockpos = new BlockPos(block.getX(), block.getY(), block.getZ());
+        world.a(blockpos, ((CanaryBlock)block).getNativeState());
+        // Notify clients (markBlockNeedsUpdate)
+        world.h(blockpos);
     }
 
     @Override
     public void setBlockAt(Position vector, Block block) {
-        setBlockAt(vector.getBlockX(), vector.getBlockY(), vector.getBlockZ(), block.getTypeId(), block.getData());
+        setBlockAt(vector.getBlockX(), vector.getBlockY(), vector.getBlockZ(), block.getType());
     }
 
     @Override
     public void setBlockAt(int x, int y, int z, short type) {
-        setBlockAt(x, y, z, type, (byte) 0);
-
+        setBlockAt(x, y, z, BlockType.fromId(type));
     }
 
     @Override
     public void setBlockAt(Position position, short type) {
-        setBlockAt(position.getBlockX(), position.getBlockY(), position.getBlockZ(), type);
+        setBlockAt(position.getBlockX(), position.getBlockY(), position.getBlockZ(), BlockType.fromId(type));
     }
 
     @Override
@@ -265,22 +291,27 @@ public class CanaryWorld implements World {
 
     @Override
     public void setBlockAt(int x, int y, int z, short type, short data) {
-        world.d(x, y, z, net.minecraft.block.Block.e(type), data, (0x1 | 0x2));
+        setBlockAt(x, y, z, BlockType.fromId(type));
     }
 
     @Override
     public void setBlockAt(int x, int y, int z, BlockType blockType) {
-        world.d(x, y, z, net.minecraft.block.Block.b(blockType.getMachineName()), blockType.getData(), (0x1 | 0x2));
+        BlockPos blockpos = new BlockPos(x, y, z);
+        // Set the block
+        world.a(blockpos, net.minecraft.block.Block.b(blockType.getMachineName()).P(), 0);
+        // Notify clients (markBlockNeedsUpdate)
+        world.h(blockpos);
     }
 
     @Override
     public void setDataAt(int x, int y, int z, short data) {
-        world.a(x, y, z, data, (0x1 | 0x2));
+        // FIXME: Unclear how that is supported now
+//        world.a(x, y, z, data, (0x1 | 0x2));
     }
 
     @Override
     public void markBlockNeedsUpdate(int x, int y, int z) {
-        world.g(x, y, z);
+        world.h(new BlockPos(x, y, z));
     }
 
     @Override
@@ -288,17 +319,17 @@ public class CanaryWorld implements World {
         EntityPlayer user = world.a(x, y, z, distance);
 
         if ((user != null) && user.getCanaryEntity() instanceof Player) {
-            return (Player) user.getCanaryEntity();
+            return (Player)user.getCanaryEntity();
         }
         return null;
     }
 
     @Override
     public Player getClosestPlayer(Entity entity, int distance) {
-        EntityPlayer user = world.a(((CanaryEntity) entity).getHandle(), distance);
+        EntityPlayer user = world.a(((CanaryEntity)entity).getHandle(), distance);
 
         if ((user != null) && user.getCanaryEntity() instanceof Player) {
-            return (Player) user.getCanaryEntity();
+            return (Player)user.getCanaryEntity();
         }
         return null;
     }
@@ -325,22 +356,17 @@ public class CanaryWorld implements World {
 
     @Override
     public int getHeight() {
-        return wrld_cfg.getMaxBuildHeight();
+        return worldConfig.getMaxBuildHeight();
     }
 
     @Override
     public int getHighestBlockAt(int x, int z) {
-        for (int i = 0; i < this.getHeight(); i++) {
-            if (world.i(x, i, z)) {
-                return i;
-            }
-        }
-        return getHeight();
+        return world.m(new BlockPos(x, 0, z)).o();
     }
 
     @Override
     public void playNoteAt(int x, int y, int z, int instrument, byte notePitch) {
-        world.c(x, y, y, instrument, notePitch);
+        world.b(instrument, new BlockPos(x, y, z), notePitch);
     }
 
     @Override
@@ -369,26 +395,46 @@ public class CanaryWorld implements World {
 
     @Override
     public long getRawTime() {
-        return world.J();
+        return world.K();
     }
 
     public long getTotalTime() {
-        return world.I();
+        // TODO: This returns what is stored in DayTime in the world.dat ... but is that the total time?
+        return world.L();
+    }
+
+    @Override
+    public Difficulty getDifficulty() {
+        return World.Difficulty.fromId(this.world.x.y().a());
+    }
+
+    @Override
+    public void setDifficulty(Difficulty difficulty) {
+        // Update canary config and worldconfig so that change will stick
+        worldConfig.getFile().setInt("difficulty", difficulty.getId());
+        this.world.x.a(EnumDifficulty.a(difficulty.getId()));
+    }
+
+    @Override
+    public WorldType getWorldType() {
+        return WorldType.fromString(world.x.u().a());
     }
 
     @Override
     public int getLightLevelAt(int x, int y, int z) {
-        return world.b(x, y, z, true);
+        // TODO: There's also b(EnumSkyBlock enumskyblock, BlockPos blockpos) for map-based level
+        // in case we want that
+        return world.c(new BlockPos(x, y, z), true);
     }
 
     @Override
     public void setLightLevelOnBlockMap(int x, int y, int z, int newLevel) {
-        world.b(EnumSkyBlock.Block, x, y, z, newLevel);
+        world.a(EnumSkyBlock.BLOCK, new BlockPos(x, y, z), newLevel);
     }
 
     @Override
     public void setLightLevelOnSkyMap(int x, int y, int z, int newLevel) {
-        world.b(EnumSkyBlock.Sky, x, y, z, newLevel);
+        world.a(EnumSkyBlock.SKY, new BlockPos(x, y, z), newLevel);
     }
 
     @Override
@@ -398,12 +444,12 @@ public class CanaryWorld implements World {
 
     @Override
     public Chunk loadChunk(Location location) {
-        return getChunkProvider().loadChunk((int) location.getX() >> 4, (int) location.getZ() >> 4);
+        return getChunkProvider().loadChunk((int)location.getX() >> 4, (int)location.getZ() >> 4);
     }
 
     @Override
     public Chunk loadChunk(Position vec3d) {
-        return getChunkProvider().loadChunk((int) vec3d.getX() >> 4, (int) vec3d.getZ() >> 4);
+        return getChunkProvider().loadChunk((int)vec3d.getX() >> 4, (int)vec3d.getZ() >> 4);
     }
 
     @Override
@@ -428,7 +474,7 @@ public class CanaryWorld implements World {
 
     @Override
     public void spawnParticle(Particle particle) {
-        MinecraftServer.I().u.sendPacketToDimension(new S2APacketParticles(particle), this.name, this.type.getId());
+        MinecraftServer.M().an().sendPacketToDimension(new S2APacketParticles(particle), this.name, this.type.getId());
     }
 
     @Override
@@ -438,12 +484,16 @@ public class CanaryWorld implements World {
 
     @Override
     public void playAUXEffect(AuxiliarySoundEffect effect) {
-        world.c(effect.type.getDigits(), effect.x, effect.y, effect.z, effect.extra);
+        playAUXEffectAt(null, effect);
     }
 
     @Override
     public void playAUXEffectAt(Player player, AuxiliarySoundEffect effect) {
-        world.a(player != null ? ((CanaryPlayer) player).getHandle() : null, effect.type.getDigits(), effect.x, effect.y, effect.z, effect.extra);
+        world.a(player != null ? ((CanaryPlayer)player).getHandle() : null,
+                effect.type.getDigits(),
+                new BlockPos(effect.x, effect.y, effect.z),
+                effect.extra
+               );
     }
 
     @Override
@@ -458,7 +508,7 @@ public class CanaryWorld implements World {
 
     @Override
     public int getBlockPower(int x, int y, int z) {
-        return world.u(x, y, z);
+        return world.y(new BlockPos(x, y, z));
     }
 
     @Override
@@ -473,7 +523,7 @@ public class CanaryWorld implements World {
 
     @Override
     public boolean isBlockPowered(int x, int y, int z) {
-        return world.u(x, y, z) > 0; //TODO: This may not function as intended
+        return getBlockPower(x, y, z) > 0; //TODO: This may not function as intended
     }
 
     @Override
@@ -488,7 +538,7 @@ public class CanaryWorld implements World {
 
     @Override
     public boolean isBlockIndirectlyPowered(int x, int y, int z) {
-        return world.v(x, y, z);
+        return world.z(new BlockPos(x, y, z));
     }
 
     @Override
@@ -503,7 +553,16 @@ public class CanaryWorld implements World {
         else {
             setThunderTime(world.s.nextInt(168000) + 12000);
         }
+    }
 
+    @Override
+    public void setThunderStrength(float strength) {
+        world.setThunderStrength(strength);
+    }
+
+    @Override
+    public float getThunderStrength() {
+        return world.getThunderStrength();
     }
 
     @Override
@@ -523,6 +582,16 @@ public class CanaryWorld implements World {
         else {
             setRainTime(world.s.nextInt(168000) + 12000);
         }
+    }
+
+    @Override
+    public void setRainStrength(float strength) {
+        world.setRainStrength(strength);
+    }
+
+    @Override
+    public float getRainStrength() {
+        return world.getRainStrength();
     }
 
     @Override
@@ -563,10 +632,10 @@ public class CanaryWorld implements World {
     @Override
     public void makeExplosion(Entity exploder, double x, double y, double z, float power, boolean smoke) {
         if (exploder == null) {
-            world.a((net.minecraft.entity.Entity) null, x, y, z, power, smoke);
+            world.a((net.minecraft.entity.Entity)null, x, y, z, power, smoke);
         }
         else {
-            world.a(((CanaryEntity) exploder).getHandle(), x, y, z, power, smoke);
+            world.a(((CanaryEntity)exploder).getHandle(), x, y, z, power, smoke);
         }
     }
 
@@ -577,39 +646,27 @@ public class CanaryWorld implements World {
 
     @Override
     public long getWorldSeed() {
-        return world.H();
+        return world.J();
     }
 
     @Override
     public void removePlayerFromWorld(Player player) {
-        world.f(((CanaryPlayer) player).getHandle());
-
+        world.f(((CanaryPlayer)player).getHandle());
     }
 
     @Override
     public void addPlayerToWorld(Player player) {
-        world.d(((CanaryPlayer) player).getHandle());
+        world.d(((CanaryPlayer)player).getHandle());
     }
 
     @Override
     public Location getSpawnLocation() {
-        // More structure ftw
-        WorldInfo info = world.x;
-        Location spawn = new Location(0, 0, 0);
-
-        spawn.setX(info.c() + 0.5D);
-        spawn.setY(info.d());
-        spawn.setZ(info.e() + 0.5D);
-        spawn.setRotation(0.0F);
-        spawn.setPitch(0.0F);
-        spawn.setType(type);
-        spawn.setWorldName(world.getCanaryWorld().getName());
-        return spawn;
+        return world.x.getSpawnLocation();
     }
 
     @Override
-    public void setSpawnLocation(Location p) {
-        world.x.a((int) p.getX(), (int) p.getY(), (int) p.getZ());
+    public void setSpawnLocation(Location location) {
+        world.x.setSpawn(location);
     }
 
     @Override
@@ -623,7 +680,7 @@ public class CanaryWorld implements World {
 
         if (result != null) {
             if (result instanceof Chest) {
-                Chest chest = (Chest) result;
+                Chest chest = (Chest)result;
 
                 if (chest.hasAttachedChest()) {
                     return chest.getDoubleChest();
@@ -641,53 +698,53 @@ public class CanaryWorld implements World {
 
     @Override
     public TileEntity getOnlyTileEntityAt(int x, int y, int z) {
-        net.minecraft.tileentity.TileEntity tileentity = world.o(x, y, z);
+        net.minecraft.tileentity.TileEntity tileentity = world.s(new BlockPos(x, y, z));
 
         if (tileentity != null) {
             if (tileentity instanceof TileEntityBrewingStand) {
-                return ((TileEntityBrewingStand) tileentity).getCanaryBrewingStand();
+                return ((TileEntityBrewingStand)tileentity).getCanaryBrewingStand();
             }
             else if (tileentity instanceof TileEntityBeacon) {
-                return ((TileEntityBeacon) tileentity).getCanaryBeacon();
+                return ((TileEntityBeacon)tileentity).getCanaryBeacon();
             }
             else if (tileentity instanceof TileEntityChest) {
-                return ((TileEntityChest) tileentity).getCanaryChest();
+                return ((TileEntityChest)tileentity).getCanaryChest();
             }
             else if (tileentity instanceof TileEntityCommandBlock) {
-                return ((TileEntityCommandBlock) tileentity).getCanaryCommandBlock();
+                return ((TileEntityCommandBlock)tileentity).getCanaryCommandBlock();
             }
             else if (tileentity instanceof TileEntityComparator) {
-                return ((TileEntityComparator) tileentity).getCanaryComparator();
+                return ((TileEntityComparator)tileentity).getCanaryComparator();
             }
             else if (tileentity instanceof TileEntityDaylightDetector) {
-                return ((TileEntityDaylightDetector) tileentity).getCanaryDaylightDetector();
+                return ((TileEntityDaylightDetector)tileentity).getCanaryDaylightDetector();
             }
             else if (tileentity instanceof TileEntityDropper) { // Should come before Dispenser since its an instance of Dispenser too
-                return ((TileEntityDropper) tileentity).getCanaryDropper();
+                return ((TileEntityDropper)tileentity).getCanaryDropper();
             }
             else if (tileentity instanceof TileEntityDispenser) {
-                return ((TileEntityDispenser) tileentity).getCanaryDispenser();
+                return ((TileEntityDispenser)tileentity).getCanaryDispenser();
             }
             else if (tileentity instanceof TileEntityFurnace) {
-                return ((TileEntityFurnace) tileentity).getCanaryFurnace();
+                return ((TileEntityFurnace)tileentity).getCanaryFurnace();
             }
             else if (tileentity instanceof TileEntityHopper) {
-                return ((TileEntityHopper) tileentity).getCanaryHopper();
+                return ((TileEntityHopper)tileentity).getCanaryHopper();
             }
             else if (tileentity instanceof TileEntityMobSpawner) {
-                return ((TileEntityMobSpawner) tileentity).getCanaryMobSpawner();
+                return ((TileEntityMobSpawner)tileentity).getCanaryMobSpawner();
             }
             else if (tileentity instanceof TileEntityNote) {
-                return ((TileEntityNote) tileentity).getCanaryNoteBlock();
+                return ((TileEntityNote)tileentity).getCanaryNoteBlock();
             }
             else if (tileentity instanceof BlockJukebox.TileEntityJukebox) {
-                return ((BlockJukebox.TileEntityJukebox) tileentity).getCanaryJukebox();
+                return ((BlockJukebox.TileEntityJukebox)tileentity).getCanaryJukebox();
             }
             else if (tileentity instanceof TileEntitySign) {
-                return ((TileEntitySign) tileentity).getCanarySign();
+                return ((TileEntitySign)tileentity).getCanarySign();
             }
             else if (tileentity instanceof TileEntitySkull) {
-                return ((TileEntitySkull) tileentity).getCanarySkull();
+                return ((TileEntitySkull)tileentity).getCanarySkull();
             }
         }
         return null;
@@ -695,18 +752,18 @@ public class CanaryWorld implements World {
 
     @Override
     public BiomeType getBiomeType(int x, int z) {
-        CanaryChunk c = (CanaryChunk) getChunk(x, z);
+        CanaryChunk c = (CanaryChunk)getChunk(x, z);
         if (c == null) {
-            return BiomeType.fromId((byte) 0);
+            return BiomeType.fromId((byte)0);
         }
         int xx = x - ((x >> 4) * 16);
         int zz = z - ((z >> 4) * 16);
-        return BiomeType.fromId((byte) c.getHandle().a(xx, zz, this.getHandle().v()).ay);
+        return c.getHandle().a(new BlockPos(xx, 0, zz), this.getHandle().v()).getCanaryBiome().getBiomeType();
     }
 
     @Override
     public void setBiome(int x, int z, BiomeType biome) {
-        CanaryChunk c = (CanaryChunk) getChunk(x, z);
+        CanaryChunk c = (CanaryChunk)getChunk(x, z);
         if (c == null) {
             return;
         }
@@ -738,14 +795,48 @@ public class CanaryWorld implements World {
     }
 
     @Override
+    public List<Village> getVillages() {
+        VillageCollection collection = this.getHandle().ae();
+        if (collection == null) {
+            return null;
+        }
+        ImmutableList.Builder<Village> builder = ImmutableList.builder();
+        for (Object object : collection.b()) {
+            net.minecraft.village.Village village = (net.minecraft.village.Village)object;
+            builder.add(village.getCanaryVillage());
+        }
+        return builder.build();
+    }
+
+    @Override
+    public Village getNearestVillage(Position position, int radius) {
+        return this.getNearestVillage(position.getBlockX(), position.getBlockY(), position.getBlockZ(), radius);
+    }
+
+    @Override
+    public Village getNearestVillage(Location location, int radius) {
+        return this.getNearestVillage(location.getBlockX(), location.getBlockY(), location.getBlockZ(), radius);
+    }
+
+    @Override
+    public Village getNearestVillage(int x, int y, int z, int radius) {
+        VillageCollection collection = this.getHandle().ae();
+        if (collection == null) {
+            return null;
+        }
+        net.minecraft.village.Village village = collection.a(new BlockPos(x, y, z), radius);
+        return village != null ? village.getCanaryVillage() : null;
+    }
+
+    @Override
     public Biome getBiome(int x, int z) {
-        CanaryChunk c = (CanaryChunk) getChunk(x, z);
+        CanaryChunk c = (CanaryChunk)getChunk(x, z);
         if (c == null) {
             return null;
         }
         int xx = x - ((x >> 4) * 16);
         int zz = z - ((z >> 4) * 16);
-        return c.getHandle().a(xx, zz, this.getHandle().v()).getCanaryBiome();
+        return c.getHandle().a(new BlockPos(xx, 0, zz), this.getHandle().v()).getCanaryBiome();
     }
 
     public net.minecraft.world.World getHandle() {
@@ -757,7 +848,7 @@ public class CanaryWorld implements World {
         if (!(ob instanceof CanaryWorld)) {
             return false;
         }
-        CanaryWorld test = (CanaryWorld) ob;
+        CanaryWorld test = (CanaryWorld)ob;
         return test.fqName.equals(this.fqName);
     }
 
@@ -771,10 +862,5 @@ public class CanaryWorld implements World {
     @Override
     public String toString() {
         return "CanaryWorld{" + "world=" + world + ", type=" + type + ", name=" + name + ", fqName=" + fqName + '}';
-    }
-
-    void dereference() {
-        world.canaryDimension = null;
-        this.world = null;
     }
 }

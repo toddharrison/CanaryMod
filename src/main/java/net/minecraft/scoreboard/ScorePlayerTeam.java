@@ -1,25 +1,32 @@
 package net.minecraft.scoreboard;
 
+import com.google.common.collect.Sets;
 import net.canarymod.api.scoreboard.CanaryTeam;
+import net.minecraft.util.EnumChatFormatting;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Set;
 
 public class ScorePlayerTeam extends Team {
 
     public final Scoreboard a; // CanaryMod: private to public
     private final String b;
-    private final Set c = new HashSet();
+    private final Set c = Sets.newHashSet();
     private String d;
     private String e = "";
     private String f = "";
     private boolean g = true;
     private boolean h = true;
+    private Team.EnumVisible i;
+    private Team.EnumVisible j;
+    private EnumChatFormatting k;
 
     private CanaryTeam team = new CanaryTeam(this); // CanaryMod: initialize our variable
 
     public ScorePlayerTeam(Scoreboard scoreboard, String s0) {
+        this.i = Team.EnumVisible.ALWAYS;
+        this.j = Team.EnumVisible.ALWAYS;
+        this.k = EnumChatFormatting.RESET;
         this.a = scoreboard;
         this.b = s0;
         this.d = s0;
@@ -66,13 +73,8 @@ public class ScorePlayerTeam extends Team {
     }
 
     public void c(String s0) {
-        if (s0 == null) {
-            throw new IllegalArgumentException("Suffix cannot be null");
-        }
-        else {
-            this.f = s0;
-            this.a.b(this);
-        }
+        this.f = s0;
+        this.a.b(this);
     }
 
     public String d(String s0) {
@@ -101,7 +103,25 @@ public class ScorePlayerTeam extends Team {
         this.a.b(this);
     }
 
-    public int i() {
+    public Team.EnumVisible i() {
+        return this.i;
+    }
+
+    public Team.EnumVisible j() {
+        return this.j;
+    }
+
+    public void a(Team.EnumVisible team_enumvisible) {
+        this.i = team_enumvisible;
+        this.a.b(this);
+    }
+
+    public void b(Team.EnumVisible team_enumvisible) {
+        this.j = team_enumvisible;
+        this.a.b(this);
+    }
+
+    public int k() {
         int i0 = 0;
 
         if (this.g()) {
@@ -113,6 +133,14 @@ public class ScorePlayerTeam extends Team {
         }
 
         return i0;
+    }
+
+    public void a(EnumChatFormatting enumchatformatting) {
+        this.k = enumchatformatting;
+    }
+
+    public EnumChatFormatting l() {
+        return this.k;
     }
 
     // CanaryMod: getter

@@ -1,33 +1,18 @@
 package net.minecraft.entity;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import net.canarymod.api.CanaryEntityTracker;
-import net.canarymod.api.entity.living.humanoid.EntityNonPlayableCharacter;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.boss.EntityWither;
-import net.minecraft.entity.item.EntityBoat;
-import net.minecraft.entity.item.EntityEnderCrystal;
-import net.minecraft.entity.item.EntityEnderEye;
-import net.minecraft.entity.item.EntityEnderPearl;
-import net.minecraft.entity.item.EntityExpBottle;
-import net.minecraft.entity.item.EntityFallingBlock;
-import net.minecraft.entity.item.EntityFireworkRocket;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.item.EntityTNTPrimed;
-import net.minecraft.entity.item.EntityXPOrb;
+import net.minecraft.entity.item.*;
 import net.minecraft.entity.passive.EntityBat;
 import net.minecraft.entity.passive.EntitySquid;
 import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraft.entity.projectile.EntityEgg;
-import net.minecraft.entity.projectile.EntityFireball;
-import net.minecraft.entity.projectile.EntityFishHook;
-import net.minecraft.entity.projectile.EntityPotion;
-import net.minecraft.entity.projectile.EntitySmallFireball;
-import net.minecraft.entity.projectile.EntitySnowball;
+import net.minecraft.entity.projectile.*;
 import net.minecraft.network.Packet;
 import net.minecraft.util.IntHashMap;
 import net.minecraft.util.ReportedException;
@@ -35,19 +20,19 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.Callable;
+import net.canarymod.api.entity.living.humanoid.EntityNonPlayableCharacter;
 
 public class EntityTracker {
 
     private static final Logger a = LogManager.getLogger();
     private final WorldServer b;
-    private final Set<EntityTrackerEntry> c = Collections.synchronizedSet(new HashSet<EntityTrackerEntry>()); // CanaryMod: synchronize, add final
+    private final Set<EntityTrackerEntry> c = Collections.synchronizedSet(Sets.<EntityTrackerEntry> newHashSet()); // CanaryMod: synchronize, add final
     private IntHashMap d = new IntHashMap();
     private int e;
 
@@ -55,7 +40,7 @@ public class EntityTracker {
 
     public EntityTracker(WorldServer worldserver) {
         this.b = worldserver;
-        this.e = worldserver.q().ah().d();
+        this.e = worldserver.r().an().d();
         canaryTracker = new CanaryEntityTracker(this, worldserver.getCanaryWorld());
     }
 
@@ -64,7 +49,7 @@ public class EntityTracker {
             this.a(entity, 512, 2);
             EntityPlayerMP entityplayermp = (EntityPlayerMP) entity;
 
-            synchronized(c) { // CanaryMod: synchronize set access
+            synchronized (c) { // CanaryMod: synchronize set access
                 Iterator iterator = this.c.iterator();
 
                 while (iterator.hasNext()) {
@@ -109,23 +94,28 @@ public class EntityTracker {
             this.a(entity, 80, 3, false);
         } else if (entity instanceof EntityBat) {
             this.a(entity, 80, 3, false);
-        } else if (entity instanceof IAnimals) {
-            this.a(entity, 80, 3, true);
         } else if (entity instanceof EntityDragon) {
             this.a(entity, 160, 3, true);
+        } else if (entity instanceof IAnimals) {
+            this.a(entity, 80, 3, true);
         } else if (entity instanceof EntityTNTPrimed) {
             this.a(entity, 160, 10, true);
         } else if (entity instanceof EntityFallingBlock) {
             this.a(entity, 160, 20, true);
         } else if (entity instanceof EntityHanging) {
             this.a(entity, 160, Integer.MAX_VALUE, false);
+        } else if (entity instanceof EntityArmorStand) {
+            this.a(entity, 160, 3, true);
         } else if (entity instanceof EntityXPOrb) {
             this.a(entity, 160, 20, true);
         } else if (entity instanceof EntityEnderCrystal) {
             this.a(entity, 256, Integer.MAX_VALUE, false);
-        } else if (entity instanceof EntityNonPlayableCharacter) { // CanaryMod: NPC
+        }
+        // CanaryMod
+        else if (entity instanceof EntityNonPlayableCharacter) {
             this.a(entity, 512, 2);
         }
+
     }
 
     public void a(Entity entity, int i0, int i1) {
@@ -138,14 +128,14 @@ public class EntityTracker {
         }
 
         try {
-            if (this.d.b(entity.y())) {
+            if (this.d.b(entity.F())) {
                 throw new IllegalStateException("Entity is already tracked!");
             }
 
             EntityTrackerEntry entitytrackerentry = new EntityTrackerEntry(entity, i0, i1, flag0);
 
             this.c.add(entitytrackerentry);
-            this.d.a(entity.y(), entitytrackerentry);
+            this.d.a(entity.F(), entitytrackerentry);
 
             // CanaryMod: update hidden player tracking state
             if (entity instanceof EntityPlayerMP) {
@@ -153,7 +143,7 @@ public class EntityTracker {
                 canaryTracker.forceHiddenPlayerUpdate(entityplayermp.getPlayer());
             }
             // CanaryMod: end
-            entitytrackerentry.b(this.b.h);
+            entitytrackerentry.b(this.b.j);
         } catch (Throwable s01) {
             CrashReport crashreport = CrashReport.a(s01, "Adding entity to track");
             CrashReportCategory crashreportcategory = crashreport.a("Entity To Track");
@@ -174,7 +164,7 @@ public class EntityTracker {
             entity.a(crashreportcategory);
             CrashReportCategory crashreportcategory1 = crashreport.a("Entity That Is Already Tracked");
 
-            ((EntityTrackerEntry) this.d.a(entity.y())).a.a(crashreportcategory1);
+            ((EntityTrackerEntry) this.d.a(entity.F())).a.a(crashreportcategory1);
 
             try {
                 throw new ReportedException(crashreport);
@@ -182,6 +172,7 @@ public class EntityTracker {
                 a.error("\"Silently\" catching entity tracking error.", reportedexception);
             }
         }
+
     }
 
     public void b(Entity entity) {
@@ -201,16 +192,17 @@ public class EntityTracker {
             }
         }
 
-        EntityTrackerEntry entitytrackerentry1 = (EntityTrackerEntry) this.d.d(entity.y());
+        EntityTrackerEntry entitytrackerentry1 = (EntityTrackerEntry) this.d.d(entity.F());
 
         if (entitytrackerentry1 != null) {
             this.c.remove(entitytrackerentry1);
             entitytrackerentry1.a();
         }
+
     }
 
     public void a() {
-        ArrayList arraylist = new ArrayList();
+        ArrayList arraylist = Lists.newArrayList();
 
         synchronized (c) { // CanaryMod: synchronize set access
             Iterator iterator = this.c.iterator();
@@ -218,68 +210,84 @@ public class EntityTracker {
             while (iterator.hasNext()) {
                 EntityTrackerEntry entitytrackerentry = (EntityTrackerEntry) iterator.next();
 
-                entitytrackerentry.a(this.b.h);
+                entitytrackerentry.a(this.b.j);
                 if (entitytrackerentry.n && entitytrackerentry.a instanceof EntityPlayerMP) {
                     arraylist.add((EntityPlayerMP) entitytrackerentry.a);
                 }
             }
-        }
 
-        for (int i0 = 0; i0 < arraylist.size(); ++i0) {
-            EntityPlayerMP entityplayermp = (EntityPlayerMP) arraylist.get(i0);
+            for (int i0 = 0; i0 < arraylist.size(); ++i0) {
+                EntityPlayerMP entityplayermp = (EntityPlayerMP) arraylist.get(i0);
 
-            synchronized (c) { // CanaryMod: synchronize set access
-                Iterator iterator1 = this.c.iterator();
+                synchronized (c) { // CanaryMod: synchronize set access
+                    Iterator iterator1 = this.c.iterator();
 
-                while (iterator1.hasNext()) {
-                    EntityTrackerEntry entitytrackerentry1 = (EntityTrackerEntry) iterator1.next();
+                    while (iterator1.hasNext()) {
+                        EntityTrackerEntry entitytrackerentry1 = (EntityTrackerEntry) iterator1.next();
 
-                    if (entitytrackerentry1.a != entityplayermp) {
-                        entitytrackerentry1.b(entityplayermp);
+                        if (entitytrackerentry1.a != entityplayermp) {
+                            entitytrackerentry1.b(entityplayermp);
+                        }
                     }
                 }
             }
         }
     }
 
+    public void a(EntityPlayerMP entityplayermp) {
+        Iterator iterator = this.c.iterator();
+
+        while (iterator.hasNext()) {
+            EntityTrackerEntry entitytrackerentry = (EntityTrackerEntry) iterator.next();
+
+            if (entitytrackerentry.a == entityplayermp) {
+                entitytrackerentry.b(this.b.j);
+            } else {
+                entitytrackerentry.b(entityplayermp);
+            }
+        }
+
+    }
+
     public void a(Entity entity, Packet packet) {
-        EntityTrackerEntry entitytrackerentry = (EntityTrackerEntry) this.d.a(entity.y());
+        EntityTrackerEntry entitytrackerentry = (EntityTrackerEntry) this.d.a(entity.F());
 
         if (entitytrackerentry != null) {
             entitytrackerentry.a(packet);
         }
+
     }
 
     public void b(Entity entity, Packet packet) {
-        EntityTrackerEntry entitytrackerentry = (EntityTrackerEntry) this.d.a(entity.y());
+        EntityTrackerEntry entitytrackerentry = (EntityTrackerEntry) this.d.a(entity.F());
 
         if (entitytrackerentry != null) {
             entitytrackerentry.b(packet);
         }
+
     }
 
-    public void a(EntityPlayerMP entityplayermp) {
+    public void b(EntityPlayerMP entityplayermp) {
         synchronized (c) { // CanaryMod: synchronize set access
             Iterator iterator = this.c.iterator();
 
             while (iterator.hasNext()) {
                 EntityTrackerEntry entitytrackerentry = (EntityTrackerEntry) iterator.next();
 
-                entitytrackerentry.c(entityplayermp);
+                entitytrackerentry.d(entityplayermp);
             }
         }
+
     }
 
     public void a(EntityPlayerMP entityplayermp, Chunk chunk) {
-        synchronized (c) { // CanaryMod: synchronize set access
-            Iterator iterator = this.c.iterator();
+        Iterator iterator = this.c.iterator();
 
-            while (iterator.hasNext()) {
-                EntityTrackerEntry entitytrackerentry = (EntityTrackerEntry)iterator.next();
+        while (iterator.hasNext()) {
+            EntityTrackerEntry entitytrackerentry = (EntityTrackerEntry) iterator.next();
 
-                if (entitytrackerentry.a != entityplayermp && entitytrackerentry.a.ah == chunk.g && entitytrackerentry.a.aj == chunk.h) {
-                    entitytrackerentry.b(entityplayermp);
-                }
+            if (entitytrackerentry.a != entityplayermp && entitytrackerentry.a.ae == chunk.a && entitytrackerentry.a.ag == chunk.b) {
+                entitytrackerentry.b(entityplayermp);
             }
         }
     }

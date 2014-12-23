@@ -8,12 +8,16 @@ public class TileEntityDropper extends TileEntityDispenser {
         this.complexBlock = new CanaryDropper(this); // CanaryMod: wrap tile entity
     }
 
-    public String b() {
+    public String d_() {
         return this.k_() ? this.a : "container.dropper";
+    }
+
+    public String k() {
+        return "minecraft:dropper";
     }
 
     // CanaryMod
     public CanaryDropper getCanaryDropper() {
-        return (CanaryDropper) complexBlock;
+        return (CanaryDropper)complexBlock;
     }
 }

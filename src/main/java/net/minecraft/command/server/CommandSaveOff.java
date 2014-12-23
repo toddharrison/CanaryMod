@@ -17,13 +17,13 @@ public class CommandSaveOff extends CommandBase {
         return "commands.save-off.usage";
     }
 
-    public void b(ICommandSender icommandsender, String[] astring) {
-        MinecraftServer minecraftserver = MinecraftServer.I();
+    public void a(ICommandSender icommandsender, String[] astring) throws CommandException {
+        MinecraftServer minecraftserver = MinecraftServer.M();
         boolean flag0 = false;
 
         // CanaryMod: Fix for MultiWorld
         for (net.canarymod.api.world.World w : minecraftserver.worldManager.getAllWorlds()) {
-            WorldServer worldserver = (WorldServer) ((CanaryWorld) w).getHandle();
+            WorldServer worldserver = (WorldServer)((CanaryWorld)w).getHandle();
 
             if (worldserver != null && !worldserver.c) {
                 worldserver.c = true;

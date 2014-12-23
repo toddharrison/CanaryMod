@@ -3,8 +3,7 @@ package net.canarymod.api.ai;
 import net.minecraft.entity.ai.EntityAITasks;
 
 import java.util.Iterator;
-
-import static net.canarymod.Canary.log;
+import net.canarymod.Canary;
 
 /**
  * @author Somners
@@ -21,33 +20,20 @@ public class CanaryAIManager implements AIManager {
      * {@inheritDoc}
      */
     @Override
-    public boolean addTask(int priority, Class<? extends AIBase> ai) {
-        if (!this.hasTask(ai)) {
-            try {
-                tasks.a(priority, new EntityAICanary(ai.newInstance()));
-                return true;
-            }
-            catch (InstantiationException ex) {
-                log.error("Exception adding new AI taks in Canary's AIManager: ", ex);
-            }
-            catch (IllegalAccessException ex) {
-                log.error("Exception adding new AI taks in Canary's AIManager: ", ex);
-            }
-        }
-        return false;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public boolean removeTask(Class<? extends AIBase> ai) {
         if (this.hasTask(ai)) {
             Iterator<?> it = tasks.b.iterator();
             while (it.hasNext()) {
                 EntityAITasks.EntityAITaskEntry entry = (EntityAITasks.EntityAITaskEntry) it.next();
                 if (entry.a instanceof EntityAICanary) {
-                    if (((EntityAICanary) entry.a).getAIBase().getClass().equals(ai)) {
+                    if (ai.isAssignableFrom(((EntityAICanary) entry.a).getAIBase().getClass())) {
+                        tasks.a(entry.a);
+                        return true;
+                    }
+                }
+                // Make sure its not null because we don't wrap ALL ai
+                else if (entry.a.getCanaryAIBase() != null) {
+                    if (ai.isAssignableFrom(entry.a.getCanaryAIBase().getClass())) {
                         tasks.a(entry.a);
                         return true;
                     }
@@ -66,7 +52,13 @@ public class CanaryAIManager implements AIManager {
         while (it.hasNext()) {
             EntityAITasks.EntityAITaskEntry entry = (EntityAITasks.EntityAITaskEntry) it.next();
             if (entry.a instanceof EntityAICanary) {
-                if (((EntityAICanary) entry.a).getAIBase().getClass().equals(ai)) {
+                if (ai.isAssignableFrom(((EntityAICanary) entry.a).getAIBase().getClass())) {
+                    return true;
+                }
+            }
+            // Make sure its not null because we don't wrap ALL ai
+            else if (entry.a.getCanaryAIBase() != null) {
+                if (ai.isAssignableFrom(entry.a.getCanaryAIBase().getClass())) {
                     return true;
                 }
             }
@@ -83,8 +75,14 @@ public class CanaryAIManager implements AIManager {
         while (it.hasNext()) {
             EntityAITasks.EntityAITaskEntry entry = (EntityAITasks.EntityAITaskEntry) it.next();
             if (entry.a instanceof EntityAICanary) {
-                if (((EntityAICanary) entry.a).getAIBase().getClass().equals(ai)) {
+                if (((EntityAICanary) entry.a).getAIBase().getClass().isAssignableFrom(ai)) {
                     return ((EntityAICanary) entry.a).getAIBase();
+                }
+            }
+            // Make sure its not null because we don't wrap ALL ai
+            else if (entry.a.getCanaryAIBase() != null) {
+                if (entry.a.getCanaryAIBase().getClass().isAssignableFrom(ai)) {
+                    return entry.a.getCanaryAIBase();
                 }
             }
         }
@@ -94,8 +92,15 @@ public class CanaryAIManager implements AIManager {
     @Override
     public boolean addTask(int priority, AIBase ai) {
         if (!this.hasTask(ai.getClass())) {
-            tasks.a(priority, new EntityAICanary(ai));
-            return true;
+            if (ai instanceof CanaryAIBase) {
+                tasks.a(priority, ((CanaryAIBase)ai).getHandle());
+                return true;
+            }
+            else {
+                        
+                tasks.a(priority, new EntityAICanary(ai));
+                return true;
+            }
         }
         return false;
     }

@@ -1,24 +1,22 @@
 package net.minecraft.inventory;
 
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityDispenser;
 
-
 public class ContainerDispenser extends Container {
 
-    private TileEntityDispenser a;
+    private IInventory a;
 
-    public ContainerDispenser(IInventory iinventory, TileEntityDispenser tileentitydispenser) {
-        this.a = tileentitydispenser;
+    public ContainerDispenser(IInventory iinventory, IInventory iinventory1) {
+        this.a = iinventory1;
 
         int i0;
         int i1;
 
         for (i0 = 0; i0 < 3; ++i0) {
             for (i1 = 0; i1 < 3; ++i1) {
-                this.a(new Slot(tileentitydispenser, i1 + i0 * 3, 62 + i1 * 18, 17 + i0 * 18));
+                this.a(new Slot(iinventory1, i1 + i0 * 3, 62 + i1 * 18, 17 + i0 * 18));
             }
         }
 
@@ -32,7 +30,7 @@ public class ContainerDispenser extends Container {
             this.a(new Slot(iinventory, i0, 8 + i0 * 18, 142));
         }
 
-        this.inventory = a.getCanaryDispenser(); // CanaryMod: Set inventory instance
+        this.inventory = ((TileEntityDispenser)a).getCanaryDispenser(); // CanaryMod: Set inventory instance
     }
 
     public boolean a(EntityPlayer entityplayer) {
@@ -41,12 +39,12 @@ public class ContainerDispenser extends Container {
 
     public ItemStack b(EntityPlayer entityplayer, int i0) {
         ItemStack itemstack = null;
-        Slot slot = (Slot) this.c.get(i0);
+        Slot slot = (Slot)this.c.get(i0);
 
         if (slot != null && slot.e()) {
             ItemStack itemstack1 = slot.d();
 
-            itemstack = itemstack1.m();
+            itemstack = itemstack1.k();
             if (i0 < 9) {
                 if (!this.a(itemstack1, 9, 45, true)) {
                     return null;
@@ -57,7 +55,7 @@ public class ContainerDispenser extends Container {
             }
 
             if (itemstack1.b == 0) {
-                slot.c((ItemStack) null);
+                slot.d((ItemStack)null);
             }
             else {
                 slot.f();

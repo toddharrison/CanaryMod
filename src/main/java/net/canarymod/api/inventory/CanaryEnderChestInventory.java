@@ -19,6 +19,14 @@ public class CanaryEnderChestInventory extends CanaryEntityInventory implements 
         this.human = human;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getInventoryName() {
+        return inventory.d_();
+    }
+
     public InventoryType getInventoryType() {
         return InventoryType.CHEST;
     }
@@ -79,7 +87,7 @@ public class CanaryEnderChestInventory extends CanaryEntityInventory implements 
      */
     @Override
     public void update() {
-        getHandle().l_();
+        getHandle().o_();
     }
 
     public InventoryEnderChest getHandle() {

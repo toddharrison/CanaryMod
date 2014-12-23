@@ -1,5 +1,6 @@
 package net.canarymod.api.factory;
 
+import net.canarymod.NotYetImplementedException;
 import net.canarymod.api.DataWatcher;
 import net.canarymod.api.chat.CanaryChatComponent;
 import net.canarymod.api.chat.ChatComponent;
@@ -11,11 +12,7 @@ import net.canarymod.api.entity.hanging.CanaryPainting;
 import net.canarymod.api.entity.hanging.Painting;
 import net.canarymod.api.entity.living.CanaryLivingBase;
 import net.canarymod.api.entity.living.LivingBase;
-import net.canarymod.api.entity.living.humanoid.CanaryHuman;
-import net.canarymod.api.entity.living.humanoid.CanaryHumanCapabilities;
-import net.canarymod.api.entity.living.humanoid.Human;
-import net.canarymod.api.entity.living.humanoid.HumanCapabilities;
-import net.canarymod.api.entity.living.humanoid.Player;
+import net.canarymod.api.entity.living.humanoid.*;
 import net.canarymod.api.inventory.CanaryItem;
 import net.canarymod.api.inventory.Item;
 import net.canarymod.api.nbt.CanaryCompoundTag;
@@ -30,20 +27,20 @@ import net.canarymod.api.statistics.CanaryStat;
 import net.canarymod.api.statistics.Stat;
 import net.canarymod.api.world.CanaryChunk;
 import net.canarymod.api.world.Chunk;
+import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.blocks.CanaryBlock;
+import net.canarymod.api.world.effects.Particle;
+import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.api.world.position.Position;
 import net.canarymod.api.world.position.Vector3D;
-import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.server.*;
 import net.minecraft.stats.StatBase;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.Vec3;
-import net.minecraft.world.ChunkPosition;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static net.canarymod.Canary.log;
 
@@ -67,200 +64,210 @@ public class CanaryPacketFactory implements PacketFactory {
                 throw new InvalidPacketConstructionException(id, "JoinGame", "Join Game packets should only be handled by the Server");
             case 0x02: // 2
                 verify(id, "Chat", 1, args, test(CanaryChatComponent.class, 1));
-                return new CanaryPacket(new S02PacketChat(((CanaryChatComponent) args[0]).getNative()));
+                return new CanaryPacket(new S02PacketChat(((CanaryChatComponent)args[0]).getNative()));
             case 0x03: // 3
                 verify(id, "UpdateTime", 2, args, test(Long.class, 2));
-                return new CanaryPacket(new S03PacketTimeUpdate((Long) args[0], (Long) args[1], false));
+                return new CanaryPacket(new S03PacketTimeUpdate((Long)args[0], (Long)args[1], false));
             case 0x04: // 4
                 verify(id, "EntityEquipment", 3, args, test(Integer.class, 2), test(CanaryItem.class, 1));
-                return new CanaryPacket(new S04PacketEntityEquipment((Integer) args[0], (Integer) args[1], ((CanaryItem) args[2]).getHandle()));
+                return new CanaryPacket(new S04PacketEntityEquipment((Integer)args[0], (Integer)args[1], ((CanaryItem)args[2]).getHandle()));
             case 0x05: // 5
                 verify(id, "SpawnPosition", 3, args, test(Integer.class, 3));
-                return new CanaryPacket(new S05PacketSpawnPosition((Integer) args[0], (Integer) args[1], (Integer) args[2]));
+                return new CanaryPacket(new S05PacketSpawnPosition(blockPosFromArgs(0, args)));
             case 0x06: // 6
                 verify(id, "UpdateHealth", 3, args, test(Float.class, 1), test(Integer.class, 1), test(Float.class, 1));
-                return new CanaryPacket(new S06PacketUpdateHealth((Float) args[0], (Integer) args[1], (Float) args[2]));
+                return new CanaryPacket(new S06PacketUpdateHealth((Float)args[0], (Integer)args[1], (Float)args[2]));
             case 0x07: // 7
                 //int EnumDifficulty WorldType WorldSettings.GameType
                 return new CanaryPacket(new S07PacketRespawn());
             case 0x08: // 8
-                verify(id, "PlayerPosLook", 6, args, test(Double.class, 3), test(Float.class, 2), test(Boolean.class, 1));
-                return new CanaryPacket(new S08PacketPlayerPosLook((Double) args[0], (Double) args[1], (Double) args[2], (Float) args[3], (Float) args[4], (Boolean) args[5]));
+                if (args.length > 5) {
+                    verify(id, "PlayerPosLook", 6, args, test(Double.class, 3), test(Float.class, 2), test(Set.class, 1));
+                    return new CanaryPacket(new S08PacketPlayerPosLook((Double)args[0], (Double)args[1], (Double)args[2], (Float)args[3], (Float)args[4], (Set)args[5]));
+                }
+                verify(id, "PlayerPosLook", 6, args, test(Double.class, 3), test(Float.class, 2));
+                return new CanaryPacket(new S08PacketPlayerPosLook((Double)args[0], (Double)args[1], (Double)args[2], (Float)args[3], (Float)args[4], Collections.emptySet()));
             case 0x09: // 9
                 verify(id, "HeldItemChange", 1, args, test(Integer.class, 1));
-                return new CanaryPacket(new S09PacketHeldItemChange((Integer) args[0]));
+                return new CanaryPacket(new S09PacketHeldItemChange((Integer)args[0]));
             case 0x0A: // 10
                 verify(id, "UseBed", 4, args, test(CanaryHuman.class, 1), test(Integer.class, 3));
-                return new CanaryPacket(new S0APacketUseBed(((CanaryHuman) args[0]).getHandle(), (Integer) args[1], (Integer) args[2], (Integer) args[3]));
+                return new CanaryPacket(new S0APacketUseBed(((CanaryHuman)args[0]).getHandle(), blockPosFromArgs(1, args)));
             case 0x0B: // 11
                 verify(id, "Animation", 2, args, test(CanaryEntity.class, 1), test(Integer.class, 1));
-                return new CanaryPacket(new S0BPacketAnimation(((CanaryEntity) args[0]).getHandle(), (Integer) args[1]));
+                return new CanaryPacket(new S0BPacketAnimation(((CanaryEntity)args[0]).getHandle(), (Integer)args[1]));
             case 0x0C: // 12
                 verify(id, "SpawnPlayer", 1, args, test(CanaryHuman.class, 1));
-                return new CanaryPacket(new S0CPacketSpawnPlayer(((CanaryHuman) args[0]).getHandle()));
+                return new CanaryPacket(new S0CPacketSpawnPlayer(((CanaryHuman)args[0]).getHandle()));
             case 0x0D: // 13
                 verify(id, "CollectItem", 2, args, test(Integer.class, 2));
-                return new CanaryPacket(new S0DPacketCollectItem((Integer) args[0], (Integer) args[1]));
+                return new CanaryPacket(new S0DPacketCollectItem((Integer)args[0], (Integer)args[1]));
             case 0x0E: // 14
                 if (args.length > 2) {
                     verify(id, "SpawnObject", 2, args, test(CanaryEntity.class, 1), test(Integer.class, 2));
-                    return new CanaryPacket(new S0EPacketSpawnObject(((CanaryEntity) args[0]).getHandle(), (Integer) args[1], (Integer) args[2]));
+                    return new CanaryPacket(new S0EPacketSpawnObject(((CanaryEntity)args[0]).getHandle(), (Integer)args[1], (Integer)args[2]));
                 }
                 verify(id, "SpawnObject", 2, args, test(CanaryEntity.class, 1), test(Integer.class, 1));
-                return new CanaryPacket(new S0EPacketSpawnObject(((CanaryEntity) args[0]).getHandle(), (Integer) args[1]));
+                return new CanaryPacket(new S0EPacketSpawnObject(((CanaryEntity)args[0]).getHandle(), (Integer)args[1]));
             case 0x0F: // 15
                 verify(id, "SpawnMob", 1, args, test(CanaryLivingBase.class, 1));
-                return new CanaryPacket(new S0FPacketSpawnMob(((CanaryLivingBase) args[0]).getHandle()));
+                return new CanaryPacket(new S0FPacketSpawnMob(((CanaryLivingBase)args[0]).getHandle()));
             case 0x10: // 16
                 verify(id, "SpawnPainting", 1, args, test(CanaryPainting.class, 1));
-                return new CanaryPacket(new S10PacketSpawnPainting(((CanaryPainting) args[0]).getHandle()));
+                return new CanaryPacket(new S10PacketSpawnPainting(((CanaryPainting)args[0]).getHandle()));
             case 0x11: // 17
                 verify(id, "SpawnExperienceOrb", 1, args, test(CanaryXPOrb.class, 1));
-                return new CanaryPacket(new S11PacketSpawnExperienceOrb(((CanaryXPOrb) args[0]).getHandle()));
+                return new CanaryPacket(new S11PacketSpawnExperienceOrb(((CanaryXPOrb)args[0]).getHandle()));
             case 0x12: // 18
                 if (args.length > 1) {
                     verify(id, "EntityVelocity", 4, args, test(Integer.class, 1), test(Double.class, 3));
-                    return new CanaryPacket(new S12PacketEntityVelocity((Integer) args[0], (Double) args[1], (Double) args[2], (Double) args[3]));
+                    return new CanaryPacket(new S12PacketEntityVelocity((Integer)args[0], (Double)args[1], (Double)args[2], (Double)args[3]));
                 }
                 verify(id, "EntityVelocity", 1, args, test(CanaryEntity.class, 1));
-                return new CanaryPacket(new S12PacketEntityVelocity(((CanaryEntity) args[0]).getHandle()));
+                return new CanaryPacket(new S12PacketEntityVelocity(((CanaryEntity)args[0]).getHandle()));
             case 0x13: // 19
                 verify(id, "DestroyEntities", 1, args, test(int[].class, 1));
-                return new CanaryPacket(new S13PacketDestroyEntities((int[]) args[0]));
+                return new CanaryPacket(new S13PacketDestroyEntities((int[])args[0]));
             case 0x14: // 20
                 throw new InvalidPacketConstructionException(id, "Entity", "Is abstract packet for ids 15, 16, and 17");
             case 0x15: // 21
                 verify(id, "EntityRelMove", 4, args, test(Integer.class, 1), test(Byte.class, 3));
-                return new CanaryPacket(new S14PacketEntity.S15PacketEntityRelMove((Integer) args[0], (Byte) args[1], (Byte) args[2], (Byte) args[3]));
+                return new CanaryPacket(new S14PacketEntity.S15PacketEntityRelMove((Integer)args[0], (Byte)args[1], (Byte)args[2], (Byte)args[3], true));
             case 0x16: // 22
                 verify(id, "EntityLook", 3, args, test(Integer.class, 1), test(Byte.class, 2));
-                return new CanaryPacket(new S14PacketEntity.S16PacketEntityLook((Integer) args[0], (Byte) args[1], (Byte) args[2]));
+                return new CanaryPacket(new S14PacketEntity.S16PacketEntityLook((Integer) args[0], (Byte) args[1], (Byte) args[2], true));
             case 0x17: // 23
                 verify(id, "EntityLookMove", 6, args, test(Integer.class, 1), test(Byte.class, 5));
-                return new CanaryPacket(new S14PacketEntity.S17PacketEntityLookMove((Integer) args[0], (Byte) args[1], (Byte) args[2], (Byte) args[3], (Byte) args[4], (Byte) args[5]));
+                return new CanaryPacket(new S14PacketEntity.S17PacketEntityLookMove((Integer) args[0], (Byte) args[1], (Byte) args[2], (Byte) args[3], (Byte) args[4], (Byte) args[5], true));
             case 0x18: // 24
                 if (args.length > 1) {
                     verify(id, "EntityTeleport", 6, args, test(Integer.class, 4), test(Byte.class, 2));
-                    return new CanaryPacket(new S18PacketEntityTeleport((Integer) args[0], (Integer) args[1], (Integer) args[2], (Integer) args[3], (Byte) args[4], (Byte) args[5]));
+                    return new CanaryPacket(new S18PacketEntityTeleport((Integer)args[0], (Integer)args[1], (Integer)args[2], (Integer)args[3], (Byte)args[4], (Byte)args[5], true));
                 }
                 verify(id, "EntityTeleport", 1, args, test(CanaryEntity.class, 1));
-                return new CanaryPacket(new S18PacketEntityTeleport(((CanaryEntity) args[0]).getHandle()));
+                return new CanaryPacket(new S18PacketEntityTeleport(((CanaryEntity)args[0]).getHandle()));
             case 0x19: // 25
                 verify(id, "EntityStatus", 2, args, test(CanaryEntity.class, 1), test(Byte.class, 1));
-                return new CanaryPacket(new S19PacketEntityStatus(((CanaryEntity) args[0]).getHandle(), (Byte) args[1]));
+                return new CanaryPacket(new S19PacketEntityStatus(((CanaryEntity)args[0]).getHandle(), (Byte)args[1]));
             //case 0x1A: UNKNOWN PACKET // 26
             case 0x1B: // 27
                 verify(id, "EntityAttach", 3, args, test(Integer.class, 1), test(CanaryEntity.class, 2));
-                return new CanaryPacket(new S1BPacketEntityAttach((Integer) args[0], ((CanaryEntity) args[1]).getHandle(), ((CanaryEntity) args[2]).getHandle()));
+                return new CanaryPacket(new S1BPacketEntityAttach((Integer)args[0], ((CanaryEntity)args[1]).getHandle(), ((CanaryEntity)args[2]).getHandle()));
             case 0x1C: // 28
                 throw new InvalidPacketConstructionException(id, "EntityMetadata", "CanaryMod is currently unable to handle creation of this packet.");
             case 0x1D: // 29
                 verify(id, "EntityEffect", 2, args, test(Integer.class, 1), test(CanaryPotionEffect.class, 1));
-                return new CanaryPacket(new S1DPacketEntityEffect((Integer) args[0], ((CanaryPotionEffect) args[1]).getHandle()));
+                return new CanaryPacket(new S1DPacketEntityEffect((Integer)args[0], ((CanaryPotionEffect)args[1]).getHandle()));
             case 0x1E: // 30
                 verify(id, "RemoveEntityEffect", 2, args, test(Integer.class, 1), test(CanaryPotionEffect.class, 1));
-                return new CanaryPacket(new S1EPacketRemoveEntityEffect((Integer) args[0], ((CanaryPotionEffect) args[1]).getHandle()));
+                return new CanaryPacket(new S1EPacketRemoveEntityEffect((Integer)args[0], ((CanaryPotionEffect)args[1]).getHandle()));
             case 0x1F: // 31
                 verify(id, "SetExperience", 3, args, test(Float.class, 1), test(Integer.class, 2));
-                return new CanaryPacket(new S1FPacketSetExperience((Float) args[0], (Integer) args[1], (Integer) args[2]));
+                return new CanaryPacket(new S1FPacketSetExperience((Float)args[0], (Integer)args[1], (Integer)args[2]));
             case 0x20: // 32
                 throw new InvalidPacketConstructionException(id, "EntityProperties", "CanaryMod is currently unable to handle creation of this packet.");
             case 0x21: // 33
                 verify(id, "ChunkData", 3, args, test(CanaryChunk.class, 1), test(Boolean.class, 1), test(Integer.class, 1));
-                return new CanaryPacket(new S21PacketChunkData(((CanaryChunk) args[0]).getHandle(), (Boolean) args[1], (Integer) args[2]));
+                return new CanaryPacket(new S21PacketChunkData(((CanaryChunk)args[0]).getHandle(), (Boolean)args[1], (Integer)args[2]));
             case 0x22: // 34
                 verify(id, "MultiBlockChange", 3, args, test(Integer.class, 1), test(short[].class, 1), test(CanaryChunk.class, 1));
-                return new CanaryPacket(new S22PacketMultiBlockChange((Integer) args[0], (short[]) args[1], ((CanaryChunk) args[2]).getHandle()));
+                return new CanaryPacket(new S22PacketMultiBlockChange((Integer)args[0], (short[])args[1], ((CanaryChunk)args[2]).getHandle()));
             case 0x23: // 35
                 if (args.length > 1) {
                     verify(id, "BlockChange", 5, args, test(Integer.class, 5));
-                    return new CanaryBlockChangePacket((Integer) args[0], (Integer) args[1], (Integer) args[2], (Integer) args[3], (Integer) args[4]);
+                    return new CanaryBlockChangePacket(BlockType.fromId((Integer)args[3]), (Integer)args[4], new BlockPosition((Integer)args[0], (Integer)args[1], (Integer)args[2]));
                 }
                 verify(id, "BlockChange", 1, args, test(CanaryBlock.class, 1));
-                return new CanaryBlockChangePacket((CanaryBlock) args[0]);
+                return new CanaryBlockChangePacket((CanaryBlock)args[0]);
             case 0x24: // 36
                 verify(id, "BlockAction", 6, args, test(Integer.class, 6));
-                return new CanaryPacket(new S24PacketBlockAction((Integer) args[0], (Integer) args[1], (Integer) args[2], Block.e((Integer) args[3]), (Integer) args[4], (Integer) args[5]));
+                //return new CanaryPacket(new S24PacketBlockAction((Integer) args[0], (Integer) args[1], (Integer) args[2], Block.c((Integer) args[3]), (Integer) args[4], (Integer) args[5]));
+                throw new NotYetImplementedException("A Minecraft Update has broken this construction");
             case 0x25: // 37
                 verify(id, "BlockBreakAnim", 5, args, test(Integer.class, 5));
-                return new CanaryPacket(new S25PacketBlockBreakAnim((Integer) args[0], (Integer) args[1], (Integer) args[2], (Integer) args[3], (Integer) args[4]));
+                return new CanaryPacket(new S25PacketBlockBreakAnim((Integer) args[0], blockPosFromArgs(1, args), (Integer) args[4]));
             case 0x26: // 38
                 verify(id, "MapChunkBulk", 1, args, test(List.class, 1));
                 ArrayList<net.minecraft.world.chunk.Chunk> nmsChunks = new ArrayList<net.minecraft.world.chunk.Chunk>();
-                for (Object chunk : (List) args[0]) {
-                    nmsChunks.add(((CanaryChunk) chunk).getHandle());
+                for (Object chunk : (List)args[0]) {
+                    nmsChunks.add(((CanaryChunk)chunk).getHandle());
                 }
                 return new CanaryPacket(new S26PacketMapChunkBulk(nmsChunks));
             case 0x27: // 39
                 verify(id, "Explosion", 6, args, test(Double.class, 3), test(Float.class, 1), test(List.class, 1), test(Vector3D.class, 1));
-                ArrayList<ChunkPosition> cp = new ArrayList<ChunkPosition>();
+                ArrayList<BlockPos> listbp = new ArrayList<BlockPos>();
                 for (Object position : (List) args[4]) {
-                    cp.add(new ChunkPosition(((Position) position).getBlockX(), ((Position) position).getBlockY(), ((Position) position).getBlockZ()));
+                    listbp.add(new BlockPos(((Position)position).getBlockX(), ((Position)position).getBlockY(), ((Position)position).getBlockZ()));
                 }
                 Vector3D v3D = (Vector3D) args[5];
-                return new CanaryPacket(new S27PacketExplosion((Double) args[0], (Double) args[1], (Double) args[2], (Float) args[3], cp, Vec3.a(v3D.getX(), v3D.getY(), v3D.getZ())));
+                return new CanaryPacket(new S27PacketExplosion((Double) args[0], (Double) args[1], (Double) args[2], (Float) args[3], listbp, new Vec3(v3D.getX(), v3D.getY(), v3D.getZ())));
             case 0x28: // 40
                 verify(id, "Effect", 6, args, test(Integer.class, 5), test(Boolean.class, 1));
-                return new CanaryPacket(new S28PacketEffect((Integer) args[0], (Integer) args[1], (Integer) args[2], (Integer) args[3], (Integer) args[4], (Boolean) args[5]));
+                return new CanaryPacket(new S28PacketEffect((Integer) args[0], blockPosFromArgs(1, args), (Integer) args[4], (Boolean) args[5]));
             case 0x29: // 41
                 verify(id, "SoundEffect", 6, args, test(String.class, 1), test(Double.class, 3), test(Float.class, 2));
-                return new CanaryPacket(new S29PacketSoundEffect((String) args[0], (Double) args[1], (Double) args[2], (Double) args[3], (Float) args[4], (Float) args[5]));
+                return new CanaryPacket(new S29PacketSoundEffect((String)args[0], (Double)args[1], (Double)args[2], (Double)args[3], (Float)args[4], (Float)args[5]));
             case 0x2A: // 42
                 verify(id, "Particles", 9, args, test(String.class, 1), test(Float.class, 7), test(Integer.class, 1));
-                return new CanaryPacket(new S2APacketParticles((String) args[0], (Float) args[1], (Float) args[2], (Float) args[3], (Float) args[4], (Float) args[5], (Float) args[6], (Float) args[7], (Integer) args[8]));
+                // name, x, y, z, velocityX, velocityY, velcityZ, speed, quantity
+                return new CanaryPacket(new S2APacketParticles(new Particle((Float) args[1], (Float) args[2], (Float) args[3], (Float) args[4], (Float) args[5], (Float) args[6], (Float) args[7], (Integer) args[8], Particle.Type.fromName((String) args[0]))));
             case 0x2B: // 43
                 verify(id, "ChangeGameState", 2, args, test(Integer.class, 1), test(Float.class, 1));
-                return new CanaryPacket(new S2BPacketChangeGameState((Integer) args[0], (Float) args[1]));
+                return new CanaryPacket(new S2BPacketChangeGameState((Integer)args[0], (Float)args[1]));
             case 0x2C: // 44
                 verify(id, "SpawnGlobalEntity", 1, args, test(CanaryEntity.class, 1));
-                return new CanaryPacket(new S2CPacketSpawnGlobalEntity(((CanaryEntity) args[0]).getHandle()));
+                return new CanaryPacket(new S2CPacketSpawnGlobalEntity(((CanaryEntity)args[0]).getHandle()));
             case 0x2D: // 45
                 verify(id, "OpenWindow", 5, args, test(Integer.class, 2), test(String.class, 1), test(Integer.class, 1), test(Boolean.class, 1));
-                return new CanaryPacket(new S2DPacketOpenWindow((Integer) args[0], (Integer) args[1], (String) args[2], (Integer) args[3], (Boolean) args[4]));
+                //return new CanaryPacket(new S2DPacketOpenWindow((Integer) args[0], (Integer) args[1], (String) args[2], (Integer) args[3], (Boolean) args[4]));
+                throw new NotYetImplementedException("A Minecraft Update has broken this construction");
             case 0x2E: // 46
                 verify(id, "CloseWindow", 1, args, test(Integer.class, 1));
-                return new CanaryPacket(new S2EPacketCloseWindow((Integer) args[0]));
+                return new CanaryPacket(new S2EPacketCloseWindow((Integer)args[0]));
             case 0x2F: // 47
                 verify(id, "SetSlot", 3, args, test(Integer.class, 2), test(CanaryItem.class, 1));
-                return new CanaryPacket(new S2FPacketSetSlot((Integer) args[0], (Integer) args[1], ((CanaryItem) args[2]).getHandle()));
+                return new CanaryPacket(new S2FPacketSetSlot((Integer)args[0], (Integer)args[1], ((CanaryItem)args[2]).getHandle()));
             case 0x30: // 48
                 verify(id, "WindowItems", 2, args, test(Integer.class, 1), test(List.class, 1));
                 ArrayList<ItemStack> nmsItems = new ArrayList<ItemStack>();
-                for (Object item : (List) args[1]) {
-                    nmsItems.add(item == null ? null : ((CanaryItem) item).getHandle());
+                for (Object item : (List)args[1]) {
+                    nmsItems.add(item == null ? null : ((CanaryItem)item).getHandle());
                 }
-                return new CanaryPacket(new S30PacketWindowItems((Integer) args[0], nmsItems));
+                return new CanaryPacket(new S30PacketWindowItems((Integer)args[0], nmsItems));
             case 0x31: // 49
                 verify(id, "WindowProperty", 3, args, test(Integer.class, 3));
-                return new CanaryPacket(new S31PacketWindowProperty((Integer) args[0], (Integer) args[1], (Integer) args[2]));
+                return new CanaryPacket(new S31PacketWindowProperty((Integer)args[0], (Integer)args[1], (Integer)args[2]));
             case 0x32: // 50
                 verify(id, "ConfirmTransaction", 3, args, test(Integer.class, 1), test(Short.class, 1), test(Boolean.class, 1));
-                return new CanaryPacket(new S32PacketConfirmTransaction((Integer) args[0], (Short) args[1], (Boolean) args[2]));
+                return new CanaryPacket(new S32PacketConfirmTransaction((Integer)args[0], (Short)args[1], (Boolean)args[2]));
             case 0x33: // 51
                 verify(id, "UpdateSign", 4, args, test(Integer.class, 3), test(String[].class, 1));
-                return new CanaryPacket(new S33PacketUpdateSign((Integer) args[0], (Integer) args[1], (Integer) args[2], (String[]) args[3]));
+                //return new CanaryPacket(new S33PacketUpdateSign((Integer) args[0], (Integer) args[1], (Integer) args[2], (String[]) args[3]));
+                throw new NotYetImplementedException("A Minecraft Update has broken this construction");
             case 0x34: // 52
                 verify(id, "Maps", 2, args, test(Integer.class, 1), test(byte[].class, 1));
-                return new CanaryPacket(new S34PacketMaps((Integer) args[0], (byte[]) args[1]));
+                //return new CanaryPacket(new S34PacketMaps((Integer) args[0], (byte[]) args[1]));
+                throw new NotYetImplementedException("A Minecraft Update has broken this construction");
             case 0x35: // 53
                 verify(id, "UpdateTileEntity", 5, args, test(Integer.class, 4), test(CanaryCompoundTag.class, 1));
-                return new CanaryPacket(new S35PacketUpdateTileEntity((Integer) args[0], (Integer) args[1], (Integer) args[2], (Integer) args[3], ((CanaryCompoundTag) args[4]).getHandle()));
+                return new CanaryPacket(new S35PacketUpdateTileEntity(blockPosFromArgs(0, args), (Integer) args[3], ((CanaryCompoundTag) args[4]).getHandle()));
             case 0x36: // 54
                 verify(id, "SignEditorOpen", 3, args, test(Integer.class, 3));
-                return new CanaryPacket(new S36PacketSignEditorOpen((Integer) args[0], (Integer) args[1], (Integer) args[2]));
+                return new CanaryPacket(new S36PacketSignEditorOpen(blockPosFromArgs(0, args)));
             case 0x37: // 55
                 verify(id, "Statistics", 1, args, test(Map.class, 1));
                 HashMap<StatBase, Integer> nmsStatMap = new HashMap<StatBase, Integer>();
-                for (Map.Entry<Stat, Integer> entry : ((Map<Stat, Integer>) args[0]).entrySet()) {
-                    nmsStatMap.put(((CanaryStat) entry.getKey()).getHandle(), entry.getValue());
+                for (Map.Entry<Stat, Integer> entry : ((Map<Stat, Integer>)args[0]).entrySet()) {
+                    nmsStatMap.put(((CanaryStat)entry.getKey()).getHandle(), entry.getValue());
                 }
                 return new CanaryPacket(new S37PacketStatistics(nmsStatMap));
             case 0x38:
-                verify(id, "PlayerListItem", 3, args, test(String.class, 1), test(Boolean.class, 1), test(Integer.class, 1));
-                return new CanaryPacket(new S38PacketPlayerListItem((String) args[0], (Boolean) args[1], (Integer) args[2]));
+                //verify(id, "PlayerListItem", 3, args, test(String.class, 1), test(Boolean.class, 1), test(Integer.class, 1));
+                //return new CanaryPacket(new S38PacketPlayerListItem((String) args[0], (Boolean) args[1], (Integer) args[2]));
+                throw new NotYetImplementedException("A Minecraft Update has broken this construction");
             case 0x39:
                 verify(id, "PlayerAbilities", 1, args, test(HumanCapabilities.class, 1));
-                return new CanaryPacket(new S39PacketPlayerAbilities(((CanaryHumanCapabilities) args[0]).getHandle()));
+                return new CanaryPacket(new S39PacketPlayerAbilities(((CanaryHumanCapabilities)args[0]).getHandle()));
             case 0x3A:
                 throw new InvalidPacketConstructionException(id, "TabComplete", "No function unless requested and client waiting.");
             case 0x3B:
@@ -278,6 +285,10 @@ public class CanaryPacketFactory implements PacketFactory {
             default:
                 throw new InvalidPacketConstructionException(id, "UNKNOWN", "Unknown Packet ID");
         }
+    }
+
+    private BlockPos blockPosFromArgs(int start, Object[] args) {
+        return new BlockPos((Integer)args[start], (Integer)args[start + 1], (Integer)args[start + 2]);
     }
 
     @Override
@@ -633,6 +644,17 @@ public class CanaryPacketFactory implements PacketFactory {
     }
 
     @Override
+    public Packet blockChange(int x, int y, int z, BlockType type) {
+        try {
+            return createPacket(35, x, y, z, (int)type.getId(), (int)type.getData());
+        }
+        catch (InvalidPacketConstructionException ipcex) {
+            log.trace(ipcex);
+        }
+        return null;
+    }
+
+    @Override
     public Packet blockAction(int x, int y, int z, int stat1, int stat2, int targetId) {
         try {
             return createPacket(36, x, y, z, stat1, stat2, targetId);
@@ -699,9 +721,9 @@ public class CanaryPacketFactory implements PacketFactory {
     }
 
     @Override
-    public Packet particles(String name, float f1, float f2, float f3, float f4, float f5, float f6, float f7, int i1) {
+    public Packet particles(String name, float x, float y, float z, float velocityX, float velocityY, float velcityZ, float speed, int quantity) {
         try {
-            return createPacket(42, name, f1, f2, f3, f4, f5, f6, f7, i1);
+            return createPacket(42, name, x, y, z, velocityX, velocityY, velcityZ, speed, quantity);
         }
         catch (InvalidPacketConstructionException ipcex) {
             log.trace(ipcex);
@@ -710,7 +732,7 @@ public class CanaryPacketFactory implements PacketFactory {
     }
 
     @Override
-    public Packet changeGameState(int state, float mode) {
+    public Packet changeGameState(int state, int mode) {
         try {
             return createPacket(43, state, mode);
         }

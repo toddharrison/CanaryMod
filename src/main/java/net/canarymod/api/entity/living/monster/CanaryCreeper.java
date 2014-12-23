@@ -73,7 +73,7 @@ public class CanaryCreeper extends CanaryEntityMob implements Creeper {
      */
     @Override
     public boolean isCharged() {
-        return getHandle().bZ();
+        return getHandle().n();
     }
 
     /**
@@ -89,7 +89,7 @@ public class CanaryCreeper extends CanaryEntityMob implements Creeper {
      */
     @Override
     public float getPower() {
-        return getHandle().bs;
+        return getHandle().bl;
     }
 
     /**
@@ -97,7 +97,7 @@ public class CanaryCreeper extends CanaryEntityMob implements Creeper {
      */
     @Override
     public void setPower(float power) {
-        getHandle().bs = (int) power;
+        getHandle().bk = (int) power;
     }
 
     /**
@@ -105,7 +105,7 @@ public class CanaryCreeper extends CanaryEntityMob implements Creeper {
      */
     @Override
     public void detonate() {
-        getHandle().br = 0;
+        getHandle().bl = 0;
     }
 
     /**
@@ -113,7 +113,7 @@ public class CanaryCreeper extends CanaryEntityMob implements Creeper {
      */
     @Override
     public int getFuse() {
-        return getHandle().br;
+        return getHandle().bk;
     }
 
     /**
@@ -121,7 +121,7 @@ public class CanaryCreeper extends CanaryEntityMob implements Creeper {
      */
     @Override
     public void setFuse(int fuse) {
-        getHandle().br = fuse;
+        getHandle().bk = fuse;
     }
 
     /**
@@ -129,7 +129,7 @@ public class CanaryCreeper extends CanaryEntityMob implements Creeper {
      */
     @Override
     public void increaseFuse(int increase) {
-        getHandle().br += increase;
+        getHandle().bk += increase;
     }
 
     /**
@@ -137,7 +137,7 @@ public class CanaryCreeper extends CanaryEntityMob implements Creeper {
      */
     @Override
     public void decreaseFuse(int decrease) {
-        getHandle().br -= decrease;
+        getHandle().bk -= decrease;
     }
 
     /**
@@ -145,7 +145,7 @@ public class CanaryCreeper extends CanaryEntityMob implements Creeper {
      */
     @Override
     public boolean isAgro() {
-        return getHandle().cb() == 1;
+        return getHandle().ck() == 1;
     }
 
     /**

@@ -23,9 +23,9 @@ public class EntityNPCLookHelper {
     public void a(Entity entity, float f0, float f1) {
         this.e = entity.s;
         if (entity instanceof EntityLivingBase) {
-            this.f = entity.t + (double) entity.g();
+            this.f = entity.t + (double) entity.aR();
         } else {
-            this.f = (entity.C.b + entity.C.e) / 2.0D;
+            this.f = (entity.aQ().b + entity.aQ().e) / 2.0D;
         }
 
         this.g = entity.u;
@@ -48,27 +48,27 @@ public class EntityNPCLookHelper {
         if (this.d) {
             this.d = false;
             double d0 = this.e - this.a.s;
-            double d1 = this.f - (this.a.t + (double) this.a.g());
+            double d1 = this.f - (this.a.t + (double) this.a.aR());
             double d2 = this.g - this.a.u;
             double d3 = (double) MathHelper.a(d0 * d0 + d2 * d2);
             float f0 = (float) (Math.atan2(d2, d0) * 180.0D / 3.1415927410125732D) - 90.0F;
             float f1 = (float) (-(Math.atan2(d1, d3) * 180.0D / 3.1415927410125732D));
 
             this.a.z = this.a(this.a.z, f1, this.c);
-            this.a.aO = this.a(this.a.aO, f0, this.b);
+            this.a.aI = this.a(this.a.aI, f0, this.b);
         } else {
-            this.a.aO = this.a(this.a.aO, this.a.aM, 10.0F);
+            this.a.aI = this.a(this.a.aI, this.a.aG, 10.0F);
         }
 
-        float f2 = MathHelper.g(this.a.aO - this.a.aM);
+        float f2 = MathHelper.g(this.a.aI - this.a.aG);
 
-        if (!this.a.getPathNavigate().g()) {
+        if (!this.a.getPathNavigate().m()) {
             if (f2 < -75.0F) {
-                this.a.aO = this.a.aM - 75.0F;
+                this.a.aI = this.a.aG - 75.0F;
             }
 
             if (f2 > 75.0F) {
-                this.a.aO = this.a.aM + 75.0F;
+                this.a.aI = this.a.aG + 75.0F;
             }
         }
 
@@ -86,5 +86,21 @@ public class EntityNPCLookHelper {
         }
 
         return f0 + f3;
+    }
+
+    public boolean b() {
+        return this.d;
+    }
+
+    public double e() {
+        return this.e;
+    }
+
+    public double f() {
+        return this.f;
+    }
+
+    public double g() {
+        return this.g;
     }
 }

@@ -1,14 +1,19 @@
 package net.minecraft.block;
 
 import net.canarymod.api.world.blocks.CanaryBlock;
+import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.world.PortalCreateHook;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemMonsterPlacer;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.util.Direction;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -16,60 +21,53 @@ import java.util.Random;
 
 public class BlockPortal extends BlockBreakable {
 
-    public static final int[][] a = new int[][]{new int[0], {3, 1}, {2, 0}};
+    public static final PropertyEnum a = PropertyEnum.a("axis", EnumFacing.Axis.class, (Enum[])(new EnumFacing.Axis[]{ EnumFacing.Axis.X, EnumFacing.Axis.Z }));
 
     public BlockPortal() {
-        super("portal", Material.E, false);
+        super(Material.E, false);
+        this.j(this.L.b().a(a, EnumFacing.Axis.X));
         this.a(true);
     }
 
-    public void a(World world, int i0, int i1, int i2, Random random) {
-        super.a(world, i0, i1, i2, random);
-        if (world.t.d() && world.O().b("doMobSpawning") && random.nextInt(2000) < world.r.a()) {
-            int i3;
+    public static int a(EnumFacing.Axis enumfacing_axis) {
+        return enumfacing_axis == EnumFacing.Axis.X ? 1 : (enumfacing_axis == EnumFacing.Axis.Z ? 2 : 0);
+    }
 
-            for (i3 = i1; !World.a((IBlockAccess) world, i0, i3, i2) && i3 > 0; --i3) {
+    public void b(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {
+        super.b(world, blockpos, iblockstate, random);
+        if (world.t.d() && world.Q().b("doMobSpawning") && random.nextInt(2000) < world.aa().a()) {
+            int i0 = blockpos.o();
+
+            BlockPos blockpos1;
+
+            for (blockpos1 = blockpos; !World.a((IBlockAccess)world, blockpos1) && blockpos1.o() > 0; blockpos1 = blockpos1.b()) {
                 ;
             }
 
-            if (i3 > 0 && !world.a(i0, i3 + 1, i2).r()) {
-                Entity entity = ItemMonsterPlacer.a(world, 57, (double) i0 + 0.5D, (double) i3 + 1.1D, (double) i2 + 0.5D);
+            if (i0 > 0 && !world.p(blockpos1.a()).c().t()) {
+                Entity entity = ItemMonsterPlacer.a(world, 57, (double)blockpos1.n() + 0.5D, (double)blockpos1.o() + 1.1D, (double)blockpos1.p() + 0.5D);
 
                 if (entity != null) {
-                    entity.am = entity.ai();
+                    entity.aj = entity.ar();
                 }
             }
         }
     }
 
-    public AxisAlignedBB a(World world, int i0, int i1, int i2) {
+    public AxisAlignedBB a(World world, BlockPos blockpos, IBlockState iblockstate) {
         return null;
     }
 
-    public void a(IBlockAccess iblockaccess, int i0, int i1, int i2) {
-        int i3 = b(iblockaccess.e(i0, i1, i2));
-
-        if (i3 == 0) {
-            if (iblockaccess.a(i0 - 1, i1, i2) != this && iblockaccess.a(i0 + 1, i1, i2) != this) {
-                i3 = 2;
-            }
-            else {
-                i3 = 1;
-            }
-
-            if (iblockaccess instanceof World && !((World) iblockaccess).E) {
-                ((World) iblockaccess).a(i0, i1, i2, i3, 2);
-            }
-        }
-
+    public void a(IBlockAccess iblockaccess, BlockPos blockpos) {
+        EnumFacing.Axis enumfacing_axis = (EnumFacing.Axis)iblockaccess.p(blockpos).b(a);
         float f0 = 0.125F;
         float f1 = 0.125F;
 
-        if (i3 == 1) {
+        if (enumfacing_axis == EnumFacing.Axis.X) {
             f0 = 0.5F;
         }
 
-        if (i3 == 2) {
+        if (enumfacing_axis == EnumFacing.Axis.Z) {
             f1 = 0.5F;
         }
 
@@ -80,91 +78,108 @@ public class BlockPortal extends BlockBreakable {
         return false;
     }
 
-    public boolean e(World world, int i0, int i1, int i2) {
-        Size blockportal_size = new Size(world, i0, i1, i2, 1);
-        Size blockportal_size1 = new Size(world, i0, i1, i2, 2);
+    public boolean d(World world, BlockPos blockpos) {
+        BlockPortal.Size blockportal_size = new BlockPortal.Size(world, blockpos, EnumFacing.Axis.X);
 
         // CanaryMod: PortalCreate
         PortalCreateHook hook;
         if (blockportal_size.b() && blockportal_size.e == 0) {
-            hook = (PortalCreateHook) new PortalCreateHook(blockportal_size.getPortalBlocks()).call();
+            hook = (PortalCreateHook)new PortalCreateHook(blockportal_size.getPortalBlocks()).call();
             if (!hook.isCanceled()) {
                 blockportal_size.c();
                 return true;
             }
         }
-        else if (blockportal_size1.b() && blockportal_size1.e == 0) {
-            hook = (PortalCreateHook) new PortalCreateHook(blockportal_size1.getPortalBlocks()).call();
-            if (!hook.isCanceled()) {
-                blockportal_size1.c();
-                return true;
+        else {
+            BlockPortal.Size blockportal_size1 = new BlockPortal.Size(world, blockpos, EnumFacing.Axis.Z);
+            if (blockportal_size1.b() && blockportal_size1.e == 0) {
+                hook = (PortalCreateHook)new PortalCreateHook(blockportal_size1.getPortalBlocks()).call();
+                if (!hook.isCanceled()) {
+                    blockportal_size1.c();
+                    return true;
+                }
             }
+            // else {
+            //
+            // }
+            // CanaryMod: End
         }
-
-        // else {
         return false;
-        // }
-        // CanaryMod: End
     }
 
-    public void a(World world, int i0, int i1, int i2, Block block) {
-        int i3 = b(world.e(i0, i1, i2));
-        Size blockportal_size = new Size(world, i0, i1, i2, 1);
-        Size blockportal_size1 = new Size(world, i0, i1, i2, 2);
+    public void a(World world, BlockPos blockpos, IBlockState iblockstate, Block block) {
+        EnumFacing.Axis enumfacing_axis = (EnumFacing.Axis)iblockstate.b(a);
+        BlockPortal.Size blockportal_size;
 
-        if (i3 == 1 && (!blockportal_size.b() || blockportal_size.e < blockportal_size.h * blockportal_size.g)) {
-            world.b(i0, i1, i2, Blocks.a);
+        if (enumfacing_axis == EnumFacing.Axis.X) {
+            blockportal_size = new BlockPortal.Size(world, blockpos, EnumFacing.Axis.X);
+            if (!blockportal_size.b() || blockportal_size.e < blockportal_size.h * blockportal_size.g) {
+                world.a(blockpos, Blocks.a.P());
+            }
         }
-        else if (i3 == 2 && (!blockportal_size1.b() || blockportal_size1.e < blockportal_size1.h * blockportal_size1.g)) {
-            world.b(i0, i1, i2, Blocks.a);
+        else if (enumfacing_axis == EnumFacing.Axis.Z) {
+            blockportal_size = new BlockPortal.Size(world, blockpos, EnumFacing.Axis.Z);
+            if (!blockportal_size.b() || blockportal_size.e < blockportal_size.h * blockportal_size.g) {
+                world.a(blockpos, Blocks.a.P());
+            }
         }
-        else if (i3 == 0 && !blockportal_size.b() && !blockportal_size1.b()) {
-            world.b(i0, i1, i2, Blocks.a);
-        }
-
     }
 
     public int a(Random random) {
         return 0;
     }
 
-    public void a(World world, int i0, int i1, int i2, Entity entity) {
+    public void a(World world, BlockPos blockpos, IBlockState iblockstate, Entity entity) {
         if (entity.m == null && entity.l == null) {
-            entity.ah();
+            entity.aq();
         }
     }
 
-    public static int b(int i0) {
-        return i0 & 3;
+    public IBlockState a(int i0) {
+        return this.P().a(a, (i0 & 3) == 2 ? EnumFacing.Axis.Z : EnumFacing.Axis.X);
+    }
+
+    public int c(IBlockState iblockstate) {
+        return a((EnumFacing.Axis)iblockstate.b(a));
+    }
+
+    protected BlockState e() {
+        return new BlockState(this, new IProperty[]{ a });
     }
 
     public static class Size {
         //TODO: Restore Portal Reconstruct Job/onPortalCreate
 
         private final World a;
-        private final int b;
-        private final int c;
-        private final int d;
+        private final EnumFacing.Axis b;
+        private final EnumFacing c;
+        private final EnumFacing d;
         private int e = 0;
-        private ChunkCoordinates f;
+        private BlockPos f;
         private int g;
         private int h;
 
-        public Size(World world, int i0, int i1, int i2, int i3) {
-            this.a = world;
-            this.b = i3;
-            this.d = BlockPortal.a[i3][0];
-            this.c = BlockPortal.a[i3][1];
+        public Size(World p_i45694_1_, BlockPos p_i45694_2_, EnumFacing.Axis p_i45694_3_) {
+            this.a = p_i45694_1_;
+            this.b = p_i45694_3_;
+            if (p_i45694_3_ == EnumFacing.Axis.X) {
+                this.d = EnumFacing.EAST;
+                this.c = EnumFacing.WEST;
+            }
+            else {
+                this.d = EnumFacing.NORTH;
+                this.c = EnumFacing.SOUTH;
+            }
 
-            for (int i10 = i1; i1 > i10 - 21 && i1 > 0 && this.a(world.a(i0, i1 - 1, i2)); --i1) {
+            for (BlockPos blockpos1 = p_i45694_2_; p_i45694_2_.o() > blockpos1.o() - 21 && p_i45694_2_.o() > 0 && this.a(p_i45694_1_.p(p_i45694_2_.b()).c()); p_i45694_2_ = p_i45694_2_.b()) {
                 ;
             }
 
-            int i11 = this.a(i0, i1, i2, this.d) - 1;
+            int block = this.a(p_i45694_2_, this.d) - 1;
 
-            if (i11 >= 0) {
-                this.f = new ChunkCoordinates(i0 + i11 * Direction.a[this.d], i1, i2 + i11 * Direction.b[this.d]);
-                this.h = this.a(this.f.a, this.f.b, this.f.c, this.c);
+            if (block >= 0) {
+                this.f = p_i45694_2_.a(this.d, block);
+                this.h = this.a(this.f, this.c);
                 if (this.h < 2 || this.h > 21) {
                     this.f = null;
                     this.h = 0;
@@ -174,76 +189,58 @@ public class BlockPortal extends BlockBreakable {
             if (this.f != null) {
                 this.g = this.a();
             }
-
         }
 
-        protected int a(int i0, int i1, int i2, int i3) {
-            int i4 = Direction.a[i3];
-            int i5 = Direction.b[i3];
+        protected int a(BlockPos p_a_1_, EnumFacing p_a_2_) {
+            int i4;
 
-            int i6;
-            Block block;
+            for (i4 = 0; i4 < 22; ++i4) {
+                BlockPos blockpos1 = p_a_1_.a(p_a_2_, i4);
 
-            for (i6 = 0; i6 < 22; ++i6) {
-                block = this.a.a(i0 + i4 * i6, i1, i2 + i5 * i6);
-                if (!this.a(block)) {
-                    break;
-                }
-
-                Block block1 = this.a.a(i0 + i4 * i6, i1 - 1, i2 + i5 * i6);
-
-                if (block1 != Blocks.Z) {
+                if (!this.a(this.a.p(blockpos1).c()) || this.a.p(blockpos1.b()).c() != Blocks.Z) {
                     break;
                 }
             }
 
-            block = this.a.a(i0 + i4 * i6, i1, i2 + i5 * i6);
-            return block == Blocks.Z ? i6 : 0;
+            Block block = this.a.p(p_a_1_.a(p_a_2_, i4)).c();
+
+            return block == Blocks.Z ? i4 : 0;
         }
 
         protected int a() {
-            int i17;
-            int i18;
-            int i19;
-            int i20;
+            int i3;
 
             label56:
             for (this.g = 0; this.g < 21; ++this.g) {
-                i17 = this.f.b + this.g;
+                for (i3 = 0; i3 < this.h; ++i3) {
+                    BlockPos blockpos3 = this.f.a(this.c, i3).b(this.g);
+                    Block i4 = this.a.p(blockpos3).c();
 
-                for (i18 = 0; i18 < this.h; ++i18) {
-                    i19 = this.f.a + i18 * Direction.a[BlockPortal.a[this.b][1]];
-                    i20 = this.f.c + i18 * Direction.b[BlockPortal.a[this.b][1]];
-                    Block i21 = this.a.a(i19, i17, i20);
-
-                    if (!this.a(i21)) {
+                    if (!this.a(i4)) {
                         break label56;
                     }
 
-                    if (i21 == Blocks.aO) {
+                    if (i4 == Blocks.aY) {
                         ++this.e;
                     }
 
-                    if (i18 == 0) {
-                        i21 = this.a.a(i19 + Direction.a[BlockPortal.a[this.b][0]], i17, i20 + Direction.b[BlockPortal.a[this.b][0]]);
-                        if (i21 != Blocks.Z) {
+                    if (i3 == 0) {
+                        i4 = this.a.p(blockpos3.a(this.d)).c();
+                        if (i4 != Blocks.Z) {
                             break label56;
                         }
                     }
-                    else if (i18 == this.h - 1) {
-                        i21 = this.a.a(i19 + Direction.a[BlockPortal.a[this.b][1]], i17, i20 + Direction.b[BlockPortal.a[this.b][1]]);
-                        if (i21 != Blocks.Z) {
+                    else if (i3 == this.h - 1) {
+                        i4 = this.a.p(blockpos3.a(this.c)).c();
+                        if (i4 != Blocks.Z) {
                             break label56;
                         }
                     }
                 }
             }
 
-            for (i17 = 0; i17 < this.h; ++i17) {
-                i18 = this.f.a + i17 * Direction.a[BlockPortal.a[this.b][1]];
-                i19 = this.f.b + this.g;
-                i20 = this.f.c + i17 * Direction.b[BlockPortal.a[this.b][1]];
-                if (this.a.a(i18, i19, i20) != Blocks.Z) {
+            for (i3 = 0; i3 < this.h; ++i3) {
+                if (this.a.p(this.f.a(this.c, i3).b(this.g)).c() != Blocks.Z) {
                     this.g = 0;
                     break;
                 }
@@ -260,8 +257,8 @@ public class BlockPortal extends BlockBreakable {
             }
         }
 
-        protected boolean a(Block block) {
-            return block.J == Material.a || block == Blocks.ab || block == Blocks.aO;
+        protected boolean a(Block p_a_1_) {
+            return p_a_1_.J == Material.a || p_a_1_ == Blocks.ab || p_a_1_ == Blocks.aY;
         }
 
         public boolean b() {
@@ -269,31 +266,25 @@ public class BlockPortal extends BlockBreakable {
         }
 
         public void c() {
-            for (int i0 = 0; i0 < this.h; ++i0) {
-                int i1 = this.f.a + Direction.a[this.c] * i0;
-                int i2 = this.f.c + Direction.b[this.c] * i0;
+            for (int i3 = 0; i3 < this.h; ++i3) {
+                BlockPos blockpos3 = this.f.a(this.c, i3);
 
-                for (int i3 = 0; i3 < this.g; ++i3) {
-                    int i4 = this.f.b + i3;
-
-                    this.a.d(i1, i4, i2, Blocks.aO, this.b, 2);
+                for (int i4 = 0; i4 < this.g; ++i4) {
+                    this.a.a(blockpos3.b(i4), Blocks.aY.P().a(BlockPortal.a, this.b), 2);
                 }
             }
-
         }
 
         // CanaryMod: cloning the method above to determine the shape/size of the portal
         public CanaryBlock[][] getPortalBlocks() {
             CanaryBlock[][] portalBlockArray = new CanaryBlock[this.h][this.g];
-            for (int i17 = 0; i17 < this.h; ++i17) {
-                int i18 = this.f.a + Direction.a[this.c] * i17;
-                int i19 = this.f.c + Direction.b[this.c] * i17;
+            for (int i3 = 0; i3 < this.h; ++i3) {
+                BlockPos blockpos3 = this.f.a(this.c, i3);
 
-                for (int i20 = 0; i20 < this.g; ++i20) {
-                    int i21 = this.f.b + i20;
+                for (int i4 = 0; i4 < this.g; ++i4) {
 
                     //this.a.d(i18, i21, i19, Blocks.aO, this.b, 2);
-                    portalBlockArray[i17][i20] = (CanaryBlock) this.a.getCanaryWorld().getBlockAt(i18, i21, i19);
+                    portalBlockArray[i3][i4] = (CanaryBlock)this.a.getCanaryWorld().getBlockAt(new BlockPosition(blockpos3));
                 }
             }
             return portalBlockArray;

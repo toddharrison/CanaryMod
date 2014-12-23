@@ -1,103 +1,96 @@
 package net.minecraft.entity.monster;
 
-import net.canarymod.hook.entity.MobTargetHook;
+import com.google.common.base.Predicate;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.*;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.EntityAIAvoidEntity;
+import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 
-
 public abstract class EntityMob extends EntityCreature implements IMob {
+
+    protected final EntityAIBase a = new EntityAIAvoidEntity(this, new Predicate() {
+
+        public boolean a(Entity p_a_1_) {
+            return p_a_1_ instanceof EntityCreeper && ((EntityCreeper) p_a_1_).ck() > 0;
+        }
+
+        public boolean apply(Object p_apply_1_) {
+            return this.a((Entity) p_apply_1_);
+        }
+    }, 4.0F, 1.0D, 2.0D);
 
     public EntityMob(World world) {
         super(world);
-        this.b = 5;
+        this.b_ = 5;
     }
 
-    public void e() {
-        this.bb();
-        float f0 = this.d(1.0F);
+    public void m() {
+        this.bw();
+        float f0 = this.c(1.0F);
 
         if (f0 > 0.5F) {
-            this.aU += 2;
+            this.aO += 2;
         }
 
-        super.e();
+        super.m();
     }
 
-    public void h() {
-        super.h();
-        if (!this.o.E && this.o.r == EnumDifficulty.PEACEFUL) {
-            this.B();
+    public void s_() {
+        super.s_();
+        if (!this.o.D && this.o.aa() == EnumDifficulty.PEACEFUL) {
+            this.J();
         }
+
     }
 
-    protected String H() {
+    protected String P() {
         return "game.hostile.swim";
     }
 
-    protected String O() {
+    protected String aa() {
         return "game.hostile.swim.splash";
     }
 
-    protected Entity bR() {
-        EntityPlayer entityplayer = this.o.b(this, 16.0D);
-
-        return entityplayer != null && this.p(entityplayer) ? entityplayer : null;
-    }
-
     public boolean a(DamageSource damagesource, float f0) {
-        if (this.aw()) {
+        if (this.b(damagesource)) {
             return false;
         } else if (super.a(damagesource, f0)) {
             Entity entity = damagesource.j();
 
-            if (this.l != entity && this.m != entity) {
-                if (entity != this) {
-                    // CanaryMod: MobTarget
-                    if (entity instanceof EntityLiving) {
-                        MobTargetHook hook = (MobTargetHook) new MobTargetHook((net.canarymod.api.entity.living.EntityLiving) this.getCanaryEntity(), (net.canarymod.api.entity.living.EntityLiving) entity.getCanaryEntity()).call();
-                        if (!hook.isCanceled()) {
-                            this.bm = entity;
-                        }
-                    } else {
-                        this.bm = entity;
-                    }
-                    //
-                }
-
-                return true;
-            } else {
-                return true;
-            }
+            return this.l != entity && this.m != entity ? true : true;
         } else {
             return false;
         }
     }
 
-    protected String aT() {
+    protected String bn() {
         return "game.hostile.hurt";
     }
 
-    protected String aU() {
+    protected String bo() {
         return "game.hostile.die";
     }
 
-    protected String o(int i0) {
+    protected String n(int i0) {
         return i0 > 4 ? "game.hostile.hurt.fall.big" : "game.hostile.hurt.fall.small";
     }
 
-    public boolean n(Entity entity) {
+    public boolean r(Entity entity) {
         float f0 = (float) this.a(SharedMonsterAttributes.e).e();
         int i0 = 0;
 
         if (entity instanceof EntityLivingBase) {
-            f0 += EnchantmentHelper.a((EntityLivingBase) this, (EntityLivingBase) entity);
-            i0 += EnchantmentHelper.b(this, (EntityLivingBase) entity);
+            f0 += EnchantmentHelper.a(this.bz(), ((EntityLivingBase) entity).by());
+            i0 += EnchantmentHelper.a((EntityLivingBase) this);
         }
 
         boolean flag0 = entity.a(DamageSource.a((EntityLivingBase) this), f0);
@@ -109,64 +102,53 @@ public abstract class EntityMob extends EntityCreature implements IMob {
                 this.x *= 0.6D;
             }
 
-            int i1 = EnchantmentHelper.a((EntityLivingBase) this);
+            int i1 = EnchantmentHelper.b((EntityLivingBase) this);
 
             if (i1 > 0) {
                 entity.e(i1 * 4);
             }
 
-            if (entity instanceof EntityLivingBase) {
-                EnchantmentHelper.a((EntityLivingBase) entity, (Entity) this);
-            }
-            EnchantmentHelper.b(this, entity);
+            this.a(this, entity);
         }
 
         return flag0;
     }
 
-    protected void a(Entity entity, float f0) {
-        if (this.aB <= 0 && f0 < 2.0F && entity.C.e > this.C.b && entity.C.b < this.C.e) {
-            this.aB = 20;
-            this.n(entity);
-        }
+    public float a(BlockPos blockpos) {
+        return 0.5F - this.o.o(blockpos);
     }
 
-    public float a(int i0, int i1, int i2) {
-        return 0.5F - this.o.n(i0, i1, i2);
-    }
+    protected boolean m_() {
+        BlockPos blockpos = new BlockPos(this.s, this.aQ().b, this.u);
 
-    protected boolean j_() {
-        int i0 = MathHelper.c(this.s);
-        int i1 = MathHelper.c(this.C.b);
-        int i2 = MathHelper.c(this.u);
-
-        if (this.o.b(EnumSkyBlock.Sky, i0, i1, i2) > this.Z.nextInt(32)) {
+        if (this.o.b(EnumSkyBlock.SKY, blockpos) > this.V.nextInt(32)) {
             return false;
-        } else {
-            int i3 = this.o.k(i0, i1, i2);
+        }
+        else {
+            int i0 = this.o.l(blockpos);
 
-            if (this.o.P()) {
-                int i4 = this.o.j;
+            if (this.o.R()) {
+                int i1 = this.o.ab();
 
-                this.o.j = 10;
-                i3 = this.o.k(i0, i1, i2);
-                this.o.j = i4;
+                this.o.b(10);
+                i0 = this.o.l(blockpos);
+                this.o.b(i1);
             }
 
-            return i3 <= this.Z.nextInt(8);
+            return i0 <= this.V.nextInt(8);
         }
     }
 
-    public boolean by() {
-        return this.o.r != EnumDifficulty.PEACEFUL && this.j_() && super.by();
+    public boolean bQ() {
+        return this.o.aa() != EnumDifficulty.PEACEFUL && this.m_() && super.bQ();
     }
 
-    protected void aD() {
-        super.aD();
-        this.bc().b(SharedMonsterAttributes.e);
+    protected void aW() {
+        super.aW();
+        this.bx().b(SharedMonsterAttributes.e);
     }
 
-    protected boolean aG() {
+    protected boolean aZ() {
         return true;
     }
 }

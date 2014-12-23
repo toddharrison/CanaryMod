@@ -11,6 +11,7 @@ public final class CanaryFactory implements Factory {
     private final ChatComponentFactory chatCompFactory = new CanaryChatComponentFactory();
     private final AttributeFactory attributeFactory = new CanaryAttributeFactory();
     private final StatisticsFactory statisticsFactory = new CanaryStatisticsFactory();
+    private final AIFactory aiFactory = new CanaryAIFactory();
 
     @Override
     public ItemFactory getItemFactory() {
@@ -55,6 +56,11 @@ public final class CanaryFactory implements Factory {
     @Override
     public StatisticsFactory getStatisticsFactory() {
         return statisticsFactory;
+    }
+
+    @Override
+    public AIFactory getAIFactory() {
+        return aiFactory;
     }
 
 }

@@ -1,8 +1,13 @@
 package net.minecraft.block;
 
+import net.canarymod.api.world.blocks.CanaryBlockBase;
+import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.world.BlockDropXpHook;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -11,9 +16,10 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
-import net.minecraft.tileentity.TileEntitySign;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
@@ -25,16 +31,17 @@ import java.util.Random;
 
 public class Block {
 
-    public static final RegistryNamespaced c = new RegistryNamespacedDefaultedByKey("air");
-    private CreativeTabs a;
-    protected String d;
-    public static final SoundType e = new SoundType("stone", 1.0F, 1.0F);
-    public static final SoundType f = new SoundType("wood", 1.0F, 1.0F);
-    public static final SoundType g = new SoundType("gravel", 1.0F, 1.0F);
-    public static final SoundType h = new SoundType("grass", 1.0F, 1.0F);
-    public static final SoundType i = new SoundType("stone", 1.0F, 1.0F);
-    public static final SoundType j = new SoundType("stone", 1.0F, 1.5F);
-    public static final SoundType k = new SoundType("stone", 1.0F, 1.0F) {
+    private static final ResourceLocation a = new ResourceLocation("air");
+    public static final RegistryNamespacedDefaultedByKey c = new RegistryNamespacedDefaultedByKey(a);
+    public static final ObjectIntIdentityMap d = new ObjectIntIdentityMap();
+    private CreativeTabs b;
+    public static final Block.SoundType e = new Block.SoundType("stone", 1.0F, 1.0F);
+    public static final Block.SoundType f = new Block.SoundType("wood", 1.0F, 1.0F);
+    public static final Block.SoundType g = new Block.SoundType("gravel", 1.0F, 1.0F);
+    public static final Block.SoundType h = new Block.SoundType("grass", 1.0F, 1.0F);
+    public static final Block.SoundType i = new Block.SoundType("stone", 1.0F, 1.0F);
+    public static final Block.SoundType j = new Block.SoundType("stone", 1.0F, 1.5F);
+    public static final Block.SoundType k = new Block.SoundType("stone", 1.0F, 1.0F) {
 
         public String a() {
             return "dig.glass";
@@ -44,16 +51,16 @@ public class Block {
             return "step.stone";
         }
     };
-    public static final SoundType l = new SoundType("cloth", 1.0F, 1.0F);
-    public static final SoundType m = new SoundType("sand", 1.0F, 1.0F);
-    public static final SoundType n = new SoundType("snow", 1.0F, 1.0F);
-    public static final SoundType o = new SoundType("ladder", 1.0F, 1.0F) {
+    public static final Block.SoundType l = new Block.SoundType("cloth", 1.0F, 1.0F);
+    public static final Block.SoundType m = new Block.SoundType("sand", 1.0F, 1.0F);
+    public static final Block.SoundType n = new Block.SoundType("snow", 1.0F, 1.0F);
+    public static final Block.SoundType o = new Block.SoundType("ladder", 1.0F, 1.0F) {
 
         public String a() {
             return "dig.wood";
         }
     };
-    public static final SoundType p = new SoundType("anvil", 0.3F, 1.0F) {
+    public static final Block.SoundType p = new Block.SoundType("anvil", 0.3F, 1.0F) {
 
         public String a() {
             return "dig.stone";
@@ -63,14 +70,27 @@ public class Block {
             return "random.anvil_land";
         }
     };
-    protected boolean q;
-    protected int r;
-    protected boolean s;
-    protected int t;
-    protected boolean u;
-    protected float v;
+    public static final Block.SoundType q = new Block.SoundType("slime", 1.0F, 1.0F) {
+
+        public String a() {
+            return "mob.slime.big";
+        }
+
+        public String b() {
+            return "mob.slime.big";
+        }
+
+        public String c() {
+            return "mob.slime.small";
+        }
+    };
+    protected boolean r;
+    protected int s;
+    protected boolean t;
+    protected int u;
+    protected boolean v;
     protected float w;
-    protected boolean x = true;
+    protected float x;
     protected boolean y = true;
     protected boolean z;
     protected boolean A;
@@ -80,31 +100,49 @@ public class Block {
     protected double E;
     protected double F;
     protected double G;
-    public SoundType H;
+    public Block.SoundType H;
     public float I;
     protected final Material J;
     public float K;
-    private String b;
+    protected final BlockState L;
+    private IBlockState M;
+    private String N;
 
-    public static int b(Block block) {
-        return c.b((Object) block);
+    // CanaryMod
+    private CanaryBlockBase cbb;
+
+    public static int a(Block block) {
+        return c.b(block);
     }
 
-    public static Block e(int i0) {
-        return (Block) c.a(i0);
+    public static int f(IBlockState iblockstate) {
+        return a(iblockstate.c()) + (iblockstate.c().c(iblockstate) << 12);
+    }
+
+    public static Block c(int i0) {
+        return (Block)c.a(i0);
+    }
+
+    public static IBlockState d(int i0) {
+        int i1 = i0 & 4095;
+        int i2 = i0 >> 12 & 15;
+
+        return c(i1).a(i2);
     }
 
     public static Block a(Item item) {
-        return e(Item.b(item));
+        return item instanceof ItemBlock ? ((ItemBlock)item).d() : null;
     }
 
     public static Block b(String s0) {
-        if (c.b(s0)) {
-            return (Block) c.a(s0);
+        ResourceLocation resourcelocation = new ResourceLocation(s0);
+
+        if (c.d(resourcelocation)) {
+            return (Block)c.a(resourcelocation);
         }
         else {
             try {
-                return (Block) c.a(Integer.parseInt(s0));
+                return (Block)c.a(Integer.parseInt(s0));
             }
             catch (NumberFormatException numberformatexception) {
                 return null;
@@ -112,246 +150,45 @@ public class Block {
         }
     }
 
-    public boolean j() {
-        return this.q;
-    }
-
-    public int k() {
+    public boolean m() {
         return this.r;
     }
 
-    public int m() {
-        return this.t;
+    public int n() {
+        return this.s;
     }
 
-    public boolean n() {
+    public int p() {
         return this.u;
     }
 
-    public Material o() {
+    public boolean q() {
+        return this.v;
+    }
+
+    public Material r() {
         return this.J;
     }
 
-    public MapColor f(int i0) {
-        return this.o().r();
+    public MapColor g(IBlockState iblockstate) {
+        return this.r().r();
     }
 
-    public static void p() {
-        c.a(0, "air", (new BlockAir()).c("air"));
-        c.a(1, "stone", (new BlockStone()).c(1.5F).b(10.0F).a(i).c("stone").d("stone"));
-        c.a(2, "grass", (new BlockGrass()).c(0.6F).a(h).c("grass").d("grass"));
-        c.a(3, "dirt", (new BlockDirt()).c(0.5F).a(g).c("dirt").d("dirt"));
-        Block block = (new Block(Material.e)).c(2.0F).b(10.0F).a(i).c("stonebrick").a(CreativeTabs.b).d("cobblestone");
+    public IBlockState a(int i0) {
+        return this.P();
+    }
 
-        c.a(4, "cobblestone", block);
-        Block block1 = (new BlockWood()).c(2.0F).b(5.0F).a(f).c("wood").d("planks");
-
-        c.a(5, "planks", block1);
-        c.a(6, "sapling", (new BlockSapling()).c(0.0F).a(h).c("sapling").d("sapling"));
-        c.a(7, "bedrock", (new Block(Material.e)).s().b(6000000.0F).a(i).c("bedrock").H().a(CreativeTabs.b).d("bedrock"));
-        c.a(8, "flowing_water", (new BlockDynamicLiquid(Material.h)).c(100.0F).g(3).c("water").H().d("water_flow"));
-        c.a(9, "water", (new BlockStaticLiquid(Material.h)).c(100.0F).g(3).c("water").H().d("water_still"));
-        c.a(10, "flowing_lava", (new BlockDynamicLiquid(Material.i)).c(100.0F).a(1.0F).c("lava").H().d("lava_flow"));
-        c.a(11, "lava", (new BlockStaticLiquid(Material.i)).c(100.0F).a(1.0F).c("lava").H().d("lava_still"));
-        c.a(12, "sand", (new BlockSand()).c(0.5F).a(m).c("sand").d("sand"));
-        c.a(13, "gravel", (new BlockGravel()).c(0.6F).a(g).c("gravel").d("gravel"));
-        c.a(14, "gold_ore", (new BlockOre()).c(3.0F).b(5.0F).a(i).c("oreGold").d("gold_ore"));
-        c.a(15, "iron_ore", (new BlockOre()).c(3.0F).b(5.0F).a(i).c("oreIron").d("iron_ore"));
-        c.a(16, "coal_ore", (new BlockOre()).c(3.0F).b(5.0F).a(i).c("oreCoal").d("coal_ore"));
-        c.a(17, "log", (new BlockOldLog()).c("log").d("log"));
-        c.a(18, "leaves", (new BlockOldLeaf()).c("leaves").d("leaves"));
-        c.a(19, "sponge", (new BlockSponge()).c(0.6F).a(h).c("sponge").d("sponge"));
-        c.a(20, "glass", (new BlockGlass(Material.s, false)).c(0.3F).a(k).c("glass").d("glass"));
-        c.a(21, "lapis_ore", (new BlockOre()).c(3.0F).b(5.0F).a(i).c("oreLapis").d("lapis_ore"));
-        c.a(22, "lapis_block", (new BlockCompressed(MapColor.H)).c(3.0F).b(5.0F).a(i).c("blockLapis").a(CreativeTabs.b).d("lapis_block"));
-        c.a(23, "dispenser", (new BlockDispenser()).c(3.5F).a(i).c("dispenser").d("dispenser"));
-        Block block2 = (new BlockSandStone()).a(i).c(0.8F).c("sandStone").d("sandstone");
-
-        c.a(24, "sandstone", block2);
-        c.a(25, "noteblock", (new BlockNote()).c(0.8F).c("musicBlock").d("noteblock"));
-        c.a(26, "bed", (new BlockBed()).c(0.2F).c("bed").H().d("bed"));
-        c.a(27, "golden_rail", (new BlockRailPowered()).c(0.7F).a(j).c("goldenRail").d("rail_golden"));
-        c.a(28, "detector_rail", (new BlockRailDetector()).c(0.7F).a(j).c("detectorRail").d("rail_detector"));
-        c.a(29, "sticky_piston", (new BlockPistonBase(true)).c("pistonStickyBase"));
-        c.a(30, "web", (new BlockWeb()).g(1).c(4.0F).c("web").d("web"));
-        c.a(31, "tallgrass", (new BlockTallGrass()).c(0.0F).a(h).c("tallgrass"));
-        c.a(32, "deadbush", (new BlockDeadBush()).c(0.0F).a(h).c("deadbush").d("deadbush"));
-        c.a(33, "piston", (new BlockPistonBase(false)).c("pistonBase"));
-        c.a(34, "piston_head", new BlockPistonExtension());
-        c.a(35, "wool", (new BlockColored(Material.n)).c(0.8F).a(l).c("cloth").d("wool_colored"));
-        c.a(36, "piston_extension", new BlockPistonMoving());
-        c.a(37, "yellow_flower", (new BlockFlower(0)).c(0.0F).a(h).c("flower1").d("flower_dandelion"));
-        c.a(38, "red_flower", (new BlockFlower(1)).c(0.0F).a(h).c("flower2").d("flower_rose"));
-        c.a(39, "brown_mushroom", (new BlockMushroom()).c(0.0F).a(h).a(0.125F).c("mushroom").d("mushroom_brown"));
-        c.a(40, "red_mushroom", (new BlockMushroom()).c(0.0F).a(h).c("mushroom").d("mushroom_red"));
-        c.a(41, "gold_block", (new BlockCompressed(MapColor.F)).c(3.0F).b(10.0F).a(j).c("blockGold").d("gold_block"));
-        c.a(42, "iron_block", (new BlockCompressed(MapColor.h)).c(5.0F).b(10.0F).a(j).c("blockIron").d("iron_block"));
-        c.a(43, "double_stone_slab", (new BlockStoneSlab(true)).c(2.0F).b(10.0F).a(i).c("stoneSlab"));
-        c.a(44, "stone_slab", (new BlockStoneSlab(false)).c(2.0F).b(10.0F).a(i).c("stoneSlab"));
-        Block block3 = (new Block(Material.e)).c(2.0F).b(10.0F).a(i).c("brick").a(CreativeTabs.b).d("brick");
-
-        c.a(45, "brick_block", block3);
-        c.a(46, "tnt", (new BlockTNT()).c(0.0F).a(h).c("tnt").d("tnt"));
-        c.a(47, "bookshelf", (new BlockBookshelf()).c(1.5F).a(f).c("bookshelf").d("bookshelf"));
-        c.a(48, "mossy_cobblestone", (new Block(Material.e)).c(2.0F).b(10.0F).a(i).c("stoneMoss").a(CreativeTabs.b).d("cobblestone_mossy"));
-        c.a(49, "obsidian", (new BlockObsidian()).c(50.0F).b(2000.0F).a(i).c("obsidian").d("obsidian"));
-        c.a(50, "torch", (new BlockTorch()).c(0.0F).a(0.9375F).a(f).c("torch").d("torch_on"));
-        c.a(51, "fire", (new BlockFire()).c(0.0F).a(1.0F).a(f).c("fire").H().d("fire"));
-        c.a(52, "mob_spawner", (new BlockMobSpawner()).c(5.0F).a(j).c("mobSpawner").H().d("mob_spawner"));
-        c.a(53, "oak_stairs", (new BlockStairs(block1, 0)).c("stairsWood"));
-        c.a(54, "chest", (new BlockChest(0)).c(2.5F).a(f).c("chest"));
-        c.a(55, "redstone_wire", (new BlockRedstoneWire()).c(0.0F).a(e).c("redstoneDust").H().d("redstone_dust"));
-        c.a(56, "diamond_ore", (new BlockOre()).c(3.0F).b(5.0F).a(i).c("oreDiamond").d("diamond_ore"));
-        c.a(57, "diamond_block", (new BlockCompressed(MapColor.G)).c(5.0F).b(10.0F).a(j).c("blockDiamond").d("diamond_block"));
-        c.a(58, "crafting_table", (new BlockWorkbench()).c(2.5F).a(f).c("workbench").d("crafting_table"));
-        c.a(59, "wheat", (new BlockCrops()).c("crops").d("wheat"));
-        Block block4 = (new BlockFarmland()).c(0.6F).a(g).c("farmland").d("farmland");
-
-        c.a(60, "farmland", block4);
-        c.a(61, "furnace", (new BlockFurnace(false)).c(3.5F).a(i).c("furnace").a(CreativeTabs.c));
-        c.a(62, "lit_furnace", (new BlockFurnace(true)).c(3.5F).a(i).a(0.875F).c("furnace"));
-        c.a(63, "standing_sign", (new BlockSign(TileEntitySign.class, true)).c(1.0F).a(f).c("sign").H());
-        c.a(64, "wooden_door", (new BlockDoor(Material.d)).c(3.0F).a(f).c("doorWood").H().d("door_wood"));
-        c.a(65, "ladder", (new BlockLadder()).c(0.4F).a(o).c("ladder").d("ladder"));
-        c.a(66, "rail", (new BlockRail()).c(0.7F).a(j).c("rail").d("rail_normal"));
-        c.a(67, "stone_stairs", (new BlockStairs(block, 0)).c("stairsStone"));
-        c.a(68, "wall_sign", (new BlockSign(TileEntitySign.class, false)).c(1.0F).a(f).c("sign").H());
-        c.a(69, "lever", (new BlockLever()).c(0.5F).a(f).c("lever").d("lever"));
-        c.a(70, "stone_pressure_plate", (new BlockPressurePlate("stone", Material.e, BlockPressurePlate.Sensitivity.mobs)).c(0.5F).a(i).c("pressurePlate"));
-        c.a(71, "iron_door", (new BlockDoor(Material.f)).c(5.0F).a(j).c("doorIron").H().d("door_iron"));
-        c.a(72, "wooden_pressure_plate", (new BlockPressurePlate("planks_oak", Material.d, BlockPressurePlate.Sensitivity.everything)).c(0.5F).a(f).c("pressurePlate"));
-        c.a(73, "redstone_ore", (new BlockRedstoneOre(false)).c(3.0F).b(5.0F).a(i).c("oreRedstone").a(CreativeTabs.b).d("redstone_ore"));
-        c.a(74, "lit_redstone_ore", (new BlockRedstoneOre(true)).a(0.625F).c(3.0F).b(5.0F).a(i).c("oreRedstone").d("redstone_ore"));
-        c.a(75, "unlit_redstone_torch", (new BlockRedstoneTorch(false)).c(0.0F).a(f).c("notGate").d("redstone_torch_off"));
-        c.a(76, "redstone_torch", (new BlockRedstoneTorch(true)).c(0.0F).a(0.5F).a(f).c("notGate").a(CreativeTabs.d).d("redstone_torch_on"));
-        c.a(77, "stone_button", (new BlockButtonStone()).c(0.5F).a(i).c("button"));
-        c.a(78, "snow_layer", (new BlockSnow()).c(0.1F).a(n).c("snow").g(0).d("snow"));
-        c.a(79, "ice", (new BlockIce()).c(0.5F).g(3).a(k).c("ice").d("ice"));
-        c.a(80, "snow", (new BlockSnowBlock()).c(0.2F).a(n).c("snow").d("snow"));
-        c.a(81, "cactus", (new BlockCactus()).c(0.4F).a(l).c("cactus").d("cactus"));
-        c.a(82, "clay", (new BlockClay()).c(0.6F).a(g).c("clay").d("clay"));
-        c.a(83, "reeds", (new BlockReed()).c(0.0F).a(h).c("reeds").H().d("reeds"));
-        c.a(84, "jukebox", (new BlockJukebox()).c(2.0F).b(10.0F).a(i).c("jukebox").d("jukebox"));
-        c.a(85, "fence", (new BlockFence("planks_oak", Material.d)).c(2.0F).b(5.0F).a(f).c("fence"));
-        Block block5 = (new BlockPumpkin(false)).c(1.0F).a(f).c("pumpkin").d("pumpkin");
-
-        c.a(86, "pumpkin", block5);
-        c.a(87, "netherrack", (new BlockNetherrack()).c(0.4F).a(i).c("hellrock").d("netherrack"));
-        c.a(88, "soul_sand", (new BlockSoulSand()).c(0.5F).a(m).c("hellsand").d("soul_sand"));
-        c.a(89, "glowstone", (new BlockGlowstone(Material.s)).c(0.3F).a(k).a(1.0F).c("lightgem").d("glowstone"));
-        c.a(90, "portal", (new BlockPortal()).c(-1.0F).a(k).a(0.75F).c("portal").d("portal"));
-        c.a(91, "lit_pumpkin", (new BlockPumpkin(true)).c(1.0F).a(f).a(1.0F).c("litpumpkin").d("pumpkin"));
-        c.a(92, "cake", (new BlockCake()).c(0.5F).a(l).c("cake").H().d("cake"));
-        c.a(93, "unpowered_repeater", (new BlockRedstoneRepeater(false)).c(0.0F).a(f).c("diode").H().d("repeater_off"));
-        c.a(94, "powered_repeater", (new BlockRedstoneRepeater(true)).c(0.0F).a(0.625F).a(f).c("diode").H().d("repeater_on"));
-        c.a(95, "stained_glass", (new BlockStainedGlass(Material.s)).c(0.3F).a(k).c("stainedGlass").d("glass"));
-        c.a(96, "trapdoor", (new BlockTrapDoor(Material.d)).c(3.0F).a(f).c("trapdoor").H().d("trapdoor"));
-        c.a(97, "monster_egg", (new BlockSilverfish()).c(0.75F).c("monsterStoneEgg"));
-        Block block6 = (new BlockStoneBrick()).c(1.5F).b(10.0F).a(i).c("stonebricksmooth").d("stonebrick");
-
-        c.a(98, "stonebrick", block6);
-        c.a(99, "brown_mushroom_block", (new BlockHugeMushroom(Material.d, 0)).c(0.2F).a(f).c("mushroom").d("mushroom_block"));
-        c.a(100, "red_mushroom_block", (new BlockHugeMushroom(Material.d, 1)).c(0.2F).a(f).c("mushroom").d("mushroom_block"));
-        c.a(101, "iron_bars", (new BlockPane("iron_bars", "iron_bars", Material.f, true)).c(5.0F).b(10.0F).a(j).c("fenceIron"));
-        c.a(102, "glass_pane", (new BlockPane("glass", "glass_pane_top", Material.s, false)).c(0.3F).a(k).c("thinGlass"));
-        Block block7 = (new BlockMelon()).c(1.0F).a(f).c("melon").d("melon");
-
-        c.a(103, "melon_block", block7);
-        c.a(104, "pumpkin_stem", (new BlockStem(block5)).c(0.0F).a(f).c("pumpkinStem").d("pumpkin_stem"));
-        c.a(105, "melon_stem", (new BlockStem(block7)).c(0.0F).a(f).c("pumpkinStem").d("melon_stem"));
-        c.a(106, "vine", (new BlockVine()).c(0.2F).a(h).c("vine").d("vine"));
-        c.a(107, "fence_gate", (new BlockFenceGate()).c(2.0F).b(5.0F).a(f).c("fenceGate"));
-        c.a(108, "brick_stairs", (new BlockStairs(block3, 0)).c("stairsBrick"));
-        c.a(109, "stone_brick_stairs", (new BlockStairs(block6, 0)).c("stairsStoneBrickSmooth"));
-        c.a(110, "mycelium", (new BlockMycelium()).c(0.6F).a(h).c("mycel").d("mycelium"));
-        c.a(111, "waterlily", (new BlockLilyPad()).c(0.0F).a(h).c("waterlily").d("waterlily"));
-        Block block8 = (new Block(Material.e)).c(2.0F).b(10.0F).a(i).c("netherBrick").a(CreativeTabs.b).d("nether_brick");
-
-        c.a(112, "nether_brick", block8);
-        c.a(113, "nether_brick_fence", (new BlockFence("nether_brick", Material.e)).c(2.0F).b(10.0F).a(i).c("netherFence"));
-        c.a(114, "nether_brick_stairs", (new BlockStairs(block8, 0)).c("stairsNetherBrick"));
-        c.a(115, "nether_wart", (new BlockNetherWart()).c("netherStalk").d("nether_wart"));
-        c.a(116, "enchanting_table", (new BlockEnchantmentTable()).c(5.0F).b(2000.0F).c("enchantmentTable").d("enchanting_table"));
-        c.a(117, "brewing_stand", (new BlockBrewingStand()).c(0.5F).a(0.125F).c("brewingStand").d("brewing_stand"));
-        c.a(118, "cauldron", (new BlockCauldron()).c(2.0F).c("cauldron").d("cauldron"));
-        c.a(119, "end_portal", (new BlockEndPortal(Material.E)).c(-1.0F).b(6000000.0F));
-        c.a(120, "end_portal_frame", (new BlockEndPortalFrame()).a(k).a(0.125F).c(-1.0F).c("endPortalFrame").b(6000000.0F).a(CreativeTabs.c).d("endframe"));
-        c.a(121, "end_stone", (new Block(Material.e)).c(3.0F).b(15.0F).a(i).c("whiteStone").a(CreativeTabs.b).d("end_stone"));
-        c.a(122, "dragon_egg", (new BlockDragonEgg()).c(3.0F).b(15.0F).a(i).a(0.125F).c("dragonEgg").d("dragon_egg"));
-        c.a(123, "redstone_lamp", (new BlockRedstoneLight(false)).c(0.3F).a(k).c("redstoneLight").a(CreativeTabs.d).d("redstone_lamp_off"));
-        c.a(124, "lit_redstone_lamp", (new BlockRedstoneLight(true)).c(0.3F).a(k).c("redstoneLight").d("redstone_lamp_on"));
-        c.a(125, "double_wooden_slab", (new BlockWoodSlab(true)).c(2.0F).b(5.0F).a(f).c("woodSlab"));
-        c.a(126, "wooden_slab", (new BlockWoodSlab(false)).c(2.0F).b(5.0F).a(f).c("woodSlab"));
-        c.a(127, "cocoa", (new BlockCocoa()).c(0.2F).b(5.0F).a(f).c("cocoa").d("cocoa"));
-        c.a(128, "sandstone_stairs", (new BlockStairs(block2, 0)).c("stairsSandStone"));
-        c.a(129, "emerald_ore", (new BlockOre()).c(3.0F).b(5.0F).a(i).c("oreEmerald").d("emerald_ore"));
-        c.a(130, "ender_chest", (new BlockEnderChest()).c(22.5F).b(1000.0F).a(i).c("enderChest").a(0.5F));
-        c.a(131, "tripwire_hook", (new BlockTripWireHook()).c("tripWireSource").d("trip_wire_source"));
-        c.a(132, "tripwire", (new BlockTripWire()).c("tripWire").d("trip_wire"));
-        c.a(133, "emerald_block", (new BlockCompressed(MapColor.I)).c(5.0F).b(10.0F).a(j).c("blockEmerald").d("emerald_block"));
-        c.a(134, "spruce_stairs", (new BlockStairs(block1, 1)).c("stairsWoodSpruce"));
-        c.a(135, "birch_stairs", (new BlockStairs(block1, 2)).c("stairsWoodBirch"));
-        c.a(136, "jungle_stairs", (new BlockStairs(block1, 3)).c("stairsWoodJungle"));
-        c.a(137, "command_block", (new BlockCommandBlock()).s().b(6000000.0F).c("commandBlock").d("command_block"));
-        c.a(138, "beacon", (new BlockBeacon()).c("beacon").a(1.0F).d("beacon"));
-        c.a(139, "cobblestone_wall", (new BlockWall(block)).c("cobbleWall"));
-        c.a(140, "flower_pot", (new BlockFlowerPot()).c(0.0F).a(e).c("flowerPot").d("flower_pot"));
-        c.a(141, "carrots", (new BlockCarrot()).c("carrots").d("carrots"));
-        c.a(142, "potatoes", (new BlockPotato()).c("potatoes").d("potatoes"));
-        c.a(143, "wooden_button", (new BlockButtonWood()).c(0.5F).a(f).c("button"));
-        c.a(144, "skull", (new BlockSkull()).c(1.0F).a(i).c("skull").d("skull"));
-        c.a(145, "anvil", (new BlockAnvil()).c(5.0F).a(p).b(2000.0F).c("anvil"));
-        c.a(146, "trapped_chest", (new BlockChest(1)).c(2.5F).a(f).c("chestTrap"));
-        c.a(147, "light_weighted_pressure_plate", (new BlockPressurePlateWeighted("gold_block", Material.f, 15)).c(0.5F).a(f).c("weightedPlate_light"));
-        c.a(148, "heavy_weighted_pressure_plate", (new BlockPressurePlateWeighted("iron_block", Material.f, 150)).c(0.5F).a(f).c("weightedPlate_heavy"));
-        c.a(149, "unpowered_comparator", (new BlockRedstoneComparator(false)).c(0.0F).a(f).c("comparator").H().d("comparator_off"));
-        c.a(150, "powered_comparator", (new BlockRedstoneComparator(true)).c(0.0F).a(0.625F).a(f).c("comparator").H().d("comparator_on"));
-        c.a(151, "daylight_detector", (new BlockDaylightDetector()).c(0.2F).a(f).c("daylightDetector").d("daylight_detector"));
-        c.a(152, "redstone_block", (new BlockCompressedPowered(MapColor.f)).c(5.0F).b(10.0F).a(j).c("blockRedstone").d("redstone_block"));
-        c.a(153, "quartz_ore", (new BlockOre()).c(3.0F).b(5.0F).a(i).c("netherquartz").d("quartz_ore"));
-        c.a(154, "hopper", (new BlockHopper()).c(3.0F).b(8.0F).a(f).c("hopper").d("hopper"));
-        Block block9 = (new BlockQuartz()).a(i).c(0.8F).c("quartzBlock").d("quartz_block");
-
-        c.a(155, "quartz_block", block9);
-        c.a(156, "quartz_stairs", (new BlockStairs(block9, 0)).c("stairsQuartz"));
-        c.a(157, "activator_rail", (new BlockRailPowered()).c(0.7F).a(j).c("activatorRail").d("rail_activator"));
-        c.a(158, "dropper", (new BlockDropper()).c(3.5F).a(i).c("dropper").d("dropper"));
-        c.a(159, "stained_hardened_clay", (new BlockColored(Material.e)).c(1.25F).b(7.0F).a(i).c("clayHardenedStained").d("hardened_clay_stained"));
-        c.a(160, "stained_glass_pane", (new BlockStainedGlassPane()).c(0.3F).a(k).c("thinStainedGlass").d("glass"));
-        c.a(161, "leaves2", (new BlockNewLeaf()).c("leaves").d("leaves"));
-        c.a(162, "log2", (new BlockNewLog()).c("log").d("log"));
-        c.a(163, "acacia_stairs", (new BlockStairs(block1, 4)).c("stairsWoodAcacia"));
-        c.a(164, "dark_oak_stairs", (new BlockStairs(block1, 5)).c("stairsWoodDarkOak"));
-        c.a(170, "hay_block", (new BlockHay()).c(0.5F).a(h).c("hayBlock").a(CreativeTabs.b).d("hay_block"));
-        c.a(171, "carpet", (new BlockCarpet()).c(0.1F).a(l).c("woolCarpet").g(0));
-        c.a(172, "hardened_clay", (new BlockHardenedClay()).c(1.25F).b(7.0F).a(i).c("clayHardened").d("hardened_clay"));
-        c.a(173, "coal_block", (new Block(Material.e)).c(5.0F).b(10.0F).a(i).c("blockCoal").a(CreativeTabs.b).d("coal_block"));
-        c.a(174, "packed_ice", (new BlockPackedIce()).c(0.5F).a(k).c("icePacked").d("ice_packed"));
-        c.a(175, "double_plant", new BlockDoublePlant());
-        Iterator iterator = c.iterator();
-
-        while (iterator.hasNext()) {
-            Block block10 = (Block) iterator.next();
-
-            if (block10.J == Material.a) {
-                block10.u = false;
-            }
-            else {
-                boolean flag0 = false;
-                boolean flag1 = block10.b() == 10;
-                boolean flag2 = block10 instanceof BlockSlab;
-                boolean flag3 = block10 == block4;
-                boolean flag4 = block10.s;
-                boolean flag5 = block10.r == 0;
-
-                if (flag1 || flag2 || flag3 || flag4 || flag5) {
-                    flag0 = true;
-                }
-
-                block10.u = flag0;
-            }
+    public int c(IBlockState iblockstate) {
+        if (iblockstate != null && !iblockstate.a().isEmpty()) {
+            throw new IllegalArgumentException("Don\'t know how to convert " + iblockstate + " back into data...");
         }
+        else {
+            return 0;
+        }
+    }
 
+    public IBlockState a(IBlockState iblockstate, IBlockAccess iblockaccess, BlockPos blockpos) {
+        return iblockstate;
     }
 
     protected Block(Material material) {
@@ -360,63 +197,77 @@ public class Block {
         this.K = 0.6F;
         this.J = material;
         this.a(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
-        this.q = this.c();
-        this.r = this.c() ? 255 : 0;
-        this.s = !material.b();
+        this.r = this.c();
+        this.s = this.c() ? 255 : 0;
+        this.t = !material.b();
+        this.L = this.e();
+        this.j(this.L.b());
     }
 
-    protected Block a(SoundType block_soundtype) {
+    protected Block a(Block.SoundType block_soundtype) {
         this.H = block_soundtype;
         return this;
     }
 
-    protected Block g(int i0) {
-        this.r = i0;
+    protected Block e(int i0) {
+        this.s = i0;
         return this;
     }
 
     protected Block a(float f0) {
-        this.t = (int) (15.0F * f0);
+        this.u = (int)(15.0F * f0);
         return this;
     }
 
     protected Block b(float f0) {
-        this.w = f0 * 3.0F;
+        this.x = f0 * 3.0F;
         return this;
     }
 
-    public boolean r() {
-        return this.J.k() && this.d() && !this.f();
+    public boolean s() {
+        return this.J.c() && this.d();
+    }
+
+    public boolean t() {
+        return this.J.k() && this.d() && !this.g();
+    }
+
+    public boolean u() {
+        return this.J.c() && this.d();
     }
 
     public boolean d() {
         return true;
     }
 
-    public boolean b(IBlockAccess iblockaccess, int i0, int i1, int i2) {
+    public boolean b(IBlockAccess iblockaccess, BlockPos blockpos) {
         return !this.J.c();
     }
 
     public int b() {
-        return 0;
+        return 3;
+    }
+
+    public boolean f(World world, BlockPos blockpos) {
+        return false;
     }
 
     protected Block c(float f0) {
-        this.v = f0;
-        if (this.w < f0 * 5.0F) {
-            this.w = f0 * 5.0F;
+        this.w = f0;
+        if (this.x < f0 * 5.0F) {
+            this.x = f0 * 5.0F;
         }
 
         return this;
     }
 
-    protected Block s() {
+    protected Block v() {
         this.c(-1.0F);
         return this;
     }
 
-    public float f(World world, int i0, int i1, int i2) {
-        return this.v;
+    public float g(World world, BlockPos blockpos) {
+        return this.w;
     }
 
     protected Block a(boolean flag0) {
@@ -424,155 +275,159 @@ public class Block {
         return this;
     }
 
-    public boolean t() {
+    public boolean w() {
         return this.z;
     }
 
-    public boolean u() {
+    public boolean x() {
         return this.A;
     }
 
     protected final void a(float f0, float f1, float f2, float f3, float f4, float f5) {
-        this.B = (double) f0;
-        this.C = (double) f1;
-        this.D = (double) f2;
-        this.E = (double) f3;
-        this.F = (double) f4;
-        this.G = (double) f5;
+        this.B = (double)f0;
+        this.C = (double)f1;
+        this.D = (double)f2;
+        this.E = (double)f3;
+        this.F = (double)f4;
+        this.G = (double)f5;
     }
 
-    public boolean d(IBlockAccess iblockaccess, int i0, int i1, int i2, int i3) {
-        return iblockaccess.a(i0, i1, i2).o().a();
+    public boolean b(IBlockAccess iblockaccess, BlockPos blockpos, EnumFacing enumfacing) {
+        return iblockaccess.p(blockpos).c().r().a();
     }
 
-    public void a(World world, int i0, int i1, int i2, AxisAlignedBB axisalignedbb, List list, Entity entity) {
-        AxisAlignedBB axisalignedbb1 = this.a(world, i0, i1, i2);
+    public void a(World world, BlockPos blockpos, IBlockState iblockstate, AxisAlignedBB axisalignedbb, List list, Entity entity) {
+        AxisAlignedBB axisalignedbb1 = this.a(world, blockpos, iblockstate);
 
         if (axisalignedbb1 != null && axisalignedbb.b(axisalignedbb1)) {
             list.add(axisalignedbb1);
         }
     }
 
-    public AxisAlignedBB a(World world, int i0, int i1, int i2) {
-        return AxisAlignedBB.a((double) i0 + this.B, (double) i1 + this.C, (double) i2 + this.D, (double) i0 + this.E, (double) i1 + this.F, (double) i2 + this.G);
+    public AxisAlignedBB a(World world, BlockPos blockpos, IBlockState iblockstate) {
+        return new AxisAlignedBB((double)blockpos.n() + this.B, (double)blockpos.o() + this.C, (double)blockpos.p() + this.D, (double)blockpos.n() + this.E, (double)blockpos.o() + this.F, (double)blockpos.p() + this.G);
     }
 
     public boolean c() {
         return true;
     }
 
-    public boolean a(int i0, boolean flag0) {
-        return this.v();
+    public boolean a(IBlockState iblockstate, boolean flag0) {
+        return this.y();
     }
 
-    public boolean v() {
+    public boolean y() {
         return true;
     }
 
-    public void a(World world, int i0, int i1, int i2, Random random) {
+    public void a(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {
+        this.b(world, blockpos, iblockstate, random);
     }
 
-    public void b(World world, int i0, int i1, int i2, int i3) {
+    public void b(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {
     }
 
-    public void a(World world, int i0, int i1, int i2, Block block) {
+    public void d(World world, BlockPos blockpos, IBlockState iblockstate) {
+    }
+
+    public void a(World world, BlockPos blockpos, IBlockState iblockstate, Block block) {
     }
 
     public int a(World world) {
         return 10;
     }
 
-    public void b(World world, int i0, int i1, int i2) {
+    public void c(World world, BlockPos blockpos, IBlockState iblockstate) {
     }
 
-    public void a(World world, int i0, int i1, int i2, Block block, int i3) {
+    public void b(World world, BlockPos blockpos, IBlockState iblockstate) {
     }
 
     public int a(Random random) {
         return 1;
     }
 
-    public Item a(int i0, Random random, int i1) {
+    public Item a(IBlockState iblockstate, Random random, int i0) {
         return Item.a(this);
     }
 
-    public float a(EntityPlayer entityplayer, World world, int i0, int i1, int i2) {
-        float f0 = this.f(world, i0, i1, i2);
+    public float a(EntityPlayer entityplayer, World world, BlockPos blockpos) {
+        float f0 = this.g(world, blockpos);
 
-        return f0 < 0.0F ? 0.0F : (!entityplayer.a(this) ? entityplayer.a(this, false) / f0 / 100.0F : entityplayer.a(this, true) / f0 / 30.0F);
+        return f0 < 0.0F ? 0.0F : (!entityplayer.b(this) ? entityplayer.a(this) / f0 / 100.0F : entityplayer.a(this) / f0 / 30.0F);
     }
 
-    public final void b(World world, int i0, int i1, int i2, int i3, int i4) {
-        this.a(world, i0, i1, i2, i3, 1.0F, i4);
+    public final void b(World world, BlockPos blockpos, IBlockState iblockstate, int i0) {
+        this.a(world, blockpos, iblockstate, 1.0F, i0);
     }
 
-    public void a(World world, int i0, int i1, int i2, int i3, float f0, int i4) {
-        if (!world.E) {
-            int i5 = this.a(i4, world.s);
+    public void a(World world, BlockPos blockpos, IBlockState iblockstate, float f0, int i0) {
+        if (!world.D) {
+            int i1 = this.a(i0, world.s);
 
-            for (int i6 = 0; i6 < i5; ++i6) {
+            for (int i2 = 0; i2 < i1; ++i2) {
                 if (world.s.nextFloat() <= f0) {
-                    Item item = this.a(i3, world.s, i4);
+                    Item item = this.a(iblockstate, world.s, i0);
 
                     if (item != null) {
-                        this.a(world, i0, i1, i2, new ItemStack(item, 1, this.a(i3)));
+                        a(world, blockpos, new ItemStack(item, 1, this.a(iblockstate)));
                     }
                 }
             }
         }
     }
 
-    protected void a(World world, int i0, int i1, int i2, ItemStack itemstack) {
-        if (!world.E && world.O().b("doTileDrops")) {
-            float f0 = 0.7F;
-            double d0 = (double) (world.s.nextFloat() * f0) + (double) (1.0F - f0) * 0.5D;
-            double d1 = (double) (world.s.nextFloat() * f0) + (double) (1.0F - f0) * 0.5D;
-            double d2 = (double) (world.s.nextFloat() * f0) + (double) (1.0F - f0) * 0.5D;
-            EntityItem entityitem = new EntityItem(world, (double) i0 + d0, (double) i1 + d1, (double) i2 + d2, itemstack);
+    public static void a(World world, BlockPos blockpos, ItemStack itemstack) {
+        if (!world.D && world.Q().b("doTileDrops")) {
+            float f0 = 0.5F;
+            double d0 = (double)(world.s.nextFloat() * f0) + (double)(1.0F - f0) * 0.5D;
+            double d1 = (double)(world.s.nextFloat() * f0) + (double)(1.0F - f0) * 0.5D;
+            double d2 = (double)(world.s.nextFloat() * f0) + (double)(1.0F - f0) * 0.5D;
+            EntityItem entityitem = new EntityItem(world, (double)blockpos.n() + d0, (double)blockpos.o() + d1, (double)blockpos.p() + d2, itemstack);
 
-            entityitem.b = 10;
-            world.d((Entity) entityitem);
+            entityitem.p();
+            world.d((Entity)entityitem);
         }
     }
 
-    protected void c(World world, int i0, int i1, int i2, int i3) {
-        if (!world.E) {
+    protected void b(World world, BlockPos blockpos, int i0) {
+        if (!world.D) {
             // CanaryMod: BlockDropXpHook
-            net.canarymod.api.world.blocks.Block block = world.getCanaryWorld().getBlockAt(i0, i1, i2);
-            BlockDropXpHook hook = (BlockDropXpHook) new BlockDropXpHook(block, i3).call();
+            net.canarymod.api.world.blocks.Block block = world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos));
+            BlockDropXpHook hook = (BlockDropXpHook)new BlockDropXpHook(block, i0).call();
             if (hook.isCanceled()) {
                 return;
             }
-            i3 = hook.getXp();
+            i0 = hook.getXp();
             //
 
-            while (i3 > 0) {
-                int i4 = EntityXPOrb.a(i3);
+            while (i0 > 0) {
+                int i1 = EntityXPOrb.a(i0);
 
-                i3 -= i4;
-                world.d((Entity) (new EntityXPOrb(world, (double) i0 + 0.5D, (double) i1 + 0.5D, (double) i2 + 0.5D, i4)));
+                i0 -= i1;
+                world.d((Entity)(new EntityXPOrb(world, (double)blockpos.n() + 0.5D, (double)blockpos.o() + 0.5D, (double)blockpos.p() + 0.5D, i1)));
             }
         }
     }
 
-    public int a(int i0) {
+    public int a(IBlockState iblockstate) {
         return 0;
     }
 
     public float a(Entity entity) {
-        return this.w / 5.0F;
+        return this.x / 5.0F;
     }
 
-    public MovingObjectPosition a(World world, int i0, int i1, int i2, Vec3 vec3, Vec3 vec31) {
-        this.a((IBlockAccess) world, i0, i1, i2);
-        vec3 = vec3.c((double) (-i0), (double) (-i1), (double) (-i2));
-        vec31 = vec31.c((double) (-i0), (double) (-i1), (double) (-i2));
-        Vec3 vec32 = vec3.b(vec31, this.B);
-        Vec3 vec33 = vec3.b(vec31, this.E);
-        Vec3 vec34 = vec3.c(vec31, this.C);
-        Vec3 vec35 = vec3.c(vec31, this.F);
-        Vec3 vec36 = vec3.d(vec31, this.D);
-        Vec3 vec37 = vec3.d(vec31, this.G);
+    public MovingObjectPosition a(World world, BlockPos blockpos, Vec3 vec3, Vec3 vec31) {
+        this.a((IBlockAccess)world, blockpos);
+        vec3 = vec3.b((double)(-blockpos.n()), (double)(-blockpos.o()), (double)(-blockpos.p()));
+        vec31 = vec31.b((double)(-blockpos.n()), (double)(-blockpos.o()), (double)(-blockpos.p()));
+        Vec3 vec32 = vec3.a(vec31, this.B);
+        Vec3 vec33 = vec3.a(vec31, this.E);
+        Vec3 vec34 = vec3.b(vec31, this.C);
+        Vec3 vec35 = vec3.b(vec31, this.F);
+        Vec3 vec36 = vec3.c(vec31, this.D);
+        Vec3 vec37 = vec3.c(vec31, this.G);
 
         if (!this.a(vec32)) {
             vec32 = null;
@@ -600,27 +455,27 @@ public class Block {
 
         Vec3 vec38 = null;
 
-        if (vec32 != null && (vec38 == null || vec3.e(vec32) < vec3.e(vec38))) {
+        if (vec32 != null && (vec38 == null || vec3.g(vec32) < vec3.g(vec38))) {
             vec38 = vec32;
         }
 
-        if (vec33 != null && (vec38 == null || vec3.e(vec33) < vec3.e(vec38))) {
+        if (vec33 != null && (vec38 == null || vec3.g(vec33) < vec3.g(vec38))) {
             vec38 = vec33;
         }
 
-        if (vec34 != null && (vec38 == null || vec3.e(vec34) < vec3.e(vec38))) {
+        if (vec34 != null && (vec38 == null || vec3.g(vec34) < vec3.g(vec38))) {
             vec38 = vec34;
         }
 
-        if (vec35 != null && (vec38 == null || vec3.e(vec35) < vec3.e(vec38))) {
+        if (vec35 != null && (vec38 == null || vec3.g(vec35) < vec3.g(vec38))) {
             vec38 = vec35;
         }
 
-        if (vec36 != null && (vec38 == null || vec3.e(vec36) < vec3.e(vec38))) {
+        if (vec36 != null && (vec38 == null || vec3.g(vec36) < vec3.g(vec38))) {
             vec38 = vec36;
         }
 
-        if (vec37 != null && (vec38 == null || vec3.e(vec37) < vec3.e(vec38))) {
+        if (vec37 != null && (vec38 == null || vec3.g(vec37) < vec3.g(vec38))) {
             vec38 = vec37;
         }
 
@@ -628,33 +483,33 @@ public class Block {
             return null;
         }
         else {
-            byte b0 = -1;
+            EnumFacing enumfacing = null;
 
             if (vec38 == vec32) {
-                b0 = 4;
+                enumfacing = EnumFacing.WEST;
             }
 
             if (vec38 == vec33) {
-                b0 = 5;
+                enumfacing = EnumFacing.EAST;
             }
 
             if (vec38 == vec34) {
-                b0 = 0;
+                enumfacing = EnumFacing.DOWN;
             }
 
             if (vec38 == vec35) {
-                b0 = 1;
+                enumfacing = EnumFacing.UP;
             }
 
             if (vec38 == vec36) {
-                b0 = 2;
+                enumfacing = EnumFacing.NORTH;
             }
 
             if (vec38 == vec37) {
-                b0 = 3;
+                enumfacing = EnumFacing.SOUTH;
             }
 
-            return new MovingObjectPosition(i0, i1, i2, b0, vec38.c((double) i0, (double) i1, (double) i2));
+            return new MovingObjectPosition(vec38.b((double)blockpos.n(), (double)blockpos.o(), (double)blockpos.p()), enumfacing, blockpos);
         }
     }
 
@@ -670,181 +525,177 @@ public class Block {
         return vec3 == null ? false : vec3.a >= this.B && vec3.a <= this.E && vec3.b >= this.C && vec3.b <= this.F;
     }
 
-    public void a(World world, int i0, int i1, int i2, Explosion explosion) {
+    public void a(World world, BlockPos blockpos, Explosion explosion) {
     }
 
-    public boolean a(World world, int i0, int i1, int i2, int i3, ItemStack itemstack) {
-        return this.d(world, i0, i1, i2, i3);
+    public boolean a(World world, BlockPos blockpos, EnumFacing enumfacing, ItemStack itemstack) {
+        return this.a(world, blockpos, enumfacing);
     }
 
-    public boolean d(World world, int i0, int i1, int i2, int i3) {
-        return this.c(world, i0, i1, i2);
+    public boolean a(World world, BlockPos blockpos, EnumFacing enumfacing) {
+        return this.c(world, blockpos);
     }
 
-    public boolean c(World world, int i0, int i1, int i2) {
-        return world.a(i0, i1, i2).J.j();
+    public boolean c(World world, BlockPos blockpos) {
+        return world.p(blockpos).c().J.j();
     }
 
-    public boolean a(World world, int i0, int i1, int i2, EntityPlayer entityplayer, int i3, float f0, float f1, float f2) {
+    public boolean a(World world, BlockPos blockpos, IBlockState iblockstate, EntityPlayer entityplayer, EnumFacing enumfacing, float f0, float f1, float f2) {
         return false;
     }
 
-    public void b(World world, int i0, int i1, int i2, Entity entity) {
+    public void a(World world, BlockPos blockpos, Entity entity) {
     }
 
-    public int a(World world, int i0, int i1, int i2, int i3, float f0, float f1, float f2, int i4) {
-        return i4;
+    public IBlockState a(World world, BlockPos blockpos, EnumFacing enumfacing, float f0, float f1, float f2, int i0, EntityLivingBase entitylivingbase) {
+        return this.a(i0);
     }
 
-    public void a(World world, int i0, int i1, int i2, EntityPlayer entityplayer) {
+    public void a(World world, BlockPos blockpos, EntityPlayer entityplayer) {
     }
 
-    public void a(World world, int i0, int i1, int i2, Entity entity, Vec3 vec3) {
+    public Vec3 a(World world, BlockPos blockpos, Entity entity, Vec3 vec3) {
+        return vec3;
     }
 
-    public void a(IBlockAccess iblockaccess, int i0, int i1, int i2) {
-    }
-
-    public final double x() {
-        return this.B;
-    }
-
-    public final double y() {
-        return this.E;
+    public void a(IBlockAccess iblockaccess, BlockPos blockpos) {
     }
 
     public final double z() {
-        return this.C;
+        return this.B;
     }
 
     public final double A() {
-        return this.F;
+        return this.E;
     }
 
     public final double B() {
-        return this.D;
+        return this.C;
     }
 
     public final double C() {
+        return this.F;
+    }
+
+    public final double D() {
+        return this.D;
+    }
+
+    public final double E() {
         return this.G;
     }
 
-    public int b(IBlockAccess iblockaccess, int i0, int i1, int i2, int i3) {
+    public int a(IBlockAccess iblockaccess, BlockPos blockpos, IBlockState iblockstate, EnumFacing enumfacing) {
         return 0;
     }
 
-    public boolean f() {
+    public boolean g() {
         return false;
     }
 
-    public void a(World world, int i0, int i1, int i2, Entity entity) {
+    public void a(World world, BlockPos blockpos, IBlockState iblockstate, Entity entity) {
     }
 
-    public int c(IBlockAccess iblockaccess, int i0, int i1, int i2, int i3) {
+    public int b(IBlockAccess iblockaccess, BlockPos blockpos, IBlockState iblockstate, EnumFacing enumfacing) {
         return 0;
     }
 
-    public void g() {
+    public void h() {
     }
 
-    public void a(World world, EntityPlayer entityplayer, int i0, int i1, int i2, int i3) {
-        entityplayer.a(StatList.C[b(this)], 1);
+    public void a(World world, EntityPlayer entityplayer, BlockPos blockpos, IBlockState iblockstate, TileEntity tileentity) {
+        entityplayer.b(StatList.H[a(this)]);
         entityplayer.a(0.025F);
-        if (this.E() && EnchantmentHelper.e(entityplayer)) {
-            ItemStack itemstack = this.j(i3);
+        if (this.G() && EnchantmentHelper.e(entityplayer)) {
+            ItemStack itemstack = this.i(iblockstate);
 
             if (itemstack != null) {
-                this.a(world, i0, i1, i2, itemstack);
+                a(world, blockpos, itemstack);
             }
         }
         else {
-            int i4 = EnchantmentHelper.f(entityplayer);
+            int i0 = EnchantmentHelper.f(entityplayer);
 
-            this.b(world, i0, i1, i2, i3, i4);
+            this.b(world, blockpos, iblockstate, i0);
         }
     }
 
-    protected boolean E() {
+    protected boolean G() {
         return this.d() && !this.A;
     }
 
-    protected ItemStack j(int i0) {
-        int i1 = 0;
+    protected ItemStack i(IBlockState iblockstate) {
+        int i0 = 0;
         Item item = Item.a(this);
 
-        if (item != null && item.n()) {
-            i1 = i0;
+        if (item != null && item.k()) {
+            i0 = this.c(iblockstate);
         }
 
-        return new ItemStack(item, 1, i1);
+        return new ItemStack(item, 1, i0);
     }
 
     public int a(int i0, Random random) {
         return this.a(random);
     }
 
-    public boolean j(World world, int i0, int i1, int i2) {
-        return true;
-    }
-
-    public void a(World world, int i0, int i1, int i2, EntityLivingBase entitylivingbase, ItemStack itemstack) {
-    }
-
-    public void e(World world, int i0, int i1, int i2, int i3) {
+    public void a(World world, BlockPos blockpos, IBlockState iblockstate, EntityLivingBase entitylivingbase, ItemStack itemstack) {
     }
 
     public Block c(String s0) {
-        this.b = s0;
+        this.N = s0;
         return this;
     }
 
-    public String F() {
+    public String H() {
         return StatCollector.a(this.a() + ".name");
     }
 
     public String a() {
-        return "tile." + this.b;
+        return "tile." + this.N;
     }
 
-    public boolean a(World world, int i0, int i1, int i2, int i3, int i4) {
+    public boolean a(World world, BlockPos blockpos, IBlockState iblockstate, int i0, int i1) {
         return false;
     }
 
-    public boolean G() {
+    public boolean I() {
         return this.y;
     }
 
-    protected Block H() {
+    protected Block J() {
         this.y = false;
         return this;
     }
 
-    public int h() {
+    public int i() {
         return this.J.m();
     }
 
-    public void a(World world, int i0, int i1, int i2, Entity entity, float f0) {
+    public void a(World world, BlockPos blockpos, Entity entity, float f0) {
+        entity.e(f0, 1.0F);
     }
 
-    public int k(World world, int i0, int i1, int i2) {
-        return this.a(world.e(i0, i1, i2));
+    public void a(World world, Entity entity) {
+        entity.w = 0.0D;
+    }
+
+    public int j(World world, BlockPos blockpos) {
+        return this.a(world.p(blockpos));
     }
 
     public Block a(CreativeTabs creativetabs) {
-        this.a = creativetabs;
+        this.b = creativetabs;
         return this;
     }
 
-    public void a(World world, int i0, int i1, int i2, int i3, EntityPlayer entityplayer) {
+    public void a(World world, BlockPos blockpos, IBlockState iblockstate, EntityPlayer entityplayer) {
     }
 
-    public void f(World world, int i0, int i1, int i2, int i3) {
+    public void k(World world, BlockPos blockpos) {
     }
 
-    public void l(World world, int i0, int i1, int i2) {
-    }
-
-    public boolean L() {
+    public boolean M() {
         return true;
     }
 
@@ -852,25 +703,315 @@ public class Block {
         return true;
     }
 
-    public boolean c(Block block) {
+    public boolean b(Block block) {
         return this == block;
     }
 
     public static boolean a(Block block, Block block1) {
-        return block != null && block1 != null ? (block == block1 ? true : block.c(block1)) : false;
+        return block != null && block1 != null ? (block == block1 ? true : block.b(block1)) : false;
     }
 
-    public boolean M() {
+    public boolean N() {
         return false;
     }
 
-    public int g(World world, int i0, int i1, int i2, int i3) {
+    public int l(World world, BlockPos blockpos) {
         return 0;
     }
 
-    protected Block d(String s0) {
-        this.d = s0;
-        return this;
+    protected BlockState e() {
+        return new BlockState(this, new IProperty[0]);
+    }
+
+    public BlockState O() {
+        return this.L;
+    }
+
+    protected final void j(IBlockState iblockstate) {
+        this.M = iblockstate;
+    }
+
+    public final IBlockState P() {
+        return this.M;
+    }
+
+    public static void R() {
+        a(0, a, (new BlockAir()).c("air"));
+        a(1, "stone", (new BlockStone()).c(1.5F).b(10.0F).a(i).c("stone"));
+        a(2, "grass", (new BlockGrass()).c(0.6F).a(h).c("grass"));
+        a(3, "dirt", (new BlockDirt()).c(0.5F).a(g).c("dirt"));
+        Block block = (new Block(Material.e)).c(2.0F).b(10.0F).a(i).c("stonebrick").a(CreativeTabs.b);
+        a(4, "cobblestone", block);
+        Block block1 = (new BlockPlanks()).c(2.0F).b(5.0F).a(f).c("wood");
+
+        a(5, "planks", block1);
+        a(6, "sapling", (new BlockSapling()).c(0.0F).a(h).c("sapling"));
+        a(7, "bedrock", (new Block(Material.e)).v().b(6000000.0F).a(i).c("bedrock").J().a(CreativeTabs.b));
+        a(8, "flowing_water", (new BlockDynamicLiquid(Material.h)).c(100.0F).e(3).c("water").J());
+        a(9, "water", (new BlockStaticLiquid(Material.h)).c(100.0F).e(3).c("water").J());
+        a(10, "flowing_lava", (new BlockDynamicLiquid(Material.i)).c(100.0F).a(1.0F).c("lava").J());
+        a(11, "lava", (new BlockStaticLiquid(Material.i)).c(100.0F).a(1.0F).c("lava").J());
+        a(12, "sand", (new BlockSand()).c(0.5F).a(m).c("sand"));
+        a(13, "gravel", (new BlockGravel()).c(0.6F).a(g).c("gravel"));
+        a(14, "gold_ore", (new BlockOre()).c(3.0F).b(5.0F).a(i).c("oreGold"));
+        a(15, "iron_ore", (new BlockOre()).c(3.0F).b(5.0F).a(i).c("oreIron"));
+        a(16, "coal_ore", (new BlockOre()).c(3.0F).b(5.0F).a(i).c("oreCoal"));
+        a(17, "log", (new BlockOldLog()).c("log"));
+        a(18, "leaves", (new BlockOldLeaf()).c("leaves"));
+        a(19, "sponge", (new BlockSponge()).c(0.6F).a(h).c("sponge"));
+        a(20, "glass", (new BlockGlass(Material.s, false)).c(0.3F).a(k).c("glass"));
+        a(21, "lapis_ore", (new BlockOre()).c(3.0F).b(5.0F).a(i).c("oreLapis"));
+        a(22, "lapis_block", (new BlockCompressed(MapColor.H)).c(3.0F).b(5.0F).a(i).c("blockLapis").a(CreativeTabs.b));
+        a(23, "dispenser", (new BlockDispenser()).c(3.5F).a(i).c("dispenser"));
+        Block block2 = (new BlockSandStone()).a(i).c(0.8F).c("sandStone");
+
+        a(24, "sandstone", block2);
+        a(25, "noteblock", (new BlockNote()).c(0.8F).c("musicBlock"));
+        a(26, "bed", (new BlockBed()).a(f).c(0.2F).c("bed").J());
+        a(27, "golden_rail", (new BlockRailPowered()).c(0.7F).a(j).c("goldenRail"));
+        a(28, "detector_rail", (new BlockRailDetector()).c(0.7F).a(j).c("detectorRail"));
+        a(29, "sticky_piston", (new BlockPistonBase(true)).c("pistonStickyBase"));
+        a(30, "web", (new BlockWeb()).e(1).c(4.0F).c("web"));
+        a(31, "tallgrass", (new BlockTallGrass()).c(0.0F).a(h).c("tallgrass"));
+        a(32, "deadbush", (new BlockDeadBush()).c(0.0F).a(h).c("deadbush"));
+        a(33, "piston", (new BlockPistonBase(false)).c("pistonBase"));
+        a(34, "piston_head", new BlockPistonExtension());
+        a(35, "wool", (new BlockColored(Material.n)).c(0.8F).a(l).c("cloth"));
+        a(36, "piston_extension", new BlockPistonMoving());
+        a(37, "yellow_flower", (new BlockYellowFlower()).c(0.0F).a(h).c("flower1"));
+        a(38, "red_flower", (new BlockRedFlower()).c(0.0F).a(h).c("flower2"));
+        Block block3 = (new BlockMushroom()).c(0.0F).a(h).a(0.125F).c("mushroom");
+
+        a(39, "brown_mushroom", block3);
+        Block block4 = (new BlockMushroom()).c(0.0F).a(h).c("mushroom");
+
+        a(40, "red_mushroom", block4);
+        a(41, "gold_block", (new BlockCompressed(MapColor.F)).c(3.0F).b(10.0F).a(j).c("blockGold"));
+        a(42, "iron_block", (new BlockCompressed(MapColor.h)).c(5.0F).b(10.0F).a(j).c("blockIron"));
+        a(43, "double_stone_slab", (new BlockDoubleStoneSlab()).c(2.0F).b(10.0F).a(i).c("stoneSlab"));
+        a(44, "stone_slab", (new BlockHalfStoneSlab()).c(2.0F).b(10.0F).a(i).c("stoneSlab"));
+        Block block5 = (new Block(Material.e)).c(2.0F).b(10.0F).a(i).c("brick").a(CreativeTabs.b);
+
+        a(45, "brick_block", block5);
+        a(46, "tnt", (new BlockTNT()).c(0.0F).a(h).c("tnt"));
+        a(47, "bookshelf", (new BlockBookshelf()).c(1.5F).a(f).c("bookshelf"));
+        a(48, "mossy_cobblestone", (new Block(Material.e)).c(2.0F).b(10.0F).a(i).c("stoneMoss").a(CreativeTabs.b));
+        a(49, "obsidian", (new BlockObsidian()).c(50.0F).b(2000.0F).a(i).c("obsidian"));
+        a(50, "torch", (new BlockTorch()).c(0.0F).a(0.9375F).a(f).c("torch"));
+        a(51, "fire", (new BlockFire()).c(0.0F).a(1.0F).a(l).c("fire").J());
+        a(52, "mob_spawner", (new BlockMobSpawner()).c(5.0F).a(j).c("mobSpawner").J());
+        a(53, "oak_stairs", (new BlockStairs(block1.P().a(BlockPlanks.a, BlockPlanks.EnumType.OAK))).c("stairsWood"));
+        a(54, "chest", (new BlockChest(0)).c(2.5F).a(f).c("chest"));
+        a(55, "redstone_wire", (new BlockRedstoneWire()).c(0.0F).a(e).c("redstoneDust").J());
+        a(56, "diamond_ore", (new BlockOre()).c(3.0F).b(5.0F).a(i).c("oreDiamond"));
+        a(57, "diamond_block", (new BlockCompressed(MapColor.G)).c(5.0F).b(10.0F).a(j).c("blockDiamond"));
+        a(58, "crafting_table", (new BlockWorkbench()).c(2.5F).a(f).c("workbench"));
+        a(59, "wheat", (new BlockCrops()).c("crops"));
+        Block block6 = (new BlockFarmland()).c(0.6F).a(g).c("farmland");
+
+        a(60, "farmland", block6);
+        a(61, "furnace", (new BlockFurnace(false)).c(3.5F).a(i).c("furnace").a(CreativeTabs.c));
+        a(62, "lit_furnace", (new BlockFurnace(true)).c(3.5F).a(i).a(0.875F).c("furnace"));
+        a(63, "standing_sign", (new BlockStandingSign()).c(1.0F).a(f).c("sign").J());
+        a(64, "wooden_door", (new BlockDoor(Material.d)).c(3.0F).a(f).c("doorOak").J());
+        a(65, "ladder", (new BlockLadder()).c(0.4F).a(o).c("ladder"));
+        a(66, "rail", (new BlockRail()).c(0.7F).a(j).c("rail"));
+        a(67, "stone_stairs", (new BlockStairs(block.P())).c("stairsStone"));
+        a(68, "wall_sign", (new BlockWallSign()).c(1.0F).a(f).c("sign").J());
+        a(69, "lever", (new BlockLever()).c(0.5F).a(f).c("lever"));
+        a(70, "stone_pressure_plate", (new BlockPressurePlate(Material.e, BlockPressurePlate.Sensitivity.MOBS)).c(0.5F).a(i).c("pressurePlateStone"));
+        a(71, "iron_door", (new BlockDoor(Material.f)).c(5.0F).a(j).c("doorIron").J());
+        a(72, "wooden_pressure_plate", (new BlockPressurePlate(Material.d, BlockPressurePlate.Sensitivity.EVERYTHING)).c(0.5F).a(f).c("pressurePlateWood"));
+        a(73, "redstone_ore", (new BlockRedstoneOre(false)).c(3.0F).b(5.0F).a(i).c("oreRedstone").a(CreativeTabs.b));
+        a(74, "lit_redstone_ore", (new BlockRedstoneOre(true)).a(0.625F).c(3.0F).b(5.0F).a(i).c("oreRedstone"));
+        a(75, "unlit_redstone_torch", (new BlockRedstoneTorch(false)).c(0.0F).a(f).c("notGate"));
+        a(76, "redstone_torch", (new BlockRedstoneTorch(true)).c(0.0F).a(0.5F).a(f).c("notGate").a(CreativeTabs.d));
+        a(77, "stone_button", (new BlockButtonStone()).c(0.5F).a(i).c("button"));
+        a(78, "snow_layer", (new BlockSnow()).c(0.1F).a(n).c("snow").e(0));
+        a(79, "ice", (new BlockIce()).c(0.5F).e(3).a(k).c("ice"));
+        a(80, "snow", (new BlockSnowBlock()).c(0.2F).a(n).c("snow"));
+        a(81, "cactus", (new BlockCactus()).c(0.4F).a(l).c("cactus"));
+        a(82, "clay", (new BlockClay()).c(0.6F).a(g).c("clay"));
+        a(83, "reeds", (new BlockReed()).c(0.0F).a(h).c("reeds").J());
+        a(84, "jukebox", (new BlockJukebox()).c(2.0F).b(10.0F).a(i).c("jukebox"));
+        a(85, "fence", (new BlockFence(Material.d)).c(2.0F).b(5.0F).a(f).c("fence"));
+        Block block7 = (new BlockPumpkin()).c(1.0F).a(f).c("pumpkin");
+
+        a(86, "pumpkin", block7);
+        a(87, "netherrack", (new BlockNetherrack()).c(0.4F).a(i).c("hellrock"));
+        a(88, "soul_sand", (new BlockSoulSand()).c(0.5F).a(m).c("hellsand"));
+        a(89, "glowstone", (new BlockGlowstone(Material.s)).c(0.3F).a(k).a(1.0F).c("lightgem"));
+        a(90, "portal", (new BlockPortal()).c(-1.0F).a(k).a(0.75F).c("portal"));
+        a(91, "lit_pumpkin", (new BlockPumpkin()).c(1.0F).a(f).a(1.0F).c("litpumpkin"));
+        a(92, "cake", (new BlockCake()).c(0.5F).a(l).c("cake").J());
+        a(93, "unpowered_repeater", (new BlockRedstoneRepeater(false)).c(0.0F).a(f).c("diode").J());
+        a(94, "powered_repeater", (new BlockRedstoneRepeater(true)).c(0.0F).a(f).c("diode").J());
+        a(95, "stained_glass", (new BlockStainedGlass(Material.s)).c(0.3F).a(k).c("stainedGlass"));
+        a(96, "trapdoor", (new BlockTrapDoor(Material.d)).c(3.0F).a(f).c("trapdoor").J());
+        a(97, "monster_egg", (new BlockSilverfish()).c(0.75F).c("monsterStoneEgg"));
+        Block block8 = (new BlockStoneBrick()).c(1.5F).b(10.0F).a(i).c("stonebricksmooth");
+
+        a(98, "stonebrick", block8);
+        a(99, "brown_mushroom_block", (new BlockHugeMushroom(Material.d, block3)).c(0.2F).a(f).c("mushroom"));
+        a(100, "red_mushroom_block", (new BlockHugeMushroom(Material.d, block4)).c(0.2F).a(f).c("mushroom"));
+        a(101, "iron_bars", (new BlockPane(Material.f, true)).c(5.0F).b(10.0F).a(j).c("fenceIron"));
+        a(102, "glass_pane", (new BlockPane(Material.s, false)).c(0.3F).a(k).c("thinGlass"));
+        Block block9 = (new BlockMelon()).c(1.0F).a(f).c("melon");
+
+        a(103, "melon_block", block9);
+        a(104, "pumpkin_stem", (new BlockStem(block7)).c(0.0F).a(f).c("pumpkinStem"));
+        a(105, "melon_stem", (new BlockStem(block9)).c(0.0F).a(f).c("pumpkinStem"));
+        a(106, "vine", (new BlockVine()).c(0.2F).a(h).c("vine"));
+        a(107, "fence_gate", (new BlockFenceGate()).c(2.0F).b(5.0F).a(f).c("fenceGate"));
+        a(108, "brick_stairs", (new BlockStairs(block5.P())).c("stairsBrick"));
+        a(109, "stone_brick_stairs", (new BlockStairs(block8.P().a(BlockStoneBrick.a, BlockStoneBrick.EnumType.DEFAULT))).c("stairsStoneBrickSmooth"));
+        a(110, "mycelium", (new BlockMycelium()).c(0.6F).a(h).c("mycel"));
+        a(111, "waterlily", (new BlockLilyPad()).c(0.0F).a(h).c("waterlily"));
+        Block block10 = (new BlockNetherBrick()).c(2.0F).b(10.0F).a(i).c("netherBrick").a(CreativeTabs.b);
+
+        a(112, "nether_brick", block10);
+        a(113, "nether_brick_fence", (new BlockFence(Material.e)).c(2.0F).b(10.0F).a(i).c("netherFence"));
+        a(114, "nether_brick_stairs", (new BlockStairs(block10.P())).c("stairsNetherBrick"));
+        a(115, "nether_wart", (new BlockNetherWart()).c("netherStalk"));
+        a(116, "enchanting_table", (new BlockEnchantmentTable()).c(5.0F).b(2000.0F).c("enchantmentTable"));
+        a(117, "brewing_stand", (new BlockBrewingStand()).c(0.5F).a(0.125F).c("brewingStand"));
+        a(118, "cauldron", (new BlockCauldron()).c(2.0F).c("cauldron"));
+        a(119, "end_portal", (new BlockEndPortal(Material.E)).c(-1.0F).b(6000000.0F));
+        a(120, "end_portal_frame", (new BlockEndPortalFrame()).a(k).a(0.125F).c(-1.0F).c("endPortalFrame").b(6000000.0F).a(CreativeTabs.c));
+        a(121, "end_stone", (new Block(Material.e)).c(3.0F).b(15.0F).a(i).c("whiteStone").a(CreativeTabs.b));
+        a(122, "dragon_egg", (new BlockDragonEgg()).c(3.0F).b(15.0F).a(i).a(0.125F).c("dragonEgg"));
+        a(123, "redstone_lamp", (new BlockRedstoneLight(false)).c(0.3F).a(k).c("redstoneLight").a(CreativeTabs.d));
+        a(124, "lit_redstone_lamp", (new BlockRedstoneLight(true)).c(0.3F).a(k).c("redstoneLight"));
+        a(125, "double_wooden_slab", (new BlockDoubleWoodSlab()).c(2.0F).b(5.0F).a(f).c("woodSlab"));
+        a(126, "wooden_slab", (new BlockHalfWoodSlab()).c(2.0F).b(5.0F).a(f).c("woodSlab"));
+        a(127, "cocoa", (new BlockCocoa()).c(0.2F).b(5.0F).a(f).c("cocoa"));
+        a(128, "sandstone_stairs", (new BlockStairs(block2.P().a(BlockSandStone.a, BlockSandStone.EnumType.SMOOTH))).c("stairsSandStone"));
+        a(129, "emerald_ore", (new BlockOre()).c(3.0F).b(5.0F).a(i).c("oreEmerald"));
+        a(130, "ender_chest", (new BlockEnderChest()).c(22.5F).b(1000.0F).a(i).c("enderChest").a(0.5F));
+        a(131, "tripwire_hook", (new BlockTripWireHook()).c("tripWireSource"));
+        a(132, "tripwire", (new BlockTripWire()).c("tripWire"));
+        a(133, "emerald_block", (new BlockCompressed(MapColor.I)).c(5.0F).b(10.0F).a(j).c("blockEmerald"));
+        a(134, "spruce_stairs", (new BlockStairs(block1.P().a(BlockPlanks.a, BlockPlanks.EnumType.SPRUCE))).c("stairsWoodSpruce"));
+        a(135, "birch_stairs", (new BlockStairs(block1.P().a(BlockPlanks.a, BlockPlanks.EnumType.BIRCH))).c("stairsWoodBirch"));
+        a(136, "jungle_stairs", (new BlockStairs(block1.P().a(BlockPlanks.a, BlockPlanks.EnumType.JUNGLE))).c("stairsWoodJungle"));
+        a(137, "command_block", (new BlockCommandBlock()).v().b(6000000.0F).c("commandBlock"));
+        a(138, "beacon", (new BlockBeacon()).c("beacon").a(1.0F));
+        a(139, "cobblestone_wall", (new BlockWall(block)).c("cobbleWall"));
+        a(140, "flower_pot", (new BlockFlowerPot()).c(0.0F).a(e).c("flowerPot"));
+        a(141, "carrots", (new BlockCarrot()).c("carrots"));
+        a(142, "potatoes", (new BlockPotato()).c("potatoes"));
+        a(143, "wooden_button", (new BlockButtonWood()).c(0.5F).a(f).c("button"));
+        a(144, "skull", (new BlockSkull()).c(1.0F).a(i).c("skull"));
+        a(145, "anvil", (new BlockAnvil()).c(5.0F).a(p).b(2000.0F).c("anvil"));
+        a(146, "trapped_chest", (new BlockChest(1)).c(2.5F).a(f).c("chestTrap"));
+        a(147, "light_weighted_pressure_plate", (new BlockPressurePlateWeighted("gold_block", Material.f, 15)).c(0.5F).a(f).c("weightedPlate_light"));
+        a(148, "heavy_weighted_pressure_plate", (new BlockPressurePlateWeighted("iron_block", Material.f, 150)).c(0.5F).a(f).c("weightedPlate_heavy"));
+        a(149, "unpowered_comparator", (new BlockRedstoneComparator(false)).c(0.0F).a(f).c("comparator").J());
+        a(150, "powered_comparator", (new BlockRedstoneComparator(true)).c(0.0F).a(0.625F).a(f).c("comparator").J());
+        a(151, "daylight_detector", new BlockDaylightDetector(false));
+        a(152, "redstone_block", (new BlockCompressedPowered(MapColor.f)).c(5.0F).b(10.0F).a(j).c("blockRedstone"));
+        a(153, "quartz_ore", (new BlockOre()).c(3.0F).b(5.0F).a(i).c("netherquartz"));
+        a(154, "hopper", (new BlockHopper()).c(3.0F).b(8.0F).a(j).c("hopper"));
+        Block block11 = (new BlockQuartz()).a(i).c(0.8F).c("quartzBlock");
+
+        a(155, "quartz_block", block11);
+        a(156, "quartz_stairs", (new BlockStairs(block11.P().a(BlockQuartz.a, BlockQuartz.EnumType.DEFAULT))).c("stairsQuartz"));
+        a(157, "activator_rail", (new BlockRailPowered()).c(0.7F).a(j).c("activatorRail"));
+        a(158, "dropper", (new BlockDropper()).c(3.5F).a(i).c("dropper"));
+        a(159, "stained_hardened_clay", (new BlockColored(Material.e)).c(1.25F).b(7.0F).a(i).c("clayHardenedStained"));
+        a(160, "stained_glass_pane", (new BlockStainedGlassPane()).c(0.3F).a(k).c("thinStainedGlass"));
+        a(161, "leaves2", (new BlockNewLeaf()).c("leaves"));
+        a(162, "log2", (new BlockNewLog()).c("log"));
+        a(163, "acacia_stairs", (new BlockStairs(block1.P().a(BlockPlanks.a, BlockPlanks.EnumType.ACACIA))).c("stairsWoodAcacia"));
+        a(164, "dark_oak_stairs", (new BlockStairs(block1.P().a(BlockPlanks.a, BlockPlanks.EnumType.DARK_OAK))).c("stairsWoodDarkOak"));
+        a(165, "slime", (new BlockSlime()).c("slime").a(q));
+        a(166, "barrier", (new BlockBarrier()).c("barrier"));
+        a(167, "iron_trapdoor", (new BlockTrapDoor(Material.f)).c(5.0F).a(j).c("ironTrapdoor").J());
+        a(168, "prismarine", (new BlockPrismarine()).c(1.5F).b(10.0F).a(i).c("prismarine"));
+        a(169, "sea_lantern", (new BlockSeaLantern(Material.s)).c(0.3F).a(k).a(1.0F).c("seaLantern"));
+        a(170, "hay_block", (new BlockHay()).c(0.5F).a(h).c("hayBlock").a(CreativeTabs.b));
+        a(171, "carpet", (new BlockCarpet()).c(0.1F).a(l).c("woolCarpet").e(0));
+        a(172, "hardened_clay", (new BlockHardenedClay()).c(1.25F).b(7.0F).a(i).c("clayHardened"));
+        a(173, "coal_block", (new Block(Material.e)).c(5.0F).b(10.0F).a(i).c("blockCoal").a(CreativeTabs.b));
+        a(174, "packed_ice", (new BlockPackedIce()).c(0.5F).a(k).c("icePacked"));
+        a(175, "double_plant", new BlockDoublePlant());
+        a(176, "standing_banner", (new BlockBanner.BlockBannerStanding()).c(1.0F).a(f).c("banner").J());
+        a(177, "wall_banner", (new BlockBanner.BlockBannerHanging()).c(1.0F).a(f).c("banner").J());
+        a(178, "daylight_detector_inverted", new BlockDaylightDetector(true));
+        Block block12 = (new BlockRedSandstone()).a(i).c(0.8F).c("redSandStone");
+
+        a(179, "red_sandstone", block12);
+        a(180, "red_sandstone_stairs", (new BlockStairs(block12.P().a(BlockRedSandstone.a, BlockRedSandstone.EnumType.SMOOTH))).c("stairsRedSandStone"));
+        a(181, "double_stone_slab2", (new BlockDoubleStoneSlabNew()).c(2.0F).b(10.0F).a(i).c("stoneSlab2"));
+        a(182, "stone_slab2", (new BlockHalfStoneSlabNew()).c(2.0F).b(10.0F).a(i).c("stoneSlab2"));
+        a(183, "spruce_fence_gate", (new BlockFenceGate()).c(2.0F).b(5.0F).a(f).c("spruceFenceGate"));
+        a(184, "birch_fence_gate", (new BlockFenceGate()).c(2.0F).b(5.0F).a(f).c("birchFenceGate"));
+        a(185, "jungle_fence_gate", (new BlockFenceGate()).c(2.0F).b(5.0F).a(f).c("jungleFenceGate"));
+        a(186, "dark_oak_fence_gate", (new BlockFenceGate()).c(2.0F).b(5.0F).a(f).c("darkOakFenceGate"));
+        a(187, "acacia_fence_gate", (new BlockFenceGate()).c(2.0F).b(5.0F).a(f).c("acaciaFenceGate"));
+        a(188, "spruce_fence", (new BlockFence(Material.d)).c(2.0F).b(5.0F).a(f).c("spruceFence"));
+        a(189, "birch_fence", (new BlockFence(Material.d)).c(2.0F).b(5.0F).a(f).c("birchFence"));
+        a(190, "jungle_fence", (new BlockFence(Material.d)).c(2.0F).b(5.0F).a(f).c("jungleFence"));
+        a(191, "dark_oak_fence", (new BlockFence(Material.d)).c(2.0F).b(5.0F).a(f).c("darkOakFence"));
+        a(192, "acacia_fence", (new BlockFence(Material.d)).c(2.0F).b(5.0F).a(f).c("acaciaFence"));
+        a(193, "spruce_door", (new BlockDoor(Material.d)).c(3.0F).a(f).c("doorSpruce").J());
+        a(194, "birch_door", (new BlockDoor(Material.d)).c(3.0F).a(f).c("doorBirch").J());
+        a(195, "jungle_door", (new BlockDoor(Material.d)).c(3.0F).a(f).c("doorJungle").J());
+        a(196, "acacia_door", (new BlockDoor(Material.d)).c(3.0F).a(f).c("doorAcacia").J());
+        a(197, "dark_oak_door", (new BlockDoor(Material.d)).c(3.0F).a(f).c("doorDarkOak").J());
+        c.a();
+        Iterator iterator = c.iterator();
+
+        Block block13;
+
+        while (iterator.hasNext()) {
+            block13 = (Block)iterator.next();
+            if (block13.J == Material.a) {
+                block13.v = false;
+            }
+            else {
+                boolean flag0 = false;
+                boolean flag1 = block13 instanceof BlockStairs;
+                boolean flag2 = block13 instanceof BlockSlab;
+                boolean flag3 = block13 == block6;
+                boolean flag4 = block13.t;
+                boolean flag5 = block13.s == 0;
+
+                if (flag1 || flag2 || flag3 || flag4 || flag5) {
+                    flag0 = true;
+                }
+
+                block13.v = flag0;
+            }
+        }
+
+        iterator = c.iterator();
+
+        while (iterator.hasNext()) {
+            block13 = (Block)iterator.next();
+            Iterator iterator1 = block13.O().a().iterator();
+
+            while (iterator1.hasNext()) {
+                IBlockState iblockstate = (IBlockState)iterator1.next();
+                int i0 = c.b(block13) << 4 | block13.c(iblockstate);
+
+                d.a(iblockstate, i0);
+            }
+        }
+    }
+
+    private static void a(int i0, ResourceLocation resourcelocation, Block block) {
+        c.a(i0, resourcelocation, block);
+    }
+
+    private static void a(int i0, String s0, Block block) {
+        a(i0, new ResourceLocation(s0), block);
+    }
+    
+
+    // CanaryMod
+    public final CanaryBlockBase getWrapper(){
+        return this.cbb;
     }
 
     public static class SoundType {
@@ -879,17 +1020,17 @@ public class Block {
         public final float b;
         public final float c;
 
-        public SoundType(String s0, float f0, float f1) {
-            this.a = s0;
-            this.b = f0;
-            this.c = f1;
-        }
-
-        public float c() {
-            return this.b;
+        public SoundType(String p_i45393_1_, float p_i45393_2_, float p_i45393_3_) {
+            this.a = p_i45393_1_;
+            this.b = p_i45393_2_;
+            this.c = p_i45393_3_;
         }
 
         public float d() {
+            return this.b;
+        }
+
+        public float e() {
             return this.c;
         }
 
@@ -897,7 +1038,7 @@ public class Block {
             return "dig." + this.a;
         }
 
-        public String e() {
+        public String c() {
             return "step." + this.a;
         }
 

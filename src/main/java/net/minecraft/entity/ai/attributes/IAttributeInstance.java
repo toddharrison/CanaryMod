@@ -15,13 +15,17 @@ public interface IAttributeInstance {
 
     void a(double d0);
 
+    Collection a(int i0);
+
     Collection c();
+
+    boolean a(AttributeModifier attributemodifier);
 
     AttributeModifier a(UUID uuid);
 
-    void a(AttributeModifier attributemodifier);
-
     void b(AttributeModifier attributemodifier);
+
+    void c(AttributeModifier attributemodifier);
 
     double e();
 

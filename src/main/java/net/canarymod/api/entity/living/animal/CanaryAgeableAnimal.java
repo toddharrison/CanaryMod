@@ -18,7 +18,7 @@ public abstract class CanaryAgeableAnimal extends CanaryAnimal implements Ageabl
      */
     @Override
     public int getGrowingAge() {
-        return getHandle().d();
+        return getHandle().l();
     }
 
     /**
@@ -26,7 +26,7 @@ public abstract class CanaryAgeableAnimal extends CanaryAnimal implements Ageabl
      */
     @Override
     public void setGrowingAge(int age) {
-        getHandle().c(age);
+        getHandle().b(age);
     }
 
     @Override

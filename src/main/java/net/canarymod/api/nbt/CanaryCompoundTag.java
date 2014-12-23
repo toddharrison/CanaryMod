@@ -13,7 +13,7 @@ import java.util.Set;
  * @author Greg (gregthegeek)
  * @author Jason (darkdiplomat)
  */
-public class CanaryCompoundTag extends CanaryBaseTag implements CompoundTag {
+public class CanaryCompoundTag extends CanaryBaseTag<CompoundTag> implements CompoundTag {
 
     /**
      * Constructs a new wrapper for NBTTagCompound
@@ -39,12 +39,16 @@ public class CanaryCompoundTag extends CanaryBaseTag implements CompoundTag {
     @Override
     public Collection<BaseTag> values() {
         Collection<BaseTag> values = new ArrayList<BaseTag>();
-        for (NBTBase tag : (Collection<NBTBase>) getHandle().c()) {
+        for (NBTBase tag : (Collection<NBTBase>)getHandle().c()) {
             values.add(CanaryBaseTag.wrap(tag));
         }
         return values;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("unchecked")
     public Set<String> keySet() {
         return getHandle().c();
     }
@@ -54,7 +58,7 @@ public class CanaryCompoundTag extends CanaryBaseTag implements CompoundTag {
      */
     @Override
     public void put(String key, BaseTag value) {
-        getHandle().a(key, ((CanaryBaseTag) value).getHandle());
+        getHandle().a(key, ((CanaryBaseTag)value).getHandle());
     }
 
     /**
@@ -134,7 +138,7 @@ public class CanaryCompoundTag extends CanaryBaseTag implements CompoundTag {
      */
     @Override
     public void put(String key, CompoundTag value) {
-        getHandle().a(key, ((CanaryCompoundTag) value).getHandle());
+        getHandle().a(key, ((CanaryCompoundTag)value).getHandle());
     }
 
     /**
@@ -159,6 +163,14 @@ public class CanaryCompoundTag extends CanaryBaseTag implements CompoundTag {
     @Override
     public boolean containsKey(String key) {
         return getHandle().c(key);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean containsKey(String key, NBTTagType nbtTagType) {
+        return nbtTagType != NBTTagType.UNKNOWN && getHandle().b(key, nbtTagType == NBTTagType.ANY_NUMERIC ? 99 : nbtTagType.ordinal());
     }
 
     /**
@@ -270,7 +282,7 @@ public class CanaryCompoundTag extends CanaryBaseTag implements CompoundTag {
      */
     @Override
     public boolean isEmpty() {
-        return getHandle().d();
+        return getHandle().c_();
     }
 
     /**
@@ -278,7 +290,7 @@ public class CanaryCompoundTag extends CanaryBaseTag implements CompoundTag {
      */
     @Override
     public CompoundTag copy() {
-        return new CanaryCompoundTag((NBTTagCompound) getHandle().b());
+        return new CanaryCompoundTag((NBTTagCompound)getHandle().b());
     }
 
     /**
@@ -286,6 +298,6 @@ public class CanaryCompoundTag extends CanaryBaseTag implements CompoundTag {
      */
     @Override
     public NBTTagCompound getHandle() {
-        return (NBTTagCompound) tag;
+        return (NBTTagCompound)tag;
     }
 }

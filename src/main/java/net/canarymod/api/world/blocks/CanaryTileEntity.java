@@ -49,25 +49,25 @@ public abstract class CanaryTileEntity implements TileEntity {
     /** {@inheritDoc} */
     @Override
     public int getX() {
-        return tileentity.c;
+        return tileentity.c.n();
     }
 
     /** {@inheritDoc} */
     @Override
     public int getY() {
-        return tileentity.d;
+        return tileentity.c.o();
     }
 
     /** {@inheritDoc} */
     @Override
     public int getZ() {
-        return tileentity.e;
+        return tileentity.c.p();
     }
 
     /** {@inheritDoc} */
     @Override
     public World getWorld() {
-        return tileentity.w().getCanaryWorld();
+        return tileentity.z().getCanaryWorld();
     }
 
     /** {@inheritDoc} */

@@ -100,19 +100,19 @@ public abstract class CanaryEntity implements Entity {
     @Override
     public void setMotionX(double motionX) {
         entity.v = motionX;
-        entity.H = true;
+        entity.G = true;
     }
 
     @Override
     public void setMotionY(double motionY) {
         entity.w = motionY;
-        entity.H = true;
+        entity.G = true;
     }
 
     @Override
     public void setMotionZ(double motionZ) {
         entity.x = motionZ;
-        entity.H = true;
+        entity.G = true;
     }
 
     @Override
@@ -125,7 +125,7 @@ public abstract class CanaryEntity implements Entity {
         entity.v = motionX;
         entity.w = motionY;
         entity.x = motionZ;
-        entity.H = true;
+        entity.G = true;
     }
 
     @Override
@@ -140,7 +140,7 @@ public abstract class CanaryEntity implements Entity {
 
     @Override
     public float getEyeHeight() {
-        return entity.g();
+        return entity.aR();
     }
 
     @Override
@@ -183,12 +183,12 @@ public abstract class CanaryEntity implements Entity {
 
     @Override
     public void setFireTicks(int ticks) {
-        this.entity.e = ticks;
+        this.entity.i = ticks;
     }
 
     @Override
     public int getFireTicks() {
-        return this.entity.e;
+        return this.entity.i;
     }
 
     @Override
@@ -228,7 +228,7 @@ public abstract class CanaryEntity implements Entity {
 
     @Override
     public EntityItem dropLoot(int itemId, int amount) {
-        return (EntityItem) entity.a(net.minecraft.item.Item.d(itemId), amount).getEntityItem();
+        return (EntityItem) entity.a(net.minecraft.item.Item.b(itemId), amount).getEntityItem();
     }
 
     public EntityItem dropLoot(Item item) {
@@ -237,37 +237,37 @@ public abstract class CanaryEntity implements Entity {
 
     @Override
     public boolean isSprinting() { // 3
-        return entity.ao();
+        return entity.ax();
     }
 
     @Override
     public void setSprinting(boolean sprinting) {
-        entity.c(sprinting);
+        entity.d(sprinting);
     }
 
     @Override
     public boolean isSneaking() { // 1
-        return entity.an();
+        return entity.aw();
     }
 
     @Override
     public void setSneaking(boolean sneaking) {
-        entity.b(sneaking);
+        entity.c(sneaking);
     }
 
     @Override
     public boolean isInvisible() { // 5
-        return entity.ap();
+        return entity.ay();
     }
 
     @Override
     public void setInvisible(boolean invisible) {
-        entity.d(invisible);
+        entity.e(invisible);
     }
 
     @Override
     public String getName() {
-        return entity.b_();
+        return entity.d_();
     }
 
     @Override
@@ -282,12 +282,12 @@ public abstract class CanaryEntity implements Entity {
 
     @Override
     public int getID() {
-        return entity.y();
+        return entity.F();
     }
 
     @Override
     public UUID getUUID() {
-        return entity.aB();
+        return entity.aJ();
     }
 
     @Override
@@ -305,14 +305,14 @@ public abstract class CanaryEntity implements Entity {
     @Override
     public boolean canSpawn() {
         if (this.isLiving()) {
-            return ((net.minecraft.entity.EntityLiving) entity).by();
+            return ((net.minecraft.entity.EntityLiving) entity).bQ();
         }
-        return getHandle().o.a(entity, entity.C).isEmpty(); //Is not occupied space
+        return getHandle().o.a(entity, entity.aQ()).isEmpty(); //Is not occupied space
     }
 
     @Override
     public boolean isRiding() {
-        return entity.am();
+        return entity.av();
     }
 
     @Override
@@ -336,12 +336,7 @@ public abstract class CanaryEntity implements Entity {
         return null;
     }
 
-    /**
-     * Mounts a specified {@code Entity}
-     *
-     * @param entity
-     *         the {@code Entity} to mount
-     */
+    @Override
     public void mount(Entity entity) {
         if (entity != null) {
             this.entity.a(((CanaryEntity) entity).getHandle());
@@ -351,22 +346,19 @@ public abstract class CanaryEntity implements Entity {
         }
     }
 
-    /**
-     * Dismount ridden {@code Entity}
-     */
+    @Override
     public void dismount() {
         mount(null);
     }
 
-    /** Destroys this entity */
     @Override
     public void destroy() {
-        entity.B();
+        entity.J();
     }
 
     @Override
     public boolean isDead() {
-        return entity.K;
+        return entity.I;
     }
 
     @Override
@@ -411,45 +403,62 @@ public abstract class CanaryEntity implements Entity {
         return entity.getMetaData();
     }
 
-
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean isAmbient() {
         return false;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean isOnGround() {
-        return getHandle().D;
+        return getHandle().C;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean isInWeb() {
-        return getHandle().I;
+        return getHandle().H;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean isInWater() {
-        return getHandle().ac;
+        return getHandle().Y;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean isInLava() {
-        return getHandle().P();
+        return getHandle().ab();
+    }
+
+    @Override
+    public boolean hasDisplayName() {
+        return getHandle().k_();
+    }
+
+    @Override
+    public String getDisplayName() {
+        return getHandle().aL();
+    }
+
+    @Override
+    public void setDisplayName(String display) {
+        if (display == null) {
+            display = "";
+        }
+        getHandle().a(display);
+    }
+
+    @Override
+    public boolean showingDisplayName() { // TODO: checkthat this is actually right
+        return getHandle().aM();
+    }
+
+    @Override
+    public void setShowDisplayName(boolean show) {
+        getHandle().g(show);
+    }
+
+    @Override
+    public boolean isEating(){
+        return getHandle().isEating();
     }
 
     @Override

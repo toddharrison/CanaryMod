@@ -40,7 +40,7 @@ public class CanaryGhast extends CanaryEntityMob implements Ghast {
      */
     @Override
     public int getCourseChangeCooldown() {
-        return getHandle().h;
+        throw new UnsupportedOperationException("Minecraft update broke this shit");
     }
 
     /**
@@ -48,7 +48,7 @@ public class CanaryGhast extends CanaryEntityMob implements Ghast {
      */
     @Override
     public void setCourseChangeCooldown(int cooldown) {
-        getHandle().h = cooldown;
+        throw new UnsupportedOperationException("Minecraft update broke this shit");
     }
 
     /**
@@ -56,7 +56,7 @@ public class CanaryGhast extends CanaryEntityMob implements Ghast {
      */
     @Override
     public double getWaypointX() {
-        return getHandle().i;
+        throw new UnsupportedOperationException("Minecraft update broke this shit");
     }
 
     /**
@@ -64,7 +64,7 @@ public class CanaryGhast extends CanaryEntityMob implements Ghast {
      */
     @Override
     public void setWaypointX(double waypointX) {
-        getHandle().i = waypointX;
+        throw new UnsupportedOperationException("Minecraft update broke this shit");
     }
 
     /**
@@ -72,7 +72,7 @@ public class CanaryGhast extends CanaryEntityMob implements Ghast {
      */
     @Override
     public double getWaypointY() {
-        return getHandle().j;
+        throw new UnsupportedOperationException("Minecraft update broke this shit");
     }
 
     /**
@@ -80,7 +80,7 @@ public class CanaryGhast extends CanaryEntityMob implements Ghast {
      */
     @Override
     public void setWaypointY(double waypointY) {
-        getHandle().j = waypointY;
+        throw new UnsupportedOperationException("Minecraft update broke this shit");
     }
 
     /**
@@ -88,7 +88,7 @@ public class CanaryGhast extends CanaryEntityMob implements Ghast {
      */
     @Override
     public double getWaypointZ() {
-        return getHandle().bn;
+        throw new UnsupportedOperationException("Minecraft update broke this shit");
     }
 
     /**
@@ -96,7 +96,7 @@ public class CanaryGhast extends CanaryEntityMob implements Ghast {
      */
     @Override
     public void setWaypointZ(double waypointZ) {
-        getHandle().bn = waypointZ;
+        throw new UnsupportedOperationException("Minecraft update broke this shit");
     }
 
     /**
@@ -104,7 +104,7 @@ public class CanaryGhast extends CanaryEntityMob implements Ghast {
      */
     @Override
     public int getArgoCooldown() {
-        return getHandle().br;
+        throw new UnsupportedOperationException("Minecraft update broke this shit");
     }
 
     /**
@@ -112,7 +112,7 @@ public class CanaryGhast extends CanaryEntityMob implements Ghast {
      */
     @Override
     public void setArgoCooldown(int ticks) {
-        getHandle().br = ticks;
+        throw new UnsupportedOperationException("Minecraft update broke this shit");
     }
 
     /**
@@ -120,11 +120,7 @@ public class CanaryGhast extends CanaryEntityMob implements Ghast {
      */
     @Override
     public LivingBase getAttackTarget() {
-        net.minecraft.entity.Entity target = getHandle().bq;
-        if (target != null) {
-            return (LivingBase) target.getCanaryEntity();
-        }
-        return null;
+        throw new UnsupportedOperationException("Minecraft update broke this shit");
     }
 
     /**
@@ -132,12 +128,7 @@ public class CanaryGhast extends CanaryEntityMob implements Ghast {
      */
     @Override
     public void setAttackTarget(LivingBase livingbase) {
-        if (livingbase == null) {
-            getHandle().bq = null;
-        }
-        else {
-            getHandle().bq = ((CanaryLivingBase) livingbase).getHandle();
-        }
+        throw new UnsupportedOperationException("Minecraft update broke this shit");
     }
 
     /**

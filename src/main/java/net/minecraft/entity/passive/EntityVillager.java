@@ -1,52 +1,80 @@
 package net.minecraft.entity.passive;
 
-import net.canarymod.api.CanaryVillagerTrade;
+import com.google.common.base.Predicate;
 import net.canarymod.api.entity.living.humanoid.CanaryVillager;
-import net.canarymod.api.entity.living.humanoid.Villager;
-import net.canarymod.hook.entity.VillagerTradeUnlockHook;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentData;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.*;
+import net.minecraft.entity.effect.EntityLightningBolt;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.EntityXPOrb;
+import net.minecraft.entity.monster.EntityWitch;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.inventory.InventoryBasic;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.Tuple;
+import net.minecraft.stats.StatList;
+import net.minecraft.util.*;
 import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
 import net.minecraft.village.Village;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.Random;
 
-public class EntityVillager extends EntityAgeable implements IMerchant, INpc {
+public class EntityVillager extends EntityAgeable implements INpc, IMerchant {
 
+    private static final EntityVillager.ITradeList[][][][] bA = new EntityVillager.ITradeList[][][][]{
+            {
+                    {
+                            {new EntityVillager.EmeraldForItems(Items.O, new EntityVillager.PriceInfo(18, 22)), new EntityVillager.EmeraldForItems(Items.bS, new EntityVillager.PriceInfo(15, 19)), new EntityVillager.EmeraldForItems(Items.bR, new EntityVillager.PriceInfo(15, 19)), new EntityVillager.ListItemForEmeralds(Items.P, new EntityVillager.PriceInfo(-4, -2))}, {new EntityVillager.EmeraldForItems(Item.a(Blocks.aU), new EntityVillager.PriceInfo(8, 13)), new EntityVillager.ListItemForEmeralds(Items.ca, new EntityVillager.PriceInfo(-3, -2))}, {new EntityVillager.EmeraldForItems(Item.a(Blocks.bk), new EntityVillager.PriceInfo(7, 12)), new EntityVillager.ListItemForEmeralds(Items.e, new EntityVillager.PriceInfo(-5, -7))},
+                            {new EntityVillager.ListItemForEmeralds(Items.bc, new EntityVillager.PriceInfo(-6, -10)), new EntityVillager.ListItemForEmeralds(Items.aZ, new EntityVillager.PriceInfo(1, 1))}},
+                    {{new EntityVillager.EmeraldForItems(Items.F, new EntityVillager.PriceInfo(15, 20)), new EntityVillager.EmeraldForItems(Items.h, new EntityVillager.PriceInfo(16, 24)), new EntityVillager.ItemAndEmeraldToItem(Items.aU, new EntityVillager.PriceInfo(6, 6), Items.aV, new EntityVillager.PriceInfo(6, 6))}, {new EntityVillager.ListEnchantedItemForEmeralds(Items.aR, new EntityVillager.PriceInfo(7, 8))}},
+                    {
+                            {new EntityVillager.EmeraldForItems(Item.a(Blocks.L), new EntityVillager.PriceInfo(16, 22)), new EntityVillager.ListItemForEmeralds(Items.be, new EntityVillager.PriceInfo(3, 4))},
+                            {
+                                    new EntityVillager.ListItemForEmeralds(new ItemStack(Item.a(Blocks.L), 1, 0), new EntityVillager.PriceInfo(1, 2)), new EntityVillager.ListItemForEmeralds(new ItemStack(Item.a(Blocks.L), 1, 1), new EntityVillager.PriceInfo(1, 2)), new EntityVillager.ListItemForEmeralds(new ItemStack(Item.a(Blocks.L), 1, 2), new EntityVillager.PriceInfo(1, 2)), new EntityVillager.ListItemForEmeralds(new ItemStack(Item.a(Blocks.L), 1, 3), new EntityVillager.PriceInfo(1, 2)), new EntityVillager.ListItemForEmeralds(new ItemStack(Item.a(Blocks.L), 1, 4), new EntityVillager.PriceInfo(1, 2)), new EntityVillager.ListItemForEmeralds(new ItemStack(Item.a(Blocks.L), 1, 5), new EntityVillager.PriceInfo(1, 2)), new EntityVillager.ListItemForEmeralds(new ItemStack(Item.a(Blocks.L), 1, 6), new EntityVillager.PriceInfo(1, 2)),
+                                    new EntityVillager.ListItemForEmeralds(new ItemStack(Item.a(Blocks.L), 1, 7), new EntityVillager.PriceInfo(1, 2)), new EntityVillager.ListItemForEmeralds(new ItemStack(Item.a(Blocks.L), 1, 8), new EntityVillager.PriceInfo(1, 2)), new EntityVillager.ListItemForEmeralds(new ItemStack(Item.a(Blocks.L), 1, 9), new EntityVillager.PriceInfo(1, 2)), new EntityVillager.ListItemForEmeralds(new ItemStack(Item.a(Blocks.L), 1, 10), new EntityVillager.PriceInfo(1, 2)), new EntityVillager.ListItemForEmeralds(new ItemStack(Item.a(Blocks.L), 1, 11), new EntityVillager.PriceInfo(1, 2)), new EntityVillager.ListItemForEmeralds(new ItemStack(Item.a(Blocks.L), 1, 12), new EntityVillager.PriceInfo(1, 2)), new EntityVillager.ListItemForEmeralds(new ItemStack(Item.a(Blocks.L), 1, 13), new EntityVillager.PriceInfo(1, 2)),
+                                    new EntityVillager.ListItemForEmeralds(new ItemStack(Item.a(Blocks.L), 1, 14), new EntityVillager.PriceInfo(1, 2)), new EntityVillager.ListItemForEmeralds(new ItemStack(Item.a(Blocks.L), 1, 15), new EntityVillager.PriceInfo(1, 2))}},
+                    {{new EntityVillager.EmeraldForItems(Items.F, new EntityVillager.PriceInfo(15, 20)), new EntityVillager.ListItemForEmeralds(Items.g, new EntityVillager.PriceInfo(-12, -8))}, {new EntityVillager.ListItemForEmeralds(Items.f, new EntityVillager.PriceInfo(2, 3)), new EntityVillager.ItemAndEmeraldToItem(Item.a(Blocks.n), new EntityVillager.PriceInfo(10, 10), Items.ak, new EntityVillager.PriceInfo(6, 10))}}},
+            {{{new EntityVillager.EmeraldForItems(Items.aK, new EntityVillager.PriceInfo(24, 36)), new EntityVillager.ListEnchantedBookForEmeralds()}, {new EntityVillager.EmeraldForItems(Items.aL, new EntityVillager.PriceInfo(8, 10)), new EntityVillager.ListItemForEmeralds(Items.aQ, new EntityVillager.PriceInfo(10, 12)), new EntityVillager.ListItemForEmeralds(Item.a(Blocks.X), new EntityVillager.PriceInfo(3, 4))}, {new EntityVillager.EmeraldForItems(Items.bN, new EntityVillager.PriceInfo(2, 2)), new EntityVillager.ListItemForEmeralds(Items.aS, new EntityVillager.PriceInfo(10, 12)), new EntityVillager.ListItemForEmeralds(Item.a(Blocks.w), new EntityVillager.PriceInfo(-5, -3))}, {new EntityVillager.ListEnchantedBookForEmeralds()}, {new EntityVillager.ListEnchantedBookForEmeralds()}, {new EntityVillager.ListItemForEmeralds(Items.co, new EntityVillager.PriceInfo(20, 22))}}},
+            {{{new EntityVillager.EmeraldForItems(Items.bt, new EntityVillager.PriceInfo(36, 40)), new EntityVillager.EmeraldForItems(Items.k, new EntityVillager.PriceInfo(8, 10))}, {new EntityVillager.ListItemForEmeralds(Items.aC, new EntityVillager.PriceInfo(-4, -1)), new EntityVillager.ListItemForEmeralds(new ItemStack(Items.aW, 1, EnumDyeColor.BLUE.b()), new EntityVillager.PriceInfo(-2, -1))}, {new EntityVillager.ListItemForEmeralds(Items.bH, new EntityVillager.PriceInfo(7, 11)), new EntityVillager.ListItemForEmeralds(Item.a(Blocks.aX), new EntityVillager.PriceInfo(-3, -1))}, {new EntityVillager.ListItemForEmeralds(Items.bK, new EntityVillager.PriceInfo(3, 11))}}},
+            {
+                    {{new EntityVillager.EmeraldForItems(Items.h, new EntityVillager.PriceInfo(16, 24)), new EntityVillager.ListItemForEmeralds(Items.Y, new EntityVillager.PriceInfo(4, 6))}, {new EntityVillager.EmeraldForItems(Items.j, new EntityVillager.PriceInfo(7, 9)), new EntityVillager.ListItemForEmeralds(Items.Z, new EntityVillager.PriceInfo(10, 14))}, {new EntityVillager.EmeraldForItems(Items.i, new EntityVillager.PriceInfo(3, 4)), new EntityVillager.ListEnchantedItemForEmeralds(Items.ad, new EntityVillager.PriceInfo(16, 19))}, {new EntityVillager.ListItemForEmeralds(Items.X, new EntityVillager.PriceInfo(5, 7)), new EntityVillager.ListItemForEmeralds(Items.W, new EntityVillager.PriceInfo(9, 11)), new EntityVillager.ListItemForEmeralds(Items.U, new EntityVillager.PriceInfo(5, 7)), new EntityVillager.ListItemForEmeralds(Items.V, new EntityVillager.PriceInfo(11, 15))}},
+                    {{new EntityVillager.EmeraldForItems(Items.h, new EntityVillager.PriceInfo(16, 24)), new EntityVillager.ListItemForEmeralds(Items.c, new EntityVillager.PriceInfo(6, 8))}, {new EntityVillager.EmeraldForItems(Items.j, new EntityVillager.PriceInfo(7, 9)), new EntityVillager.ListEnchantedItemForEmeralds(Items.l, new EntityVillager.PriceInfo(9, 10))}, {new EntityVillager.EmeraldForItems(Items.i, new EntityVillager.PriceInfo(3, 4)), new EntityVillager.ListEnchantedItemForEmeralds(Items.u, new EntityVillager.PriceInfo(12, 15)), new EntityVillager.ListEnchantedItemForEmeralds(Items.x, new EntityVillager.PriceInfo(9, 12))}},
+                    {{new EntityVillager.EmeraldForItems(Items.h, new EntityVillager.PriceInfo(16, 24)), new EntityVillager.ListEnchantedItemForEmeralds(Items.a, new EntityVillager.PriceInfo(5, 7))}, {new EntityVillager.EmeraldForItems(Items.j, new EntityVillager.PriceInfo(7, 9)), new EntityVillager.ListEnchantedItemForEmeralds(Items.b, new EntityVillager.PriceInfo(9, 11))}, {new EntityVillager.EmeraldForItems(Items.i, new EntityVillager.PriceInfo(3, 4)), new EntityVillager.ListEnchantedItemForEmeralds(Items.w, new EntityVillager.PriceInfo(12, 15))}}},
+            {{{new EntityVillager.EmeraldForItems(Items.al, new EntityVillager.PriceInfo(14, 18)), new EntityVillager.EmeraldForItems(Items.bk, new EntityVillager.PriceInfo(14, 18))}, {new EntityVillager.EmeraldForItems(Items.h, new EntityVillager.PriceInfo(16, 24)), new EntityVillager.ListItemForEmeralds(Items.am, new EntityVillager.PriceInfo(-7, -5)), new EntityVillager.ListItemForEmeralds(Items.bl, new EntityVillager.PriceInfo(-8, -6))}}, {{new EntityVillager.EmeraldForItems(Items.aF, new EntityVillager.PriceInfo(9, 12)), new EntityVillager.ListItemForEmeralds(Items.S, new EntityVillager.PriceInfo(2, 4))}, {new EntityVillager.ListEnchantedItemForEmeralds(Items.R, new EntityVillager.PriceInfo(7, 12))}, {new EntityVillager.ListItemForEmeralds(Items.aA, new EntityVillager.PriceInfo(8, 10))}}}};
+    public Village bk;
+    private int bl;
+    private boolean bm;
+    private boolean bn;
+    private EntityPlayer bo;
+    private MerchantRecipeList bp;
     private int bq;
     private boolean br;
     private boolean bs;
-    public Village bp; // CanaryMod: package => public
-    private EntityPlayer bt;
-    private MerchantRecipeList bu;
+    private int bt;
+    private String bu;
     private int bv;
-    private boolean bw;
-    private int bx;
-    private String by;
-    private boolean bz;
-    private float bA;
-    private static final Map bB = new HashMap();
-    private static final Map bC = new HashMap();
+    private int bw;
+    private boolean bx;
+    private boolean by;
+    private InventoryBasic bz;
 
     public EntityVillager(World world) {
         this(world, 0);
@@ -54,76 +82,104 @@ public class EntityVillager extends EntityAgeable implements IMerchant, INpc {
 
     public EntityVillager(World world, int i0) {
         super(world);
-        this.s(i0);
+        this.bz = new InventoryBasic("Items", false, 8);
+        this.r(i0);
         this.a(0.6F, 1.8F);
-        this.m().b(true);
-        this.m().a(true);
-        this.c.a(0, new EntityAISwimming(this));
-        this.c.a(1, new EntityAIAvoidEntity(this, EntityZombie.class, 8.0F, 0.6D, 0.6D));
-        this.c.a(1, new EntityAITradePlayer(this));
-        this.c.a(1, new EntityAILookAtTradePlayer(this));
-        this.c.a(2, new EntityAIMoveIndoors(this));
-        this.c.a(3, new EntityAIRestrictOpenDoor(this));
-        this.c.a(4, new EntityAIOpenDoor(this, true));
-        this.c.a(5, new EntityAIMoveTowardsRestriction(this, 0.6D));
-        this.c.a(6, new EntityAIVillagerMate(this));
-        this.c.a(7, new EntityAIFollowGolem(this));
-        this.c.a(8, new EntityAIPlay(this, 0.32D));
-        this.c.a(9, new EntityAIWatchClosest2(this, EntityPlayer.class, 3.0F, 1.0F));
-        this.c.a(9, new EntityAIWatchClosest2(this, EntityVillager.class, 5.0F, 0.02F));
-        this.c.a(9, new EntityAIWander(this, 0.6D));
-        this.c.a(10, new EntityAIWatchClosest(this, EntityLiving.class, 8.0F));
+        ((PathNavigateGround) this.s()).b(true);
+        ((PathNavigateGround) this.s()).a(true);
+        this.i.a(0, new EntityAISwimming(this));
+        this.i.a(1, new EntityAIAvoidEntity(this, new Predicate() {
+
+            public boolean a(Entity p_a_1_) {
+                return p_a_1_ instanceof EntityZombie;
+            }
+
+            public boolean apply(Object p_apply_1_) {
+                return this.a((Entity) p_apply_1_);
+            }
+        }, 8.0F, 0.6D, 0.6D));
+        this.i.a(1, new EntityAITradePlayer(this));
+        this.i.a(1, new EntityAILookAtTradePlayer(this));
+        this.i.a(2, new EntityAIMoveIndoors(this));
+        this.i.a(3, new EntityAIRestrictOpenDoor(this));
+        this.i.a(4, new EntityAIOpenDoor(this, true));
+        this.i.a(5, new EntityAIMoveTowardsRestriction(this, 0.6D));
+        this.i.a(6, new EntityAIVillagerMate(this));
+        this.i.a(7, new EntityAIFollowGolem(this));
+        this.i.a(9, new EntityAIWatchClosest2(this, EntityPlayer.class, 3.0F, 1.0F));
+        this.i.a(9, new EntityAIVillagerInteract(this));
+        this.i.a(9, new EntityAIWander(this, 0.6D));
+        this.i.a(10, new EntityAIWatchClosest(this, EntityLiving.class, 8.0F));
+        this.j(true);
         this.entity = new CanaryVillager(this); // CanaryMod: Wrap Entity
     }
 
-    protected void aD() {
-        super.aD();
+    private void ct() {
+        if (!this.by) {
+            this.by = true;
+            if (this.i_()) {
+                this.i.a(8, new EntityAIPlay(this, 0.32D));
+            }
+            else if (this.cj() == 0) {
+                this.i.a(6, new EntityAIHarvestFarmland(this, 0.6D));
+            }
+
+        }
+    }
+
+    protected void n() {
+        if (this.cj() == 0) {
+            this.i.a(8, new EntityAIHarvestFarmland(this, 0.6D));
+        }
+
+        super.n();
+    }
+
+    protected void aW() {
+        super.aW();
         this.a(SharedMonsterAttributes.d).a(0.5D);
     }
 
-    public boolean bk() {
-        return true;
-    }
+    protected void E() {
+        if (--this.bl <= 0) {
+            BlockPos blockpos = new BlockPos(this);
 
-    protected void bp() {
-        if (--this.bq <= 0) {
-            this.o.A.a(MathHelper.c(this.s), MathHelper.c(this.t), MathHelper.c(this.u));
-            this.bq = 70 + this.Z.nextInt(50);
-            this.bp = this.o.A.a(MathHelper.c(this.s), MathHelper.c(this.t), MathHelper.c(this.u), 32);
-            if (this.bp == null) {
-                this.bX();
-            } else {
-                ChunkCoordinates chunkcoordinates = this.bp.a();
+            this.o.ae().a(blockpos);
+            this.bl = 70 + this.V.nextInt(50);
+            this.bk = this.o.ae().a(blockpos, 32);
+            if (this.bk == null) {
+                this.ch();
+            }
+            else {
+                BlockPos blockpos1 = this.bk.a();
 
-                this.a(chunkcoordinates.a, chunkcoordinates.b, chunkcoordinates.c, (int) ((float) this.bp.b() * 0.6F));
-                if (this.bz) {
-                    this.bz = false;
-                    this.bp.b(5);
+                this.a(blockpos1, (int) ((float) this.bk.b() * 1.0F));
+                if (this.bx) {
+                    this.bx = false;
+                    this.bk.b(5);
                 }
             }
         }
 
-        if (!this.cc() && this.bv > 0) {
-            --this.bv;
-            if (this.bv <= 0) {
-                if (this.bw) {
-                    if (this.bu.size() > 1) {
-                        Iterator iterator = this.bu.iterator();
+        if (!this.cm() && this.bq > 0) {
+            --this.bq;
+            if (this.bq <= 0) {
+                if (this.br) {
+                    Iterator iterator = this.bp.iterator();
 
-                        while (iterator.hasNext()) {
-                            MerchantRecipe merchantrecipe = (MerchantRecipe) iterator.next();
+                    while (iterator.hasNext()) {
+                        MerchantRecipe merchantrecipe = (MerchantRecipe) iterator.next();
 
-                            if (merchantrecipe.g()) {
-                                merchantrecipe.a(this.Z.nextInt(6) + this.Z.nextInt(6) + 2);
-                            }
+                        if (merchantrecipe.h()) {
+                            merchantrecipe.a(this.V.nextInt(6) + this.V.nextInt(6) + 2);
                         }
                     }
 
-                    this.t(1);
-                    this.bw = false;
-                    if (this.bp != null && this.by != null) {
-                        this.o.a(this, (byte) 14);
-                        this.bp.a(this.by, 1);
+                    this.cu();
+                    this.br = false;
+                    if (this.bk != null && this.bu != null) {
+                        this.o.a((Entity) this, (byte) 14);
+                        this.bk.a(this.bu, 1);
                     }
                 }
 
@@ -131,124 +187,160 @@ public class EntityVillager extends EntityAgeable implements IMerchant, INpc {
             }
         }
 
-        super.bp();
+        super.E();
     }
 
     public boolean a(EntityPlayer entityplayer) {
-        ItemStack itemstack = entityplayer.bm.h();
-        boolean flag0 = itemstack != null && itemstack.b() == Items.bx;
+        ItemStack itemstack = entityplayer.bg.h();
+        boolean flag0 = itemstack != null && itemstack.b() == Items.bJ;
 
-        if (!flag0 && this.Z() && !this.cc() && !this.f()) {
-            if (!this.o.E) {
+        if (!flag0 && this.ai() && !this.cm() && !this.i_()) {
+            if (!this.o.D && (this.bp == null || this.bp.size() > 0)) {
                 this.a_(entityplayer);
-                entityplayer.a((IMerchant) this, this.bG());
+                entityplayer.a((IMerchant) this);
             }
 
+            entityplayer.b(StatList.F);
             return true;
-        } else {
+        }
+        else {
             return super.a(entityplayer);
         }
     }
 
-    protected void c() {
-        super.c();
-        this.af.a(16, Integer.valueOf(0));
+    protected void h() {
+        super.h();
+        this.ac.a(16, Integer.valueOf(0));
     }
 
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.a("Profession", this.bZ());
-        nbttagcompound.a("Riches", this.bx);
-        if (this.bu != null) {
-            nbttagcompound.a("Offers", (NBTBase) this.bu.a());
+        nbttagcompound.a("Profession", this.cj());
+        nbttagcompound.a("Riches", this.bt);
+        nbttagcompound.a("Career", this.bv);
+        nbttagcompound.a("CareerLevel", this.bw);
+        nbttagcompound.a("Willing", this.bs);
+        if (this.bp != null) {
+            nbttagcompound.a("Offers", (NBTBase) this.bp.a());
         }
+
+        NBTTagList nbttaglist = new NBTTagList();
+
+        for (int i0 = 0; i0 < this.bz.n_(); ++i0) {
+            ItemStack itemstack = this.bz.a(i0);
+
+            if (itemstack != null) {
+                nbttaglist.a((NBTBase) itemstack.b(new NBTTagCompound()));
+            }
+        }
+
+        nbttagcompound.a("Inventory", (NBTBase) nbttaglist);
     }
 
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
-        this.s(nbttagcompound.f("Profession"));
-        this.bx = nbttagcompound.f("Riches");
+        this.r(nbttagcompound.f("Profession"));
+        this.bt = nbttagcompound.f("Riches");
+        this.bv = nbttagcompound.f("Career");
+        this.bw = nbttagcompound.f("CareerLevel");
+        this.bs = nbttagcompound.n("Willing");
         if (nbttagcompound.b("Offers", 10)) {
             NBTTagCompound nbttagcompound1 = nbttagcompound.m("Offers");
 
-            this.bu = new MerchantRecipeList(nbttagcompound1);
+            this.bp = new MerchantRecipeList(nbttagcompound1);
         }
+
+        NBTTagList nbttaglist = nbttagcompound.c("Inventory", 10);
+
+        for (int i0 = 0; i0 < nbttaglist.c(); ++i0) {
+            ItemStack itemstack = ItemStack.a(nbttaglist.b(i0));
+
+            if (itemstack != null) {
+                this.bz.a(itemstack);
+            }
+        }
+
+        this.j(true);
+        this.ct();
     }
 
-    protected boolean v() {
+    protected boolean C() {
         return false;
     }
 
-    protected String t() {
-        return this.cc() ? "mob.villager.haggle" : "mob.villager.idle";
+    protected String z() {
+        return this.cm() ? "mob.villager.haggle" : "mob.villager.idle";
     }
 
-    protected String aT() {
+    protected String bn() {
         return "mob.villager.hit";
     }
 
-    protected String aU() {
+    protected String bo() {
         return "mob.villager.death";
     }
 
-    public void s(int i0) {
-        this.af.b(16, Integer.valueOf(i0));
+    public void r(int i0) {
+        this.ac.b(16, Integer.valueOf(i0));
     }
 
-    public int bZ() {
-        return this.af.c(16);
+    public int cj() {
+        return Math.max(this.ac.c(16) % 5, 0);
     }
 
-    public boolean ca() {
-        return this.br;
+    public boolean ck() {
+        return this.bm;
     }
 
-    public void i(boolean flag0) {
-        this.br = flag0;
+    public void l(boolean flag0) {
+        this.bm = flag0;
     }
 
-    public void j(boolean flag0) {
-        this.bs = flag0;
+    public void m(boolean flag0) {
+        this.bn = flag0;
     }
 
-    public boolean cb() {
-        return this.bs;
+    public boolean cl() {
+        return this.bn;
     }
 
     public void b(EntityLivingBase entitylivingbase) {
         super.b(entitylivingbase);
-        if (this.bp != null && entitylivingbase != null) {
-            this.bp.a(entitylivingbase);
+        if (this.bk != null && entitylivingbase != null) {
+            this.bk.a(entitylivingbase);
             if (entitylivingbase instanceof EntityPlayer) {
                 byte b0 = -1;
 
-                if (this.f()) {
+                if (this.i_()) {
                     b0 = -3;
                 }
 
-                this.bp.a(entitylivingbase.b_(), b0);
-                if (this.Z()) {
-                    this.o.a(this, (byte) 13);
+                this.bk.a(entitylivingbase.d_(), b0);
+                if (this.ai()) {
+                    this.o.a((Entity) this, (byte) 13);
                 }
             }
         }
+
     }
 
     public void a(DamageSource damagesource) {
-        if (this.bp != null) {
+        if (this.bk != null) {
             Entity entity = damagesource.j();
 
             if (entity != null) {
                 if (entity instanceof EntityPlayer) {
-                    this.bp.a(entity.b_(), -2);
-                } else if (entity instanceof IMob) {
-                    this.bp.h();
+                    this.bk.a(entity.d_(), -2);
                 }
-            } else if (entity == null) {
+                else if (entity instanceof IMob) {
+                    this.bk.h();
+                }
+            }
+            else {
                 EntityPlayer entityplayer = this.o.a(this, 16.0D);
 
                 if (entityplayer != null) {
-                    this.bp.h();
+                    this.bk.h();
                 }
             }
         }
@@ -257,327 +349,488 @@ public class EntityVillager extends EntityAgeable implements IMerchant, INpc {
     }
 
     public void a_(EntityPlayer entityplayer) {
-        this.bt = entityplayer;
+        this.bo = entityplayer;
     }
 
-    public EntityPlayer b() {
-        return this.bt;
+    public EntityPlayer u_() {
+        return this.bo;
     }
 
-    public boolean cc() {
-        return this.bt != null;
+    public boolean cm() {
+        return this.bo != null;
+    }
+
+    public boolean n(boolean flag0) {
+        if (!this.bs && flag0 && this.cp()) {
+            boolean flag1 = false;
+
+            for (int i0 = 0; i0 < this.bz.n_(); ++i0) {
+                ItemStack itemstack = this.bz.a(i0);
+
+                if (itemstack != null) {
+                    if (itemstack.b() == Items.P && itemstack.b >= 3) {
+                        flag1 = true;
+                        this.bz.a(i0, 3);
+                    }
+                    else if ((itemstack.b() == Items.bS || itemstack.b() == Items.bR) && itemstack.b >= 12) {
+                        flag1 = true;
+                        this.bz.a(i0, 12);
+                    }
+                }
+
+                if (flag1) {
+                    this.o.a((Entity) this, (byte) 18);
+                    this.bs = true;
+                    break;
+                }
+            }
+        }
+
+        return this.bs;
+    }
+
+    public void o(boolean flag0) {
+        this.bs = flag0;
     }
 
     public void a(MerchantRecipe merchantrecipe) {
-        merchantrecipe.f();
-        this.a_ = -this.q();
-        this.a("mob.villager.yes", this.bf(), this.bg());
-        if (merchantrecipe.a((MerchantRecipe) this.bu.get(this.bu.size() - 1))) {
-            this.bv = 40;
-            this.bw = true;
-            if (this.bt != null) {
-                this.by = this.bt.b_();
-            } else {
-                this.by = null;
+        merchantrecipe.g();
+        this.a_ = -this.w();
+        this.a("mob.villager.yes", this.bA(), this.bB());
+        int i0 = 3 + this.V.nextInt(4);
+
+        if (merchantrecipe.e() == 1 || this.V.nextInt(5) == 0) {
+            this.bq = 40;
+            this.br = true;
+            this.bs = true;
+            if (this.bo != null) {
+                this.bu = this.bo.d_();
             }
+            else {
+                this.bu = null;
+            }
+
+            i0 += 5;
         }
 
-        if (merchantrecipe.a().b() == Items.bC) {
-            this.bx += merchantrecipe.a().b;
+        if (merchantrecipe.a().b() == Items.bO) {
+            this.bt += merchantrecipe.a().b;
         }
+
+        if (merchantrecipe.j()) {
+            this.o.d((Entity) (new EntityXPOrb(this.o, this.s, this.t + 0.5D, this.u, i0)));
+        }
+
     }
 
     public void a_(ItemStack itemstack) {
-        if (!this.o.E && this.a_ > -this.q() + 20) {
-            this.a_ = -this.q();
+        if (!this.o.D && this.a_ > -this.w() + 20) {
+            this.a_ = -this.w();
             if (itemstack != null) {
-                this.a("mob.villager.yes", this.bf(), this.bg());
-            } else {
-                this.a("mob.villager.no", this.bf(), this.bg());
+                this.a("mob.villager.yes", this.bA(), this.bB());
+            }
+            else {
+                this.a("mob.villager.no", this.bA(), this.bB());
             }
         }
+
     }
 
-    public MerchantRecipeList b(EntityPlayer entityplayer) {
-        if (this.bu == null) {
-            this.t(1);
+    public MerchantRecipeList b_(EntityPlayer entityplayer) {
+        if (this.bp == null) {
+            this.cu();
         }
 
-        return this.bu;
+        return this.bp;
     }
 
-    private float p(float f0) {
-        float f1 = f0 + this.bA;
+    private void cu() {
+        EntityVillager.ITradeList[][][] aentityvillager_itradelist = bA[this.cj()];
 
-        return f1 > 0.9F ? 0.9F - (f1 - 0.9F) : f1;
-    }
-
-    private void t(int i0) {
-        if (this.bu != null) {
-            this.bA = MathHelper.c((float) this.bu.size()) * 0.2F;
-        } else {
-            this.bA = 0.0F;
+        if (this.bv != 0 && this.bw != 0) {
+            ++this.bw;
+        }
+        else {
+            this.bv = this.V.nextInt(aentityvillager_itradelist.length) + 1;
+            this.bw = 1;
         }
 
-        MerchantRecipeList merchantrecipelist;
+        if (this.bp == null) {
+            this.bp = new MerchantRecipeList();
+        }
 
-        merchantrecipelist = new MerchantRecipeList();
-        int i1;
+        int i0 = this.bv - 1;
+        int i1 = this.bw - 1;
+        EntityVillager.ITradeList[][] aentityvillager_itradelist1 = aentityvillager_itradelist[i0];
 
-        label50:
-        switch (this.bZ()) {
-            case 0:
-                a(merchantrecipelist, Items.O, this.Z, this.p(0.9F));
-                a(merchantrecipelist, Item.a(Blocks.L), this.Z, this.p(0.5F));
-                a(merchantrecipelist, Items.bf, this.Z, this.p(0.5F));
-                a(merchantrecipelist, Items.aQ, this.Z, this.p(0.4F));
-                b(merchantrecipelist, Items.P, this.Z, this.p(0.9F));
-                b(merchantrecipelist, Items.ba, this.Z, this.p(0.3F));
-                b(merchantrecipelist, Items.e, this.Z, this.p(0.3F));
-                b(merchantrecipelist, Items.aX, this.Z, this.p(0.3F));
-                b(merchantrecipelist, Items.aZ, this.Z, this.p(0.3F));
-                b(merchantrecipelist, Items.d, this.Z, this.p(0.3F));
-                b(merchantrecipelist, Items.bg, this.Z, this.p(0.3F));
-                b(merchantrecipelist, Items.g, this.Z, this.p(0.5F));
-                if (this.Z.nextFloat() < this.p(0.5F)) {
-                    merchantrecipelist.add(new MerchantRecipe(new ItemStack(Blocks.n, 10), new ItemStack(Items.bC), new ItemStack(Items.ak, 4 + this.Z.nextInt(2), 0)));
-                }
-                break;
+        if (i1 < aentityvillager_itradelist1.length) {
+            EntityVillager.ITradeList[] aentityvillager_itradelist2 = aentityvillager_itradelist1[i1];
+            EntityVillager.ITradeList[] aentityvillager_itradelist3 = aentityvillager_itradelist2;
+            int i2 = aentityvillager_itradelist2.length;
 
-            case 1:
-                a(merchantrecipelist, Items.aF, this.Z, this.p(0.8F));
-                a(merchantrecipelist, Items.aG, this.Z, this.p(0.8F));
-                a(merchantrecipelist, Items.bB, this.Z, this.p(0.3F));
-                b(merchantrecipelist, Item.a(Blocks.X), this.Z, this.p(0.8F));
-                b(merchantrecipelist, Item.a(Blocks.w), this.Z, this.p(0.2F));
-                b(merchantrecipelist, Items.aL, this.Z, this.p(0.2F));
-                b(merchantrecipelist, Items.aN, this.Z, this.p(0.2F));
-                if (this.Z.nextFloat() < this.p(0.07F)) {
-                    Enchantment enchantment = Enchantment.c[this.Z.nextInt(Enchantment.c.length)];
-                    int i2 = MathHelper.a(this.Z, enchantment.d(), enchantment.b());
-                    ItemStack itemstack = Items.bR.a(new EnchantmentData(enchantment, i2));
+            for (int i3 = 0; i3 < i2; ++i3) {
+                EntityVillager.ITradeList entityvillager_itradelist = aentityvillager_itradelist3[i3];
 
-                    i1 = 2 + this.Z.nextInt(5 + i2 * 10) + 3 * i2;
-                    merchantrecipelist.add(new MerchantRecipe(new ItemStack(Items.aG), new ItemStack(Items.bC, i1), itemstack));
-                }
-                break;
+                entityvillager_itradelist.a(this.bp, this.V);
+            }
+        }
 
-            case 2:
-                b(merchantrecipelist, Items.bv, this.Z, this.p(0.3F));
-                b(merchantrecipelist, Items.by, this.Z, this.p(0.2F));
-                b(merchantrecipelist, Items.ax, this.Z, this.p(0.4F));
-                b(merchantrecipelist, Item.a(Blocks.aN), this.Z, this.p(0.3F));
-                Item[] aitem = new Item[]{Items.l, Items.u, Items.Z, Items.ad, Items.c, Items.x, Items.b, Items.w};
-                Item[] aitem1 = aitem;
-                int i3 = aitem.length;
+    }
 
-                i1 = 0;
+    public IChatComponent e_() {
+        String s0 = this.aL();
 
-                while (true) {
-                    if (i1 >= i3) {
-                        break label50;
+        if (s0 != null && s0.length() > 0) {
+            return new ChatComponentText(s0);
+        }
+        else {
+            if (this.bp == null) {
+                this.cu();
+            }
+
+            String s1 = null;
+
+            switch (this.cj()) {
+                case 0:
+                    if (this.bv == 1) {
+                        s1 = "farmer";
                     }
-
-                    Item item = aitem1[i1];
-
-                    if (this.Z.nextFloat() < this.p(0.05F)) {
-                        merchantrecipelist.add(new MerchantRecipe(new ItemStack(item, 1, 0), new ItemStack(Items.bC, 2 + this.Z.nextInt(3), 0), EnchantmentHelper.a(this.Z, new ItemStack(item, 1, 0), 5 + this.Z.nextInt(15))));
+                    else if (this.bv == 2) {
+                        s1 = "fisherman";
                     }
+                    else if (this.bv == 3) {
+                        s1 = "shepherd";
+                    }
+                    else if (this.bv == 4) {
+                        s1 = "fletcher";
+                    }
+                    break;
 
-                    ++i1;
-                }
+                case 1:
+                    s1 = "librarian";
+                    break;
 
-            case 3:
-                a(merchantrecipelist, Items.h, this.Z, this.p(0.7F));
-                a(merchantrecipelist, Items.j, this.Z, this.p(0.5F));
-                a(merchantrecipelist, Items.k, this.Z, this.p(0.5F));
-                a(merchantrecipelist, Items.i, this.Z, this.p(0.5F));
-                b(merchantrecipelist, Items.l, this.Z, this.p(0.5F));
-                b(merchantrecipelist, Items.u, this.Z, this.p(0.5F));
-                b(merchantrecipelist, Items.c, this.Z, this.p(0.3F));
-                b(merchantrecipelist, Items.x, this.Z, this.p(0.3F));
-                b(merchantrecipelist, Items.b, this.Z, this.p(0.5F));
-                b(merchantrecipelist, Items.w, this.Z, this.p(0.5F));
-                b(merchantrecipelist, Items.a, this.Z, this.p(0.2F));
-                b(merchantrecipelist, Items.v, this.Z, this.p(0.2F));
-                b(merchantrecipelist, Items.K, this.Z, this.p(0.2F));
-                b(merchantrecipelist, Items.L, this.Z, this.p(0.2F));
-                b(merchantrecipelist, Items.ab, this.Z, this.p(0.2F));
-                b(merchantrecipelist, Items.af, this.Z, this.p(0.2F));
-                b(merchantrecipelist, Items.Y, this.Z, this.p(0.2F));
-                b(merchantrecipelist, Items.ac, this.Z, this.p(0.2F));
-                b(merchantrecipelist, Items.Z, this.Z, this.p(0.2F));
-                b(merchantrecipelist, Items.ad, this.Z, this.p(0.2F));
-                b(merchantrecipelist, Items.aa, this.Z, this.p(0.2F));
-                b(merchantrecipelist, Items.ae, this.Z, this.p(0.2F));
-                b(merchantrecipelist, Items.X, this.Z, this.p(0.1F));
-                b(merchantrecipelist, Items.U, this.Z, this.p(0.1F));
-                b(merchantrecipelist, Items.V, this.Z, this.p(0.1F));
-                b(merchantrecipelist, Items.W, this.Z, this.p(0.1F));
-                break;
+                case 2:
+                    s1 = "cleric";
+                    break;
 
-            case 4:
-                a(merchantrecipelist, Items.h, this.Z, this.p(0.7F));
-                a(merchantrecipelist, Items.al, this.Z, this.p(0.5F));
-                a(merchantrecipelist, Items.bd, this.Z, this.p(0.5F));
-                b(merchantrecipelist, Items.av, this.Z, this.p(0.1F));
-                b(merchantrecipelist, Items.R, this.Z, this.p(0.3F));
-                b(merchantrecipelist, Items.T, this.Z, this.p(0.3F));
-                b(merchantrecipelist, Items.Q, this.Z, this.p(0.3F));
-                b(merchantrecipelist, Items.S, this.Z, this.p(0.3F));
-                b(merchantrecipelist, Items.am, this.Z, this.p(0.3F));
-                b(merchantrecipelist, Items.be, this.Z, this.p(0.3F));
-        }
+                case 3:
+                    if (this.bv == 1) {
+                        s1 = "armor";
+                    }
+                    else if (this.bv == 2) {
+                        s1 = "weapon";
+                    }
+                    else if (this.bv == 3) {
+                        s1 = "tool";
+                    }
+                    break;
 
-        if (merchantrecipelist.isEmpty()) {
-            a(merchantrecipelist, Items.k, this.Z, 1.0F);
-        }
-
-        Collections.shuffle(merchantrecipelist);
-        if (this.bu == null) {
-            this.bu = new MerchantRecipeList();
-        }
-
-        for (int i4 = 0; i4 < i0 && i4 < merchantrecipelist.size(); ++i4) {
-            MerchantRecipe recipe = (MerchantRecipe) merchantrecipelist.get(i4);
-            // CanaryMod: VillagerTradeUnlock
-            VillagerTradeUnlockHook hook = (VillagerTradeUnlockHook) new VillagerTradeUnlockHook((Villager) getCanaryEntity(), new CanaryVillagerTrade(recipe)).call();
-            if (!hook.isCanceled()) {
-                this.bu.a(recipe);
-            }
-            //
-        }
-    }
-
-    private static void a(MerchantRecipeList merchantrecipelist, Item item, Random random, float f0) {
-        if (random.nextFloat() < f0) {
-            merchantrecipelist.add(new MerchantRecipe(a(item, random), Items.bC));
-        }
-    }
-
-    private static ItemStack a(Item item, Random random) {
-        return new ItemStack(item, b(item, random), 0);
-    }
-
-    private static int b(Item item, Random random) {
-        Tuple tuple = (Tuple) bB.get(item);
-
-        return tuple == null ? 1 : (((Integer) tuple.a()).intValue() >= ((Integer) tuple.b()).intValue() ? ((Integer) tuple.a()).intValue() : ((Integer) tuple.a()).intValue() + random.nextInt(((Integer) tuple.b()).intValue() - ((Integer) tuple.a()).intValue()));
-    }
-
-    private static void b(MerchantRecipeList merchantrecipelist, Item item, Random random, float f0) {
-        if (random.nextFloat() < f0) {
-            int i0 = c(item, random);
-            ItemStack itemstack;
-            ItemStack itemstack1;
-
-            if (i0 < 0) {
-                itemstack = new ItemStack(Items.bC, 1, 0);
-                itemstack1 = new ItemStack(item, -i0, 0);
-            } else {
-                itemstack = new ItemStack(Items.bC, i0, 0);
-                itemstack1 = new ItemStack(item, 1, 0);
+                case 4:
+                    if (this.bv == 1) {
+                        s1 = "butcher";
+                    }
+                    else if (this.bv == 2) {
+                        s1 = "leather";
+                    }
             }
 
-            merchantrecipelist.add(new MerchantRecipe(itemstack, itemstack1));
+            if (s1 != null) {
+                ChatComponentTranslation chatcomponenttranslation = new ChatComponentTranslation("entity.Villager." + s1, new Object[0]);
+
+                chatcomponenttranslation.b().a(this.aP());
+                chatcomponenttranslation.b().a(this.aJ().toString());
+                return chatcomponenttranslation;
+            }
+            else {
+                return super.e_();
+            }
         }
     }
 
-    private static int c(Item item, Random random) {
-        Tuple tuple = (Tuple) bC.get(item);
+    public float aR() {
+        float f0 = 1.62F;
 
-        return tuple == null ? 1 : (((Integer) tuple.a()).intValue() >= ((Integer) tuple.b()).intValue() ? ((Integer) tuple.a()).intValue() : ((Integer) tuple.a()).intValue() + random.nextInt(((Integer) tuple.b()).intValue() - ((Integer) tuple.a()).intValue()));
+        if (this.i_()) {
+            f0 = (float) ((double) f0 - 0.81D);
+        }
+
+        return f0;
     }
 
-    public IEntityLivingData a(IEntityLivingData ientitylivingdata) {
-        ientitylivingdata = super.a(ientitylivingdata);
-        this.s(this.o.s.nextInt(5));
+    public IEntityLivingData a(DifficultyInstance difficultyinstance, IEntityLivingData ientitylivingdata) {
+        ientitylivingdata = super.a(difficultyinstance, ientitylivingdata);
+        this.r(this.o.s.nextInt(5));
+        this.ct();
         return ientitylivingdata;
     }
 
-    public void cd() {
-        this.bz = true;
+    public void cn() {
+        this.bx = true;
     }
 
     public EntityVillager b(EntityAgeable entityageable) {
         EntityVillager entityvillager = new EntityVillager(this.o);
 
-        entityvillager.a((IEntityLivingData) null);
+        entityvillager.a(this.o.E(new BlockPos(entityvillager)), (IEntityLivingData) null);
         return entityvillager;
     }
 
-    public boolean bM() {
+    public boolean ca() {
         return false;
+    }
+
+    public void a(EntityLightningBolt entitylightningbolt) {
+        if (!this.o.D) {
+            EntityWitch entitywitch = new EntityWitch(this.o);
+
+            entitywitch.b(this.s, this.t, this.u, this.y, this.z);
+            entitywitch.a(this.o.E(new BlockPos(entitywitch)), (IEntityLivingData) null);
+            this.o.d((Entity) entitywitch);
+            this.J();
+        }
+    }
+
+    public InventoryBasic co() {
+        return this.bz;
+    }
+
+    protected void a(EntityItem entityitem) {
+        ItemStack itemstack = entityitem.l();
+        Item item = itemstack.b();
+
+        if (this.a(item)) {
+            ItemStack itemstack1 = this.bz.a(itemstack);
+
+            if (itemstack1 == null) {
+                entityitem.J();
+            }
+            else {
+                itemstack.b = itemstack1.b;
+            }
+        }
+
+    }
+
+    private boolean a(Item item) {
+        return item == Items.P || item == Items.bS || item == Items.bR || item == Items.O || item == Items.N;
+    }
+
+    public boolean cp() {
+        return this.s(1);
+    }
+
+    public boolean cq() {
+        return this.s(2);
+    }
+
+    public boolean cr() {
+        boolean flag0 = this.cj() == 0;
+
+        return flag0 ? !this.s(5) : !this.s(1);
+    }
+
+    private boolean s(int i0) {
+        boolean flag0 = this.cj() == 0;
+
+        for (int i1 = 0; i1 < this.bz.n_(); ++i1) {
+            ItemStack itemstack = this.bz.a(i1);
+
+            if (itemstack != null) {
+                if (itemstack.b() == Items.P && itemstack.b >= 3 * i0 || itemstack.b() == Items.bS && itemstack.b >= 12 * i0 || itemstack.b() == Items.bR && itemstack.b >= 12 * i0) {
+                    return true;
+                }
+
+                if (flag0 && itemstack.b() == Items.O && itemstack.b >= 9 * i0) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public boolean cs() {
+        for (int i0 = 0; i0 < this.bz.n_(); ++i0) {
+            ItemStack itemstack = this.bz.a(i0);
+
+            if (itemstack != null && (itemstack.b() == Items.N || itemstack.b() == Items.bS || itemstack.b() == Items.bR)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean d(int i0, ItemStack itemstack) {
+        if (super.d(i0, itemstack)) {
+            return true;
+        }
+        else {
+            int i1 = i0 - 300;
+
+            if (i1 >= 0 && i1 < this.bz.n_()) {
+                this.bz.a(i1, itemstack);
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
     }
 
     public EntityAgeable a(EntityAgeable entityageable) {
         return this.b(entityageable);
     }
 
-    static {
-        bB.put(Items.h, new Tuple(Integer.valueOf(16), Integer.valueOf(24)));
-        bB.put(Items.j, new Tuple(Integer.valueOf(8), Integer.valueOf(10)));
-        bB.put(Items.k, new Tuple(Integer.valueOf(8), Integer.valueOf(10)));
-        bB.put(Items.i, new Tuple(Integer.valueOf(4), Integer.valueOf(6)));
-        bB.put(Items.aF, new Tuple(Integer.valueOf(24), Integer.valueOf(36)));
-        bB.put(Items.aG, new Tuple(Integer.valueOf(11), Integer.valueOf(13)));
-        bB.put(Items.bB, new Tuple(Integer.valueOf(1), Integer.valueOf(1)));
-        bB.put(Items.bi, new Tuple(Integer.valueOf(3), Integer.valueOf(4)));
-        bB.put(Items.bv, new Tuple(Integer.valueOf(2), Integer.valueOf(3)));
-        bB.put(Items.al, new Tuple(Integer.valueOf(14), Integer.valueOf(18)));
-        bB.put(Items.bd, new Tuple(Integer.valueOf(14), Integer.valueOf(18)));
-        bB.put(Items.bf, new Tuple(Integer.valueOf(14), Integer.valueOf(18)));
-        bB.put(Items.aQ, new Tuple(Integer.valueOf(9), Integer.valueOf(13)));
-        bB.put(Items.N, new Tuple(Integer.valueOf(34), Integer.valueOf(48)));
-        bB.put(Items.bc, new Tuple(Integer.valueOf(30), Integer.valueOf(38)));
-        bB.put(Items.bb, new Tuple(Integer.valueOf(30), Integer.valueOf(38)));
-        bB.put(Items.O, new Tuple(Integer.valueOf(18), Integer.valueOf(22)));
-        bB.put(Item.a(Blocks.L), new Tuple(Integer.valueOf(14), Integer.valueOf(22)));
-        bB.put(Items.bh, new Tuple(Integer.valueOf(36), Integer.valueOf(64)));
-        bC.put(Items.d, new Tuple(Integer.valueOf(3), Integer.valueOf(4)));
-        bC.put(Items.aZ, new Tuple(Integer.valueOf(3), Integer.valueOf(4)));
-        bC.put(Items.l, new Tuple(Integer.valueOf(7), Integer.valueOf(11)));
-        bC.put(Items.u, new Tuple(Integer.valueOf(12), Integer.valueOf(14)));
-        bC.put(Items.c, new Tuple(Integer.valueOf(6), Integer.valueOf(8)));
-        bC.put(Items.x, new Tuple(Integer.valueOf(9), Integer.valueOf(12)));
-        bC.put(Items.b, new Tuple(Integer.valueOf(7), Integer.valueOf(9)));
-        bC.put(Items.w, new Tuple(Integer.valueOf(10), Integer.valueOf(12)));
-        bC.put(Items.a, new Tuple(Integer.valueOf(4), Integer.valueOf(6)));
-        bC.put(Items.v, new Tuple(Integer.valueOf(7), Integer.valueOf(8)));
-        bC.put(Items.K, new Tuple(Integer.valueOf(4), Integer.valueOf(6)));
-        bC.put(Items.L, new Tuple(Integer.valueOf(7), Integer.valueOf(8)));
-        bC.put(Items.ab, new Tuple(Integer.valueOf(4), Integer.valueOf(6)));
-        bC.put(Items.af, new Tuple(Integer.valueOf(7), Integer.valueOf(8)));
-        bC.put(Items.Y, new Tuple(Integer.valueOf(4), Integer.valueOf(6)));
-        bC.put(Items.ac, new Tuple(Integer.valueOf(7), Integer.valueOf(8)));
-        bC.put(Items.Z, new Tuple(Integer.valueOf(10), Integer.valueOf(14)));
-        bC.put(Items.ad, new Tuple(Integer.valueOf(16), Integer.valueOf(19)));
-        bC.put(Items.aa, new Tuple(Integer.valueOf(8), Integer.valueOf(10)));
-        bC.put(Items.ae, new Tuple(Integer.valueOf(11), Integer.valueOf(14)));
-        bC.put(Items.X, new Tuple(Integer.valueOf(5), Integer.valueOf(7)));
-        bC.put(Items.U, new Tuple(Integer.valueOf(5), Integer.valueOf(7)));
-        bC.put(Items.V, new Tuple(Integer.valueOf(11), Integer.valueOf(15)));
-        bC.put(Items.W, new Tuple(Integer.valueOf(9), Integer.valueOf(11)));
-        bC.put(Items.P, new Tuple(Integer.valueOf(-4), Integer.valueOf(-2)));
-        bC.put(Items.ba, new Tuple(Integer.valueOf(-8), Integer.valueOf(-4)));
-        bC.put(Items.e, new Tuple(Integer.valueOf(-8), Integer.valueOf(-4)));
-        bC.put(Items.aX, new Tuple(Integer.valueOf(-10), Integer.valueOf(-7)));
-        bC.put(Item.a(Blocks.w), new Tuple(Integer.valueOf(-5), Integer.valueOf(-3)));
-        bC.put(Item.a(Blocks.X), new Tuple(Integer.valueOf(3), Integer.valueOf(4)));
-        bC.put(Items.R, new Tuple(Integer.valueOf(4), Integer.valueOf(5)));
-        bC.put(Items.T, new Tuple(Integer.valueOf(2), Integer.valueOf(4)));
-        bC.put(Items.Q, new Tuple(Integer.valueOf(2), Integer.valueOf(4)));
-        bC.put(Items.S, new Tuple(Integer.valueOf(2), Integer.valueOf(4)));
-        bC.put(Items.av, new Tuple(Integer.valueOf(6), Integer.valueOf(8)));
-        bC.put(Items.by, new Tuple(Integer.valueOf(-4), Integer.valueOf(-1)));
-        bC.put(Items.ax, new Tuple(Integer.valueOf(-4), Integer.valueOf(-1)));
-        bC.put(Items.aL, new Tuple(Integer.valueOf(10), Integer.valueOf(12)));
-        bC.put(Items.aN, new Tuple(Integer.valueOf(10), Integer.valueOf(12)));
-        bC.put(Item.a(Blocks.aN), new Tuple(Integer.valueOf(-3), Integer.valueOf(-1)));
-        bC.put(Items.am, new Tuple(Integer.valueOf(-7), Integer.valueOf(-5)));
-        bC.put(Items.be, new Tuple(Integer.valueOf(-7), Integer.valueOf(-5)));
-        bC.put(Items.bg, new Tuple(Integer.valueOf(-8), Integer.valueOf(-6)));
-        bC.put(Items.bv, new Tuple(Integer.valueOf(7), Integer.valueOf(11)));
-        bC.put(Items.g, new Tuple(Integer.valueOf(-12), Integer.valueOf(-8)));
+    interface ITradeList {
+
+        void a(MerchantRecipeList merchantrecipelist, Random random);
+    }
+
+    static class EmeraldForItems implements EntityVillager.ITradeList {
+
+        public Item a;
+        public EntityVillager.PriceInfo b;
+
+        public EmeraldForItems(Item p_i45815_1_, EntityVillager.PriceInfo p_i45815_2_) {
+            this.a = p_i45815_1_;
+            this.b = p_i45815_2_;
+        }
+
+        public void a(MerchantRecipeList p_a_1_, Random p_a_2_) {
+            int i0 = 1;
+
+            if (this.b != null) {
+                i0 = this.b.a(p_a_2_);
+            }
+
+            p_a_1_.add(new MerchantRecipe(new ItemStack(this.a, i0, 0), Items.bO));
+        }
+    }
+
+    static class ItemAndEmeraldToItem implements EntityVillager.ITradeList {
+
+        public ItemStack a;
+        public EntityVillager.PriceInfo b;
+        public ItemStack c;
+        public EntityVillager.PriceInfo d;
+
+        public ItemAndEmeraldToItem(Item p_i45813_1_, EntityVillager.PriceInfo p_i45813_2_, Item p_i45813_3_, EntityVillager.PriceInfo p_i45813_4_) {
+            this.a = new ItemStack(p_i45813_1_);
+            this.b = p_i45813_2_;
+            this.c = new ItemStack(p_i45813_3_);
+            this.d = p_i45813_4_;
+        }
+
+        public void a(MerchantRecipeList p_a_1_, Random p_a_2_) {
+            int i0 = 1;
+
+            if (this.b != null) {
+                i0 = this.b.a(p_a_2_);
+            }
+
+            int i1 = 1;
+
+            if (this.d != null) {
+                i1 = this.d.a(p_a_2_);
+            }
+
+            p_a_1_.add(new MerchantRecipe(new ItemStack(this.a.b(), i0, this.a.i()), new ItemStack(Items.bO), new ItemStack(this.c.b(), i1, this.c.i())));
+        }
+    }
+
+
+    static class ListEnchantedBookForEmeralds implements EntityVillager.ITradeList {
+
+        public void a(MerchantRecipeList p_a_1_, Random p_a_2_) {
+            Enchantment enchantment = Enchantment.b[p_a_2_.nextInt(Enchantment.b.length)];
+            int i0 = MathHelper.a(p_a_2_, enchantment.e(), enchantment.b());
+            ItemStack itemstack = Items.cd.a(new EnchantmentData(enchantment, i0));
+            int i1 = 2 + p_a_2_.nextInt(5 + i0 * 10) + 3 * i0;
+
+            if (i1 > 64) {
+                i1 = 64;
+            }
+
+            p_a_1_.add(new MerchantRecipe(new ItemStack(Items.aL), new ItemStack(Items.bO, i1), itemstack));
+        }
+    }
+
+
+    static class ListEnchantedItemForEmeralds implements EntityVillager.ITradeList {
+
+        public ItemStack a;
+        public EntityVillager.PriceInfo b;
+
+        public ListEnchantedItemForEmeralds(Item p_i45814_1_, EntityVillager.PriceInfo p_i45814_2_) {
+            this.a = new ItemStack(p_i45814_1_);
+            this.b = p_i45814_2_;
+        }
+
+        public void a(MerchantRecipeList p_a_1_, Random p_a_2_) {
+            int i0 = 1;
+
+            if (this.b != null) {
+                i0 = this.b.a(p_a_2_);
+            }
+
+            ItemStack itemstack = new ItemStack(Items.bO, i0, 0);
+            ItemStack itemstack1 = new ItemStack(this.a.b(), 1, this.a.i());
+
+            itemstack1 = EnchantmentHelper.a(p_a_2_, itemstack1, 5 + p_a_2_.nextInt(15));
+            p_a_1_.add(new MerchantRecipe(itemstack, itemstack1));
+        }
+    }
+
+
+    static class ListItemForEmeralds implements EntityVillager.ITradeList {
+
+        public ItemStack a;
+        public EntityVillager.PriceInfo b;
+
+        public ListItemForEmeralds(Item p_i45811_1_, EntityVillager.PriceInfo p_i45811_2_) {
+            this.a = new ItemStack(p_i45811_1_);
+            this.b = p_i45811_2_;
+        }
+
+        public ListItemForEmeralds(ItemStack p_i45812_1_, EntityVillager.PriceInfo p_i45812_2_) {
+            this.a = p_i45812_1_;
+            this.b = p_i45812_2_;
+        }
+
+        public void a(MerchantRecipeList p_a_1_, Random p_a_2_) {
+            int i0 = 1;
+
+            if (this.b != null) {
+                i0 = this.b.a(p_a_2_);
+            }
+
+            ItemStack itemstack;
+            ItemStack itemstack1;
+
+            if (i0 < 0) {
+                itemstack = new ItemStack(Items.bO, 1, 0);
+                itemstack1 = new ItemStack(this.a.b(), -i0, this.a.i());
+            }
+            else {
+                itemstack = new ItemStack(Items.bO, i0, 0);
+                itemstack1 = new ItemStack(this.a.b(), 1, this.a.i());
+            }
+
+            p_a_1_.add(new MerchantRecipe(itemstack, itemstack1));
+        }
+    }
+
+
+    static class PriceInfo extends Tuple {
+
+        public PriceInfo(int p_i45810_1_, int p_i45810_2_) {
+            super(Integer.valueOf(p_i45810_1_), Integer.valueOf(p_i45810_2_));
+        }
+
+        public int a(Random p_a_1_) {
+            return ((Integer) this.a()).intValue() >= ((Integer) this.b()).intValue() ? ((Integer) this.a()).intValue() : ((Integer) this.a()).intValue() + p_a_1_.nextInt(((Integer) this.b()).intValue() - ((Integer) this.a()).intValue() + 1);
+        }
     }
 }

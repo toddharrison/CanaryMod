@@ -20,6 +20,14 @@ public class CanaryPlayerInventory extends CanaryEntityInventory implements Play
      * {@inheritDoc}
      */
     @Override
+    public String getInventoryName() {
+        return inventory.d_();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public InventoryType getInventoryType() {
         return InventoryType.PLAYER;
     }
@@ -153,7 +161,7 @@ public class CanaryPlayerInventory extends CanaryEntityInventory implements Play
      */
     @Override
     public void update() {
-        getHandle().l_();
+        getHandle().o_();
     }
 
     /**
@@ -162,5 +170,24 @@ public class CanaryPlayerInventory extends CanaryEntityInventory implements Play
     @Override
     public InventoryPlayer getHandle() {
         return (InventoryPlayer) inventory;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public Item getItemOnCursor() {
+        return getHandle().p() != null ? getHandle().p().getCanaryItem() : null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setItemOnCursor(Item item) {
+        if (item == null) {
+            getHandle().b((ItemStack) null);
+        }
+        else {
+            getHandle().b(((CanaryItem) item).getHandle());
+        }
     }
 }

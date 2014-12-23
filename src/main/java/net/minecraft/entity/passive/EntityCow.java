@@ -9,97 +9,104 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.pathfinding.PathNavigateGround;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
+
 
 public class EntityCow extends EntityAnimal {
 
     public EntityCow(World world) {
         super(world);
         this.a(0.9F, 1.3F);
-        this.m().a(true);
-        this.c.a(0, new EntityAISwimming(this));
-        this.c.a(1, new EntityAIPanic(this, 2.0D));
-        this.c.a(2, new EntityAIMate(this, 1.0D));
-        this.c.a(3, new EntityAITempt(this, 1.25D, Items.O, false));
-        this.c.a(4, new EntityAIFollowParent(this, 1.25D));
-        this.c.a(5, new EntityAIWander(this, 1.0D));
-        this.c.a(6, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
-        this.c.a(7, new EntityAILookIdle(this));
+        ((PathNavigateGround) this.s()).a(true);
+        this.i.a(0, new EntityAISwimming(this));
+        this.i.a(1, new EntityAIPanic(this, 2.0D));
+        this.i.a(2, new EntityAIMate(this, 1.0D));
+        this.i.a(3, new EntityAITempt(this, 1.25D, Items.O, false));
+        this.i.a(4, new EntityAIFollowParent(this, 1.25D));
+        this.i.a(5, new EntityAIWander(this, 1.0D));
+        this.i.a(6, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
+        this.i.a(7, new EntityAILookIdle(this));
         this.entity = new CanaryCow(this); // CanaryMod: Wrap Entity
     }
 
-    public boolean bk() {
-        return true;
-    }
-
-    protected void aD() {
-        super.aD();
+    protected void aW() {
+        super.aW();
         this.a(SharedMonsterAttributes.a).a(10.0D);
         this.a(SharedMonsterAttributes.d).a(0.20000000298023224D);
     }
 
-    protected String t() {
+    protected String z() {
         return "mob.cow.say";
     }
 
-    protected String aT() {
+    protected String bn() {
         return "mob.cow.hurt";
     }
 
-    protected String aU() {
+    protected String bo() {
         return "mob.cow.hurt";
     }
 
-    protected void a(int i0, int i1, int i2, Block block) {
+    protected void a(BlockPos blockpos, Block block) {
         this.a("mob.cow.step", 0.15F, 1.0F);
     }
 
-    protected float bf() {
+    protected float bA() {
         return 0.4F;
     }
 
-    protected Item u() {
-        return Items.aA;
+    protected Item A() {
+        return Items.aF;
     }
 
     protected void b(boolean flag0, int i0) {
-        int i1 = this.Z.nextInt(3) + this.Z.nextInt(1 + i0);
+        int i1 = this.V.nextInt(3) + this.V.nextInt(1 + i0);
 
         int i2;
 
         for (i2 = 0; i2 < i1; ++i2) {
-            this.a(Items.aA, 1);
+            this.a(Items.aF, 1);
         }
 
-        i1 = this.Z.nextInt(3) + 1 + this.Z.nextInt(1 + i0);
+        i1 = this.V.nextInt(3) + 1 + this.V.nextInt(1 + i0);
 
         for (i2 = 0; i2 < i1; ++i2) {
-            if (this.al()) {
-                this.a(Items.be, 1);
-            } else {
-                this.a(Items.bd, 1);
+            if (this.au()) {
+                this.a(Items.bj, 1);
+            }
+            else {
+                this.a(Items.bi, 1);
             }
         }
+
     }
 
     public boolean a(EntityPlayer entityplayer) {
-        ItemStack itemstack = entityplayer.bm.h();
+        ItemStack itemstack = entityplayer.bg.h();
 
-        if (itemstack != null && itemstack.b() == Items.ar && !entityplayer.bE.d) {
+        if (itemstack != null && itemstack.b() == Items.aw && !entityplayer.by.d) {
             if (itemstack.b-- == 1) {
-                entityplayer.bm.a(entityplayer.bm.c, new ItemStack(Items.aB));
-            } else if (!entityplayer.bm.a(new ItemStack(Items.aB))) {
-                entityplayer.a(new ItemStack(Items.aB, 1, 0), false);
+                entityplayer.bg.a(entityplayer.bg.c, new ItemStack(Items.aG));
+            }
+            else if (!entityplayer.bg.a(new ItemStack(Items.aG))) {
+                entityplayer.a(new ItemStack(Items.aG, 1, 0), false);
             }
 
             return true;
-        } else {
+        }
+        else {
             return super.a(entityplayer);
         }
     }
 
     public EntityCow b(EntityAgeable entityageable) {
         return new EntityCow(this.o);
+    }
+
+    public float aR() {
+        return this.K;
     }
 
     public EntityAgeable a(EntityAgeable entityageable) {

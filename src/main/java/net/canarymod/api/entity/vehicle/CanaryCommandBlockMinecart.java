@@ -1,6 +1,7 @@
 package net.canarymod.api.entity.vehicle;
 
 import net.canarymod.Canary;
+import net.canarymod.api.chat.ChatComponent;
 import net.canarymod.api.entity.EntityType;
 import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.chat.ReceiverType;
@@ -47,7 +48,7 @@ public class CanaryCommandBlockMinecart extends CanaryMinecart implements Comman
      */
     @Override
     public String getName() {
-        return getLogic().b_();
+        return getLogic().d_();
     }
 
     /**
@@ -58,9 +59,6 @@ public class CanaryCommandBlockMinecart extends CanaryMinecart implements Comman
         getLogic().b(name);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void notice(String message) {
         log.info(Logman.NOTICE, String.format(cmdPrefix, getName(), message));
@@ -70,8 +68,68 @@ public class CanaryCommandBlockMinecart extends CanaryMinecart implements Comman
      * {@inheritDoc}
      */
     @Override
+    public void notice(CharSequence message) {
+        log.info(Logman.NOTICE, String.format(cmdPrefix, getName(), message));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void notice(CharSequence... messages) {
+        for (CharSequence message : messages) {
+            notice(message);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void notice(Iterable<? extends CharSequence> messages) {
+        for (CharSequence message : messages) {
+            notice(message);
+        }
+    }
+
+    @Override
     public void message(String message) {
         log.info(Logman.MESSAGE, String.format(cmdPrefix, getName(), message));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void message(CharSequence message) {
+        log.info(Logman.MESSAGE, String.format(cmdPrefix, getName(), message));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void message(CharSequence... messages) {
+        for (CharSequence message : messages) {
+            message(message);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void message(Iterable<? extends CharSequence> messages) {
+        for (CharSequence message : messages) {
+            message(message);
+        }
+    }
+
+    @Override
+    public void message(ChatComponent... chatComponents) {
+        for(ChatComponent chatComponent : chatComponents){
+            log.info(Logman.MESSAGE, String.format(cmdPrefix, getName(), chatComponent.getFullText()));
+        }
     }
 
     /**
@@ -95,6 +153,11 @@ public class CanaryCommandBlockMinecart extends CanaryMinecart implements Comman
         return ReceiverType.COMMANDBLOCKENTITY;
     }
 
+    @Override
+    public String getLocale() {
+        return Configuration.getServerConfig().getServerLocale();
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -108,7 +171,7 @@ public class CanaryCommandBlockMinecart extends CanaryMinecart implements Comman
      */
     @Override
     public String getCommand() {
-        return getLogic().i();
+        return getLogic().l();
     }
 
     /**

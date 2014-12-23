@@ -14,6 +14,14 @@ public class CanaryCustomStorageInventory extends CanaryEntityInventory implemen
      * {@inheritDoc}
      */
     @Override
+    public String getInventoryName() {
+        return inventory.d_();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public InventoryType getInventoryType() {
         return InventoryType.CUSTOM;
     }
@@ -66,7 +74,7 @@ public class CanaryCustomStorageInventory extends CanaryEntityInventory implemen
      */
     @Override
     public void update() {
-        getHandle().l_();
+        getHandle().o_();
     }
 
     public NativeCustomStorageInventory getHandle() {

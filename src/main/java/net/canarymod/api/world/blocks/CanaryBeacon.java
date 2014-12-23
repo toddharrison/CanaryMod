@@ -1,6 +1,5 @@
 package net.canarymod.api.world.blocks;
 
-import net.canarymod.api.inventory.CanaryBlockInventory;
 import net.canarymod.api.inventory.CanaryItem;
 import net.canarymod.api.inventory.InventoryType;
 import net.canarymod.api.inventory.Item;
@@ -13,7 +12,7 @@ import net.minecraft.tileentity.TileEntityBeacon;
  *
  * @author Jason (darkdiplomat)
  */
-public class CanaryBeacon extends CanaryBlockInventory implements Beacon {
+public class CanaryBeacon extends CanaryLockableTileEntity implements Beacon {
 
     /**
      * Constructs a new wrapper for TileEntityBeacon
@@ -63,7 +62,7 @@ public class CanaryBeacon extends CanaryBlockInventory implements Beacon {
      */
     @Override
     public PotionEffectType getPrimaryEffect() {
-        return PotionEffectType.fromId(this.getTileEntity().j());
+        return PotionEffectType.fromId(this.getTileEntity().a_(1));
     }
 
     /**
@@ -71,7 +70,7 @@ public class CanaryBeacon extends CanaryBlockInventory implements Beacon {
      */
     @Override
     public void setPrimaryEffect(PotionEffectType effect) {
-        this.getTileEntity().d(effect.getID());
+        this.getTileEntity().b(1, effect.getID());
     }
 
     /**
@@ -87,7 +86,7 @@ public class CanaryBeacon extends CanaryBlockInventory implements Beacon {
      */
     @Override
     public PotionEffectType getSecondaryEffect() {
-        return PotionEffectType.fromId(this.getTileEntity().k());
+        return PotionEffectType.fromId(this.getTileEntity().a_(2));
     }
 
     /**
@@ -95,7 +94,7 @@ public class CanaryBeacon extends CanaryBlockInventory implements Beacon {
      */
     @Override
     public void setSecondaryEffect(PotionEffectType effect) {
-        this.getTileEntity().e(effect.getID());
+        this.getTileEntity().b(2, effect.getID());
     }
 
     /**
@@ -111,7 +110,7 @@ public class CanaryBeacon extends CanaryBlockInventory implements Beacon {
      */
     @Override
     public int getLevels() {
-        return getTileEntity().l();
+        return this.getTileEntity().a_(0);
     }
 
     /**
@@ -157,7 +156,7 @@ public class CanaryBeacon extends CanaryBlockInventory implements Beacon {
      */
     @Override
     public void setContents(Item[] items) {
-        getTileEntity().a(0, items[0] != null ? ((CanaryItem) items[0]).getHandle() : null);
+        getTileEntity().a(0, items[0] != null ? ((CanaryItem)items[0]).getHandle() : null);
     }
 
     /**
@@ -173,6 +172,6 @@ public class CanaryBeacon extends CanaryBlockInventory implements Beacon {
      */
     @Override
     public TileEntityBeacon getTileEntity() {
-        return (TileEntityBeacon) tileentity;
+        return (TileEntityBeacon)tileentity;
     }
 }

@@ -1,85 +1,55 @@
 package net.minecraft.item;
 
-import net.canarymod.Canary;
-import net.canarymod.api.world.blocks.BlockFace;
 import net.canarymod.api.world.blocks.CanaryBlock;
 import net.canarymod.hook.player.ItemUseHook;
 import net.canarymod.hook.world.IgnitionHook;
 import net.canarymod.hook.world.IgnitionHook.IgnitionCause;
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 public class ItemFlintAndSteel extends Item {
 
     public ItemFlintAndSteel() {
         this.h = 1;
-        this.f(64);
+        this.d(64);
         this.a(CreativeTabs.i);
     }
 
-    public boolean a(ItemStack itemstack, EntityPlayer entityplayer, World world, int i0, int i1, int i2, int i3, float f0, float f1, float f2) {
+    public boolean a(ItemStack itemstack, EntityPlayer entityplayer, World world, BlockPos blockpos, EnumFacing enumfacing, float f0, float f1, float f2) {
+        blockpos = blockpos.a(enumfacing);
         // CanaryMod: get clicked
-        CanaryBlock clicked = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
-
-        clicked.setFaceClicked(BlockFace.fromByte((byte) i3));
-        clicked.setStatus((byte) 2); // Flint&Steel Status 2
+        CanaryBlock clicked = CanaryBlock.getPooledBlock(world.p(blockpos), blockpos, world); // Store clicked, Status 2
+        clicked.setStatus((byte)2);
+        clicked.setFaceClicked(enumfacing.asBlockFace()); // Set face clicked
         //
 
-        if (i3 == 0) {
-            --i1;
-        }
-
-        if (i3 == 1) {
-            ++i1;
-        }
-
-        if (i3 == 2) {
-            --i2;
-        }
-
-        if (i3 == 3) {
-            ++i2;
-        }
-
-        if (i3 == 4) {
-            --i0;
-        }
-
-        if (i3 == 5) {
-            ++i0;
-        }
-
-        if (!entityplayer.a(i0, i1, i2, i3, itemstack)) {
+        if (!entityplayer.a(blockpos, enumfacing, itemstack)) {
             return false;
         }
         else {
 
             // CanaryMod: ItemUse/Ignition
-            // Create & Call ItemUseHook
-            ItemUseHook iuh = (ItemUseHook) new ItemUseHook(((EntityPlayerMP) entityplayer).getPlayer(), itemstack.getCanaryItem(), clicked).call();
-            // Create & Call IgnitionHook
-            CanaryBlock ignited = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
-            IgnitionHook ih = new IgnitionHook(ignited, ((EntityPlayerMP) entityplayer).getPlayer(), clicked, IgnitionCause.FLINT_AND_STEEL);
-            Canary.hooks().callHook(ih);
-
-            // If either hook is canceled, return
-            if (iuh.isCanceled() || ih.isCanceled()) {
+            CanaryBlock ignited = CanaryBlock.getPooledBlock(world.p(blockpos), blockpos, world);
+            // If item use gets canceled then no ignition would really take place
+            if (new ItemUseHook(((EntityPlayerMP)entityplayer).getPlayer(), itemstack.getCanaryItem(), clicked).call().isCanceled()
+                        || new IgnitionHook(ignited, ((EntityPlayerMP)entityplayer).getPlayer(), clicked, IgnitionCause.FIREBALL_CLICK).call().isCanceled()) {
                 return false;
             }
             //
 
-            if (world.a(i0, i1, i2).o() == Material.a) {
-                world.a((double) i0 + 0.5D, (double) i1 + 0.5D, (double) i2 + 0.5D, "fire.ignite", 1.0F, g.nextFloat() * 0.4F + 0.8F);
-                world.b(i0, i1, i2, (Block) Blocks.ab);
+            if (world.p(blockpos).c().r() == Material.a) {
+                world.a((double)blockpos.n() + 0.5D, (double)blockpos.o() + 0.5D, (double)blockpos.p() + 0.5D, "fire.ignite", 1.0F, g.nextFloat() * 0.4F + 0.8F);
+                world.a(blockpos, Blocks.ab.P());
             }
 
-            itemstack.a(1, (EntityLivingBase) entityplayer);
+            itemstack.a(1, (EntityLivingBase)entityplayer);
             return true;
         }
     }

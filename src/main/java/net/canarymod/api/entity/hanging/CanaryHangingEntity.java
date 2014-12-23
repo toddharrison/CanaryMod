@@ -25,7 +25,7 @@ public abstract class CanaryHangingEntity extends CanaryEntity implements Hangin
      */
     @Override
     public int getHangingDirection() {
-        return getHandle().a;
+        return getHandle().b.ordinal();
     }
 
     /**
@@ -36,7 +36,7 @@ public abstract class CanaryHangingEntity extends CanaryEntity implements Hangin
         if (direction < 0 || 3 > direction) {
             return;
         }
-        getHandle().a(direction);
+        getHandle().b.a(direction);
     }
 
     /**
@@ -44,7 +44,7 @@ public abstract class CanaryHangingEntity extends CanaryEntity implements Hangin
      */
     @Override
     public boolean isOnValidSurface() {
-        return getHandle().e();
+        return getHandle().j();
     }
 
     /**

@@ -10,43 +10,53 @@ import java.util.*;
 
 public class ServersideAttributeMap extends BaseAttributeMap {
 
-    private final Set d = Sets.newHashSet();
-    protected final Map c = new LowerStringMap();
+    protected final Map d = new LowerStringMap();
+    private final Set e = Sets.newHashSet();
+    // CanaryMod: our variables    
     private final CanaryAttributeMap canaryAttributeMap = new CanaryAttributeMap(this);
 
-    public ModifiableAttributeInstance c(IAttribute IAttribute) {
-        return (ModifiableAttributeInstance) super.a(IAttribute);
+    public ModifiableAttributeInstance e(IAttribute iattribute) {
+        return (ModifiableAttributeInstance) super.a(iattribute);
     }
 
     public ModifiableAttributeInstance b(String s0) {
-        IAttributeInstance attributeinstance = super.a(s0);
+        IAttributeInstance iattributeinstance = super.a(s0);
 
-        if (attributeinstance == null) {
-            attributeinstance = (IAttributeInstance) this.c.get(s0);
+        if (iattributeinstance == null) {
+            iattributeinstance = (IAttributeInstance) this.d.get(s0);
         }
 
-        return (ModifiableAttributeInstance) attributeinstance;
+        return (ModifiableAttributeInstance) iattributeinstance;
     }
 
-    public IAttributeInstance b(IAttribute IAttribute) {
-        if (this.b.containsKey(IAttribute.a())) {
-            throw new IllegalArgumentException("Attribute is already registered!");
-        } else {
-            ModifiableAttributeInstance modifiableattributeinstance = new ModifiableAttributeInstance(this, IAttribute);
+    public IAttributeInstance b(IAttribute iattribute) {
+        IAttributeInstance iattributeinstance = super.b(iattribute);
 
-            this.b.put(IAttribute.a(), modifiableattributeinstance);
-            if (IAttribute instanceof RangedAttribute && ((RangedAttribute) IAttribute).f() != null) {
-                this.c.put(((RangedAttribute) IAttribute).f(), modifiableattributeinstance);
+        if (iattribute instanceof RangedAttribute && ((RangedAttribute) iattribute).g() != null) {
+            this.d.put(((RangedAttribute) iattribute).g(), iattributeinstance);
+        }
+
+        return iattributeinstance;
+    }
+
+    protected IAttributeInstance c(IAttribute iattribute) {
+        return new ModifiableAttributeInstance(this, iattribute);
+    }
+
+    public void a(IAttributeInstance iattributeinstance) {
+        if (iattributeinstance.a().c()) {
+            this.e.add(iattributeinstance);
+        }
+
+        Iterator iterator = this.c.get(iattributeinstance.a()).iterator();
+
+        while (iterator.hasNext()) {
+            IAttribute iattribute = (IAttribute) iterator.next();
+            ModifiableAttributeInstance modifiableattributeinstance = this.e(iattribute);
+
+            if (modifiableattributeinstance != null) {
+                modifiableattributeinstance.f();
             }
-
-            this.a.put(IAttribute, modifiableattributeinstance);
-            return modifiableattributeinstance;
-        }
-    }
-
-    public void a(ModifiableAttributeInstance modifiableattributeinstance) {
-        if (modifiableattributeinstance.a().c()) {
-            this.d.add(modifiableattributeinstance);
         }
 
     }
@@ -57,7 +67,7 @@ public class ServersideAttributeMap extends BaseAttributeMap {
     }
 
     public Set b() {
-        return this.d;
+        return this.e;
     }
 
     public Collection c() {
@@ -65,10 +75,10 @@ public class ServersideAttributeMap extends BaseAttributeMap {
         Iterator iterator = this.a().iterator();
 
         while (iterator.hasNext()) {
-            IAttributeInstance attributeinstance = (IAttributeInstance) iterator.next();
+            IAttributeInstance iattributeinstance = (IAttributeInstance) iterator.next();
 
-            if (attributeinstance.a().c()) {
-                hashset.add(attributeinstance);
+            if (iattributeinstance.a().c()) {
+                hashset.add(iattributeinstance);
             }
         }
 
@@ -79,7 +89,7 @@ public class ServersideAttributeMap extends BaseAttributeMap {
         return this.b(s0);
     }
 
-    public IAttributeInstance a(IAttribute IAttribute) {
-        return this.c(IAttribute);
+    public IAttributeInstance a(IAttribute iattribute) {
+        return this.e(iattribute);
     }
 }

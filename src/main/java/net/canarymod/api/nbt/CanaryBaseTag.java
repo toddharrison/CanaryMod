@@ -2,7 +2,7 @@ package net.canarymod.api.nbt;
 
 import net.minecraft.nbt.*;
 
-public abstract class CanaryBaseTag implements BaseTag {
+public abstract class CanaryBaseTag<T> implements BaseTag<T> {
     protected final NBTBase tag;
 
     protected CanaryBaseTag(NBTBase tag) {
@@ -12,6 +12,10 @@ public abstract class CanaryBaseTag implements BaseTag {
     @Override
     public byte getTypeId() {
         return tag.a();
+    }
+
+    public NBTTagType getType() {
+        return NBTTagType.getTypeFromId(getTypeId());
     }
 
     @Override

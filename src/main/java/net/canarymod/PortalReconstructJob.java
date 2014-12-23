@@ -1,5 +1,6 @@
 package net.canarymod;
 
+import java.util.ArrayList;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.packet.CanaryPacket;
 import net.canarymod.api.world.CanaryWorld;
@@ -7,8 +8,7 @@ import net.canarymod.api.world.World;
 import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.tasks.ServerTask;
 import net.minecraft.network.play.server.S23PacketBlockChange;
-
-import java.util.ArrayList;
+import net.minecraft.util.BlockPos;
 
 /**
  * Portal Reconstruct Job
@@ -55,7 +55,7 @@ public final class PortalReconstructJob extends ServerTask {
         for (Integer[] frameCoord : portalBlocks) {
             world.getChunk(frameCoord[0] >> 4, frameCoord[2] >> 4).setBlockTypeAt(frameCoord[0] & 15, frameCoord[1], frameCoord[2] & 15, frameCoord[3]);
             for (Player player : world.getPlayerList()) {
-                player.sendPacket(new CanaryPacket(new S23PacketBlockChange(frameCoord[0], frameCoord[1], frameCoord[2], ((CanaryWorld) world).getHandle())));
+                player.sendPacket(new CanaryPacket(new S23PacketBlockChange(((CanaryWorld) world).getHandle(), new BlockPos(frameCoord[0], frameCoord[1], frameCoord[2]))));
             }
         }
     }

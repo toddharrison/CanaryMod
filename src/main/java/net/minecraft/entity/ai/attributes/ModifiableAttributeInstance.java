@@ -2,6 +2,7 @@ package net.minecraft.entity.ai.attributes;
 
 
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import net.canarymod.api.attributes.CanaryModifiedAttribute;
 
 import java.util.*;
@@ -19,13 +20,13 @@ public class ModifiableAttributeInstance implements IAttributeInstance {
     private double h;
     private CanaryModifiedAttribute canaryModifiableAttribute;
 
-    public ModifiableAttributeInstance(BaseAttributeMap baseattributemap, IAttribute IAttribute) {
+    public ModifiableAttributeInstance(BaseAttributeMap baseattributemap, IAttribute iattribute) {
         this.a = baseattributemap;
-        this.b = IAttribute;
-        this.f = IAttribute.b();
+        this.b = iattribute;
+        this.f = iattribute.b();
 
         for (int i0 = 0; i0 < 3; ++i0) {
-            this.c.put(Integer.valueOf(i0), new HashSet());
+            this.c.put(Integer.valueOf(i0), Sets.newHashSet());
         }
         this.canaryModifiableAttribute = new CanaryModifiedAttribute(this);
     }
@@ -50,7 +51,7 @@ public class ModifiableAttributeInstance implements IAttributeInstance {
     }
 
     public Collection c() {
-        HashSet hashset = new HashSet();
+        HashSet hashset = Sets.newHashSet();
 
         for (int i0 = 0; i0 < 3; ++i0) {
             hashset.addAll(this.a(i0));
@@ -63,14 +64,19 @@ public class ModifiableAttributeInstance implements IAttributeInstance {
         return (AttributeModifier) this.e.get(uuid);
     }
 
-    public void a(AttributeModifier attributemodifier) {
+    public boolean a(AttributeModifier attributemodifier) {
+        return this.e.get(attributemodifier.a()) != null;
+    }
+
+    public void b(AttributeModifier attributemodifier) {
         if (this.a(attributemodifier.a()) != null) {
             throw new IllegalArgumentException("Modifier is already applied on this attribute!");
-        } else {
+        }
+        else {
             Object object = (Set) this.d.get(attributemodifier.b());
 
             if (object == null) {
-                object = new HashSet();
+                object = Sets.newHashSet();
                 this.d.put(attributemodifier.b(), object);
             }
 
@@ -81,12 +87,12 @@ public class ModifiableAttributeInstance implements IAttributeInstance {
         }
     }
 
-    private void f() {
+    protected void f() {
         this.g = true;
-        this.a.a(this);
+        this.a.a((IAttributeInstance) this);
     }
 
-    public void b(AttributeModifier attributemodifier) {
+    public void c(AttributeModifier attributemodifier) {
         for (int i0 = 0; i0 < 3; ++i0) {
             Set set = (Set) this.c.get(Integer.valueOf(i0));
 
@@ -120,7 +126,7 @@ public class ModifiableAttributeInstance implements IAttributeInstance {
 
         AttributeModifier attributemodifier;
 
-        for (Iterator iterator = this.a(0).iterator(); iterator.hasNext(); d0 += attributemodifier.d()) {
+        for (Iterator iterator = this.b(0).iterator(); iterator.hasNext(); d0 += attributemodifier.d()) {
             attributemodifier = (AttributeModifier) iterator.next();
         }
 
@@ -129,15 +135,29 @@ public class ModifiableAttributeInstance implements IAttributeInstance {
         Iterator iterator1;
         AttributeModifier attributemodifier1;
 
-        for (iterator1 = this.a(1).iterator(); iterator1.hasNext(); d1 += d0 * attributemodifier1.d()) {
+        for (iterator1 = this.b(1).iterator(); iterator1.hasNext(); d1 += d0 * attributemodifier1.d()) {
             attributemodifier1 = (AttributeModifier) iterator1.next();
         }
 
-        for (iterator1 = this.a(2).iterator(); iterator1.hasNext(); d1 *= 1.0D + attributemodifier1.d()) {
+        for (iterator1 = this.b(2).iterator(); iterator1.hasNext(); d1 *= 1.0D + attributemodifier1.d()) {
             attributemodifier1 = (AttributeModifier) iterator1.next();
         }
 
         return this.b.a(d1);
+    }
+
+    private Collection b(int i0) {
+        HashSet hashset = Sets.newHashSet(this.a(i0));
+
+        for (IAttribute iattribute = this.b.d(); iattribute != null; iattribute = iattribute.d()) {
+            IAttributeInstance iattributeinstance = this.a.a(iattribute);
+
+            if (iattributeinstance != null) {
+                hashset.addAll(iattributeinstance.a(i0));
+            }
+        }
+
+        return hashset;
     }
 
     public CanaryModifiedAttribute getWrapper() {

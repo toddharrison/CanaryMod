@@ -9,20 +9,21 @@ import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
+import net.minecraft.stats.StatList;
 import net.minecraft.village.MerchantRecipe;
 
 
 public class SlotMerchantResult extends Slot {
 
     private final InventoryMerchant a;
+    private final IMerchant h;
     private EntityPlayer b;
     private int c;
-    private final IMerchant d;
 
     public SlotMerchantResult(EntityPlayer entityplayer, IMerchant imerchant, InventoryMerchant inventorymerchant, int i0, int i1, int i2) {
         super(inventorymerchant, i0, i1, i2);
         this.b = entityplayer;
-        this.d = imerchant;
+        this.h = imerchant;
         this.a = inventorymerchant;
     }
 
@@ -40,16 +41,16 @@ public class SlotMerchantResult extends Slot {
 
     protected void a(ItemStack itemstack, int i0) {
         this.c += i0;
-        this.b(itemstack);
+        this.c(itemstack);
     }
 
-    protected void b(ItemStack itemstack) {
+    protected void c(ItemStack itemstack) {
         itemstack.a(this.b.o, this.b, this.c);
         this.c = 0;
     }
 
     public void a(EntityPlayer entityplayer, ItemStack itemstack) {
-        this.b(itemstack);
+        this.c(itemstack);
         MerchantRecipe merchantrecipe = this.a.i();
 
         // CanaryMod: VillagerTradeHook
@@ -63,7 +64,8 @@ public class SlotMerchantResult extends Slot {
             ItemStack itemstack2 = this.a.a(1);
 
             if (this.a(merchantrecipe, itemstack1, itemstack2) || this.a(merchantrecipe, itemstack2, itemstack1)) {
-                this.d.a(merchantrecipe);
+                this.h.a(merchantrecipe);
+                entityplayer.b(StatList.G);
                 if (itemstack1 != null && itemstack1.b <= 0) {
                     itemstack1 = null;
                 }

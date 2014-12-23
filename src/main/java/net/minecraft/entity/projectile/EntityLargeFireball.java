@@ -24,18 +24,21 @@ public class EntityLargeFireball extends EntityFireball {
     }
 
     protected void a(MovingObjectPosition movingobjectposition) {
-        if (!this.o.E) {
+        if (!this.o.D) {
             // CanaryMod: ProjectileHitHook
-            ProjectileHitHook hook = (ProjectileHitHook) new ProjectileHitHook(this.getCanaryEntity(), movingobjectposition == null || movingobjectposition.g == null ? null : movingobjectposition.g.getCanaryEntity()).call();
+            ProjectileHitHook hook = (ProjectileHitHook) new ProjectileHitHook(this.getCanaryEntity(), movingobjectposition == null || movingobjectposition.d == null ? null : movingobjectposition.d.getCanaryEntity()).call();
             if (!hook.isCanceled()) { //
-                if (movingobjectposition.g != null) {
-                    movingobjectposition.g.a(DamageSource.a((EntityFireball) this, this.a), 6.0F);
+                if (movingobjectposition.d != null) {
+                    movingobjectposition.d.a(DamageSource.a((EntityFireball) this, this.a), 6.0F);
                 }
 
-                this.o.a((Entity) null, this.s, this.t, this.u, (float) this.e, true, this.o.O().b("mobGriefing"));
-                this.B();
+                boolean flag0 = this.o.Q().b("mobGriefing");
+
+                this.o.a((Entity) null, this.s, this.t, this.u, (float) this.e, flag0, flag0);
+                this.J();
             }
         }
+
     }
 
     public void b(NBTTagCompound nbttagcompound) {
@@ -48,5 +51,6 @@ public class EntityLargeFireball extends EntityFireball {
         if (nbttagcompound.b("ExplosionPower", 99)) {
             this.e = nbttagcompound.f("ExplosionPower");
         }
+
     }
 }

@@ -4,11 +4,13 @@ import net.canarymod.api.world.CanaryChunkProviderCustom;
 import net.canarymod.api.world.ChunkProviderCustom;
 import net.canarymod.api.world.DimensionType;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.biome.WorldChunkManager;
 import net.minecraft.world.biome.WorldChunkManagerHell;
+import net.minecraft.world.border.WorldBorder;
 import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraft.world.gen.ChunkProviderDebug;
 import net.minecraft.world.gen.ChunkProviderFlat;
 import net.minecraft.world.gen.ChunkProviderGenerate;
 import net.minecraft.world.gen.FlatGeneratorInfo;
@@ -16,15 +18,16 @@ import net.minecraft.world.gen.FlatGeneratorInfo;
 public abstract class WorldProvider {
 
     public static final float[] a = new float[]{1.0F, 0.75F, 0.5F, 0.25F, 0.0F, 0.25F, 0.5F, 0.75F};
-    public World b;
-    public WorldType c;
-    public String d;
-    public WorldChunkManager e;
-    public boolean f;
-    public boolean g;
-    public float[] h = new float[16];
-    public int i;
-    private float[] j = new float[4];
+    protected World b;
+    private WorldType h;
+    private String i;
+    protected WorldChunkManager c;
+    protected boolean d;
+    protected boolean e;
+    protected final float[] f = new float[16];
+    protected int g;
+    private final float[] j = new float[4];
+
     //CanaryMod adds DimensionType
     protected DimensionType canaryDimensionType;
 
@@ -40,8 +43,8 @@ public abstract class WorldProvider {
     //
     public final void a(World world) {
         this.b = world;
-        this.c = world.N().u();
-        this.d = world.N().y();
+        this.h = world.P().u();
+        this.i = world.P().B();
         this.b();
         this.a();
     }
@@ -52,36 +55,44 @@ public abstract class WorldProvider {
         for (int i0 = 0; i0 <= 15; ++i0) {
             float f1 = 1.0F - (float) i0 / 15.0F;
 
-            this.h[i0] = (1.0F - f1) / (f1 * 3.0F + 1.0F) * (1.0F - f0) + f0;
+            this.f[i0] = (1.0F - f1) / (f1 * 3.0F + 1.0F) * (1.0F - f0) + f0;
         }
     }
 
     protected void b() {
-        if (this.b.N().u() == WorldType.c) {
-            FlatGeneratorInfo flatgeneratorinfo = FlatGeneratorInfo.a(this.b.N().y());
+        WorldType worldtype = this.b.P().u();
 
-            this.e = new WorldChunkManagerHell(BiomeGenBase.d(flatgeneratorinfo.a()), 0.5F);
-        } else {
-            this.e = new WorldChunkManager(this.b);
+        if (worldtype == WorldType.c) {
+            FlatGeneratorInfo flatgeneratorinfo = FlatGeneratorInfo.a(this.b.P().B());
+
+            this.c = new WorldChunkManagerHell(BiomeGenBase.a(flatgeneratorinfo.a(), BiomeGenBase.ad), 0.5F);
         }
+        else if (worldtype == WorldType.g) {
+            this.c = new WorldChunkManagerHell(BiomeGenBase.q, 0.0F);
+        }
+        else {
+            this.c = new WorldChunkManager(this.b);
+        }
+
     }
 
     public IChunkProvider c() {
         //CanaryMod changed that to load custom generators from dim types
         if (this.canaryDimensionType.hasChunkProvider()) {
-            IChunkProvider nmsProvider = (IChunkProvider) (this.c == WorldType.c ? new ChunkProviderFlat(this.b, this.b.H(), this.b.N().s(), this.d) : new ChunkProviderGenerate(this.b, this.b.H(), this.b.N().s()));
+            IChunkProvider nmsProvider = (IChunkProvider) (this.h == WorldType.c ? new ChunkProviderFlat(this.b, this.b.J(), this.b.P().s(), this.i) : (this.h == WorldType.g ? new ChunkProviderDebug(this.b) : (this.h == WorldType.f ? new ChunkProviderGenerate(this.b, this.b.J(), this.b.P().s(), this.i) : new ChunkProviderGenerate(this.b, this.b.J(), this.b.P().s(), this.i))));
             ChunkProviderCustom dimProvider = canaryDimensionType.getChunkProvider();
             dimProvider.setWorld(this.b.getCanaryWorld());
             return new CanaryChunkProviderCustom(dimProvider, nmsProvider);
-        } else {
-            return (IChunkProvider) (this.c == WorldType.c ? new ChunkProviderFlat(this.b, this.b.H(), this.b.N().s(), this.d) : new ChunkProviderGenerate(this.b, this.b.H(), this.b.N().s()));
+        }
+        else {
+            return (IChunkProvider) (this.h == WorldType.c ? new ChunkProviderFlat(this.b, this.b.J(), this.b.P().s(), this.i) : (this.h == WorldType.g ? new ChunkProviderDebug(this.b) : (this.h == WorldType.f ? new ChunkProviderGenerate(this.b, this.b.J(), this.b.P().s(), this.i) : new ChunkProviderGenerate(this.b, this.b.J(), this.b.P().s(), this.i))));
         }
         //
-//        return (IChunkProvider) (this.c == WorldType.c ? new ChunkProviderFlat(this.b, this.b.G(), this.b.M().s(), this.d) : new ChunkProviderGenerate(this.b, this.b.G(), this.b.M().s()));
+//      return (IChunkProvider) (this.c == WorldType.c ? new ChunkProviderFlat(this.b, this.b.G(), this.b.M().s(), this.d) : new ChunkProviderGenerate(this.b, this.b.G(), this.b.M().s()));
     }
 
     public boolean a(int i0, int i1) {
-        return this.b.b(i0, i1) == Blocks.c;
+        return this.b.c(new BlockPos(i0, 0, i1)) == Blocks.c;
     }
 
     public float a(long i0, float f0) {
@@ -119,14 +130,40 @@ public abstract class WorldProvider {
         return (WorldProvider) (i0 == -1 ? new WorldProviderHell() : (i0 == 0 ? new WorldProviderSurface() : (i0 == 1 ? new WorldProviderEnd() : null)));
     }
 
-    public ChunkCoordinates h() {
+    public BlockPos h() {
         return null;
     }
 
     public int i() {
-        return this.c == WorldType.c ? 4 : 64;
+        return this.h == WorldType.c ? 4 : 64;
     }
 
+    public abstract String k();
+
     public abstract String l();
+
+    public WorldChunkManager m() {
+        return this.c;
+    }
+
+    public boolean n() {
+        return this.d;
+    }
+
+    public boolean o() {
+        return this.e;
+    }
+
+    public float[] p() {
+        return this.f;
+    }
+
+    public int q() {
+        return this.g;
+    }
+
+    public WorldBorder r() {
+        return new WorldBorder();
+    }
 
 }

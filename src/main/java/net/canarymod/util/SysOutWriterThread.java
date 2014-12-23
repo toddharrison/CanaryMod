@@ -7,16 +7,17 @@ package net.canarymod.util;
 
 import com.google.common.collect.ImmutableMap;
 import com.mojang.util.QueueLogAppender;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import jline.console.ConsoleReader;
-import net.canarymod.chat.TextFormat;
+import net.canarymod.chat.ChatFormat;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.fusesource.jansi.Ansi;
 import org.fusesource.jansi.Ansi.Color;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -75,7 +76,7 @@ public class SysOutWriterThread extends Thread {
 
             try {
                 if (this.reader == null) {
-                    out.write(message.getBytes());
+                    out.write(ChatFormat.removeFormatting(message).getBytes());
                     out.flush();
                 } else {
                     reader.print(ConsoleReader.RESET_LINE + "");
@@ -100,7 +101,7 @@ public class SysOutWriterThread extends Thread {
 
     private String replaceColours(String toProcess) throws IOException {
         if (!reader.getTerminal().isAnsiSupported()) {
-            return TextFormat.removeFormatting(toProcess);
+            return ChatFormat.removeFormatting(toProcess);
         } else {
             Matcher matcher = colourPattern.matcher(toProcess);
             boolean result = matcher.find();

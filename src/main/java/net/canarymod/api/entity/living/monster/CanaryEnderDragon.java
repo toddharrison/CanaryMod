@@ -40,7 +40,7 @@ public class CanaryEnderDragon extends CanaryEntityLiving implements EnderDragon
      */
     @Override
     public boolean isSlowed() {
-        return getHandle().bA;
+        return getHandle().bv;
     }
 
     /**
@@ -48,7 +48,7 @@ public class CanaryEnderDragon extends CanaryEntityLiving implements EnderDragon
      */
     @Override
     public EnderCrystal getHealingCrystal() {
-        return getHandle().bC != null ? (EnderCrystal) getHandle().bC.getCanaryEntity() : null;
+        return getHandle().bx != null ? (EnderCrystal) getHandle().bx.getCanaryEntity() : null;
     }
 
     /**

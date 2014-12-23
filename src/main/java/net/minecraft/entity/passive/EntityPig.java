@@ -17,91 +17,89 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.stats.AchievementList;
 import net.minecraft.stats.StatBase;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
+
 
 public class EntityPig extends EntityAnimal {
 
-    private final EntityAIControlledByPlayer bp;
+    private final EntityAIControlledByPlayer bk;
 
     public EntityPig(World world) {
         super(world);
         this.a(0.9F, 0.9F);
-        this.m().a(true);
-        this.c.a(0, new EntityAISwimming(this));
-        this.c.a(1, new EntityAIPanic(this, 1.25D));
-        this.c.a(2, this.bp = new EntityAIControlledByPlayer(this, 0.3F));
-        this.c.a(3, new EntityAIMate(this, 1.0D));
-        this.c.a(4, new EntityAITempt(this, 1.2D, Items.bM, false));
-        this.c.a(4, new EntityAITempt(this, 1.2D, Items.bF, false));
-        this.c.a(5, new EntityAIFollowParent(this, 1.1D));
-        this.c.a(6, new EntityAIWander(this, 1.0D));
-        this.c.a(7, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
-        this.c.a(8, new EntityAILookIdle(this));
+        ((PathNavigateGround) this.s()).a(true);
+        this.i.a(0, new EntityAISwimming(this));
+        this.i.a(1, new EntityAIPanic(this, 1.25D));
+        this.i.a(2, this.bk = new EntityAIControlledByPlayer(this, 0.3F));
+        this.i.a(3, new EntityAIMate(this, 1.0D));
+        this.i.a(4, new EntityAITempt(this, 1.2D, Items.bY, false));
+        this.i.a(4, new EntityAITempt(this, 1.2D, Items.bR, false));
+        this.i.a(5, new EntityAIFollowParent(this, 1.1D));
+        this.i.a(6, new EntityAIWander(this, 1.0D));
+        this.i.a(7, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
+        this.i.a(8, new EntityAILookIdle(this));
         this.entity = new CanaryPig(this); // CanaryMod: Wrap Entity
     }
 
-    public boolean bk() {
-        return true;
-    }
 
-    protected void aD() {
-        super.aD();
+    protected void aW() {
+        super.aW();
         this.a(SharedMonsterAttributes.a).a(10.0D);
         this.a(SharedMonsterAttributes.d).a(0.25D);
     }
 
-    protected void bn() {
-        super.bn();
+    public boolean bV() {
+        ItemStack itemstack = ((EntityPlayer) this.l).bz();
+
+        return itemstack != null && itemstack.b() == Items.bY;
     }
 
-    public boolean bE() {
-        ItemStack itemstack = ((EntityPlayer) this.l).be();
-
-        return itemstack != null && itemstack.b() == Items.bM;
-    }
-
-    protected void c() {
-        super.c();
-        this.af.a(16, Byte.valueOf((byte) 0));
+    protected void h() {
+        super.h();
+        this.ac.a(16, Byte.valueOf((byte) 0));
     }
 
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.a("Saddle", this.bZ());
+        nbttagcompound.a("Saddle", this.cj());
     }
 
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
-        this.i(nbttagcompound.n("Saddle"));
+        this.l(nbttagcompound.n("Saddle"));
     }
 
-    protected String t() {
+    protected String z() {
         return "mob.pig.say";
     }
 
-    protected String aT() {
+    protected String bn() {
         return "mob.pig.say";
     }
 
-    protected String aU() {
+    protected String bo() {
         return "mob.pig.death";
     }
 
-    protected void a(int i0, int i1, int i2, Block block) {
+    protected void a(BlockPos blockpos, Block block) {
         this.a("mob.pig.step", 0.15F, 1.0F);
     }
 
     public boolean a(EntityPlayer entityplayer) {
         if (super.a(entityplayer)) {
             return true;
-        } else if (this.bZ() && !this.o.E && (this.l == null || this.l == entityplayer)) {
+        }
+        else if (this.cj() && !this.o.D && (this.l == null || this.l == entityplayer)) {
             // CanaryMod: VehicleEnter/VehicleExit
             CancelableHook hook;
             if (this.l == null) {
                 hook = new VehicleEnterHook((Vehicle) this.entity, entityplayer.getCanaryHuman());
-            } else {
+            }
+            else {
                 hook = new VehicleExitHook((Vehicle) this.entity, entityplayer.getCanaryHuman());
             }
             hook.call();
@@ -110,71 +108,77 @@ public class EntityPig extends EntityAnimal {
             }
             //
             return true;
-        } else {
+        }
+        else {
             return false;
         }
     }
 
-    protected Item u() {
-        return this.al() ? Items.am : Items.al;
+    protected Item A() {
+        return this.au() ? Items.am : Items.al;
     }
 
     protected void b(boolean flag0, int i0) {
-        int i1 = this.Z.nextInt(3) + 1 + this.Z.nextInt(1 + i0);
+        int i1 = this.V.nextInt(3) + 1 + this.V.nextInt(1 + i0);
 
         for (int i2 = 0; i2 < i1; ++i2) {
-            if (this.al()) {
+            if (this.au()) {
                 this.a(Items.am, 1);
-            } else {
+            }
+            else {
                 this.a(Items.al, 1);
             }
         }
 
-        if (this.bZ()) {
-            this.a(Items.av, 1);
+        if (this.cj()) {
+            this.a(Items.aA, 1);
         }
+
     }
 
-    public boolean bZ() {
-        return (this.af.a(16) & 1) != 0;
+    public boolean cj() {
+        return (this.ac.a(16) & 1) != 0;
     }
 
-    public void i(boolean flag0) {
+    public void l(boolean flag0) {
         if (flag0) {
-            this.af.b(16, Byte.valueOf((byte) 1));
-        } else {
-            this.af.b(16, Byte.valueOf((byte) 0));
+            this.ac.b(16, Byte.valueOf((byte) 1));
         }
+        else {
+            this.ac.b(16, Byte.valueOf((byte) 0));
+        }
+
     }
 
     public void a(EntityLightningBolt entitylightningbolt) {
-        if (!this.o.E) {
+        if (!this.o.D) {
             EntityPigZombie entitypigzombie = new EntityPigZombie(this.o);
 
             entitypigzombie.c(0, new ItemStack(Items.B));
             entitypigzombie.b(this.s, this.t, this.u, this.y, this.z);
             this.o.d((Entity) entitypigzombie);
-            this.B();
+            this.J();
         }
     }
 
-    protected void b(float f0) {
-        super.b(f0);
+    public void e(float f0, float f1) {
+        super.e(f0, f1);
         if (f0 > 5.0F && this.l instanceof EntityPlayer) {
-            ((EntityPlayer) this.l).a((StatBase) AchievementList.u);
+            ((EntityPlayer) this.l).b((StatBase) AchievementList.u);
         }
+
     }
 
     public EntityPig b(EntityAgeable entityageable) {
         return new EntityPig(this.o);
     }
 
-    public boolean c(ItemStack itemstack) {
-        return itemstack != null && itemstack.b() == Items.bF;
+    public boolean d(ItemStack itemstack) {
+        return itemstack != null && itemstack.b() == Items.bR;
     }
 
-    public EntityAIControlledByPlayer ca() {
-        return this.bp;
+    public EntityAIControlledByPlayer ck() {
+        return this.bk;
     }
 
     public EntityAgeable a(EntityAgeable entityageable) {

@@ -5,14 +5,17 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.DamageSource;
+import net.minecraft.world.ILockableContainer;
+import net.minecraft.world.LockCode;
 import net.minecraft.world.World;
 
-public abstract class EntityMinecartContainer extends EntityMinecart implements IInventory {
+public abstract class EntityMinecartContainer extends EntityMinecart implements ILockableContainer {
 
     public ItemStack[] a = new ItemStack[36]; // CanaryMod: private -> public
     private boolean b = true;
@@ -27,33 +30,7 @@ public abstract class EntityMinecartContainer extends EntityMinecart implements 
 
     public void a(DamageSource damagesource) {
         super.a(damagesource);
-
-        for (int i0 = 0; i0 < this.a(); ++i0) {
-            ItemStack itemstack = this.a(i0);
-
-            if (itemstack != null) {
-                float f0 = this.Z.nextFloat() * 0.8F + 0.1F;
-                float f1 = this.Z.nextFloat() * 0.8F + 0.1F;
-                float f2 = this.Z.nextFloat() * 0.8F + 0.1F;
-
-                while (itemstack.b > 0) {
-                    int i1 = this.Z.nextInt(21) + 10;
-
-                    if (i1 > itemstack.b) {
-                        i1 = itemstack.b;
-                    }
-
-                    itemstack.b -= i1;
-                    EntityItem entityitem = new EntityItem(this.o, this.s + (double) f0, this.t + (double) f1, this.u + (double) f2, new ItemStack(itemstack.b(), i1, itemstack.k()));
-                    float f3 = 0.05F;
-
-                    entityitem.v = (double) ((float) this.Z.nextGaussian() * f3);
-                    entityitem.w = (double) ((float) this.Z.nextGaussian() * f3 + 0.2F);
-                    entityitem.x = (double) ((float) this.Z.nextGaussian() * f3);
-                    this.o.d((Entity) entityitem);
-                }
-            }
-        }
+        InventoryHelper.a(this.o, (Entity) this, this);
     }
 
     public ItemStack a(int i0) {
@@ -68,7 +45,8 @@ public abstract class EntityMinecartContainer extends EntityMinecart implements 
                 itemstack = this.a[i0];
                 this.a[i0] = null;
                 return itemstack;
-            } else {
+            }
+            else {
                 itemstack = this.a[i0].a(i1);
                 if (this.a[i0].b == 0) {
                     this.a[i0] = null;
@@ -76,95 +54,67 @@ public abstract class EntityMinecartContainer extends EntityMinecart implements 
 
                 return itemstack;
             }
-        } else {
+        }
+        else {
             return null;
         }
     }
 
-    public ItemStack a_(int i0) {
+    public ItemStack b(int i0) {
         if (this.a[i0] != null) {
             ItemStack itemstack = this.a[i0];
 
             this.a[i0] = null;
             return itemstack;
-        } else {
+        }
+        else {
             return null;
         }
     }
 
     public void a(int i0, ItemStack itemstack) {
         this.a[i0] = itemstack;
-        if (itemstack != null && itemstack.b > this.d()) {
-            itemstack.b = this.d();
+        if (itemstack != null && itemstack.b > this.p_()) {
+            itemstack.b = this.p_();
         }
     }
 
-    public void e() {
+    public void o_() {
     }
 
     public boolean a(EntityPlayer entityplayer) {
-        return this.K ? false : entityplayer.f(this) <= 64.0D;
+        return this.I ? false : entityplayer.h(this) <= 64.0D;
     }
 
-    public void f() {
+    public void b(EntityPlayer entityplayer) {
     }
 
-    public void l_() {
+    public void c(EntityPlayer entityplayer) {
     }
 
     public boolean b(int i0, ItemStack itemstack) {
         return true;
     }
 
-    public String b() {
-        return this.k_() ? this.u() : "container.minecart";
+    public String d_() {
+        return this.k_() ? this.aL() : "container.minecart";
     }
 
-    public int d() {
+    public int p_() {
         return 64;
     }
 
-    public void b(int i0) {
+    public void c(int i0) {
         this.b = false;
-        super.b(i0);
+        super.c(i0);
     }
 
-    public void B() {
+    public void J() {
         if (this.b) {
-            for (int i0 = 0; i0 < this.a(); ++i0) {
-                ItemStack itemstack = this.a(i0);
-
-                if (itemstack != null) {
-                    float f0 = this.Z.nextFloat() * 0.8F + 0.1F;
-                    float f1 = this.Z.nextFloat() * 0.8F + 0.1F;
-                    float f2 = this.Z.nextFloat() * 0.8F + 0.1F;
-
-                    while (itemstack.b > 0) {
-                        int i1 = this.Z.nextInt(21) + 10;
-
-                        if (i1 > itemstack.b) {
-                            i1 = itemstack.b;
-                        }
-
-                        itemstack.b -= i1;
-                        EntityItem entityitem = new EntityItem(this.o, this.s + (double) f0, this.t + (double) f1, this.u + (double) f2, new ItemStack(itemstack.b(), i1, itemstack.k()));
-
-                        if (itemstack.p()) {
-                            entityitem.f().d((NBTTagCompound) itemstack.q().b());
-                        }
-
-                        float f3 = 0.05F;
-
-                        entityitem.v = (double) ((float) this.Z.nextGaussian() * f3);
-                        entityitem.w = (double) ((float) this.Z.nextGaussian() * f3 + 0.2F);
-                        entityitem.x = (double) ((float) this.Z.nextGaussian() * f3);
-                        this.o.d((Entity) entityitem);
-                    }
-                }
-            }
+            InventoryHelper.a(this.o, (Entity) this, this);
         }
 
-        super.B();
+        super.J();
     }
 
     protected void b(NBTTagCompound nbttagcompound) {
@@ -188,7 +138,7 @@ public abstract class EntityMinecartContainer extends EntityMinecart implements 
         super.a(nbttagcompound);
         NBTTagList nbttaglist = nbttagcompound.c("Items", 10);
 
-        this.a = new ItemStack[this.a()];
+        this.a = new ItemStack[this.n_()];
 
         for (int i0 = 0; i0 < nbttaglist.c(); ++i0) {
             NBTTagCompound nbttagcompound1 = nbttaglist.b(i0);
@@ -198,22 +148,52 @@ public abstract class EntityMinecartContainer extends EntityMinecart implements 
                 this.a[i1] = ItemStack.a(nbttagcompound1);
             }
         }
+
     }
 
-    public boolean c(EntityPlayer entityplayer) {
-        if (!this.o.E) {
+    public boolean e(EntityPlayer entityplayer) {
+        if (!this.o.D) {
             entityplayer.a((IInventory) this);
         }
 
         return true;
     }
 
-    protected void i() {
+    protected void o() {
         int i0 = 15 - Container.b((IInventory) this);
         float f0 = 0.98F + (float) i0 * 0.001F;
 
         this.v *= (double) f0;
         this.w *= 0.0D;
         this.x *= (double) f0;
+    }
+
+    public int a_(int i0) {
+        return 0;
+    }
+
+    public void b(int i0, int i1) {
+    }
+
+    public int g() {
+        return 0;
+    }
+
+    public boolean q_() {
+        return false;
+    }
+
+    public void a(LockCode lockcode) {
+    }
+
+    public LockCode i() {
+        return LockCode.a;
+    }
+
+    public void l() {
+        for (int i0 = 0; i0 < this.a.length; ++i0) {
+            this.a[i0] = null;
+        }
+
     }
 }

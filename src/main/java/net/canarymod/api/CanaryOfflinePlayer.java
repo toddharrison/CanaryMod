@@ -71,7 +71,7 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
             }
         }
 
-        this.statisticsFile = new StatisticsFile(((CanaryServer) Canary.getServer()).getHandle(), file2);
+        this.statisticsFile = new StatisticsFile(((CanaryServer)Canary.getServer()).getHandle(), file2);
         this.statisticsFile.a();
     }
 
@@ -153,9 +153,9 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
         }
         ListTag<? extends CanaryBaseTag> poslist = data.getListTag("Pos");
         Position p = new Position();
-        p.setX(((CanaryDoubleTag) poslist.get(0)).getValue());
-        p.setY(((CanaryDoubleTag) poslist.get(1)).getValue());
-        p.setZ(((CanaryDoubleTag) poslist.get(2)).getValue());
+        p.setX(((CanaryDoubleTag)poslist.get(0)).getValue());
+        p.setY(((CanaryDoubleTag)poslist.get(1)).getValue());
+        p.setZ(((CanaryDoubleTag)poslist.get(2)).getValue());
         return p;
     }
 
@@ -222,9 +222,6 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
      */
     @Override
     public boolean removeGroup(Group g) {
-        if (groups.get(0).equals(g)) {
-            return false;
-        }
         boolean success = groups.remove(g);
         if (success) {
             Canary.usersAndGroups().addOrUpdateOfflinePlayer(this);
@@ -314,10 +311,10 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
             return;
         }
         if (getNBT() != null) {
-            ISaveHandler handler = ((CanaryWorld) getWorld()).getHandle().M();
+            ISaveHandler handler = ((CanaryWorld)getWorld()).getHandle().O();
             if (handler instanceof SaveHandler) {
-                SaveHandler shandler = (SaveHandler) handler;
-                shandler.writePlayerNbt(uuid, (CanaryCompoundTag) getNBT());
+                SaveHandler shandler = (SaveHandler)handler;
+                shandler.writePlayerNbt(uuid, (CanaryCompoundTag)getNBT());
             }
             else {
                 log.error(getName() + "'s OfflinePlayer could not be saved! Unsupported SaveHandler!");
@@ -634,7 +631,7 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
         if (getNBT() != null) {
             float newHealth = Math.max(0, health);
             getNBT().put("HealF", newHealth);
-            getNBT().put("Health", (short) ((int) Math.ceil((double) newHealth)));
+            getNBT().put("Health", (short)((int)Math.ceil((double)newHealth)));
         }
     }
 
@@ -646,7 +643,7 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
         if (getNBT() != null) {
             float newHealth = Math.max(0, getHealth() + health);
             getNBT().put("HealF", newHealth);
-            getNBT().put("Health", (short) ((int) Math.ceil((double) newHealth)));
+            getNBT().put("Health", (short)((int)Math.ceil((double)newHealth)));
         }
     }
 
@@ -655,12 +652,9 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
      */
     @Override
     public void setStat(Stat stat, int value) {
-        statisticsFile.a(null, ((CanaryStat) stat).getHandle(), value);
+        statisticsFile.a(null, ((CanaryStat)stat).getHandle(), value);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void setStat(Statistics statistics, int value) {
         setStat(statistics.getInstance(), value);
@@ -671,17 +665,15 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
      */
     @Override
     public void increaseStat(Stat stat, int value) {
-        if (value < 0) return;
+        if (value < 0) {
+            return;
+        }
         setStat(stat, getStat(stat) + value);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void increaseStat(Statistics statistics, int value) {
-        if (value < 0) return;
-        setStat(statistics, getStat(statistics) + value);
+        increaseStat(statistics.getInstance(), value);
     }
 
     /**
@@ -689,17 +681,15 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
      */
     @Override
     public void decreaseStat(Stat stat, int value) {
-        if (value < 0) return;
+        if (value < 0) {
+            return;
+        }
         setStat(stat, getStat(stat) - value);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void decreaseStat(Statistics statistics, int value) {
-        if (value < 0) return;
-        setStat(statistics, getStat(statistics) - value);
+        decreaseStat(statistics.getInstance(), value);
     }
 
     /**
@@ -707,12 +697,9 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
      */
     @Override
     public int getStat(Stat stat) {
-        return statisticsFile.a(((CanaryStat) stat).getHandle());
+        return statisticsFile.a(((CanaryStat)stat).getHandle());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public int getStat(Statistics statistics) {
         return getStat(statistics.getInstance());
@@ -727,13 +714,10 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
         if (achievement.getParent() != null && !hasAchievement(achievement.getParent())) {
             awardAchievement(achievement.getParent());
         }
-        statisticsFile.b(null, ((CanaryAchievement) achievement).getHandle(), 1);
+        statisticsFile.b(null, ((CanaryAchievement)achievement).getHandle(), 1);
         statisticsFile.b((EntityPlayerMP) null);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void awardAchievement(Achievements achievements) {
         awardAchievement(achievements.getInstance());
@@ -754,9 +738,6 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
         statisticsFile.a(null, ((CanaryAchievement) achievement).getHandle(), 0);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void removeAchievement(Achievements achievements) {
         removeAchievement(achievements.getInstance());
@@ -767,15 +748,11 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
      */
     @Override
     public boolean hasAchievement(Achievement achievement) {
-        return statisticsFile.a(((CanaryAchievement) achievement).getHandle());
+        return statisticsFile.a(((CanaryAchievement)achievement).getHandle());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean hasAchievement(Achievements achievements) {
         return hasAchievement(achievements.getInstance());
     }
-
 }

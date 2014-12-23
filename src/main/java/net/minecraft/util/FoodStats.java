@@ -39,11 +39,11 @@ public class FoodStats {
     }
 
     public void a(ItemFood itemfood, ItemStack itemstack) {
-        this.a(itemfood.g(itemstack), itemfood.h(itemstack));
+        this.a(itemfood.h(itemstack), itemfood.i(itemstack));
     }
 
     public void a(EntityPlayer entityplayer) {
-        EnumDifficulty enumdifficulty = entityplayer.o.r;
+        EnumDifficulty enumdifficulty = entityplayer.o.aa();
 
         this.e = this.a;
         if (this.c > 4.0F) {
@@ -65,10 +65,10 @@ public class FoodStats {
             }
         }
 
-        if (entityplayer.o.O().b("naturalRegeneration") && this.a >= 18 && entityplayer.bR()) {
+        if (entityplayer.o.Q().b("naturalRegeneration") && this.a >= 18 && entityplayer.cl()) {
             ++this.d;
             if (this.d >= 80) {
-                entityplayer.f(1.0F);
+                entityplayer.g(1.0F);
                 this.a(3.0F);
                 this.d = 0;
             }
@@ -76,9 +76,9 @@ public class FoodStats {
         else if (this.a <= 0) {
             ++this.d;
             if (this.d >= 80) {
-                if (entityplayer.aS() > 10.0F || enumdifficulty == EnumDifficulty.HARD || entityplayer.aS() > 1.0F && enumdifficulty == EnumDifficulty.NORMAL) {
+                if (entityplayer.bm() > 10.0F || enumdifficulty == EnumDifficulty.HARD || entityplayer.bm() > 1.0F && enumdifficulty == EnumDifficulty.NORMAL) {
                     // CanaryMod: DamageHook (starve)
-                    DamageHook dmg = (DamageHook) new DamageHook(null, entityplayer.getCanaryEntity(), new CanaryDamageSource(DamageSource.f), 1.0F).call();
+                    DamageHook dmg = (DamageHook) new DamageHook(null, entityplayer.getCanaryEntity(), new CanaryDamageSource(DamageSource.g), 1.0F).call();
                     if (!dmg.isCanceled()) {
                         entityplayer.a((((CanaryDamageSource) dmg.getDamageSource()).getHandle()), dmg.getDamageDealt());
                     }
@@ -126,6 +126,10 @@ public class FoodStats {
 
     public float e() {
         return this.b;
+    }
+
+    public void a(int i0) {
+        this.a = i0;
     }
 
     // CanaryMod

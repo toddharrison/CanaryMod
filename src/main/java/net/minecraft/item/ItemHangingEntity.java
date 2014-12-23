@@ -1,6 +1,5 @@
 package net.minecraft.item;
 
-import net.canarymod.api.world.blocks.BlockFace;
 import net.canarymod.api.world.blocks.CanaryBlock;
 import net.canarymod.hook.player.ItemUseHook;
 import net.minecraft.creativetab.CreativeTabs;
@@ -10,7 +9,8 @@ import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.entity.item.EntityPainting;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.Direction;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 public class ItemHangingEntity extends Item {
@@ -22,33 +22,32 @@ public class ItemHangingEntity extends Item {
         this.a(CreativeTabs.c);
     }
 
-    public boolean a(ItemStack itemstack, EntityPlayer entityplayer, World world, int i0, int i1, int i2, int i3, float f0, float f1, float f2) {
-        if (i3 == 0) {
+    public boolean a(ItemStack itemstack, EntityPlayer entityplayer, World world, BlockPos blockpos, EnumFacing enumfacing, float f0, float f1, float f2) {
+        if (enumfacing == EnumFacing.DOWN) {
             return false;
         }
-        else if (i3 == 1) {
+        else if (enumfacing == EnumFacing.UP) {
             return false;
         }
         else {
             // CanaryMod: ItemUse
-            CanaryBlock clicked = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
-
-            clicked.setFaceClicked(BlockFace.fromByte((byte) i3));
-            ItemUseHook hook = (ItemUseHook) new ItemUseHook(((EntityPlayerMP) entityplayer).getPlayer(), itemstack.getCanaryItem(), clicked).call();
-            if (hook.isCanceled()) {
+            CanaryBlock clicked = CanaryBlock.getPooledBlock(world.p(blockpos), blockpos, world); // Store clicked
+            clicked.setFaceClicked(enumfacing.asBlockFace()); // Set face clicked
+            if (new ItemUseHook(((EntityPlayerMP)entityplayer).getPlayer(), itemstack.getCanaryItem(), clicked).call().isCanceled()) {
                 return false;
             }
             //
-            int i4 = Direction.e[i3];
-            EntityHanging entityhanging = this.a(world, i0, i1, i2, i4);
+            BlockPos blockpos1 = blockpos.a(enumfacing);
 
-            if (!entityplayer.a(i0, i1, i2, i3, itemstack)) {
+            if (!entityplayer.a(blockpos1, enumfacing, itemstack)) {
                 return false;
             }
             else {
-                if (entityhanging != null && entityhanging.e()) {
-                    if (!world.E) {
-                        world.d((Entity) entityhanging);
+                EntityHanging entityhanging = this.a(world, blockpos1, enumfacing);
+
+                if (entityhanging != null && entityhanging.j()) {
+                    if (!world.D) {
+                        world.d((Entity)entityhanging);
                     }
 
                     --itemstack.b;
@@ -59,7 +58,7 @@ public class ItemHangingEntity extends Item {
         }
     }
 
-    private EntityHanging a(World world, int i0, int i1, int i2, int i3) {
-        return (EntityHanging) (this.a == EntityPainting.class ? new EntityPainting(world, i0, i1, i2, i3) : (this.a == EntityItemFrame.class ? new EntityItemFrame(world, i0, i1, i2, i3) : null));
+    private EntityHanging a(World world, BlockPos blockpos, EnumFacing enumfacing) {
+        return (EntityHanging)(this.a == EntityPainting.class ? new EntityPainting(world, blockpos, enumfacing) : (this.a == EntityItemFrame.class ? new EntityItemFrame(world, blockpos, enumfacing) : null));
     }
 }

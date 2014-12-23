@@ -33,7 +33,7 @@ public class CanaryVillagerTrade implements VillagerTrade {
      *         the {@link Item} to set for selling
      */
     public CanaryVillagerTrade(Item buying, Item selling) {
-        this.recipe = new MerchantRecipe(((CanaryItem) buying).getHandle(), ((CanaryItem) selling).getHandle());
+        this.recipe = new MerchantRecipe(((CanaryItem)buying).getHandle(), ((CanaryItem)selling).getHandle());
     }
 
     /**
@@ -47,7 +47,7 @@ public class CanaryVillagerTrade implements VillagerTrade {
      *         the {@link Item} to set for selling
      */
     public CanaryVillagerTrade(Item buying1, Item buying2, Item selling) {
-        this.recipe = new MerchantRecipe(((CanaryItem) buying1).getHandle(), ((CanaryItem) buying2).getHandle(), ((CanaryItem) selling).getHandle());
+        this.recipe = new MerchantRecipe(((CanaryItem)buying1).getHandle(), ((CanaryItem)buying2).getHandle(), ((CanaryItem)selling).getHandle());
     }
 
     /**
@@ -63,7 +63,7 @@ public class CanaryVillagerTrade implements VillagerTrade {
      */
     @Override
     public void setBuyingOne(Item item) {
-        getRecipe().a = ((CanaryItem) item).getHandle();
+        getRecipe().a = ((CanaryItem)item).getHandle();
     }
 
     /**
@@ -79,7 +79,7 @@ public class CanaryVillagerTrade implements VillagerTrade {
      */
     @Override
     public void setBuyingTwo(Item item) {
-        getRecipe().b = ((CanaryItem) item).getHandle();
+        getRecipe().b = ((CanaryItem)item).getHandle();
     }
 
     /**
@@ -103,7 +103,7 @@ public class CanaryVillagerTrade implements VillagerTrade {
      */
     @Override
     public void setSelling(Item item) {
-        getRecipe().c = ((CanaryItem) item).getHandle();
+        getRecipe().c = ((CanaryItem)item).getHandle();
     }
 
     /**
@@ -127,7 +127,7 @@ public class CanaryVillagerTrade implements VillagerTrade {
      */
     @Override
     public boolean isUsedUp() {
-        return getRecipe().g();
+        return getRecipe().h();
     }
 
     /**
@@ -135,7 +135,7 @@ public class CanaryVillagerTrade implements VillagerTrade {
      */
     @Override
     public CompoundTag getDataAsTag() {
-        return new CanaryCompoundTag(getRecipe().i());
+        return new CanaryCompoundTag(getRecipe().k());
     }
 
     /**
@@ -143,7 +143,7 @@ public class CanaryVillagerTrade implements VillagerTrade {
      */
     @Override
     public void readFromTag(CompoundTag tag) {
-        getRecipe().a(((CanaryCompoundTag) tag).getHandle());
+        getRecipe().a(((CanaryCompoundTag)tag).getHandle());
     }
 
     public MerchantRecipe getRecipe() {
@@ -154,5 +154,4 @@ public class CanaryVillagerTrade implements VillagerTrade {
     public String toString() {
         return String.format("VillagerTrade[buying1=%s, buying2=%s, selling=%s]", getBuyingOne(), getBuyingTwo(), getSelling());
     }
-
 }

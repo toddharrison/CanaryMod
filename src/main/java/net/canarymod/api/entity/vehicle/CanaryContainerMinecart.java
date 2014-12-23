@@ -1,5 +1,6 @@
 package net.canarymod.api.entity.vehicle;
 
+import net.canarymod.Canary;
 import net.canarymod.api.inventory.CanaryItem;
 import net.canarymod.api.inventory.Item;
 import net.canarymod.api.inventory.ItemType;
@@ -103,7 +104,7 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
         for (Item item : items) {
             if (item.getId() == itemId) {
                 if (item.getAmount() == remaining) {
-                    removeItem(item.getSlot());
+                    setSlot(item.getSlot(), null);
                     return;
                 }
                 else if (item.getAmount() > remaining) {
@@ -112,7 +113,7 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
                     return;
                 }
                 else {
-                    removeItem(item.getSlot());
+                    setSlot(item.getSlot(), null);
                     remaining -= item.getAmount();
                 }
             }
@@ -136,9 +137,9 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
         int remaining = item.getAmount();
 
         for (Item it : items) {
-            if (it.getId() == item.getId() && it.getDamage() == item.getDamage()) {
+            if (item.equalsIgnoreSize(item)) {
                 if (it.getAmount() == remaining) {
-                    removeItem(it.getSlot());
+                    setSlot(it.getSlot(), null);
                     return;
                 }
                 else if (it.getAmount() > remaining) {
@@ -147,7 +148,7 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
                     return;
                 }
                 else {
-                    removeItem(it.getSlot());
+                    setSlot(it.getSlot(), null);
                     remaining -= it.getAmount();
                 }
             }
@@ -172,7 +173,7 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
      */
     @Override
     public String getInventoryName() {
-        return this.getHandle().b();
+        return this.getHandle().d_();
     }
 
     /**
@@ -180,7 +181,7 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
      */
     @Override
     public int getInventoryStackLimit() {
-        return this.getHandle().d();
+        return this.getHandle().p_();
     }
 
     /**
@@ -257,7 +258,7 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
      */
     @Override
     public int getSize() {
-        return this.getHandle().a();
+        return getHandle().a.length;
     }
 
     /**
@@ -475,7 +476,7 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
         for (int index = 0; index < getSize(); index++) {
             Item toCheck = getSlot(index);
 
-            if (toCheck != null && toCheck.getType().equals(item.getType())) {
+            if (toCheck != null && item.equalsIgnoreSize(toCheck)) {
                 setSlot(index, null);
                 return toCheck;
             }
@@ -570,7 +571,7 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
 
     @Override
     public void update() {
-        this.getHandle().l_();
+        this.getHandle().e();
     }
 
     public boolean canOpenRemote() {
@@ -587,5 +588,32 @@ public abstract class CanaryContainerMinecart extends CanaryMinecart implements 
     @Override
     public EntityMinecartContainer getHandle() {
         return (EntityMinecartContainer) entity;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean canInsertItems(Item item) {
+        int totalSpace = 0;
+        for (Item inv : getContents()) {
+            if (inv == null) {
+                totalSpace += item.getMaxAmount();
+            }
+            else {
+                if (inv.getType().equals(item.getType())) {
+                    if (item.hasDataTag() && item.getDataTag().equals(inv.getDataTag())) {
+                        totalSpace += inv.getMaxAmount() - inv.getAmount();
+                    }
+                }
+            }
+        }
+
+
+        if (totalSpace > 0) {
+            return true;
+        }
+
+        return false;
     }
 }

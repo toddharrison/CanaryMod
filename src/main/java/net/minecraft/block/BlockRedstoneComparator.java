@@ -1,204 +1,290 @@
 package net.minecraft.block;
 
-import net.canarymod.api.world.blocks.BlockType;
+import com.google.common.base.Predicate;
 import net.canarymod.api.world.blocks.CanaryBlock;
 import net.canarymod.hook.world.BlockPhysicsHook;
 import net.canarymod.hook.world.RedstoneChangeHook;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityComparator;
-import net.minecraft.util.Direction;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IStringSerializable;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import java.util.List;
 import java.util.Random;
 
 public class BlockRedstoneComparator extends BlockRedstoneDiode implements ITileEntityProvider {
 
+    public static final PropertyBool a = PropertyBool.a("powered");
+    public static final PropertyEnum b = PropertyEnum.a("mode", Mode.class);
+
     public BlockRedstoneComparator(boolean flag0) {
         super(flag0);
+        this.j(this.L.b().a(N, EnumFacing.NORTH).a(a, Boolean.valueOf(false)).a(b, Mode.COMPARE));
         this.A = true;
     }
 
-    public Item a(int i0, Random random, int i1) {
-        return Items.bS;
+    public Item a(IBlockState iblockstate, Random random, int i0) {
+        return Items.ce;
     }
 
-    protected int b(int i0) {
+    protected int d(IBlockState iblockstate) {
         return 2;
     }
 
-    protected BlockRedstoneDiode e() {
-        return Blocks.bV;
+    protected IBlockState e(IBlockState iblockstate) {
+        Boolean obool = (Boolean)iblockstate.b(a);
+        Mode blockredstonecomparator_mode = (Mode)iblockstate.b(b);
+        EnumFacing enumfacing = (EnumFacing)iblockstate.b(N);
+
+        return Blocks.ck.P().a(N, enumfacing).a(a, obool).a(b, blockredstonecomparator_mode);
     }
 
-    protected BlockRedstoneDiode i() {
-        return Blocks.bU;
+    protected IBlockState k(IBlockState iblockstate) {
+        Boolean obool = (Boolean)iblockstate.b(a);
+        Mode blockredstonecomparator_mode = (Mode)iblockstate.b(b);
+        EnumFacing enumfacing = (EnumFacing)iblockstate.b(N);
+
+        return Blocks.cj.P().a(N, enumfacing).a(a, obool).a(b, blockredstonecomparator_mode);
     }
 
-    public int b() {
-        return 37;
+    protected boolean l(IBlockState iblockstate) {
+        return this.M || ((Boolean)iblockstate.b(a)).booleanValue();
     }
 
-    protected boolean c(int i0) {
-        return this.a || (i0 & 8) != 0;
+    protected int a(IBlockAccess iblockaccess, BlockPos blockpos, IBlockState iblockstate) {
+        TileEntity tileentity = iblockaccess.s(blockpos);
+
+        return tileentity instanceof TileEntityComparator ? ((TileEntityComparator)tileentity).b() : 0;
     }
 
-    protected int f(IBlockAccess iblockaccess, int i0, int i1, int i2, int i3) {
-        return this.e(iblockaccess, i0, i1, i2).a();
+    private int j(World world, BlockPos blockpos, IBlockState iblockstate) {
+        return iblockstate.b(b) == Mode.SUBTRACT ? Math.max(this.f(world, blockpos, iblockstate) - this.c((IBlockAccess)world, blockpos, iblockstate), 0) : this.f(world, blockpos, iblockstate);
     }
 
-    private int j(World world, int i0, int i1, int i2, int i3) {
-        return !this.d(i3) ? this.h(world, i0, i1, i2, i3) : Math.max(this.h(world, i0, i1, i2, i3) - this.h((IBlockAccess) world, i0, i1, i2, i3), 0);
-    }
+    protected boolean e(World world, BlockPos blockpos, IBlockState iblockstate) {
+        int i0 = this.f(world, blockpos, iblockstate);
 
-    public boolean d(int i0) {
-        return (i0 & 4) == 4;
-    }
-
-    protected boolean a(World world, int i0, int i1, int i2, int i3) {
-        int i4 = this.h(world, i0, i1, i2, i3);
-
-        if (i4 >= 15) {
+        if (i0 >= 15) {
             return true;
         }
-        else if (i4 == 0) {
+        else if (i0 == 0) {
             return false;
         }
         else {
-            int i5 = this.h((IBlockAccess) world, i0, i1, i2, i3); // CanaryMod: Cast World to IBlockAccess
+            int i1 = this.c((IBlockAccess)world, blockpos, iblockstate);
 
-            return i5 == 0 ? true : i4 >= i5;
+            return i1 == 0 ? true : i0 >= i1;
         }
     }
 
-    protected int h(World world, int i0, int i1, int i2, int i3) {
-        int i4 = super.h(world, i0, i1, i2, i3);
-        int i5 = l(i3);
-        int i6 = i0 + Direction.a[i5];
-        int i7 = i2 + Direction.b[i5];
-        Block block = world.a(i6, i1, i7);
+    protected int f(World world, BlockPos blockpos, IBlockState iblockstate) {
+        int i0 = super.f(world, blockpos, iblockstate);
+        EnumFacing enumfacing = (EnumFacing)iblockstate.b(N);
+        BlockPos blockpos1 = blockpos.a(enumfacing);
+        Block block = world.p(blockpos1).c();
 
-        if (block.M()) {
-            i4 = block.g(world, i6, i1, i7, Direction.f[i5]);
+        if (block.N()) {
+            i0 = block.l(world, blockpos1);
         }
-        else if (i4 < 15 && block.r()) {
-            i6 += Direction.a[i5];
-            i7 += Direction.b[i5];
-            block = world.a(i6, i1, i7);
-            if (block.M()) {
-                i4 = block.g(world, i6, i1, i7, Direction.f[i5]);
+        else if (i0 < 15 && block.t()) {
+            blockpos1 = blockpos1.a(enumfacing);
+            block = world.p(blockpos1).c();
+            if (block.N()) {
+                i0 = block.l(world, blockpos1);
+            }
+            else if (block.r() == Material.a) {
+                EntityItemFrame entityitemframe = this.a(world, enumfacing, blockpos1);
+
+                if (entityitemframe != null) {
+                    i0 = entityitemframe.q();
+                }
             }
         }
 
-        return i4;
+        return i0;
     }
 
-    public TileEntityComparator e(IBlockAccess iblockaccess, int i0, int i1, int i2) {
-        return (TileEntityComparator) iblockaccess.o(i0, i1, i2);
+    private EntityItemFrame a(World world, final EnumFacing enumfacing, BlockPos blockpos) {
+        List list = world.a(EntityItemFrame.class, new AxisAlignedBB((double)blockpos.n(), (double)blockpos.o(), (double)blockpos.p(), (double)(blockpos.n() + 1), (double)(blockpos.o() + 1), (double)(blockpos.p() + 1)), new Predicate() {
+
+                                public boolean a(Entity world) {
+                                    return world != null && world.aO() == enumfacing;
+                                }
+
+                                public boolean apply(Object p_apply_1_) {
+                                    return this.a((Entity)p_apply_1_);
+                                }
+                            }
+                           );
+
+        return list.size() == 1 ? (EntityItemFrame)list.get(0) : null;
     }
 
-    public boolean a(World world, int i0, int i1, int i2, EntityPlayer entityplayer, int i3, float f0, float f1, float f2) {
+    public boolean a(World world, BlockPos blockpos, IBlockState iblockstate, EntityPlayer entityplayer, EnumFacing enumfacing, float f0, float f1, float f2) {
         // CanaryMod: Block Physics
-        BlockPhysicsHook blockPhysics = (BlockPhysicsHook) new BlockPhysicsHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), false).call();
-        if (blockPhysics.isCanceled()) {
+        if (new BlockPhysicsHook(CanaryBlock.getPooledBlock(iblockstate, blockpos, world), false).call().isCanceled()) {
             return false;
         }
         //
-        int i4 = world.e(i0, i1, i2);
-        boolean flag0 = this.a | (i4 & 8) != 0;
-        boolean flag1 = !this.d(i4);
-        int i5 = flag1 ? 4 : 0;
-
-        i5 |= flag0 ? 8 : 0;
-        world.a((double) i0 + 0.5D, (double) i1 + 0.5D, (double) i2 + 0.5D, "random.click", 0.3F, flag1 ? 0.55F : 0.5F);
-        world.a(i0, i1, i2, i5 | i4 & 3, 2);
-        this.c(world, i0, i1, i2, world.s);
-        return true;
+        if (!entityplayer.by.e) {
+            return false;
+        }
+        else {
+            iblockstate = iblockstate.a(b);
+            world.a((double)blockpos.n() + 0.5D, (double)blockpos.o() + 0.5D, (double)blockpos.p() + 0.5D, "random.click", 0.3F, iblockstate.b(b) == Mode.SUBTRACT ? 0.55F : 0.5F);
+            world.a(blockpos, iblockstate, 2);
+            this.k(world, blockpos, iblockstate);
+            return true;
+        }
     }
 
-    protected void b(World world, int i0, int i1, int i2, Block block) {
-        if (!world.a(i0, i1, i2, (Block) this)) {
-            int i3 = world.e(i0, i1, i2);
-            int i4 = this.j(world, i0, i1, i2, i3);
-            int i5 = this.e((IBlockAccess) world, i0, i1, i2).a();
+    protected void g(World world, BlockPos blockpos, IBlockState iblockstate) {
+        if (!world.a(blockpos, (Block)this)) {
+            int i0 = this.j(world, blockpos, iblockstate);
+            TileEntity tileentity = world.s(blockpos);
+            int i1 = tileentity instanceof TileEntityComparator ? ((TileEntityComparator)tileentity).b() : 0;
 
-            if (i4 != i5 || this.c(i3) != this.a(world, i0, i1, i2, i3)) {
-                if (this.i(world, i0, i1, i2, i3)) {
-                    world.a(i0, i1, i2, this, this.b(0), -1);
+            if (i0 != i1 || this.l(iblockstate) != this.e(world, blockpos, iblockstate)) {
+                if (this.i(world, blockpos, iblockstate)) {
+                    world.a(blockpos, this, 2, -1);
                 }
                 else {
-                    world.a(i0, i1, i2, this, this.b(0), 0);
+                    world.a(blockpos, this, 2, 0);
                 }
             }
         }
     }
 
-    private void c(World world, int i0, int i1, int i2, Random random) {
-        int i3 = world.e(i0, i1, i2);
-        int i4 = this.j(world, i0, i1, i2, i3);
-        int i5 = this.e((IBlockAccess) world, i0, i1, i2).a();
+    private void k(World world, BlockPos blockpos, IBlockState iblockstate) {
+        int i0 = this.j(world, blockpos, iblockstate);
+        TileEntity tileentity = world.s(blockpos);
+        int i1 = 0;
 
-        this.e((IBlockAccess) world, i0, i1, i2).a(i4);
-        if (i5 != i4 || !this.d(i3)) {
+        if (tileentity instanceof TileEntityComparator) {
+            TileEntityComparator tileentitycomparator = (TileEntityComparator)tileentity;
+
+            i1 = tileentitycomparator.b();
+            tileentitycomparator.a(i0);
+        }
+
+        if (i1 != i0 || iblockstate.b(b) == Mode.COMPARE) {
+            boolean flag0 = this.e(world, blockpos, iblockstate);
+            boolean flag1 = this.l(iblockstate);
+
             // CanaryMod: RedstoneChange; Comparator change
-            RedstoneChangeHook hook = (RedstoneChangeHook) new RedstoneChangeHook(world.getCanaryWorld().getBlockAt(i0, i1, i2), i5, i4).call();
-            if (hook.isCanceled()) {
+            if (new RedstoneChangeHook(CanaryBlock.getPooledBlock(iblockstate, blockpos, world), i0, i1).call().isCanceled()) {
                 return;
             }
             //
-            boolean flag0 = this.a(world, i0, i1, i2, i3);
-            boolean flag1 = this.a || (i3 & 8) != 0;
-
             if (flag1 && !flag0) {
-                world.a(i0, i1, i2, i3 & -9, 2);
+                world.a(blockpos, iblockstate.a(a, Boolean.valueOf(false)), 2);
             }
             else if (!flag1 && flag0) {
-                world.a(i0, i1, i2, i3 | 8, 2);
+                world.a(blockpos, iblockstate.a(a, Boolean.valueOf(true)), 2);
             }
 
-            this.e(world, i0, i1, i2);
+            this.h(world, blockpos, iblockstate);
         }
     }
 
-    public void a(World world, int i0, int i1, int i2, Random random) {
-        if (this.a) {
-            int i3 = world.e(i0, i1, i2);
-
-            world.d(i0, i1, i2, this.i(), i3 | 8, 4);
+    public void b(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {
+        if (this.M) {
+            world.a(blockpos, this.k(iblockstate).a(a, Boolean.valueOf(true)), 4);
         }
 
-        this.c(world, i0, i1, i2, random);
+        this.k(world, blockpos, iblockstate);
     }
 
-    public void b(World world, int i0, int i1, int i2) {
-        super.b(world, i0, i1, i2);
-        world.a(i0, i1, i2, this.a(world, 0));
+    public void c(World world, BlockPos blockpos, IBlockState iblockstate) {
+        super.c(world, blockpos, iblockstate);
+        world.a(blockpos, this.a(world, 0));
     }
 
-    public void a(World world, int i0, int i1, int i2, Block block, int i3) {
+    public void b(World world, BlockPos blockpos, IBlockState iblockstate) {
         // CanaryMod: Comparator break
-        int oldLvl = this.e((IBlockAccess) world, i0, i1, i2).a();
+        int oldLvl = ((TileEntityComparator)world.s(blockpos)).b();
         if (oldLvl != 0) {
-            new RedstoneChangeHook(new CanaryBlock(BlockType.RedstoneComparator.getId(), (short) 2, i0, i1, i2, world.getCanaryWorld()), oldLvl, 0).call();
+            new RedstoneChangeHook(CanaryBlock.getPooledBlock(iblockstate, blockpos, world), oldLvl, 0).call();
         }
         //
-        super.a(world, i0, i1, i2, block, i3);
-        world.p(i0, i1, i2);
-        this.e(world, i0, i1, i2);
+        super.b(world, blockpos, iblockstate);
+        world.t(blockpos);
+        this.h(world, blockpos, iblockstate);
     }
 
-    public boolean a(World world, int i0, int i1, int i2, int i3, int i4) {
-        super.a(world, i0, i1, i2, i3, i4);
-        TileEntity tileentity = world.o(i0, i1, i2);
+    public boolean a(World world, BlockPos blockpos, IBlockState iblockstate, int i0, int i1) {
+        super.a(world, blockpos, iblockstate, i0, i1);
+        TileEntity tileentity = world.s(blockpos);
 
-        return tileentity != null ? tileentity.c(i3, i4) : false;
+        return tileentity == null ? false : tileentity.c(i0, i1);
     }
 
     public TileEntity a(World world, int i0) {
         return new TileEntityComparator();
+    }
+
+    public IBlockState a(int i0) {
+        return this.P().a(N, EnumFacing.b(i0)).a(a, Boolean.valueOf((i0 & 8) > 0)).a(b, (i0 & 4) > 0 ? Mode.SUBTRACT : Mode.COMPARE);
+    }
+
+    public int c(IBlockState iblockstate) {
+        byte b0 = 0;
+        int i0 = b0 | ((EnumFacing)iblockstate.b(N)).b();
+
+        if (((Boolean)iblockstate.b(a)).booleanValue()) {
+            i0 |= 8;
+        }
+
+        if (iblockstate.b(b) == Mode.SUBTRACT) {
+            i0 |= 4;
+        }
+
+        return i0;
+    }
+
+    protected BlockState e() {
+        return new BlockState(this, new IProperty[]{ N, b, a });
+    }
+
+    public IBlockState a(World world, BlockPos blockpos, EnumFacing enumfacing, float f0, float f1, float f2, int i0, EntityLivingBase entitylivingbase) {
+        return this.P().a(N, entitylivingbase.aO().d()).a(a, Boolean.valueOf(false)).a(b, Mode.COMPARE);
+    }
+
+    public static enum Mode implements IStringSerializable {
+
+        COMPARE("COMPARE", 0, "compare"),
+        SUBTRACT("SUBTRACT", 1, "subtract");
+        private static final Mode[] $VALUES = new Mode[]{ COMPARE, SUBTRACT };
+        private final String c;
+
+        private Mode(String p_i45731_1_, int p_i45731_2_, String p_i45731_3_) {
+            this.c = p_i45731_3_;
+        }
+
+        public String toString() {
+            return this.c;
+        }
+
+        public String l() {
+            return this.c;
+        }
+
     }
 }

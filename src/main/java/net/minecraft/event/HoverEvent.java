@@ -8,20 +8,22 @@ import net.minecraft.util.IChatComponent;
 
 import java.util.Map;
 
+import net.minecraft.util.IChatComponent;
+
 
 public class HoverEvent {
 
-    private final Action a;
+    private final HoverEvent.Action a;
     private final IChatComponent b;
     private final CanaryHoverEvent che; // CanaryMod
 
-    public HoverEvent(Action hoverevent_action, IChatComponent ichatcomponent) {
+    public HoverEvent(HoverEvent.Action hoverevent_action, IChatComponent ichatcomponent) {
         this.a = hoverevent_action;
         this.b = ichatcomponent;
         this.che = new CanaryHoverEvent(this); // CanaryMod: install wrapper
     }
 
-    public Action a() {
+    public HoverEvent.Action a() {
         return this.a;
     }
 
@@ -77,19 +79,20 @@ public class HoverEvent {
         //CanaryMod: Reduce, Reuse, Recycle (ie: cleaned up a bit)
         SHOW_TEXT(true),//
         SHOW_ACHIEVEMENT(true),//
-        SHOW_ITEM(true);
+        SHOW_ITEM(true), //
+        SHOW_ENTITY(true);
 
-        private static final Map<String, Action> d = Maps.newHashMap();
-        private final boolean e;
+        private static final Map<String, Action> e = Maps.newHashMap();
+        private final boolean f;
         private final CanaryHoverEventAction chea; // CanaryMod
 
         private Action(boolean flag0) {
-            this.e = flag0;
+            this.f = flag0;
             this.chea = new CanaryHoverEventAction(this); // CanaryMod: install wrapper
         }
 
         public boolean a() {
-            return this.e;
+            return this.f;
         }
 
         public String b() {
@@ -101,13 +104,18 @@ public class HoverEvent {
             return chea;
         }
 
-        public static Action a(String ahoverevent_action) {
-            return d.get(ahoverevent_action);
+        public static HoverEvent.Action a(String p_a_0_) {
+            return (HoverEvent.Action) e.get(p_a_0_);
         }
 
         static {
-            for (Action hoverevent_action : values()) {
-                d.put(hoverevent_action.b(), hoverevent_action);
+            HoverEvent.Action[] ahoverevent_action = values();
+            int i0 = ahoverevent_action.length;
+
+            for (int i1 = 0; i1 < i0; ++i1) {
+                HoverEvent.Action hoverevent_action = ahoverevent_action[i1];
+
+                e.put(hoverevent_action.b(), hoverevent_action);
             }
 
         }

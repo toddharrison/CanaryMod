@@ -2,20 +2,23 @@ package net.minecraft.block;
 
 import net.canarymod.hook.world.DispenseHook;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.dispenser.*;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityDispenser;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IRegistry;
 import net.minecraft.util.RegistryDefaulted;
 import net.minecraft.world.World;
 
@@ -23,11 +26,14 @@ import java.util.Random;
 
 public class BlockDispenser extends BlockContainer {
 
-    public static final IRegistry a = new RegistryDefaulted(new BehaviorDefaultDispenseItem());
-    protected Random b = new Random();
+    public static final PropertyDirection a = PropertyDirection.a("facing");
+    public static final PropertyBool b = PropertyBool.a("triggered");
+    public static final RegistryDefaulted M = new RegistryDefaulted(new BehaviorDefaultDispenseItem());
+    protected Random N = new Random();
 
     protected BlockDispenser() {
         super(Material.e);
+        this.j(this.L.b().a(a, EnumFacing.NORTH).a(b, Boolean.valueOf(false)));
         this.a(CreativeTabs.d);
     }
 
@@ -35,103 +41,102 @@ public class BlockDispenser extends BlockContainer {
         return 4;
     }
 
-    public void b(World world, int i0, int i1, int i2) {
-        super.b(world, i0, i1, i2);
-        this.m(world, i0, i1, i2);
+    public void c(World world, BlockPos blockpos, IBlockState iblockstate) {
+        super.c(world, blockpos, iblockstate);
+        this.e(world, blockpos, iblockstate);
     }
 
-    private void m(World world, int i0, int i1, int i2) {
-        if (!world.E) {
-            Block block = world.a(i0, i1, i2 - 1);
-            Block block1 = world.a(i0, i1, i2 + 1);
-            Block block2 = world.a(i0 - 1, i1, i2);
-            Block block3 = world.a(i0 + 1, i1, i2);
-            byte b0 = 3;
+    private void e(World world, BlockPos blockpos, IBlockState iblockstate) {
+        if (!world.D) {
+            EnumFacing enumfacing = (EnumFacing)iblockstate.b(a);
+            boolean flag0 = world.p(blockpos.c()).c().m();
+            boolean flag1 = world.p(blockpos.d()).c().m();
 
-            if (block.j() && !block1.j()) {
-                b0 = 3;
+            if (enumfacing == EnumFacing.NORTH && flag0 && !flag1) {
+                enumfacing = EnumFacing.SOUTH;
+            }
+            else if (enumfacing == EnumFacing.SOUTH && flag1 && !flag0) {
+                enumfacing = EnumFacing.NORTH;
+            }
+            else {
+                boolean flag2 = world.p(blockpos.e()).c().m();
+                boolean flag3 = world.p(blockpos.f()).c().m();
+
+                if (enumfacing == EnumFacing.WEST && flag2 && !flag3) {
+                    enumfacing = EnumFacing.EAST;
+                }
+                else if (enumfacing == EnumFacing.EAST && flag3 && !flag2) {
+                    enumfacing = EnumFacing.WEST;
+                }
             }
 
-            if (block1.j() && !block.j()) {
-                b0 = 2;
-            }
-
-            if (block2.j() && !block3.j()) {
-                b0 = 5;
-            }
-
-            if (block3.j() && !block2.j()) {
-                b0 = 4;
-            }
-
-            world.a(i0, i1, i2, b0, 2);
+            world.a(blockpos, iblockstate.a(a, enumfacing).a(b, Boolean.valueOf(false)), 2);
         }
     }
 
-    public boolean a(World world, int i0, int i1, int i2, EntityPlayer entityplayer, int i3, float f0, float f1, float f2) {
-        if (world.E) {
+    public boolean a(World world, BlockPos blockpos, IBlockState iblockstate, EntityPlayer entityplayer, EnumFacing enumfacing, float f0, float f1, float f2) {
+        if (world.D) {
             return true;
         }
         else {
-            TileEntityDispenser tileentitydispenser = (TileEntityDispenser)world.o(i0, i1, i2);
+            TileEntity tileentity = world.s(blockpos);
 
-            if (tileentitydispenser != null) {
-                entityplayer.a(tileentitydispenser);
+            if (tileentity instanceof TileEntityDispenser) {
+                entityplayer.a((IInventory)((TileEntityDispenser)tileentity));
             }
 
             return true;
         }
     }
 
-    protected void e(World world, int i0, int i1, int i2) {
-        BlockSourceImpl blocksourceimpl = new BlockSourceImpl(world, i0, i1, i2);
-        TileEntityDispenser tileentitydispenser = (TileEntityDispenser)blocksourceimpl.j();
+    protected void d(World world, BlockPos blockpos) {
+        BlockSourceImpl blocksourceimpl = new BlockSourceImpl(world, blockpos);
+        TileEntityDispenser tileentitydispenser = (TileEntityDispenser)blocksourceimpl.h();
 
         if (tileentitydispenser != null) {
-            int i3 = tileentitydispenser.i();
+            int i0 = tileentitydispenser.m();
 
-            if (i3 < 0) {
-                // CanaryMod: Dispense Smoke
-                DispenseHook hook = (DispenseHook)new DispenseHook(tileentitydispenser.getCanaryDispenser(), null).call();
-                if (!hook.isCanceled()) {
-                    world.c(1001, i0, i1, i2, 0);
+            if (i0 < 0) {
+                // CanaryMod: Dispense Smok
+                if (!new DispenseHook(tileentitydispenser.getCanaryDispenser(), null).call().isCanceled()) {
+                    world.b(1001, blockpos, 0);
                 }
                 //
             }
             else {
-                ItemStack itemstack = tileentitydispenser.a(i3);
+                ItemStack itemstack = tileentitydispenser.a(i0);
                 IBehaviorDispenseItem ibehaviordispenseitem = this.a(itemstack);
 
                 if (ibehaviordispenseitem != IBehaviorDispenseItem.a) {
                     ItemStack itemstack1 = ibehaviordispenseitem.a(blocksourceimpl, itemstack);
 
-                    tileentitydispenser.a(i3, itemstack1.b == 0 ? null : itemstack1);
+                    tileentitydispenser.a(i0, itemstack1.b == 0 ? null : itemstack1);
                 }
             }
         }
     }
 
-    public IBehaviorDispenseItem a(ItemStack itemstack) { // CanaryMod: protected => public
-        return (IBehaviorDispenseItem)a.a(itemstack.b());
+    // CanaryMod: protected>>public
+    public IBehaviorDispenseItem a(ItemStack itemstack) {
+        return (IBehaviorDispenseItem)M.a(itemstack == null ? null : itemstack.b());
     }
 
-    public void a(World world, int i0, int i1, int i2, Block block) {
-        boolean flag0 = world.v(i0, i1, i2) || world.v(i0, i1 + 1, i2);
-        int i3 = world.e(i0, i1, i2);
-        boolean flag1 = (i3 & 8) != 0;
+    public void a(World world, BlockPos blockpos, IBlockState iblockstate, Block block) {
+        boolean flag0 = world.z(blockpos) || world.z(blockpos.a());
+        boolean flag1 = ((Boolean)iblockstate.b(b)).booleanValue();
 
         if (flag0 && !flag1) {
-            world.a(i0, i1, i2, this, this.a(world));
-            world.a(i0, i1, i2, i3 | 8, 4);
+            world.a(blockpos, (Block)this, this.a(world));
+            world.a(blockpos, iblockstate.a(b, Boolean.valueOf(true)), 4);
         }
         else if (!flag0 && flag1) {
-            world.a(i0, i1, i2, i3 & -9, 4);
+            world.a(blockpos, iblockstate.a(b, Boolean.valueOf(false)), 4);
         }
     }
 
-    public void a(World world, int i0, int i1, int i2, Random random) {
-        if (!world.E) {
-            this.e(world, i0, i1, i2);
+    public void b(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {
+        if (!world.D) {
+            this.d(world, blockpos);
         }
     }
 
@@ -139,62 +144,37 @@ public class BlockDispenser extends BlockContainer {
         return new TileEntityDispenser();
     }
 
-    public void a(World world, int i0, int i1, int i2, EntityLivingBase entitylivingbase, ItemStack itemstack) {
-        int i3 = BlockPistonBase.a(world, i0, i1, i2, entitylivingbase);
+    public IBlockState a(World world, BlockPos blockpos, EnumFacing enumfacing, float f0, float f1, float f2, int i0, EntityLivingBase entitylivingbase) {
+        return this.P().a(a, BlockPistonBase.a(world, blockpos, entitylivingbase)).a(b, Boolean.valueOf(false));
+    }
 
-        world.a(i0, i1, i2, i3, 2);
-        if (itemstack.u()) {
-            ((TileEntityDispenser)world.o(i0, i1, i2)).a(itemstack.s());
+    public void a(World world, BlockPos blockpos, IBlockState iblockstate, EntityLivingBase entitylivingbase, ItemStack itemstack) {
+        world.a(blockpos, iblockstate.a(a, BlockPistonBase.a(world, blockpos, entitylivingbase)), 2);
+        if (itemstack.s()) {
+            TileEntity tileentity = world.s(blockpos);
+
+            if (tileentity instanceof TileEntityDispenser) {
+                ((TileEntityDispenser)tileentity).a(itemstack.q());
+            }
         }
     }
 
-    public void a(World world, int i0, int i1, int i2, Block block, int i3) {
-        TileEntityDispenser tileentitydispenser = (TileEntityDispenser)world.o(i0, i1, i2);
+    public void b(World world, BlockPos blockpos, IBlockState iblockstate) {
+        TileEntity tileentity = world.s(blockpos);
 
-        if (tileentitydispenser != null) {
-            for (int i4 = 0; i4 < tileentitydispenser.a(); ++i4) {
-                ItemStack itemstack = tileentitydispenser.a(i4);
-
-                if (itemstack != null) {
-                    float f0 = this.b.nextFloat() * 0.8F + 0.1F;
-                    float f1 = this.b.nextFloat() * 0.8F + 0.1F;
-                    float f2 = this.b.nextFloat() * 0.8F + 0.1F;
-
-                    while (itemstack.b > 0) {
-                        int i5 = this.b.nextInt(21) + 10;
-
-                        if (i5 > itemstack.b) {
-                            i5 = itemstack.b;
-                        }
-
-                        itemstack.b -= i5;
-                        EntityItem entityitem = new EntityItem(world, (double)((float)i0 + f0), (double)((float)i1 + f1), (double)((float)i2 + f2), new ItemStack(itemstack.b(), i5, itemstack.k()));
-
-                        if (itemstack.p()) {
-                            entityitem.f().d((NBTTagCompound)itemstack.q().b());
-                        }
-
-                        float f3 = 0.05F;
-
-                        entityitem.v = (double)((float)this.b.nextGaussian() * f3);
-                        entityitem.w = (double)((float)this.b.nextGaussian() * f3 + 0.2F);
-                        entityitem.x = (double)((float)this.b.nextGaussian() * f3);
-                        world.d((Entity)entityitem);
-                    }
-                }
-            }
-
-            world.f(i0, i1, i2, block);
+        if (tileentity instanceof TileEntityDispenser) {
+            InventoryHelper.a(world, blockpos, (TileEntityDispenser)tileentity);
+            world.e(blockpos, this);
         }
 
-        super.a(world, i0, i1, i2, block, i3);
+        super.b(world, blockpos, iblockstate);
     }
 
     public static IPosition a(IBlockSource iblocksource) {
-        EnumFacing enumfacing = b(iblocksource.h());
-        double d0 = iblocksource.a() + 0.7D * (double)enumfacing.c();
-        double d1 = iblocksource.b() + 0.7D * (double)enumfacing.d();
-        double d2 = iblocksource.c() + 0.7D * (double)enumfacing.e();
+        EnumFacing enumfacing = b(iblocksource.f());
+        double d0 = iblocksource.a() + 0.7D * (double)enumfacing.g();
+        double d1 = iblocksource.b() + 0.7D * (double)enumfacing.h();
+        double d2 = iblocksource.c() + 0.7D * (double)enumfacing.i();
 
         return new PositionImpl(d0, d1, d2);
     }
@@ -203,11 +183,34 @@ public class BlockDispenser extends BlockContainer {
         return EnumFacing.a(i0 & 7);
     }
 
-    public boolean M() {
+    public boolean N() {
         return true;
     }
 
-    public int g(World world, int i0, int i1, int i2, int i3) {
-        return Container.b((IInventory)world.o(i0, i1, i2));
+    public int l(World world, BlockPos blockpos) {
+        return Container.a(world.s(blockpos));
+    }
+
+    public int b() {
+        return 3;
+    }
+
+    public IBlockState a(int i0) {
+        return this.P().a(a, b(i0)).a(b, Boolean.valueOf((i0 & 8) > 0));
+    }
+
+    public int c(IBlockState iblockstate) {
+        byte b0 = 0;
+        int i0 = b0 | ((EnumFacing)iblockstate.b(a)).a();
+
+        if (((Boolean)iblockstate.b(b)).booleanValue()) {
+            i0 |= 8;
+        }
+
+        return i0;
+    }
+
+    protected BlockState e() {
+        return new BlockState(this, new IProperty[]{ a, b });
     }
 }

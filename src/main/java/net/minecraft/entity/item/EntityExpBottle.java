@@ -4,6 +4,7 @@ import net.canarymod.api.entity.throwable.CanaryXPBottle;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.projectile.EntityThrowable;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
@@ -32,22 +33,22 @@ public class EntityExpBottle extends EntityThrowable {
     }
 
     // CanaryMod: remove unneeded method override
-    // protected float i() {
+    // protected float m() {
     // return 0.07F;
     // }
     //
 
-    protected float e() {
+    protected float j() {
         return 0.7F;
     }
 
-    protected float f() {
+    protected float l() {
         return -20.0F;
     }
 
     protected void a(MovingObjectPosition movingobjectposition) {
-        if (!this.o.E) {
-            this.o.c(2002, (int) Math.round(this.s), (int) Math.round(this.t), (int) Math.round(this.u), 0);
+        if (!this.o.D) {
+            this.o.b(2002, new BlockPos(this), 0);
             int i0 = 3 + this.o.s.nextInt(5) + this.o.s.nextInt(5);
 
             while (i0 > 0) {
@@ -57,7 +58,8 @@ public class EntityExpBottle extends EntityThrowable {
                 this.o.d((Entity) (new EntityXPOrb(this.o, this.s, this.t, this.u, i1)));
             }
 
-            this.B();
+            this.J();
         }
+
     }
 }

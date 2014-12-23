@@ -1,223 +1,185 @@
 package net.minecraft.block;
 
-
+import com.google.common.base.Predicate;
 import net.canarymod.api.world.blocks.CanaryBlock;
 import net.canarymod.hook.world.BlockGrowHook;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.properties.PropertyInteger;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import java.util.Iterator;
 import java.util.Random;
-
 
 public class BlockStem extends BlockBush implements IGrowable {
 
-    private final Block a;
+    public static final PropertyInteger a = PropertyInteger.a("age", 0, 7);
+    public static final PropertyDirection b = PropertyDirection.a("facing", new Predicate() {
+
+                                                                      public boolean a(EnumFacing p_a_1_) {
+                                                                          return p_a_1_ != EnumFacing.DOWN;
+                                                                      }
+
+                                                                      public boolean apply(Object p_apply_1_) {
+                                                                          return this.a((EnumFacing)p_apply_1_);
+                                                                      }
+                                                                  }
+                                                                 );
+    private final Block M;
 
     protected BlockStem(Block block) {
-        this.a = block;
+        this.j(this.L.b().a(a, Integer.valueOf(0)).a(b, EnumFacing.UP));
+        this.M = block;
         this.a(true);
         float f0 = 0.125F;
 
         this.a(0.5F - f0, 0.0F, 0.5F - f0, 0.5F + f0, 0.25F, 0.5F + f0);
-        this.a((CreativeTabs) null);
+        this.a((CreativeTabs)null);
     }
 
-    protected boolean a(Block block) {
+    public IBlockState a(IBlockState iblockstate, IBlockAccess iblockaccess, BlockPos blockpos) {
+        iblockstate = iblockstate.a(b, EnumFacing.UP);
+        Iterator iterator = EnumFacing.Plane.HORIZONTAL.iterator();
+
+        while (iterator.hasNext()) {
+            EnumFacing enumfacing = (EnumFacing)iterator.next();
+
+            if (iblockaccess.p(blockpos.a(enumfacing)).c() == this.M) {
+                iblockstate = iblockstate.a(b, enumfacing);
+                break;
+            }
+        }
+
+        return iblockstate;
+    }
+
+    protected boolean c(Block block) {
         return block == Blocks.ak;
     }
 
-    public void a(World world, int i0, int i1, int i2, Random random) {
-        super.a(world, i0, i1, i2, random);
-        if (world.k(i0, i1 + 1, i2) >= 9) {
-            float f0 = this.n(world, i0, i1, i2);
+    public void b(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {
+        super.b(world, blockpos, iblockstate, random);
+        if (world.l(blockpos.a()) >= 9) {
+            float f0 = BlockCrops.a(this, world, blockpos);
 
-            if (random.nextInt((int) (25.0F / f0) + 1) == 0) {
-                int i3 = world.e(i0, i1, i2);
+            if (random.nextInt((int)(25.0F / f0) + 1) == 0) {
+                int i0 = ((Integer)iblockstate.b(a)).intValue();
 
                 // CanaryMod: Grab the original stuff
-                CanaryBlock original = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
+                CanaryBlock original = CanaryBlock.getPooledBlock(iblockstate, blockpos, world);
                 CanaryBlock growth;
-                BlockGrowHook blockGrowHook;
                 //
-                if (i3 < 7) {
-                    ++i3;
+                if (i0 < 7) {
+                    iblockstate = iblockstate.a(a, Integer.valueOf(i0 + 1));
                     // Growth is original with new data
-                    growth = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
-                    growth.setData((short) i3);
-                    blockGrowHook = (BlockGrowHook) new BlockGrowHook(original, growth).call();
-                    if (!blockGrowHook.isCanceled()) {
-                        world.a(i0, i1, i2, i3, 2);
+                    if (!new BlockGrowHook(original, CanaryBlock.getPooledBlock(iblockstate, blockpos, world)).call().isCanceled()) {
+                        world.a(blockpos, iblockstate, 2);
                     }
                     //
                 }
                 else {
-                    if (world.a(i0 - 1, i1, i2) == this.a) {
-                        return;
+                    Iterator iterator = EnumFacing.Plane.HORIZONTAL.iterator();
+
+                    while (iterator.hasNext()) {
+                        EnumFacing enumfacing = (EnumFacing)iterator.next();
+
+                        if (world.p(blockpos.a(enumfacing)).c() == this.M) {
+                            return;
+                        }
                     }
 
-                    if (world.a(i0 + 1, i1, i2) == this.a) {
-                        return;
-                    }
+                    blockpos = blockpos.a(EnumFacing.Plane.HORIZONTAL.a(random));
+                    Block block = world.p(blockpos.b()).c();
 
-                    if (world.a(i0, i1, i2 - 1) == this.a) {
-                        return;
-                    }
-
-                    if (world.a(i0, i1, i2 + 1) == this.a) {
-                        return;
-                    }
-
-                    int i4 = random.nextInt(4);
-                    int i5 = i0;
-                    int i6 = i2;
-
-                    if (i4 == 0) {
-                        i5 = i0 - 1;
-                    }
-
-                    if (i4 == 1) {
-                        ++i5;
-                    }
-
-                    if (i4 == 2) {
-                        i6 = i2 - 1;
-                    }
-
-                    if (i4 == 3) {
-                        ++i6;
-                    }
-
-                    Block block = world.a(i5, i1 - 1, i6);
-
-                    if (world.a(i5, i1, i6).J == Material.a && (block == Blocks.ak || block == Blocks.d || block == Blocks.c)) {
+                    if (world.p(blockpos).c().J == Material.a && (block == Blocks.ak || block == Blocks.d || block == Blocks.c)) {
                         // A Melon/Pumpkin has spawned
-                        growth = new CanaryBlock(this.a, (short) 0, i5, i1, i6, world.getCanaryWorld());
-                        blockGrowHook = (BlockGrowHook) new BlockGrowHook(original, growth);
-                        if (!blockGrowHook.isCanceled()) {
-                            world.b(i5, i1, i6, this.a);
+                        if (!new BlockGrowHook(original, CanaryBlock.getPooledBlock(this.M.P(), blockpos, world)).call().isCanceled()) {
+                            world.a(blockpos, this.M.P());
                         }
                         //
                     }
                 }
             }
         }
-
     }
 
-    public void m(World world, int i0, int i1, int i2) {
-        int i3 = world.e(i0, i1, i2) + MathHelper.a(world.s, 2, 5);
+    public void g(World world, BlockPos blockpos, IBlockState iblockstate) {
+        int i0 = ((Integer)iblockstate.b(a)).intValue() + MathHelper.a(world.s, 2, 5);
 
-        if (i3 > 7) {
-            i3 = 7;
-        }
-
-        world.a(i0, i1, i2, i3, 2);
+        world.a(blockpos, iblockstate.a(a, Integer.valueOf(Math.min(7, i0))), 2);
     }
 
-    private float n(World world, int i0, int i1, int i2) {
-        float f0 = 1.0F;
-        Block block = world.a(i0, i1, i2 - 1);
-        Block block1 = world.a(i0, i1, i2 + 1);
-        Block block2 = world.a(i0 - 1, i1, i2);
-        Block block3 = world.a(i0 + 1, i1, i2);
-        Block block4 = world.a(i0 - 1, i1, i2 - 1);
-        Block block5 = world.a(i0 + 1, i1, i2 - 1);
-        Block block6 = world.a(i0 + 1, i1, i2 + 1);
-        Block block7 = world.a(i0 - 1, i1, i2 + 1);
-        boolean flag0 = block2 == this || block3 == this;
-        boolean flag1 = block == this || block1 == this;
-        boolean flag2 = block4 == this || block5 == this || block6 == this || block7 == this;
-
-        for (int i3 = i0 - 1; i3 <= i0 + 1; ++i3) {
-            for (int i4 = i2 - 1; i4 <= i2 + 1; ++i4) {
-                Block block8 = world.a(i3, i1 - 1, i4);
-                float f1 = 0.0F;
-
-                if (block8 == Blocks.ak) {
-                    f1 = 1.0F;
-                    if (world.e(i3, i1 - 1, i4) > 0) {
-                        f1 = 3.0F;
-                    }
-                }
-
-                if (i3 != i0 || i4 != i2) {
-                    f1 /= 4.0F;
-                }
-
-                f0 += f1;
-            }
-        }
-
-        if (flag2 || flag0 && flag1) {
-            f0 /= 2.0F;
-        }
-
-        return f0;
-    }
-
-    public void g() {
+    public void h() {
         float f0 = 0.125F;
 
         this.a(0.5F - f0, 0.0F, 0.5F - f0, 0.5F + f0, 0.25F, 0.5F + f0);
     }
 
-    public void a(IBlockAccess iblockaccess, int i0, int i1, int i2) {
-        this.F = (double) ((float) (iblockaccess.e(i0, i1, i2) * 2 + 2) / 16.0F);
+    public void a(IBlockAccess iblockaccess, BlockPos blockpos) {
+        this.F = (double)((float)(((Integer)iblockaccess.p(blockpos).b(a)).intValue() * 2 + 2) / 16.0F);
         float f0 = 0.125F;
 
-        this.a(0.5F - f0, 0.0F, 0.5F - f0, 0.5F + f0, (float) this.F, 0.5F + f0);
+        this.a(0.5F - f0, 0.0F, 0.5F - f0, 0.5F + f0, (float)this.F, 0.5F + f0);
     }
 
-    public int b() {
-        return 19;
-    }
+    public void a(World world, BlockPos blockpos, IBlockState iblockstate, float f0, int i0) {
+        super.a(world, blockpos, iblockstate, f0, i0);
+        if (!world.D) {
+            Item item = this.j();
 
-    public void a(World world, int i0, int i1, int i2, int i3, float f0, int i4) {
-        super.a(world, i0, i1, i2, i3, f0, i4);
-        if (!world.E) {
-            Item item = null;
+            if (item != null) {
+                int i1 = ((Integer)iblockstate.b(a)).intValue();
 
-            if (this.a == Blocks.aK) {
-                item = Items.bb;
-            }
-
-            if (this.a == Blocks.ba) {
-                item = Items.bc;
-            }
-
-            for (int i5 = 0; i5 < 3; ++i5) {
-                if (world.s.nextInt(15) <= i3) {
-                    this.a(world, i0, i1, i2, new ItemStack(item));
+                for (int i2 = 0; i2 < 3; ++i2) {
+                    if (world.s.nextInt(15) <= i1) {
+                        a(world, blockpos, new ItemStack(item));
+                    }
                 }
             }
-
         }
     }
 
-    public Item a(int i0, Random random, int i1) {
+    protected Item j() {
+        return this.M == Blocks.aU ? Items.bg : (this.M == Blocks.bk ? Items.bh : null);
+    }
+
+    public Item a(IBlockState iblockstate, Random random, int i0) {
         return null;
     }
 
-    public int a(Random random) {
-        return 1;
+    public boolean a(World world, BlockPos blockpos, IBlockState iblockstate, boolean flag0) {
+        return ((Integer)iblockstate.b(a)).intValue() != 7;
     }
 
-    public boolean a(World world, int i0, int i1, int i2, boolean flag0) {
-        return world.e(i0, i1, i2) != 7;
-    }
-
-    public boolean a(World world, Random random, int i0, int i1, int i2) {
+    public boolean a(World world, Random random, BlockPos blockpos, IBlockState iblockstate) {
         return true;
     }
 
-    public void b(World world, Random random, int i0, int i1, int i2) {
-        this.m(world, i0, i1, i2);
+    public void b(World world, Random random, BlockPos blockpos, IBlockState iblockstate) {
+        this.g(world, blockpos, iblockstate);
+    }
+
+    public IBlockState a(int i0) {
+        return this.P().a(a, Integer.valueOf(i0));
+    }
+
+    public int c(IBlockState iblockstate) {
+        return ((Integer)iblockstate.b(a)).intValue();
+    }
+
+    protected BlockState e() {
+        return new BlockState(this, new IProperty[]{ a, b });
     }
 }

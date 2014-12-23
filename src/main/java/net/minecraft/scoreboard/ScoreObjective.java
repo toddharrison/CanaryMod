@@ -7,16 +7,18 @@ public class ScoreObjective {
     private final Scoreboard a;
     private final String b;
     private final IScoreObjectiveCriteria c;
-    private String d;
+    private IScoreObjectiveCriteria.EnumRenderType d;
+    private String e;
 
     // CanaryMod: our variables
     private final CanaryScoreObjective scoreObjective = new CanaryScoreObjective(this);
 
-    public ScoreObjective(Scoreboard scoreboard, String s0, IScoreObjectiveCriteria scoreobjectivecriteria) {
+    public ScoreObjective(Scoreboard scoreboard, String s0, IScoreObjectiveCriteria iscoreobjectivecriteria) {
         this.a = scoreboard;
         this.b = s0;
-        this.c = scoreobjectivecriteria;
-        this.d = s0;
+        this.c = iscoreobjectivecriteria;
+        this.e = s0;
+        this.d = iscoreobjectivecriteria.c();
     }
 
     public String b() {
@@ -28,16 +30,29 @@ public class ScoreObjective {
     }
 
     public String d() {
-        return this.d;
+        return this.e;
     }
 
     public void a(String s0) {
-        this.d = s0;
+        this.e = s0;
+        this.a.b(this);
+    }
+
+    public IScoreObjectiveCriteria.EnumRenderType e() {
+        return this.d;
+    }
+
+    public void a(IScoreObjectiveCriteria.EnumRenderType iscoreobjectivecriteria_enumrendertype) {
+        this.d = iscoreobjectivecriteria_enumrendertype;
         this.a.b(this);
     }
 
     // CanaryMod: getter
     public CanaryScoreObjective getCanaryScoreObjective() {
         return this.scoreObjective;
+    }
+    
+    public Scoreboard getScoreboard() {
+        return this.a;
     }
 }

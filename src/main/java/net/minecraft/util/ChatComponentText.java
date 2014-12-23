@@ -8,7 +8,7 @@ import java.util.Iterator;
 
 public class ChatComponentText extends ChatComponentStyle {
 
-    private final String b;
+    private String b; // CanaryMod: Remove Final modifier
     private final CanaryChatComponent canaryChatComponent; // CanaryMod
 
     public ChatComponentText(String s0) {
@@ -27,7 +27,7 @@ public class ChatComponentText extends ChatComponentStyle {
     public ChatComponentText h() {
         ChatComponentText chatcomponenttext = new ChatComponentText(this.b);
 
-        chatcomponenttext.a(this.b().l());
+        chatcomponenttext.a(this.b().m());
         Iterator iterator = this.a().iterator();
 
         while (iterator.hasNext()) {
@@ -65,5 +65,9 @@ public class ChatComponentText extends ChatComponentStyle {
     @Override
     public CanaryChatComponent getWrapper() {
         return canaryChatComponent;
+    }
+
+    public void setText(String text){
+        this.b = text;
     }
 }

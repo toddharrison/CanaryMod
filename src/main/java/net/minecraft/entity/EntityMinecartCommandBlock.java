@@ -2,14 +2,16 @@ package net.minecraft.entity;
 
 import net.canarymod.api.entity.vehicle.CanaryCommandBlockMinecart;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.command.server.CommandBlockLogic;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.IChatComponent;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
 
@@ -17,25 +19,34 @@ public class EntityMinecartCommandBlock extends EntityMinecart {
 
     private final CommandBlockLogic a = new CommandBlockLogic() {
 
-        public void e() {
-            EntityMinecartCommandBlock.this.z().b(23, this.i());
-            EntityMinecartCommandBlock.this.z().b(24, IChatComponent.Serializer.a(this.h()));
+        public void h() {
+            EntityMinecartCommandBlock.this.H().b(23, this.l());
+            EntityMinecartCommandBlock.this.H().b(24, IChatComponent.Serializer.a(this.k()));
         }
 
-        public ChunkCoordinates f_() {
-            return new ChunkCoordinates(MathHelper.c(EntityMinecartCommandBlock.this.s), MathHelper.c(EntityMinecartCommandBlock.this.t + 0.5D), MathHelper.c(EntityMinecartCommandBlock.this.u));
+        public BlockPos c() {
+            return new BlockPos(EntityMinecartCommandBlock.this.s, EntityMinecartCommandBlock.this.t + 0.5D, EntityMinecartCommandBlock.this.u);
         }
 
-        public World d() {
+        public Vec3 d() {
+            return new Vec3(EntityMinecartCommandBlock.this.s, EntityMinecartCommandBlock.this.t, EntityMinecartCommandBlock.this.u);
+        }
+
+        public World e() {
             return EntityMinecartCommandBlock.this.o;
         }
 
+        public Entity f() {
+            return EntityMinecartCommandBlock.this;
+        }
+
+        @Override
         public net.canarymod.api.CommandBlockLogic getReference() {
-            return (net.canarymod.api.CommandBlockLogic) EntityMinecartCommandBlock.this.getCanaryEntity();
+            throw new UnsupportedOperationException("CommandBlockLogic.getReference() Not supported yet in EntityMinecartCommandBlock.");
         }
     };
     private int b = 0;
-
+   
     public EntityMinecartCommandBlock(World world) {
         super(world);
         this.entity = new CanaryCommandBlockMinecart(this); // CanaryMod: Wrap Entity
@@ -46,17 +57,17 @@ public class EntityMinecartCommandBlock extends EntityMinecart {
         this.entity = new CanaryCommandBlockMinecart(this); // CanaryMod: Wrap Entity
     }
 
-    protected void c() {
-        super.c();
-        this.z().a(23, "");
-        this.z().a(24, "");
+    protected void h() {
+        super.h();
+        this.H().a(23, "");
+        this.H().a(24, "");
     }
 
     protected void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
         this.a.b(nbttagcompound);
-        this.z().b(23, this.e().i());
-        this.z().b(24, IChatComponent.Serializer.a(this.e().h()));
+        this.H().b(23, this.j().l());
+        this.H().b(24, IChatComponent.Serializer.a(this.j().k()));
     }
 
     protected void b(NBTTagCompound nbttagcompound) {
@@ -64,44 +75,41 @@ public class EntityMinecartCommandBlock extends EntityMinecart {
         this.a.a(nbttagcompound);
     }
 
-    public int m() {
-        return 6;
+    public EntityMinecart.EnumMinecartType s() {
+        return EntityMinecart.EnumMinecartType.COMMAND_BLOCK;
     }
 
-    public Block o() {
-        return Blocks.bI;
+    public IBlockState u() {
+        return Blocks.bX.P();
     }
 
-    public CommandBlockLogic e() {
+    public CommandBlockLogic j() {
         return this.a;
     }
 
     public void a(int i0, int i1, int i2, boolean flag0) {
-        if (flag0 && this.aa - this.b >= 4) {
-            this.e().a(this.o);
-            this.b = this.aa;
+        if (flag0 && this.W - this.b >= 4) {
+            this.j().a(this.o);
+            this.b = this.W;
         }
 
     }
 
-    public boolean c(EntityPlayer entityplayer) {
-        if (this.o.E) {
-            entityplayer.a(this.e());
-        }
-
-        return super.c(entityplayer);
+    public boolean e(EntityPlayer entityplayer) {
+        this.a.a(entityplayer);
+        return false;
     }
 
     public void i(int i0) {
         super.i(i0);
         if (i0 == 24) {
             try {
-                this.a.b(IChatComponent.Serializer.a(this.z().e(24)));
+                this.a.b(IChatComponent.Serializer.a(this.H().e(24)));
             } catch (Throwable throwable) {
                 ;
             }
         } else if (i0 == 23) {
-            this.a.a(this.z().e(23));
+            this.a.a(this.H().e(23));
         }
 
     }

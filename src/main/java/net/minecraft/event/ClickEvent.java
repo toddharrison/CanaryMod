@@ -10,17 +10,17 @@ import java.util.Map;
 
 public class ClickEvent {
 
-    private final Action a;
+    private final ClickEvent.Action a;
     private final String b;
     private final CanaryClickEvent cce; // CanaryMod
 
-    public ClickEvent(Action clickevent_action, String s0) {
+    public ClickEvent(ClickEvent.Action clickevent_action, String s0) {
         this.a = clickevent_action;
         this.b = s0;
         this.cce = new CanaryClickEvent(this); // CanaryMod: install wrapper
     }
 
-    public Action a() {
+    public ClickEvent.Action a() {
         return this.a;
     }
 
@@ -35,23 +35,27 @@ public class ClickEvent {
     public boolean equals(Object object) {
         if (this == object) {
             return true;
-        } else if (object != null && this.getClass() == object.getClass()) {
+        }
+        else if (object != null && this.getClass() == object.getClass()) {
             ClickEvent clickevent = (ClickEvent) object;
 
             if (this.a != clickevent.a) {
                 return false;
-            } else {
+            }
+            else {
                 if (this.b != null) {
                     if (!this.b.equals(clickevent.b)) {
                         return false;
                     }
-                } else if (clickevent.b != null) {
+                }
+                else if (clickevent.b != null) {
                     return false;
                 }
 
                 return true;
             }
-        } else {
+        }
+        else {
             return false;
         }
     }
@@ -72,19 +76,21 @@ public class ClickEvent {
         OPEN_URL(true), //
         OPEN_FILE(false), //
         RUN_COMMAND(true), //
-        SUGGEST_COMMAND(true);
+        TWITCH_USER_INFO(false), //
+        SUGGEST_COMMAND(true), //
+        CHANGE_PAGE(true);
 
-        private static final Map<String, Action> f = Maps.newHashMap();
-        private final boolean g;
+        private static final Map<String, Action> g = Maps.newHashMap();
+        private final boolean h;
         private final CanaryClickEventAction ccea; // CanaryMod
 
         private Action(boolean flag0) {
-            this.g = flag0;
+            this.h = flag0;
             ccea = new CanaryClickEventAction(this); // CanaryMod: install wrapper
         }
 
         public boolean a() {
-            return this.g;
+            return this.h;
         }
 
         public String b() {
@@ -98,13 +104,19 @@ public class ClickEvent {
         //
 
         public static Action a(String aclickevent_action) {
-            return f.get(aclickevent_action.toLowerCase());
+            return g.get(aclickevent_action.toLowerCase());
         }
 
         static {
-            for (Action action : values()) {
-                f.put(action.b(), action);
+            ClickEvent.Action[] aclickevent_action = values();
+            int i0 = aclickevent_action.length;
+
+            for (int i1 = 0; i1 < i0; ++i1) {
+                ClickEvent.Action clickevent_action = aclickevent_action[i1];
+
+                g.put(clickevent_action.b(), clickevent_action);
             }
+
         }
     }
 }

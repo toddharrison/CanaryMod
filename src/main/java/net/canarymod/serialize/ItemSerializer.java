@@ -22,7 +22,7 @@ public class ItemSerializer implements Serializer<CanaryItem> {
         if (item.length < 4) {
             throw new CanaryDeserializeException("Could not deserialize Item. Expected fields 4. Found: " + item.length, getVendor());
         }
-        CanaryItem citem = new CanaryItem(new ItemStack(net.minecraft.item.Item.d(parseInt(item[0])), parseInt(item[2]), parseInt(item[1])));
+        CanaryItem citem = new CanaryItem(new ItemStack(net.minecraft.item.Item.b(parseInt(item[0])), parseInt(item[2]), parseInt(item[1])));
         if (item.length >= 5) {
             citem.setDisplayName(item[4]);
         }

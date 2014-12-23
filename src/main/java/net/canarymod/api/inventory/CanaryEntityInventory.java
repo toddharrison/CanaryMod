@@ -1,5 +1,6 @@
 package net.canarymod.api.inventory;
 
+import net.canarymod.Canary;
 import net.canarymod.api.nbt.CanaryCompoundTag;
 import net.canarymod.config.Configuration;
 import net.minecraft.inventory.IInventory;
@@ -102,7 +103,7 @@ public abstract class CanaryEntityInventory implements Inventory {
             if (item == null) continue;
             if (item.getId() == itemId) {
                 if (item.getAmount() == remaining) {
-                    removeItem(item.getSlot());
+                    setSlot(item.getSlot(), null);
                     return;
                 }
                 else if (item.getAmount() > remaining) {
@@ -111,7 +112,7 @@ public abstract class CanaryEntityInventory implements Inventory {
                     return;
                 }
                 else {
-                    removeItem(item.getSlot());
+                    setSlot(item.getSlot(), null);
                     remaining -= item.getAmount();
                 }
             }
@@ -136,9 +137,9 @@ public abstract class CanaryEntityInventory implements Inventory {
 
         for (Item it : items) {
             if (it == null) continue;
-            if (it.getId() == item.getId() && it.getDamage() == item.getDamage()) {
+            if (it.equalsIgnoreSize(item)) {
                 if (it.getAmount() == remaining) {
-                    removeItem(it.getSlot());
+                    setSlot(it.getSlot(), null);
                     return;
                 }
                 else if (it.getAmount() > remaining) {
@@ -147,7 +148,7 @@ public abstract class CanaryEntityInventory implements Inventory {
                     return;
                 }
                 else {
-                    removeItem(it.getSlot());
+                    setSlot(it.getSlot(), null);
                     remaining -= it.getAmount();
                 }
             }
@@ -171,16 +172,8 @@ public abstract class CanaryEntityInventory implements Inventory {
      * {@inheritDoc}
      */
     @Override
-    public String getInventoryName() {
-        return inventory.b();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public int getInventoryStackLimit() {
-        return inventory.d();
+        return inventory.p_();
     }
 
     /**
@@ -257,7 +250,7 @@ public abstract class CanaryEntityInventory implements Inventory {
      */
     @Override
     public int getSize() {
-        return inventory.a();
+        return inventory.n_();
     }
 
     /**
@@ -307,7 +300,7 @@ public abstract class CanaryEntityInventory implements Inventory {
     private boolean hasItem(ItemType type, boolean doDamage) {
         for (int index = 0; index < getSize(); index++) {
             Item test = getSlot(index);
-            if (test != null && doDamage ? test.getType().equals(type) : test.getType().getId() == type.getId()) {
+            if (test != null && (doDamage ? test.getType().equals(type) : test.getType().getId() == type.getId())) {
                 return true;
             }
         }
@@ -371,7 +364,7 @@ public abstract class CanaryEntityInventory implements Inventory {
         for (int index = 0; index < getSize(); index++) {
             Item toCheck = getSlot(index);
 
-            if (toCheck != null && doDamage ? toCheck.getType().equals(type) : toCheck.getType().getId() == type.getId()) {
+            if (toCheck != null && (doDamage ? toCheck.getType().equals(type) : toCheck.getType().getId() == type.getId())) {
                 int am = toCheck.getAmount();
 
                 if (am > minAmount && am < maxAmount) {
@@ -395,8 +388,13 @@ public abstract class CanaryEntityInventory implements Inventory {
 
             // Get an existing item with at least 1 spot free
             for (Item i : getContents()) {
-                if (i != null && item.getId() == i.getId() && item.getDamage() == i.getDamage()
-                        && i.getAmount() < i.getMaxAmount()) {
+                if (i != null && i.getType().equals(item.getType()) && i.getAmount() < i.getMaxAmount()) {
+                    if((i.hasDataTag() && !item.hasDataTag()) || (!i.hasDataTag() && item.hasDataTag())){
+                        continue;
+                    }
+                    else if (i.hasDataTag() && !i.getDataTag().equals(item.getDataTag())){
+                        continue;
+                    }
                     itemExisting = i;
                 }
             }
@@ -417,13 +415,12 @@ public abstract class CanaryEntityInventory implements Inventory {
             if (eslot != -1) {
                 // Set the amount on item so the NBT copies the correct amounts.
                 item.setAmount(amount);
-                // Create NBT Tags and new Item, then copy NBT from existing item to new item
-                CanaryCompoundTag nbt = new CanaryCompoundTag();
-
-                ((CanaryItem) item).getHandle().b(nbt.getHandle());
+                // Create new Item
                 CanaryItem tempItem = new CanaryItem(item.getId(), amount, item.getDamage(), -1);
-
-                tempItem.getHandle().c(nbt.getHandle());
+                // Create NBT Tags and new Item, then copy NBT from existing item to new item
+                CanaryCompoundTag nbt = item.hasDataTag() ? (CanaryCompoundTag) ((CanaryItem) item).getDataTag().copy() : null;
+                // Set NBT on new Item
+                tempItem.setDataTag(nbt);
                 this.setSlot(eslot, tempItem);
                 amount = 0;
                 continue;
@@ -490,7 +487,7 @@ public abstract class CanaryEntityInventory implements Inventory {
         for (int index = 0; index < getSize(); index++) {
             Item toCheck = getSlot(index);
 
-            if (toCheck != null && toCheck.getType().equals(item.getType())) {
+            if (toCheck != null && item.equalsIgnoreSize(toCheck)) {
                 setSlot(index, null);
                 return toCheck;
             }
@@ -532,7 +529,7 @@ public abstract class CanaryEntityInventory implements Inventory {
         for (int index = 0; index < getSize(); index++) {
             Item toCheck = getSlot(index);
 
-            if (toCheck != null && doDamage ? toCheck.getType().equals(type) : toCheck.getId() == type.getId()) {
+            if (toCheck != null && (doDamage ? toCheck.getType().equals(type) : toCheck.getId() == type.getId())) {
                 setSlot(index, null);
                 return toCheck;
             }
@@ -556,4 +553,31 @@ public abstract class CanaryEntityInventory implements Inventory {
     }
 
     public abstract IInventory getHandle();
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean canInsertItems(Item item) {
+        int totalSpace = 0;
+        for (Item inv : getContents()) {
+            if (inv == null) {
+                totalSpace += item.getMaxAmount();
+            }
+            else {
+                if (inv.getType().equals(item.getType())) {
+                    if (item.hasDataTag() && item.getDataTag().equals(inv.getDataTag())) {
+                        totalSpace += inv.getMaxAmount() - inv.getAmount();
+                    }
+                }
+            }
+        }
+
+
+        if (totalSpace > 0) {
+            return true;
+        }
+
+        return false;
+    }
 }

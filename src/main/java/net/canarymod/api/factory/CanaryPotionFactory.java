@@ -14,7 +14,7 @@ public class CanaryPotionFactory implements PotionFactory {
 
     @Override
     public PotionEffect newPotionEffect(int id, int duration, int amplifier, boolean ambient) {
-        net.minecraft.potion.PotionEffect oEffect = new net.minecraft.potion.PotionEffect(id, duration, amplifier, ambient);
+        net.minecraft.potion.PotionEffect oEffect = new net.minecraft.potion.PotionEffect(id, duration, amplifier, ambient, true);
         return new CanaryPotionEffect(oEffect);
     }
 

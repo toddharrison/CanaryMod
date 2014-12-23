@@ -43,7 +43,7 @@ public class CanaryWorkbench extends CanaryBlockInventory implements Workbench {
      */
     @Override
     public int getX() {
-        return container.h;
+        return container.h.n();
     }
 
     /**
@@ -51,7 +51,7 @@ public class CanaryWorkbench extends CanaryBlockInventory implements Workbench {
      */
     @Override
     public int getY() {
-        return container.i;
+        return container.h.o();
     }
 
     /**
@@ -59,7 +59,7 @@ public class CanaryWorkbench extends CanaryBlockInventory implements Workbench {
      */
     @Override
     public int getZ() {
-        return container.j;
+        return container.h.p();
     }
 
     /**

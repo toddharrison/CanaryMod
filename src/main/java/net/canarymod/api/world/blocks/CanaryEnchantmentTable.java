@@ -48,7 +48,7 @@ public class CanaryEnchantmentTable extends CanaryBlockInventory implements Ench
      */
     @Override
     public int getX() {
-        return container.i;
+        return container.j.n();
     }
 
     /**
@@ -56,7 +56,7 @@ public class CanaryEnchantmentTable extends CanaryBlockInventory implements Ench
      */
     @Override
     public int getY() {
-        return container.j;
+        return container.j.o();
     }
 
     /**
@@ -64,7 +64,7 @@ public class CanaryEnchantmentTable extends CanaryBlockInventory implements Ench
      */
     @Override
     public int getZ() {
-        return container.k;
+        return container.j.p();
     }
 
     /**
@@ -72,7 +72,7 @@ public class CanaryEnchantmentTable extends CanaryBlockInventory implements Ench
      */
     @Override
     public World getWorld() {
-        return container.h.getCanaryWorld();
+        return container.i.getCanaryWorld();
     }
 
     /**

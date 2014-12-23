@@ -8,7 +8,7 @@ import net.minecraft.nbt.NBTTagInt;
  * @author Greg (gregthegeek)
  * @author Jason (darkdiplomat)
  */
-public class CanaryIntTag extends CanaryPrimativeTag implements IntTag {
+public class CanaryIntTag extends CanaryPrimitiveTag<IntTag> implements IntTag {
 
     /**
      * Constructs a new wrapper for NBTTagInt

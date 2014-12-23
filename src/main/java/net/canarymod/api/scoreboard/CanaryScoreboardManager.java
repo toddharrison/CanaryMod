@@ -1,25 +1,25 @@
 package net.canarymod.api.scoreboard;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import net.canarymod.Canary;
-import static net.canarymod.Canary.log;
-
 import net.canarymod.api.entity.living.humanoid.CanaryPlayer;
 import net.canarymod.api.entity.living.humanoid.Player;
-import net.canarymod.api.world.CanaryWorld;
-import net.canarymod.api.world.DimensionType;
-import net.canarymod.api.world.World;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S3BPacketScoreboardObjective;
 import net.minecraft.network.play.server.S3EPacketTeams;
-import net.minecraft.scoreboard.*;
+import net.minecraft.scoreboard.ScorePlayerTeam;
+import net.minecraft.scoreboard.ScoreboardSaveData;
+import net.minecraft.scoreboard.ServerScoreboard;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.storage.MapStorage;
 import net.minecraft.world.storage.SaveHandler;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import static net.canarymod.Canary.log;
 
 
 /**
@@ -67,11 +67,12 @@ public class CanaryScoreboardManager implements ScoreboardManager {
     public Scoreboard getScoreboard(String name) {
         /* Check to see if it's already loaded */
         for (Scoreboard s : scoreboards) {
-            if (((CanaryScoreboard)s).getSaveName().equals(name))
+            if (s.getSaveName().equals(name)) {
                 return s;
+            }
         }
         /* Not loaded, Create a Scoreboard */
-        ServerScoreboard serverScoreboard = new ServerScoreboard(MinecraftServer.I());
+        ServerScoreboard serverScoreboard = new ServerScoreboard(MinecraftServer.M());
         serverScoreboard.getCanaryScoreboard().saveName = name;
         /* Load the scoreboard (will be null if it doesn't exist */
         ScoreboardSaveData scoreboardSaveData = (ScoreboardSaveData)this.mapStorage.a(ScoreboardSaveData.class, name);
@@ -83,7 +84,7 @@ public class CanaryScoreboardManager implements ScoreboardManager {
         }
         /* tell the ServerScoreboard and ScoreboardSaveData about each other <3 */
         scoreboardSaveData.a(serverScoreboard);
-        ((ServerScoreboard)serverScoreboard).a(scoreboardSaveData);
+        serverScoreboard.a(scoreboardSaveData);
         /* Cache It */
         scoreboards.add(serverScoreboard.getCanaryScoreboard());
         for (Player p : Canary.getServer().getConfigurationManager().getAllPlayers()) {
@@ -116,7 +117,7 @@ public class CanaryScoreboardManager implements ScoreboardManager {
             while (iterator.hasNext()) {
                 ScorePlayerTeam scoreplayerteam = (ScorePlayerTeam) iterator.next();
 
-                entityplayermp.a.a((Packet) (new S3EPacketTeams(scoreplayerteam, 0)));
+                entityplayermp.a.a(new S3EPacketTeams(scoreplayerteam, 0));
             }
 
             /* Send all the Scores and ScoreObjective Data */

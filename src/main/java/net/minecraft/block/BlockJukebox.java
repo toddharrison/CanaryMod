@@ -2,6 +2,10 @@ package net.minecraft.block;
 
 import net.canarymod.api.world.blocks.CanaryJukebox;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
@@ -12,85 +16,116 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 public class BlockJukebox extends BlockContainer {
 
+    public static final PropertyBool a = PropertyBool.a("has_record");
+
     protected BlockJukebox() {
         super(Material.d);
+        this.j(this.L.b().a(a, Boolean.valueOf(false)));
         this.a(CreativeTabs.c);
     }
 
-    public boolean a(World world, int i0, int i1, int i2, EntityPlayer entityplayer, int i3, float f0, float f1, float f2) {
-        if (world.e(i0, i1, i2) == 0) {
-            return false;
+    public boolean a(World world, BlockPos blockpos, IBlockState iblockstate, EntityPlayer entityplayer, EnumFacing enumfacing, float f0, float f1, float f2) {
+        if (((Boolean)iblockstate.b(a)).booleanValue()) {
+            this.e(world, blockpos, iblockstate);
+            iblockstate = iblockstate.a(a, Boolean.valueOf(false));
+            world.a(blockpos, iblockstate, 2);
+            return true;
         }
         else {
-            this.e(world, i0, i1, i2);
-            return true;
+            return false;
         }
     }
 
-    public void b(World world, int i0, int i1, int i2, ItemStack itemstack) {
-        if (!world.E) {
-            TileEntityJukebox blockjukebox_tileentityjukebox = (TileEntityJukebox) world.o(i0, i1, i2);
+    public void a(World world, BlockPos blockpos, IBlockState iblockstate, ItemStack itemstack) {
+        if (!world.D) {
+            TileEntity tileentity = world.s(blockpos);
 
-            if (blockjukebox_tileentityjukebox != null) {
-                blockjukebox_tileentityjukebox.a(itemstack.m());
-                world.a(i0, i1, i2, 1, 2);
+            if (tileentity instanceof BlockJukebox.TileEntityJukebox) {
+                ((BlockJukebox.TileEntityJukebox)tileentity).a(new ItemStack(itemstack.b(), 1, itemstack.i()));
+                world.a(blockpos, iblockstate.a(a, Boolean.valueOf(true)), 2);
             }
         }
     }
 
-    public void e(World world, int i0, int i1, int i2) {
-        if (!world.E) {
-            TileEntityJukebox blockjukebox_tileentityjukebox = (TileEntityJukebox) world.o(i0, i1, i2);
+    private void e(World world, BlockPos blockpos, IBlockState iblockstate) {
+        if (!world.D) {
+            TileEntity tileentity = world.s(blockpos);
 
-            if (blockjukebox_tileentityjukebox != null) {
+            if (tileentity instanceof BlockJukebox.TileEntityJukebox) {
+                BlockJukebox.TileEntityJukebox blockjukebox_tileentityjukebox = (BlockJukebox.TileEntityJukebox)tileentity;
                 ItemStack itemstack = blockjukebox_tileentityjukebox.a();
 
                 if (itemstack != null) {
-                    world.c(1005, i0, i1, i2, 0);
-                    world.a((String) null, i0, i1, i2);
-                    blockjukebox_tileentityjukebox.a((ItemStack) null);
-                    world.a(i0, i1, i2, 0, 2);
+                    world.b(1005, blockpos, 0);
+                    world.a(blockpos, (String)null);
+                    blockjukebox_tileentityjukebox.a((ItemStack)null);
                     float f0 = 0.7F;
-                    double d0 = (double) (world.s.nextFloat() * f0) + (double) (1.0F - f0) * 0.5D;
-                    double d1 = (double) (world.s.nextFloat() * f0) + (double) (1.0F - f0) * 0.2D + 0.6D;
-                    double d2 = (double) (world.s.nextFloat() * f0) + (double) (1.0F - f0) * 0.5D;
-                    ItemStack itemstack1 = itemstack.m();
-                    EntityItem entityitem = new EntityItem(world, (double) i0 + d0, (double) i1 + d1, (double) i2 + d2, itemstack1);
+                    double d0 = (double)(world.s.nextFloat() * f0) + (double)(1.0F - f0) * 0.5D;
+                    double d1 = (double)(world.s.nextFloat() * f0) + (double)(1.0F - f0) * 0.2D + 0.6D;
+                    double d2 = (double)(world.s.nextFloat() * f0) + (double)(1.0F - f0) * 0.5D;
+                    ItemStack itemstack1 = itemstack.k();
+                    EntityItem entityitem = new EntityItem(world, (double)blockpos.n() + d0, (double)blockpos.o() + d1, (double)blockpos.p() + d2, itemstack1);
 
-                    entityitem.b = 10;
-                    world.d((Entity) entityitem);
+                    entityitem.p();
+                    world.d((Entity)entityitem);
                 }
             }
         }
     }
 
-    public void a(World world, int i0, int i1, int i2, Block block, int i3) {
-        this.e(world, i0, i1, i2);
-        super.a(world, i0, i1, i2, block, i3);
+    public void b(World world, BlockPos blockpos, IBlockState iblockstate) {
+        this.e(world, blockpos, iblockstate);
+        super.b(world, blockpos, iblockstate);
     }
 
-    public void a(World world, int i0, int i1, int i2, int i3, float f0, int i4) {
-        if (!world.E) {
-            super.a(world, i0, i1, i2, i3, f0, 0);
+    public void a(World world, BlockPos blockpos, IBlockState iblockstate, float f0, int i0) {
+        if (!world.D) {
+            super.a(world, blockpos, iblockstate, f0, 0);
         }
     }
 
     public TileEntity a(World world, int i0) {
-        return new TileEntityJukebox();
+        return new BlockJukebox.TileEntityJukebox();
     }
 
-    public boolean M() {
+    public boolean N() {
         return true;
     }
 
-    public int g(World world, int i0, int i1, int i2, int i3) {
-        ItemStack itemstack = ((TileEntityJukebox) world.o(i0, i1, i2)).a();
+    public int l(World world, BlockPos blockpos) {
+        TileEntity tileentity = world.s(blockpos);
 
-        return itemstack == null ? 0 : Item.b(itemstack.b()) + 1 - Item.b(Items.cd);
+        if (tileentity instanceof BlockJukebox.TileEntityJukebox) {
+            ItemStack itemstack = ((BlockJukebox.TileEntityJukebox)tileentity).a();
+
+            if (itemstack != null) {
+                return Item.b(itemstack.b()) + 1 - Item.b(Items.cq);
+            }
+        }
+
+        return 0;
+    }
+
+    public int b() {
+        return 3;
+    }
+
+    public IBlockState a(int i0) {
+        return this.P().a(a, Boolean.valueOf(i0 > 0));
+    }
+
+    public int c(IBlockState iblockstate) {
+        return ((Boolean)iblockstate.b(a)).booleanValue() ? 1 : 0;
+    }
+
+    protected BlockState e() {
+        return new BlockState(this, new IProperty[]{ a });
     }
 
     public static class TileEntityJukebox extends TileEntity {
@@ -101,38 +136,35 @@ public class BlockJukebox extends BlockContainer {
             this.complexBlock = new CanaryJukebox(this); // CanaryMod: wrap tile entity
         }
 
-        public void a(NBTTagCompound nbttagcompound) {
-            super.a(nbttagcompound);
-            if (nbttagcompound.b("RecordItem", 10)) {
-                this.a(ItemStack.a(nbttagcompound.m("RecordItem")));
+        public void a(NBTTagCompound p_a_1_) {
+            super.a(p_a_1_);
+            if (p_a_1_.b("RecordItem", 10)) {
+                this.a(ItemStack.a(p_a_1_.m("RecordItem")));
             }
-            else if (nbttagcompound.f("Record") > 0) {
-                this.a(new ItemStack(Item.d(nbttagcompound.f("Record")), 1, 0));
+            else if (p_a_1_.f("Record") > 0) {
+                this.a(new ItemStack(Item.b(p_a_1_.f("Record")), 1, 0));
             }
-
         }
 
-        public void b(NBTTagCompound nbttagcompound) {
-            super.b(nbttagcompound);
+        public void b(NBTTagCompound p_b_1_) {
+            super.b(p_b_1_);
             if (this.a() != null) {
-                nbttagcompound.a("RecordItem", (NBTBase) this.a().b(new NBTTagCompound()));
-                nbttagcompound.a("Record", Item.b(this.a().b()));
+                p_b_1_.a("RecordItem", (NBTBase)this.a().b(new NBTTagCompound()));
             }
-
         }
 
         public ItemStack a() {
             return this.a;
         }
 
-        public void a(ItemStack nbttagcompound) {
-            this.a = nbttagcompound;
-            this.e();
+        public void a(ItemStack p_a_1_) {
+            this.a = p_a_1_;
+            this.o_();
         }
 
         // CanaryMod
         public CanaryJukebox getCanaryJukebox() {
-            return (CanaryJukebox) complexBlock;
+            return (CanaryJukebox)complexBlock;
         }
     }
 }

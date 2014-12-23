@@ -5,336 +5,274 @@ import net.canarymod.api.world.blocks.CanaryBlock;
 import net.canarymod.hook.world.FlowHook;
 import net.canarymod.hook.world.LiquidDestroyHook;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import java.util.EnumSet;
+import java.util.Iterator;
 import java.util.Random;
+import java.util.Set;
 
 public class BlockDynamicLiquid extends BlockLiquid {
 
     int a;
-    boolean[] b = new boolean[4];
-    int[] M = new int[4];
 
     protected BlockDynamicLiquid(Material material) {
         super(material);
     }
 
-    private void n(World world, int i0, int i1, int i2) {
-        int i3 = world.e(i0, i1, i2);
-
-        world.d(i0, i1, i2, Block.e(Block.b((Block) this) + 1), i3, 2);
+    private void f(World world, BlockPos blockpos, IBlockState iblockstate) {
+        world.a(blockpos, b(this.J).P().a(b, iblockstate.b(b)), 2);
     }
 
-    public void a(World world, int i0, int i1, int i2, Random random) {
+    public void b(World world, BlockPos blockpos, IBlockState iblockstate, Random random) {
 
         // CanaryMod: Flow from
-        CanaryBlock from = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
+        CanaryBlock from = CanaryBlock.getPooledBlock(iblockstate, blockpos, world);
         //
 
-        int i3 = this.e(world, i0, i1, i2);
+        int i0 = ((Integer)iblockstate.b(b)).intValue();
         byte b0 = 1;
 
-        if (this.J == Material.i && !world.t.f) {
+        if (this.J == Material.i && !world.t.n()) {
             b0 = 2;
         }
 
-        boolean flag0 = true;
-        int i4 = this.a(world);
-        int i5;
+        int i1 = this.a(world);
+        int i2;
 
-        if (i3 > 0) {
-            byte b1 = -100;
+        if (i0 > 0) {
+            int i3 = -100;
 
             this.a = 0;
-            int i6 = this.a(world, i0 - 1, i1, i2, b1);
 
-            i6 = this.a(world, i0 + 1, i1, i2, i6);
-            i6 = this.a(world, i0, i1, i2 - 1, i6);
-            i6 = this.a(world, i0, i1, i2 + 1, i6);
-            i5 = i6 + b0;
-            if (i5 >= 8 || i6 < 0) {
-                i5 = -1;
+            EnumFacing enumfacing;
+
+            for (Iterator iterator = EnumFacing.Plane.HORIZONTAL.iterator(); iterator.hasNext(); i3 = this.a(world, blockpos.a(enumfacing), i3)) {
+                enumfacing = (EnumFacing)iterator.next();
             }
 
-            if (this.e(world, i0, i1 + 1, i2) >= 0) {
-                int i7 = this.e(world, i0, i1 + 1, i2);
+            int i4 = i3 + b0;
 
-                if (i7 >= 8) {
-                    i5 = i7;
+            if (i4 >= 8 || i3 < 0) {
+                i4 = -1;
+            }
+
+            if (this.e((IBlockAccess)world, blockpos.a()) >= 0) {
+                i2 = this.e((IBlockAccess)world, blockpos.a());
+                if (i2 >= 8) {
+                    i4 = i2;
                 }
                 else {
-                    i5 = i7 + 8;
+                    i4 = i2 + 8;
                 }
             }
 
             if (this.a >= 2 && this.J == Material.h) {
-                if (world.a(i0, i1 - 1, i2).o().a()) {
-                    i5 = 0;
+                IBlockState iblockstate1 = world.p(blockpos.b());
+
+                if (iblockstate1.c().r().a()) {
+                    i4 = 0;
                 }
-                else if (world.a(i0, i1 - 1, i2).o() == this.J && world.e(i0, i1 - 1, i2) == 0) {
-                    i5 = 0;
+                else if (iblockstate1.c().r() == this.J && ((Integer)iblockstate1.b(b)).intValue() == 0) {
+                    i4 = 0;
                 }
             }
 
-            if (this.J == Material.i && i3 < 8 && i5 < 8 && i5 > i3 && random.nextInt(4) != 0) {
-                i4 *= 4;
+            if (this.J == Material.i && i0 < 8 && i4 < 8 && i4 > i0 && random.nextInt(4) != 0) {
+                i1 *= 4;
             }
 
-            if (i5 == i3) {
-                if (flag0) {
-                    this.n(world, i0, i1, i2);
-                }
+            if (i4 == i0) {
+                this.f(world, blockpos, iblockstate);
             }
             else {
-                i3 = i5;
-                if (i5 < 0) {
-                    world.f(i0, i1, i2);
+                i0 = i4;
+                if (i4 < 0) {
+                    world.g(blockpos);
                 }
                 else {
-                    world.a(i0, i1, i2, i5, 2);
-                    world.a(i0, i1, i2, this, i4);
-                    world.d(i0, i1, i2, this);
+                    iblockstate = iblockstate.a(b, Integer.valueOf(i4));
+                    world.a(blockpos, iblockstate, 2);
+                    world.a(blockpos, (Block)this, i1);
+                    world.c(blockpos, (Block)this);
                 }
             }
         }
         else {
-            this.n(world, i0, i1, i2);
+            this.f(world, blockpos, iblockstate);
         }
 
-        if (this.q(world, i0, i1 - 1, i2)) {
-            if (this.J == Material.i && world.a(i0, i1 - 1, i2).o() == Material.h) {
-                world.b(i0, i1 - 1, i2, Blocks.b);
-                this.m(world, i0, i1 - 1, i2);
+        IBlockState iblockstate2 = world.p(blockpos.b());
+
+        if (this.h(world, blockpos.b(), iblockstate2)) {
+            if (this.J == Material.i && world.p(blockpos.b()).c().r() == Material.h) {
+                world.a(blockpos.b(), Blocks.b.P());
+                this.d(world, blockpos.b());
                 return;
             }
 
             // CanaryMod: Flow (down)
-            CanaryBlock to = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1 - 1, i2);
-            FlowHook hook = (FlowHook) new FlowHook(from, to).call();
-            if (!hook.isCanceled()) {
-                if (i3 >= 8) {
-                    this.h(world, i0, i1 - 1, i2, i3);
+            if (!new FlowHook(from, CanaryBlock.getPooledBlock(iblockstate, blockpos.b(), world)).call().isCanceled()) {
+                if (i0 >= 8) {
+                    this.a(world, blockpos.b(), iblockstate2, i0);
                 }
                 else {
-                    this.h(world, i0, i1 - 1, i2, i3 + 8);
+                    this.a(world, blockpos.b(), iblockstate2, i0 + 8);
                 }
+                //
             }
-            //
         }
-        else if (i3 >= 0 && (i3 == 0 || this.p(world, i0, i1 - 1, i2))) {
-            boolean[] aboolean = this.o(world, i0, i1, i2);
+        else if (i0 >= 0 && (i0 == 0 || this.g(world, blockpos.b(), iblockstate2))) {
+            Set set = this.e(world, blockpos);
 
-            i5 = i3 + b0;
-            if (i3 >= 8) {
-                i5 = 1;
+            i2 = i0 + b0;
+            if (i0 >= 8) {
+                i2 = 1;
             }
 
-            if (i5 >= 8) {
+            if (i2 >= 8) {
                 return;
             }
 
-            if (aboolean[0]) {
-                // CanaryMod: Flow
-                CanaryBlock to = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0 - 1, i1, i2);
-                FlowHook hook = (FlowHook) new FlowHook(from, to).call();
-                if (!hook.isCanceled()) {
-                    this.h(world, i0 - 1, i1, i2, i5);
-                }
-                //
-            }
+            Iterator iterator1 = set.iterator();
 
-            if (aboolean[1]) {
-                // CanaryMod: Flow
-                CanaryBlock to = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0 + 1, i1, i2);
-                FlowHook hook = (FlowHook) new FlowHook(from, to).call();
-                if (!hook.isCanceled()) {
-                    this.h(world, i0 + 1, i1, i2, i5);
-                }
-                //
-            }
+            while (iterator1.hasNext()) {
+                EnumFacing enumfacing1 = (EnumFacing)iterator1.next();
 
-            if (aboolean[2]) {
                 // CanaryMod: Flow
-                CanaryBlock to = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2 - 1);
-                FlowHook hook = (FlowHook) new FlowHook(from, to).call();
-                if (!hook.isCanceled()) {
-                    this.h(world, i0, i1, i2 - 1, i5);
-                }
-                //
-            }
-
-            if (aboolean[3]) {
-                // CanaryMod: Flow
-                CanaryBlock to = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2 + 1);
-                FlowHook hook = (FlowHook) new FlowHook(from, to).call();
-                if (!hook.isCanceled()) {
-                    this.h(world, i0, i1, i2 + 1, i5);
+                if (!new FlowHook(from, CanaryBlock.getPooledBlock(iblockstate, blockpos.a(enumfacing1), world)).call().isCanceled()) {
+                    this.a(world, blockpos.a(enumfacing1), world.p(blockpos.a(enumfacing1)), i2);
                 }
                 //
             }
         }
     }
 
-    private void h(World world, int i0, int i1, int i2, int i3) {
-        if (this.q(world, i0, i1, i2)) {
-            Block block = world.a(i0, i1, i2);
-
-            if (this.J == Material.i) {
-                this.m(world, i0, i1, i2);
+    private void a(World world, BlockPos blockpos, IBlockState iblockstate, int i0) {
+        if (this.h(world, blockpos, iblockstate)) {
+            if (iblockstate.c() != Blocks.a) {
+                if (this.J == Material.i) {
+                    this.d(world, blockpos);
+                }
+                else {
+                    iblockstate.c().b(world, blockpos, iblockstate, 0);
+                }
             }
-            else {
-                block.b(world, i0, i1, i2, world.e(i0, i1, i2), 0);
-            }
 
-            world.d(i0, i1, i2, this, i3, 3);
+            world.a(blockpos, this.P().a(b, Integer.valueOf(i0)), 3);
         }
     }
 
-    private int c(World world, int i0, int i1, int i2, int i3, int i4) {
-        int i5 = 1000;
+    private int a(World world, BlockPos blockpos, int i0, EnumFacing enumfacing) {
+        int i1 = 1000;
+        Iterator iterator = EnumFacing.Plane.HORIZONTAL.iterator();
 
-        for (int i6 = 0; i6 < 4; ++i6) {
-            if ((i6 != 0 || i4 != 1) && (i6 != 1 || i4 != 0) && (i6 != 2 || i4 != 3) && (i6 != 3 || i4 != 2)) {
-                int i7 = i0;
-                int i8 = i2;
+        while (iterator.hasNext()) {
+            EnumFacing enumfacing1 = (EnumFacing)iterator.next();
 
-                if (i6 == 0) {
-                    i7 = i0 - 1;
-                }
+            if (enumfacing1 != enumfacing) {
+                BlockPos blockpos1 = blockpos.a(enumfacing1);
+                IBlockState iblockstate = world.p(blockpos1);
 
-                if (i6 == 1) {
-                    ++i7;
-                }
-
-                if (i6 == 2) {
-                    i8 = i2 - 1;
-                }
-
-                if (i6 == 3) {
-                    ++i8;
-                }
-
-                if (!this.p(world, i7, i1, i8) && (world.a(i7, i1, i8).o() != this.J || world.e(i7, i1, i8) != 0)) {
-                    if (!this.p(world, i7, i1 - 1, i8)) {
-                        return i3;
+                if (!this.g(world, blockpos1, iblockstate) && (iblockstate.c().r() != this.J || ((Integer)iblockstate.b(b)).intValue() > 0)) {
+                    if (!this.g(world, blockpos1.b(), iblockstate)) {
+                        return i0;
                     }
 
-                    if (i3 < 4) {
-                        int i9 = this.c(world, i7, i1, i8, i3 + 1, i6);
+                    if (i0 < 4) {
+                        int i2 = this.a(world, blockpos1, i0 + 1, enumfacing1.d());
 
-                        if (i9 < i5) {
-                            i5 = i9;
+                        if (i2 < i1) {
+                            i1 = i2;
                         }
                     }
                 }
             }
         }
 
-        return i5;
+        return i1;
     }
 
-    private boolean[] o(World world, int i0, int i1, int i2) {
-        int i3;
-        int i4;
+    private Set e(World world, BlockPos blockpos) {
+        int i0 = 1000;
+        EnumSet enumset = EnumSet.noneOf(EnumFacing.class);
+        Iterator iterator = EnumFacing.Plane.HORIZONTAL.iterator();
 
-        for (i3 = 0; i3 < 4; ++i3) {
-            this.M[i3] = 1000;
-            i4 = i0;
-            int i5 = i2;
+        while (iterator.hasNext()) {
+            EnumFacing enumfacing = (EnumFacing)iterator.next();
+            BlockPos blockpos1 = blockpos.a(enumfacing);
+            IBlockState iblockstate = world.p(blockpos1);
 
-            if (i3 == 0) {
-                i4 = i0 - 1;
-            }
+            if (!this.g(world, blockpos1, iblockstate) && (iblockstate.c().r() != this.J || ((Integer)iblockstate.b(b)).intValue() > 0)) {
+                int i1;
 
-            if (i3 == 1) {
-                ++i4;
-            }
-
-            if (i3 == 2) {
-                i5 = i2 - 1;
-            }
-
-            if (i3 == 3) {
-                ++i5;
-            }
-
-            if (!this.p(world, i4, i1, i5) && (world.a(i4, i1, i5).o() != this.J || world.e(i4, i1, i5) != 0)) {
-                if (this.p(world, i4, i1 - 1, i5)) {
-                    this.M[i3] = this.c(world, i4, i1, i5, 1, i3);
+                if (this.g(world, blockpos1.b(), world.p(blockpos1.b()))) {
+                    i1 = this.a(world, blockpos1, 1, enumfacing.d());
                 }
                 else {
-                    this.M[i3] = 0;
+                    i1 = 0;
+                }
+
+                if (i1 < i0) {
+                    enumset.clear();
+                }
+
+                if (i1 <= i0) {
+                    enumset.add(enumfacing);
+                    i0 = i1;
                 }
             }
         }
 
-        i3 = this.M[0];
-
-        for (i4 = 1; i4 < 4; ++i4) {
-            if (this.M[i4] < i3) {
-                i3 = this.M[i4];
-            }
-        }
-
-        for (i4 = 0; i4 < 4; ++i4) {
-            this.b[i4] = this.M[i4] == i3;
-        }
-
-        return this.b;
+        return enumset;
     }
 
-    private boolean p(World world, int i0, int i1, int i2) {
-        Block block = world.a(i0, i1, i2);
+    private boolean g(World world, BlockPos blockpos, IBlockState iblockstate) {
+        Block block = world.p(blockpos).c();
 
-        return block != Blocks.ao && block != Blocks.av && block != Blocks.an && block != Blocks.ap && block != Blocks.aH ? (block.J == Material.E ? true : block.J.c()) : true;
+        return !(block instanceof BlockDoor) && block != Blocks.an && block != Blocks.au && block != Blocks.aM ? (block.J == Material.E ? true : block.J.c()) : true;
     }
 
-    protected int a(World world, int i0, int i1, int i2, int i3) {
-        int i4 = this.e(world, i0, i1, i2);
+    protected int a(World world, BlockPos blockpos, int i0) {
+        int i1 = this.e((IBlockAccess)world, blockpos);
 
-        if (i4 < 0) {
-            return i3;
+        if (i1 < 0) {
+            return i0;
         }
         else {
-            if (i4 == 0) {
+            if (i1 == 0) {
                 ++this.a;
             }
 
-            if (i4 >= 8) {
-                i4 = 0;
+            if (i1 >= 8) {
+                i1 = 0;
             }
 
-            return i3 >= 0 && i4 >= i3 ? i3 : i4;
+            return i0 >= 0 && i1 >= i0 ? i0 : i1;
         }
     }
 
-    private boolean q(World world, int i0, int i1, int i2) {
+    private boolean h(World world, BlockPos blockpos, IBlockState iblockstate) {
+        Material material = iblockstate.c().r();
+        boolean ret = material != this.J && material != Material.i && !this.g(world, blockpos, iblockstate);
+
         // CanaryMod: LiquidDestroy
-        CanaryBlock dest = (CanaryBlock) world.getCanaryWorld().getBlockAt(i0, i1, i2);
+        CanaryBlock dest = CanaryBlock.getPooledBlock(iblockstate, blockpos, world);
         BlockType liquid = this.J == Material.i ? BlockType.LavaFlowing : BlockType.WaterFlowing;
-        LiquidDestroyHook hook = (LiquidDestroyHook) new LiquidDestroyHook(liquid, dest).call();
-        if (hook.isForceDestroy()) {
-            return true;
-        }
-        else if (hook.isCanceled()) {
-            return false;
-        }
+        LiquidDestroyHook hook = (LiquidDestroyHook)new LiquidDestroyHook(liquid, dest).call();
+
+        return hook.isForceDestroy() || (!hook.isCanceled() && ret);
         //
-
-        Material material = world.a(i0, i1, i2).o();
-
-        return material == this.J ? false : (material == Material.i ? false : !this.p(world, i0, i1, i2));
     }
 
-    public void b(World world, int i0, int i1, int i2) {
-        super.b(world, i0, i1, i2);
-        if (world.a(i0, i1, i2) == this) {
-            world.a(i0, i1, i2, this, this.a(world));
+    public void c(World world, BlockPos blockpos, IBlockState iblockstate) {
+        if (!this.e(world, blockpos, iblockstate)) {
+            world.a(blockpos, (Block)this, this.a(world));
         }
-    }
-
-    public boolean L() {
-        return true;
     }
 }

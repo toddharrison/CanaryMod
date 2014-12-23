@@ -1,10 +1,12 @@
 package net.canarymod.api.entity.living.humanoid;
 
 import net.canarymod.api.entity.EntityItem;
+import net.canarymod.api.entity.EntityType;
 import net.canarymod.api.entity.living.CanaryLivingBase;
 import net.canarymod.api.inventory.Item;
 import net.canarymod.api.inventory.PlayerInventory;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.EnumAction;
 
 /**
  * Human implementation
@@ -18,40 +20,28 @@ public abstract class CanaryHuman extends CanaryLivingBase implements Human {
         super(entity);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String getName() {
-        return getHandle().b_();
+        return getHandle().d_();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public String getDisplayName() {
-        return getHandle().getDisplayName();
+        String displayName = getHandle().getDisplayName();
+        return displayName != null ? displayName : getName();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void setDisplayName(String name) {
         getHandle().setDisplayName(name);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void kill() {
         this.getCapabilities().setInvulnerable(false); // FORCE DEATH!
         super.kill();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public EntityItem[] dropInventory() {
         Item[] items = getInventory().getContents();
@@ -68,25 +58,22 @@ public abstract class CanaryHuman extends CanaryLivingBase implements Human {
         return drops;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean isBlocking() {
-        return getHandle().bC();
+        return getHandle().bV();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
+    public boolean isShooting() {
+        /* mimics the isBlocking method above only with BOW Action*/
+        return getHandle().bR() && getHandle().g.b().e(getHandle().g) == EnumAction.BOW;
+    }
+
     @Override
     public void destroyItemHeld() {
-        getHandle().bG();
+        getHandle().bZ();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Item getItemHeld() {
         Item item = getInventory().getItemInHand();
@@ -98,58 +85,67 @@ public abstract class CanaryHuman extends CanaryLivingBase implements Human {
         return null;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void dropItem(Item item) {
         getWorld().dropItem(getPosition(), item);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public PlayerInventory getInventory() {
         return getHandle().getPlayerInventory();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void giveItem(Item item) {
         getHandle().getPlayerInventory().addItem(item);
         getHandle().getPlayerInventory().update();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String getPrefix() {
         return this.prefix;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void setPrefix(String prefix) {
         this.prefix = prefix;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public HumanCapabilities getCapabilities() {
-        return getHandle().bE.getCanaryCapabilities();
+        return getHandle().by.getCanaryCapabilities();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
+    public boolean isSleeping() {
+        return getHandle().bI();
+    }
+
+    @Override
+    public boolean isDeeplySleeping() {
+        return getHandle().ce();
+    }
+
+    @Override
+    public boolean isSleepingIgnored() {
+        return getHandle().isSleepIgnored();
+    }
+
+    @Override
+    public void setSleepingIgnored(boolean ignored) {
+        getHandle().setSleepIgnored(ignored);
+    }
+
+    @Override
+    public boolean isUsingItem() {
+        return getHandle().bR();
+    }
+
+    @Override
+    public Item getItemInUse(){
+        return getHandle().g != null ? getHandle().g.getCanaryItem() : null;
+    }
+
     @Override
     public EntityPlayer getHandle() {
         return (EntityPlayer) entity;

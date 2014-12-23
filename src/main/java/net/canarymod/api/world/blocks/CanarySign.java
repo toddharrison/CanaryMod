@@ -1,9 +1,14 @@
 package net.canarymod.api.world.blocks;
 
+import net.canarymod.api.chat.CanaryChatComponent;
+import net.canarymod.api.chat.ChatComponent;
 import net.canarymod.api.entity.living.humanoid.CanaryPlayer;
 import net.canarymod.api.entity.living.humanoid.Player;
+import net.minecraft.block.BlockWallSign;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntitySign;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.EnumFacing;
 
 import java.util.Arrays;
 
@@ -29,7 +34,20 @@ public class CanarySign extends CanaryTileEntity implements Sign {
      */
     @Override
     public String[] getText() {
-        return getTileEntity().a.clone();
+        String[] strings = new String[4];
+        for (int i = 0 ; i < 4 ; i++) {
+            strings[i] = getTileEntity().a[i].getWrapper().getFullText();
+        }
+        return strings;
+    }
+
+    @Override
+    public ChatComponent[] getLines() {
+        ChatComponent[] components = new ChatComponent[4];
+        for (int index = 0; index < 4; index++) {
+            components[index] = getTileEntity().a[index].getWrapper();
+        }
+        return components;
     }
 
     /**
@@ -38,7 +56,15 @@ public class CanarySign extends CanaryTileEntity implements Sign {
     @Override
     public String getTextOnLine(int line) {
         if (line >= 0 && line <= 3) {
-            return getTileEntity().a[line];
+            return getText()[line];
+        }
+        return null;
+    }
+
+    @Override
+    public ChatComponent getComponentOnLine(int line) {
+        if (line >= 0 && line <= 3) {
+            return getTileEntity().a[line].getWrapper();
         }
         return null;
     }
@@ -48,7 +74,18 @@ public class CanarySign extends CanaryTileEntity implements Sign {
      */
     @Override
     public void setText(String[] text) {
-        getTileEntity().a = insureData(text);
+        String[] data = insureData(text);
+        for (int line = 0; line < 4; line++) {
+            getTileEntity().a[line] = new ChatComponentText(data[line]);
+        }
+        
+    }
+
+    @Override
+    public void setComponents(ChatComponent[] chatComponents) {
+        for (int line = 0; line < 4; line++) {
+            getTileEntity().a[line] = chatComponents[line] != null ? ((CanaryChatComponent)chatComponents[line]).getNative() : new ChatComponentText("");
+        }
     }
 
     /**
@@ -57,7 +94,14 @@ public class CanarySign extends CanaryTileEntity implements Sign {
     @Override
     public void setTextOnLine(String text, int line) {
         if (line >= 0 && line <= 3) {
-            getTileEntity().a[line] = text == null ? "" : text.length() > 15 ? text.substring(0, 15) : text;
+            getTileEntity().a[line] = new ChatComponentText(text == null ? "" : text.length() > 15 ? text.substring(0, 15) : text);
+        }
+    }
+
+    @Override
+    public void setComponentOnLine(ChatComponent chatComponent, int line) {
+        if (line >= 0 && line <= 3) {
+            getTileEntity().a[line] = chatComponent != null ? ((CanaryChatComponent)chatComponent).getNative() : new ChatComponentText("");
         }
     }
 
@@ -78,21 +122,21 @@ public class CanarySign extends CanaryTileEntity implements Sign {
     }
 
     /**
-     * {@inheirtDoc}
+     * {@inheritDoc}
      */
     @Override
     public Block getBlockAttached() {
         if (isSignPost()) {
             return getWorld().getBlockAt(getX(), getY() - 1, getZ());
         }
-        switch (getBlock().getData()) {
-            case 2: // Facing North / Attached is South
+        switch ((EnumFacing)((CanaryBlock)getBlock()).getNativeState().b(BlockWallSign.a)) {
+            case NORTH: // Facing North / Attached is South
                 return getWorld().getBlockAt(getX(), getY(), getZ() + 1);
-            case 3: // Facing South / Attached is North
+            case SOUTH: // Facing South / Attached is North
                 return getWorld().getBlockAt(getX(), getY(), getZ() - 1);
-            case 4: // Facing West / Attached is East
+            case WEST: // Facing West / Attached is East
                 return getWorld().getBlockAt(getX() + 1, getY(), getZ());
-            case 5: // Facing East / Attached is West
+            case EAST: // Facing East / Attached is West
                 return getWorld().getBlockAt(getX() - 1, getY(), getZ());
             default:
                 return null;
@@ -101,12 +145,12 @@ public class CanarySign extends CanaryTileEntity implements Sign {
 
     @Override
     public boolean isEditable() {
-        return getTileEntity().j;
+        return getTileEntity().g;
     }
 
     @Override
     public void setEditable(boolean edit) {
-        getTileEntity().j = edit;
+        getTileEntity().g = edit;
     }
 
     @Override
@@ -116,7 +160,7 @@ public class CanarySign extends CanaryTileEntity implements Sign {
 
     @Override
     public Player getOwner() {
-        EntityPlayer entityplayer = getTileEntity().b();
+        EntityPlayer entityplayer = getTileEntity().c();
         return (Player) (entityplayer == null ? null : entityplayer.getCanaryEntity());
     }
 

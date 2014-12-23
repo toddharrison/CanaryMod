@@ -1,26 +1,33 @@
 package net.minecraft.scoreboard;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import net.canarymod.api.scoreboard.CanaryScoreboard;
+import net.minecraft.util.EnumChatFormatting;
 
 import java.util.*;
 
 public class Scoreboard {
 
-    private final Map a = new HashMap();
-    private final Map b = new HashMap();
-    private final Map c = new HashMap();
-    private static final ScoreObjective[] d = new ScoreObjective[3]; // CanaryMod: make static
-    private final Map e = new HashMap();
-    private final Map f = new HashMap();
+    private final Map a = Maps.newHashMap();
+    private final Map b = Maps.newHashMap();
+    private final Map c = Maps.newHashMap();
+    private static final ScoreObjective[] d = new ScoreObjective[19]; // CanaryMod: make static
+    private final Map e = Maps.newHashMap();
+    private final Map f = Maps.newHashMap();
+    private static String[] g = null;
 
     // CanaryMod: Start CanaryScoreboard 
     protected CanaryScoreboard scoreboard;
-    
+
     public Scoreboard() {
         scoreboard = new CanaryScoreboard(this, "scoreboard");
     }
-    
-    /**@param name The save name associated with this Scoreboard */
+
+    /**
+     * @param name
+     *         The save name associated with this Scoreboard
+     */
     public Scoreboard(String name) {
         scoreboard = new CanaryScoreboard(this, name);
     }
@@ -41,7 +48,7 @@ public class Scoreboard {
             Object object = (List) this.b.get(iscoreobjectivecriteria);
 
             if (object == null) {
-                object = new ArrayList();
+                object = Lists.newArrayList();
                 this.b.put(iscoreobjectivecriteria, object);
             }
 
@@ -55,14 +62,27 @@ public class Scoreboard {
     public Collection a(IScoreObjectiveCriteria iscoreobjectivecriteria) {
         Collection collection = (Collection) this.b.get(iscoreobjectivecriteria);
 
-        return collection == null ? new ArrayList() : new ArrayList(collection);
+        return collection == null ? Lists.newArrayList() : Lists.newArrayList(collection);
     }
 
-    public Score a(String s0, ScoreObjective scoreobjective) {
+    public boolean b(String s0, ScoreObjective scoreobjective) {
+        Map map = (Map) this.c.get(s0);
+
+        if (map == null) {
+            return false;
+        }
+        else {
+            Score score = (Score) map.get(scoreobjective);
+
+            return score != null;
+        }
+    }
+
+    public Score c(String s0, ScoreObjective scoreobjective) {
         Object object = (Map) this.c.get(s0);
 
         if (object == null) {
-            object = new HashMap();
+            object = Maps.newHashMap();
             this.c.put(s0, object);
         }
 
@@ -77,7 +97,7 @@ public class Scoreboard {
     }
 
     public Collection i(ScoreObjective scoreobjective) {
-        ArrayList arraylist = new ArrayList();
+        ArrayList arraylist = Lists.newArrayList();
         Iterator iterator = this.c.values().iterator();
 
         while (iterator.hasNext()) {
@@ -101,17 +121,38 @@ public class Scoreboard {
         return this.c.keySet();
     }
 
-    public void c(String s0) {
-        Map map = (Map) this.c.remove(s0);
+    public void d(String s0, ScoreObjective scoreobjective) {
+        Map map;
 
-        if (map != null) {
-            this.a(s0);
+        if (scoreobjective == null) {
+            map = (Map) this.c.remove(s0);
+            if (map != null) {
+                this.a(s0);
+            }
         }
+        else {
+            map = (Map) this.c.get(s0);
+            if (map != null) {
+                Score score = (Score) map.remove(scoreobjective);
+
+                if (map.size() < 1) {
+                    Map map1 = (Map) this.c.remove(s0);
+
+                    if (map1 != null) {
+                        this.a(s0);
+                    }
+                }
+                else if (score != null) {
+                    this.a(s0, scoreobjective);
+                }
+            }
+        }
+
     }
 
     public Collection e() {
         Collection collection = this.c.values();
-        ArrayList arraylist = new ArrayList();
+        ArrayList arraylist = Lists.newArrayList();
         Iterator iterator = collection.iterator();
 
         while (iterator.hasNext()) {
@@ -123,11 +164,11 @@ public class Scoreboard {
         return arraylist;
     }
 
-    public Map d(String s0) {
+    public Map c(String s0) {
         Object object = (Map) this.c.get(s0);
 
         if (object == null) {
-            object = new HashMap();
+            object = Maps.newHashMap();
         }
 
         return (Map) object;
@@ -136,7 +177,7 @@ public class Scoreboard {
     public void k(ScoreObjective scoreobjective) {
         this.a.remove(scoreobjective.b());
 
-        for (int i0 = 0; i0 < 3; ++i0) {
+        for (int i0 = 0; i0 < 19; ++i0) {
             if (this.a(i0) == scoreobjective) {
                 this.a(i0, (ScoreObjective) null);
             }
@@ -167,12 +208,12 @@ public class Scoreboard {
         return this.d[i0];
     }
 
-    public ScorePlayerTeam e(String s0) {
+    public ScorePlayerTeam d(String s0) {
         return (ScorePlayerTeam) this.e.get(s0);
     }
 
-    public ScorePlayerTeam f(String s0) {
-        ScorePlayerTeam scoreplayerteam = this.e(s0);
+    public ScorePlayerTeam e(String s0) {
+        ScorePlayerTeam scoreplayerteam = this.d(s0);
 
         if (scoreplayerteam != null) {
             throw new IllegalArgumentException("A team with the name \'" + s0 + "\' already exists!");
@@ -203,9 +244,10 @@ public class Scoreboard {
             return false;
         }
         else {
-            ScorePlayerTeam scoreplayerteam = this.e(s1);
-            if (this.i(s0) != null) {
-                this.g(s0);
+            ScorePlayerTeam scoreplayerteam = this.d(s1);
+
+            if (this.h(s0) != null) {
+                this.f(s0);
             }
 
             this.f.put(s0, scoreplayerteam);
@@ -214,8 +256,8 @@ public class Scoreboard {
         }
     }
 
-    public boolean g(String s0) {
-        ScorePlayerTeam scoreplayerteam = this.i(s0);
+    public boolean f(String s0) {
+        ScorePlayerTeam scoreplayerteam = this.h(s0);
 
         if (scoreplayerteam != null) {
             this.a(s0, scoreplayerteam);
@@ -227,7 +269,7 @@ public class Scoreboard {
     }
 
     public void a(String s0, ScorePlayerTeam scoreplayerteam) {
-        if (this.i(s0) != scoreplayerteam) {
+        if (this.h(s0) != scoreplayerteam) {
             throw new IllegalStateException("Player is either on another team or not on any team. Cannot remove from team \'" + scoreplayerteam.b() + "\'.");
         }
         else {
@@ -244,7 +286,7 @@ public class Scoreboard {
         return this.e.values();
     }
 
-    public ScorePlayerTeam i(String s0) {
+    public ScorePlayerTeam h(String s0) {
         return (ScorePlayerTeam) this.f.get(s0);
     }
 
@@ -261,6 +303,9 @@ public class Scoreboard {
     }
 
     public void a(String s0) {
+    }
+
+    public void a(String s0, ScoreObjective scoreobjective) {
     }
 
     public void a(ScorePlayerTeam scoreplayerteam) {
@@ -284,12 +329,52 @@ public class Scoreboard {
                 return "belowName";
 
             default:
+                if (i0 >= 3 && i0 <= 18) {
+                    EnumChatFormatting enumchatformatting = EnumChatFormatting.a(i0 - 3);
+
+                    if (enumchatformatting != null && enumchatformatting != EnumChatFormatting.RESET) {
+                        return "sidebar.team." + enumchatformatting.e();
+                    }
+                }
+
                 return null;
         }
     }
 
-    public static int j(String s0) {
-        return s0.equalsIgnoreCase("list") ? 0 : (s0.equalsIgnoreCase("sidebar") ? 1 : (s0.equalsIgnoreCase("belowName") ? 2 : -1));
+    public static int i(String s0) {
+        if (s0.equalsIgnoreCase("list")) {
+            return 0;
+        }
+        else if (s0.equalsIgnoreCase("sidebar")) {
+            return 1;
+        }
+        else if (s0.equalsIgnoreCase("belowName")) {
+            return 2;
+        }
+        else {
+            if (s0.startsWith("sidebar.team.")) {
+                String s1 = s0.substring("sidebar.team.".length());
+                EnumChatFormatting enumchatformatting = EnumChatFormatting.b(s1);
+
+                if (enumchatformatting != null && enumchatformatting.b() >= 0) {
+                    return enumchatformatting.b() + 3;
+                }
+            }
+
+            return -1;
+        }
+    }
+
+    public static String[] h() {
+        if (g == null) {
+            g = new String[19];
+
+            for (int i0 = 0; i0 < 19; ++i0) {
+                g[i0] = b(i0);
+            }
+        }
+
+        return g;
     }
 
     // CanaryMod: our methods
@@ -303,5 +388,20 @@ public class Scoreboard {
 
     public Collection getAllScoreObjective() {
         return this.a.values();
+    }
+    
+    public ScorePlayerTeam addTeam(ScorePlayerTeam team)
+    {
+        ScorePlayerTeam scoreplayerteam = this.d(team.b());
+
+        if (scoreplayerteam != null) {
+            throw new IllegalArgumentException("A team with the name \'" + team.b() + "\' already exists!");
+        }
+        else {
+            scoreplayerteam = team;
+            this.e.put(team.b(), scoreplayerteam);
+            this.a(scoreplayerteam);
+            return scoreplayerteam;
+        }
     }
 }

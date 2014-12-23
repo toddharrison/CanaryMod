@@ -1,6 +1,7 @@
 package net.canarymod.api.world;
 
 import net.canarymod.Canary;
+import net.canarymod.WorldCacheTimer;
 import net.canarymod.api.CanaryServer;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.backbone.PermissionDataAccess;
@@ -11,12 +12,26 @@ import net.canarymod.database.exceptions.DatabaseWriteException;
 import net.canarymod.hook.system.LoadWorldHook;
 import net.canarymod.hook.system.UnloadWorldHook;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.*;
+import net.minecraft.world.EnumDifficulty;
+import net.minecraft.world.WorldServer;
+import net.minecraft.world.WorldServerMulti;
+import net.minecraft.world.WorldSettings;
 import net.minecraft.world.chunk.storage.AnvilSaveHandler;
+import net.minecraft.world.storage.WorldInfo;
+import net.visualillusionsent.utils.TaskManager;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
 
 import static net.canarymod.Canary.log;
 
@@ -29,24 +44,13 @@ import static net.canarymod.Canary.log;
  */
 public class CanaryWorldManager implements WorldManager {
 
-    private Map<String, World> loadedWorlds;
-    private List<String> existingWorlds;
-    private Map<String, Boolean> markedForUnload;
-    private static final Object worldLock = new Object();
+    private final Map<String, World> loadedWorlds;
+    private final List<String> existingWorlds;
+    private final Map<String, Boolean> markedForUnload;
 
-    private final FileFilter worldFilter = new FileFilter() {
-        @Override
-        public boolean accept(File pathname) {
-            return pathname.isDirectory();
-        }
-    };
-
-    private final FileFilter dimensionFilter = new FileFilter() {
-        @Override
-        public boolean accept(File pathname) {
-            return pathname.isDirectory() && pathname.getName().contains("_");
-        }
-    };
+    // This is used so we don't generate new collections each getAllWorlds call.
+    private int worldHash;
+    private Collection<World> workerWorlds;
 
     public CanaryWorldManager() {
         markedForUnload = new HashMap<String, Boolean>(1);
@@ -59,6 +63,12 @@ public class CanaryWorldManager implements WorldManager {
             loadedWorlds = new HashMap<String, World>(3);
             return;
         }
+        FileFilter worldFilter = new FileFilter() {
+            @Override
+            public boolean accept(File pathname) {
+                return pathname.isDirectory();
+            }
+        };
         File[] worlds = worldsFolders.listFiles(worldFilter);
         if (worlds == null) {
             // Resonable defaults
@@ -75,6 +85,12 @@ public class CanaryWorldManager implements WorldManager {
         existingWorlds = new ArrayList<String>(worldNum);
         loadedWorlds = new HashMap<String, World>(worldNum);
         for (File world : worlds) {
+            FileFilter dimensionFilter = new FileFilter() {
+                @Override
+                public boolean accept(File pathname) {
+                    return pathname.isDirectory() && pathname.getName().contains("_");
+                }
+            };
             File[] dimensions = world.listFiles(dimensionFilter);
             if (dimensions == null) {
                 log.warn("No dimensions found for World - ".concat(world.getName()));
@@ -177,7 +193,6 @@ public class CanaryWorldManager implements WorldManager {
     @Override
     public boolean createWorld(String name, long seed, DimensionType dimType, WorldType genType) {
         WorldConfiguration cfg = WorldConfiguration.create(name, dimType);
-
         if (cfg == null) {
             Canary.log.debug("Config already exists for " + name + "_" + dimType.getName());
             cfg = Configuration.getWorldConfig(name.concat("_").concat(dimType.getName()));
@@ -192,10 +207,9 @@ public class CanaryWorldManager implements WorldManager {
 
     @Override
     public boolean createWorld(WorldConfiguration configuration) {
-        if (configuration == null) {
+        if(configuration == null){
             return false;
         }
-
         MinecraftServer mcserver = ((CanaryServer) Canary.getServer()).getHandle();
         String worldFqName = configuration.getFile().getFileName().replace(".cfg", "");
         String name = worldFqName.replaceAll("_.+", "");
@@ -215,21 +229,26 @@ public class CanaryWorldManager implements WorldManager {
         long seed = configuration.getWorldSeed().matches("\\d+") ? Long.valueOf(configuration.getWorldSeed()) : configuration.getWorldSeed().hashCode();
         worldsettings = new WorldSettings(seed, WorldSettings.GameType.a(configuration.getGameMode().getId()), configuration.generatesStructures(), false, net.minecraft.world.WorldType.a(configuration.getWorldType().toString()));
         worldsettings.a(configuration.getGeneratorSettings());
+        WorldInfo worldinfo = new WorldInfo(worldsettings, name, dimType);
 
         if (dimType == DimensionType.NORMAL) {
-            world = new WorldServer(mcserver, isavehandler, name, dimType.getId(), worldsettings, mcserver.b);
+            world = (WorldServer) new WorldServer(mcserver, isavehandler, worldinfo, dimType.getId(), mcserver.b).b();
+            world.a(worldsettings);
         }
         else {
-            world = new WorldServerMulti(mcserver, isavehandler, name, dimType.getId(), worldsettings, (WorldServer) ((CanaryWorld) getWorld(name, net.canarymod.api.world.DimensionType.NORMAL, true)).getHandle(), mcserver.b);
+            world = (WorldServer) new WorldServerMulti(mcserver, isavehandler, dimType.getId(), (WorldServer) ((CanaryWorld) getWorld(name, net.canarymod.api.world.DimensionType.NORMAL, true)).getHandle(), mcserver.b, worldinfo).b();
+            world.a(worldsettings);
         }
 
-        world.a((IWorldAccess) (new net.minecraft.world.WorldManager(mcserver, world)));
-        world.N().a(WorldSettings.GameType.a(configuration.getGameMode().getId()));
-        mcserver.u.a(new WorldServer[]{world}); // Init player data files
-        world.r = EnumDifficulty.a(configuration.getDifficulty().getId()); // Set difficulty directly based on WorldConfiguration setting
+        world.a((new net.minecraft.world.WorldManager(mcserver, world)));
+        world.P().a(WorldSettings.GameType.a(configuration.getGameMode().getId()));
+        mcserver.an().a(new WorldServer[]{world}); // Init player data files
+        world.x.a(EnumDifficulty.a(configuration.getDifficulty().getId())); // Set difficulty directly based on WorldConfiguration setting
+
         mcserver.loadStartArea(world);
-        addWorld(world.getCanaryWorld());
+
         updateExistingWorldsList(name, dimType);
+        addWorld(world.getCanaryWorld());
         new LoadWorldHook(world.getCanaryWorld()).call();
         return true;
     }
@@ -248,7 +267,6 @@ public class CanaryWorldManager implements WorldManager {
 
     @Override
     public boolean destroyWorld(String name) {
-        String mainName = name.replaceAll("_.+", "");
         File file = new File("worlds/" + name.replaceAll("_.+", "") + "/" + name);
         File dir = new File("worldsbackup/" + name + "(" + System.currentTimeMillis() + ")"); // Timestamp the backup
         boolean success = dir.mkdirs() && file.renameTo(new File(dir, file.getName()));
@@ -266,18 +284,22 @@ public class CanaryWorldManager implements WorldManager {
             removeWorlds();
             // markedForUnload.clear();
         }
-        // Canary.println("getAllWorlds");
-        return Collections.unmodifiableCollection(this.loadedWorlds.values());
+        int hashcode = loadedWorlds.hashCode();
+        if (worldHash != hashcode || workerWorlds == null) {
+            workerWorlds = Collections.unmodifiableCollection(this.loadedWorlds.values());
+            worldHash = hashcode;
+        }
+        return workerWorlds;
     }
 
     @Override
     public void unloadWorld(String name, DimensionType type, boolean force) {
-        if (name.equals(Configuration.getServerConfig().getDefaultWorldName()) && type.equals(DimensionType.NORMAL) && !force) {
-            return; // Don't schedule the default world for unloading unless forced to do so
-        }
         // This actually just schedules a world for unloading,
         // to prevent ConcurrentModificationExceptions as the values for world are iterated over constantly.
         // See getAllWorld for details
+        if (name.equals(Configuration.getServerConfig().getDefaultWorldName()) && type.equals(DimensionType.NORMAL) && !force) {
+            return; // Don't schedule the default world for unloading unless forced to do so
+        }
         markedForUnload.put(name + "_" + type.getName(), force);
     }
 
@@ -285,29 +307,36 @@ public class CanaryWorldManager implements WorldManager {
      * This'll actually remove all marked worlds from the system so that they may get GC'd soon after
      */
     private void removeWorlds() {
-        Iterator<String> iter = markedForUnload.keySet().iterator();
-        synchronized (worldLock) {
+        synchronized (markedForUnload) {
+            Iterator<Map.Entry<String, Boolean>> iter = markedForUnload.entrySet().iterator();
             while (iter.hasNext()) {
-                String fqName = iter.next();
+                Map.Entry<String, Boolean> entry = iter.next();
+                String fqName = entry.getKey();
                 CanaryWorld world = (CanaryWorld) loadedWorlds.get(fqName);
-                boolean force = markedForUnload.get(fqName);
-                if (world.getPlayerList().size() > 0) {
+                boolean force = entry.getValue();
+                if (!world.getPlayerList().isEmpty()) {
                     if (force) {
                         for (Player p : world.getPlayerList()) {
                             p.kick("Server scheduled world shutdown");
                         }
                     }
                     else {
-                        log.warn(world.getFqName() + " was scheduled for unload but there were still players in it. Not unloading world!");
+                        log.warn(fqName + " was scheduled for unload but there were still players in it. Not unloading world!");
+                        iter.remove(); // Remove from unload list as its not going to be unloaded
+                        // if cachetask is null then timeout is probably disabled, otherwise check if the task has exited
+                        if (world.cachetask != null && world.cachetask.isDone()) {
+                            // Reschedule timeout as something has broken it
+                            world.cachetask = TaskManager.scheduleContinuedTaskInMinutes(new WorldCacheTimer(world), Configuration.getServerConfig().getWorldCacheTimeout(), Configuration.getServerConfig().getWorldCacheTimeout());
+                        }
                         continue;
                     }
                 }
                 world.save();
                 ((WorldServer) world.getHandle()).n(); // close out the SaveHandler Session Lock
                 new UnloadWorldHook(world).call();
-                loadedWorlds.remove(world.getFqName());
-                world.dereference(); // prevent a leak
+                loadedWorlds.remove(fqName);
                 iter.remove();
+                Canary.log.info("Unloaded World: " + fqName + " (" + (force ? "force unloaded" : "cache timeout") + ")");
             }
         }
     }
@@ -364,6 +393,4 @@ public class CanaryWorldManager implements WorldManager {
         }
         return worlds.toArray(new String[worlds.size()]);
     }
-
-
 }

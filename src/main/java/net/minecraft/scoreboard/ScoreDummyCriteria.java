@@ -6,12 +6,12 @@ import java.util.List;
 
 public class ScoreDummyCriteria implements IScoreObjectiveCriteria {
 
-    private final String g;
+    private final String j;
     protected net.canarymod.api.scoreboard.ScoreObjectiveCriteria criteria;
 
     public ScoreDummyCriteria(String s0) {
-        this.g = s0;
-        // CanaryMod: lets not add doubles, otay?
+        this.j = s0;
+        // CanaryMod: lets not add doubles
         if (!IScoreObjectiveCriteria.a.containsKey(s0)) {
             IScoreObjectiveCriteria.a.put(s0, this);
         }//
@@ -22,7 +22,7 @@ public class ScoreDummyCriteria implements IScoreObjectiveCriteria {
     }
 
     public String a() {
-        return this.g;
+        return this.j;
     }
 
     public int a(List list) {
@@ -31,6 +31,10 @@ public class ScoreDummyCriteria implements IScoreObjectiveCriteria {
 
     public boolean b() {
         return false;
+    }
+
+    public IScoreObjectiveCriteria.EnumRenderType c() {
+        return IScoreObjectiveCriteria.EnumRenderType.INTEGER;
     }
 
     public net.canarymod.api.scoreboard.ScoreObjectiveCriteria getCanaryScoreObjectiveCriteria() {

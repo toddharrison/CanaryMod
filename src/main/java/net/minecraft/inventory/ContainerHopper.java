@@ -11,14 +11,14 @@ public class ContainerHopper extends Container {
 
     private final IInventory a;
 
-    public ContainerHopper(InventoryPlayer inventoryplayer, IInventory iinventory) {
+    public ContainerHopper(InventoryPlayer inventoryplayer, IInventory iinventory, EntityPlayer entityplayer) {
         this.a = iinventory;
-        iinventory.f();
+        iinventory.b(entityplayer);
         byte b0 = 51;
 
         int i0;
 
-        for (i0 = 0; i0 < iinventory.a(); ++i0) {
+        for (i0 = 0; i0 < iinventory.n_(); ++i0) {
             this.a(new Slot(iinventory, i0, 44 + i0 * 18, 20));
         }
 
@@ -46,18 +46,18 @@ public class ContainerHopper extends Container {
         if (slot != null && slot.e()) {
             ItemStack itemstack1 = slot.d();
 
-            itemstack = itemstack1.m();
-            if (i0 < this.a.a()) {
-                if (!this.a(itemstack1, this.a.a(), this.c.size(), true)) {
+            itemstack = itemstack1.k();
+            if (i0 < this.a.n_()) {
+                if (!this.a(itemstack1, this.a.n_(), this.c.size(), true)) {
                     return null;
                 }
             }
-            else if (!this.a(itemstack1, 0, this.a.a(), false)) {
+            else if (!this.a(itemstack1, 0, this.a.n_(), false)) {
                 return null;
             }
 
             if (itemstack1.b == 0) {
-                slot.c((ItemStack) null);
+                slot.d((ItemStack) null);
             }
             else {
                 slot.f();
@@ -69,6 +69,6 @@ public class ContainerHopper extends Container {
 
     public void b(EntityPlayer entityplayer) {
         super.b(entityplayer);
-        this.a.l_();
+        this.a.c(entityplayer);
     }
 }

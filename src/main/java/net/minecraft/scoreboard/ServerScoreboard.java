@@ -1,8 +1,7 @@
 package net.minecraft.scoreboard;
 
-
-import java.util.*;
-
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import net.canarymod.api.scoreboard.CanaryScoreboard;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.Packet;
@@ -10,18 +9,15 @@ import net.minecraft.network.play.server.S3BPacketScoreboardObjective;
 import net.minecraft.network.play.server.S3CPacketUpdateScore;
 import net.minecraft.network.play.server.S3DPacketDisplayScoreboard;
 import net.minecraft.network.play.server.S3EPacketTeams;
-import net.minecraft.scoreboard.Score;
-import net.minecraft.scoreboard.ScoreObjective;
-import net.minecraft.scoreboard.ScorePlayerTeam;
-import net.minecraft.scoreboard.Scoreboard;
-import net.minecraft.scoreboard.ScoreboardSaveData;
 import net.minecraft.server.MinecraftServer;
+
+import java.util.*;
 
 
 public class ServerScoreboard extends Scoreboard {
 
     private final MinecraftServer a;
-    private final Set b = new HashSet();
+    private final Set b = Sets.newHashSet();
     private ScoreboardSaveData c;
 
     public ServerScoreboard(MinecraftServer minecraftserver) {
@@ -33,7 +29,7 @@ public class ServerScoreboard extends Scoreboard {
         super.a(score);
         // CanaryMod: Don't Check This
         //if (this.b.contains(score.d())) {
-            this.a.ah().a((Packet) (new S3CPacketUpdateScore(score, 0)));
+        this.a.an().a((Packet) (new S3CPacketUpdateScore(score)));
         //}
         // CanaryMod: End
         this.b();
@@ -41,7 +37,13 @@ public class ServerScoreboard extends Scoreboard {
 
     public void a(String s0) {
         super.a(s0);
-        this.a.ah().a((Packet) (new S3CPacketUpdateScore(s0)));
+        this.a.an().a((Packet) (new S3CPacketUpdateScore(s0)));
+        this.b();
+    }
+
+    public void a(String s0, ScoreObjective scoreobjective) {
+        super.a(s0, scoreobjective);
+        this.a.an().a((Packet) (new S3CPacketUpdateScore(s0, scoreobjective)));
         this.b();
     }
 
@@ -51,16 +53,18 @@ public class ServerScoreboard extends Scoreboard {
         super.a(i0, scoreobjective);
         if (scoreobjective1 != scoreobjective && scoreobjective1 != null) {
             if (this.h(scoreobjective1) > 0) {
-                this.a.ah().a((Packet) (new S3DPacketDisplayScoreboard(i0, scoreobjective)));
-            } else {
+                this.a.an().a((Packet) (new S3DPacketDisplayScoreboard(i0, scoreobjective)));
+            }
+            else {
                 this.g(scoreobjective1);
             }
         }
 
         if (scoreobjective != null) {
             if (this.b.contains(scoreobjective)) {
-                this.a.ah().a((Packet) (new S3DPacketDisplayScoreboard(i0, scoreobjective)));
-            } else {
+                this.a.an().a((Packet) (new S3DPacketDisplayScoreboard(i0, scoreobjective)));
+            }
+            else {
                 this.e(scoreobjective);
             }
         }
@@ -70,19 +74,20 @@ public class ServerScoreboard extends Scoreboard {
 
     public boolean a(String s0, String s1) {
         if (super.a(s0, s1)) {
-            ScorePlayerTeam scoreplayerteam = this.e(s1);
+            ScorePlayerTeam scoreplayerteam = this.d(s1);
 
-            this.a.ah().a((Packet) (new S3EPacketTeams(scoreplayerteam, Arrays.asList(new String[] { s0}), 3)));
+            this.a.an().a((Packet) (new S3EPacketTeams(scoreplayerteam, Arrays.asList(new String[]{s0}), 3)));
             this.b();
             return true;
-        } else {
+        }
+        else {
             return false;
         }
     }
 
     public void a(String s0, ScorePlayerTeam scoreplayerteam) {
         super.a(s0, scoreplayerteam);
-        this.a.ah().a((Packet) (new S3EPacketTeams(scoreplayerteam, Arrays.asList(new String[] { s0}), 4)));
+        this.a.an().a((Packet) (new S3EPacketTeams(scoreplayerteam, Arrays.asList(new String[]{s0}), 4)));
         this.b();
     }
 
@@ -93,9 +98,11 @@ public class ServerScoreboard extends Scoreboard {
 
     public void b(ScoreObjective scoreobjective) {
         super.b(scoreobjective);
-        if (this.b.contains(scoreobjective)) {
-            this.a.ah().a((Packet) (new S3BPacketScoreboardObjective(scoreobjective, 2)));
-        }
+        // CanaryMod: Don't Check This
+        //if (this.b.contains(scoreobjective)) {
+            this.a.an().a((Packet) (new S3BPacketScoreboardObjective(scoreobjective, 2)));
+        //}
+        // CanaryMod: End
 
         this.b();
     }
@@ -111,19 +118,19 @@ public class ServerScoreboard extends Scoreboard {
 
     public void a(ScorePlayerTeam scoreplayerteam) {
         super.a(scoreplayerteam);
-        this.a.ah().a((Packet) (new S3EPacketTeams(scoreplayerteam, 0)));
+        this.a.an().a((Packet) (new S3EPacketTeams(scoreplayerteam, 0)));
         this.b();
     }
 
     public void b(ScorePlayerTeam scoreplayerteam) {
         super.b(scoreplayerteam);
-        this.a.ah().a((Packet) (new S3EPacketTeams(scoreplayerteam, 2)));
+        this.a.an().a((Packet) (new S3EPacketTeams(scoreplayerteam, 2)));
         this.b();
     }
 
     public void c(ScorePlayerTeam scoreplayerteam) {
         super.c(scoreplayerteam);
-        this.a.ah().a((Packet) (new S3EPacketTeams(scoreplayerteam, 1)));
+        this.a.an().a((Packet) (new S3EPacketTeams(scoreplayerteam, 1)));
         this.b();
     }
 
@@ -139,11 +146,11 @@ public class ServerScoreboard extends Scoreboard {
     }
 
     public List d(ScoreObjective scoreobjective) {
-        ArrayList arraylist = new ArrayList();
+        ArrayList arraylist = Lists.newArrayList();
 
         arraylist.add(new S3BPacketScoreboardObjective(scoreobjective, 0));
 
-        for (int i0 = 0; i0 < 3; ++i0) {
+        for (int i0 = 0; i0 < 19; ++i0) {
             if (this.a(i0) == scoreobjective) {
                 arraylist.add(new S3DPacketDisplayScoreboard(i0, scoreobjective));
             }
@@ -154,7 +161,7 @@ public class ServerScoreboard extends Scoreboard {
         while (iterator.hasNext()) {
             Score score = (Score) iterator.next();
 
-            arraylist.add(new S3CPacketUpdateScore(score, 0));
+            arraylist.add(new S3CPacketUpdateScore(score));
         }
 
         return arraylist;
@@ -162,7 +169,7 @@ public class ServerScoreboard extends Scoreboard {
 
     public void e(ScoreObjective scoreobjective) {
         List list = this.d(scoreobjective);
-        Iterator iterator = this.a.ah().e.iterator();
+        Iterator iterator = this.a.an().e.iterator();
 
         while (iterator.hasNext()) {
             EntityPlayerMP entityplayermp = (EntityPlayerMP) iterator.next();
@@ -179,11 +186,11 @@ public class ServerScoreboard extends Scoreboard {
     }
 
     public List f(ScoreObjective scoreobjective) {
-        ArrayList arraylist = new ArrayList();
+        ArrayList arraylist = Lists.newArrayList();
 
         arraylist.add(new S3BPacketScoreboardObjective(scoreobjective, 1));
 
-        for (int i0 = 0; i0 < 3; ++i0) {
+        for (int i0 = 0; i0 < 19; ++i0) {
             if (this.a(i0) == scoreobjective) {
                 arraylist.add(new S3DPacketDisplayScoreboard(i0, scoreobjective));
             }
@@ -194,7 +201,7 @@ public class ServerScoreboard extends Scoreboard {
 
     public void g(ScoreObjective scoreobjective) {
         List list = this.f(scoreobjective);
-        Iterator iterator = this.a.ah().e.iterator();
+        Iterator iterator = this.a.an().e.iterator();
 
         while (iterator.hasNext()) {
             EntityPlayerMP entityplayermp = (EntityPlayerMP) iterator.next();
@@ -213,7 +220,7 @@ public class ServerScoreboard extends Scoreboard {
     public int h(ScoreObjective scoreobjective) {
         int i0 = 0;
 
-        for (int i1 = 0; i1 < 3; ++i1) {
+        for (int i1 = 0; i1 < 19; ++i1) {
             if (this.a(i1) == scoreobjective) {
                 ++i0;
             }

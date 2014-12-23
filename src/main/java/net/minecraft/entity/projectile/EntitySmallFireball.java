@@ -2,15 +2,20 @@ package net.minecraft.entity.projectile;
 
 import net.canarymod.api.entity.CanarySmallFireball;
 import net.canarymod.api.world.blocks.CanaryBlock;
+import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.entity.ProjectileHitHook;
 import net.canarymod.hook.world.IgnitionHook;
 import net.canarymod.hook.world.IgnitionHook.IgnitionCause;
 import net.minecraft.block.Block;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+
 
 public class EntitySmallFireball extends EntityFireball {
 
@@ -33,62 +38,47 @@ public class EntitySmallFireball extends EntityFireball {
     }
 
     protected void a(MovingObjectPosition movingobjectposition) {
-        if (!this.o.E) {
+        if (!this.o.D) {
             // CanaryMod: ProjectileHit
-            ProjectileHitHook hook = (ProjectileHitHook) new ProjectileHitHook(this.getCanaryEntity(), movingobjectposition == null || movingobjectposition.g == null ? null : movingobjectposition.g.getCanaryEntity()).call();
+            ProjectileHitHook hook = (ProjectileHitHook) new ProjectileHitHook(this.getCanaryEntity(), movingobjectposition == null || movingobjectposition.d == null ? null : movingobjectposition.d.getCanaryEntity()).call();
             if (!hook.isCanceled()) { //
-                if (movingobjectposition.g != null) {
-                    if (!movingobjectposition.g.K() && movingobjectposition.g.a(DamageSource.a((EntityFireball) this, this.a), 5.0F)) {
-                        movingobjectposition.g.e(5);
+                boolean flag0;
+
+                if (movingobjectposition.d != null) {
+                    flag0 = movingobjectposition.d.a(DamageSource.a((EntityFireball) this, this.a), 5.0F);
+                    if (flag0) {
+                        this.a(this.a, movingobjectposition.d);
+                        if (!movingobjectposition.d.T()) {
+                            movingobjectposition.d.e(5);
+                        }
                     }
                 } else {
-                    int i0 = movingobjectposition.b;
-                    int i1 = movingobjectposition.c;
-                    int i2 = movingobjectposition.d;
-
-                    switch (movingobjectposition.e) {
-                        case 0:
-                            --i1;
-                            break;
-
-                        case 1:
-                            ++i1;
-                            break;
-
-                        case 2:
-                            --i2;
-                            break;
-
-                        case 3:
-                            ++i2;
-                            break;
-
-                        case 4:
-                            --i0;
-                            break;
-
-                        case 5:
-                            ++i0;
+                    flag0 = true;
+                    if (this.a != null && this.a instanceof EntityLiving) {
+                        flag0 = this.o.Q().b("mobGriefing");
                     }
 
-                    if (this.o.c(i0, i1, i2)) {
-                        // CanaryMod: IgnitionHook
-                        CanaryBlock block = (CanaryBlock) this.o.getCanaryWorld().getBlockAt(i0, i1 - 1, i2);
-                        block.setStatus((byte) 7); // 7 fireball hit
-                        IgnitionHook ignitionHook = (IgnitionHook) new IgnitionHook(block, null, null, IgnitionCause.FIREBALL_HIT).call();
-                        if (!ignitionHook.isCanceled()) {
-                            this.o.b(i0, i1, i2, (Block) Blocks.ab);
+                    if (flag0) {
+                        BlockPos blockpos = movingobjectposition.a().a(movingobjectposition.b);
+
+                        if (this.o.d(blockpos)) {
+                            // CanaryMod: IgnitionHook
+                            CanaryBlock block = (CanaryBlock) this.o.getCanaryWorld().getBlockAt(new BlockPosition(blockpos));
+                            block.setStatus((byte) 7); // 7 fireball hit
+                            IgnitionHook ignitionHook = (IgnitionHook) new IgnitionHook(block, null, null, IgnitionCause.FIREBALL_HIT).call();
+                            if (!ignitionHook.isCanceled()) {
+                                this.o.a(blockpos, Blocks.ab.P());
+                            }
+                            //                        
                         }
-                        //
                     }
                 }
-
-                this.B();
+                this.J();
             }
         }
     }
 
-    public boolean R() {
+    public boolean ad() {
         return false;
     }
 

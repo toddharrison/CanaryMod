@@ -1,11 +1,13 @@
 package net.minecraft.entity.monster;
 
+import com.google.common.base.Predicate;
 import net.canarymod.api.entity.living.monster.CanarySkeleton;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.*;
+import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Blocks;
@@ -17,8 +19,9 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.stats.AchievementList;
 import net.minecraft.stats.StatBase;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.MathHelper;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProviderHell;
 
@@ -26,84 +29,94 @@ import java.util.Calendar;
 
 public class EntitySkeleton extends EntityMob implements IRangedAttackMob {
 
-    private EntityAIArrowAttack bp = new EntityAIArrowAttack(this, 1.0D, 20, 60, 15.0F);
-    private EntityAIAttackOnCollide bq = new EntityAIAttackOnCollide(this, EntityPlayer.class, 1.2D, false);
+    private EntityAIArrowAttack b = new EntityAIArrowAttack(this, 1.0D, 20, 60, 15.0F);
+    private EntityAIAttackOnCollide c = new EntityAIAttackOnCollide(this, EntityPlayer.class, 1.2D, false);
 
     public EntitySkeleton(World world) {
         super(world);
-        this.c.a(1, new EntityAISwimming(this));
-        this.c.a(2, new EntityAIRestrictSun(this));
-        this.c.a(3, new EntityAIFleeSun(this, 1.0D));
-        this.c.a(5, new EntityAIWander(this, 1.0D));
-        this.c.a(6, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
-        this.c.a(6, new EntityAILookIdle(this));
-        this.d.a(1, new EntityAIHurtByTarget(this, false));
-        this.d.a(2, new EntityAINearestAttackableTarget(this, EntityPlayer.class, 0, true));
-        if (world != null && !world.E) {
-            this.bZ();
+        this.i.a(1, new EntityAISwimming(this));
+        this.i.a(2, new EntityAIRestrictSun(this));
+        this.i.a(2, this.a);
+        this.i.a(3, new EntityAIFleeSun(this, 1.0D));
+        this.i.a(3, new EntityAIAvoidEntity(this, new Predicate() {
+
+            public boolean a(Entity p_a_1_) {
+                return p_a_1_ instanceof EntityWolf;
+            }
+
+            public boolean apply(Object p_apply_1_) {
+                return this.a((Entity) p_apply_1_);
+            }
+        }, 6.0F, 1.0D, 1.2D));
+        this.i.a(4, new EntityAIWander(this, 1.0D));
+        this.i.a(6, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
+        this.i.a(6, new EntityAILookIdle(this));
+        this.bg.a(1, new EntityAIHurtByTarget(this, false, new Class[0]));
+        this.bg.a(2, new EntityAINearestAttackableTarget(this, EntityPlayer.class, true));
+        this.bg.a(3, new EntityAINearestAttackableTarget(this, EntityIronGolem.class, true));
+        if (world != null && !world.D) {
+            this.n();
         }
         this.entity = new CanarySkeleton(this); // CanaryMod: Wrap Entity
     }
 
-    protected void aD() {
-        super.aD();
+    protected void aW() {
+        super.aW();
         this.a(SharedMonsterAttributes.d).a(0.25D);
     }
 
-    protected void c() {
-        super.c();
-        this.af.a(13, new Byte((byte) 0));
+    protected void h() {
+        super.h();
+        this.ac.a(13, new Byte((byte) 0));
     }
 
-    public boolean bk() {
-        return true;
-    }
-
-    protected String t() {
+    protected String z() {
         return "mob.skeleton.say";
     }
 
-    protected String aT() {
+    protected String bn() {
         return "mob.skeleton.hurt";
     }
 
-    protected String aU() {
+    protected String bo() {
         return "mob.skeleton.death";
     }
 
-    protected void a(int i0, int i1, int i2, Block block) {
+    protected void a(BlockPos blockpos, Block block) {
         this.a("mob.skeleton.step", 0.15F, 1.0F);
     }
 
-    public boolean n(Entity entity) {
-        if (super.n(entity)) {
-            if (this.cb() == 1 && entity instanceof EntityLivingBase) {
+    public boolean r(Entity entity) {
+        if (super.r(entity)) {
+            if (this.ck() == 1 && entity instanceof EntityLivingBase) {
                 ((EntityLivingBase) entity).c(new PotionEffect(Potion.v.H, 200));
             }
 
             return true;
-        } else {
+        }
+        else {
             return false;
         }
     }
 
-    public EnumCreatureAttribute bd() {
+    public EnumCreatureAttribute by() {
         return EnumCreatureAttribute.UNDEAD;
     }
 
-    public void e() {
-        if (this.o.w() && !this.o.E) {
-            float f0 = this.d(1.0F);
+    public void m() {
+        if (this.o.w() && !this.o.D) {
+            float f0 = this.c(1.0F);
+            BlockPos blockpos = new BlockPos(this.s, (double) Math.round(this.t), this.u);
 
-            if (f0 > 0.5F && this.Z.nextFloat() * 30.0F < (f0 - 0.4F) * 2.0F && this.o.i(MathHelper.c(this.s), MathHelper.c(this.t), MathHelper.c(this.u))) {
+            if (f0 > 0.5F && this.V.nextFloat() * 30.0F < (f0 - 0.4F) * 2.0F && this.o.i(blockpos)) {
                 boolean flag0 = true;
-                ItemStack itemstack = this.q(4);
+                ItemStack itemstack = this.p(4);
 
                 if (itemstack != null) {
-                    if (itemstack.g()) {
-                        itemstack.b(itemstack.j() + this.Z.nextInt(2));
-                        if (itemstack.j() >= itemstack.l()) {
-                            this.a(itemstack);
+                    if (itemstack.e()) {
+                        itemstack.b(itemstack.h() + this.V.nextInt(2));
+                        if (itemstack.h() >= itemstack.j()) {
+                            this.b(itemstack);
                             this.c(4, (ItemStack) null);
                         }
                     }
@@ -117,20 +130,21 @@ public class EntitySkeleton extends EntityMob implements IRangedAttackMob {
             }
         }
 
-        if (this.o.E && this.cb() == 1) {
-            this.a(0.72F, 2.34F);
+        if (this.o.D && this.ck() == 1) {
+            this.a(0.72F, 2.535F);
         }
 
-        super.e();
+        super.m();
     }
 
-    public void ab() {
-        super.ab();
+    public void ak() {
+        super.ak();
         if (this.m instanceof EntityCreature) {
             EntityCreature entitycreature = (EntityCreature) this.m;
 
-            this.aM = entitycreature.aM;
+            this.aG = entitycreature.aG;
         }
+
     }
 
     public void a(DamageSource damagesource) {
@@ -141,12 +155,17 @@ public class EntitySkeleton extends EntityMob implements IRangedAttackMob {
             double d1 = entityplayer.u - this.u;
 
             if (d0 * d0 + d1 * d1 >= 2500.0D) {
-                entityplayer.a((StatBase) AchievementList.v);
+                entityplayer.b((StatBase) AchievementList.v);
             }
         }
+        else if (damagesource.j() instanceof EntityCreeper && ((EntityCreeper) damagesource.j()).n() && ((EntityCreeper) damagesource.j()).cn()) {
+            ((EntityCreeper) damagesource.j()).co();
+            this.a(new ItemStack(Items.bX, 1, this.ck() == 1 ? 1 : 0), 0.0F);
+        }
+
     }
 
-    protected Item u() {
+    protected Item A() {
         return Items.g;
     }
 
@@ -154,110 +173,118 @@ public class EntitySkeleton extends EntityMob implements IRangedAttackMob {
         int i1;
         int i2;
 
-        if (this.cb() == 1) {
-            i1 = this.Z.nextInt(3 + i0) - 1;
+        if (this.ck() == 1) {
+            i1 = this.V.nextInt(3 + i0) - 1;
 
             for (i2 = 0; i2 < i1; ++i2) {
                 this.a(Items.h, 1);
             }
-        } else {
-            i1 = this.Z.nextInt(3 + i0);
+        }
+        else {
+            i1 = this.V.nextInt(3 + i0);
 
             for (i2 = 0; i2 < i1; ++i2) {
                 this.a(Items.g, 1);
             }
         }
 
-        i1 = this.Z.nextInt(3 + i0);
+        i1 = this.V.nextInt(3 + i0);
 
         for (i2 = 0; i2 < i1; ++i2) {
-            this.a(Items.aS, 1);
+            this.a(Items.aX, 1);
         }
+
     }
 
-    protected void n(int i0) {
-        if (this.cb() == 1) {
-            this.a(new ItemStack(Items.bL, 1, 1), 0.0F);
+    protected void bp() {
+        if (this.ck() == 1) {
+            this.a(new ItemStack(Items.bX, 1, 1), 0.0F);
         }
+
     }
 
-    protected void bC() {
-        super.bC();
+    protected void a(DifficultyInstance difficultyinstance) {
+        super.a(difficultyinstance);
         this.c(0, new ItemStack(Items.f));
     }
 
-    public IEntityLivingData a(IEntityLivingData ientitylivingdata) {
-        ientitylivingdata = super.a(ientitylivingdata);
-        if (this.o.t instanceof WorldProviderHell && this.aI().nextInt(5) > 0) {
-            this.c.a(4, this.bq);
+    public IEntityLivingData a(DifficultyInstance difficultyinstance, IEntityLivingData ientitylivingdata) {
+        ientitylivingdata = super.a(difficultyinstance, ientitylivingdata);
+        if (this.o.t instanceof WorldProviderHell && this.bb().nextInt(5) > 0) {
+            this.i.a(4, this.c);
             this.a(1);
             this.c(0, new ItemStack(Items.q));
             this.a(SharedMonsterAttributes.e).a(4.0D);
-        } else {
-            this.c.a(4, this.bp);
-            this.bC();
-            this.bD();
+        }
+        else {
+            this.i.a(4, this.b);
+            this.a(difficultyinstance);
+            this.b(difficultyinstance);
         }
 
-        this.h(this.Z.nextFloat() < 0.55F * this.o.b(this.s, this.t, this.u));
-        if (this.q(4) == null) {
-            Calendar calendar = this.o.V();
+        this.j(this.V.nextFloat() < 0.55F * difficultyinstance.c());
+        if (this.p(4) == null) {
+            Calendar calendar = this.o.Y();
 
-            if (calendar.get(2) + 1 == 10 && calendar.get(5) == 31 && this.Z.nextFloat() < 0.25F) {
-                this.c(4, new ItemStack(this.Z.nextFloat() < 0.1F ? Blocks.aP : Blocks.aK));
-                this.e[4] = 0.0F;
+            if (calendar.get(2) + 1 == 10 && calendar.get(5) == 31 && this.V.nextFloat() < 0.25F) {
+                this.c(4, new ItemStack(this.V.nextFloat() < 0.1F ? Blocks.aZ : Blocks.aU));
+                this.bh[4] = 0.0F;
             }
         }
 
         return ientitylivingdata;
     }
 
-    public void bZ() {
-        this.c.a((EntityAIBase) this.bq);
-        this.c.a((EntityAIBase) this.bp);
-        ItemStack itemstack = this.be();
+    public void n() {
+        this.i.a((EntityAIBase) this.c);
+        this.i.a((EntityAIBase) this.b);
+        ItemStack itemstack = this.bz();
 
         if (itemstack != null && itemstack.b() == Items.f) {
-            this.c.a(4, this.bp);
-        } else {
-            this.c.a(4, this.bq);
+            this.i.a(4, this.b);
         }
+        else {
+            this.i.a(4, this.c);
+        }
+
     }
 
     public void a(EntityLivingBase entitylivingbase, float f0) {
-        EntityArrow entityarrow = new EntityArrow(this.o, this, entitylivingbase, 1.6F, (float) (14 - this.o.r.a() * 4));
-        int i0 = EnchantmentHelper.a(Enchantment.v.B, this.be());
-        int i1 = EnchantmentHelper.a(Enchantment.w.B, this.be());
+        EntityArrow entityarrow = new EntityArrow(this.o, this, entitylivingbase, 1.6F, (float) (14 - this.o.aa().a() * 4));
+        int i0 = EnchantmentHelper.a(Enchantment.v.B, this.bz());
+        int i1 = EnchantmentHelper.a(Enchantment.w.B, this.bz());
 
-        entityarrow.b((double) (f0 * 2.0F) + this.Z.nextGaussian() * 0.25D + (double) ((float) this.o.r.a() * 0.11F));
+        entityarrow.b((double) (f0 * 2.0F) + this.V.nextGaussian() * 0.25D + (double) ((float) this.o.aa().a() * 0.11F));
         if (i0 > 0) {
-            entityarrow.b(entityarrow.e() + (double) i0 * 0.5D + 0.5D);
+            entityarrow.b(entityarrow.j() + (double) i0 * 0.5D + 0.5D);
         }
 
         if (i1 > 0) {
             entityarrow.a(i1);
         }
 
-        if (EnchantmentHelper.a(Enchantment.x.B, this.be()) > 0 || this.cb() == 1) {
+        if (EnchantmentHelper.a(Enchantment.x.B, this.bz()) > 0 || this.ck() == 1) {
             entityarrow.e(100);
         }
 
-        this.a("random.bow", 1.0F, 1.0F / (this.aI().nextFloat() * 0.4F + 0.8F));
+        this.a("random.bow", 1.0F, 1.0F / (this.bb().nextFloat() * 0.4F + 0.8F));
         this.o.d((Entity) entityarrow);
     }
 
-    public int cb() {
-        return this.af.a(13);
+    public int ck() {
+        return this.ac.a(13);
     }
 
     public void a(int i0) {
-        this.af.b(13, Byte.valueOf((byte) i0));
-        this.ae = i0 == 1;
+        this.ac.b(13, Byte.valueOf((byte) i0));
+        this.ab = i0 == 1;
         if (i0 == 1) {
-            this.a(0.72F, 2.34F);
-        } else {
-            this.a(0.6F, 1.8F);
+            this.a(0.72F, 2.535F);
         }
+        else {
+            this.a(0.6F, 1.95F);
+        }
+
     }
 
     public void a(NBTTagCompound nbttagcompound) {
@@ -268,22 +295,27 @@ public class EntitySkeleton extends EntityMob implements IRangedAttackMob {
             this.a(b0);
         }
 
-        this.bZ();
+        this.n();
     }
 
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.a("SkeletonType", (byte) this.cb());
+        nbttagcompound.a("SkeletonType", (byte) this.ck());
     }
 
     public void c(int i0, ItemStack itemstack) {
         super.c(i0, itemstack);
-        if (!this.o.E && i0 == 0) {
-            this.bZ();
+        if (!this.o.D && i0 == 0) {
+            this.n();
         }
+
     }
 
-    public double ad() {
-        return super.ad() - 0.5D;
+    public float aR() {
+        return this.ck() == 1 ? super.aR() : 1.74F;
+    }
+
+    public double am() {
+        return super.am() - 0.5D;
     }
 }

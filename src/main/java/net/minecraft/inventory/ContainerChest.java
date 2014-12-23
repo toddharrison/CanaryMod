@@ -4,15 +4,16 @@ import net.canarymod.api.inventory.Inventory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
+
 public class ContainerChest extends Container {
 
     private IInventory a;
     private int f;
 
-    public ContainerChest(IInventory iinventory, IInventory iinventory1) {
+    public ContainerChest(IInventory iinventory, IInventory iinventory1, EntityPlayer entityplayer) {
         this.a = iinventory1;
-        this.f = iinventory1.a() / 9;
-        iinventory1.f();
+        this.f = iinventory1.n_() / 9;
+        iinventory1.b(entityplayer);
         int i0 = (this.f - 4) * 18;
 
         int i1;
@@ -33,11 +34,12 @@ public class ContainerChest extends Container {
         for (i1 = 0; i1 < 9; ++i1) {
             this.a(new Slot(iinventory, i1, 8 + i1 * 18, 161 + i0));
         }
+
     }
 
     public boolean a(EntityPlayer entityplayer) {
-        // CanaryMod: remote inventories
-        if (this.inventory.canOpenRemote()) {
+        // CanaryMod: remote inventories; add null check just incase
+        if (this.inventory != null && this.inventory.canOpenRemote()) {
             return true;
         }
         //
@@ -51,7 +53,7 @@ public class ContainerChest extends Container {
         if (slot != null && slot.e()) {
             ItemStack itemstack1 = slot.d();
 
-            itemstack = itemstack1.m();
+            itemstack = itemstack1.k();
             if (i0 < this.f * 9) {
                 if (!this.a(itemstack1, this.f * 9, this.c.size(), true)) {
                     return null;
@@ -62,7 +64,7 @@ public class ContainerChest extends Container {
             }
 
             if (itemstack1.b == 0) {
-                slot.c((ItemStack) null);
+                slot.d((ItemStack) null);
             }
             else {
                 slot.f();
@@ -74,7 +76,7 @@ public class ContainerChest extends Container {
 
     public void b(EntityPlayer entityplayer) {
         super.b(entityplayer);
-        this.a.l_();
+        this.a.c(entityplayer);
     }
 
     public IInventory e() {

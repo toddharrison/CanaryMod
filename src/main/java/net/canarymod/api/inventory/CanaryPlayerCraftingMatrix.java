@@ -72,7 +72,7 @@ public class CanaryPlayerCraftingMatrix extends CanaryEntityInventory implements
      */
     @Override
     public void update() {
-        getHandle().l_();
+        getHandle().o_();
     }
 
     /**
@@ -81,5 +81,13 @@ public class CanaryPlayerCraftingMatrix extends CanaryEntityInventory implements
     @Override
     public InventoryCrafting getHandle() {
         return (InventoryCrafting) inventory;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getInventoryName() {
+        return inventory.d_();
     }
 }

@@ -4,6 +4,7 @@ import net.canarymod.api.entity.CanaryTNTPrimed;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 
 public class EntityTNTPrimed extends Entity {
@@ -15,7 +16,6 @@ public class EntityTNTPrimed extends Entity {
         super(world);
         this.k = true;
         this.a(0.98F, 0.98F);
-        this.L = this.N / 2.0F;
         this.entity = new CanaryTNTPrimed(this); // CanaryMod: Wrap Entity
     }
 
@@ -34,18 +34,18 @@ public class EntityTNTPrimed extends Entity {
         this.b = entitylivingbase;
     }
 
-    protected void c() {
+    protected void h() {
     }
 
-    protected boolean g_() {
+    protected boolean r_() {
         return false;
     }
 
-    public boolean R() {
-        return !this.K;
+    public boolean ad() {
+        return !this.I;
     }
 
-    public void h() {
+    public void s_() {
         this.p = this.s;
         this.q = this.t;
         this.r = this.u;
@@ -54,26 +54,28 @@ public class EntityTNTPrimed extends Entity {
         this.v *= 0.9800000190734863D;
         this.w *= 0.9800000190734863D;
         this.x *= 0.9800000190734863D;
-        if (this.D) {
+        if (this.C) {
             this.v *= 0.699999988079071D;
             this.x *= 0.699999988079071D;
             this.w *= -0.5D;
         }
 
         if (this.a-- <= 0) {
-            this.B();
-            if (!this.o.E) {
-                this.f();
+            this.J();
+            if (!this.o.D) {
+                this.l();
             }
-        } else {
-            this.o.a("smoke", this.s, this.t + 0.5D, this.u, 0.0D, 0.0D, 0.0D);
+        }
+        else {
+            this.W();
+            this.o.a(EnumParticleTypes.SMOKE_NORMAL, this.s, this.t + 0.5D, this.u, 0.0D, 0.0D, 0.0D, new int[0]);
         }
     }
 
-    private void f() {
+    private void l() {
         // float f0 = 4.0F;
 
-        this.o.a(this, this.s, this.t, this.u, ((CanaryTNTPrimed) entity).getPower(), true); // CanaryMod: get power level
+        this.o.a(this, this.s, this.t + (double) (this.K / 2.0F), this.u, ((CanaryTNTPrimed) entity).getPower(), true); // CanaryMod: get power level
     }
 
     protected void b(NBTTagCompound nbttagcompound) {
@@ -84,7 +86,11 @@ public class EntityTNTPrimed extends Entity {
         this.a = nbttagcompound.d("Fuse");
     }
 
-    public EntityLivingBase e() {
+    public EntityLivingBase j() {
         return this.b;
+    }
+
+    public float aR() {
+        return 0.0F;
     }
 }

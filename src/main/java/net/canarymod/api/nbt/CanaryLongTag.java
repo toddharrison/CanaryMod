@@ -8,7 +8,7 @@ import net.minecraft.nbt.NBTTagLong;
  * @author Greg (gregthegeek)
  * @author Jason (darkdiplomat)
  */
-public class CanaryLongTag extends CanaryPrimativeTag implements LongTag {
+public class CanaryLongTag extends CanaryPrimitiveTag<LongTag> implements LongTag {
 
     /**
      * Constructs a new wrapper for NBTTagLong

@@ -40,7 +40,7 @@ public class CanaryAnvil extends CanaryBlockInventory implements Anvil {
      */
     @Override
     public int getX() {
-        return container.j;
+        return container.j.n();
     }
 
     /**
@@ -48,7 +48,7 @@ public class CanaryAnvil extends CanaryBlockInventory implements Anvil {
      */
     @Override
     public int getY() {
-        return container.k;
+        return container.j.o();
     }
 
     /**
@@ -56,7 +56,7 @@ public class CanaryAnvil extends CanaryBlockInventory implements Anvil {
      */
     @Override
     public int getZ() {
-        return container.l;
+        return container.j.p();
     }
 
     /**

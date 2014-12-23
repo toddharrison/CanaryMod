@@ -2,13 +2,14 @@ package net.minecraft.command;
 
 import net.canarymod.Canary;
 import net.canarymod.api.world.CanaryWorld;
+import net.minecraft.command.common.CommandReplaceItem;
 import net.minecraft.command.server.*;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.network.rcon.RConConsoleSource;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
+import net.minecraft.world.WorldServer;
 
 import java.util.Iterator;
 
@@ -26,8 +27,11 @@ public class ServerCommandManager extends CommandHandler implements IAdminComman
         this.a(new CommandXP());
         this.a(new CommandTeleport());
         this.a(new CommandGive());
+        this.a(new CommandReplaceItem());
+        this.a(new CommandStats());
         this.a(new CommandEffect());
         this.a(new CommandEnchant());
+        this.a(new CommandParticle());
         this.a(new CommandEmote());
         this.a(new CommandShowSeed());
         this.a(new CommandHelp());
@@ -42,12 +46,21 @@ public class ServerCommandManager extends CommandHandler implements IAdminComman
         this.a(new CommandSpreadPlayers());
         this.a(new CommandPlaySound());
         this.a(new CommandScoreboard());
+        this.a(new CommandExecuteAt());
+        this.a(new CommandTrigger());
         this.a(new CommandAchievement());
         this.a(new CommandSummon());
         this.a(new CommandSetBlock());
+        this.a(new CommandFill());
+        this.a(new CommandClone());
+        this.a(new CommandCompare());
+        this.a(new CommandBlockData());
         this.a(new CommandTestForBlock());
         this.a(new CommandMessageRaw());
-        if (MinecraftServer.I().X()) {
+        this.a(new CommandWorldBorder());
+        this.a(new CommandTitle());
+        this.a(new CommandEntityData());
+        if (MinecraftServer.M().ad()) {
             /* CanaryMod: Disable commands that are overridden
             this.a(new CommandOp());
             this.a(new CommandDeOp());
@@ -69,43 +82,52 @@ public class ServerCommandManager extends CommandHandler implements IAdminComman
             this.a(new CommandWhitelist());
             */
             this.a(new CommandSetPlayerTimeout());
-            this.a(new CommandNetstat());
-        } else {
+        }
+        else {
             this.a(new CommandPublishLocalServer());
         }
 
-        CommandBase.a((IAdminCommand) this);
+        CommandBase.a((IAdminCommand)this);
     }
 
     public void a(ICommandSender icommandsender, ICommand icommand, int i0, String s0, Object... aobject) {
         boolean flag0 = true;
+        MinecraftServer minecraftserver = MinecraftServer.M();
+        WorldServer default0 = (WorldServer)((CanaryWorld)Canary.getServer().getDefaultWorld()).getHandle();
 
-        // CanaryMod: Fix for MultiWorld
-        if (icommandsender instanceof CommandBlockLogic && !((CanaryWorld) Canary.getServer().getDefaultWorld()).getHandle().O().b("commandBlockOutput")) {
+        if (!icommandsender.t_()) {
             flag0 = false;
         }
 
-        ChatComponentTranslation chatcomponenttranslation = new ChatComponentTranslation("chat.type.admin", new Object[]{icommandsender.b_(), new ChatComponentTranslation(s0, aobject)});
+        ChatComponentTranslation chatcomponenttranslation = new ChatComponentTranslation("chat.type.admin", new Object[]{ icommandsender.d_(), new ChatComponentTranslation(s0, aobject) });
 
         chatcomponenttranslation.b().a(EnumChatFormatting.GRAY);
         chatcomponenttranslation.b().b(Boolean.valueOf(true));
         if (flag0) {
-            Iterator iterator = MinecraftServer.I().ah().e.iterator();
+            Iterator iterator = minecraftserver.an().e.iterator();
 
             while (iterator.hasNext()) {
-                EntityPlayer entityplayer = (EntityPlayer) iterator.next();
+                EntityPlayer entityplayer = (EntityPlayer)iterator.next();
 
-                if (entityplayer != icommandsender && MinecraftServer.I().ah().g(entityplayer.bJ()) && icommand.a(entityplayer) && (!(icommandsender instanceof RConConsoleSource) || MinecraftServer.I().m())) {
-                    entityplayer.a((IChatComponent) chatcomponenttranslation);
+                if (entityplayer != icommandsender && minecraftserver.an().g(entityplayer.cc()) && icommand.a(icommandsender)) {
+                    entityplayer.a((IChatComponent)chatcomponenttranslation);
                 }
             }
         }
 
-        if (icommandsender != MinecraftServer.I()) {
-            MinecraftServer.I().a((IChatComponent) chatcomponenttranslation);
+        // CanaryMod: Fix for MultiWorld
+        if (icommandsender != minecraftserver && default0.Q().b("logAdminCommands")) {
+            minecraftserver.a((IChatComponent)chatcomponenttranslation);
         }
 
-        if ((i0 & 1) != 1) {
+        // CanaryMod: Fix for MultiWorld
+        boolean flag1 = default0.Q().b("sendCommandFeedback");
+
+        if (icommandsender instanceof CommandBlockLogic) {
+            flag1 = ((CommandBlockLogic)icommandsender).m();
+        }
+
+        if ((i0 & 1) != 1 && flag1) {
             icommandsender.a(new ChatComponentTranslation(s0, aobject));
         }
     }

@@ -1,16 +1,16 @@
 package net.canarymod.api.factory;
 
-import net.canarymod.api.chat.CanaryChatComponent;
-import net.canarymod.api.chat.CanaryClickEventAction;
-import net.canarymod.api.chat.CanaryHoverEventAction;
-import net.canarymod.api.chat.ChatComponent;
-import net.canarymod.api.chat.ChatFormatting;
+import net.canarymod.Canary;
+import net.canarymod.api.chat.*;
+import net.canarymod.api.chat.ChatStyle;
 import net.canarymod.api.chat.ClickEvent;
-import net.canarymod.api.chat.ClickEventAction;
 import net.canarymod.api.chat.HoverEvent;
-import net.canarymod.api.chat.HoverEventAction;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.*;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.StringTokenizer;
+import java.util.regex.Pattern;
 
 /**
  * Implementation of ChatComponentFactory
@@ -18,6 +18,8 @@ import net.minecraft.util.EnumChatFormatting;
  * @author Jason (darkdiplomat)
  */
 public class CanaryChatComponentFactory implements ChatComponentFactory {
+    private final Pattern urlPattern = Pattern.compile("^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]");
+
 
     /**
      * {@inheritDoc}
@@ -31,10 +33,246 @@ public class CanaryChatComponentFactory implements ChatComponentFactory {
      * {@inheritDoc}
      */
     @Override
+    public ChatComponent compileChatComponent(String text){
+        CanaryChatComponent toSend = new ChatComponentText("").getWrapper();
+        StringTokenizer tokenizer = new StringTokenizer(text, "\u00A7", true); // Need to know if it actually starts with a style char
+        CanaryChatComponent working = new ChatComponentText("").getWrapper();
+        while (tokenizer.hasMoreTokens()) {
+            String workingMsg = tokenizer.nextToken();
+            boolean doStyle = workingMsg.equals("\u00A7");
+            if (doStyle) {
+                if (!tokenizer.hasMoreTokens()) {
+                    break; // dangling style; just drop it
+                }
+                workingMsg = tokenizer.nextToken();
+                if (((CanaryChatStyle)working.getChatStyle()).getNative().equals(net.minecraft.util.ChatStyle.k)) {
+                    working.setChatStyle(new net.minecraft.util.ChatStyle().getWrapper());
+                }
+                CanaryChatStyle style = (CanaryChatStyle)working.getChatStyle();
+                char code = workingMsg.toLowerCase().charAt(0);
+                EnumChatFormatting ecf = enumChatFormattingFromChar(code);
+                if (ecf != null) {
+                    style.setColor(ecf.getWrapper());
+                }
+                else {
+                    switch (code) {
+                        case 'k':
+                            style.setObfuscated(true);
+                            break;
+                        case 'l':
+                            style.setBold(true);
+                            break;
+                        case 'm':
+                            style.setStrikethrough(true);
+                            break;
+                        case 'n':
+                            style.setUnderlined(true);
+                            break;
+                        case 'o':
+                            style.setItalic(true);
+                            break;
+                        case 'r':
+                            style.setColor(EnumChatFormatting.RESET.getWrapper());
+                            break;
+                    }
+                }
+
+                if (workingMsg.length() > 1) { // Only reset things if there was something beyond the style
+                    eventFormat(toSend, working, workingMsg, true);
+                }
+            }
+            else if (workingMsg.length() > 1) {
+                eventFormat(toSend, working, workingMsg, false);
+            }
+            else {
+                toSend.appendSibling(working.setText(workingMsg));
+            }
+            working = new ChatComponentText("").getWrapper();
+        }
+        return toSend;
+    }
+
+    private EnumChatFormatting enumChatFormattingFromChar(char color) {
+        switch (color) {
+            case '0':
+                return EnumChatFormatting.BLACK;
+            case '1':
+                return EnumChatFormatting.DARK_BLUE;
+            case '2':
+                return EnumChatFormatting.DARK_GREEN;
+            case '3':
+                return EnumChatFormatting.DARK_AQUA;
+            case '4':
+                return EnumChatFormatting.DARK_RED;
+            case '5':
+                return EnumChatFormatting.DARK_PURPLE;
+            case '6':
+                return EnumChatFormatting.GOLD;
+            case '7':
+                return EnumChatFormatting.GRAY;
+            case '8':
+                return EnumChatFormatting.DARK_GRAY;
+            case '9':
+                return EnumChatFormatting.BLUE;
+            case 'a':
+                return EnumChatFormatting.GREEN;
+            case 'b':
+                return EnumChatFormatting.AQUA;
+            case 'c':
+                return EnumChatFormatting.RED;
+            case 'd':
+                return EnumChatFormatting.LIGHT_PURPLE;
+            case 'e':
+                return EnumChatFormatting.YELLOW;
+            case 'f':
+                return EnumChatFormatting.WHITE;
+            //Skip Stylizations
+            default:
+                return null;
+        }
+    }
+
+    private void eventFormat(CanaryChatComponent toSend, CanaryChatComponent working, String workingMsg, boolean styleSet) {
+        List<String> playerNames = Arrays.asList(Canary.getServer().getPlayerNameList()); // store this so we aren't converting every check.
+        String[] subWorking = styleSet ? workingMsg.substring(1).split(" ") : workingMsg.split(" "); // Find the URL
+        boolean addSpaces = workingMsg.contains(" "); // if its only one string then there probably was no spaces
+        StringBuilder subRebuild = new StringBuilder(); // Rebuild everything before and after the URL
+        net.canarymod.api.chat.ChatStyle workingStyle = working.getChatStyle().clone();
+        for (String sub : subWorking) {
+            /* check for urls */
+            if (urlPattern.matcher(sub).matches()) {
+                net.canarymod.api.chat.ChatStyle urlStyle = new net.minecraft.util.ChatStyle().getWrapper();
+                toSend.appendSibling(working.setText(subRebuild.toString())); // append everything before the URL
+                working = new ChatComponentText("").getWrapper(); // reset working
+
+                net.minecraft.event.ClickEvent clickEvent = new net.minecraft.event.ClickEvent(net.minecraft.event.ClickEvent.Action.OPEN_URL, sub); // Create the ClickEvent Action for the URL
+                if (styleSet) {
+                    urlStyle = workingStyle.clone(); // Need to pull the formatting in as well
+                }
+                urlStyle.setChatClickEvent(clickEvent.getWrapper()); // Append the action
+                toSend.appendSibling(working.setChatStyle(urlStyle).setText(sub.concat(addSpaces ? " " : ""))); // Append URL
+
+                working = new ChatComponentText("").getWrapper(); // reset working again
+                working.setChatStyle(workingStyle.clone()); // reset working style
+
+                subRebuild.delete(0, subRebuild.length()); // Reset the subRebuilder to handle things after the URL
+            }
+            /* check for playername */
+            else if (sub.matches("([a-zA-Z0-9_]){1,20}$") && playerNames.contains(sub)) {
+                net.canarymod.api.chat.ChatStyle urlStyle = new net.minecraft.util.ChatStyle().getWrapper();
+                toSend.appendSibling(working.setText(subRebuild.toString())); // append everything before the URL
+                working = new ChatComponentText("").getWrapper(); // reset working
+
+                net.minecraft.event.ClickEvent clickEvent = new net.minecraft.event.ClickEvent(net.minecraft.event.ClickEvent.Action.SUGGEST_COMMAND, "/msg " + sub); // Create the ClickEvent Action for the URL
+                if (styleSet) {
+                    urlStyle = workingStyle.clone(); // Need to pull the formatting in as well
+                }
+                urlStyle.setChatClickEvent(clickEvent.getWrapper()); // Append the action
+                toSend.appendSibling(working.setChatStyle(urlStyle).setText(sub.concat(addSpaces ? " " : ""))); // Append URL
+
+                working = new ChatComponentText("").getWrapper(); // reset working again
+                working.setChatStyle(workingStyle.clone()); // reset working style
+
+                subRebuild.delete(0, subRebuild.length()); // Reset the subRebuilder to handle things after the URL
+            }
+            else {
+                subRebuild.append(sub);
+                if (addSpaces) {
+                    subRebuild.append(" "); // Append that there space
+                }
+            }
+        }
+        if (subRebuild.length() > 0) {
+            toSend.appendSibling(working.setText(subRebuild.toString())); // Append whats left over
+        }
+    }
+
+    @Override
+    public String decompileChatComponent(ChatComponent chatComponent) {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        ChatStyle chatStyle = chatComponent.getChatStyle();
+        if(chatStyle.isBold()){
+            stringBuilder.append("\u00A7").append(getFormattingByName("bold").getFormattingCode());
+        }
+        if(chatStyle.isItalic()){
+            stringBuilder.append("\u00A7").append(getFormattingByName("italic").getFormattingCode());
+        }
+        if(chatStyle.isStrikethrough()){
+            stringBuilder.append("\u00A7").append(getFormattingByName("strikethrough").getFormattingCode());
+        }
+        if(chatStyle.isUnderlined()){
+            stringBuilder.append("\u00A7").append(getFormattingByName("underlined").getFormattingCode());
+        }
+        if(chatStyle.isObfuscated()){
+            stringBuilder.append("\u00A7").append(getFormattingByName("obfuscated").getFormattingCode());
+        }
+        if(chatStyle.getColor() != null){
+            stringBuilder.append("\u00A7").append(chatStyle.getColor().getFormattingCode());
+        }
+        stringBuilder.append(chatComponent.getText());
+        stringBuilder.append("\u00A7R");
+
+        iterateChatComponentSiblings(chatComponent, stringBuilder);
+
+        return stringBuilder.toString();
+    }
+
+    private void iterateChatComponentSiblings(ChatComponent chatComponent, StringBuilder builder){
+        for(ChatComponent sibling : chatComponent.getSiblings()){
+            ChatStyle chatStyle = chatComponent.getChatStyle();
+            if(chatStyle.isBold()){
+                builder.append("\u00A7").append(getFormattingByName("bold").getFormattingCode());
+            }
+            if(chatStyle.isItalic()){
+                builder.append("\u00A7").append(getFormattingByName("italic").getFormattingCode());
+            }
+            if(chatStyle.isStrikethrough()){
+                builder.append("\u00A7").append(getFormattingByName("strikethrough").getFormattingCode());
+            }
+            if(chatStyle.isUnderlined()){
+                builder.append("\u00A7").append(getFormattingByName("underlined").getFormattingCode());
+            }
+            if(chatStyle.isObfuscated()){
+                builder.append("\u00A7").append(getFormattingByName("obfuscated").getFormattingCode());
+            }
+            if(chatStyle.getColor() != null){
+                builder.append("\u00A7").append(chatStyle.getColor().getFormattingCode());
+            }
+            builder.append(chatComponent.getText());
+            builder.append("\u00A7R");
+            iterateChatComponentSiblings(sibling, builder);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ChatComponent deserialize(String json) {
+        return IChatComponent.Serializer.a(json).getWrapper();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public ChatFormatting getFormattingByName(String name) {
         return EnumChatFormatting.b(name).getWrapper();
     }
-
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ChatFormatting getStyleByChar(char charcode) {
+        for (EnumChatFormatting temp : EnumChatFormatting.values()) {
+            if (temp.z == charcode)
+                return temp.getWrapper();
+        }
+        return null;
+    }
+    
     /**
      * {@inheritDoc}
      */
