@@ -100,7 +100,7 @@ public abstract class CanaryTileEntity implements TileEntity {
     @Override
     public CompoundTag writeToTag(CompoundTag tag) {
         if (tileentity != null) {
-            tileentity.b(((CanaryCompoundTag) tag).getHandle());
+            tileentity.a(((CanaryCompoundTag) tag).getHandle());
             return tag;
         }
         return null;
