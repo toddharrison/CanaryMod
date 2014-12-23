@@ -1,5 +1,6 @@
 package net.minecraft.server.network;
 
+import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
 import net.canarymod.api.chat.CanaryChatComponent;
 import net.canarymod.hook.system.ServerListPingHook;
@@ -16,7 +17,6 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IChatComponent;
 
 import java.net.InetSocketAddress;
-import java.util.Arrays;
 
 public class NetHandlerStatusServer implements INetHandlerStatusServer {
 
@@ -34,14 +34,14 @@ public class NetHandlerStatusServer implements INetHandlerStatusServer {
     public void a(C00PacketServerQuery c00packetserverquery) {
         // CanaryMod: ServerListPingHook
         ServerStatusResponse ssr = this.a.aE();
-        ServerListPingHook hook = (ServerListPingHook)new ServerListPingHook(((InetSocketAddress)this.b.b()).getAddress(), ((ChatComponentText)ssr.a()).getWrapper(), ssr.b().b(), ssr.b().a(), ssr.d(), Arrays.asList(ssr.b().c())).call();
+        ServerListPingHook hook = (ServerListPingHook)new ServerListPingHook(((InetSocketAddress)this.b.b()).getAddress(), ((ChatComponentText)ssr.a()).getWrapper(), ssr.b().b(), ssr.b().a(), ssr.d(), Lists.newArrayList(ssr.b().c())).call();
         if (hook.isCanceled()) {
             // Response Denied!
             return;
         }
         // Recreate the ServerStatusResponse to be sent so that the default isn't destroyed
         ssr = new ServerStatusResponse();
-        ssr.a(new ServerStatusResponse.MinecraftProtocolVersionIdentifier("1.8", 47)); //Protocol (do not change this at all [except in the case of updating to new Minecraft]!)
+        ssr.a(new ServerStatusResponse.MinecraftProtocolVersionIdentifier(this.a.F(), this.a.getProtocolVersion()));
         ServerStatusResponse.PlayerCountData ssrpcd = new ServerStatusResponse.PlayerCountData(hook.getMaxPlayers(), hook.getCurrentPlayers());
         ssrpcd.a(hook.getProfiles().toArray(new GameProfile[hook.getProfiles().size()]));
         ssr.a(ssrpcd); //Max/Online Players & GameProfiles

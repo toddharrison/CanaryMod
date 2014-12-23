@@ -674,6 +674,10 @@ public class CanaryServer implements Server {
         return server.F();
     }
 
+    public int getProtocolVersion() {
+        return server.getProtocolVersion();
+    }
+
     /**
      * {@inheritDoc}
      */

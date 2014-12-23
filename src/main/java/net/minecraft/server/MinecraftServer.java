@@ -1474,4 +1474,8 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
     public WorldServer defaultWorld() {
         return (WorldServer)((CanaryWorld)worldManager.getWorld(this.J, DimensionType.NORMAL, true)).getHandle();
     }
+
+    public int getProtocolVersion() {
+        return this.r.c().b();
+    }
 }
