@@ -91,7 +91,7 @@ public class CanaryMod extends Canary {
         this.kitProvider = new KitProvider();
     }
 
-    public void initCommands() {
+    public void registerCanaryCommands() {
         try {
             this.commandManager.registerCommands(new CommandList(), Canary.getServer(), false);
         }
@@ -128,7 +128,7 @@ public class CanaryMod extends Canary {
         this.initWarps();
         // commands require a valid commandOwner which is the server.
         // That means for commands to work, we gotta load Minecraft first
-        this.initCommands();
+        this.registerCanaryCommands();
         // and finally throw in the MOTDListner
         this.initMOTDListener();
         isInitialised = true;

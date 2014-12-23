@@ -312,11 +312,14 @@ public class DedicatedServer extends MinecraftServer implements IServer {
             this.c((this.al() + 8) / 16 << 4);
             this.c(MathHelper.a(this.al(), 64, 256));
             worldcfg.getFile().setInt("max-build-height", this.al());
+            // CanaryMod
+            // Early plugins now, before any subsystems and worlds
+            Canary.enableEarlyPlugins();
             // Init subsystems before plugins load
             ((CanaryMod)Canary.instance()).lateInitialisation();
-            // CanaryMod enable plugins here, before the first world is loaded.
             // At this point all bootstrapping should be done and systems should be running
-            Canary.enablePlugins();
+            Canary.enableLatePlugins();
+            // End CanaryMod
 
             if (!MinecraftServer.isHeadless()) {
                 // CanaryMod moved GUI start to after plugins enable
