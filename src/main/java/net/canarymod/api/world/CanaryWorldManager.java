@@ -48,6 +48,10 @@ public class CanaryWorldManager implements WorldManager {
     private final List<String> existingWorlds;
     private final Map<String, Boolean> markedForUnload;
 
+    // This is used so we don't generate new collections each getAllWorlds call.
+    private int worldHash;
+    private Collection<World> workerWorlds;
+
     public CanaryWorldManager() {
         markedForUnload = new HashMap<String, Boolean>(1);
         File worldsFolders = new File("worlds");
@@ -263,7 +267,6 @@ public class CanaryWorldManager implements WorldManager {
 
     @Override
     public boolean destroyWorld(String name) {
-        String mainName = name.replaceAll("_.+", "");
         File file = new File("worlds/" + name.replaceAll("_.+", "") + "/" + name);
         File dir = new File("worldsbackup/" + name + "(" + System.currentTimeMillis() + ")"); // Timestamp the backup
         boolean success = dir.mkdirs() && file.renameTo(new File(dir, file.getName()));
@@ -281,8 +284,12 @@ public class CanaryWorldManager implements WorldManager {
             removeWorlds();
             // markedForUnload.clear();
         }
-        // Canary.println("getAllWorlds");
-        return Collections.unmodifiableCollection(this.loadedWorlds.values());
+        int hashcode = loadedWorlds.hashCode();
+        if (worldHash != hashcode || workerWorlds == null) {
+            workerWorlds = Collections.unmodifiableCollection(this.loadedWorlds.values());
+            worldHash = hashcode;
+        }
+        return workerWorlds;
     }
 
     @Override
