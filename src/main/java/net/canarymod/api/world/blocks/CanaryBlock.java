@@ -72,11 +72,7 @@ public class CanaryBlock implements Block {
 
     public static CanaryBlock getPooledBlock(IBlockState state, BlockPos pos, net.minecraft.world.World world) {
         CanaryBlock block = blockPool.get(pos);
-        if (block == null) {
-            return blockPool.add(pos, new CanaryBlock(state, pos, world));
-        }
-        if (!block.world.equals(world.getCanaryWorld())) {
-            // We're querying from a different world, change the reference in the pool
+        if (block == null || !block.world.equals(world.getCanaryWorld())) {
             return blockPool.add(pos, new CanaryBlock(state, pos, world));
         }
         // Update block state, it might has changed
@@ -348,7 +344,7 @@ public class CanaryBlock implements Block {
             }
         }
 
-        return net.minecraft.block.Block.b(getType().getMachineName()).a(((CanaryWorld)getWorld()).getHandle(), new BlockPos(getX(), getY(), getZ()), getBlock().P(), player != null ? ((CanaryPlayer)player).getHandle() : null, enumfacing, 0, 0, 0); // last four parameters aren't even used by lever or button
+        return net.minecraft.block.Block.b(getType().getMachineName()).a(((CanaryWorld) getWorld()).getHandle(), new BlockPos(getX(), getY(), getZ()), getBlock().P(), player != null ? ((CanaryPlayer) player).getHandle() : null, enumfacing, 0, 0, 0); // last four parameters aren't even used by lever or button
     }
 
     public void sendUpdateToPlayers(Player... players) {
@@ -464,9 +460,8 @@ public class CanaryBlock implements Block {
     }
 
     private void setNativeType(IBlockState state) {
-        String newMachineName = machineNameOfBlock(state.c());
-        if (!type.getMachineName().equals(newMachineName)) {
-            this.type = BlockType.fromStringAndData(newMachineName, convertPropertyTypeData(state));
+        if (this.state.c() != state.c()) {
+            this.type = BlockType.fromStringAndData(machineNameOfBlock(state.c()), convertPropertyTypeData(state));
         }
         this.state = state;
     }
