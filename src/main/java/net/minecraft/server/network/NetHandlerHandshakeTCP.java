@@ -68,7 +68,7 @@ public class NetHandlerHandshakeTCP implements INetHandlerHandshakeServer {
                 break;
             case 2:
                 this.b.a(EnumConnectionState.STATUS);
-                this.b.a((INetHandler)(new NetHandlerStatusServer(this.a, this.b)));
+                this.b.a(new NetHandlerStatusServer(this.a, this.b, c00handshake));
                 break;
             default:
                 throw new UnsupportedOperationException("Invalid intention " + c00handshake.a());

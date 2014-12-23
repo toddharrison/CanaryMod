@@ -7,6 +7,7 @@ import net.canarymod.hook.system.ServerListPingHook;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.ServerStatusResponse;
+import net.minecraft.network.handshake.client.C00Handshake;
 import net.minecraft.network.status.INetHandlerStatusServer;
 import net.minecraft.network.status.client.C00PacketServerQuery;
 import net.minecraft.network.status.client.C01PacketPing;
@@ -22,10 +23,13 @@ public class NetHandlerStatusServer implements INetHandlerStatusServer {
 
     private final MinecraftServer a;
     private final NetworkManager b;
+    private final C00Handshake c00handshake; // CanaryMod
 
-    public NetHandlerStatusServer(MinecraftServer minecraftserver, NetworkManager networkmanager) {
+    // CanaryMod: add handshake packet
+    public NetHandlerStatusServer(MinecraftServer minecraftserver, NetworkManager networkmanager, C00Handshake c00handshake) {
         this.a = minecraftserver;
         this.b = networkmanager;
+        this.c00handshake = c00handshake; // CanaryMod
     }
 
     public void a(IChatComponent ichatcomponent) {
@@ -34,7 +38,7 @@ public class NetHandlerStatusServer implements INetHandlerStatusServer {
     public void a(C00PacketServerQuery c00packetserverquery) {
         // CanaryMod: ServerListPingHook
         ServerStatusResponse ssr = this.a.aE();
-        ServerListPingHook hook = (ServerListPingHook)new ServerListPingHook(((InetSocketAddress)this.b.b()).getAddress(), ((ChatComponentText)ssr.a()).getWrapper(), ssr.b().b(), ssr.b().a(), ssr.d(), Lists.newArrayList(ssr.b().c())).call();
+        ServerListPingHook hook = (ServerListPingHook)new ServerListPingHook((InetSocketAddress)this.b.b(), c00handshake.b(), c00handshake.b.split("\00")[0], ((ChatComponentText)ssr.a()).getWrapper(), ssr.b().b(), ssr.b().a(), ssr.d(), Lists.newArrayList(ssr.b().c())).call();
         if (hook.isCanceled()) {
             // Response Denied!
             return;
