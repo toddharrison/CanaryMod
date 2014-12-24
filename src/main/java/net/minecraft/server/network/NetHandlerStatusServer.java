@@ -38,7 +38,7 @@ public class NetHandlerStatusServer implements INetHandlerStatusServer {
     public void a(C00PacketServerQuery c00packetserverquery) {
         // CanaryMod: ServerListPingHook
         ServerStatusResponse ssr = this.a.aE();
-        ServerListPingHook hook = (ServerListPingHook)new ServerListPingHook((InetSocketAddress)this.b.b(), c00handshake.b(), c00handshake.b.split("\00")[0], ((ChatComponentText)ssr.a()).getWrapper(), ssr.b().b(), ssr.b().a(), ssr.d(), Lists.newArrayList(ssr.b().c())).call();
+        ServerListPingHook hook = (ServerListPingHook)new ServerListPingHook((InetSocketAddress)this.b.b(), c00handshake.b(), c00handshake.b.split("\00")[0], c00handshake.getPort(), ((ChatComponentText)ssr.a()).getWrapper(), ssr.b().b(), ssr.b().a(), ssr.d(), Lists.newArrayList(ssr.b().c())).call();
         if (hook.isCanceled()) {
             // Response Denied!
             return;

@@ -44,4 +44,8 @@ public class C00Handshake implements Packet {
     public void a(INetHandler inethandler) {
         this.a((INetHandlerHandshakeServer)inethandler);
     }
+
+    public int getPort() { //CanaryMod: ServerListPing ping port
+        return this.c;
+    }
 }
