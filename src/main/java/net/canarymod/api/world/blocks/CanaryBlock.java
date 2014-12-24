@@ -13,6 +13,7 @@ import net.canarymod.api.world.blocks.properties.BlockBooleanProperty;
 import net.canarymod.api.world.blocks.properties.BlockEnumProperty;
 import net.canarymod.api.world.blocks.properties.BlockIntegerProperty;
 import net.canarymod.api.world.blocks.properties.BlockProperty;
+import net.canarymod.api.world.blocks.properties.BlockStateMapper;
 import net.canarymod.api.world.blocks.properties.CanaryBlockEnumProperty;
 import net.canarymod.api.world.blocks.properties.CanaryBlockProperty;
 import net.canarymod.api.world.position.BlockPosition;
@@ -138,6 +139,7 @@ public class CanaryBlock implements Block {
     @Override
     public void setTypeId(short typeId) {
         this.type = BlockType.fromIdAndData(typeId, data);
+        this.state = BlockStateMapper.getStateForType(type);
     }
 
     @Override
@@ -148,7 +150,7 @@ public class CanaryBlock implements Block {
     @Override
     public void setType(BlockType type) {
         this.type = type;
-        this.state = net.minecraft.block.Block.b(type.getMachineName()).P();
+        this.state = BlockStateMapper.getStateForType(type);
     }
 
     @Override
@@ -159,6 +161,7 @@ public class CanaryBlock implements Block {
     @Override
     public void setData(short data) {
         this.type = BlockType.fromStringAndData(type.getMachineName(), data);
+        this.state = BlockStateMapper.getStateForType(type);
     }
 
     @Override
