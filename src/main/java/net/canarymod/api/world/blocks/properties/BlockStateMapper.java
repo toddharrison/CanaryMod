@@ -39,6 +39,7 @@ import static net.canarymod.api.world.blocks.BlockType.AcaciaLeaves;
 import static net.canarymod.api.world.blocks.BlockType.AcaciaLog;
 import static net.canarymod.api.world.blocks.BlockType.AcaciaSapling;
 import static net.canarymod.api.world.blocks.BlockType.AcaciaWood;
+import static net.canarymod.api.world.blocks.BlockType.AcaciaWoodSlab;
 import static net.canarymod.api.world.blocks.BlockType.Allium;
 import static net.canarymod.api.world.blocks.BlockType.Andesite;
 import static net.canarymod.api.world.blocks.BlockType.AzureBluet;
@@ -46,6 +47,7 @@ import static net.canarymod.api.world.blocks.BlockType.BirchLeaves;
 import static net.canarymod.api.world.blocks.BlockType.BirchLog;
 import static net.canarymod.api.world.blocks.BlockType.BirchSapling;
 import static net.canarymod.api.world.blocks.BlockType.BirchWood;
+import static net.canarymod.api.world.blocks.BlockType.BirchWoodSlab;
 import static net.canarymod.api.world.blocks.BlockType.BlackCarpet;
 import static net.canarymod.api.world.blocks.BlockType.BlackGlass;
 import static net.canarymod.api.world.blocks.BlockType.BlackGlassPane;
@@ -73,6 +75,7 @@ import static net.canarymod.api.world.blocks.BlockType.DarkOakLeaves;
 import static net.canarymod.api.world.blocks.BlockType.DarkOakLog;
 import static net.canarymod.api.world.blocks.BlockType.DarkOakSapling;
 import static net.canarymod.api.world.blocks.BlockType.DarkOakWood;
+import static net.canarymod.api.world.blocks.BlockType.DarkOakWoodSlab;
 import static net.canarymod.api.world.blocks.BlockType.DarkPrismarine;
 import static net.canarymod.api.world.blocks.BlockType.Diorite;
 import static net.canarymod.api.world.blocks.BlockType.DoubleAcaciaWoodSlab;
@@ -83,6 +86,7 @@ import static net.canarymod.api.world.blocks.BlockType.DoubleDarkOakWoodSlab;
 import static net.canarymod.api.world.blocks.BlockType.DoubleGrass;
 import static net.canarymod.api.world.blocks.BlockType.DoubleJungleWoodSlab;
 import static net.canarymod.api.world.blocks.BlockType.DoubleNetherBrickSlab;
+import static net.canarymod.api.world.blocks.BlockType.DoubleOrnateStoneSlab;
 import static net.canarymod.api.world.blocks.BlockType.DoubleQuartzSlab;
 import static net.canarymod.api.world.blocks.BlockType.DoubleSandStoneSlab;
 import static net.canarymod.api.world.blocks.BlockType.DoubleSandStoneTrimSlab;
@@ -104,6 +108,7 @@ import static net.canarymod.api.world.blocks.BlockType.JungleLeaves;
 import static net.canarymod.api.world.blocks.BlockType.JungleLog;
 import static net.canarymod.api.world.blocks.BlockType.JungleSapling;
 import static net.canarymod.api.world.blocks.BlockType.JungleWood;
+import static net.canarymod.api.world.blocks.BlockType.JungleWoodSlab;
 import static net.canarymod.api.world.blocks.BlockType.LargeFern;
 import static net.canarymod.api.world.blocks.BlockType.LightBlueCarpet;
 import static net.canarymod.api.world.blocks.BlockType.LightBlueGlass;
@@ -170,8 +175,10 @@ import static net.canarymod.api.world.blocks.BlockType.SandstoneBlank;
 import static net.canarymod.api.world.blocks.BlockType.SandstoneOrnate;
 import static net.canarymod.api.world.blocks.BlockType.SpruceSapling;
 import static net.canarymod.api.world.blocks.BlockType.SpruceWood;
+import static net.canarymod.api.world.blocks.BlockType.SpruceWoodSlab;
 import static net.canarymod.api.world.blocks.BlockType.StoneBrickSilverFishBlock;
 import static net.canarymod.api.world.blocks.BlockType.StoneBricksSlab;
+import static net.canarymod.api.world.blocks.BlockType.StoneSlab;
 import static net.canarymod.api.world.blocks.BlockType.TallGrass;
 import static net.canarymod.api.world.blocks.BlockType.WhiteCarpet;
 import static net.canarymod.api.world.blocks.BlockType.WhiteGlass;
@@ -283,7 +290,7 @@ public enum BlockStateMapper {
     OXEYEDAISY(OxeyeDaisy, Blocks.O.l(), BlockFlower.EnumFlowerType.OXEYE_DAISY),
 
     /* Double Slab Variants */
-    DOUBLESLAB_STONE_TRIM(DoubleStoneSlab, new IProperty[]{ BlockStoneSlab.M, BlockDoubleStoneSlab.b }, new Comparable[]{ BlockStoneSlab.EnumType.STONE, true }),
+    DOUBLESLAB_STONE_TRIM(DoubleOrnateStoneSlab, new IProperty[]{ BlockStoneSlab.M, BlockDoubleStoneSlab.b }, new Comparable[]{ BlockStoneSlab.EnumType.STONE, true }),
     DOUBLESLAB_SANDSTONE_TRIM(DoubleSandStoneTrimSlab, new IProperty[]{ BlockStoneSlab.M, BlockStoneSlab.b }, new Comparable[]{ BlockStoneSlab.EnumType.SAND, true }),
     DOUBLESLAB_WOOD(DoubleWoodSlab, BlockStoneSlab.M, BlockStoneSlab.EnumType.WOOD),
     DOUBLESLAB_COBBLE(DoubleCobbleSlab, BlockStoneSlab.M, BlockStoneSlab.EnumType.COBBLESTONE),
@@ -291,7 +298,7 @@ public enum BlockStateMapper {
     DOUBLESLAB_STONEBRICK(DoubleStoneBricksSlab, BlockStoneSlab.M, BlockStoneSlab.EnumType.SMOOTHBRICK),
     DOUBLESLAB_NETHERBRICK(DoubleNetherBrickSlab, BlockStoneSlab.M, BlockStoneSlab.EnumType.NETHERBRICK),
     DOUBLESLAB_QUARTZ(DoubleQuartzSlab, BlockStoneSlab.M, BlockStoneSlab.EnumType.QUARTZ),
-    DOUBLESLAB_STONE(DoubleBrickBlockSlab, BlockStoneSlab.M, BlockStoneSlab.EnumType.STONE),
+    DOUBLESLAB_STONE(DoubleStoneSlab, BlockStoneSlab.M, BlockStoneSlab.EnumType.STONE),
     DOUBLESLAB_SANDSTONE(DoubleSandStoneSlab, BlockStoneSlab.M, BlockStoneSlab.EnumType.SAND),
 
     /* Slab Variants */
@@ -303,7 +310,7 @@ public enum BlockStateMapper {
     SLAB_STONEBRICK(StoneBricksSlab, BlockStoneSlab.M, BlockStoneSlab.EnumType.SMOOTHBRICK),
     SLAB_NETHERBRICK(NetherBricksSlab, BlockStoneSlab.M, BlockStoneSlab.EnumType.NETHERBRICK),
     SLAB_QUARTZ(QuartzSlab, BlockStoneSlab.M, BlockStoneSlab.EnumType.QUARTZ),
-    SLAB_STONE(BrickBlockSlab, BlockStoneSlab.M, BlockStoneSlab.EnumType.STONE),
+    SLAB_STONE(StoneSlab, BlockStoneSlab.M, BlockStoneSlab.EnumType.STONE),
     SLAB_SANDSTONE(SandStoneSlab, BlockStoneSlab.M, BlockStoneSlab.EnumType.SAND),
 
     /* Stained Glass Variants */
@@ -344,11 +351,11 @@ public enum BlockStateMapper {
     DOUBLEWOODSLAB_DARKOAK(DoubleDarkOakWoodSlab, BlockWoodSlab.b, BlockPlanks.EnumType.DARK_OAK),
 
     /* Wood Slab Variants */
-    WOODSLAB_SPRUCE(DoubleSpruceWoodSlab, BlockWoodSlab.b, BlockPlanks.EnumType.SPRUCE),
-    WOODSLAB_BIRCH(DoubleBirchWoodSlab, BlockWoodSlab.b, BlockPlanks.EnumType.BIRCH),
-    WOODSLAB_JUNGLE(DoubleJungleWoodSlab, BlockWoodSlab.b, BlockPlanks.EnumType.JUNGLE),
-    WOODSLAB_ACACIA(DoubleAcaciaWoodSlab, BlockWoodSlab.b, BlockPlanks.EnumType.ACACIA),
-    WOODSLAB_DARKOAK(DoubleDarkOakWoodSlab, BlockWoodSlab.b, BlockPlanks.EnumType.DARK_OAK),
+    WOODSLAB_SPRUCE(SpruceWoodSlab, BlockWoodSlab.b, BlockPlanks.EnumType.SPRUCE),
+    WOODSLAB_BIRCH(BirchWoodSlab, BlockWoodSlab.b, BlockPlanks.EnumType.BIRCH),
+    WOODSLAB_JUNGLE(JungleWoodSlab, BlockWoodSlab.b, BlockPlanks.EnumType.JUNGLE),
+    WOODSLAB_ACACIA(AcaciaWoodSlab, BlockWoodSlab.b, BlockPlanks.EnumType.ACACIA),
+    WOODSLAB_DARKOAK(DarkOakWoodSlab, BlockWoodSlab.b, BlockPlanks.EnumType.DARK_OAK),
 
     /*
     /* Skull Variants * / // Which I have no good way of switching state of...
@@ -465,7 +472,7 @@ public enum BlockStateMapper {
     static {
         for (BlockStateMapper tts : values()) {
             if (map.containsKey(tts.type)) {
-                Canary.log.debug("A BlockType was attempted to be mapped more than once in BlockStateMapper... {}", tts.type);
+                Canary.log.debug("A BlockType was attempted to be mapped more than once in BlockStateMapper for {}... (Name:{} [Id:{} Data:{}])", tts.name(), tts.type.getMachineName(), tts.type.getId(), tts.type.getData());
                 continue;
             }
             map.put(tts.type, tts);

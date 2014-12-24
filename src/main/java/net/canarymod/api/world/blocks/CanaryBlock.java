@@ -534,7 +534,7 @@ public class CanaryBlock implements Block {
         }
         else if (nmsBlock instanceof BlockSkull){
             TileEntity tileEntity = getTileEntity();
-            if (tileEntity != null) {
+            if (tileEntity != null && tileEntity instanceof CanarySkull) {
                 return ((CanarySkull)tileEntity).getTileEntity().c();
             }
         }
