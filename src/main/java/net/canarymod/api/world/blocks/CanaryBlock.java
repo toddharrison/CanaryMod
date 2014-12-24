@@ -533,8 +533,10 @@ public class CanaryBlock implements Block {
             return ((Enum)state.b(BlockWall.P)).ordinal();
         }
         else if (nmsBlock instanceof BlockSkull){
-            // CRAP
-            return 0;
+            TileEntity tileEntity = getTileEntity();
+            if (tileEntity != null) {
+                return ((CanarySkull)tileEntity).getTileEntity().c();
+            }
         }
         else if (nmsBlock instanceof BlockQuartz){
             return ((Enum)state.b(BlockQuartz.a)).ordinal();

@@ -465,7 +465,7 @@ public enum BlockStateMapper {
     static {
         for (BlockStateMapper tts : values()) {
             if (map.containsKey(tts.type)) {
-                Canary.log.debug("A BlockType was attempted to be mapped more than one... {}", tts.type);
+                Canary.log.debug("A BlockType was attempted to be mapped more than once in BlockStateMapper... {}", tts.type);
                 continue;
             }
             map.put(tts.type, tts);
