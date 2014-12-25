@@ -56,13 +56,16 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.WorldSettings;
+import net.minecraft.world.gen.feature.*;
 import net.visualillusionsent.utils.TaskManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ScheduledFuture;
 
 public class CanaryWorld implements World {
+    private static final Random random = new Random();
     private WorldServer world;
     private DimensionType type;
     public long[] nanoTicks;
@@ -837,6 +840,62 @@ public class CanaryWorld implements World {
         int xx = x - ((x >> 4) * 16);
         int zz = z - ((z >> 4) * 16);
         return c.getHandle().a(new BlockPos(xx, 0, zz), this.getHandle().v()).getCanaryBiome();
+    }
+
+    public boolean generateTree(Position pos, TreeType type) {
+        WorldGenerator gen;
+        switch (type) {
+            case BIGOAK:
+                gen = new WorldGenBigTree(true);
+                break;
+            case SWAMPOAK:
+                gen = new WorldGenSwamp();
+                break;
+            case DARKOAK:
+                gen = new WorldGenCanopyTree(true);
+                break;
+            case BIRCH:
+                gen = new WorldGenForest(true, false);
+                break;
+            case TALLBIRCH:
+                gen = new WorldGenForest(true, true);
+                break;
+            case SPRUCE:
+                gen = new WorldGenTaiga2(true);
+                break;
+            case TALLSPRUCE:
+                gen = new WorldGenTaiga1();
+                break;
+            case MEGASPRUCE:
+                gen = new WorldGenMegaPineTree(false, random.nextBoolean());
+                break;
+            case JUNGLE:
+                gen = new WorldGenTrees(true, 4 + random.nextInt(7), 3, 3, false);
+                break;
+            case TALLJUNGLE:
+                gen = new WorldGenTrees(true, 4 + random.nextInt(7), 3, 3, true);
+                break;
+            case JUNGLEBUSH:
+                gen = new WorldGenShrub(3, 0);
+                break;
+            case MEGAJUNGLE:
+                gen = new WorldGenMegaJungle(true, 10, 20, 3, 3);
+                break;
+            case ACACIA:
+                gen = new WorldGenSavannaTree(true);
+                break;
+            case REDMUSHROOM:
+                gen = new WorldGenBigMushroom(1);
+                break;
+            case BROWNMUSHROOM:
+                gen = new WorldGenBigMushroom(0);
+                break;
+            default:
+                gen = new WorldGenTrees(true);
+                break;
+        }
+
+        return gen.b(world, random, new BlockPos(pos.getBlockX(), pos.getBlockY(), pos.getBlockZ()));
     }
 
     public net.minecraft.world.World getHandle() {
