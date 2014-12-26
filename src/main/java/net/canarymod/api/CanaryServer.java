@@ -768,6 +768,18 @@ public class CanaryServer implements Server {
         return tps;
     }
 
+    @Override
+    public void showTitle(ChatComponent title) {
+        showTitle(title, null);
+    }
+
+    @Override
+    public void showTitle(ChatComponent title, ChatComponent subtitle) {
+        for(Player player : getPlayerList()){
+            player.showTitle(title, subtitle);
+        }
+    }
+
     public class ServerTimer implements Runnable {
         private String name;
 

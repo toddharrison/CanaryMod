@@ -66,11 +66,9 @@ import net.minecraft.inventory.ContainerHopper;
 import net.minecraft.inventory.ContainerHorseInventory;
 import net.minecraft.inventory.ContainerRepair;
 import net.minecraft.inventory.ContainerWorkbench;
-import net.minecraft.network.play.server.S02PacketChat;
-import net.minecraft.network.play.server.S2BPacketChangeGameState;
-import net.minecraft.network.play.server.S38PacketPlayerListItem;
-import net.minecraft.network.play.server.S39PacketPlayerAbilities;
+import net.minecraft.network.play.server.*;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.IChatComponent;
 import net.minecraft.world.WorldSettings;
 import net.visualillusionsent.utils.StringUtils;
 
@@ -367,7 +365,11 @@ public class CanaryPlayer extends CanaryHuman implements Player {
      */
     @Override
     public void sendPacket(Packet packet) {
-        getHandle().a.a(((CanaryPacket) packet).getPacket());
+        sendRawPacket(((CanaryPacket) packet).getPacket());
+    }
+
+    private void sendRawPacket(net.minecraft.network.Packet packet){
+        getHandle().a.a(packet);
     }
 
     /**
@@ -997,7 +999,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
      */
     @Override
     public void updateCapabilities() {
-        this.sendPacket(new CanaryPacket(new S39PacketPlayerAbilities(((CanaryHumanCapabilities) getCapabilities()).getHandle())));
+        this.sendRawPacket(new S39PacketPlayerAbilities(((CanaryHumanCapabilities) getCapabilities()).getHandle()));
     }
 
     /**
@@ -1135,7 +1137,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
      */
     @Override
     public void sendChatComponent(ChatComponent chatComponent) {
-        this.sendPacket(new CanaryPacket(new S02PacketChat(((CanaryChatComponent) chatComponent).getNative())));
+        this.sendRawPacket(new S02PacketChat(((CanaryChatComponent) chatComponent).getNative()));
     }
 
     public void resetNativeEntityReference(EntityPlayerMP entityPlayerMP) {
@@ -1187,7 +1189,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
      */
     @Override
     public void setCompassTarget(int x, int y, int z) {
-        this.sendPacket(new CanaryPacket(new net.minecraft.network.play.server.S05PacketSpawnPosition(new BlockPos(x, y, z))));
+        this.sendRawPacket(new S05PacketSpawnPosition(new BlockPos(x, y, z)));
     }
 
     @Override
@@ -1318,6 +1320,25 @@ public class CanaryPlayer extends CanaryHuman implements Player {
             return null;
         }
         return getHandle().bi.getInventory();
+    }
+
+    public void showTitle(ChatComponent title){
+        showTitle(title, null);
+    }
+
+    public void showTitle(ChatComponent title, ChatComponent subtitle){
+        if(title != null) {
+            IChatComponent titleNative = ((CanaryChatComponent) title).getNative();
+            // These need fired with as little delay between as possible
+            if (subtitle != null) {
+                IChatComponent subtitleNative = ((CanaryChatComponent) subtitle).getNative();
+                sendRawPacket(new S45PacketTitle(S45PacketTitle.Type.TITLE, titleNative));
+                sendRawPacket(new S45PacketTitle(S45PacketTitle.Type.SUBTITLE, subtitleNative));
+            }
+            else {
+                sendRawPacket(new S45PacketTitle(S45PacketTitle.Type.TITLE, titleNative));
+            }
+        }
     }
 
     /**

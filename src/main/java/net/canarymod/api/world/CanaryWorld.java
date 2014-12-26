@@ -5,6 +5,7 @@ import net.canarymod.WorldCacheTimer;
 import net.canarymod.api.CanaryEntityTracker;
 import net.canarymod.api.GameMode;
 import net.canarymod.api.PlayerManager;
+import net.canarymod.api.chat.ChatComponent;
 import net.canarymod.api.entity.CanaryEntity;
 import net.canarymod.api.entity.Entity;
 import net.canarymod.api.entity.EntityItem;
@@ -896,6 +897,18 @@ public class CanaryWorld implements World {
         }
 
         return gen.b(world, random, new BlockPos(pos.getBlockX(), pos.getBlockY(), pos.getBlockZ()));
+    }
+
+    @Override
+    public void showTitle(ChatComponent title) {
+        showTitle(title, null);
+    }
+
+    @Override
+    public void showTitle(ChatComponent title, ChatComponent subtitle) {
+        for(Player player : getPlayerList()){
+            player.showTitle(title, subtitle);
+        }
     }
 
     public net.minecraft.world.World getHandle() {
