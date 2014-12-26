@@ -53,13 +53,14 @@ public class SlotMerchantResult extends Slot {
         this.c(itemstack);
         MerchantRecipe merchantrecipe = this.a.i();
 
-        // CanaryMod: VillagerTradeHook
-        VillagerTradeHook hook = (VillagerTradeHook) new VillagerTradeHook(((EntityPlayerMP) entityplayer).getPlayer(), (Villager) ((EntityVillager) this.d).getCanaryEntity(), new CanaryVillagerTrade(merchantrecipe)).call();
-        if (hook.isCanceled()) {
-            return;
-        }
-        //
         if (merchantrecipe != null) {
+            // CanaryMod: VillagerTradeHook
+            VillagerTradeHook hook = (VillagerTradeHook) new VillagerTradeHook(((EntityPlayerMP) entityplayer).getPlayer(), (Villager) ((EntityVillager) this.h).getCanaryEntity(), new CanaryVillagerTrade(merchantrecipe)).call();
+            if (hook.isCanceled()) {
+                return;
+            }
+            //
+
             ItemStack itemstack1 = this.a.a(0);
             ItemStack itemstack2 = this.a.a(1);
 
