@@ -1,7 +1,9 @@
 package net.minecraft.entity.passive;
 
 import com.google.common.base.Predicate;
+import net.canarymod.api.CanaryVillagerTrade;
 import net.canarymod.api.entity.living.humanoid.CanaryVillager;
+import net.canarymod.hook.entity.VillagerTradeUnlockHook;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentData;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -39,6 +41,22 @@ import java.util.Random;
 
 public class EntityVillager extends EntityAgeable implements INpc, IMerchant {
 
+    private int bl;
+    private boolean bm;
+    private boolean bn;
+    Village bk;
+    private EntityPlayer bo;
+    private MerchantRecipeList bp;
+    private int bq;
+    private boolean br;
+    private boolean bs;
+    private int bt;
+    private String bu;
+    private int bv;
+    private int bw;
+    private boolean bx;
+    private boolean by;
+    private InventoryBasic bz;
     private static final EntityVillager.ITradeList[][][][] bA = new EntityVillager.ITradeList[][][][]{
             {
                     {
@@ -59,22 +77,6 @@ public class EntityVillager extends EntityAgeable implements INpc, IMerchant {
                     {{new EntityVillager.EmeraldForItems(Items.h, new EntityVillager.PriceInfo(16, 24)), new EntityVillager.ListItemForEmeralds(Items.c, new EntityVillager.PriceInfo(6, 8))}, {new EntityVillager.EmeraldForItems(Items.j, new EntityVillager.PriceInfo(7, 9)), new EntityVillager.ListEnchantedItemForEmeralds(Items.l, new EntityVillager.PriceInfo(9, 10))}, {new EntityVillager.EmeraldForItems(Items.i, new EntityVillager.PriceInfo(3, 4)), new EntityVillager.ListEnchantedItemForEmeralds(Items.u, new EntityVillager.PriceInfo(12, 15)), new EntityVillager.ListEnchantedItemForEmeralds(Items.x, new EntityVillager.PriceInfo(9, 12))}},
                     {{new EntityVillager.EmeraldForItems(Items.h, new EntityVillager.PriceInfo(16, 24)), new EntityVillager.ListEnchantedItemForEmeralds(Items.a, new EntityVillager.PriceInfo(5, 7))}, {new EntityVillager.EmeraldForItems(Items.j, new EntityVillager.PriceInfo(7, 9)), new EntityVillager.ListEnchantedItemForEmeralds(Items.b, new EntityVillager.PriceInfo(9, 11))}, {new EntityVillager.EmeraldForItems(Items.i, new EntityVillager.PriceInfo(3, 4)), new EntityVillager.ListEnchantedItemForEmeralds(Items.w, new EntityVillager.PriceInfo(12, 15))}}},
             {{{new EntityVillager.EmeraldForItems(Items.al, new EntityVillager.PriceInfo(14, 18)), new EntityVillager.EmeraldForItems(Items.bk, new EntityVillager.PriceInfo(14, 18))}, {new EntityVillager.EmeraldForItems(Items.h, new EntityVillager.PriceInfo(16, 24)), new EntityVillager.ListItemForEmeralds(Items.am, new EntityVillager.PriceInfo(-7, -5)), new EntityVillager.ListItemForEmeralds(Items.bl, new EntityVillager.PriceInfo(-8, -6))}}, {{new EntityVillager.EmeraldForItems(Items.aF, new EntityVillager.PriceInfo(9, 12)), new EntityVillager.ListItemForEmeralds(Items.S, new EntityVillager.PriceInfo(2, 4))}, {new EntityVillager.ListEnchantedItemForEmeralds(Items.R, new EntityVillager.PriceInfo(7, 12))}, {new EntityVillager.ListItemForEmeralds(Items.aA, new EntityVillager.PriceInfo(8, 10))}}}};
-    public Village bk;
-    private int bl;
-    private boolean bm;
-    private boolean bn;
-    private EntityPlayer bo;
-    private MerchantRecipeList bp;
-    private int bq;
-    private boolean br;
-    private boolean bs;
-    private int bt;
-    private String bu;
-    private int bv;
-    private int bw;
-    private boolean bx;
-    private boolean by;
-    private InventoryBasic bz;
 
     public EntityVillager(World world) {
         this(world, 0);
@@ -470,8 +472,7 @@ public class EntityVillager extends EntityAgeable implements INpc, IMerchant {
 
             for (int i3 = 0; i3 < i2; ++i3) {
                 EntityVillager.ITradeList entityvillager_itradelist = aentityvillager_itradelist3[i3];
-
-                entityvillager_itradelist.a(this.bp, this.V);
+                entityvillager_itradelist.a(this.bp, this.V, this); // CanaryMod: pass EntityVillager
             }
         }
 
@@ -683,30 +684,37 @@ public class EntityVillager extends EntityAgeable implements INpc, IMerchant {
         return this.b(entityageable);
     }
 
-    interface ITradeList {
-
-        void a(MerchantRecipeList merchantrecipelist, Random random);
-    }
-
     static class EmeraldForItems implements EntityVillager.ITradeList {
 
         public Item a;
         public EntityVillager.PriceInfo b;
 
-        public EmeraldForItems(Item p_i45815_1_, EntityVillager.PriceInfo p_i45815_2_) {
-            this.a = p_i45815_1_;
-            this.b = p_i45815_2_;
+        public EmeraldForItems(Item item, EntityVillager.PriceInfo entityvillager_priceinfo) {
+            this.a = item;
+            this.b = entityvillager_priceinfo;
         }
 
-        public void a(MerchantRecipeList p_a_1_, Random p_a_2_) {
+        public void a(MerchantRecipeList merchantrecipelist, Random random, EntityVillager entityvillager) { // CanaryMod: Signature change, pass EntityVillager
             int i0 = 1;
 
             if (this.b != null) {
-                i0 = this.b.a(p_a_2_);
+                i0 = this.b.a(random);
             }
 
-            p_a_1_.add(new MerchantRecipe(new ItemStack(this.a, i0, 0), Items.bO));
+            // CanaryMod: VillagerTradeUnlock
+            MerchantRecipe newRecipe = new MerchantRecipe(new ItemStack(this.a, i0, 0), Items.bO);
+            VillagerTradeUnlockHook hook = (VillagerTradeUnlockHook) new VillagerTradeUnlockHook(entityvillager.getCanaryEntity(), new CanaryVillagerTrade(newRecipe)).call();
+            if (!hook.isCanceled()) {
+                merchantrecipelist.add(newRecipe);
+            }
+            //
+
         }
+    }
+
+    interface ITradeList {
+
+        void a(MerchantRecipeList merchantrecipelist, Random random, EntityVillager entityvillager); // CanaryMod: Signature change, pass EntityVillager
     }
 
     static class ItemAndEmeraldToItem implements EntityVillager.ITradeList {
@@ -716,44 +724,56 @@ public class EntityVillager extends EntityAgeable implements INpc, IMerchant {
         public ItemStack c;
         public EntityVillager.PriceInfo d;
 
-        public ItemAndEmeraldToItem(Item p_i45813_1_, EntityVillager.PriceInfo p_i45813_2_, Item p_i45813_3_, EntityVillager.PriceInfo p_i45813_4_) {
-            this.a = new ItemStack(p_i45813_1_);
-            this.b = p_i45813_2_;
-            this.c = new ItemStack(p_i45813_3_);
-            this.d = p_i45813_4_;
+        public ItemAndEmeraldToItem(Item item, EntityVillager.PriceInfo entityvillager_priceinfo, Item item1, EntityVillager.PriceInfo entityvillager_priceinfo1) {
+            this.a = new ItemStack(item);
+            this.b = entityvillager_priceinfo;
+            this.c = new ItemStack(item1);
+            this.d = entityvillager_priceinfo1;
         }
 
-        public void a(MerchantRecipeList p_a_1_, Random p_a_2_) {
+        public void a(MerchantRecipeList merchantrecipelist, Random random, EntityVillager entityvillager) { // CanaryMod: Signature change, pass EntityVillager
             int i0 = 1;
 
             if (this.b != null) {
-                i0 = this.b.a(p_a_2_);
+                i0 = this.b.a(random);
             }
 
             int i1 = 1;
 
             if (this.d != null) {
-                i1 = this.d.a(p_a_2_);
+                i1 = this.d.a(random);
             }
 
-            p_a_1_.add(new MerchantRecipe(new ItemStack(this.a.b(), i0, this.a.i()), new ItemStack(Items.bO), new ItemStack(this.c.b(), i1, this.c.i())));
+            // CanaryMod: VillagerTradeUnlock
+            MerchantRecipe newRecipe = new MerchantRecipe(new ItemStack(this.a.b(), i0, this.a.i()), new ItemStack(Items.bO), new ItemStack(this.c.b(), i1, this.c.i()));
+            VillagerTradeUnlockHook hook = (VillagerTradeUnlockHook) new VillagerTradeUnlockHook(entityvillager.getCanaryEntity(), new CanaryVillagerTrade(newRecipe)).call();
+            if (!hook.isCanceled()) {
+                merchantrecipelist.add(newRecipe);
+            }
+            //
         }
     }
 
 
     static class ListEnchantedBookForEmeralds implements EntityVillager.ITradeList {
 
-        public void a(MerchantRecipeList p_a_1_, Random p_a_2_) {
-            Enchantment enchantment = Enchantment.b[p_a_2_.nextInt(Enchantment.b.length)];
-            int i0 = MathHelper.a(p_a_2_, enchantment.e(), enchantment.b());
+        public void a(MerchantRecipeList merchantrecipelist, Random random, EntityVillager entityvillager) { // CanaryMod: Signature change, pass EntityVillager
+            Enchantment enchantment = Enchantment.b[random.nextInt(Enchantment.b.length)];
+            int i0 = MathHelper.a(random, enchantment.e(), enchantment.b());
             ItemStack itemstack = Items.cd.a(new EnchantmentData(enchantment, i0));
-            int i1 = 2 + p_a_2_.nextInt(5 + i0 * 10) + 3 * i0;
+            int i1 = 2 + random.nextInt(5 + i0 * 10) + 3 * i0;
 
             if (i1 > 64) {
                 i1 = 64;
             }
 
-            p_a_1_.add(new MerchantRecipe(new ItemStack(Items.aL), new ItemStack(Items.bO, i1), itemstack));
+            // CanaryMod: VillagerTradeUnlock
+            MerchantRecipe newRecipe = new MerchantRecipe(new ItemStack(Items.aL), new ItemStack(Items.bO, i1), itemstack);
+            VillagerTradeUnlockHook hook = (VillagerTradeUnlockHook) new VillagerTradeUnlockHook(entityvillager.getCanaryEntity(), new CanaryVillagerTrade(newRecipe)).call();
+            if (!hook.isCanceled()) {
+                merchantrecipelist.add(newRecipe);
+            }
+            //
         }
     }
 
@@ -763,23 +783,30 @@ public class EntityVillager extends EntityAgeable implements INpc, IMerchant {
         public ItemStack a;
         public EntityVillager.PriceInfo b;
 
-        public ListEnchantedItemForEmeralds(Item p_i45814_1_, EntityVillager.PriceInfo p_i45814_2_) {
-            this.a = new ItemStack(p_i45814_1_);
-            this.b = p_i45814_2_;
+        public ListEnchantedItemForEmeralds(Item item, EntityVillager.PriceInfo entityvillager_priceinfo) {
+            this.a = new ItemStack(item);
+            this.b = entityvillager_priceinfo;
         }
 
-        public void a(MerchantRecipeList p_a_1_, Random p_a_2_) {
+        public void a(MerchantRecipeList merchantrecipelist, Random random, EntityVillager entityvillager) { // CanaryMod: Signature change, pass EntityVillager
             int i0 = 1;
 
             if (this.b != null) {
-                i0 = this.b.a(p_a_2_);
+                i0 = this.b.a(random);
             }
 
             ItemStack itemstack = new ItemStack(Items.bO, i0, 0);
             ItemStack itemstack1 = new ItemStack(this.a.b(), 1, this.a.i());
 
-            itemstack1 = EnchantmentHelper.a(p_a_2_, itemstack1, 5 + p_a_2_.nextInt(15));
-            p_a_1_.add(new MerchantRecipe(itemstack, itemstack1));
+            itemstack1 = EnchantmentHelper.a(random, itemstack1, 5 + random.nextInt(15));
+
+            // CanaryMod: VillagerTradeUnlock
+            MerchantRecipe newRecipe = new MerchantRecipe(itemstack, itemstack1);
+            VillagerTradeUnlockHook hook = (VillagerTradeUnlockHook) new VillagerTradeUnlockHook(entityvillager.getCanaryEntity(), new CanaryVillagerTrade(newRecipe)).call();
+            if (!hook.isCanceled()) {
+                merchantrecipelist.add(newRecipe);
+            }
+            //
         }
     }
 
@@ -789,21 +816,21 @@ public class EntityVillager extends EntityAgeable implements INpc, IMerchant {
         public ItemStack a;
         public EntityVillager.PriceInfo b;
 
-        public ListItemForEmeralds(Item p_i45811_1_, EntityVillager.PriceInfo p_i45811_2_) {
-            this.a = new ItemStack(p_i45811_1_);
-            this.b = p_i45811_2_;
+        public ListItemForEmeralds(Item item, EntityVillager.PriceInfo entityvillager_priceinfo) {
+            this.a = new ItemStack(item);
+            this.b = entityvillager_priceinfo;
         }
 
-        public ListItemForEmeralds(ItemStack p_i45812_1_, EntityVillager.PriceInfo p_i45812_2_) {
-            this.a = p_i45812_1_;
-            this.b = p_i45812_2_;
+        public ListItemForEmeralds(ItemStack itemstack, EntityVillager.PriceInfo entityvillager_priceinfo) {
+            this.a = itemstack;
+            this.b = entityvillager_priceinfo;
         }
 
-        public void a(MerchantRecipeList p_a_1_, Random p_a_2_) {
+        public void a(MerchantRecipeList merchantrecipelist, Random random, EntityVillager entityvillager) { // CanaryMod: Signature change, pass EntityVillager
             int i0 = 1;
 
             if (this.b != null) {
-                i0 = this.b.a(p_a_2_);
+                i0 = this.b.a(random);
             }
 
             ItemStack itemstack;
@@ -818,7 +845,13 @@ public class EntityVillager extends EntityAgeable implements INpc, IMerchant {
                 itemstack1 = new ItemStack(this.a.b(), 1, this.a.i());
             }
 
-            p_a_1_.add(new MerchantRecipe(itemstack, itemstack1));
+            // CanaryMod: VillagerTradeUnlock
+            MerchantRecipe newRecipe = new MerchantRecipe(itemstack, itemstack1);
+            VillagerTradeUnlockHook hook = (VillagerTradeUnlockHook) new VillagerTradeUnlockHook(entityvillager.getCanaryEntity(), new CanaryVillagerTrade(newRecipe)).call();
+            if (!hook.isCanceled()) {
+                merchantrecipelist.add(newRecipe);
+            }
+            //
         }
     }
 
@@ -833,4 +866,18 @@ public class EntityVillager extends EntityAgeable implements INpc, IMerchant {
             return ((Integer) this.a()).intValue() >= ((Integer) this.b()).intValue() ? ((Integer) this.a()).intValue() : ((Integer) this.a()).intValue() + p_a_1_.nextInt(((Integer) this.b()).intValue() - ((Integer) this.a()).intValue() + 1);
         }
     }
+
+    // CanaryMod
+    public Village getVillage() {
+        return this.bk;
+    }
+
+    public void setVillage(Village village) {
+        this.bk = village;
+    }
+
+    public CanaryVillager getCanaryEntity() {
+        return (CanaryVillager) super.getCanaryEntity();
+    }
+    //
 }

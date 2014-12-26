@@ -124,7 +124,7 @@ public class CanaryVillager extends CanaryEntityLiving implements Villager {
      */
     @Override
     public Village getVillage() {
-        return getHandle().bk.getCanaryVillage();
+        return getHandle().getVillage().getCanaryVillage();
     }
 
     /**
@@ -132,7 +132,7 @@ public class CanaryVillager extends CanaryEntityLiving implements Villager {
      */
     @Override
     public void setVillage(Village village) {
-        getHandle().bk = ((CanaryVillage) village).getHandle();
+        getHandle().setVillage(((CanaryVillage) village).getHandle());
     }
 
     /**
