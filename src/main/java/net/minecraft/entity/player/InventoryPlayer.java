@@ -229,8 +229,7 @@ public class InventoryPlayer implements IInventory {
                 i0 = this.j();
                 if (i0 >= 0) {
                     // CanaryMod: ItemPickUp
-                    ItemPickupHook hook = (ItemPickupHook) new ItemPickupHook(((EntityPlayerMP) this.d).getPlayer(), (net.canarymod.api.entity.EntityItem) entityitem.getCanaryEntity()).call();
-                    return !hook.isCanceled();
+                    return !new ItemPickupHook(((EntityPlayerMP)this.d).getPlayer(), (net.canarymod.api.entity.EntityItem)entityitem.getCanaryEntity()).call().isCanceled();
                     //
                 } else if (this.d.by.d) {
                     return true;
@@ -255,10 +254,8 @@ public class InventoryPlayer implements IInventory {
 
                 if (itemstack.b - left > 0) {
                     // CanaryMod: ItemPickUp
-                    if (this.d instanceof EntityPlayerMP) { // Cause NPC may be picking something up...
-                        return !((ItemPickupHook) new ItemPickupHook(((EntityPlayerMP) this.d).getPlayer(), (net.canarymod.api.entity.EntityItem) entityitem.getCanaryEntity()).call()).isCanceled();
-                    }
-                    return true;
+                    // Cause NPC may be picking something up...
+                    return !(this.d instanceof EntityPlayerMP) || !new ItemPickupHook(((EntityPlayerMP)this.d).getPlayer(), (net.canarymod.api.entity.EntityItem)entityitem.getCanaryEntity()).call().isCanceled();
                     //
                 } else {
                     return false;

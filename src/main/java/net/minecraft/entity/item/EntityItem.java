@@ -296,42 +296,46 @@ public class EntityItem extends Entity {
             ItemStack itemstack = this.l();
             int i0 = itemstack.b;
 
-            if (this.d == 0 && (this.g == null || 6000 - this.c <= 200 || this.g.equals(entityplayer.d_())) && entityplayer.bg.a(itemstack)) {
-                if (itemstack.b() == Item.a(Blocks.r)) {
-                    entityplayer.b((StatBase) AchievementList.g);
-                }
-
-                if (itemstack.b() == Item.a(Blocks.s)) {
-                    entityplayer.b((StatBase) AchievementList.g);
-                }
-
-                if (itemstack.b() == Items.aF) {
-                    entityplayer.b((StatBase) AchievementList.t);
-                }
-
-                if (itemstack.b() == Items.i) {
-                    entityplayer.b((StatBase) AchievementList.w);
-                }
-
-                if (itemstack.b() == Items.bv) {
-                    entityplayer.b((StatBase) AchievementList.A);
-                }
-
-                if (itemstack.b() == Items.i && this.n() != null) {
-                    EntityPlayer entityplayer1 = this.o.a(this.n());
-
-                    if (entityplayer1 != null && entityplayer1 != entityplayer) {
-                        entityplayer1.b((StatBase) AchievementList.x);
+            if (this.d == 0 && (this.g == null || 6000 - this.c <= 200 || this.g.equals(entityplayer.d_()))
+                    && entityplayer.bg.canPickup(this)) { // CanaryMod: simulate pickup first
+                // CanaryMod: Now do the actual picking up
+                if (entityplayer.bg.a(itemstack)) {
+                    if (itemstack.b() == Item.a(Blocks.r)) {
+                        entityplayer.b((StatBase)AchievementList.g);
                     }
-                }
 
-                if (!this.R()) {
-                    this.o.a((Entity) entityplayer, "random.pop", 0.2F, ((this.V.nextFloat() - this.V.nextFloat()) * 0.7F + 1.0F) * 2.0F);
-                }
+                    if (itemstack.b() == Item.a(Blocks.s)) {
+                        entityplayer.b((StatBase)AchievementList.g);
+                    }
 
-                entityplayer.a((Entity) this, i0);
-                if (itemstack.b <= 0) {
-                    this.J();
+                    if (itemstack.b() == Items.aF) {
+                        entityplayer.b((StatBase)AchievementList.t);
+                    }
+
+                    if (itemstack.b() == Items.i) {
+                        entityplayer.b((StatBase)AchievementList.w);
+                    }
+
+                    if (itemstack.b() == Items.bv) {
+                        entityplayer.b((StatBase)AchievementList.A);
+                    }
+
+                    if (itemstack.b() == Items.i && this.n() != null) {
+                        EntityPlayer entityplayer1 = this.o.a(this.n());
+
+                        if (entityplayer1 != null && entityplayer1 != entityplayer) {
+                            entityplayer1.b((StatBase)AchievementList.x);
+                        }
+                    }
+
+                    if (!this.R()) {
+                        this.o.a((Entity)entityplayer, "random.pop", 0.2F, ((this.V.nextFloat() - this.V.nextFloat()) * 0.7F + 1.0F) * 2.0F);
+                    }
+
+                    entityplayer.a((Entity)this, i0);
+                    if (itemstack.b <= 0) {
+                        this.J();
+                    }
                 }
             }
 
