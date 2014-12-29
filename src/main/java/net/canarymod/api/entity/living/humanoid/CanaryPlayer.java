@@ -4,6 +4,7 @@ import com.mojang.authlib.GameProfile;
 import net.canarymod.Canary;
 import net.canarymod.MathHelp;
 import net.canarymod.ToolBox;
+import net.canarymod.api.CanaryEntityTracker;
 import net.canarymod.api.GameMode;
 import net.canarymod.api.NetServerHandler;
 import net.canarymod.api.PlayerListAction;
@@ -66,7 +67,12 @@ import net.minecraft.inventory.ContainerHopper;
 import net.minecraft.inventory.ContainerHorseInventory;
 import net.minecraft.inventory.ContainerRepair;
 import net.minecraft.inventory.ContainerWorkbench;
-import net.minecraft.network.play.server.*;
+import net.minecraft.network.play.server.S02PacketChat;
+import net.minecraft.network.play.server.S05PacketSpawnPosition;
+import net.minecraft.network.play.server.S2BPacketChangeGameState;
+import net.minecraft.network.play.server.S38PacketPlayerListItem;
+import net.minecraft.network.play.server.S39PacketPlayerAbilities;
+import net.minecraft.network.play.server.S45PacketTitle;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.world.WorldSettings;
@@ -1056,9 +1062,6 @@ public class CanaryPlayer extends CanaryHuman implements Player {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void createAndOpenWorkbench() {
         Inventory bench_inv = new ContainerWorkbench(getHandle().bg, ((CanaryWorld)getWorld()).getHandle(), new BlockPos(-1, -1, -1)).getInventory();
@@ -1066,9 +1069,6 @@ public class CanaryPlayer extends CanaryHuman implements Player {
         openInventory(bench_inv);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void createAndOpenAnvil() {
         Inventory anvil_inv = new ContainerRepair(getHandle().bg, ((CanaryWorld)getWorld()).getHandle(), new BlockPos(-1, -1, -1), getHandle()).getInventory();
@@ -1076,9 +1076,6 @@ public class CanaryPlayer extends CanaryHuman implements Player {
         openInventory(anvil_inv);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void createAndOpenEnchantmentTable(int bookshelves) {
         CanaryEnchantmentTable ench_inv = (CanaryEnchantmentTable)new ContainerEnchantment(getHandle().bg, ((CanaryWorld)getWorld()).getHandle(), new BlockPos(-1, -1, -1)).getInventory();
@@ -1087,25 +1084,16 @@ public class CanaryPlayer extends CanaryHuman implements Player {
         openInventory(ench_inv);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void closeWindow() {
         getHandle().n();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void openSignEditWindow(Sign sign) {
         getHandle().a(((CanarySign) sign).getTileEntity());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String getFirstJoined() {
         return getHandle().getFirstJoined();
@@ -1116,25 +1104,16 @@ public class CanaryPlayer extends CanaryHuman implements Player {
         return getHandle().getLastJoined();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public long getTimePlayed() {
         return getHandle().getTimePlayed();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String getLocale() {
         return getHandle().bG;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void sendChatComponent(ChatComponent chatComponent) {
         this.sendRawPacket(new S02PacketChat(((CanaryChatComponent) chatComponent).getNative()));
@@ -1144,49 +1123,61 @@ public class CanaryPlayer extends CanaryHuman implements Player {
         this.entity = entityPlayerMP;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void hidePlayer(Player player) {
         this.getWorld().getEntityTracker().hidePlayer(player, this);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
+    public void hideFrom(Player player) {
+        this.getWorld().getEntityTracker().hidePlayer(player, this);
+    }
+
     @Override
     public void hidePlayerGlobal() {
         this.getWorld().getEntityTracker().hidePlayerGlobal(this);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
+    public void hideFromAll() {
+        this.getWorld().getEntityTracker().hidePlayerGlobal(this);
+    }
+
     @Override
     public void showPlayer(Player player) {
         this.getWorld().getEntityTracker().showPlayer(player, this);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
+    public void showTo(Player player) {
+        this.getWorld().getEntityTracker().showPlayer(player, this);
+    }
+
     @Override
     public void showPlayerGlobal() {
         this.getWorld().getEntityTracker().showPlayerGlobal(this);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
+    public void showToAll() {
+        this.getWorld().getEntityTracker().showPlayerGlobal(this);
+    }
+
     @Override
     public boolean isPlayerHidden(Player player, Player isHidden) {
+        return this.isHiddenFrom(player);
+    }
+
+    @Override
+    public boolean isHiddenFrom(Player player) {
         return this.getWorld().getEntityTracker().isPlayerHidden(player, this);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
+    public boolean isHiddenFromAll() {
+        return ((CanaryEntityTracker)this.getWorld().getEntityTracker()).isHiddenGlobally(this);
+    }
+
     @Override
     public void setCompassTarget(int x, int y, int z) {
         this.sendRawPacket(new S05PacketSpawnPosition(new BlockPos(x, y, z)));
@@ -1206,9 +1197,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
     public void setDisplayNameComponent(ChatComponent chatComponent){
         getHandle().setDisplayNameComponent(chatComponent != null ? ((CanaryChatComponent) chatComponent).getNative() : null);
     }
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public void setStat(Stat stat, int value) {
         getHandle().A().a(getHandle(), ((CanaryStat) stat).getHandle(), value);
@@ -1219,9 +1208,6 @@ public class CanaryPlayer extends CanaryHuman implements Player {
         setStat(statistics.getInstance(), value);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void increaseStat(Stat stat, int value) {
         if (value < 0) return;
@@ -1233,9 +1219,6 @@ public class CanaryPlayer extends CanaryHuman implements Player {
         increaseStat(statistics.getInstance(), value);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void decreaseStat(Stat stat, int value) {
         if (value < 0) return;
@@ -1247,9 +1230,6 @@ public class CanaryPlayer extends CanaryHuman implements Player {
         decreaseStat(statistics.getInstance(), value);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public int getStat(Stat stat) {
         return getHandle().A().a(((CanaryStat) stat).getHandle());
@@ -1260,9 +1240,6 @@ public class CanaryPlayer extends CanaryHuman implements Player {
         return getStat(statistics.getInstance());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void awardAchievement(Achievement achievement) {
         // Need to give all parent achievements
@@ -1278,9 +1255,6 @@ public class CanaryPlayer extends CanaryHuman implements Player {
         awardAchievement(achievements.getInstance());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void removeAchievement(Achievement achievement) {
         // Need to remove any children achievements
@@ -1298,9 +1272,6 @@ public class CanaryPlayer extends CanaryHuman implements Player {
         removeAchievement(achievements.getInstance());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean hasAchievement(Achievement achievement) {
         return getHandle().A().a(((CanaryAchievement) achievement).getHandle());
@@ -1310,10 +1281,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
     public boolean hasAchievement(Achievements achievements) {
         return hasAchievement(achievements.getInstance());
     }
-    
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public Inventory getSecondInventory() {
         if (getHandle().bi == getHandle().bh) {
@@ -1322,10 +1290,12 @@ public class CanaryPlayer extends CanaryHuman implements Player {
         return getHandle().bi.getInventory();
     }
 
+    @Override
     public void showTitle(ChatComponent title){
         showTitle(title, null);
     }
 
+    @Override
     public void showTitle(ChatComponent title, ChatComponent subtitle){
         if(title != null) {
             IChatComponent titleNative = ((CanaryChatComponent) title).getNative();
@@ -1341,17 +1311,11 @@ public class CanaryPlayer extends CanaryHuman implements Player {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String toString() {
         return String.format("Player[name=%s]", getName());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof Player)) {
@@ -1362,9 +1326,6 @@ public class CanaryPlayer extends CanaryHuman implements Player {
         return getName().equals(other.getName());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public int hashCode() {
         int hash = 7;
@@ -1373,9 +1334,6 @@ public class CanaryPlayer extends CanaryHuman implements Player {
         return hash;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public EntityPlayerMP getHandle() {
         return (EntityPlayerMP) entity;
