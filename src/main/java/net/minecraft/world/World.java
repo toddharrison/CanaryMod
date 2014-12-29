@@ -14,7 +14,12 @@ import net.canarymod.hook.entity.EntitySpawnHook;
 import net.canarymod.hook.entity.VehicleCollisionHook;
 import net.canarymod.hook.world.BlockUpdateHook;
 import net.canarymod.hook.world.WeatherChangeHook;
-import net.minecraft.block.*;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockHopper;
+import net.minecraft.block.BlockLiquid;
+import net.minecraft.block.BlockSlab;
+import net.minecraft.block.BlockSnow;
+import net.minecraft.block.BlockStairs;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.command.IEntitySelector;
@@ -39,7 +44,15 @@ import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.IntHashMap;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.ReportedException;
+import net.minecraft.util.Vec3;
 import net.minecraft.village.VillageCollection;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.biome.WorldChunkManager;
@@ -51,7 +64,14 @@ import net.minecraft.world.storage.ISaveHandler;
 import net.minecraft.world.storage.MapStorage;
 import net.minecraft.world.storage.WorldInfo;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.Callable;
 
 public abstract class World implements IBlockAccess {
@@ -948,15 +968,15 @@ public abstract class World implements IBlockAccess {
             }
         }
 
-        // CanaryMod: Implemented fix via M4411K4 VEHICLE_COLLISION hook
+        double d0 = 0.25D;
+        List list = this.b(entity, axisalignedbb.b(d0, d0, d0));
+
+        // CanaryMod: Implement M4411K4 VEHICLECOLLISION hook
         CanaryVehicle vehicle = null;
 
         if (entity instanceof EntityMinecart || entity instanceof EntityBoat) {
             vehicle = (CanaryVehicle) entity.getCanaryEntity();
         }
-
-        double d0 = 0.25D;
-        List list = this.b(entity, axisalignedbb.b(d0, d0, d0));
 
         for (int i9 = 0; i9 < list.size(); ++i9) {
             if (entity.l != list && entity.m != list) {
@@ -964,28 +984,21 @@ public abstract class World implements IBlockAccess {
                 AxisAlignedBB axisalignedbb1 = entity1.S();
 
                 if (axisalignedbb1 != null && axisalignedbb1.b(axisalignedbb)) {
-                    // CanaryMod: this collided with a boat
-                    if (vehicle != null) {
-                        VehicleCollisionHook vch = (VehicleCollisionHook) new VehicleCollisionHook(vehicle, entity.getCanaryEntity()).call();
-                        if (vch.isCanceled()) {
-                            continue;
-                        }
+                    // CanaryMod: Collision Block?
+                    if (vehicle == null || !new VehicleCollisionHook(vehicle, entity1.getCanaryEntity()).call().isCanceled()) {
+                        arraylist.add(axisalignedbb1);
                     }
                     //
-                    arraylist.add(axisalignedbb1);
+
                 }
 
                 axisalignedbb1 = entity.j((Entity) list.get(i9));
                 if (axisalignedbb1 != null && axisalignedbb1.b(axisalignedbb)) {
-                    // CanaryMod: this collided with entity
-                    if (vehicle != null) {
-                        VehicleCollisionHook vch = (VehicleCollisionHook) new VehicleCollisionHook(vehicle, entity.getCanaryEntity()).call();
-                        if (vch.isCanceled()) {
-                            continue;
-                        }
+                    // CanaryMod: Collision Entity?
+                    if (vehicle == null || !new VehicleCollisionHook(vehicle, entity1.getCanaryEntity()).call().isCanceled()) {
+                        arraylist.add(axisalignedbb1);
                     }
                     //
-                    arraylist.add(axisalignedbb1);
                 }
             }
         }

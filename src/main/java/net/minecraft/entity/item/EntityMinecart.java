@@ -8,7 +8,12 @@ import net.canarymod.api.entity.vehicle.Minecart;
 import net.canarymod.api.entity.vehicle.Vehicle;
 import net.canarymod.api.world.position.Vector3D;
 import net.canarymod.config.Configuration;
-import net.canarymod.hook.entity.*;
+import net.canarymod.hook.entity.MinecartActivateHook;
+import net.canarymod.hook.entity.VehicleCollisionHook;
+import net.canarymod.hook.entity.VehicleDamageHook;
+import net.canarymod.hook.entity.VehicleDestroyHook;
+import net.canarymod.hook.entity.VehicleEnterHook;
+import net.canarymod.hook.entity.VehicleMoveHook;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.BlockRailPowered;
@@ -23,7 +28,15 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.*;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.IChatComponent;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.IWorldNameable;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -33,9 +46,9 @@ import java.util.Map;
 
 public abstract class EntityMinecart extends Entity implements IWorldNameable {
 
-    private static final int[][][] c = new int[][][]{{{0, 0, -1}, {0, 0, 1}}, {{-1, 0, 0}, {1, 0, 0}}, {{-1, -1, 0}, {1, 0, 0}}, {{-1, 0, 0}, {1, -1, 0}}, {{0, 0, -1}, {0, -1, 1}}, {{0, -1, -1}, {0, 0, 1}}, {{0, 0, 1}, {1, 0, 0}}, {{0, 0, 1}, {-1, 0, 0}}, {{0, 0, -1}, {-1, 0, 0}}, {{0, 0, -1}, {1, 0, 0}}};
     public boolean a; // CanaryMod: private>>public
     private String b;
+    private static final int[][][] c = new int[][][]{ { { 0, 0, -1 }, { 0, 0, 1 } }, { { -1, 0, 0 }, { 1, 0, 0 } }, { { -1, -1, 0 }, { 1, 0, 0 } }, { { -1, 0, 0 }, { 1, -1, 0 } }, { { 0, 0, -1 }, { 0, -1, 1 } }, { { 0, -1, -1 }, { 0, 0, 1 } }, { { 0, 0, 1 }, { 1, 0, 0 } }, { { 0, 0, 1 }, { -1, 0, 0 } }, { { 0, 0, -1 }, { -1, 0, 0 } }, { { 0, 0, -1 }, { 1, 0, 0 } } };
     private int d;
     private double e;
     private double f;
@@ -47,17 +60,6 @@ public abstract class EntityMinecart extends Entity implements IWorldNameable {
         super(world);
         this.k = true;
         this.a(0.98F, 0.7F);
-    }
-
-    public EntityMinecart(World world, double d0, double d1, double d2) {
-        this(world);
-        this.b(d0, d1, d2);
-        this.v = 0.0D;
-        this.w = 0.0D;
-        this.x = 0.0D;
-        this.p = d0;
-        this.q = d1;
-        this.r = d2;
     }
 
     public static EntityMinecart a(World world, double d0, double d1, double d2, EntityMinecart.EnumMinecartType entityminecart_enumminecarttype) {
@@ -108,6 +110,17 @@ public abstract class EntityMinecart extends Entity implements IWorldNameable {
 
     public boolean ae() {
         return true;
+    }
+
+    public EntityMinecart(World world, double d0, double d1, double d2) {
+        this(world);
+        this.b(d0, d1, d2);
+        this.v = 0.0D;
+        this.w = 0.0D;
+        this.x = 0.0D;
+        this.p = d0;
+        this.q = d1;
+        this.r = d2;
     }
 
     public double an() {
@@ -329,7 +342,7 @@ public abstract class EntityMinecart extends Entity implements IWorldNameable {
                     this.q = ppY;
                     this.r = ppZ;
                     this.y = prevRot;
-                    this.z = prevRot;
+                    this.z = prevPit;
                     this.al(); // Update rider
                 }
             }
@@ -711,89 +724,84 @@ public abstract class EntityMinecart extends Entity implements IWorldNameable {
                     if (entity instanceof EntityLivingBase && !(entity instanceof EntityPlayer) && !(entity instanceof EntityIronGolem) && this.s() == EntityMinecart.EnumMinecartType.RIDEABLE && this.v * this.v + this.x * this.x > 0.01D && this.l == null && entity.m == null) {
 
                         // CanaryMod: VehicleCollision
-                        VehicleCollisionHook vch = new VehicleCollisionHook((Vehicle) this.entity, entity.getCanaryEntity());
-
-                        Canary.hooks().callHook(vch);
-                        if (vch.isCanceled()) {
+                        if (new VehicleCollisionHook((Vehicle)this.entity, entity.getCanaryEntity()).call().isCanceled()) {
                             return;
                         }
                         //
+
                         if (entity instanceof EntityLivingBase && !(entity instanceof EntityPlayer) && !(entity instanceof EntityIronGolem) && this.m() == 0 && this.v * this.v + this.x * this.x > 0.01D && this.l == null && entity.m == null) {
                             // CanaryMod: VehicleEnter (Animal/Mob)
-                            VehicleEnterHook veh = new VehicleEnterHook((Vehicle) this.entity, (EntityLiving) entity.getCanaryEntity());
-
-                            Canary.hooks().callHook(veh);
-                            if (!veh.isCanceled()) {
-                                entity.a((Entity) this);
+                            if (!new VehicleEnterHook((Vehicle)this.entity, (EntityLiving)entity.getCanaryEntity()).call().isCanceled()) {
+                                entity.a(this);
                             }
                             //
                         }
+                    }
 
-                        double d0 = entity.s - this.s;
-                        double d1 = entity.u - this.u;
-                        double d2 = d0 * d0 + d1 * d1;
+                    double d0 = entity.s - this.s;
+                    double d1 = entity.u - this.u;
+                    double d2 = d0 * d0 + d1 * d1;
 
-                        if (d2 >= 9.999999747378752E-5D) {
-                            d2 = (double) MathHelper.a(d2);
-                            d0 /= d2;
-                            d1 /= d2;
-                            double d3 = 1.0D / d2;
+                    if (d2 >= 9.999999747378752E-5D) {
+                        d2 = (double)MathHelper.a(d2);
+                        d0 /= d2;
+                        d1 /= d2;
+                        double d3 = 1.0D / d2;
 
-                            if (d3 > 1.0D) {
-                                d3 = 1.0D;
+                        if (d3 > 1.0D) {
+                            d3 = 1.0D;
+                        }
+
+                        d0 *= d3;
+                        d1 *= d3;
+                        d0 *= 0.10000000149011612D;
+                        d1 *= 0.10000000149011612D;
+                        d0 *= (double)(1.0F - this.U);
+                        d1 *= (double)(1.0F - this.U);
+                        d0 *= 0.5D;
+                        d1 *= 0.5D;
+                        if (entity instanceof EntityMinecart) {
+                            double d4 = entity.s - this.s;
+                            double d5 = entity.u - this.u;
+                            Vec3 vec3 = (new Vec3(d4, 0.0D, d5)).a();
+                            Vec3 vec31 = (new Vec3((double)MathHelper.b(this.y * 3.1415927F / 180.0F), 0.0D, (double)MathHelper.a(this.y * 3.1415927F / 180.0F))).a();
+                            double d6 = Math.abs(vec3.b(vec31));
+
+                            if (d6 < 0.800000011920929D) {
+                                return;
                             }
 
-                            d0 *= d3;
-                            d1 *= d3;
-                            d0 *= 0.10000000149011612D;
-                            d1 *= 0.10000000149011612D;
-                            d0 *= (double) (1.0F - this.U);
-                            d1 *= (double) (1.0F - this.U);
-                            d0 *= 0.5D;
-                            d1 *= 0.5D;
-                            if (entity instanceof EntityMinecart) {
-                                double d4 = entity.s - this.s;
-                                double d5 = entity.u - this.u;
-                                Vec3 vec3 = (new Vec3(d4, 0.0D, d5)).a();
-                                Vec3 vec31 = (new Vec3((double) MathHelper.b(this.y * 3.1415927F / 180.0F), 0.0D, (double) MathHelper.a(this.y * 3.1415927F / 180.0F))).a();
-                                double d6 = Math.abs(vec3.b(vec31));
+                            double d7 = entity.v + this.v;
+                            double d8 = entity.x + this.x;
 
-                                if (d6 < 0.800000011920929D) {
-                                    return;
-                                }
-
-                                double d7 = entity.v + this.v;
-                                double d8 = entity.x + this.x;
-
-                                if (((EntityMinecart) entity).s() == EntityMinecart.EnumMinecartType.FURNACE && this.s() != EntityMinecart.EnumMinecartType.FURNACE) {
-                                    this.v *= 0.20000000298023224D;
-                                    this.x *= 0.20000000298023224D;
-                                    this.g(entity.v - d0, 0.0D, entity.x - d1);
-                                    entity.v *= 0.949999988079071D;
-                                    entity.x *= 0.949999988079071D;
-                                }
-                                else if (((EntityMinecart) entity).s() != EntityMinecart.EnumMinecartType.FURNACE && this.s() == EntityMinecart.EnumMinecartType.FURNACE) {
-                                    entity.v *= 0.20000000298023224D;
-                                    entity.x *= 0.20000000298023224D;
-                                    entity.g(this.v + d0, 0.0D, this.x + d1);
-                                    this.v *= 0.949999988079071D;
-                                    this.x *= 0.949999988079071D;
-                                }
-                                else {
-                                    d7 /= 2.0D;
-                                    d8 /= 2.0D;
-                                    this.v *= 0.20000000298023224D;
-                                    this.x *= 0.20000000298023224D;
-                                    this.g(d7 - d0, 0.0D, d8 - d1);
-                                    entity.v *= 0.20000000298023224D;
-                                    entity.x *= 0.20000000298023224D;
-                                    entity.g(d7 + d0, 0.0D, d8 + d1);
-                                }
+                            if (((EntityMinecart)entity).s() == EntityMinecart.EnumMinecartType.FURNACE && this.s() != EntityMinecart.EnumMinecartType.FURNACE) {
+                                this.v *= 0.20000000298023224D;
+                                this.x *= 0.20000000298023224D;
+                                this.g(entity.v - d0, 0.0D, entity.x - d1);
+                                entity.v *= 0.949999988079071D;
+                                entity.x *= 0.949999988079071D;
+                            }
+                            else if (((EntityMinecart)entity).s() != EntityMinecart.EnumMinecartType.FURNACE && this.s() == EntityMinecart.EnumMinecartType.FURNACE) {
+                                entity.v *= 0.20000000298023224D;
+                                entity.x *= 0.20000000298023224D;
+                                entity.g(this.v + d0, 0.0D, this.x + d1);
+                                this.v *= 0.949999988079071D;
+                                this.x *= 0.949999988079071D;
                             }
                             else {
-                                this.g(-d0, 0.0D, -d1);
-                                entity.g(d0 / 4.0D, 0.0D, d1 / 4.0D);
+                                d7 /= 2.0D;
+                                d8 /= 2.0D;
+                                this.v *= 0.20000000298023224D;
+                                this.x *= 0.20000000298023224D;
+                                this.g(d7 - d0, 0.0D, d8 - d1);
+                                entity.v *= 0.20000000298023224D;
+                                entity.x *= 0.20000000298023224D;
+                                entity.g(d7 + d0, 0.0D, d8 + d1);
                             }
+                        }
+                        else {
+                            this.g(-d0, 0.0D, -d1);
+                            entity.g(d0 / 4.0D, 0.0D, d1 / 4.0D);
                         }
                     }
                 }
@@ -898,13 +906,22 @@ public abstract class EntityMinecart extends Entity implements IWorldNameable {
 
         RIDEABLE("RIDEABLE", 0, 0, "MinecartRideable"), CHEST("CHEST", 1, 1, "MinecartChest"), FURNACE("FURNACE", 2, 2, "MinecartFurnace"), TNT("TNT", 3, 3, "MinecartTNT"), SPAWNER("SPAWNER", 4, 4, "MinecartSpawner"), HOPPER("HOPPER", 5, 5, "MinecartHopper"), COMMAND_BLOCK("COMMAND_BLOCK", 6, 6, "MinecartCommandBlock");
         private static final Map h = Maps.newHashMap();
-        private static final EntityMinecart.EnumMinecartType[] $VALUES = new EntityMinecart.EnumMinecartType[]{RIDEABLE, CHEST, FURNACE, TNT, SPAWNER, HOPPER, COMMAND_BLOCK};
         private final int i;
         private final String j;
+
+        private static final EntityMinecart.EnumMinecartType[] $VALUES = new EntityMinecart.EnumMinecartType[]{ RIDEABLE, CHEST, FURNACE, TNT, SPAWNER, HOPPER, COMMAND_BLOCK };
 
         private EnumMinecartType(String p_i45847_1_, int p_i45847_2_, int p_i45847_3_, String p_i45847_4_) {
             this.i = p_i45847_3_;
             this.j = p_i45847_4_;
+        }
+
+        public int a() {
+            return this.i;
+        }
+
+        public String b() {
+            return this.j;
         }
 
         public static EntityMinecart.EnumMinecartType a(int p_a_0_) {
@@ -922,14 +939,6 @@ public abstract class EntityMinecart extends Entity implements IWorldNameable {
                 h.put(Integer.valueOf(entityminecart_enumminecarttype1.a()), entityminecart_enumminecarttype1);
             }
 
-        }
-
-        public int a() {
-            return this.i;
-        }
-
-        public String b() {
-            return this.j;
         }
     }
 
