@@ -13,8 +13,16 @@ import net.canarymod.api.world.position.Location;
 import net.canarymod.api.world.position.Vector3D;
 import net.canarymod.config.Configuration;
 import net.canarymod.hook.CancelableHook;
-import net.canarymod.hook.entity.*;
-import net.minecraft.block.*;
+import net.canarymod.hook.entity.DamageHook;
+import net.canarymod.hook.entity.DimensionSwitchHook;
+import net.canarymod.hook.entity.EntityMountHook;
+import net.canarymod.hook.entity.EntityMoveHook;
+import net.canarymod.hook.entity.VehicleMoveHook;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockFence;
+import net.minecraft.block.BlockFenceGate;
+import net.minecraft.block.BlockLiquid;
+import net.minecraft.block.BlockWall;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.command.CommandResultStats;
@@ -33,9 +41,23 @@ import net.minecraft.event.HoverEvent;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.*;
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagDouble;
+import net.minecraft.nbt.NBTTagFloat;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.*;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.IChatComponent;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.ReportedException;
+import net.minecraft.util.StatCollector;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -160,24 +182,6 @@ public abstract class Entity implements ICommandSender {
         this.ac.a(2, "");
         this.ac.a(4, Byte.valueOf((byte) 0));
         this.h();
-
-        entity = new CanaryEntity(this) {
-
-            @Override
-            public Entity getHandle() {
-                return entity;
-            }
-
-            @Override
-            public EntityType getEntityType() {
-                return null;
-            }
-
-            @Override
-            public String getFqName() {
-                return "Entity";
-            }
-        };
     }
 
     protected abstract void h();
@@ -1957,6 +1961,25 @@ public abstract class Entity implements ICommandSender {
     }
 
     public CanaryEntity getCanaryEntity() {
+        if (entity == null) { // Set an instance only if not found
+            entity = new CanaryEntity(this) {
+
+                @Override
+                public EntityType getEntityType() {
+                    return EntityType.GENERIC_ENTITY;
+                }
+
+                @Override
+                public String getFqName() {
+                    return "GenericEntity[" + this.getClass().getSimpleName() + "]";
+                }
+
+                @Override
+                public Entity getHandle() {
+                    return entity;
+                }
+            };
+        }
         return entity;
     }
 

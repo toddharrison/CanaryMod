@@ -1,6 +1,8 @@
 package net.minecraft.entity.monster;
 
 import com.google.common.base.Predicate;
+import net.canarymod.api.entity.EntityType;
+import net.canarymod.api.entity.living.monster.CanaryEntityMob;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
@@ -150,5 +152,31 @@ public abstract class EntityMob extends EntityCreature implements IMob {
 
     protected boolean aZ() {
         return true;
+    }
+
+    // CanaryMod
+    @Override
+    public CanaryEntityMob getCanaryEntity() {
+        if (this.entity == null || !(this.entity instanceof CanaryEntityMob)) {
+            // Set the proper wrapper as needed
+            this.entity =
+                    new CanaryEntityMob(this) {
+                        @Override
+                        public String getFqName() {
+                            return "GenericMob[" + getClass().getSimpleName() + "]";
+                        }
+
+                        @Override
+                        public EntityType getEntityType() {
+                            return EntityType.GENERIC_MOB;
+                        }
+
+                        @Override
+                        public EntityMob getHandle() {
+                            return (EntityMob)entity;
+                        }
+                    };
+        }
+        return (CanaryEntityMob)entity;
     }
 }

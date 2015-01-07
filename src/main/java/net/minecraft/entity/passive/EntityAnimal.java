@@ -25,25 +25,6 @@ public abstract class EntityAnimal extends EntityAgeable implements IAnimals {
     public EntityAnimal(World world) {
         super(world);
         this.bl = Blocks.c;
-
-        //CanaryMod: Genericly wrapped animal
-        this.entity = new CanaryAnimal(this) {
-
-            @Override
-            public String getFqName() {
-                return "Generic Animal";
-            }
-
-            @Override
-            public EntityType getEntityType() {
-                return EntityType.GENERIC_ANIMAL;
-            }
-
-            @Override
-            public EntityAnimal getHandle() {
-                return (EntityAnimal) entity;
-            }
-        };
     }
 
     protected void E() {
@@ -172,5 +153,29 @@ public abstract class EntityAnimal extends EntityAgeable implements IAnimals {
 
     public boolean a(EntityAnimal entityanimal) {
         return entityanimal == this ? false : (entityanimal.getClass() != this.getClass() ? false : this.cp() && entityanimal.cp());
+    }
+
+    public CanaryAnimal getCanaryEntity() {
+        if (this.entity == null || !(this.entity instanceof CanaryAnimal)) {
+            // Set the proper wrapper as needed
+            this.entity = new CanaryAnimal(this) {
+
+                @Override
+                public String getFqName() {
+                    return "Generic Animal";
+                }
+
+                @Override
+                public EntityType getEntityType() {
+                    return EntityType.GENERIC_ANIMAL;
+                }
+
+                @Override
+                public EntityAnimal getHandle() {
+                    return (EntityAnimal)entity;
+                }
+            };
+        }
+        return (CanaryAnimal)this.entity;
     }
 }

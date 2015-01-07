@@ -3,6 +3,7 @@ package net.minecraft.entity;
 import com.google.common.collect.Maps;
 import net.canarymod.Canary;
 import net.canarymod.api.CanaryDamageSource;
+import net.canarymod.api.entity.EntityType;
 import net.canarymod.api.entity.living.CanaryLivingBase;
 import net.canarymod.api.potion.CanaryPotionEffect;
 import net.canarymod.api.scoreboard.CanaryScoreboard;
@@ -1663,5 +1664,31 @@ public abstract class EntityLivingBase extends Entity {
     //CanaryMod: Used to check if a ArmSwing animation is allowed to play (look above for S0BPacketAnimation)
     public boolean showAnimation() {
         return !this.ap || this.aq >= this.n() / 2 || this.aq < 0;
+    }
+
+    @Override
+    public CanaryLivingBase getCanaryEntity() {
+        if (this.entity == null || !(this.entity instanceof CanaryLivingBase)) {
+            // Set the proper wrapper as needed
+            this.entity =
+                    new CanaryLivingBase(this) {
+
+                        @Override
+                        public EntityLivingBase getHandle() {
+                            return (EntityLivingBase)entity;
+                        }
+
+                        @Override
+                        public String getFqName() {
+                            return "GenericLivingBase[" + getClass().getSimpleName() + "]";
+                        }
+
+                        @Override
+                        public EntityType getEntityType() {
+                            return EntityType.GENERIC_LIVING;
+                        }
+                    };
+        }
+        return (CanaryLivingBase)this.entity;
     }
 }

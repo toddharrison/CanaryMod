@@ -1,14 +1,9 @@
 package net.minecraft.entity;
 
+import net.canarymod.api.entity.EntityType;
+import net.canarymod.api.entity.living.CanaryEntityLiving;
 import net.canarymod.hook.entity.EntityDespawnHook;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityBodyHelper;
-import net.minecraft.entity.EntityHanging;
-import net.minecraft.entity.EntityLeashKnot;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.IEntityLivingData;
-import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAITasks;
 import net.minecraft.entity.ai.EntityJumpHelper;
 import net.minecraft.entity.ai.EntityLookHelper;
@@ -922,5 +917,31 @@ public abstract class EntityLiving extends EntityLivingBase {
 
     public EntityAITasks getTargetTasks() {
         return this.bg;
+    }
+
+    @Override
+    public CanaryEntityLiving getCanaryEntity() {
+        if (this.entity == null || !(this.entity instanceof CanaryEntityLiving)) {
+            // Set the proper wrapper as needed
+            this.entity =
+                    new CanaryEntityLiving(this) {
+
+                        @Override
+                        public String getFqName() {
+                            return "GenericEntityLiving[" + getClass().getSimpleName() + "]";
+                        }
+
+                        @Override
+                        public EntityType getEntityType() {
+                            return EntityType.GENERIC_LIVING;
+                        }
+
+                        @Override
+                        public EntityLiving getHandle() {
+                            return (EntityLiving)entity;
+                        }
+                    };
+        }
+        return (CanaryEntityLiving)entity;
     }
 }

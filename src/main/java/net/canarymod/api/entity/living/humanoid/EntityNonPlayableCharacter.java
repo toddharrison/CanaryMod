@@ -1,10 +1,13 @@
 package net.canarymod.api.entity.living.humanoid;
 
 import com.mojang.authlib.GameProfile;
-import java.util.UUID;
 import net.canarymod.api.entity.CanaryEntity;
 import net.canarymod.api.entity.living.LivingBase;
-import net.canarymod.api.entity.living.humanoid.npc.ai.*;
+import net.canarymod.api.entity.living.humanoid.npc.ai.Attacked;
+import net.canarymod.api.entity.living.humanoid.npc.ai.Clicked;
+import net.canarymod.api.entity.living.humanoid.npc.ai.Destroyed;
+import net.canarymod.api.entity.living.humanoid.npc.ai.PickupItem;
+import net.canarymod.api.entity.living.humanoid.npc.ai.Update;
 import net.canarymod.api.entity.living.humanoid.npchelpers.EntityNPCJumpHelper;
 import net.canarymod.api.entity.living.humanoid.npchelpers.EntityNPCLookHelper;
 import net.canarymod.api.entity.living.humanoid.npchelpers.EntityNPCMoveHelper;
@@ -25,6 +28,8 @@ import net.minecraft.util.IChatComponent;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
+import java.util.UUID;
+
 /**
  * NonPlayableCharacter (NPC) Entity class
  *
@@ -36,8 +41,18 @@ public final class EntityNonPlayableCharacter extends EntityPlayer {
     private EntityNPCLookHelper look_helper;
     private PathNavigateNPC path_navigate;
 
+    private static UUID bastardizeUUID(UUID uuid) {
+        if (uuid.version() != 2) { // clear version
+            long msb = uuid.getMostSignificantBits();
+            msb &= ~0x0000000000004000L;
+            msb |= 0x0000000000002000L;
+            return new UUID(msb, uuid.getLeastSignificantBits());
+        }
+        return uuid;
+    }
+
     private static GameProfile genFakeProfile(UUID uuid, String name, String skinName) {
-        GameProfile ofNPC = new GameProfile(uuid, name);
+        GameProfile ofNPC = new GameProfile(bastardizeUUID(uuid), name);
         ofNPC.getProperties().put("textures", NMSToolBox.getSkinProperty(skinName));
         return ofNPC;
     }
@@ -58,6 +73,7 @@ public final class EntityNonPlayableCharacter extends EntityPlayer {
         while (!world.a((Entity)this, this.aQ()).isEmpty() && this.t < 255.0D) {
             this.b(this.s, this.t + 1.0D, this.u);
         }
+        this.ac.a(10, (byte)127); // Skin Flag
         this.entity = new CanaryNonPlayableCharacter(this);
     }
 

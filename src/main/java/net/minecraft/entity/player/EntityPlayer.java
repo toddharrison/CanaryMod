@@ -18,7 +18,6 @@ import net.canarymod.api.nbt.CanaryCompoundTag;
 import net.canarymod.api.packet.CanaryPacket;
 import net.canarymod.api.scoreboard.CanaryScoreboard;
 import net.canarymod.api.world.CanaryWorld;
-import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.api.world.position.Location;
 import net.canarymod.hook.player.BedEnterHook;
@@ -162,22 +161,6 @@ public abstract class EntityPlayer extends EntityLivingBase {
         this.b((double)blockpos.n() + 0.5D, (double)(blockpos.o() + 1), (double)blockpos.p() + 0.5D, 0.0F, 0.0F);
         this.aT = 180.0F;
         this.X = 20;
-        this.entity = new CanaryHuman(this) { // CanaryMod: Special Case wrap
-            @Override
-            public String getFqName() {
-                return "Human";
-            }
-
-            @Override
-            public EntityType getEntityType() {
-                return null;
-            }
-
-            @Override
-            public EntityPlayer getHandle() {
-                return (EntityPlayer)entity;
-            }
-        };
     }
 
     protected void aW() {
@@ -2042,6 +2025,28 @@ public abstract class EntityPlayer extends EntityLivingBase {
 
     public CanaryHuman getCanaryHuman() {
         return (CanaryHuman)entity;
+    }
+
+    public CanaryHuman getCanaryEntity() {
+        if (this.entity == null || !(this.entity instanceof CanaryHuman)) {
+            // Set the proper wrapper as needed
+            this.entity = new CanaryHuman(this) {
+                @Override
+                public String getFqName() {
+                    return "GenericHuman";
+                }
+
+                @Override
+                public EntityType getEntityType() {
+                    return EntityType.GENERIC_LIVING;
+                }
+
+                @Override
+                public EntityPlayer getHandle() {
+                    return (EntityPlayer)entity;
+                }
+            };
+        }
     }
 
     public void initializeNewMeta() {
