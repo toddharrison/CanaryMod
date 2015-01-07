@@ -2047,6 +2047,7 @@ public abstract class EntityPlayer extends EntityLivingBase {
                 }
             };
         }
+        return (CanaryHuman)this.entity;
     }
 
     public void initializeNewMeta() {
