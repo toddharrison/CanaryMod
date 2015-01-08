@@ -211,4 +211,8 @@ public class TileEntityBanner extends TileEntity {
     public void initializePatternsList() {
         this.f = new NBTTagList();
     }
+
+    public CanaryBanner getCanaryBanner(){
+        return (CanaryBanner)this.complexBlock;
+    }
 }
