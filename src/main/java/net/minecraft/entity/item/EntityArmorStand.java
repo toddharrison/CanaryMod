@@ -672,4 +672,46 @@ public class EntityArmorStand extends EntityLivingBase {
     public Rotations t() {
         return this.bi;
     }
+
+    /* CanaryMod: Start helper methods */
+    public final void setSmall(boolean small){
+        this.a(small);  // 10 (& 0)
+    }
+
+    public final void setShowArms(boolean arms){
+        this.k(arms);  // 10 & 4
+    }
+
+    public final int getDisabledSlots(){
+        return this.bg;
+    }
+
+    public final void setDisabledSlots(int offsets){
+        this.bg = offsets;
+    }
+
+    public final void setNoBaseplate(boolean nobaseplate){
+        this.l(nobaseplate); // 10 & 8
+    }
+
+    public final void setNoGravity(boolean nogravity){
+        this.j(nogravity); // 10 & 2
+    }
+
+    public Rotations getLeftArmRotations(){
+        return this.bj;
+    }
+
+    public Rotations getRightArmRotations(){
+        return this.bk;
+    }
+
+    public Rotations getLeftLegRotations(){
+        return this.bl;
+    }
+
+    public Rotations getRightLegRotations(){
+        return this.bm;
+    }
+    /* CanaryMod: End */
 }

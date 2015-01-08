@@ -495,7 +495,7 @@ public class CanaryItem implements Item {
 
         for (int index = 0; index < stackarray.length; index++) {
             if (stackarray[index] != null) {
-                items[index] = stackarray[index].getCanaryItem();
+                items[index] = nativeToItem(stackarray[index]);
                 items[index].setSlot(index);
             }
         }
@@ -507,10 +507,30 @@ public class CanaryItem implements Item {
 
         for (int index = 0; index < itemarray.length; index++) {
             if (itemarray[index] != null) {
-                stacks[index] = ((CanaryItem) itemarray[index]).getHandle();
+                stacks[index] = itemToNative(itemarray[index]);
             }
         }
         return stacks;
+    }
+
+    /**
+     * Safely converts an {@link net.canarymod.api.inventory.Item} to an ItemStack
+     */
+    public static ItemStack itemToNative(Item item){
+        if(item != null && item instanceof CanaryItem){
+            return ((CanaryItem)item).getHandle();
+        }
+        return null;
+    }
+
+    /**
+     * Safely converts an ItemStack to an {@link net.canarymod.api.inventory.Item}
+     */
+    public static CanaryItem nativeToItem(ItemStack itemstack){
+        if(itemstack != null){
+            return itemstack.getCanaryItem();
+        }
+        return null;
     }
 
     @Override

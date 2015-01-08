@@ -85,6 +85,8 @@ public class CanaryEntityFactory implements EntityFactory {
             net.minecraft.world.World mcworld = ((CanaryWorld) world).getHandle();
 
             switch (type) {
+                case ARMORSTAND:
+                    return new EntityArmorStand(mcworld).getCanaryEntity();
                 case ARROW:
                     return new EntityArrow(mcworld).getCanaryEntity();
                 case BAT:
@@ -189,6 +191,8 @@ public class CanaryEntityFactory implements EntityFactory {
                     Villager priest = (Villager) new EntityVillager(mcworld).getCanaryEntity();
                     priest.setProfession(Profession.PRIEST);
                     return priest;
+                case RABBIT:
+                    return new EntityRabbit(mcworld).getCanaryEntity();
                 case SHEEP:
                     return new EntitySheep(mcworld).getCanaryEntity();
                 case SILVERFISH:
