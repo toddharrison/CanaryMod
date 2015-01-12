@@ -11,40 +11,35 @@ import net.minecraft.server.gui.MinecraftServerGui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.text.MessageFormat;
 
 import static net.canarymod.Canary.log;
 
 public class Main {
-    static JDialog dialog;
+    static WarningDialog warningDialog;
+    static final Icon icon;
 
     static {
+        java.net.URL imgURL = Main.class.getResource("/assets/favicon.png");
+        Icon tempI = null;
+        if (imgURL != null) {
+            tempI = new ImageIcon(imgURL, "DA BIRD");
+        }
+        icon = tempI;
+
         // For our jar double-clickers add a message about the libraries loading when the user has a graphics environment and the console isn't present
         if (!GraphicsEnvironment.isHeadless() && System.console() == null) {
-            java.net.URL imgURL = Main.class.getResource("/assets/favicon.png");
-            Icon icon = null;
-            if (imgURL != null) {
-                icon = new ImageIcon(imgURL, "DA BIRD");
-            }
-
-            final JDialog temp = new JDialog();
-            final Icon iconF = icon;
+            final WarningDialog temp = new LibraryWarningDialog();
             SwingUtilities.invokeLater(new Runnable() {
+                                           @Override
                                            public void run() {
-                                               try {
-                                                   final JOptionPane optionPane = new JOptionPane("Please wait while the libraries initialize....", JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, iconF, new Object[]{ }, null);
-                                                   temp.setTitle("CanaryMod");
-                                                   temp.setModal(true);
-                                                   temp.setContentPane(optionPane);
-                                                   temp.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
-                                                   temp.pack();
-                                                   temp.setVisible(true);
-                                               }
-                                               catch (Exception ignored) {
-                                               }
+                                               temp.create();
                                            }
                                        }
                                       );
-            dialog = temp;
+            warningDialog = temp;
         }
     }
 
@@ -93,26 +88,27 @@ public class Main {
             }
 
             // Warn the user if there is no known way to control the server
-            if (System.console() == null && headless && !nocontrol) {
-                log.warn("Server is starting without a known Console or GUI.");
-                log.warn("If this is intentional, use the nocontrol argument to supress this warning.");
+            if (System.console() == null) {
+                if (headless && !nocontrol) {
+                    log.warn("Server is starting without a known Console or GUI.");
+                    log.warn("If this is intentional, use the \"nocontrol\" argument to suppress this warning.");
+                }
+                else if (!headless) {
+                    MinecraftServer.setHeadless(false); // Seems they want the GUI
+                    log.debug("Settings server to use GUI...");
+                }
             }
 
             if (!MinecraftServer.isHeadless()) {
                 try {
                     UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
                 }
-                catch (UnsupportedLookAndFeelException ignored) {}
+                catch (UnsupportedLookAndFeelException ignored) {
+                }
                 MinecraftServerGui.getLog();
             }
 
             initBird(); // Initialize the Bird
-            if (dialog != null) {
-                // kill dialog
-                dialog.setVisible(false);
-                dialog.dispose();
-                dialog = null;
-            }
             MinecraftServer.main(args); // Boot up the native server
         }
         catch (Throwable t) {
@@ -132,5 +128,122 @@ public class Main {
 
     public static boolean canRunUncontrolled() {
         return nocontrol;
+    }
+
+    public static void closeLibWarning() {
+        if (warningDialog != null && warningDialog instanceof LibraryWarningDialog) {
+            // kill dialog
+            warningDialog.setVisible(false);
+            warningDialog.dispose();
+            warningDialog = null;
+        }
+    }
+
+    public static void displayEULAWarning() {
+        closeLibWarning();
+        warningDialog = new EULAWarningDialog();
+        SwingUtilities.invokeLater(new Runnable() {
+                                       @Override
+                                       public void run() {
+                                           warningDialog.create();
+                                       }
+                                   }
+                                  );
+    }
+
+    public static void displayPortBindWarning(String error) {
+        closeLibWarning();
+        warningDialog = new BindPortWarningDialog(error);
+        SwingUtilities.invokeLater(new Runnable() {
+                                       @Override
+                                       public void run() {
+                                           warningDialog.create();
+                                       }
+                                   }
+                                  );
+    }
+
+    public static boolean warningOpen() {
+        return warningDialog != null && !(warningDialog instanceof LibraryWarningDialog);
+    }
+
+    private static abstract class WarningDialog extends JDialog {
+        abstract void create();
+    }
+
+    private static final class LibraryWarningDialog extends WarningDialog {
+
+        public final void create() {
+            try {
+                final JOptionPane optionPane = new JOptionPane("Please wait while the libraries initialize....", JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, icon, new Object[]{ }, null);
+                this.setTitle("CanaryMod");
+                this.setModal(true);
+                this.setContentPane(optionPane);
+                this.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+                this.pack();
+                this.setVisible(true);
+            }
+            catch (Exception exception) {
+                Canary.log.debug("Library Warning Dialog Error", exception);
+            }
+        }
+    }
+
+    private static final class EULAWarningDialog extends WarningDialog {
+        final void create() {
+            try {
+                final JOptionPane optionPane = new JOptionPane("You need to agree to the EULA in order to run the server.\nGo to eula.txt for more info.", JOptionPane.WARNING_MESSAGE, JOptionPane.DEFAULT_OPTION, icon, new Object[]{ }, null);
+
+                this.setTitle("EULA NOT ACCEPTED");
+                this.setModal(true);
+                this.setContentPane(optionPane);
+                this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+                this.pack();
+                this.setVisible(true);
+                this.addWindowListener(new WindowAdapter() {
+                                           @Override
+                                           public void windowClosed(WindowEvent e) {
+                                               warningDialog = null;
+                                           }
+                                       }
+                                      );
+            }
+            catch (Exception ignored) {
+                Canary.log.debug("EULA Dialog error!", ignored);
+                warningDialog = null;
+            }
+        }
+    }
+
+    private static final class BindPortWarningDialog extends WarningDialog {
+        private final String error;
+
+        BindPortWarningDialog(String error) {
+            this.error = error;
+        }
+
+        final void create() {
+            try {
+                final JOptionPane optionPane = new JOptionPane(MessageFormat.format("The exception was: {}.\nPerhaps a server is already running on that port?", error), JOptionPane.WARNING_MESSAGE, JOptionPane.DEFAULT_OPTION, icon, new Object[]{ }, null);
+
+                this.setTitle("FAILED TO BIND TO PORT!");
+                this.setModal(true);
+                this.setContentPane(optionPane);
+                this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+                this.pack();
+                this.setVisible(true);
+                this.addWindowListener(new WindowAdapter() {
+                                           @Override
+                                           public void windowClosed(WindowEvent e) {
+                                               warningDialog = null;
+                                           }
+                                       }
+                                      );
+            }
+            catch (Exception ignored) {
+                Canary.log.debug("Bind Port Dialog error!", ignored);
+                warningDialog = null;
+            }
+        }
     }
 }

@@ -15,6 +15,7 @@ import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.Unpooled;
 import io.netty.handler.codec.base64.Base64;
 import net.canarymod.Canary;
+import net.canarymod.Main;
 import net.canarymod.api.CanaryConfigurationManager;
 import net.canarymod.api.CanaryServer;
 import net.canarymod.api.world.CanarySaveConverter;
@@ -494,7 +495,10 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
                 }
             }
             else {
-                this.a((CrashReport)null);
+                // this.a((CrashReport)null); // CanaryMod: Fix Server detonation hang
+                while (Main.warningOpen()) {
+                    Thread.sleep(50L);
+                }
             }
         }
         catch (Throwable throwable) {

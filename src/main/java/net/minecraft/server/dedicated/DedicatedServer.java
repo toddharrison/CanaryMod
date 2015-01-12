@@ -37,6 +37,7 @@ import net.visualillusionsent.utils.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -189,6 +190,10 @@ public class DedicatedServer extends MinecraftServer implements IServer {
         ServerConfiguration cfg = Configuration.getServerConfig();
         this.o = new ServerEula(new File("eula.txt"));
         if (!this.o.a()) {
+            Main.closeLibWarning(); // Close the warning dialog window now
+            if (!GraphicsEnvironment.isHeadless() && System.console() == null) {
+                Main.displayEULAWarning();
+            }
             j.info("You need to agree to the EULA in order to run the server. Go to eula.txt for more info.");
             this.o.b();
             return false;
@@ -248,6 +253,10 @@ public class DedicatedServer extends MinecraftServer implements IServer {
                 this.ao().a(inetaddress, this.Q());
             }
             catch (IOException ioexception1) {
+                Main.closeLibWarning(); // Close the warning dialog window now
+                if (!GraphicsEnvironment.isHeadless() && System.console() == null) {
+                    Main.displayPortBindWarning(ioexception1.toString());
+                }
                 j.warn("**** FAILED TO BIND TO PORT!");
                 j.warn("The exception was: {}", new Object[]{ ioexception1.toString() });
                 j.warn("Perhaps a server is already running on that port?");
@@ -325,6 +334,7 @@ public class DedicatedServer extends MinecraftServer implements IServer {
                 // CanaryMod moved GUI start to after plugins enable
                 this.aO();
             }
+            Main.closeLibWarning(); // Close the warning dialog window now
 
             // CanaryMod changed call to initWorld
             this.initWorld(this.T(), this.T(), i2, worldtype, net.canarymod.api.world.DimensionType.NORMAL, s3);
