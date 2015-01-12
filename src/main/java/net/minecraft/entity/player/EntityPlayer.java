@@ -1873,33 +1873,21 @@ public abstract class EntityPlayer extends EntityLivingBase {
     // CanaryMod
     // Start: Custom XP methods
     public void addXP(int amount) {
-        this.u(amount);
-        updateXP();
+        this.bA += amount;
+        this.bA = Math.max(0, bA);
+        recalculateXP();
+
     }
 
-    public void removeXP(int rXp) {
-        if (rXp > this.bA) { // Don't go below 0
-            rXp = this.bA;
-        }
-
-        this.bB -= (float)rXp / (float)this.cj();
-
-        // Inverse of for loop in this.t(int)
-        for (this.bA -= rXp; this.bB < 0.0F; this.bB = this.bB / this.cj() + 1.0F) {
-            this.bB *= this.cj();
-            this.a(-1);
-        }
-        updateXP();
+    public void removeXP(int amount) {
+        this.bA -= amount;
+        this.bA = Math.max(0, bA);
+        recalculateXP();
     }
 
-    public void setXP(int i) {
-        if (i < this.bz) {
-            this.removeXP(this.bz - i);
-        }
-        else {
-            this.u(i - this.bz);
-        }
-        updateXP();
+    public void setXP(int amount) {
+        this.bA = Math.max(0, amount);
+        recalculateXP();
     }
 
     public void recalculateXP() {
@@ -1908,7 +1896,7 @@ public abstract class EntityPlayer extends EntityLivingBase {
 
         while (this.bB >= 1.0F) {
             this.bB = (this.bB - 1.0F) * this.cj();
-            this.bC++;
+            this.bz++;
             this.bB /= this.cj();
         }
 
