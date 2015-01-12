@@ -1891,19 +1891,18 @@ public abstract class EntityPlayer extends EntityLivingBase {
     }
 
     public void recalculateXP() {
-        this.bB = this.bA / (float)this.cj();
         this.bz = 0;
+        this.bB = 0;
+        for (this.bB = this.bA / (float)this.cj(); this.bB >= 1.0F; this.bB /= (float)this.cj()) {
+            this.bB = (this.bB - 1.0F) * (float)this.cj();
 
-        while (this.bB >= 1.0F) {
-            this.bB = (this.bB - 1.0F) * this.cj();
             this.bz++;
-            this.bB /= this.cj();
+            if (this.bz % 5 == 0 && (float)this.i < (float)this.W - 100.0F) {
+                this.i = this.W;
+            }
         }
 
-        if (this instanceof EntityPlayerMP) {
-            updateLevels();
-            updateXP();
-        }
+        updateXP();
     }
 
     private void updateXP() {
