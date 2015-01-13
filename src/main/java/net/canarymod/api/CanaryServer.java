@@ -16,6 +16,7 @@ import net.canarymod.api.inventory.recipes.Recipe;
 import net.canarymod.api.inventory.recipes.ShapedRecipeHelper;
 import net.canarymod.api.inventory.recipes.SmeltRecipe;
 import net.canarymod.api.nbt.CanaryCompoundTag;
+import net.canarymod.api.world.UnknownWorldException;
 import net.canarymod.api.world.World;
 import net.canarymod.api.world.WorldManager;
 import net.canarymod.api.world.blocks.CanaryCommandBlock;
@@ -441,7 +442,13 @@ public class CanaryServer implements Server {
 
     @Override
     public World getWorld(String name) {
-        return server.getWorldManager().getWorld(name, false);
+        try {
+            return server.getWorldManager().getWorld(name, false);
+        }
+        catch (UnknownWorldException ukwex) {
+            // @return {@link World} if found; {@code null} if not
+            return null;
+        }
     }
 
     @Override

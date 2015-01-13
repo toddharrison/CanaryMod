@@ -381,7 +381,7 @@ public class DedicatedServer extends MinecraftServer implements IServer {
     public void a(WorldSettings.GameType worldsettings_gametype) {
         //super.a(worldsettings_gametype);
         //this.q = worldsettings_gametype;
-        Canary.log.warn("GameType should only be changed using the World configurations");
+        this.setDefaultGameMode(worldsettings_gametype, this.defaultWorld());
     }
 
     @Deprecated //CanaryMod: deprecate method

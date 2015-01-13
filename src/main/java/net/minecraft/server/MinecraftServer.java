@@ -1223,11 +1223,13 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
     }
 
     public void a(WorldSettings.GameType worldsettings_gametype) {
+        /*
         for (net.canarymod.api.world.World w : worldManager.getAllWorlds()) {
             WorldServer worldserver = (WorldServer)((CanaryWorld)w).getHandle();
 
             worldserver.P().a(worldsettings_gametype);
         }
+        */
     }
 
     public NetworkSystem ao() {
@@ -1481,5 +1483,11 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 
     public int getProtocolVersion() {
         return this.r.c().b();
+    }
+
+    public void setDefaultGameMode(WorldSettings.GameType worldsettings_gametype, World world) {
+        WorldServer worldserver = (WorldServer)world;
+        worldserver.P().a(worldsettings_gametype);
+        Configuration.getWorldConfig(world.getCanaryWorld().getFqName()).getFile().setInt("gamemode", worldsettings_gametype.a());
     }
 }
