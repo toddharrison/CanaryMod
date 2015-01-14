@@ -1659,6 +1659,7 @@ public abstract class EntityLivingBase extends Entity {
             PotionEffect potioneffect = (PotionEffect) iterator.next();
             this.b(potioneffect);
         }
+        this.g.clear(); // Clear the map of effects now
     }
 
     //CanaryMod: Used to check if a ArmSwing animation is allowed to play (look above for S0BPacketAnimation)
