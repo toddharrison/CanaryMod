@@ -58,7 +58,9 @@ public class CanaryCommandBlock extends CanaryTileEntity implements CommandBlock
      */
     @Override
     public void notice(CharSequence message) {
-        log.info(Logman.NOTICE, String.format(cmdPrefix, getName(), message));
+        if (!Configuration.getServerConfig().isCommandBlockSilent()) {
+            log.info(Logman.NOTICE, String.format(cmdPrefix, getName(), message));
+        }
     }
 
     /**
@@ -83,7 +85,9 @@ public class CanaryCommandBlock extends CanaryTileEntity implements CommandBlock
 
     @Override
     public void message(String message) {
-        log.info(Logman.MESSAGE, String.format(cmdPrefix, getName(), message));
+        if (!Configuration.getServerConfig().isCommandBlockSilent()) {
+            log.info(Logman.MESSAGE, String.format(cmdPrefix, getName(), message));
+        }
     }
 
     /**
@@ -91,7 +95,7 @@ public class CanaryCommandBlock extends CanaryTileEntity implements CommandBlock
      */
     @Override
     public void message(CharSequence message) {
-        log.info(Logman.MESSAGE, String.format(cmdPrefix, getName(), message));
+        this.message(message.toString());
     }
 
     /**
@@ -100,7 +104,7 @@ public class CanaryCommandBlock extends CanaryTileEntity implements CommandBlock
     @Override
     public void message(CharSequence... messages) {
         for (CharSequence message : messages) {
-            message(message);
+            this.message(message);
         }
     }
 
@@ -110,14 +114,14 @@ public class CanaryCommandBlock extends CanaryTileEntity implements CommandBlock
     @Override
     public void message(Iterable<? extends CharSequence> messages) {
         for (CharSequence message : messages) {
-            message(message);
+            this.message(message);
         }
     }
 
     @Override
     public void message(ChatComponent... chatComponents) {
         for(ChatComponent chatComponent : chatComponents){
-            log.info(Logman.MESSAGE, String.format(cmdPrefix, getName(), chatComponent.getFullText()));
+            this.message(chatComponent.getFullText());
         }
     }
 
