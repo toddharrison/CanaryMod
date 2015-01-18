@@ -1,6 +1,5 @@
 package net.canarymod.api.inventory;
 
-import net.canarymod.Canary;
 import net.canarymod.api.nbt.CanaryCompoundTag;
 import net.canarymod.config.Configuration;
 import net.minecraft.inventory.IInventory;

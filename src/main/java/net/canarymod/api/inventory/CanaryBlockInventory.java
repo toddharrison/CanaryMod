@@ -397,7 +397,7 @@ public abstract class CanaryBlockInventory extends CanaryTileEntity implements I
                     if((i.hasDataTag() && !item.hasDataTag()) || (!i.hasDataTag() && item.hasDataTag())){
                         continue;
                     }
-                    else if (!i.getDataTag().equals(item.getDataTag())){
+                    else if (i.hasDataTag() && !i.getDataTag().equals(item.getDataTag())){
                         continue;
                     }
                     itemExisting = i;
