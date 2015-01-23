@@ -17,8 +17,11 @@ import net.canarymod.api.entity.living.animal.CanaryHorse;
 import net.canarymod.api.inventory.CanaryAnimalInventory;
 import net.canarymod.api.inventory.CanaryBlockInventory;
 import net.canarymod.api.inventory.CanaryEntityInventory;
+import net.canarymod.api.inventory.CanaryItem;
 import net.canarymod.api.inventory.EnderChestInventory;
 import net.canarymod.api.inventory.Inventory;
+import net.canarymod.api.inventory.Item;
+import net.canarymod.api.inventory.ItemType;
 import net.canarymod.api.packet.CanaryPacket;
 import net.canarymod.api.packet.Packet;
 import net.canarymod.api.statistics.Achievement;
@@ -1092,6 +1095,13 @@ public class CanaryPlayer extends CanaryHuman implements Player {
     @Override
     public void openSignEditWindow(Sign sign) {
         getHandle().a(((CanarySign) sign).getTileEntity());
+    }
+
+    @Override
+    public void openBook(Item book) {
+        if (book != null && book.getType().equals(ItemType.WrittenBook)) {
+            getHandle().a(((CanaryItem)book).getHandle());
+        }
     }
 
     @Override
