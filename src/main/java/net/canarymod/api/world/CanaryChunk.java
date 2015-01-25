@@ -67,7 +67,13 @@ public class CanaryChunk implements Chunk {
     }
 
     @Override
+    @Deprecated
     public int getMaxHeigth() {
+        return 256;
+    }
+
+    @Override
+    public int getMaxHeight() {
         return 256;
     }
 

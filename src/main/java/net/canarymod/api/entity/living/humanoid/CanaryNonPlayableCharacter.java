@@ -167,7 +167,13 @@ public class CanaryNonPlayableCharacter extends CanaryHuman implements NonPlayab
      * {@inheritDoc}
      */
     @Override
+    @Deprecated
     public List<NPCBehaviorListener> geRegisteredListeners() {
+        return NPCBehaviorRegistry.getRegisteredListeners(this);
+    }
+
+    @Override
+    public List<NPCBehaviorListener> getRegisteredListeners() {
         return NPCBehaviorRegistry.getRegisteredListeners(this);
     }
 
