@@ -1,11 +1,14 @@
 package net.canarymod.api.entity.vehicle;
 
 import net.canarymod.Canary;
+import net.canarymod.api.Server;
 import net.canarymod.api.chat.ChatComponent;
 import net.canarymod.api.entity.EntityType;
+import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.chat.ReceiverType;
 import net.canarymod.config.Configuration;
+import net.canarymod.exceptions.InvalidInstanceException;
 import net.canarymod.hook.system.PermissionCheckHook;
 import net.canarymod.logger.Logman;
 import net.canarymod.user.Group;
@@ -151,6 +154,21 @@ public class CanaryCommandBlockMinecart extends CanaryMinecart implements Comman
     @Override
     public ReceiverType getReceiverType() {
         return ReceiverType.COMMANDBLOCKENTITY;
+    }
+
+    @Override
+    public Player asPlayer() {
+        throw new InvalidInstanceException("CommandBlock is not a MessageReceiver of the type: PLAYER");
+    }
+
+    @Override
+    public Server asServer() {
+        throw new InvalidInstanceException("CommandBlock is not a MessageReceiver of the type: SERVER");
+    }
+
+    @Override
+    public net.canarymod.api.CommandBlockLogic asCommandBlock() {
+        return this;
     }
 
     @Override

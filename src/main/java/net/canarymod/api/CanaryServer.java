@@ -23,6 +23,7 @@ import net.canarymod.api.world.blocks.CanaryCommandBlock;
 import net.canarymod.chat.MessageReceiver;
 import net.canarymod.chat.ReceiverType;
 import net.canarymod.config.Configuration;
+import net.canarymod.exceptions.InvalidInstanceException;
 import net.canarymod.hook.command.ConsoleCommandHook;
 import net.canarymod.hook.system.PermissionCheckHook;
 import net.canarymod.logger.Logman;
@@ -481,6 +482,21 @@ public class CanaryServer implements Server {
     @Override
     public ReceiverType getReceiverType() {
         return ReceiverType.SERVER;
+    }
+
+    @Override
+    public Player asPlayer() {
+        throw new InvalidInstanceException("Server is not a MessageReceiver of the type: PLAYER");
+    }
+
+    @Override
+    public Server asServer() {
+        return this;
+    }
+
+    @Override
+    public CommandBlockLogic asCommandBlock() {
+        throw new InvalidInstanceException("Server is not a MessageReceiver of the type: COMMANDBLOCK");
     }
 
     @Override

@@ -5,11 +5,13 @@ import net.canarymod.Canary;
 import net.canarymod.MathHelp;
 import net.canarymod.ToolBox;
 import net.canarymod.api.CanaryEntityTracker;
+import net.canarymod.api.CommandBlockLogic;
 import net.canarymod.api.GameMode;
 import net.canarymod.api.NetServerHandler;
 import net.canarymod.api.PlayerListAction;
 import net.canarymod.api.PlayerListData;
 import net.canarymod.api.PlayerListEntry;
+import net.canarymod.api.Server;
 import net.canarymod.api.chat.CanaryChatComponent;
 import net.canarymod.api.chat.ChatComponent;
 import net.canarymod.api.entity.EntityType;
@@ -49,6 +51,7 @@ import net.canarymod.api.world.position.Location;
 import net.canarymod.chat.ChatFormat;
 import net.canarymod.chat.ReceiverType;
 import net.canarymod.config.Configuration;
+import net.canarymod.exceptions.InvalidInstanceException;
 import net.canarymod.hook.command.PlayerCommandHook;
 import net.canarymod.hook.player.ChatHook;
 import net.canarymod.hook.player.TeleportHook;
@@ -119,6 +122,21 @@ public class CanaryPlayer extends CanaryHuman implements Player {
     @Override
     public ReceiverType getReceiverType() {
         return ReceiverType.PLAYER;
+    }
+
+    @Override
+    public Player asPlayer() {
+        return this;
+    }
+
+    @Override
+    public Server asServer() {
+        throw new InvalidInstanceException("Player is not a MessageReceiver of the type: SERVER");
+    }
+
+    @Override
+    public CommandBlockLogic asCommandBlock() {
+        throw new InvalidInstanceException("Player is not a MessageReceiver of the type: COMMANDBLOCK");
     }
 
     /**

@@ -1,10 +1,13 @@
 package net.canarymod.api.world.blocks;
 
 import net.canarymod.Canary;
+import net.canarymod.api.Server;
 import net.canarymod.api.chat.ChatComponent;
+import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.chat.ReceiverType;
 import net.canarymod.config.Configuration;
+import net.canarymod.exceptions.InvalidInstanceException;
 import net.canarymod.hook.system.PermissionCheckHook;
 import net.canarymod.logger.Logman;
 import net.canarymod.user.Group;
@@ -144,6 +147,21 @@ public class CanaryCommandBlock extends CanaryTileEntity implements CommandBlock
     @Override
     public ReceiverType getReceiverType() {
         return ReceiverType.COMMANDBLOCK;
+    }
+
+    @Override
+    public Player asPlayer() {
+        throw new InvalidInstanceException("CommandBlock is not a MessageReceiver of the type: PLAYER");
+    }
+
+    @Override
+    public Server asServer() {
+        throw new InvalidInstanceException("CommandBlock is not a MessageReceiver of the type: SERVER");
+    }
+
+    @Override
+    public net.canarymod.api.CommandBlockLogic asCommandBlock() {
+        return this;
     }
 
     @Override
