@@ -1,6 +1,7 @@
 package net.minecraft.server.management;
 
 import com.google.common.collect.Lists;
+import net.canarymod.Canary;
 import net.canarymod.api.CanaryPlayerManager;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.Packet;
@@ -64,8 +65,13 @@ public class PlayerManager {
         }
         else {
             for (i1 = 0; i1 < this.e.size(); ++i1) {
-                playermanager_playerinstance = (PlayerManager.PlayerInstance)this.e.get(i1);
-                playermanager_playerinstance.b();
+                try {
+                    playermanager_playerinstance = (PlayerManager.PlayerInstance) this.e.get(i1);
+                    playermanager_playerinstance.b();
+                }
+                catch (NullPointerException npex){
+                    Canary.log.debug("NullPointer supressed in PlayerManager", npex);
+                }
             }
         }
 
