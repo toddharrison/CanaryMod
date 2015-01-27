@@ -23,6 +23,7 @@ import net.canarymod.config.Configuration;
 import net.canarymod.hook.player.BlockRightClickHook;
 import net.canarymod.hook.player.BookEditHook;
 import net.canarymod.hook.player.DisconnectionHook;
+import net.canarymod.hook.player.HeldItemChangeHook;
 import net.canarymod.hook.player.KickHook;
 import net.canarymod.hook.player.PlayerArmSwingHook;
 import net.canarymod.hook.player.PlayerIdleHook;
@@ -85,6 +86,7 @@ import net.minecraft.network.play.server.S00PacketKeepAlive;
 import net.minecraft.network.play.server.S02PacketChat;
 import net.minecraft.network.play.server.S07PacketRespawn;
 import net.minecraft.network.play.server.S08PacketPlayerPosLook;
+import net.minecraft.network.play.server.S09PacketHeldItemChange;
 import net.minecraft.network.play.server.S18PacketEntityTeleport;
 import net.minecraft.network.play.server.S23PacketBlockChange;
 import net.minecraft.network.play.server.S2FPacketSetSlot;
@@ -763,7 +765,13 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, IUpdatePlaye
     public void a(C09PacketHeldItemChange c09packethelditemchange) {
         PacketThreadUtil.a(c09packethelditemchange, this, this.b.u());
         if (c09packethelditemchange.a() >= 0 && c09packethelditemchange.a() < InventoryPlayer.i()) {
-            this.b.bg.c = c09packethelditemchange.a();
+            // CanaryMod: HeldItemChange Hook
+            HeldItemChangeHook heldItemChangeHook = (HeldItemChangeHook) new HeldItemChangeHook(this.b.getPlayer(), this.b.bg.c, c09packethelditemchange.a()).call();
+            this.b.bg.c = Math.min(Math.max(heldItemChangeHook.getNewValue(), 0), InventoryPlayer.i());
+            //update helditem
+            if (this.b.bg.c != c09packethelditemchange.a()){
+                a.a(new S09PacketHeldItemChange(this.b.bg.c));
+            }
             this.b.z();
         }
         else {
