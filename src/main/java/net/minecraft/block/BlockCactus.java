@@ -117,7 +117,7 @@ public class BlockCactus extends Block {
 
     public void a(World world, BlockPos blockpos, IBlockState iblockstate, Entity entity) {
         // CanaryMod: Damage (Craptus)
-        if (!new DamageHook(null, entity.getCanaryEntity(), new CanaryDamageSource(DamageSource.g), 1.0F).call().isCanceled()) {
+        if (!new DamageHook(null, entity.getCanaryEntity(), new CanaryDamageSource(DamageSource.h), 1.0F).call().isCanceled()) {
             entity.a(DamageSource.h, 1.0F);
         }
         //
