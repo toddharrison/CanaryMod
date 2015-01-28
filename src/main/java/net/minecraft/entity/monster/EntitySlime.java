@@ -1,5 +1,6 @@
 package net.minecraft.entity.monster;
 
+import net.canarymod.Canary;
 import net.canarymod.api.entity.living.monster.CanarySlime;
 import net.canarymod.api.entity.living.monster.Slime;
 import net.canarymod.hook.entity.SlimeSplitHook;
@@ -204,7 +205,7 @@ public class EntitySlime extends EntityLiving implements IMob {
 
     public void d(EntityPlayer entityplayer) {
         if (this.cg()) {
-            this.e(entityplayer);
+            this.e((EntityLivingBase)entityplayer); // CanaryMod: Cast Correction
         }
 
     }
