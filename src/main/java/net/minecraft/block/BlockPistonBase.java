@@ -87,6 +87,7 @@ public class BlockPistonBase extends Block {
             if ((new BlockPistonStructureHelper(world, blockpos, enumfacing, true)).a()) {
                 // CanaryMod: PistonExtend
                 if (!new PistonExtendHook(piston, moving).call().isCanceled()) {
+                    world.a(blockpos, iblockstate.a(b, Boolean.valueOf(true)), 2); // CanaryMod: Correct double extension calls
                     world.c(blockpos, this, 0, enumfacing.a());
                 }
                 //
