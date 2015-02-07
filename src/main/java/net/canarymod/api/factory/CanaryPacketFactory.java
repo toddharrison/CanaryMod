@@ -276,6 +276,7 @@ public class CanaryPacketFactory implements PacketFactory {
                 verify(id, "CloseWindow", 1, args, test(Integer.class, 1));
                 return new CanaryPacket(new S2EPacketCloseWindow((Integer)args[0]));
             case 0x2F: // 47
+                verify(id, "SetSlot", 3, args);
                 if (args[2] == null){
                     verify(id, "SetSlot", 3, args, test(Integer.class, 2));
                     return new CanaryPacket(new S2FPacketSetSlot((Integer)args[0], (Integer)args[1], null));
