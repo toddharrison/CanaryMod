@@ -145,6 +145,8 @@ public class CanaryEntityFactory implements EntityFactory {
                     return new EntityFireworkRocket(mcworld).getCanaryEntity();
                 case FURNACEMINECART:
                     return new EntityMinecartFurnace(mcworld).getCanaryEntity();
+                case GUARDIAN:
+                    return new EntityGuardian(mcworld).getCanaryEntity();
                 case GHAST:
                     return new EntityGhast(mcworld).getCanaryEntity();
                 case GIANTZOMBIE:

@@ -63,9 +63,9 @@
         </license>
     </licenses>
     <scm>
-        <connection>scm:git:git://github.com/CanaryModTeam/CanaryRecode.git</connection>
-        <url>https://github.com/CanaryModTeam/CanaryRecode</url>
-        <developerConnection>scm:git:git@github.com:CanaryModTeam/CanaryRecode.git</developerConnection>
+        <connection>scm:git:git://github.com/CanaryModTeam/CanaryMod.git</connection>
+        <url>https://github.com/CanaryModTeam/CanaryMod</url>
+        <developerConnection>scm:git:git@github.com:CanaryModTeam/CanaryMod.git</developerConnection>
     </scm>
     <repositories>
         <repository>
