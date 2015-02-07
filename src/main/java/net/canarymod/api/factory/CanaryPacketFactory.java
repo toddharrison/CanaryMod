@@ -276,8 +276,14 @@ public class CanaryPacketFactory implements PacketFactory {
                 verify(id, "CloseWindow", 1, args, test(Integer.class, 1));
                 return new CanaryPacket(new S2EPacketCloseWindow((Integer)args[0]));
             case 0x2F: // 47
-                verify(id, "SetSlot", 3, args, test(Integer.class, 2), test(CanaryItem.class, 1));
-                return new CanaryPacket(new S2FPacketSetSlot((Integer)args[0], (Integer)args[1], ((CanaryItem)args[2]).getHandle()));
+                verify(id, "SetSlot", 3, args);
+                if (args[2] == null){
+                    verify(id, "SetSlot", 3, args, test(Integer.class, 2));
+                    return new CanaryPacket(new S2FPacketSetSlot((Integer)args[0], (Integer)args[1], null));
+                } else {
+                    verify(id, "SetSlot", 3, args, test(Integer.class, 2), test(CanaryItem.class, 1));
+                    return new CanaryPacket(new S2FPacketSetSlot((Integer)args[0], (Integer)args[1], ((CanaryItem)args[2]).getHandle()));
+                }
             case 0x30: // 48
                 verify(id, "WindowItems", 2, args, test(Integer.class, 1), test(List.class, 1));
                 ArrayList<ItemStack> nmsItems = new ArrayList<ItemStack>();
