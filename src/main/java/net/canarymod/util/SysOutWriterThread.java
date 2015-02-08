@@ -16,8 +16,6 @@ import org.fusesource.jansi.Ansi.Color;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -90,7 +88,8 @@ public class SysOutWriterThread extends Thread {
 
                     try {
                         reader.drawLine();
-                    } catch (IOException e) {
+                    }
+                    catch (IOException e) {
                         reader.getCursorBuffer().clear();
                     }
                     reader.flush();
@@ -109,7 +108,8 @@ public class SysOutWriterThread extends Thread {
     private String replaceColours(String toProcess) throws IOException {
         if (!reader.getTerminal().isAnsiSupported()) {
             return ChatFormat.removeFormatting(toProcess);
-        } else {
+        }
+        else {
             Matcher matcher = colourPattern.matcher(toProcess);
             boolean result = matcher.find();
             if (result) {
@@ -122,7 +122,8 @@ public class SysOutWriterThread extends Thread {
                         replace = colourMap.get(match).getRight() ? replace.fgBright(colourMap.get(match).getLeft())
                                                                   : replace.fg(colourMap.get(match).getLeft());
                         replacement = replace.toString();
-                    } else if (attributeMap.containsKey(match)) {
+                    }
+                    else if (attributeMap.containsKey(match)) {
                         replacement = Ansi.ansi().a(attributeMap.get(match)).toString();
                     }
 
