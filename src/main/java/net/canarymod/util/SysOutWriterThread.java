@@ -16,6 +16,8 @@ import org.fusesource.jansi.Ansi.Color;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -78,7 +80,9 @@ public class SysOutWriterThread extends Thread {
                 if (this.reader == null) {
                     out.write(ChatFormat.removeFormatting(message).getBytes());
                     out.flush();
-                } else {
+                }
+                else {
+                    Thread.sleep(5);
                     reader.print(ConsoleReader.RESET_LINE + "");
                     reader.flush();
                     out.write(replaceColours(message).getBytes());
@@ -91,10 +95,13 @@ public class SysOutWriterThread extends Thread {
                     }
                     reader.flush();
                 }
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 // Don't use loggers here, since we're the logger.
                 System.err.println("Error while printing to ConsoleReader");
                 e.printStackTrace();
+            }
+            catch (InterruptedException ex) {
             }
         }
     }
