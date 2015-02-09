@@ -115,10 +115,10 @@ public class ServerCommandManager extends CommandHandler implements IAdminComman
             }
         }
 
-        // CanaryMod: Fix for MultiWorld
-        if (icommandsender != minecraftserver && default0.Q().b("logAdminCommands")) {
-            minecraftserver.a((IChatComponent)chatcomponenttranslation);
-        }
+        // CanaryMod: Always log the command feedback
+        //if (icommandsender != minecraftserver && default0.Q().b("logAdminCommands")) {
+        minecraftserver.a((IChatComponent)chatcomponenttranslation);
+        //}
 
         // CanaryMod: Fix for MultiWorld
         boolean flag1 = default0.Q().b("sendCommandFeedback");
