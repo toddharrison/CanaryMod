@@ -11,6 +11,12 @@ import net.canarymod.api.inventory.NativeCustomStorageInventory;
 import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.api.world.Chunk;
 import net.canarymod.api.world.World;
+import net.canarymod.api.world.blocks.BlockType;
+import net.canarymod.api.world.blocks.properties.BlockProperty;
+import net.minecraft.block.Block;
+import net.minecraft.block.properties.IProperty;
+
+import static net.canarymod.api.world.blocks.properties.CanaryBlockIntegerProperty.wrapAs;
 
 /**
  * Object Factory implementation
@@ -81,5 +87,18 @@ public class CanaryObjectFactory implements ObjectFactory {
     @Override
     public Chunk newChunk(World world, int x, int z) {
         return new net.minecraft.world.chunk.Chunk(((CanaryWorld) world).getHandle(), x, z).getCanaryChunk();
+    }
+
+    @Override
+    public <T extends BlockProperty> T getPropertyInstance(BlockType blockType, String propertyName) {
+        if (blockType != null && propertyName != null) {
+            for (Object nativeP : Block.b(blockType.getMachineName()).P().b().keySet()) {
+                BlockProperty property = wrapAs((IProperty)nativeP);
+                if (property.getName().equals(propertyName)) {
+                    return (T)property;
+                }
+            }
+        }
+        return null;
     }
 }

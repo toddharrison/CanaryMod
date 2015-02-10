@@ -1,6 +1,10 @@
 package net.canarymod.api.world.blocks.properties;
 
-import net.minecraft.block.properties.*;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.properties.PropertyInteger;
 
 import java.util.Collection;
 
@@ -50,7 +54,7 @@ public class CanaryBlockProperty implements BlockProperty {
             return new CanaryBlockEnumProperty((PropertyEnum)iproperty);
         }
         else if (iproperty instanceof PropertyInteger) {
-            return new CanaryBlockProperty((PropertyInteger)iproperty);
+            return new CanaryBlockIntegerProperty((PropertyInteger)iproperty);
         }
         return new CanaryBlockProperty(iproperty); // Unknown instance
     }
