@@ -20,32 +20,6 @@ import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.api.world.position.Location;
 import net.canarymod.api.world.position.Position;
 import net.canarymod.util.ObjectPool;
-import net.minecraft.block.BlockCarpet;
-import net.minecraft.block.BlockColored;
-import net.minecraft.block.BlockDirt;
-import net.minecraft.block.BlockDoublePlant;
-import net.minecraft.block.BlockFlower;
-import net.minecraft.block.BlockNewLeaf;
-import net.minecraft.block.BlockNewLog;
-import net.minecraft.block.BlockOldLeaf;
-import net.minecraft.block.BlockOldLog;
-import net.minecraft.block.BlockPlanks;
-import net.minecraft.block.BlockPrismarine;
-import net.minecraft.block.BlockQuartz;
-import net.minecraft.block.BlockRedSandstone;
-import net.minecraft.block.BlockSand;
-import net.minecraft.block.BlockSandStone;
-import net.minecraft.block.BlockSapling;
-import net.minecraft.block.BlockSilverfish;
-import net.minecraft.block.BlockSkull;
-import net.minecraft.block.BlockStainedGlass;
-import net.minecraft.block.BlockStainedGlassPane;
-import net.minecraft.block.BlockStone;
-import net.minecraft.block.BlockStoneBrick;
-import net.minecraft.block.BlockStoneSlab;
-import net.minecraft.block.BlockTallGrass;
-import net.minecraft.block.BlockWall;
-import net.minecraft.block.BlockWoodSlab;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockPos;
@@ -478,89 +452,7 @@ public class CanaryBlock implements Block {
 
     // This is until we can make a better BlockType
     private int convertPropertyTypeData(IBlockState state){
-        net.minecraft.block.Block nmsBlock = state.c();
-        if (nmsBlock instanceof BlockStone){
-            return ((Enum)state.b(BlockStone.a)).ordinal();
-        }
-        else if (nmsBlock instanceof BlockDirt){
-            return ((Enum)state.b(BlockDirt.a)).ordinal();
-        }
-        else if (nmsBlock instanceof BlockPlanks){
-            return ((Enum)state.b(BlockPlanks.a)).ordinal();
-        }
-        else if (nmsBlock instanceof BlockOldLeaf){
-            return ((Enum)state.b(BlockOldLeaf.P)).ordinal();
-        }
-        else if (nmsBlock instanceof BlockNewLeaf){
-            return ((Enum)state.b(BlockNewLeaf.P)).ordinal();
-        }
-        else if (nmsBlock instanceof BlockSapling){
-            return ((Enum)state.b(BlockSapling.a)).ordinal();
-        }
-        else if (nmsBlock instanceof BlockNewLog){
-            return ((Enum)state.b(BlockNewLog.b)).ordinal();
-        }
-        else if (nmsBlock instanceof BlockOldLog){
-            return ((Enum)state.b(BlockOldLog.b)).ordinal();
-        }
-        else if (nmsBlock instanceof BlockSand) {
-            return ((Enum)state.b(BlockSand.a)).ordinal();
-        }
-        else if (nmsBlock instanceof BlockSandStone){
-            return ((Enum)state.b(BlockSandStone.a)).ordinal();
-        }
-        else if (nmsBlock instanceof BlockTallGrass){
-            return ((Enum)state.b(BlockTallGrass.a)).ordinal();
-        }
-        else if(nmsBlock instanceof BlockColored){
-            return ((Enum)state.b(BlockColored.a)).ordinal();
-        }
-        else if (nmsBlock instanceof BlockFlower){
-            return ((Enum)state.b(((BlockFlower)state.c()).l())).ordinal();
-        }
-        else if (nmsBlock instanceof BlockStoneSlab){
-            return ((Enum)state.b(BlockStoneSlab.M)).ordinal();
-        }
-        else if (nmsBlock instanceof BlockStainedGlass){
-            return ((Enum)state.b(BlockStainedGlass.a)).ordinal();
-        }
-        else if (nmsBlock instanceof BlockStainedGlassPane){
-            return ((Enum)state.b(BlockStainedGlassPane.a)).ordinal();
-        }
-        else if (nmsBlock instanceof BlockSilverfish){
-            return ((Enum)state.b(BlockSilverfish.a)).ordinal();
-        }
-        else if (nmsBlock instanceof BlockStoneBrick){
-            return ((Enum)state.b(BlockStoneBrick.a)).ordinal();
-        }
-        else if (nmsBlock instanceof BlockWoodSlab){
-            return ((Enum)state.b(BlockWoodSlab.b)).ordinal();
-        }
-        else if (nmsBlock instanceof BlockWall){
-            return ((Enum)state.b(BlockWall.P)).ordinal();
-        }
-        else if (nmsBlock instanceof BlockSkull){
-            TileEntity tileEntity = getTileEntity();
-            if (tileEntity != null && tileEntity instanceof CanarySkull) {
-                return ((CanarySkull)tileEntity).getTileEntity().c();
-            }
-        }
-        else if (nmsBlock instanceof BlockQuartz){
-            return ((Enum)state.b(BlockQuartz.a)).ordinal();
-        }
-        else if (nmsBlock instanceof BlockPrismarine){
-            return ((Enum)state.b(BlockPrismarine.a)).ordinal();
-        }
-        else if (nmsBlock instanceof BlockCarpet){
-            return ((Enum)state.b(BlockCarpet.a)).ordinal();
-        }
-        else if (nmsBlock instanceof BlockDoublePlant){
-            return ((Enum)state.b(BlockDoublePlant.a)).ordinal();
-        }
-        else if (nmsBlock instanceof BlockRedSandstone) {
-            return ((Enum)state.b(BlockRedSandstone.a)).ordinal();
-        }
-        return 0;
+        return state.c().c(state);
     }
 
     @Override
