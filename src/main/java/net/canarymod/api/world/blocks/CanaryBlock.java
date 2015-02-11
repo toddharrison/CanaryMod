@@ -422,7 +422,7 @@ public class CanaryBlock implements Block {
             throw new NotYetImplementedException("CanaryBlock was formed missing the IBlockState, this is a bug and should be reported");
         }
         if(property instanceof CanaryBlockEnumProperty){
-            state = state.a(((CanaryBlockEnumProperty)property).getNative(), CanaryBlockEnumProperty.convertCanary((Enum)comparable, state.c()));
+            state = state.a(((CanaryBlockEnumProperty)property).getNative(), CanaryBlockEnumProperty.convertCanary((Enum)comparable));
         }
         else {
             state = state.a(((CanaryBlockProperty) property).getNative(), comparable);

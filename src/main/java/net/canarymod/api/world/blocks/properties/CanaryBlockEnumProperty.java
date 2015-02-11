@@ -132,14 +132,10 @@ public class CanaryBlockEnumProperty extends CanaryBlockProperty implements Bloc
 
     protected CanaryBlockEnumProperty(PropertyEnum property) {
         super(property);
-
     }
 
-    public boolean canApply(Comparable comparable){
-        if(!(comparable instanceof Enum)){
-            return false;
-        }
-        return super.canApply(convertCanary((Enum)comparable); // Block not needed
+    public boolean canApply(Comparable comparable) {
+        return comparable instanceof Enum && super.canApply(convertCanary((Enum)comparable));
     }
 
     public static Comparable convertNative(Enum oenum){
