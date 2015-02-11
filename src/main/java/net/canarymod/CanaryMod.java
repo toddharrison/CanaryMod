@@ -41,6 +41,7 @@ import org.apache.logging.log4j.core.config.LoggerConfig;
 public class CanaryMod extends Canary {
 
     private boolean isInitialised;
+
     /**
      * Creates a new CanaryMod
      */
@@ -71,6 +72,12 @@ public class CanaryMod extends Canary {
         this.scoreboardManager = new CanaryScoreboardManager();
 
         pluginManager.scanForPlugins();
+    }
+
+    /**
+     * For testing purposes only
+     */
+    public CanaryMod(Object testConstruction) {
     }
 
     /**

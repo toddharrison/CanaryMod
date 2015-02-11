@@ -128,6 +128,13 @@ public class CanaryBlock implements Block {
         this.type = BlockType.fromStringAndData(machineNameOfBlock(state.c()), convertPropertyTypeData(state));
     }
 
+    /**
+     * For testing purposes only
+     */
+    public CanaryBlock(IBlockState state) {
+        this.state = state;
+    }
+
     @Override
     public short getTypeId() {
         if (type != null) {

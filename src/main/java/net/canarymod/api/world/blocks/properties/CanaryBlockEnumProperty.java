@@ -19,6 +19,16 @@ import net.canarymod.api.world.blocks.properties.helpers.RedSandstoneProperties;
 import net.canarymod.api.world.blocks.properties.helpers.RedstoneComparatorProperties;
 import net.canarymod.api.world.blocks.properties.helpers.RedstoneWireProperties;
 import net.canarymod.api.world.blocks.properties.helpers.SandstoneProperties;
+import net.canarymod.api.world.blocks.properties.helpers.SilverfishProperties;
+import net.canarymod.api.world.blocks.properties.helpers.SlabProperties;
+import net.canarymod.api.world.blocks.properties.helpers.StairsProperties;
+import net.canarymod.api.world.blocks.properties.helpers.StoneBrickProperties;
+import net.canarymod.api.world.blocks.properties.helpers.StoneProperties;
+import net.canarymod.api.world.blocks.properties.helpers.StoneSlabNewProperties;
+import net.canarymod.api.world.blocks.properties.helpers.StoneSlabProperties;
+import net.canarymod.api.world.blocks.properties.helpers.TallGrassProperties;
+import net.canarymod.api.world.blocks.properties.helpers.TrapDoorProperties;
+import net.canarymod.api.world.blocks.properties.helpers.WallProperties;
 import net.canarymod.api.world.blocks.properties.helpers.WoodProperties;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBed;
@@ -90,6 +100,17 @@ public class CanaryBlockEnumProperty extends CanaryBlockProperty implements Bloc
         fill(builder, BlockRedstoneWire.EnumAttachPosition.values(), RedstoneWireProperties.AttachPosition.values());
         fill(builder, BlockRedSandstone.EnumType.values(), RedSandstoneProperties.Type.values());
         fill(builder, BlockSandStone.EnumType.values(), SandstoneProperties.Type.values());
+        fill(builder, BlockSilverfish.EnumType.values(), SilverfishProperties.Variant.values());
+        fill(builder, BlockSlab.EnumBlockHalf.values(), SlabProperties.Half.values());
+        fill(builder, BlockStairs.EnumHalf.values(), StairsProperties.Half.values());
+        fill(builder, BlockStairs.EnumShape.values(), StairsProperties.Shape.values());
+        fill(builder, BlockStoneBrick.EnumType.values(), StoneBrickProperties.Variant.values());
+        fill(builder, BlockStone.EnumType.values(), StoneProperties.Variant.values());
+        fill(builder, BlockStoneSlab.EnumType.values(), StoneSlabProperties.Variant.values());
+        fill(builder, BlockStoneSlabNew.EnumType.values(), StoneSlabNewProperties.Variant.values());
+        fill(builder, BlockTallGrass.EnumType.values(), TallGrassProperties.Variant.values());
+        fill(builder, BlockTrapDoor.DoorHalf.values(), TrapDoorProperties.Half.values());
+        fill(builder, BlockWall.EnumType.values(), WallProperties.Variant.values());
 
         nmscms = builder.build();
     }

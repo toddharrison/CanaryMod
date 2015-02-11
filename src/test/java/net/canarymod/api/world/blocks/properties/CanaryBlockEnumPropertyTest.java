@@ -1,10 +1,21 @@
 package net.canarymod.api.world.blocks.properties;
 
+import net.canarymod.Canary;
+import net.canarymod.CanaryMod;
 import net.canarymod.api.DyeColor;
+import net.canarymod.api.factory.CanaryFactory;
 import net.canarymod.api.world.blocks.BlockFace;
+import net.canarymod.api.world.blocks.CanaryBlock;
+import net.canarymod.api.world.blocks.properties.helpers.StoneProperties;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Bootstrap;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.EnumFacing;
 import org.junit.Test;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 
 import static net.canarymod.api.world.blocks.properties.CanaryBlockEnumProperty.convertCanary;
 import static net.canarymod.api.world.blocks.properties.CanaryBlockEnumProperty.convertNative;
@@ -75,5 +86,28 @@ public class CanaryBlockEnumPropertyTest {
         assertEquals("GREEN MISMATCH", EnumDyeColor.GREEN, convertCanary(DyeColor.GREEN, null));
         assertEquals("RED MISMATCH", EnumDyeColor.RED, convertCanary(DyeColor.RED, null));
         assertEquals("BLACK MISMATCH", EnumDyeColor.BLACK, convertCanary(DyeColor.BLACK, null));
+    }
+
+    @Test
+    public void testStatePropertyConversion() throws NoSuchFieldException, IllegalAccessException, NoSuchMethodException, InvocationTargetException, InstantiationException {
+        Bootstrap.c(); // Need to run bootstrap before attempting to test any blocks
+        enableFactory(); // darkdiplomat wizardry
+
+        CanaryBlock testBlock = new CanaryBlock(Blocks.b.P());
+        StoneProperties.applyVariant(testBlock, StoneProperties.Variant.ANDESITE);
+        assertEquals(StoneProperties.Variant.ANDESITE, testBlock.getValue(StoneProperties.variant));
+    }
+
+    private static void enableFactory() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchFieldException {
+        Constructor<CanaryMod> cm = CanaryMod.class.getConstructor(Object.class);
+        cm.setAccessible(true);
+        CanaryMod canaryMod = cm.newInstance(new Object());
+
+        Field factory = Canary.class.getDeclaredField("factory");
+        factory.setAccessible(true);
+        factory.set(canaryMod, new CanaryFactory());
+        Field instance = Canary.class.getDeclaredField("instance");
+        instance.setAccessible(true);
+        instance.set(canaryMod, canaryMod);
     }
 }
