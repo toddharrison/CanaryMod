@@ -3,38 +3,8 @@ package net.canarymod.api.world.blocks.properties;
 import com.google.common.collect.ImmutableBiMap;
 import net.canarymod.api.DyeColor;
 import net.canarymod.api.world.blocks.BlockFace;
-import net.canarymod.api.world.blocks.properties.helpers.BedProperties;
-import net.canarymod.api.world.blocks.properties.helpers.DirtProperties;
-import net.canarymod.api.world.blocks.properties.helpers.DoorProperties;
-import net.canarymod.api.world.blocks.properties.helpers.DoublePlantProperties;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockBed;
-import net.minecraft.block.BlockDirt;
-import net.minecraft.block.BlockDoor;
-import net.minecraft.block.BlockDoublePlant;
-import net.minecraft.block.BlockFlower;
-import net.minecraft.block.BlockHugeMushroom;
-import net.minecraft.block.BlockLever;
-import net.minecraft.block.BlockLog;
-import net.minecraft.block.BlockPistonExtension;
-import net.minecraft.block.BlockPlanks;
-import net.minecraft.block.BlockPrismarine;
-import net.minecraft.block.BlockQuartz;
-import net.minecraft.block.BlockRail;
-import net.minecraft.block.BlockRedSandstone;
-import net.minecraft.block.BlockRedstoneComparator;
-import net.minecraft.block.BlockSand;
-import net.minecraft.block.BlockSandStone;
-import net.minecraft.block.BlockSilverfish;
-import net.minecraft.block.BlockSlab;
-import net.minecraft.block.BlockStairs;
-import net.minecraft.block.BlockStone;
-import net.minecraft.block.BlockStoneBrick;
-import net.minecraft.block.BlockStoneSlab;
-import net.minecraft.block.BlockStoneSlabNew;
-import net.minecraft.block.BlockTallGrass;
-import net.minecraft.block.BlockTrapDoor;
-import net.minecraft.block.BlockWall;
+import net.canarymod.api.world.blocks.properties.helpers.*;
+import net.minecraft.block.*;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.EnumFacing;
@@ -50,22 +20,31 @@ public class CanaryBlockEnumProperty extends CanaryBlockProperty implements Bloc
     static {
         ImmutableBiMap.Builder<Enum, Enum> builder = ImmutableBiMap.builder();
 
-        fill(builder, EnumFacing.values(), BlockFace.values());
-        fill(builder, EnumDyeColor.values(), BlockFace.values());
+        fillMinus1(builder, EnumFacing.values(), BlockFace.values()); // Remove UNKNOWN
+        fillMinus1(builder, EnumDyeColor.values(), DyeColor.values()); // Remove CUSTOM
         fill(builder, BlockBed.EnumPartType.values(), BedProperties.Half.values());
         fill(builder, BlockDirt.DirtType.values(), DirtProperties.Variant.values());
         fill(builder, BlockDoor.EnumDoorHalf.values(), DoorProperties.Half.values());
         fill(builder, BlockDoor.EnumHingePosition.values(), DoorProperties.HingePosition.values());
         fill(builder, BlockDoublePlant.EnumBlockHalf.values(), DoublePlantProperties.Half.values());
         fill(builder, BlockDoublePlant.EnumPlantType.values(), DoublePlantProperties.Variant.values());
-
-        //fill(builder, BlockFlower.EnumFlowerColor.values(), null);
+        fill(builder, BlockFlower.EnumFlowerType.values(), FlowerProperties.Type.values());
+        fill(builder, BlockFlowerPot.EnumFlowerType.values(), FlowerPotProperties.Contents.values());
 
         nmscms = builder.build();
     }
 
     private static void fill(ImmutableBiMap.Builder<Enum, Enum> map, Enum[] a, Enum[] b) {
         if (a.length != b.length) {
+            throw new IllegalArgumentException("Length mismatch");
+        }
+        for (int index = 0; index < a.length; index++) {
+            map.put(a[index], b[index]);
+        }
+    }
+
+    private static void fillMinus1(ImmutableBiMap.Builder<Enum, Enum> map, Enum[] a, Enum[] b) {
+        if (a.length != b.length - 1) {
             throw new IllegalArgumentException("Length mismatch");
         }
         for (int index = 0; index < a.length; index++) {
@@ -198,8 +177,8 @@ public class CanaryBlockEnumProperty extends CanaryBlockProperty implements Bloc
 
     public static Comparable convertCanary(Enum oenum, Block block){
         // New Properties converter
-        if (nmscms.containsKey(oenum)) {
-            return nmscms.get(oenum);
+        if (nmscms.inverse().containsKey(oenum)) {
+            return nmscms.inverse().get(oenum);
         }
         //
 
