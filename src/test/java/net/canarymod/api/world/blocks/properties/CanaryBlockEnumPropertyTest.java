@@ -40,12 +40,12 @@ public class CanaryBlockEnumPropertyTest {
 
     @Test
     public void testBlockFaceMappingInverse() {
-        assertEquals("UP TOP MISMATCH", EnumFacing.UP, convertCanary(BlockFace.TOP, null));
-        assertEquals("DOWN BOTTOM MISMATCH", EnumFacing.DOWN, convertCanary(BlockFace.BOTTOM, null));
-        assertEquals("NORTH MISMATCH", EnumFacing.NORTH, convertCanary(BlockFace.NORTH, null));
-        assertEquals("SOUTH MISMATCH", EnumFacing.SOUTH, convertCanary(BlockFace.SOUTH, null));
-        assertEquals("EAST MISMATCH", EnumFacing.EAST, convertCanary(BlockFace.EAST, null));
-        assertEquals("WEST MISMATCH", EnumFacing.WEST, convertCanary(BlockFace.WEST, null));
+        assertEquals("UP TOP MISMATCH", EnumFacing.UP, convertCanary(BlockFace.TOP));
+        assertEquals("DOWN BOTTOM MISMATCH", EnumFacing.DOWN, convertCanary(BlockFace.BOTTOM));
+        assertEquals("NORTH MISMATCH", EnumFacing.NORTH, convertCanary(BlockFace.NORTH));
+        assertEquals("SOUTH MISMATCH", EnumFacing.SOUTH, convertCanary(BlockFace.SOUTH));
+        assertEquals("EAST MISMATCH", EnumFacing.EAST, convertCanary(BlockFace.EAST));
+        assertEquals("WEST MISMATCH", EnumFacing.WEST, convertCanary(BlockFace.WEST));
     }
 
     @Test
@@ -70,22 +70,22 @@ public class CanaryBlockEnumPropertyTest {
 
     @Test
     public void testDyeColorMappingInverse() {
-        assertEquals("WHITE MISMATCH", EnumDyeColor.WHITE, convertCanary(DyeColor.WHITE, null));
-        assertEquals("ORANGE MISMATCH", EnumDyeColor.ORANGE, convertCanary(DyeColor.ORANGE, null));
-        assertEquals("MAGENTA MISMATCH", EnumDyeColor.MAGENTA, convertCanary(DyeColor.MAGENTA, null));
-        assertEquals("LIGHT BLUE MISMATCH", EnumDyeColor.LIGHT_BLUE, convertCanary(DyeColor.LIGHT_BLUE, null));
-        assertEquals("YELLOW MISMATCH", EnumDyeColor.YELLOW, convertCanary(DyeColor.YELLOW, null));
-        assertEquals("LIME MISMATCH", EnumDyeColor.LIME, convertCanary(DyeColor.LIME, null));
-        assertEquals("PINK MISMATCH", EnumDyeColor.PINK, convertCanary(DyeColor.PINK, null));
-        assertEquals("GRAY MISMATCH", EnumDyeColor.GRAY, convertCanary(DyeColor.GRAY, null));
-        assertEquals("LIGHT GRAY MISMATCH", EnumDyeColor.SILVER, convertCanary(DyeColor.LIGHT_GRAY, null));
-        assertEquals("CYAN MISMATCH", EnumDyeColor.CYAN, convertCanary(DyeColor.CYAN, null));
-        assertEquals("PURPLE MISMATCH", EnumDyeColor.PURPLE, convertCanary(DyeColor.PURPLE, null));
-        assertEquals("BLUE MISMATCH", EnumDyeColor.BLUE, convertCanary(DyeColor.BLUE, null));
-        assertEquals("BROWN MISMATCH", EnumDyeColor.BROWN, convertCanary(DyeColor.BROWN, null));
-        assertEquals("GREEN MISMATCH", EnumDyeColor.GREEN, convertCanary(DyeColor.GREEN, null));
-        assertEquals("RED MISMATCH", EnumDyeColor.RED, convertCanary(DyeColor.RED, null));
-        assertEquals("BLACK MISMATCH", EnumDyeColor.BLACK, convertCanary(DyeColor.BLACK, null));
+        assertEquals("WHITE MISMATCH", EnumDyeColor.WHITE, convertCanary(DyeColor.WHITE));
+        assertEquals("ORANGE MISMATCH", EnumDyeColor.ORANGE, convertCanary(DyeColor.ORANGE));
+        assertEquals("MAGENTA MISMATCH", EnumDyeColor.MAGENTA, convertCanary(DyeColor.MAGENTA));
+        assertEquals("LIGHT BLUE MISMATCH", EnumDyeColor.LIGHT_BLUE, convertCanary(DyeColor.LIGHT_BLUE));
+        assertEquals("YELLOW MISMATCH", EnumDyeColor.YELLOW, convertCanary(DyeColor.YELLOW));
+        assertEquals("LIME MISMATCH", EnumDyeColor.LIME, convertCanary(DyeColor.LIME));
+        assertEquals("PINK MISMATCH", EnumDyeColor.PINK, convertCanary(DyeColor.PINK));
+        assertEquals("GRAY MISMATCH", EnumDyeColor.GRAY, convertCanary(DyeColor.GRAY));
+        assertEquals("LIGHT GRAY MISMATCH", EnumDyeColor.SILVER, convertCanary(DyeColor.LIGHT_GRAY));
+        assertEquals("CYAN MISMATCH", EnumDyeColor.CYAN, convertCanary(DyeColor.CYAN));
+        assertEquals("PURPLE MISMATCH", EnumDyeColor.PURPLE, convertCanary(DyeColor.PURPLE));
+        assertEquals("BLUE MISMATCH", EnumDyeColor.BLUE, convertCanary(DyeColor.BLUE));
+        assertEquals("BROWN MISMATCH", EnumDyeColor.BROWN, convertCanary(DyeColor.BROWN));
+        assertEquals("GREEN MISMATCH", EnumDyeColor.GREEN, convertCanary(DyeColor.GREEN));
+        assertEquals("RED MISMATCH", EnumDyeColor.RED, convertCanary(DyeColor.RED));
+        assertEquals("BLACK MISMATCH", EnumDyeColor.BLACK, convertCanary(DyeColor.BLACK));
     }
 
     @Test
