@@ -12,6 +12,13 @@ import net.canarymod.api.world.blocks.properties.helpers.FlowerProperties;
 import net.canarymod.api.world.blocks.properties.helpers.HugeMushroomProperties;
 import net.canarymod.api.world.blocks.properties.helpers.LeverProperties;
 import net.canarymod.api.world.blocks.properties.helpers.LogProperties;
+import net.canarymod.api.world.blocks.properties.helpers.PrismarineProperties;
+import net.canarymod.api.world.blocks.properties.helpers.QuartzProperties;
+import net.canarymod.api.world.blocks.properties.helpers.RailProperties;
+import net.canarymod.api.world.blocks.properties.helpers.RedSandstoneProperties;
+import net.canarymod.api.world.blocks.properties.helpers.RedstoneComparatorProperties;
+import net.canarymod.api.world.blocks.properties.helpers.RedstoneWireProperties;
+import net.canarymod.api.world.blocks.properties.helpers.SandstoneProperties;
 import net.canarymod.api.world.blocks.properties.helpers.WoodProperties;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBed;
@@ -28,8 +35,10 @@ import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.BlockPrismarine;
 import net.minecraft.block.BlockQuartz;
 import net.minecraft.block.BlockRail;
+import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.BlockRedSandstone;
 import net.minecraft.block.BlockRedstoneComparator;
+import net.minecraft.block.BlockRedstoneWire;
 import net.minecraft.block.BlockSand;
 import net.minecraft.block.BlockSandStone;
 import net.minecraft.block.BlockSilverfish;
@@ -74,6 +83,13 @@ public class CanaryBlockEnumProperty extends CanaryBlockProperty implements Bloc
         fill(builder, BlockLever.EnumOrientation.values(), LeverProperties.Orientation.values());
         fill(builder, BlockLog.EnumAxis.values(), LogProperties.Axis.values());
         fill(builder, BlockPlanks.EnumType.values(), WoodProperties.Variant.values());
+        fill(builder, BlockPrismarine.EnumType.values(), PrismarineProperties.Variant.values());
+        fill(builder, BlockQuartz.EnumType.values(), QuartzProperties.Variant.values());
+        fill(builder, BlockRailBase.EnumRailDirection.values(), RailProperties.Direction.values());
+        fill(builder, BlockRedstoneComparator.Mode.values(), RedstoneComparatorProperties.Mode.values());
+        fill(builder, BlockRedstoneWire.EnumAttachPosition.values(), RedstoneWireProperties.AttachPosition.values());
+        fill(builder, BlockRedSandstone.EnumType.values(), RedSandstoneProperties.Type.values());
+        fill(builder, BlockSandStone.EnumType.values(), SandstoneProperties.Type.values());
 
         nmscms = builder.build();
     }

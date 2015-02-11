@@ -20,7 +20,11 @@ import net.minecraft.util.IStringSerializable;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.Iterator;
+import java.util.Random;
+import java.util.Set;
 
 public class BlockRedstoneWire extends Block {
 
@@ -382,7 +386,7 @@ public class BlockRedstoneWire extends Block {
         return new BlockState(this, new IProperty[]{ a, b, M, N, O });
     }
 
-    static enum EnumAttachPosition implements IStringSerializable {
+    public static enum EnumAttachPosition implements IStringSerializable { // CanaryMod: package private => public
 
         UP("UP", 0, "up"),
         SIDE("SIDE", 1, "side"),
