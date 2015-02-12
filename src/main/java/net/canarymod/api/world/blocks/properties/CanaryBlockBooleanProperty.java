@@ -3,7 +3,9 @@ package net.canarymod.api.world.blocks.properties;
 import net.minecraft.block.properties.PropertyBool;
 
 /**
- * Created by darkdiplomat on 10/7/14.
+ * PropertyBool wrapper implementation
+ *
+ * @author Jason Jones (darkdiplomat)
  */
 public class CanaryBlockBooleanProperty extends CanaryBlockProperty implements BlockBooleanProperty {
 

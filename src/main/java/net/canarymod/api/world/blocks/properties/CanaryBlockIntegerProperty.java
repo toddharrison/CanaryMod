@@ -3,7 +3,7 @@ package net.canarymod.api.world.blocks.properties;
 import net.minecraft.block.properties.PropertyInteger;
 
 /**
- * PropertyInteger wrapper
+ * PropertyInteger wrapper implementation
  *
  * @author Jason Jones (darkdiplomat)
  */

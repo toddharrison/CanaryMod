@@ -77,7 +77,7 @@ public class CanaryMod extends Canary {
     /**
      * For testing purposes only
      */
-    public CanaryMod(Object testConstruction) {
+    private CanaryMod(Object testConstruction) {
     }
 
     /**

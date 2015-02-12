@@ -28,38 +28,4 @@ public class CanaryBlockDirectionProperty extends CanaryBlockEnumProperty implem
         }
         return getAllowedValues().contains(facing);
     }
-
-    public static EnumFacing convertCanary(BlockFace blockFace) {
-        switch (blockFace) {
-            case NORTH:
-                return EnumFacing.NORTH;
-            case SOUTH:
-                return EnumFacing.SOUTH;
-            case EAST:
-                return EnumFacing.EAST;
-            case WEST:
-                return EnumFacing.WEST;
-            case BOTTOM:
-                return EnumFacing.DOWN;
-            default:
-                return EnumFacing.UP;
-        }
-    }
-
-    public static BlockFace convertNative(EnumFacing enumfacing) {
-        switch (enumfacing) {
-            case NORTH:
-                return BlockFace.NORTH;
-            case SOUTH:
-                return BlockFace.SOUTH;
-            case EAST:
-                return BlockFace.EAST;
-            case WEST:
-                return BlockFace.WEST;
-            case DOWN:
-                return BlockFace.BOTTOM;
-            default:
-                return BlockFace.TOP;
-        }
-    }
 }
