@@ -32,8 +32,7 @@ import java.util.Random;
 public class CanaryBlock implements Block {
     private final static Random rndm = new Random(); // Passed to the idDropped method
     private final static ObjectPool<BlockPos, CanaryBlock> blockPool = new ObjectPool<BlockPos, CanaryBlock>(25000, 25000, 105000000); // default: 105000000, profiler timeout: 305000000
-    protected short data; // going away
-
+    protected short data;
     protected IBlockState state;
     protected Position position;
     protected World world;
@@ -99,7 +98,7 @@ public class CanaryBlock implements Block {
         this.world = world;
         this.status = status;
 
-        this.type = BlockType.fromStringAndData(machineNameOfBlock(state.c()), convertPropertyTypeData(state));
+        this.type = BlockStateMapper.getTypeFromState(state);
     }
 
     /**
@@ -136,9 +135,13 @@ public class CanaryBlock implements Block {
 
     @Override
     public short getData() {
-        return type.getData();
+        return (short) convertPropertyTypeData(state); // Actual data could be different from typed data
     }
 
+    /**
+     * Setting a data value is bound to produce unexpected results
+     */
+    @Deprecated
     @Override
     public void setData(short data) {
         this.type = BlockType.fromStringAndData(type.getMachineName(), data);
@@ -451,7 +454,7 @@ public class CanaryBlock implements Block {
     }
 
     // This is until we can make a better BlockType
-    private int convertPropertyTypeData(IBlockState state){
+    public int convertPropertyTypeData(IBlockState state){
         return state.c().c(state);
     }
 

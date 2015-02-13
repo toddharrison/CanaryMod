@@ -94,7 +94,7 @@ public class CanaryObjectFactory implements ObjectFactory {
         if (blockType != null && propertyName != null) {
             for (Object nativeP : Block.b(blockType.getMachineName()).P().b().keySet()) {
                 BlockProperty property = wrapAs((IProperty)nativeP);
-                if (property.getName().equals(propertyName)) {
+                if (propertyName.equals(property.getName())) {
                     return (T)property;
                 }
             }
