@@ -317,7 +317,8 @@ public class CanaryWorldManager implements WorldManager {
                 if (!world.getPlayerList().isEmpty()) {
                     if (force) {
                         for (Player p : world.getPlayerList()) {
-                            p.kick("Server scheduled world shutdown");
+                            p.notice("Server scheduled world shutdown, You have been transported back to the default world.");
+                            p.teleportTo(Canary.getServer().getDefaultWorld().getSpawnLocation());
                         }
                     }
                     else {
