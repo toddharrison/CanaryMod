@@ -6,7 +6,9 @@ import net.canarymod.api.world.blocks.BlockFace;
 import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.blocks.CanaryBlock;
 import net.canarymod.api.world.blocks.properties.helpers.ColoredBlockProperties;
+import net.canarymod.api.world.blocks.properties.helpers.LogProperties;
 import net.canarymod.api.world.blocks.properties.helpers.StoneProperties;
+import net.canarymod.api.world.blocks.properties.helpers.WoodProperties;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Bootstrap;
 import net.minecraft.item.EnumDyeColor;
@@ -97,5 +99,9 @@ public class CanaryBlockEnumPropertyTest {
         ColoredBlockProperties.applyColor(testBlock, DyeColor.BLACK);
         BlockType type = BlockStateMapper.getTypeFromState(testBlock.getNativeState());
         assertEquals(BlockType.BlackWool, type);
+
+        testBlock = new CanaryBlock(Blocks.s.P());
+        LogProperties.applyVariant(testBlock, WoodProperties.Variant.DARK_OAK);
+        LogProperties.applyVariant(testBlock, WoodProperties.Variant.ACACIA);
     }
 }

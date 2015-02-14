@@ -24,6 +24,7 @@ import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.blocks.CanaryBlock;
 import net.canarymod.api.world.blocks.Chest;
 import net.canarymod.api.world.blocks.TileEntity;
+import net.canarymod.api.world.blocks.properties.BlockStateMapper;
 import net.canarymod.api.world.effects.AuxiliarySoundEffect;
 import net.canarymod.api.world.effects.Particle;
 import net.canarymod.api.world.effects.SoundEffect;
@@ -287,13 +288,10 @@ public class CanaryWorld implements World {
 
     @Override
     public void setBlockAt(int x, int y, int z, BlockType blockType) {
-        BlockPos blockpos = new BlockPos(x, y, z);
-        // Set the block
-        world.a(blockpos, net.minecraft.block.Block.b(blockType.getMachineName()).P(), 0);
-        // Notify clients (markBlockNeedsUpdate)
-        world.h(blockpos);
+        CanaryBlock.getPooledBlock(BlockStateMapper.getStateForType(blockType), new BlockPos(x, y, z), this.world).update();
     }
 
+    @Deprecated
     @Override
     public void setDataAt(int x, int y, int z, short data) {
         // FIXME: Unclear how that is supported now

@@ -106,6 +106,7 @@ public class CanaryBlock implements Block {
      */
     public CanaryBlock(IBlockState state) {
         this.state = state;
+        this.type = BlockStateMapper.getTypeFromState(state);
     }
 
     @Override
@@ -453,7 +454,6 @@ public class CanaryBlock implements Block {
         this.state = state;
     }
 
-    // This is until we can make a better BlockType
     public int convertPropertyTypeData(IBlockState state){
         return state.c().c(state);
     }
