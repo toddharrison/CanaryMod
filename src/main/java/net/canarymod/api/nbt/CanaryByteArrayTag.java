@@ -46,7 +46,7 @@ public class CanaryByteArrayTag extends CanaryBaseTag<ByteArrayTag> implements B
         if (value == null || value.length <= 0) {
             return;
         }
-
+        getHandle().b = value;
     }
 
     /**
