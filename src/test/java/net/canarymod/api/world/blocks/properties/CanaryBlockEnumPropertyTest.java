@@ -1,16 +1,7 @@
 package net.canarymod.api.world.blocks.properties;
 
-import net.canarymod.CanaryModTest;
 import net.canarymod.api.DyeColor;
 import net.canarymod.api.world.blocks.BlockFace;
-import net.canarymod.api.world.blocks.BlockType;
-import net.canarymod.api.world.blocks.CanaryBlock;
-import net.canarymod.api.world.blocks.properties.helpers.ColoredBlockProperties;
-import net.canarymod.api.world.blocks.properties.helpers.LogProperties;
-import net.canarymod.api.world.blocks.properties.helpers.StoneProperties;
-import net.canarymod.api.world.blocks.properties.helpers.WoodProperties;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Bootstrap;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.EnumFacing;
 import org.junit.Test;
@@ -86,22 +77,4 @@ public class CanaryBlockEnumPropertyTest {
         assertEquals("BLACK MISMATCH", EnumDyeColor.BLACK, convertCanary(DyeColor.BLACK));
     }
 
-    @Test
-    public void testStatePropertyConversion() throws Exception {
-        Bootstrap.c(); // Need to run bootstrap before attempting to test any blocks
-        CanaryModTest.enableFactories(); // darkdiplomat wizardry
-
-        CanaryBlock testBlock = new CanaryBlock(Blocks.b.P());
-        StoneProperties.applyVariant(testBlock, StoneProperties.Variant.ANDESITE);
-        assertEquals(StoneProperties.Variant.ANDESITE, testBlock.getValue(StoneProperties.variant));
-
-        testBlock = new CanaryBlock(Blocks.L.P());
-        ColoredBlockProperties.applyColor(testBlock, DyeColor.BLACK);
-        BlockType type = BlockStateMapper.getTypeFromState(testBlock.getNativeState());
-        assertEquals(BlockType.BlackWool, type);
-
-        testBlock = new CanaryBlock(Blocks.s.P());
-        LogProperties.applyVariant(testBlock, WoodProperties.Variant.DARK_OAK);
-        LogProperties.applyVariant(testBlock, WoodProperties.Variant.ACACIA);
-    }
 }

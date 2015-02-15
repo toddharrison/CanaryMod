@@ -15,6 +15,9 @@ import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.blocks.properties.BlockProperty;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
+import net.visualillusionsent.utils.Verify;
+
+import java.text.MessageFormat;
 
 import static net.canarymod.api.world.blocks.properties.CanaryBlockIntegerProperty.wrapAs;
 
@@ -91,14 +94,17 @@ public class CanaryObjectFactory implements ObjectFactory {
 
     @Override
     public <T extends BlockProperty> T getPropertyInstance(BlockType blockType, String propertyName) {
-        if (blockType != null && propertyName != null) {
-            for (Object nativeP : Block.b(blockType.getMachineName()).P().b().keySet()) {
-                BlockProperty property = wrapAs((IProperty)nativeP);
-                if (propertyName.equals(property.getName())) {
-                    return (T)property;
-                }
+        Verify.notNull(blockType, "BlockType blockType");
+        Verify.notNull(propertyName, "String propertyName");
+
+        for (Object nativeP : Block.b(blockType.getMachineName()).P().b().keySet()) {
+            BlockProperty property = wrapAs((IProperty)nativeP);
+            if (propertyName.equals(property.getName())) {
+                return (T)property;
             }
         }
-        return null;
+
+        // Specificaly intended to let us know we messed something up during updates
+        throw new RuntimeException(MessageFormat.format("Request for an invalid BlockProperty instance has occured. Type:{0} Property:{1}", blockType, propertyName));
     }
 }
