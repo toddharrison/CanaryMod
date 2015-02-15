@@ -50,16 +50,16 @@ public final class PortalReconstructJob extends ServerTask {
         portalBlocks.add(new Integer[]{ portalX, portalY - 2, portalZ, portalId });
         portalBlocks.add(new Integer[]{ portalX + portalXOffset, portalY - 2, portalZ + portalZOffset, portalId });
 
-        portalBlocks.add(new Integer[]{ portalX, portalY + 1, portalZ, obsidianId, 0 });
-        portalBlocks.add(new Integer[]{ portalX + portalXOffset, portalY + 1, portalZ + portalZOffset, obsidianId, 0 });
-        portalBlocks.add(new Integer[]{ portalX + portalXOffset * 2, portalY, portalZ + portalZOffset * 2, obsidianId, 0 });
-        portalBlocks.add(new Integer[]{ portalX + portalXOffset * 2, portalY - 1, portalZ + portalZOffset * 2, obsidianId, 0 });
-        portalBlocks.add(new Integer[]{ portalX + portalXOffset * 2, portalY - 2, portalZ + portalZOffset * 2, obsidianId, 0 });
-        portalBlocks.add(new Integer[]{ portalX - portalXOffset, portalY, portalZ - portalZOffset, obsidianId, 0 });
-        portalBlocks.add(new Integer[]{ portalX - portalXOffset, portalY - 1, portalZ - portalZOffset, obsidianId, 0 });
-        portalBlocks.add(new Integer[]{ portalX - portalXOffset, portalY - 2, portalZ - portalZOffset, obsidianId, 0 });
+        portalBlocks.add(new Integer[]{ portalX, portalY + 1, portalZ, obsidianId });
+        portalBlocks.add(new Integer[]{ portalX + portalXOffset, portalY + 1, portalZ + portalZOffset, obsidianId });
+        portalBlocks.add(new Integer[]{ portalX + portalXOffset * 2, portalY, portalZ + portalZOffset * 2, obsidianId });
+        portalBlocks.add(new Integer[]{ portalX + portalXOffset * 2, portalY - 1, portalZ + portalZOffset * 2, obsidianId });
+        portalBlocks.add(new Integer[]{ portalX + portalXOffset * 2, portalY - 2, portalZ + portalZOffset * 2, obsidianId });
+        portalBlocks.add(new Integer[]{ portalX - portalXOffset, portalY, portalZ - portalZOffset, obsidianId });
+        portalBlocks.add(new Integer[]{ portalX - portalXOffset, portalY - 1, portalZ - portalZOffset, obsidianId });
+        portalBlocks.add(new Integer[]{ portalX - portalXOffset, portalY - 2, portalZ - portalZOffset, obsidianId });
         portalBlocks.add(new Integer[]{ portalX, portalY - 3, portalZ, obsidianId, 0 });
-        portalBlocks.add(new Integer[]{ portalX + portalXOffset, portalY - 3, portalZ + portalZOffset, obsidianId, 0 });
+        portalBlocks.add(new Integer[]{ portalX + portalXOffset, portalY - 3, portalZ + portalZOffset, obsidianId });
     }
 
     @Override
