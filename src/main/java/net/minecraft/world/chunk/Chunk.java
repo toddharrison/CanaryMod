@@ -3,7 +3,11 @@ package net.minecraft.world.chunk;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Queues;
+import net.canarymod.PortalReconstructJob;
 import net.canarymod.api.world.CanaryChunk;
+import net.canarymod.api.world.blocks.CanaryBlock;
+import net.canarymod.hook.world.PortalDestroyHook;
+import net.canarymod.tasks.ServerTaskManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -491,7 +495,7 @@ public class Chunk {
         return this.g(blockpos.n() & 15, blockpos.o(), blockpos.p() & 15);
     }
 
-    public IBlockState a(BlockPos blockpos, IBlockState iblockstate) {
+    public IBlockState a(BlockPos blockpos, IBlockState iblockstate, boolean checkPortal) { // CanaryMod: Signature change, boolean checkPortal
         int i0 = blockpos.n() & 15;
         int i1 = blockpos.o();
         int i2 = blockpos.p() & 15;
@@ -508,6 +512,12 @@ public class Chunk {
             return null;
         }
         else {
+            // CanaryMod: Start - check if removed block is portal block
+            if (checkPortal) {
+                PortalReconstructJob.doPortalCheck(this, i0, i1, i2);
+            }
+            // CanaryMod: End - check if removed block is portal block0.
+
             Block block = iblockstate.c();
             Block block1 = iblockstate1.c();
             ExtendedBlockStorage extendedblockstorage = this.d[i1 >> 4];

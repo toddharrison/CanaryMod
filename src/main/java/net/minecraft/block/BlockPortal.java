@@ -82,10 +82,10 @@ public class BlockPortal extends BlockBreakable {
         BlockPortal.Size blockportal_size = new BlockPortal.Size(world, blockpos, EnumFacing.Axis.X);
 
         // CanaryMod: PortalCreate
+        BlockPosition cbp = new BlockPosition(blockpos);
         PortalCreateHook hook;
         if (blockportal_size.b() && blockportal_size.e == 0) {
-            hook = (PortalCreateHook)new PortalCreateHook(blockportal_size.getPortalBlocks()).call();
-            if (!hook.isCanceled()) {
+            hook = (PortalCreateHook)new PortalCreateHook(blockportal_size.getPortalBlocks(), cbp, world.getCanaryWorld()).call();            if (!hook.isCanceled()) {
                 blockportal_size.c();
                 return true;
             }
@@ -93,7 +93,7 @@ public class BlockPortal extends BlockBreakable {
         else {
             BlockPortal.Size blockportal_size1 = new BlockPortal.Size(world, blockpos, EnumFacing.Axis.Z);
             if (blockportal_size1.b() && blockportal_size1.e == 0) {
-                hook = (PortalCreateHook)new PortalCreateHook(blockportal_size1.getPortalBlocks()).call();
+                hook = (PortalCreateHook)new PortalCreateHook(blockportal_size1.getPortalBlocks(), cbp, world.getCanaryWorld()).call();
                 if (!hook.isCanceled()) {
                     blockportal_size1.c();
                     return true;

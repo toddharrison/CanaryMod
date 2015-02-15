@@ -25,9 +25,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 public class CanaryBlock implements Block {
     private final static Random rndm = new Random(); // Passed to the idDropped method
@@ -102,11 +100,16 @@ public class CanaryBlock implements Block {
     }
 
     /**
-     * For testing purposes only
+     * Internal use
+     * @param state
      */
     public CanaryBlock(IBlockState state) {
         this.state = state;
         this.type = BlockStateMapper.getTypeFromState(state);
+    }
+
+    public void applyToPool(){
+
     }
 
     @Override
@@ -458,9 +461,21 @@ public class CanaryBlock implements Block {
         return state.c().c(state);
     }
 
+    public String getPropertiesList(){
+        StringBuilder builder = new StringBuilder();
+        for(Map.Entry<BlockProperty, Comparable> props : getProperties().entrySet()){
+            builder.append(props.getKey().getName()).append(":");
+            builder.append(props.getValue()).append(" (").append(props.getValue().getClass().getSimpleName()).append(")");
+            builder.append(", ");
+        }
+        return builder.toString();
+    }
+
     @Override
     public String toString() {
-        return String.format("Block[Type=%s, data=%d, x=%d, y=%d, z=%d, world=%s, dim=%s]", getType().getMachineName(), getType().getData(), this.getX(), this.getY(), this.getZ(), this.world.getName(), this.world.getType().getName());
+        return String.format("Block[Type=%s, Meta=%d, Position[%s], World=%s, Dimension=%s, Properties[%s]]",
+                getType(), getData(), getPosition(), this.world.getName(), this.world.getType().getName(), getPropertiesList()
+        );
     }
 
     /**

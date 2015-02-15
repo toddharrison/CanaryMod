@@ -1,9 +1,10 @@
 package net.canarymod.api.world;
 
 import net.canarymod.api.entity.Entity;
+import net.canarymod.api.world.blocks.Block;
+import net.canarymod.api.world.blocks.CanaryBlock;
 import net.canarymod.api.world.blocks.TileEntity;
 import net.canarymod.api.world.position.Position;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ClassInheratanceMultiMap;
@@ -50,7 +51,7 @@ public class CanaryChunk implements Chunk {
     @Override
     public void setBlockTypeAt(int x, int y, int z, int type) {
         // returns the new block state, do something with it?
-        handle.a(new BlockPos(x, y, z), Block.d(type));
+        handle.a(new BlockPos(x, y, z), net.minecraft.block.Block.d(type), false);
     }
 
     @Override
@@ -64,6 +65,16 @@ public class CanaryChunk implements Chunk {
         IBlockState state = handle.g(new BlockPos(x, y, z));
 //        state.a()
 //        handle.a(x, y, z, data);
+    }
+
+    public Block getBlockAt(int x, int y, int z){
+        BlockPos cPos = new BlockPos(x, y, z);
+        BlockPos wPos = new BlockPos(this.getX() * 16 + x, y, this.getZ() * 16 + z);
+        return CanaryBlock.getPooledBlock(handle.g(cPos), wPos, getHandle().i);
+    }
+
+    public void setBlockAt(Block block, int x, int y, int z){
+        handle.a(new BlockPos(x, y, z), ((CanaryBlock)block).getNativeState(), false);
     }
 
     @Override

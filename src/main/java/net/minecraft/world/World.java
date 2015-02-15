@@ -281,11 +281,7 @@ public abstract class World implements IBlockAccess {
             //
             Chunk chunk = this.f(blockpos);
             Block block = iblockstate.c();
-            IBlockState iblockstate1 = chunk.a(blockpos, iblockstate); // Set block state
-
-
-
-
+            IBlockState iblockstate1 = chunk.a(blockpos, iblockstate, true); // Set block state
 
             if (iblockstate1 == null) {
                 return false;
