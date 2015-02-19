@@ -150,4 +150,9 @@ public class FoodStats {
     public void setFoodLevel(int food) {
         this.a = Math.min(food, 20);
     }
+
+    public void setSaturation(float saturturation) {
+        this.b = saturturation;
+    }
+
 }

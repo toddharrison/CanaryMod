@@ -783,7 +783,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
      */
     @Override
     public void addExhaustion(float exhaustion) {
-        getHandle().ck().a(exhaustion);
+        setExhaustion(getExhaustionLevel() + exhaustion);
     }
 
     /**
@@ -800,6 +800,21 @@ public class CanaryPlayer extends CanaryHuman implements Player {
     @Override
     public float getExhaustionLevel() {
         return getHandle().ck().getExhaustionLevel();
+    }
+
+    @Override
+    public void addSaturation(float saturation) {
+        setSaturation(getSaturationLevel() + saturation);
+    }
+
+    @Override
+    public void setSaturation(float saturation) {
+        getHandle().ck().setSaturation(saturation);
+    }
+
+    @Override
+    public float getSaturationLevel() {
+        return getHandle().ck().e();
     }
 
     /**

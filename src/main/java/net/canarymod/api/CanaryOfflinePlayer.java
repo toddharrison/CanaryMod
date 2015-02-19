@@ -478,6 +478,31 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
         return 0;
     }
 
+    @Override
+    public void addSaturation(float saturation) {
+        if (getNBT() != null) {
+            float oldSat = getSaturationLevel();
+            getNBT().put("foodSaturationLevel", oldSat + saturation);
+            save();
+        }
+    }
+
+    @Override
+    public void setSaturation(float saturation) {
+        if (getNBT() != null) {
+            getNBT().put("foodSaturationLevel", saturation);
+            save();
+        }
+    }
+
+    @Override
+    public float getSaturationLevel() {
+        if (getNBT() != null && getNBT().containsKey("foodSaturationLevel")) {
+            return getNBT().getFloat("foodSaturationLevel");
+        }
+        return 0;
+    }
+
     /**
      * {@inheritDoc}
      */
