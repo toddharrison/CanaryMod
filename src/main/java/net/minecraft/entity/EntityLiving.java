@@ -406,9 +406,7 @@ public abstract class EntityLiving extends EntityLivingBase {
     }
 
     protected boolean C() {
-        // CanaryMod: EntityDespawn
-        return !((EntityDespawnHook) new EntityDespawnHook(entity).call()).isCanceled();
-        //
+        return true;
     }
 
     protected void D() {
@@ -424,11 +422,19 @@ public abstract class EntityLiving extends EntityLivingBase {
                 double d3 = d0 * d0 + d1 * d1 + d2 * d2;
 
                 if (this.C() && d3 > 16384.0D) {
-                    this.J();
+                    // CanaryMod: EntityDespawn
+                    if (!new EntityDespawnHook(entity).call().isCanceled()) {
+                        this.J();
+                    }
+                    //
                 }
 
                 if (this.aO > 600 && this.V.nextInt(800) == 0 && d3 > 1024.0D && this.C()) {
-                    this.J();
+                    // CanaryMod: EntityDespawn
+                    if (!new EntityDespawnHook(entity).call().isCanceled()) {
+                        this.J();
+                    }
+                    //
                 } else if (d3 < 1024.0D) {
                     this.aO = 0;
                 }

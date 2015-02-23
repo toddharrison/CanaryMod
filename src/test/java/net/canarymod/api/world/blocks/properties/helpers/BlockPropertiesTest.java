@@ -7,7 +7,11 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Bootstrap;
 import org.junit.Test;
 
-import static net.canarymod.api.world.blocks.BlockType.*;
+import static net.canarymod.api.world.blocks.BlockType.Anvil;
+import static net.canarymod.api.world.blocks.BlockType.Bed;
+import static net.canarymod.api.world.blocks.BlockType.StandingBanner;
+import static net.canarymod.api.world.blocks.BlockType.Torch;
+import static net.canarymod.api.world.blocks.BlockType.WallBanner;
 
 /**
  * Block Properties helpers testing (Since we need to have Minecraft native code to run these)
@@ -54,5 +58,9 @@ public class BlockPropertiesTest {
 
     }
 
-
+    @Test
+    public void testTorchProperties() {
+        CanaryBlock torch = new CanaryBlock(Block.b(Torch.getMachineName()).P());
+        TorchProperties.applyFacing(torch, BlockFace.NORTH);
+    }
 }
