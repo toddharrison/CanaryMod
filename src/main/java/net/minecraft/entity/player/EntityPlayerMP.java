@@ -389,13 +389,13 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
             if (this.bm() != this.bK || this.bL != this.bj.a() || this.bj.e() == 0.0F != this.bM) {
                 // updates your health when it is changed.
                 if (!Configuration.getWorldConfig(getCanaryWorld().getFqName()).isHealthEnabled()) {
-                    super.e(this.bt(), 1.0F);
+                    super.h(this.bt());
                     this.I = false;
                 }
                 else {
                     HealthChangeHook hook = (HealthChangeHook)new HealthChangeHook(getPlayer(), bK, this.bm()).call();
                     if (hook.isCanceled()) {
-                        super.e(this.bK, 1.0F);
+                        super.h(this.bK);
                     }
                 }
             }
