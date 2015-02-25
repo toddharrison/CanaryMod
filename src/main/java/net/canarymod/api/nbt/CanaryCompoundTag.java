@@ -2,6 +2,7 @@ package net.canarymod.api.nbt;
 
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -258,7 +259,7 @@ public class CanaryCompoundTag extends CanaryBaseTag<CompoundTag> implements Com
      */
     @Override
     public <E extends BaseTag> ListTag<E> getListTag(String key) {
-        return new CanaryListTag<E>(getHandle().getListUnsafe(key));
+        return new CanaryListTag<E>(containsKey(key) ? getHandle().getListUnsafe(key) : new NBTTagList());
     }
 
     /**
