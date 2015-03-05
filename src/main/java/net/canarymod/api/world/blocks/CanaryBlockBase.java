@@ -170,7 +170,7 @@ public class CanaryBlockBase implements BlockBase {
 
     @Override
     public String getLocalizedName() {
-        return nmsBlock.a();
+        return nmsBlock.H();
     }
 
     @Override
