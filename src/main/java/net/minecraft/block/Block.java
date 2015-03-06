@@ -1,5 +1,6 @@
 package net.minecraft.block;
 
+import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.blocks.CanaryBlockBase;
 import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.hook.world.BlockDropXpHook;
@@ -20,7 +21,15 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.ObjectIntIdentityMap;
+import net.minecraft.util.RegistryNamespacedDefaultedByKey;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -394,6 +403,7 @@ public class Block {
         if (!world.D) {
             // CanaryMod: BlockDropXpHook
             net.canarymod.api.world.blocks.Block block = world.getCanaryWorld().getBlockAt(new BlockPosition(blockpos));
+            block.setType(BlockType.fromString(c.c(this).toString())); // the block is dead, so we need to redo its type
             BlockDropXpHook hook = (BlockDropXpHook)new BlockDropXpHook(block, i0).call();
             if (hook.isCanceled()) {
                 return;
