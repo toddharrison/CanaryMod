@@ -4,11 +4,15 @@ import net.canarymod.api.CanaryDamageSource;
 import net.canarymod.api.DamageType;
 import net.canarymod.api.entity.hanging.CanaryItemFrame;
 import net.canarymod.api.entity.hanging.HangingEntity;
+import net.canarymod.api.entity.hanging.ItemFrame;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.hook.entity.HangingEntityDestroyHook;
+import net.canarymod.hook.entity.ItemFrameRotateHook;
+import net.canarymod.hook.entity.ItemFrameSetItemHook;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityHanging;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemMap;
@@ -102,7 +106,7 @@ public class EntityItemFrame extends EntityHanging {
             }
 
             if (flag0) {
-                this.a(new ItemStack(Items.bP), 0.0F);
+                this.a(new ItemStack(Items.bD), 0.0F);
             }
 
             if (itemstack != null && this.V.nextFloat() < this.c) {
@@ -198,14 +202,23 @@ public class EntityItemFrame extends EntityHanging {
             ItemStack itemstack = entityplayer.bz();
 
             if (itemstack != null && !this.o.D) {
-                this.a(itemstack);
-                if (!entityplayer.by.d && --itemstack.b <= 0) {
-                    entityplayer.bg.a(entityplayer.bg.c, (ItemStack) null);
+                // CanaryMod: ItemFrameSetItemHook
+                if (!new ItemFrameSetItemHook(((EntityPlayerMP)entityplayer).getPlayer(), (ItemFrame)this.getCanaryEntity(), itemstack.getCanaryItem()).call().isCanceled()) {
+                    this.a(itemstack);
+                    if (!entityplayer.by.d && --itemstack.b <= 0) {
+                        entityplayer.bg.a(entityplayer.bg.c, (ItemStack)null);
+                    }
                 }
+                //
             }
         }
         else if (!this.o.D) {
-            this.a(this.p() + 1);
+            // CanaryMod: ItemFrameRotateHook
+            ItemFrameRotateHook ifrh = (ItemFrameRotateHook)new ItemFrameRotateHook(((EntityPlayerMP)entityplayer).getPlayer(), (ItemFrame)this.getCanaryEntity()).call();
+            if (!ifrh.isCanceled()) {
+                this.a(/*this.p() + 1*/ifrh.getNewRotation());
+            }
+            //
         }
 
         return true;
