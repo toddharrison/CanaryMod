@@ -1,11 +1,14 @@
 package net.minecraft.entity.item;
 
+import net.canarymod.api.entity.ArmorStand;
 import net.canarymod.api.entity.CanaryArmorStand;
+import net.canarymod.hook.player.ArmorStandModifyHook;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -367,19 +370,29 @@ public class EntityArmorStand extends EntityLivingBase {
                 if (entityplayer.by.d && (itemstack == null || itemstack.b() == Item.a(Blocks.a)) && itemstack1 != null) {
                     itemstack2 = itemstack1.k();
                     itemstack2.b = 1;
-                    this.c(i0, itemstack2);
+                    // CanaryMod: ArmorStandModify (Set item on frame, Creative mode)
+                    if (!new ArmorStandModifyHook((ArmorStand)getCanaryEntity(), ((EntityPlayerMP)entityplayer).getPlayer(), i0, itemstack == null ? null : itemstack.getCanaryItem(), itemstack1.getCanaryItem()).call().isCanceled()) {
+                        this.c(i0, itemstack2);
+                    }
                 }
                 else if (itemstack1 != null && itemstack1.b > 1) {
                     if (itemstack == null) {
+                        // Set item on frame, survival (or other allowed modes)
                         itemstack2 = itemstack1.k();
                         itemstack2.b = 1;
-                        this.c(i0, itemstack2);
-                        --itemstack1.b;
+                        // CanaryMod: ArmorStandModify (Set item on frame)
+                        if (!new ArmorStandModifyHook((ArmorStand)getCanaryEntity(), ((EntityPlayerMP)entityplayer).getPlayer(), i0, null, itemstack1.getCanaryItem()).call().isCanceled()) {
+                            this.c(i0, itemstack2);
+                            --itemstack1.b;
+                        }
                     }
                 }
                 else {
-                    this.c(i0, itemstack1);
-                    entityplayer.bg.a(i1, itemstack);
+                    // CanaryMod: ArmorStandModify (Replacing item on frame)
+                    if (!new ArmorStandModifyHook((ArmorStand)getCanaryEntity(), ((EntityPlayerMP)entityplayer).getPlayer(), i0, itemstack == null ? null : itemstack.getCanaryItem(), itemstack1 == null ? null : itemstack1.getCanaryItem()).call().isCanceled()) {
+                        this.c(i0, itemstack1);
+                        entityplayer.bg.a(i1, itemstack);
+                    }
                 }
             }
         }
