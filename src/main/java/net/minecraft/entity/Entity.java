@@ -1152,9 +1152,9 @@ public abstract class Entity implements ICommandSender {
             nbttagcompound.a("PortalCooldown", this.aj);
             nbttagcompound.a("UUIDMost", this.aJ().getMostSignificantBits());
             nbttagcompound.a("UUIDLeast", this.aJ().getLeastSignificantBits());
-            // CanaryMod add level name
-            nbttagcompound.a("LevelName", getCanaryWorld().getName());
+
             this.b(nbttagcompound); //  this method should remain before metadata saving. EntityPlayer has an update to add before saving is to be completed
+            getCanaryEntity().writeCanaryNBT(nbttagcompound); // CanaryMod: Write out our added NBT (that isn't part of the Canary meta)
             // CanaryMod: allow the saving of persistent metadata
             if (metadata != null) {
                 nbttagcompound.a("Canary", ((CanaryCompoundTag) metadata).getHandle());
@@ -1177,7 +1177,6 @@ public abstract class Entity implements ICommandSender {
                     nbttagcompound.a("Riding", (NBTBase) nbttagcompound1);
                 }
             }
-
         } catch (Throwable throwable) {
             CrashReport crashreport = CrashReport.a(throwable, "Saving entity NBT");
             CrashReportCategory crashreportcategory = crashreport.a("Entity being saved");
@@ -1228,6 +1227,7 @@ public abstract class Entity implements ICommandSender {
 
             this.b(this.s, this.t, this.u);
             this.b(this.y, this.z);
+            getCanaryEntity().readCanaryNBT(nbttagcompound); // CanaryMod: Read our added NBT Tags (not part of meta)
             // CanaryMod: allow the saving of persistent metadata
             this.metadata = nbttagcompound.c("Canary") ? new CanaryCompoundTag(nbttagcompound.m("Canary")) : new CanaryCompoundTag();
             // CanaryMod: END
@@ -1242,7 +1242,6 @@ public abstract class Entity implements ICommandSender {
             if (this.af()) {
                 this.b(this.s, this.t, this.u);
             }
-
         } catch (Throwable throwable) {
             CrashReport crashreport = CrashReport.a(throwable, "Loading entity NBT");
             CrashReportCategory crashreportcategory = crashreport.a("Entity being loaded");

@@ -302,13 +302,16 @@ public abstract class EntityLivingBase extends Entity {
             int i0;
 
             if (!this.o.D && (this.aM > 0 || this.ba()) && this.aZ() && this.o.Q().b("doMobLoot")) {
-                i0 = this.b(this.aL);
+                // CanaryMod: XP Drop checks
+                if (getCanaryEntity().doesDropXP()) {
+                    i0 = this.b(this.aL);
 
-                while (i0 > 0) {
-                    int i1 = EntityXPOrb.a(i0);
+                    while (i0 > 0) {
+                        int i1 = EntityXPOrb.a(i0);
 
-                    i0 -= i1;
-                    this.o.d((Entity) (new EntityXPOrb(this.o, this.s, this.t, this.u, i1)));
+                        i0 -= i1;
+                        this.o.d((Entity)(new EntityXPOrb(this.o, this.s, this.t, this.u, i1)));
+                    }
                 }
             }
 
@@ -822,11 +825,15 @@ public abstract class EntityLivingBase extends Entity {
             }
 
             if (this.aZ() && this.o.Q().b("doMobLoot")) {
-                this.b(this.aM > 0, i0);
-                this.a(this.aM > 0, i0);
-                if (this.aM > 0 && this.V.nextFloat() < 0.025F + (float) i0 * 0.01F) {
-                    this.bp();
+                // CanaryMod: Per-Entity Loot Drop checks
+                if (getCanaryEntity().doesDropLoot()) {
+                    this.b(this.aM > 0, i0);
+                    this.a(this.aM > 0, i0);
+                    if (this.aM > 0 && this.V.nextFloat() < 0.025F + (float)i0 * 0.01F) {
+                        this.bp();
+                    }
                 }
+                //
             }
         }
 

@@ -1,24 +1,33 @@
 package net.canarymod.api.entity.living;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import net.canarymod.api.CanaryDamageSource;
 import net.canarymod.api.DamageSource;
 import net.canarymod.api.DamageType;
 import net.canarymod.api.attributes.AttributeMap;
 import net.canarymod.api.entity.CanaryEntity;
 import net.canarymod.api.entity.Entity;
-import net.canarymod.api.potion.*;
+import net.canarymod.api.potion.CanaryPotion;
+import net.canarymod.api.potion.CanaryPotionEffect;
+import net.canarymod.api.potion.Potion;
+import net.canarymod.api.potion.PotionEffect;
+import net.canarymod.api.potion.PotionEffectType;
 import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.api.world.position.Location;
 import net.canarymod.api.world.position.Position;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Vec3;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 public abstract class CanaryLivingBase extends CanaryEntity implements LivingBase {
+    // CanaryMod: per entity loot setting, default to true
+    private boolean lootDrop = true;
+    private boolean xpDrop = true;
 
     public CanaryLivingBase(EntityLivingBase entity) {
         super(entity);
@@ -433,6 +442,29 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
         net.minecraft.entity.Entity target = ((CanaryWorld)w).getHandle().a(net.minecraft.entity.EntityLiving.class, aabb, ((CanaryLivingBase)entity).getHandle());
 
         return (target == null) ? null : target.getCanaryEntity();
+    }
+
+    @Override
+    public NBTTagCompound writeCanaryNBT(NBTTagCompound nbttagcompound) {
+        super.writeCanaryNBT(nbttagcompound); // always, ALWAYS call super
+        nbttagcompound.a("LootDrop", lootDrop);
+        nbttagcompound.a("XPDrop", xpDrop);
+        return nbttagcompound;
+    }
+
+    @Override
+    public void readCanaryNBT(NBTTagCompound nbttagcompound) {
+        super.readCanaryNBT(nbttagcompound);
+        this.lootDrop = !nbttagcompound.c("LootDrop") || nbttagcompound.n("LootDrop");
+        this.xpDrop = !nbttagcompound.c("XPDrop") || nbttagcompound.n("XPDrop");
+    }
+
+    public boolean doesDropLoot() {
+        return lootDrop;
+    }
+
+    public boolean doesDropXP() {
+        return xpDrop;
     }
 
     /**

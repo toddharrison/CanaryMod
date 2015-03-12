@@ -461,6 +461,20 @@ public abstract class CanaryEntity implements Entity {
         return getHandle().isEating();
     }
 
+    /**
+     * Writes Canary added NBT tags (Not inside the Canary meta tag)
+     */
+    public NBTTagCompound writeCanaryNBT(NBTTagCompound nbttagcompound) {
+        nbttagcompound.a("LevelName", getWorld().getName()); // CanaryMod add level name
+        return nbttagcompound;
+    }
+
+    /**
+     * Reads Canary added NBT tags (Not inside the Canary meta tag)
+     */
+    public void readCanaryNBT(NBTTagCompound nbttagcompound) {
+    }
+
     @Override
     public String toString() {
         return String.format("%s[Native: %s]", this.getClass().getSimpleName(), getHandle());

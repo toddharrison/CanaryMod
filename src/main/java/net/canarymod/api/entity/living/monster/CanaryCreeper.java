@@ -2,6 +2,7 @@ package net.canarymod.api.entity.living.monster;
 
 import net.canarymod.api.entity.EntityType;
 import net.minecraft.entity.monster.EntityCreeper;
+import net.minecraft.nbt.NBTTagCompound;
 
 /**
  * Creeper wrapper implementation
@@ -154,6 +155,21 @@ public class CanaryCreeper extends CanaryEntityMob implements Creeper {
     @Override
     public void setAgro(boolean agro) {
         getHandle().a(agro ? 1 : -1);
+    }
+
+    @Override
+    public NBTTagCompound writeCanaryNBT(NBTTagCompound nbttagcompound) {
+        super.writeCanaryNBT(nbttagcompound);
+        nbttagcompound.a("DamageEntities", damageEntity);
+        nbttagcompound.a("DamageWorld", damageWorld);
+        return nbttagcompound;
+    }
+
+    @Override
+    public void readCanaryNBT(NBTTagCompound nbttagcompound) {
+        super.readCanaryNBT(nbttagcompound);
+        this.damageEntity = nbttagcompound.c("DamageEntities") || nbttagcompound.n("DamageEntities");
+        this.damageWorld = nbttagcompound.c("DamageWorld") || nbttagcompound.n("DamageWorld");
     }
 
     /**
