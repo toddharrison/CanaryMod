@@ -2,6 +2,7 @@ package net.canarymod.api.entity;
 
 import net.canarymod.api.entity.living.LivingBase;
 import net.minecraft.entity.item.EntityTNTPrimed;
+import net.minecraft.nbt.NBTTagCompound;
 
 /**
  * EntityTNTPrimed wrapper implementation
@@ -126,6 +127,23 @@ public class CanaryTNTPrimed extends CanaryEntity implements TNTPrimed {
     @Override
     public void setPower(float power) {
         this.power = power;
+    }
+
+    @Override
+    public NBTTagCompound writeCanaryNBT(NBTTagCompound nbttagcompound) {
+        super.writeCanaryNBT(nbttagcompound);
+        nbttagcompound.a("DamageEntities", damageEntity);
+        nbttagcompound.a("DamageWorld", damageWorld);
+        nbttagcompound.a("Power", power);
+        return nbttagcompound;
+    }
+
+    @Override
+    public void readCanaryNBT(NBTTagCompound nbttagcompound) {
+        super.readCanaryNBT(nbttagcompound);
+        this.damageEntity = !nbttagcompound.c("DamageEntities") || nbttagcompound.n("DamageEntities");
+        this.damageWorld = !nbttagcompound.c("DamageWorld") || nbttagcompound.n("DamageWorld");
+        this.power = nbttagcompound.c("Power") ? nbttagcompound.h("Power") : 4.0F;
     }
 
     /**

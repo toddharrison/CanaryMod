@@ -1,6 +1,7 @@
 package net.canarymod.api.entity;
 
 import net.minecraft.entity.projectile.EntityWitherSkull;
+import net.minecraft.nbt.NBTTagCompound;
 
 /**
  * Wither Skull wrapper implementation
@@ -127,6 +128,23 @@ public class CanaryWitherSkull extends CanaryFireball implements WitherSkull {
     @Override
     public void detonate() {
         getHandle().o.a(getHandle(), getX(), getY(), getZ(), getPower(), false, damageWorld);
+    }
+
+    @Override
+    public NBTTagCompound writeCanaryNBT(NBTTagCompound nbttagcompound) {
+        super.writeCanaryNBT(nbttagcompound);
+        nbttagcompound.a("DamageEntities", damageEntity);
+        nbttagcompound.a("DamageWorld", damageWorld);
+        nbttagcompound.a("Power", power);
+        return nbttagcompound;
+    }
+
+    @Override
+    public void readCanaryNBT(NBTTagCompound nbttagcompound) {
+        super.readCanaryNBT(nbttagcompound);
+        this.damageEntity = !nbttagcompound.c("DamageEntities") || nbttagcompound.n("DamageEntities");
+        this.damageWorld = !nbttagcompound.c("DamageWorld") || nbttagcompound.n("DamageWorld");
+        this.power = nbttagcompound.c("Power") ? nbttagcompound.h("Power") : 1.0F;
     }
 
     /**

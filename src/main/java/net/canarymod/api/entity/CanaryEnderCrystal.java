@@ -1,6 +1,7 @@
 package net.canarymod.api.entity;
 
 import net.minecraft.entity.item.EntityEnderCrystal;
+import net.minecraft.nbt.NBTTagCompound;
 
 import java.util.Random;
 
@@ -152,6 +153,25 @@ public class CanaryEnderCrystal extends CanaryEntity implements EnderCrystal {
      */
     @Override
     public void decreaseFuse(int decrease) {
+    }
+
+    @Override
+    public NBTTagCompound writeCanaryNBT(NBTTagCompound nbttagcompound) {
+        super.writeCanaryNBT(nbttagcompound);
+        nbttagcompound.a("DamageEntities", damageEntity);
+        nbttagcompound.a("DamageWorld", damageWorld);
+        nbttagcompound.a("OneHit", oneHit);
+        nbttagcompound.a("Power", power);
+        return nbttagcompound;
+    }
+
+    @Override
+    public void readCanaryNBT(NBTTagCompound nbttagcompound) {
+        super.readCanaryNBT(nbttagcompound);
+        this.damageEntity = !nbttagcompound.c("DamageEntities") || nbttagcompound.n("DamageEntities");
+        this.damageWorld = !nbttagcompound.c("DamageWorld") || nbttagcompound.n("DamageWorld");
+        this.oneHit = !nbttagcompound.c("OneHit") || nbttagcompound.n("OneHit");
+        this.power = nbttagcompound.c("Power") ? nbttagcompound.h("Power") : 6.0F;
     }
 
     /**

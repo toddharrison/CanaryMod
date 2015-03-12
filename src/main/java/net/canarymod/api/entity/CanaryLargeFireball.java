@@ -1,6 +1,7 @@
 package net.canarymod.api.entity;
 
 import net.minecraft.entity.projectile.EntityLargeFireball;
+import net.minecraft.nbt.NBTTagCompound;
 
 /**
  * LargeFireball wrapper implementation
@@ -116,6 +117,21 @@ public class CanaryLargeFireball extends CanaryFireball implements LargeFireball
     public void detonate() {
         this.destroy();
         getHandle().o.a(getHandle(), getX(), getY(), getZ(), getPower(), true, damageWorld);
+    }
+
+    @Override
+    public NBTTagCompound writeCanaryNBT(NBTTagCompound nbttagcompound) {
+        super.writeCanaryNBT(nbttagcompound);
+        nbttagcompound.a("DamageEntities", damageEntity);
+        nbttagcompound.a("DamageWorld", damageWorld);
+        return nbttagcompound;
+    }
+
+    @Override
+    public void readCanaryNBT(NBTTagCompound nbttagcompound) {
+        super.readCanaryNBT(nbttagcompound);
+        this.damageEntity = !nbttagcompound.c("DamageEntities") || nbttagcompound.n("DamageEntities");
+        this.damageWorld = !nbttagcompound.c("DamageWorld") || nbttagcompound.n("DamageWorld");
     }
 
     /**

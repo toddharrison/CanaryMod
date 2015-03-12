@@ -168,8 +168,8 @@ public class CanaryCreeper extends CanaryEntityMob implements Creeper {
     @Override
     public void readCanaryNBT(NBTTagCompound nbttagcompound) {
         super.readCanaryNBT(nbttagcompound);
-        this.damageEntity = nbttagcompound.c("DamageEntities") || nbttagcompound.n("DamageEntities");
-        this.damageWorld = nbttagcompound.c("DamageWorld") || nbttagcompound.n("DamageWorld");
+        this.damageEntity = !nbttagcompound.c("DamageEntities") || nbttagcompound.n("DamageEntities");
+        this.damageWorld = !nbttagcompound.c("DamageWorld") || nbttagcompound.n("DamageWorld");
     }
 
     /**
