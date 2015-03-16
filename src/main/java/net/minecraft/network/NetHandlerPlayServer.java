@@ -31,6 +31,7 @@ import net.canarymod.hook.player.PlayerMoveHook;
 import net.canarymod.hook.player.SignChangeHook;
 import net.canarymod.hook.player.SlotClickHook;
 import net.canarymod.hook.player.TeleportHook;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.server.CommandBlockLogic;
@@ -589,7 +590,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, IUpdatePlaye
                 return;
             }
 
-            blockClicked = blockClicked != null ? blockClicked : new CanaryBlock((short) 0, (short) 0, ToolBox.floorToBlock(this.o), ToolBox.floorToBlock(this.p), ToolBox.floorToBlock(this.q), this.b.getCanaryWorld());
+            blockClicked = blockClicked != null ? blockClicked : CanaryBlock.getPooledBlock(Block.d(0), new BlockPos(ToolBox.floorToBlock(this.o), ToolBox.floorToBlock(this.p), ToolBox.floorToBlock(this.q)), this.b.o);
             //
             this.b.c.itemUsed(this.b.getPlayer(), worldserver, itemstack, blockClicked); // CanaryMod: Redirect through ItemInWorldManager.itemUsed
         }
