@@ -48,9 +48,12 @@ import net.canarymod.api.world.blocks.Sign;
 import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.api.world.position.Direction;
 import net.canarymod.api.world.position.Location;
+import net.canarymod.backbone.PlayerDataAccess;
 import net.canarymod.chat.ChatFormat;
 import net.canarymod.chat.ReceiverType;
 import net.canarymod.config.Configuration;
+import net.canarymod.database.Database;
+import net.canarymod.database.exceptions.DatabaseWriteException;
 import net.canarymod.exceptions.InvalidInstanceException;
 import net.canarymod.hook.command.PlayerCommandHook;
 import net.canarymod.hook.player.ChatHook;
@@ -715,7 +718,8 @@ public class CanaryPlayer extends CanaryHuman implements Player {
         }
         //defaultChatpattern.put("%name", getDisplayName()); // Display name not initialized at this time
         defaultChatpattern.put("%prefix", getPrefix());
-        if (isNew) {
+
+        if (isNew || provider.nameChanged(this)) {
             provider.addOrUpdatePlayerData(this);
         }
     }
