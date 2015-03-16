@@ -211,6 +211,8 @@ public class Block {
         this.t = !material.b();
         this.L = this.e();
         this.j(this.L.b());
+
+        this.cbb = new CanaryBlockBase(this); // CanaryMod: initialize wrapper
     }
 
     protected Block a(Block.SoundType block_soundtype) {
