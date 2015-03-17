@@ -125,12 +125,7 @@ import net.minecraft.world.chunk.Chunk;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class EntityPlayerMP extends EntityPlayer implements ICrafting {
 
@@ -142,7 +137,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
     public double d;
     public double e;
     public final List f = Lists.newLinkedList();
-    private final List bH = Lists.newLinkedList();
+    private final List bH = Collections.synchronizedList(Lists.newLinkedList()); // CanaryMod: concurrency correction
     private final StatisticsFile bI;
     private float bJ = Float.MIN_VALUE;
     private float bK = -1.0E8F;
@@ -289,18 +284,20 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
             this.bi = this.bh;
         }
 
-        while (!this.bH.isEmpty()) {
-            int i0 = Math.min(this.bH.size(), Integer.MAX_VALUE);
-            int[] aint = new int[i0];
-            Iterator iterator = this.bH.iterator();
-            int i1 = 0;
+        synchronized (bH) { // CanaryMod: Synchronize on list
+            while (!this.bH.isEmpty()) {
+                int i0 = Math.min(this.bH.size(), Integer.MAX_VALUE);
+                int[] aint = new int[i0];
+                Iterator iterator = this.bH.iterator();
+                int i1 = 0;
 
-            while (iterator.hasNext() && i1 < i0) {
-                aint[i1++] = ((Integer)iterator.next()).intValue();
-                iterator.remove();
+                while (iterator.hasNext() && i1 < i0) {
+                    aint[i1++] = ((Integer) iterator.next()).intValue();
+                    iterator.remove();
+                }
+
+                this.a.a((Packet) (new S13PacketDestroyEntities(aint)));
             }
-
-            this.a.a((Packet)(new S13PacketDestroyEntities(aint)));
         }
 
         if (!this.f.isEmpty()) {
@@ -957,7 +954,9 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting {
         this.bN = -1;
         this.bK = -1.0F;
         this.bL = -1;
-        this.bH.addAll(((EntityPlayerMP) entityplayer).bH);
+        synchronized (bH) { // CanaryMod: Synchronize on list
+            this.bH.addAll(((EntityPlayerMP) entityplayer).bH);
+        }
     }
 
     protected void a(PotionEffect potioneffect) {
