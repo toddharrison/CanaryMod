@@ -106,7 +106,7 @@ public class EntityItemFrame extends EntityHanging {
             }
 
             if (flag0) {
-                this.a(new ItemStack(Items.bD), 0.0F);
+                this.a(new ItemStack(Items.bP), 0.0F);
             }
 
             if (itemstack != null && this.V.nextFloat() < this.c) {
