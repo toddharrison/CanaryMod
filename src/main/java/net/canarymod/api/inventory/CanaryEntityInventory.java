@@ -366,7 +366,7 @@ public abstract class CanaryEntityInventory implements Inventory {
             if (toCheck != null && (doDamage ? toCheck.getType().equals(type) : toCheck.getType().getId() == type.getId())) {
                 int am = toCheck.getAmount();
 
-                if (am > minAmount && am < maxAmount) {
+                if (am >= minAmount && am <= maxAmount) {
                     return true;
                 }
             }

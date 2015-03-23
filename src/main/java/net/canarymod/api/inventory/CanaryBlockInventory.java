@@ -1,6 +1,5 @@
 package net.canarymod.api.inventory;
 
-import net.canarymod.Canary;
 import net.canarymod.api.nbt.CanaryCompoundTag;
 import net.canarymod.api.world.blocks.CanaryTileEntity;
 import net.canarymod.config.Configuration;
@@ -372,7 +371,7 @@ public abstract class CanaryBlockInventory extends CanaryTileEntity implements I
             if (toCheck != null && doDamage ? toCheck.getType().equals(type) : toCheck.getType().getId() == type.getId()) {
                 int am = toCheck.getAmount();
 
-                if (am > minAmount && am < maxAmount) {
+                if (am >= minAmount && am <= maxAmount) {
                     return true;
                 }
             }
