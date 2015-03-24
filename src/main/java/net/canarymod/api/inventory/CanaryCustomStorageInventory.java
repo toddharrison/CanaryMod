@@ -59,8 +59,9 @@ public class CanaryCustomStorageInventory extends CanaryEntityInventory implemen
         Item[] contents = getContents();
 
         for (int index = 0; index < this.getSize(); ++index) {
-            if (this.getSlot(index) != null) {
-                compoundTag = contents[index].getDataTag();
+            if (contents[index] != null) {
+                compoundTag = new CanaryCompoundTag();
+                contents[index].writeToTag(compoundTag);
                 compoundTag.put("Slot", (byte)index);
 
                 listTag.add(compoundTag);
