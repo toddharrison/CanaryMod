@@ -546,13 +546,6 @@ public abstract class CanaryEntityInventory implements Inventory {
         openRemote = remote;
     }
 
-    @Override
-    public InventoryType getInventoryType() {
-        return null;
-    }
-
-    public abstract IInventory getHandle();
-
     /**
      * {@inheritDoc}
      */
@@ -572,11 +565,13 @@ public abstract class CanaryEntityInventory implements Inventory {
             }
         }
 
-
-        if (totalSpace > 0) {
-            return true;
-        }
-
-        return false;
+        return totalSpace > 0;
     }
+
+    @Override
+    public InventoryType getInventoryType() {
+        return null;
+    }
+
+    public abstract IInventory getHandle();
 }

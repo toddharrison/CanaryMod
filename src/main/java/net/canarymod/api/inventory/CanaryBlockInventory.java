@@ -551,15 +551,6 @@ public abstract class CanaryBlockInventory extends CanaryTileEntity implements I
     }
 
     /**
-     * Gets the inventory handle of this ContainerBlock
-     *
-     * @return native Inventory interface
-     */
-    public IInventory getInventoryHandle() {
-        return inventory;
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override
@@ -578,11 +569,15 @@ public abstract class CanaryBlockInventory extends CanaryTileEntity implements I
             }
         }
 
+        return totalSpace > 0;
+    }
 
-        if (totalSpace > 0) {
-            return true;
-        }
-
-        return false;
+    /**
+     * Gets the inventory handle of this ContainerBlock
+     *
+     * @return native Inventory interface
+     */
+    public IInventory getInventoryHandle() {
+        return inventory;
     }
 }
