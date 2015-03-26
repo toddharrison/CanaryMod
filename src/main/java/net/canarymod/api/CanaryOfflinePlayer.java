@@ -2,8 +2,21 @@ package net.canarymod.api;
 
 import net.canarymod.Canary;
 import net.canarymod.ToolBox;
-import net.canarymod.api.nbt.*;
-import net.canarymod.api.statistics.*;
+import net.canarymod.api.inventory.CanaryOfflineEnderChestInventory;
+import net.canarymod.api.inventory.CanaryOfflinePlayerInventory;
+import net.canarymod.api.inventory.Inventory;
+import net.canarymod.api.inventory.PlayerInventory;
+import net.canarymod.api.nbt.CanaryBaseTag;
+import net.canarymod.api.nbt.CanaryCompoundTag;
+import net.canarymod.api.nbt.CanaryDoubleTag;
+import net.canarymod.api.nbt.CompoundTag;
+import net.canarymod.api.nbt.ListTag;
+import net.canarymod.api.statistics.Achievement;
+import net.canarymod.api.statistics.Achievements;
+import net.canarymod.api.statistics.CanaryAchievement;
+import net.canarymod.api.statistics.CanaryStat;
+import net.canarymod.api.statistics.Stat;
+import net.canarymod.api.statistics.Statistics;
 import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.api.world.DimensionType;
 import net.canarymod.api.world.UnknownWorldException;
@@ -41,6 +54,7 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
     private boolean isMuted;
     private UUID uuid;
     private StatisticsFile statisticsFile;
+    private Inventory playerInv, enderInv;
 
     public CanaryOfflinePlayer(String name, UUID uuid, CanaryCompoundTag tag) {
         this.data = tag;
@@ -73,61 +87,44 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
 
         this.statisticsFile = new StatisticsFile(((CanaryServer)Canary.getServer()).getHandle(), file2);
         this.statisticsFile.a();
+
+        // Initialize inventories
+        this.playerInv = new CanaryOfflinePlayerInventory(this);
+        this.enderInv = new CanaryOfflineEnderChestInventory(this);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public PermissionProvider getPermissionProvider() {
         return provider;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Group getGroup() {
         return groups.get(0);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String getPrefix() {
         return prefix;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean hasPermission(String path) {
         return provider.queryPermission(path);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void setGroup(Group group) {
         this.groups.set(0, group);
         Canary.usersAndGroups().addOrUpdateOfflinePlayer(this);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void setPrefix(String prefix) {
         this.prefix = prefix;
         Canary.usersAndGroups().addOrUpdateOfflinePlayer(this);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public World getWorld() {
         if (data == null) {
@@ -143,9 +140,6 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Position getPosition() {
         if (data == null) {
@@ -159,17 +153,11 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
         return p;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String getName() {
         return name;
     }
 
-    /**
-     * @{inheritDoc}
-     */
     @Override
     public UUID getUUID() {
         String uuid = ToolBox.usernameToUUID(getName());
@@ -181,26 +169,17 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
         return ToolBox.usernameToUUID(getName());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean isMuted() {
         return isMuted;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void setMuted(boolean muted) {
         this.isMuted = muted;
         Canary.usersAndGroups().addOrUpdateOfflinePlayer(this);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void addGroup(Group group) {
         if (!groups.contains(group)) {
@@ -209,17 +188,11 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Group[] getPlayerGroups() {
         return groups.toArray(new Group[groups.size()]);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean removeGroup(Group g) {
         boolean success = groups.remove(g);
@@ -229,9 +202,6 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
         return success;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean removeGroup(String g) {
         Group gr = Canary.usersAndGroups().getGroup(g);
@@ -241,9 +211,6 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
         return removeGroup(gr);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean isInGroup(Group group, boolean parents) {
         for (Group g : groups) {
@@ -261,9 +228,6 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
         return false;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean isInGroup(String group, boolean parents) {
         for (Group g : groups) {
@@ -281,17 +245,11 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
         return false;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean isOnline() {
         return Canary.getServer().getPlayer(name) != null;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public CompoundTag getNBT() {
         return data;
@@ -301,9 +259,6 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
         return data.containsKey("Canary") ? data.getCompoundTag("Canary") : null;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void save() {
         if (isOnline()) {
@@ -322,9 +277,6 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String getFirstJoined() {
         if (getMetaData() != null && getMetaData().containsKey("FirstJoin")) {
@@ -333,9 +285,6 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
         return "NEVER";
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String getLastJoined() {
         if (getMetaData() != null && getMetaData().containsKey("LastJoin")) {
@@ -344,9 +293,6 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
         return "NEVER";
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public long getTimePlayed() {
         if (getMetaData() != null && getMetaData().containsKey("TimePlayed")) {
@@ -355,9 +301,6 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
         return 0;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public int getModeId() {
         if (getNBT() != null && getNBT().containsKey("playerGameType")) {
@@ -366,17 +309,11 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
         return 0;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public GameMode getMode() {
         return GameMode.fromId(getModeId());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void setMode(GameMode mode) {
         if (getNBT() != null) {
@@ -385,9 +322,6 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void setModeId(int mode) {
         if (getNBT() != null) {
@@ -396,57 +330,36 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean isOperator() {
         return Canary.ops().isOpped(this);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean isAdmin() {
         return isOperator() || hasPermission("canary.super.administrator");
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean canBuild() {
         return isAdmin() || hasPermission("canary.world.build");
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void setCanBuild(boolean canModify) {
         provider.addPermission("canary.world.build", canModify);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean canIgnoreRestrictions() {
         return isAdmin() || hasPermission("canary.super.ignoreRestrictions");
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void setCanIgnoreRestrictions(boolean canIgnore) {
         provider.addPermission("canary.super.ignoreRestrictions", canIgnore, -1);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void addExhaustion(float exhaustion) {
         if (getNBT() != null) {
@@ -456,9 +369,6 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void setExhaustion(float exhaustion) {
         if (getNBT() != null) {
@@ -467,9 +377,6 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public float getExhaustionLevel() {
         if (getNBT() != null && getNBT().containsKey("foodExhaustionLevel")) {
@@ -503,9 +410,6 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
         return 0;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void setHunger(int hunger) {
         if (getNBT() != null) {
@@ -514,9 +418,6 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public int getHunger() {
         if (getNBT() != null && getNBT().containsKey("foodLevel")) {
@@ -525,9 +426,6 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
         return 0;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void addExperience(int experience) {
         if (getNBT() != null) {
@@ -537,9 +435,6 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void removeExperience(int experience) {
         if (getNBT() != null) {
@@ -549,9 +444,6 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public int getExperience() {
         if (getNBT() != null && getNBT().containsKey("XpTotal")) {
@@ -560,9 +452,6 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
         return 0;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void setExperience(int xp) {
         if (getNBT() != null) {
@@ -571,9 +460,6 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public int getLevel() {
         if (getNBT() != null && getNBT().containsKey("XpLevel")) {
@@ -637,9 +523,6 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
         return "UNKNOWN";
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public float getHealth() {
         if (getNBT() != null) {
@@ -648,9 +531,6 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
         return 0.0F;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void setHealth(float health) {
         if (getNBT() != null) {
@@ -660,9 +540,6 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void increaseHealth(float health) {
         if (getNBT() != null) {
@@ -672,9 +549,6 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void setStat(Stat stat, int value) {
         statisticsFile.a(null, ((CanaryStat)stat).getHandle(), value);
@@ -685,9 +559,6 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
         setStat(statistics.getInstance(), value);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void increaseStat(Stat stat, int value) {
         if (value < 0) {
@@ -701,9 +572,6 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
         increaseStat(statistics.getInstance(), value);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void decreaseStat(Stat stat, int value) {
         if (value < 0) {
@@ -717,9 +585,6 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
         decreaseStat(statistics.getInstance(), value);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public int getStat(Stat stat) {
         return statisticsFile.a(((CanaryStat)stat).getHandle());
@@ -730,9 +595,6 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
         return getStat(statistics.getInstance());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void awardAchievement(Achievement achievement) {
         // Need to give all parent achievements
@@ -748,9 +610,16 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
         awardAchievement(achievements.getInstance());
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
+    public PlayerInventory getInventory() {
+        return (PlayerInventory)this.playerInv;
+    }
+
+    @Override
+    public Inventory getEnderChestInventory() {
+        return this.enderInv;
+    }
+
     @Override
     public void removeAchievement(Achievement achievement) {
         // Need to remove any children achievements
@@ -768,9 +637,6 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
         removeAchievement(achievements.getInstance());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean hasAchievement(Achievement achievement) {
         return statisticsFile.a(((CanaryAchievement)achievement).getHandle());
