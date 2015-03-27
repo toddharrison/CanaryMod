@@ -10,7 +10,6 @@ import net.canarymod.api.GameMode;
 import net.canarymod.api.NetServerHandler;
 import net.canarymod.api.PlayerListAction;
 import net.canarymod.api.PlayerListData;
-import net.canarymod.api.PlayerListEntry;
 import net.canarymod.api.Server;
 import net.canarymod.api.chat.CanaryChatComponent;
 import net.canarymod.api.chat.ChatComponent;
@@ -756,14 +755,6 @@ public class CanaryPlayer extends CanaryHuman implements Player {
     @Override
     public PlayerListData getPlayerListData(PlayerListAction playerListAction) {
         return new PlayerListData(playerListAction, getGameProfile(), getPing(), getMode(), getDisplayNameComponent());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void sendPlayerListEntry(PlayerListEntry plentry) {
-        // AND dead...
     }
 
     @Override

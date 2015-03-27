@@ -750,17 +750,6 @@ public class CanaryServer implements Server {
         return ServerTaskManager.removeTask(task);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void sendPlayerListEntry(PlayerListEntry entry) {
-        if (Configuration.getServerConfig().isPlayerListEnabled()) {
-            // FIXME
-            //server.ah().a(new S38PacketPlayerListItem(entry.getName(), entry.isShown(), entry.getPing()));
-        }
-    }
-
     @Override
     public void sendPlayerListData(PlayerListData data) {
         if (Configuration.getServerConfig().isPlayerListEnabled()) {
