@@ -46,8 +46,8 @@ public class Material {
     public static final Material H = (new Material(MapColor.m)).o();
     public static final Material I = (new Material(MapColor.b)).f().o();
     private boolean J;
-    public boolean K;// CanaryMod: private => public (translucent)
-    private boolean L;
+    private boolean K;
+    private boolean L; // translucent
     private final MapColor M;
     private boolean N = true;
     private int O;
@@ -138,6 +138,10 @@ public class Material {
     // CanaryMod
     public boolean isAlwaysHarvested() {
         return this.P;
+    }
+
+    public boolean isTranslucent() {
+        return this.L;
     }
 
     public CanaryBlockMaterial getCanaryBlockMaterial() {

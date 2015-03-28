@@ -197,4 +197,8 @@ public class CanaryBlockBase implements BlockBase {
     public int getComparatorInputOverride(World world, Position position) {
         return nmsBlock.l(unwrap(world), unwrap(position));
     }
+
+    public final String toString(){ // TODO: More information
+        return "BlockBase["+net.minecraft.block.Block.c.c(nmsBlock).toString()+"]";
+    }
 }

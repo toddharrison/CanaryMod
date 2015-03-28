@@ -91,6 +91,22 @@ public class CanaryBlockMaterial implements BlockMaterial {
      */
     @Override
     public boolean isTranslucent() {
-        return material.K;
+        return material.isTranslucent();
+    }
+
+    public final String toString() {
+        StringBuilder builder = new StringBuilder("Material[ ");
+        builder.append("Liquid:").append(isLiquid());
+        builder.append(", Solid:").append(isSolid());
+        builder.append(", BlocksLight:").append(canPreventGrassGrowth());
+        builder.append(", Burn:").append(canBurn());
+        builder.append(", Replaceable:").append(isReplaceable());
+        builder.append(", Opaque:").append(isOpaque());
+        builder.append(", NoTool:").append(noToolRequired());
+        builder.append(", Mobility:").append(getMobility());
+        builder.append(", HarvestedAlways:").append(isAlwaysHarvested());
+        builder.append(", Translucent:").append(isTranslucent());
+        builder.append("]");
+        return builder.toString();
     }
 }
