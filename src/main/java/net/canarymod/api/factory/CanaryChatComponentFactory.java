@@ -76,10 +76,10 @@ public class CanaryChatComponentFactory implements ChatComponentFactory {
                             break;
                     }
                 }
-
-                if (workingMsg.length() > 1) { // Only reset things if there was something beyond the style
-                    eventFormat(toSend, working, workingMsg, true);
+                if (workingMsg.length() == 1) { // Only reset things if there was something beyond the style
+                    continue;
                 }
+                eventFormat(toSend, working, workingMsg, true);
             }
             else if (workingMsg.length() > 1) {
                 eventFormat(toSend, working, workingMsg, false);
