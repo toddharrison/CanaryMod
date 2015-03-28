@@ -17,8 +17,8 @@ public class CanaryOfflinePlayerInventory extends CanaryPlayerInventory {
     }
 
     private static InventoryPlayer formInventory(OfflinePlayer offlinePlayer) {
-        InventoryPlayer iec = new InventoryPlayer(null);
-        iec.a(((CanaryListTag)offlinePlayer.getNBT().getListTag("Inventory")).getHandle());
-        return iec;
+        InventoryPlayer ip = new InventoryPlayer(null);
+        ip.b(((CanaryListTag)offlinePlayer.getNBT().getListTag("Inventory")).getHandle());
+        return ip;
     }
 }
