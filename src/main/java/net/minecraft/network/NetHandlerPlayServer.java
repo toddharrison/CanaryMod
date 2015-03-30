@@ -415,11 +415,19 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, IUpdatePlaye
                     // CanaryMod:     on ground       |                isFlying                           |        ignorerestrictions         |      admin
                     if (!worldserver.c(axisalignedbb) && !this.b.getPlayer().getCapabilities().isFlying() && !(player.canIgnoreRestrictions() || player.isAdmin())) {
                         if (d18 >= -0.03125D) {
-                            ++this.g;
-                            if (this.g > 80) {
-                                c.warn(this.b.d_() + " was kicked for floating too long!");
-                                this.c("Flying is not enabled on this server");
-                                return;
+                            if (this.g > Configuration.getServerConfig().getFlightDetectTicks()) {
+                                // CanaryMod: Configurable flight kicking
+                                if (Configuration.getServerConfig().isFlightKickEnabled()) {
+                                    c.warn(this.b.d_() + " was kicked for floating too long!");
+                                    this.c("Flying is not enabled on this server");
+                                    this.f = 0; // Reset the counter
+                                    return;
+                                }
+                                else {
+                                    // Log a warning if they aren't being kicked
+                                    c.warn(this.b.d_() + " was detected floating too long! (Location: " + player.getLocation().asReadableString(Location.ReadMode.XYZ, Location.ReadMode.WORLD, Location.ReadMode.DIMENSION) + ")");
+                                    this.g = 0; // Reset the counter
+                                }
                             }
                         }
                     }
