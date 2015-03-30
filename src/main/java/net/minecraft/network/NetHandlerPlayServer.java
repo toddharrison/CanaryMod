@@ -420,7 +420,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, IUpdatePlaye
                                 if (Configuration.getServerConfig().isFlightKickEnabled()) {
                                     c.warn(this.b.d_() + " was kicked for floating too long!");
                                     this.c("Flying is not enabled on this server");
-                                    this.f = 0; // Reset the counter
+                                    this.g = 0; // Reset the counter
                                     return;
                                 }
                                 else {
