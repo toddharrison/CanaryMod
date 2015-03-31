@@ -1034,7 +1034,7 @@ public abstract class EntityPlayer extends EntityLivingBase {
                     double d0 = entity.v;
                     double d1 = entity.w;
                     double d2 = entity.x;
-                    boolean flag2 = entity.a(DamageSource.a(this), f0);
+                    boolean flag2 = entity.a(DamageSource.a(this, flag0 && f0 > 0.0F), f0); // CanaryMod: Include critical hit checks
 
                     if (flag2) {
                         if (i0 > 0) {

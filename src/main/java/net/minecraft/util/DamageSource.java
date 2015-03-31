@@ -43,8 +43,8 @@ public class DamageSource {
         return new EntityDamageSource("mob", entitylivingbase);
     }
 
-    public static DamageSource a(EntityPlayer entityplayer) {
-        return new EntityDamageSource("player", entityplayer);
+    public static DamageSource a(EntityPlayer entityplayer, boolean critical) { // CanaryMod: Signature change; passing critical
+        return new EntityDamageSource("player", entityplayer, critical);
     }
 
     public static DamageSource a(EntityArrow entityarrow, Entity entity) {

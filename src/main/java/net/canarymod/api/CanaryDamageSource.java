@@ -3,6 +3,7 @@ package net.canarymod.api;
 import net.canarymod.api.entity.Entity;
 import net.canarymod.api.entity.living.humanoid.CanaryPlayer;
 import net.canarymod.api.entity.living.humanoid.Player;
+import net.minecraft.util.EntityDamageSource;
 import net.minecraft.world.Explosion;
 
 public class CanaryDamageSource implements DamageSource {
@@ -75,6 +76,25 @@ public class CanaryDamageSource implements DamageSource {
     @Override
     public DamageType getDamagetype() {
         return DamageType.fromDamageSource(this);
+    }
+
+    @Override
+    public boolean isCritical() {
+        return handle instanceof EntityDamageSource && ((EntityDamageSource)handle).isCritical();
+    }
+
+    public final String toString() {
+        StringBuilder builder = new StringBuilder("DamageSource[");
+        builder.append("Name: ").append(getNativeName()).append(", ");
+        builder.append("Dealer: ").append(getDamageDealer()).append(", ");
+        builder.append("Hunger: ").append(getHungerDamage()).append(", ");
+        builder.append("Fire: ").append(isFireDamage()).append(", ");
+        builder.append("Projectile: ").append(isProjectile()).append(", ");
+        builder.append("Unblockable: ").append(isUnblockable()).append(", ");
+        builder.append("CreativeValid: ").append(validInCreativeMode()).append(", ");
+        builder.append("Critical: ").append(isCritical()).append("]");
+
+        return builder.toString();
     }
 
     /**
