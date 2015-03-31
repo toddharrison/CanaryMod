@@ -1,5 +1,6 @@
 package net.canarymod.api.entity;
 
+import com.google.common.collect.Lists;
 import net.canarymod.api.inventory.CanaryItem;
 import net.canarymod.api.inventory.Item;
 import net.canarymod.api.nbt.BaseTag;
@@ -12,6 +13,9 @@ import net.canarymod.api.world.position.Position;
 import net.canarymod.api.world.position.Vector3D;
 import net.minecraft.nbt.NBTTagCompound;
 
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -395,7 +399,7 @@ public abstract class CanaryEntity implements Entity {
 
     @Override
     public void setNBT(BaseTag tag) {
-        this.getHandle().f((NBTTagCompound) ((CanaryCompoundTag) tag).getHandle());
+        this.getHandle().f((NBTTagCompound)((CanaryCompoundTag)tag).getHandle());
     }
 
     @Override
@@ -459,6 +463,61 @@ public abstract class CanaryEntity implements Entity {
     @Override
     public boolean isEating(){
         return getHandle().isEating();
+    }
+
+    @Override
+    public List<Entity> getNearbyEntities(double radius) {
+        return this.getNearbyEntities(new Vector3D(radius, radius, radius));
+    }
+
+    @Override
+    public List<Entity> getNearbyEntities(Vector3D vector) {
+        if (getWorld().getTrackedEntities().size() == 0) {
+            return Collections.emptyList();
+        }
+
+        Vector3D min = this.getLocation();
+        Vector3D max = this.getLocation().add(vector);
+        List<Entity> radiusEntities = Lists.newArrayList();
+        synchronized (getWorld().getTrackedEntities()) {
+            Iterator<Entity> entities = getWorld().getTrackedEntities().iterator();
+            do {
+                Entity entity = entities.next();
+                if (entity.getLocation().isWithin(min, max) && !entity.equals(this)) {
+                    radiusEntities.add(entity);
+                }
+            }
+            while (entities.hasNext());
+        }
+        return radiusEntities;
+    }
+
+    @Override
+    public List<Entity> getNearbyEntities(double radius, EntityType... filter) {
+        return this.getNearbyEntities(new Vector3D(radius, radius, radius), filter);
+    }
+
+    @Override
+    public List<Entity> getNearbyEntities(Vector3D vector, EntityType... filter) {
+        List<Entity> entities = getNearbyEntities(vector);
+        if (entities.size() == 0) {
+            return entities;
+        }
+        Iterator<Entity> entityItr = entities.iterator();
+        do {
+            Entity entity = entityItr.next();
+            boolean keep = false;
+            for (EntityType type : filter) {
+                if (entity.getEntityType().isOf(type)) {
+                    keep = true;
+                }
+            }
+            if (!keep) {
+                entityItr.remove();
+            }
+        }
+        while (entityItr.hasNext());
+        return entities;
     }
 
     /**
