@@ -54,7 +54,8 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
     private boolean isMuted;
     private UUID uuid;
     private StatisticsFile statisticsFile;
-    private Inventory playerInv, enderInv;
+    private CanaryOfflinePlayerInventory playerInv;
+    private CanaryOfflineEnderChestInventory enderInv;
 
     public CanaryOfflinePlayer(String name, UUID uuid, CanaryCompoundTag tag) {
         this.data = tag;
@@ -265,11 +266,14 @@ public class CanaryOfflinePlayer implements OfflinePlayer {
             log.warn("Attempted to save an online player! (" + getName() + ")");
             return;
         }
-        if (getNBT() != null) {
+        CompoundTag tag = getNBT();
+        if (tag != null) {
+            tag.put("Inventory", playerInv.storeInventory());
+            tag.put("EnderItems", enderInv.storeInventory());
             ISaveHandler handler = ((CanaryWorld)getWorld()).getHandle().O();
             if (handler instanceof SaveHandler) {
                 SaveHandler shandler = (SaveHandler)handler;
-                shandler.writePlayerNbt(uuid, (CanaryCompoundTag)getNBT());
+                shandler.writePlayerNbt(uuid, (CanaryCompoundTag)tag);
             }
             else {
                 log.error(getName() + "'s OfflinePlayer could not be saved! Unsupported SaveHandler!");

@@ -2,7 +2,9 @@ package net.canarymod.api.inventory;
 
 import net.canarymod.api.OfflinePlayer;
 import net.canarymod.api.entity.living.humanoid.Human;
+import net.canarymod.api.nbt.CanaryBaseTag;
 import net.canarymod.api.nbt.CanaryListTag;
+import net.canarymod.api.nbt.ListTag;
 import net.minecraft.inventory.InventoryEnderChest;
 
 /**
@@ -25,5 +27,9 @@ public class CanaryOfflineEnderChestInventory extends CanaryEnderChestInventory 
         InventoryEnderChest iec = new InventoryEnderChest();
         iec.a(((CanaryListTag)offlinePlayer.getNBT().getListTag("EnderItems")).getHandle());
         return iec;
+    }
+
+    public ListTag storeInventory() {
+        return (ListTag)CanaryBaseTag.wrap(getHandle().h());
     }
 }
