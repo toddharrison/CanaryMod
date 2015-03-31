@@ -1,11 +1,12 @@
 package net.minecraft.entity.item;
 
-import net.canarymod.api.CanaryDamageSource;
-import net.canarymod.api.DamageType;
+import net.canarymod.api.entity.CanaryEntity;
 import net.canarymod.api.entity.hanging.CanaryItemFrame;
 import net.canarymod.api.entity.hanging.HangingEntity;
 import net.canarymod.api.entity.hanging.ItemFrame;
 import net.canarymod.api.entity.living.humanoid.Player;
+import net.canarymod.hook.CancelableHook;
+import net.canarymod.hook.entity.DamageHook;
 import net.canarymod.hook.entity.HangingEntityDestroyHook;
 import net.canarymod.hook.player.ItemFrameRotateHook;
 import net.canarymod.hook.player.ItemFrameSetItemHook;
@@ -51,6 +52,23 @@ public class EntityItemFrame extends EntityHanging {
     }
 
     public boolean a(DamageSource damagesource, float f0) {
+        //CanaryMod start
+        CancelableHook hook;
+        if (damagesource.j() instanceof EntityPlayer) {
+            hook = new HangingEntityDestroyHook((HangingEntity)this.getCanaryEntity(), (Player)damagesource.j().getCanaryEntity(), damagesource.getCanaryDamageSource()).call();
+        }
+        else {
+            CanaryEntity attacker = damagesource.j() != null ? damagesource.j().getCanaryEntity() : null;
+            hook = new DamageHook(attacker, this.getCanaryEntity(), damagesource.getCanaryDamageSource(), f0).call();
+            if (!hook.isCanceled()) {
+                hook = new HangingEntityDestroyHook((HangingEntity)this.getCanaryEntity(), null, damagesource.getCanaryDamageSource()).call();
+            }
+        }
+        if (hook.isCanceled()) {
+            return false;
+        }
+        //CanaryMod end
+
         if (this.b(damagesource)) {
             return false;
         }
@@ -80,19 +98,6 @@ public class EntityItemFrame extends EntityHanging {
     }
 
     public void a(Entity entity, boolean flag0) {
-        //CanaryMod start
-        HangingEntityDestroyHook hook;
-        if (entity instanceof EntityPlayer) {
-            hook = (HangingEntityDestroyHook) new HangingEntityDestroyHook((HangingEntity) this.getCanaryEntity(), (Player) entity.getCanaryEntity(), CanaryDamageSource.getDamageSourceFromType(DamageType.GENERIC)).call();
-        }
-        else {
-            hook = (HangingEntityDestroyHook) new HangingEntityDestroyHook((HangingEntity) this.getCanaryEntity(), null, CanaryDamageSource.getDamageSourceFromType(DamageType.GENERIC)).call();
-        }
-        if (hook.isCanceled()) {
-            return;
-        }
-        //CanaryMod end
-
         if (this.o.Q().b("doTileDrops")) {
             ItemStack itemstack = this.o();
 
@@ -100,6 +105,10 @@ public class EntityItemFrame extends EntityHanging {
                 EntityPlayer entityplayer = (EntityPlayer) entity;
 
                 if (entityplayer.by.d) {
+                    // CanaryMod: ItemFrameSetItemHook
+                    if (itemstack != null && new ItemFrameSetItemHook(((EntityPlayerMP)entityplayer).getPlayer(), (ItemFrame)this.getCanaryEntity(), null).call().isCanceled()) {
+                        return;
+                    }
                     this.b(itemstack);
                     return;
                 }
@@ -111,10 +120,16 @@ public class EntityItemFrame extends EntityHanging {
 
             if (itemstack != null && this.V.nextFloat() < this.c) {
                 itemstack = itemstack.k();
+                // CanaryMod: ItemFrameSetItemHook
+                if (entity instanceof EntityPlayer) {
+                    if (itemstack != null && new ItemFrameSetItemHook(((EntityPlayerMP)entity).getPlayer(), (ItemFrame)this.getCanaryEntity(), null).call().isCanceled()) {
+                        return;
+                    }
+                }
+                //
                 this.b(itemstack);
                 this.a(itemstack, 0.0F);
             }
-
         }
     }
 
