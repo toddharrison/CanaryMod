@@ -239,10 +239,12 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 
         if (worldinfo == null) {
             worldsettings = new WorldSettings(seed, WorldSettings.GameType.a(config.getGameMode().getId()), config.generatesStructures(), false, nmsWt);
-            PropertiesFile worldRaw = config.getFile();
-            worldRaw.setString("world-seed", String.valueOf(seed));
-            worldRaw.setInt("gamemode", 0);
-            worldRaw.save();
+            if (config.getWorldSeed().isEmpty()) {
+                // Ok to set the seed
+                PropertiesFile worldRaw = config.getFile();
+                worldRaw.setString("world-seed", String.valueOf(seed));
+                worldRaw.save();
+            }
             // CanaryMod those are flatworld settings, and they are likely unset
             if (generatorSettings != null) {
                 worldsettings.a(generatorSettings);
