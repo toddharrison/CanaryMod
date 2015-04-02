@@ -121,7 +121,7 @@ public class CanaryScoreboard implements Scoreboard {
         Collection i = handle.i(((CanaryScoreObjective) scoreObjective).getHandle());
         List<Score> scores = new ArrayList<Score>();
         for (Object o : i) {
-            scores.add((Score) o);
+            scores.add(((net.minecraft.scoreboard.Score) o).getCanaryScore());
         }
         return scores;
     }
