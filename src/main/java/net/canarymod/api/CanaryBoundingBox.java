@@ -19,6 +19,36 @@ public class CanaryBoundingBox implements BoundingBox {
     }
 
     @Override
+    public double getMinX() {
+        return this.axisAlignedBB.a;
+    }
+
+    @Override
+    public double getMinY() {
+        return this.axisAlignedBB.b;
+    }
+
+    @Override
+    public double getMinZ() {
+        return this.axisAlignedBB.c;
+    }
+
+    @Override
+    public double getMaxX() {
+        return this.axisAlignedBB.d;
+    }
+
+    @Override
+    public double getMaxY() {
+        return this.axisAlignedBB.e;
+    }
+
+    @Override
+    public double getMaxZ() {
+        return this.axisAlignedBB.f;
+    }
+
+    @Override
     public BoundingBox addCoordinates(double x, double y, double z) {
         return newBB(this.axisAlignedBB.a(x, y, z));
     }
