@@ -1,6 +1,5 @@
 package net.canarymod.api.commandsys;
 
-import java.util.List;
 import net.canarymod.api.CanaryServer;
 import net.canarymod.api.entity.living.humanoid.CanaryPlayer;
 import net.canarymod.api.entity.living.humanoid.Player;
@@ -9,6 +8,8 @@ import net.canarymod.api.world.blocks.CanaryCommandBlock;
 import net.canarymod.chat.MessageReceiver;
 import net.canarymod.commandsys.PlayerSelector;
 import net.minecraft.entity.player.EntityPlayerMP;
+
+import java.util.List;
 
 /**
  * A class that handels the "@" attribute

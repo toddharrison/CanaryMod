@@ -1,22 +1,18 @@
 package net.canarymod.api.entity.living.humanoid.npchelpers;
 
-
-import java.util.Iterator;
 import net.canarymod.api.entity.living.humanoid.EntityNonPlayableCharacter;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.monster.EntityZombie;
-import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.init.Blocks;
 import net.minecraft.pathfinding.PathFinder;
-import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraft.world.pathfinder.WalkNodeProcessor;
+
+import java.util.Iterator;
 
 
 public class PathNavigateGroundNPC extends PathNavigateNPC {
