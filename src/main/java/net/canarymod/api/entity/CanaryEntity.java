@@ -1,6 +1,8 @@
 package net.canarymod.api.entity;
 
 import com.google.common.collect.Lists;
+import net.canarymod.api.BoundingBox;
+import net.canarymod.api.CanaryBoundingBox;
 import net.canarymod.api.inventory.CanaryItem;
 import net.canarymod.api.inventory.Item;
 import net.canarymod.api.nbt.BaseTag;
@@ -518,6 +520,11 @@ public abstract class CanaryEntity implements Entity {
         }
         while (entityItr.hasNext());
         return entities;
+    }
+
+    @Override
+    public BoundingBox getBoundingBox() {
+        return new CanaryBoundingBox(this.entity.aQ());
     }
 
     /**
