@@ -110,10 +110,6 @@ public class CanaryBlock implements Block {
         this.type = BlockStateMapper.getTypeFromState(state);
     }
 
-    public void applyToPool(){
-
-    }
-
     @Override
     public short getTypeId() {
         if (type != null) {
@@ -140,18 +136,15 @@ public class CanaryBlock implements Block {
     }
 
     @Override
-    public short getData() {
-        return (short) convertPropertyTypeData(state); // Actual data could be different from typed data
+    public int getData() {
+        return convertPropertyTypeData(state); // Actual data could be different from typed data
     }
 
-    /**
-     * Setting a data value is bound to produce unexpected results
-     */
-    @Deprecated
     @Override
-    public void setData(short data) {
-        this.type = BlockType.fromStringAndData(type.getMachineName(), data);
-        this.state = BlockStateMapper.getStateForType(type);
+    public void setData(int data) {
+        this.state = state.c().a(data);
+        this.type = BlockStateMapper.getTypeFromState(state); // reset the type if something like variant changed
+        this.update();
     }
 
     @Override

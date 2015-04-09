@@ -2,7 +2,6 @@ package net.canarymod.api.world.blocks.properties;
 
 import com.google.common.collect.HashBiMap;
 import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Maps;
 import net.canarymod.Canary;
 import net.canarymod.api.world.blocks.BlockType;
 import net.minecraft.block.Block;
@@ -10,7 +9,6 @@ import net.minecraft.block.BlockCarpet;
 import net.minecraft.block.BlockColored;
 import net.minecraft.block.BlockDirt;
 import net.minecraft.block.BlockDoublePlant;
-import net.minecraft.block.BlockDoubleStoneSlab;
 import net.minecraft.block.BlockFlower;
 import net.minecraft.block.BlockNewLeaf;
 import net.minecraft.block.BlockNewLog;
@@ -34,11 +32,174 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
-import net.minecraft.util.ResourceLocation;
 
-import java.util.HashMap;
-
-import static net.canarymod.api.world.blocks.BlockType.*;
+import static net.canarymod.api.world.blocks.BlockType.AcaciaLeaves;
+import static net.canarymod.api.world.blocks.BlockType.AcaciaLog;
+import static net.canarymod.api.world.blocks.BlockType.AcaciaPlanks;
+import static net.canarymod.api.world.blocks.BlockType.AcaciaSapling;
+import static net.canarymod.api.world.blocks.BlockType.AcaciaWoodSlab;
+import static net.canarymod.api.world.blocks.BlockType.Allium;
+import static net.canarymod.api.world.blocks.BlockType.Andesite;
+import static net.canarymod.api.world.blocks.BlockType.AzureBluet;
+import static net.canarymod.api.world.blocks.BlockType.BirchLeaves;
+import static net.canarymod.api.world.blocks.BlockType.BirchLog;
+import static net.canarymod.api.world.blocks.BlockType.BirchPlanks;
+import static net.canarymod.api.world.blocks.BlockType.BirchSapling;
+import static net.canarymod.api.world.blocks.BlockType.BirchWoodSlab;
+import static net.canarymod.api.world.blocks.BlockType.BlackCarpet;
+import static net.canarymod.api.world.blocks.BlockType.BlackGlass;
+import static net.canarymod.api.world.blocks.BlockType.BlackGlassPane;
+import static net.canarymod.api.world.blocks.BlockType.BlackStainedClay;
+import static net.canarymod.api.world.blocks.BlockType.BlackWool;
+import static net.canarymod.api.world.blocks.BlockType.BlueCarpet;
+import static net.canarymod.api.world.blocks.BlockType.BlueGlass;
+import static net.canarymod.api.world.blocks.BlockType.BlueGlassPane;
+import static net.canarymod.api.world.blocks.BlockType.BlueOrchid;
+import static net.canarymod.api.world.blocks.BlockType.BlueStainedClay;
+import static net.canarymod.api.world.blocks.BlockType.BlueWool;
+import static net.canarymod.api.world.blocks.BlockType.BrickSlab;
+import static net.canarymod.api.world.blocks.BlockType.BrownCarpet;
+import static net.canarymod.api.world.blocks.BlockType.BrownGlass;
+import static net.canarymod.api.world.blocks.BlockType.BrownGlassPane;
+import static net.canarymod.api.world.blocks.BlockType.BrownStainedClay;
+import static net.canarymod.api.world.blocks.BlockType.BrownWool;
+import static net.canarymod.api.world.blocks.BlockType.ChiseledQuartzBlock;
+import static net.canarymod.api.world.blocks.BlockType.ChiseledSilverFishBlock;
+import static net.canarymod.api.world.blocks.BlockType.ChiseledStoneBrick;
+import static net.canarymod.api.world.blocks.BlockType.CoarseDirt;
+import static net.canarymod.api.world.blocks.BlockType.CobbleSilverFishBlock;
+import static net.canarymod.api.world.blocks.BlockType.CobbleSlab;
+import static net.canarymod.api.world.blocks.BlockType.CrackedSilverFishBlock;
+import static net.canarymod.api.world.blocks.BlockType.CrackedStoneBrick;
+import static net.canarymod.api.world.blocks.BlockType.CyanCarpet;
+import static net.canarymod.api.world.blocks.BlockType.CyanGlass;
+import static net.canarymod.api.world.blocks.BlockType.CyanGlassPane;
+import static net.canarymod.api.world.blocks.BlockType.CyanStainedClay;
+import static net.canarymod.api.world.blocks.BlockType.CyanWool;
+import static net.canarymod.api.world.blocks.BlockType.DarkOakLeaves;
+import static net.canarymod.api.world.blocks.BlockType.DarkOakLog;
+import static net.canarymod.api.world.blocks.BlockType.DarkOakPlanks;
+import static net.canarymod.api.world.blocks.BlockType.DarkOakSapling;
+import static net.canarymod.api.world.blocks.BlockType.DarkOakWoodSlab;
+import static net.canarymod.api.world.blocks.BlockType.DarkPrismarine;
+import static net.canarymod.api.world.blocks.BlockType.Diorite;
+import static net.canarymod.api.world.blocks.BlockType.DoubleAcaciaWoodSlab;
+import static net.canarymod.api.world.blocks.BlockType.DoubleBirchWoodSlab;
+import static net.canarymod.api.world.blocks.BlockType.DoubleBrickSlab;
+import static net.canarymod.api.world.blocks.BlockType.DoubleCobbleSlab;
+import static net.canarymod.api.world.blocks.BlockType.DoubleDarkOakWoodSlab;
+import static net.canarymod.api.world.blocks.BlockType.DoubleGrass;
+import static net.canarymod.api.world.blocks.BlockType.DoubleJungleWoodSlab;
+import static net.canarymod.api.world.blocks.BlockType.DoubleNetherBrickSlab;
+import static net.canarymod.api.world.blocks.BlockType.DoubleQuartzSlab;
+import static net.canarymod.api.world.blocks.BlockType.DoubleSandStoneSlab;
+import static net.canarymod.api.world.blocks.BlockType.DoubleSpruceWoodSlab;
+import static net.canarymod.api.world.blocks.BlockType.DoubleStoneBricksSlab;
+import static net.canarymod.api.world.blocks.BlockType.DoubleStoneSlab;
+import static net.canarymod.api.world.blocks.BlockType.DoubleWoodSlab;
+import static net.canarymod.api.world.blocks.BlockType.Fern;
+import static net.canarymod.api.world.blocks.BlockType.Granite;
+import static net.canarymod.api.world.blocks.BlockType.GrayCarpet;
+import static net.canarymod.api.world.blocks.BlockType.GrayGlass;
+import static net.canarymod.api.world.blocks.BlockType.GrayGlassPane;
+import static net.canarymod.api.world.blocks.BlockType.GrayStainedClay;
+import static net.canarymod.api.world.blocks.BlockType.GrayWool;
+import static net.canarymod.api.world.blocks.BlockType.GreenCarpet;
+import static net.canarymod.api.world.blocks.BlockType.GreenGlass;
+import static net.canarymod.api.world.blocks.BlockType.GreenGlassPane;
+import static net.canarymod.api.world.blocks.BlockType.GreenStainedClay;
+import static net.canarymod.api.world.blocks.BlockType.GreenWool;
+import static net.canarymod.api.world.blocks.BlockType.JungleLeaves;
+import static net.canarymod.api.world.blocks.BlockType.JungleLog;
+import static net.canarymod.api.world.blocks.BlockType.JunglePlanks;
+import static net.canarymod.api.world.blocks.BlockType.JungleSapling;
+import static net.canarymod.api.world.blocks.BlockType.JungleWoodSlab;
+import static net.canarymod.api.world.blocks.BlockType.LargeFern;
+import static net.canarymod.api.world.blocks.BlockType.LightBlueCarpet;
+import static net.canarymod.api.world.blocks.BlockType.LightBlueGlass;
+import static net.canarymod.api.world.blocks.BlockType.LightBlueGlassPane;
+import static net.canarymod.api.world.blocks.BlockType.LightBlueStainedClay;
+import static net.canarymod.api.world.blocks.BlockType.LightBlueWool;
+import static net.canarymod.api.world.blocks.BlockType.LightGrayCarpet;
+import static net.canarymod.api.world.blocks.BlockType.LightGrayGlass;
+import static net.canarymod.api.world.blocks.BlockType.LightGrayGlassPane;
+import static net.canarymod.api.world.blocks.BlockType.LightGrayStainedClay;
+import static net.canarymod.api.world.blocks.BlockType.LightGrayWool;
+import static net.canarymod.api.world.blocks.BlockType.Lilac;
+import static net.canarymod.api.world.blocks.BlockType.LimeCarpet;
+import static net.canarymod.api.world.blocks.BlockType.LimeGlass;
+import static net.canarymod.api.world.blocks.BlockType.LimeGlassPane;
+import static net.canarymod.api.world.blocks.BlockType.LimeStainedClay;
+import static net.canarymod.api.world.blocks.BlockType.LimeWool;
+import static net.canarymod.api.world.blocks.BlockType.MagentaCarpet;
+import static net.canarymod.api.world.blocks.BlockType.MagentaGlass;
+import static net.canarymod.api.world.blocks.BlockType.MagentaGlassPane;
+import static net.canarymod.api.world.blocks.BlockType.MagentaStainedClay;
+import static net.canarymod.api.world.blocks.BlockType.MagentaWool;
+import static net.canarymod.api.world.blocks.BlockType.MossyBrickSilverFishBlock;
+import static net.canarymod.api.world.blocks.BlockType.MossyStoneBrick;
+import static net.canarymod.api.world.blocks.BlockType.NetherBricksSlab;
+import static net.canarymod.api.world.blocks.BlockType.OrangeCarpet;
+import static net.canarymod.api.world.blocks.BlockType.OrangeGlass;
+import static net.canarymod.api.world.blocks.BlockType.OrangeGlassPane;
+import static net.canarymod.api.world.blocks.BlockType.OrangeStainedClay;
+import static net.canarymod.api.world.blocks.BlockType.OrangeTulip;
+import static net.canarymod.api.world.blocks.BlockType.OrangeWool;
+import static net.canarymod.api.world.blocks.BlockType.OxeyeDaisy;
+import static net.canarymod.api.world.blocks.BlockType.Peony;
+import static net.canarymod.api.world.blocks.BlockType.PinkCarpet;
+import static net.canarymod.api.world.blocks.BlockType.PinkGlass;
+import static net.canarymod.api.world.blocks.BlockType.PinkGlassPane;
+import static net.canarymod.api.world.blocks.BlockType.PinkStainedClay;
+import static net.canarymod.api.world.blocks.BlockType.PinkTulip;
+import static net.canarymod.api.world.blocks.BlockType.PinkWool;
+import static net.canarymod.api.world.blocks.BlockType.Podzol;
+import static net.canarymod.api.world.blocks.BlockType.PolishedAndesite;
+import static net.canarymod.api.world.blocks.BlockType.PolishedDiorite;
+import static net.canarymod.api.world.blocks.BlockType.PolishedGranite;
+import static net.canarymod.api.world.blocks.BlockType.PrismarineBricks;
+import static net.canarymod.api.world.blocks.BlockType.PurpleCarpet;
+import static net.canarymod.api.world.blocks.BlockType.PurpleGlass;
+import static net.canarymod.api.world.blocks.BlockType.PurpleGlassPane;
+import static net.canarymod.api.world.blocks.BlockType.PurpleStainedClay;
+import static net.canarymod.api.world.blocks.BlockType.PurpleWool;
+import static net.canarymod.api.world.blocks.BlockType.QuartzPillarCap;
+import static net.canarymod.api.world.blocks.BlockType.QuartzPillarHorizontal;
+import static net.canarymod.api.world.blocks.BlockType.QuartzPillarVertical;
+import static net.canarymod.api.world.blocks.BlockType.QuartzSlab;
+import static net.canarymod.api.world.blocks.BlockType.RedCarpet;
+import static net.canarymod.api.world.blocks.BlockType.RedGlass;
+import static net.canarymod.api.world.blocks.BlockType.RedGlassPane;
+import static net.canarymod.api.world.blocks.BlockType.RedSandstoneChiseled;
+import static net.canarymod.api.world.blocks.BlockType.RedSandstoneSmooth;
+import static net.canarymod.api.world.blocks.BlockType.RedStainedClay;
+import static net.canarymod.api.world.blocks.BlockType.RedTulip;
+import static net.canarymod.api.world.blocks.BlockType.RedWool;
+import static net.canarymod.api.world.blocks.BlockType.RoseBush;
+import static net.canarymod.api.world.blocks.BlockType.SandStoneSlab;
+import static net.canarymod.api.world.blocks.BlockType.SandstoneChiseled;
+import static net.canarymod.api.world.blocks.BlockType.SandstoneSmooth;
+import static net.canarymod.api.world.blocks.BlockType.SpruceLeaves;
+import static net.canarymod.api.world.blocks.BlockType.SpruceLog;
+import static net.canarymod.api.world.blocks.BlockType.SprucePlanks;
+import static net.canarymod.api.world.blocks.BlockType.SpruceSapling;
+import static net.canarymod.api.world.blocks.BlockType.SpruceWoodSlab;
+import static net.canarymod.api.world.blocks.BlockType.StoneBrickSilverFishBlock;
+import static net.canarymod.api.world.blocks.BlockType.StoneBricksSlab;
+import static net.canarymod.api.world.blocks.BlockType.StoneSlab;
+import static net.canarymod.api.world.blocks.BlockType.TallGrass;
+import static net.canarymod.api.world.blocks.BlockType.WhiteCarpet;
+import static net.canarymod.api.world.blocks.BlockType.WhiteGlass;
+import static net.canarymod.api.world.blocks.BlockType.WhiteGlassPane;
+import static net.canarymod.api.world.blocks.BlockType.WhiteStainedClay;
+import static net.canarymod.api.world.blocks.BlockType.WhiteTulip;
+import static net.canarymod.api.world.blocks.BlockType.WhiteWool;
+import static net.canarymod.api.world.blocks.BlockType.WoodSlab;
+import static net.canarymod.api.world.blocks.BlockType.YellowCarpet;
+import static net.canarymod.api.world.blocks.BlockType.YellowGlass;
+import static net.canarymod.api.world.blocks.BlockType.YellowGlassPane;
+import static net.canarymod.api.world.blocks.BlockType.YellowStainedClay;
+import static net.canarymod.api.world.blocks.BlockType.YellowWool;
 
 /**
  * Native mapper for those special blocks that change entirely based on state properties
@@ -87,7 +248,7 @@ public enum BlockStateMapper {
     LEAVES_DARKOAK(DarkOakLeaves, BlockNewLeaf.P, BlockPlanks.EnumType.DARK_OAK),
 
     /* Sandstone Variants */
-    SANDSTONE_CHISLED(SandstoneOrnate, BlockSandStone.a, BlockSandStone.EnumType.CHISELED),
+    SANDSTONE_CHISLED(SandstoneChiseled, BlockSandStone.a, BlockSandStone.EnumType.CHISELED),
     SANDSTONE_SMOOTH(SandstoneSmooth, BlockSandStone.a, BlockSandStone.EnumType.SMOOTH),
 
     /* Grass Variants */
@@ -165,12 +326,12 @@ public enum BlockStateMapper {
     MONSTEREGG_STONEBRICK(StoneBrickSilverFishBlock, BlockSilverfish.a, BlockSilverfish.EnumType.STONEBRICK),
     MONSTEREGG_MOSSYBRICK(MossyBrickSilverFishBlock, BlockSilverfish.a, BlockSilverfish.EnumType.MOSSY_STONEBRICK),
     MONSTEREGG_CRACKEDBRICK(CrackedSilverFishBlock, BlockSilverfish.a, BlockSilverfish.EnumType.CRACKED_STONEBRICK),
-    MONSTEREGG_ORNATEBRICK(OrnateSilverFishBlock, BlockSilverfish.a, BlockSilverfish.EnumType.CHISELED_STONEBRICK),
+    MONSTEREGG_CHISLEDBRICK(ChiseledSilverFishBlock, BlockSilverfish.a, BlockSilverfish.EnumType.CHISELED_STONEBRICK),
 
     /* Stone Brick Variants */
     STONEBRICK_MOSSY(MossyStoneBrick, BlockStoneBrick.a, BlockStoneBrick.EnumType.MOSSY),
     STONEBRICK_CRACKED(CrackedStoneBrick, BlockStoneBrick.a, BlockStoneBrick.EnumType.CRACKED),
-    STONEBRICK_CHISELED(OrnateStoneBrick, BlockStoneBrick.a, BlockStoneBrick.EnumType.CHISELED),
+    STONEBRICK_CHISELED(ChiseledStoneBrick, BlockStoneBrick.a, BlockStoneBrick.EnumType.CHISELED),
 
     /* Double Wood Slab Variants */
     DOUBLEWOODSLAB_SPRUCE(DoubleSpruceWoodSlab, BlockWoodSlab.b, BlockPlanks.EnumType.SPRUCE),
@@ -196,7 +357,7 @@ public enum BlockStateMapper {
     */
 
     /* Quartz Variants */
-    QUARTZ_CHISELED(OrnateQuartzBlock, BlockQuartz.a, BlockQuartz.EnumType.CHISELED),
+    QUARTZ_CHISELED(ChiseledQuartzBlock, BlockQuartz.a, BlockQuartz.EnumType.CHISELED),
     QUARTZ_PILLAR_VERTICAL(QuartzPillarVertical, BlockQuartz.a, BlockQuartz.EnumType.LINES_Y),
     QUARTZ_PILLAR_HORIZONTAL(QuartzPillarHorizontal, BlockQuartz.a, BlockQuartz.EnumType.LINES_X),
     QUARTZ_PILLAR_CAP(QuartzPillarCap, BlockQuartz.a, BlockQuartz.EnumType.LINES_Z),
@@ -267,15 +428,15 @@ public enum BlockStateMapper {
     PEONY(Peony, BlockDoublePlant.a, BlockDoublePlant.EnumPlantType.PAEONIA),
 
     /* Red Sandstone Variants */
-    REDSANDSTONE_CHISELED(RedSandstoneOrnate, BlockRedSandstone.a, BlockRedSandstone.EnumType.CHISELED),
-    REDSANDSTONE_SMOOTH(RedSandstoneBlank, BlockRedSandstone.a, BlockRedSandstone.EnumType.SMOOTH);
+    REDSANDSTONE_CHISELED(RedSandstoneChiseled, BlockRedSandstone.a, BlockRedSandstone.EnumType.CHISELED),
+    REDSANDSTONE_SMOOTH(RedSandstoneSmooth, BlockRedSandstone.a, BlockRedSandstone.EnumType.SMOOTH);
 
     private final BlockType type;
     private final IProperty property;
     private final Comparable value;
     private final IBlockState match;
 
-    private BlockStateMapper(BlockType type, IProperty property, Comparable value) {
+    BlockStateMapper(BlockType type, IProperty property, Comparable value) {
         this.type = type;
         this.property = property;
         this.value = value;
@@ -333,7 +494,7 @@ public enum BlockStateMapper {
                 continue;
             }
             map.put(tts.type, tts);
-            stateMap.put(Integer.valueOf(tts.type.getId()), new TypeState(tts.type, tts.match));
+            stateMap.put((int)tts.type.getId(), new TypeState(tts.type, tts.match));
         }
     }
 }
