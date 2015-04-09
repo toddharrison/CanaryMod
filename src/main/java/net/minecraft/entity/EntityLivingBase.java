@@ -303,7 +303,7 @@ public abstract class EntityLivingBase extends Entity {
 
             if (!this.o.D && (this.aM > 0 || this.ba()) && this.aZ() && this.o.Q().b("doMobLoot")) {
                 // CanaryMod: XP Drop checks
-                if (getCanaryEntity().doesDropXP()) {
+                if (getCanaryEntity().xpDrop()) {
                     i0 = this.b(this.aL);
 
                     while (i0 > 0) {
@@ -826,7 +826,7 @@ public abstract class EntityLivingBase extends Entity {
 
             if (this.aZ() && this.o.Q().b("doMobLoot")) {
                 // CanaryMod: Per-Entity Loot Drop checks
-                if (getCanaryEntity().doesDropLoot()) {
+                if (getCanaryEntity().lootDrop()) {
                     this.b(this.aM > 0, i0);
                     this.a(this.aM > 0, i0);
                     if (this.aM > 0 && this.V.nextFloat() < 0.025F + (float)i0 * 0.01F) {

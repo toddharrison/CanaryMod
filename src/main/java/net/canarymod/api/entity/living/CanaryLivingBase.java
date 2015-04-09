@@ -459,12 +459,24 @@ public abstract class CanaryLivingBase extends CanaryEntity implements LivingBas
         this.xpDrop = !nbttagcompound.c("XPDrop") || nbttagcompound.n("XPDrop");
     }
 
-    public boolean doesDropLoot() {
+    @Override
+    public boolean lootDrop() {
         return lootDrop;
     }
 
-    public boolean doesDropXP() {
+    @Override
+    public void setLootDrop(boolean lootDrop) {
+        this.lootDrop = lootDrop;
+    }
+
+    @Override
+    public boolean xpDrop() {
         return xpDrop;
+    }
+
+    @Override
+    public void setXPDrop(boolean xpDrop) {
+        this.xpDrop = xpDrop;
     }
 
     /**
