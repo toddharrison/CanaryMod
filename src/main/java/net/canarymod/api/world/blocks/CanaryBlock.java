@@ -25,7 +25,9 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Random;
 
 public class CanaryBlock implements Block {
     private final static Random rndm = new Random(); // Passed to the idDropped method
@@ -335,7 +337,7 @@ public class CanaryBlock implements Block {
             }
         }
 
-        return net.minecraft.block.Block.b(getType().getMachineName()).a(((CanaryWorld) getWorld()).getHandle(), new BlockPos(getX(), getY(), getZ()), getBlock().P(), player != null ? ((CanaryPlayer) player).getHandle() : null, enumfacing, 0, 0, 0); // last four parameters aren't even used by lever or button
+        return net.minecraft.block.Block.b(getType().getMachineName()).a(((CanaryWorld)getWorld()).getHandle(), new BlockPos(getX(), getY(), getZ()), getBlock().P(), player != null ? ((CanaryPlayer)player).getHandle() : null, enumfacing, 0, 0, 0); // last four parameters aren't even used by lever or button
     }
 
     public void sendUpdateToPlayers(Player... players) {
@@ -434,6 +436,11 @@ public class CanaryBlock implements Block {
     @Override
     public BlockBase getBlockBase() {
         return state.c().getWrapper();
+    }
+
+    @Override
+    public String stateToString() {
+        return this.state.toString();
     }
 
     /**
