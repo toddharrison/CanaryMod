@@ -4,7 +4,6 @@ import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
 import net.canarymod.Canary;
-import net.canarymod.ToolBox;
 import net.canarymod.api.entity.EntityType;
 import net.canarymod.api.entity.living.humanoid.CanaryHuman;
 import net.canarymod.api.entity.living.humanoid.CanaryPlayer;
@@ -14,7 +13,6 @@ import net.canarymod.api.inventory.CanaryItem;
 import net.canarymod.api.inventory.CanaryPlayerInventory;
 import net.canarymod.api.inventory.EnderChestInventory;
 import net.canarymod.api.inventory.PlayerInventory;
-import net.canarymod.api.nbt.CanaryCompoundTag;
 import net.canarymod.api.packet.CanaryPacket;
 import net.canarymod.api.scoreboard.CanaryScoreboard;
 import net.canarymod.api.world.CanaryWorld;
@@ -97,7 +95,6 @@ import net.minecraft.world.IInteractionObject;
 import net.minecraft.world.LockCode;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSettings;
-import net.visualillusionsent.utils.DateUtils;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -142,13 +139,6 @@ public abstract class EntityPlayer extends EntityLivingBase {
     protected final GameProfile bF; // CanaryMod: private => protected
     private boolean bG = false;
     public EntityFishHook bE;
-
-    // CanaryMod
-    private boolean sleepIgnored; // Fake Sleeping
-    protected IChatComponent displayName;
-    protected Location canaryRespawn;
-    private long currentSessionStart = ToolBox.getUnixTimestamp(); // CanaryMod: current session tracking.
-    //Darkdiplomat Note: Fields are non-persistant between respawns and world switching. Use the Meta tag for persistance.
 
     public EntityPlayer(World world, GameProfile gameprofile) {
         super(world);
@@ -729,9 +719,6 @@ public abstract class EntityPlayer extends EntityLivingBase {
         this.bg.c = nbttagcompound.f("SelectedItemSlot");
         this.bu = nbttagcompound.n("Sleeping");
         this.b = nbttagcompound.e("SleepTimer");
-        if(nbttagcompound.c("SleepingIgnored")){
-            this.sleepIgnored = nbttagcompound.n("SleepingIgnored");
-        }
         this.bB = nbttagcompound.h("XpP");
         this.bz = nbttagcompound.f("XpLevel");
         this.bA = nbttagcompound.f("XpTotal");
@@ -753,7 +740,7 @@ public abstract class EntityPlayer extends EntityLivingBase {
             net.canarymod.api.world.World world = Canary.getServer().getWorld(fqWorld);
             // CanaryMod added respawn world
             if (world != null) {
-                this.canaryRespawn = new Location(world, c.n(), c.o(), c.p(), 0f, 0f);
+                getCanaryHuman().canaryRespawn = new Location(world, c.n(), c.o(), c.p(), 0f, 0f);
             }
         }
 
@@ -772,16 +759,15 @@ public abstract class EntityPlayer extends EntityLivingBase {
         nbttagcompound.a("SelectedItemSlot", this.bg.c);
         nbttagcompound.a("Sleeping", this.bu);
         nbttagcompound.a("SleepTimer", (short)this.b);
-        nbttagcompound.a("SleepingIgnored", this.sleepIgnored);
         nbttagcompound.a("XpP", this.bB);
         nbttagcompound.a("XpLevel", this.bz);
         nbttagcompound.a("XpTotal", this.bA);
         nbttagcompound.a("XpSeed", this.f);
         nbttagcompound.a("Score", this.bW());
-        if (this.canaryRespawn != null) {
-            nbttagcompound.a("SpawnX", this.canaryRespawn.getBlockX());
-            nbttagcompound.a("SpawnY", this.canaryRespawn.getBlockY());
-            nbttagcompound.a("SpawnZ", this.canaryRespawn.getBlockZ());
+        if (getCanaryHuman().canaryRespawn != null) {
+            nbttagcompound.a("SpawnX", getCanaryHuman().canaryRespawn.getBlockX());
+            nbttagcompound.a("SpawnY", getCanaryHuman().canaryRespawn.getBlockY());
+            nbttagcompound.a("SpawnZ", getCanaryHuman().canaryRespawn.getBlockZ());
             nbttagcompound.a("SpawnForced", this.d);
             // CanaryMod add world fq name
             nbttagcompound.a("SpawnWorld", getCanaryWorld().getFqName());
@@ -790,8 +776,6 @@ public abstract class EntityPlayer extends EntityLivingBase {
         this.bj.b(nbttagcompound);
         this.by.a(nbttagcompound);
         nbttagcompound.a("EnderItems", (NBTBase)this.a.h());
-        //Make sure meta is saved right
-        saveMeta();
         ItemStack itemstack = this.bg.h();
 
         if (itemstack != null && itemstack.b() != null) {
@@ -1312,14 +1296,14 @@ public abstract class EntityPlayer extends EntityLivingBase {
             this.c = blockpos;
             this.d = spawnWasForced;
             if (updateCanaryLocation) {
-                this.canaryRespawn = new Location(getCanaryWorld(), c.n(), c.o(), c.p(), 0f, 0f);
+                getCanaryHuman().canaryRespawn = new Location(getCanaryWorld(), c.n(), c.o(), c.p(), 0f, 0f);
             }
         }
         else {
             this.c = null;
             this.d = false;
             if (updateCanaryLocation) {
-                this.canaryRespawn = null;
+                getCanaryHuman().canaryRespawn = null;
             }
         }
     }
@@ -1931,34 +1915,6 @@ public abstract class EntityPlayer extends EntityLivingBase {
 
     // End: Inventory getters
 
-    public String getDisplayName() {
-        if(displayName == null && metadata != null) {
-            if(metadata.containsKey("displayName") && !metadata.getString("displayName").isEmpty()) {
-                displayName = IChatComponent.Serializer.a(metadata.getString("displayName"));
-                if (metadata.containsKey("CustomName")){
-                    metadata.remove("CustomName"); // No sense keeping this attached
-                }
-            }
-            else if (metadata.containsKey("CustomName") && !metadata.getString("CustomName").isEmpty()){
-                setDisplayName(metadata.getString("CustomName"));
-            }
-        }
-        return displayName != null ? displayName.e() : null;
-    }
-
-    public void setDisplayName(String name) {
-       this.setDisplayNameComponent(name != null && !name.isEmpty() ? new ChatComponentText(name) : null);
-    }
-
-    public void setDisplayNameComponent(IChatComponent iChatComponent){
-        this.displayName = iChatComponent;
-        String serial = "";
-        if(iChatComponent != null){
-            serial = IChatComponent.Serializer.a(iChatComponent);
-        }
-        metadata.put("displayName", serial);
-    }
-
     /**
      * Returns a respawn location for this player.
      * Null if there is no explicitly set respawn location
@@ -1966,16 +1922,17 @@ public abstract class EntityPlayer extends EntityLivingBase {
      * @return
      */
     public Location getRespawnLocation() {
-        if (canaryRespawn != null) {
-            return this.canaryRespawn;
+        if (getCanaryHuman().canaryRespawn != null) {
+            return getCanaryHuman().canaryRespawn;
         }
         return null;
     }
 
     public boolean isBedObstructed(boolean withForcedSpawn) {
-        if (this.canaryRespawn != null) {
-            return EntityPlayer.a(((CanaryWorld)canaryRespawn.getWorld()).getHandle(),
-                    new BlockPos(canaryRespawn.getBlockX(), canaryRespawn.getBlockY(), canaryRespawn.getBlockZ()),
+        if (getCanaryHuman().canaryRespawn != null) {
+            Location respawn = getCanaryHuman().canaryRespawn;
+            return EntityPlayer.a(((CanaryWorld)respawn.getWorld()).getHandle(),
+                                  new BlockPos(respawn.getBlockX(), respawn.getBlockY(), respawn.getBlockZ()),
                     withForcedSpawn) == null;
         }
         else {
@@ -1986,28 +1943,11 @@ public abstract class EntityPlayer extends EntityLivingBase {
     public void setRespawnLocation(Location l) {
         if (l == null) {
             c = null;
-            canaryRespawn = null;
+            getCanaryHuman().canaryRespawn = null;
             return;
         }
         c = new BlockPos(l.getBlockX(), l.getBlockY(), l.getBlockZ());
-        canaryRespawn = l;
-    }
-
-    public String getFirstJoined() {
-        return metadata.getString("FirstJoin");
-    }
-
-    public long getTimePlayed() {
-        return metadata.getLong("TimePlayed") + (ToolBox.getUnixTimestamp() - currentSessionStart);
-    }
-
-    public String getPreviousIP() {
-        return metadata.getString("PreviousIP");
-    }
-
-    public void saveMeta() {
-        metadata.put("TimePlayed", metadata.getLong("TimePlayed") + (ToolBox.getUnixTimestamp() - currentSessionStart));
-        currentSessionStart = ToolBox.getUnixTimestamp(); // When saving, reset the start time so there isnt a duplicate addition of time stored
+        getCanaryHuman().canaryRespawn = l;
     }
 
     public CanaryHuman getCanaryHuman() {
@@ -2035,28 +1975,5 @@ public abstract class EntityPlayer extends EntityLivingBase {
             };
         }
         return (CanaryHuman)this.entity;
-    }
-
-    public void initializeNewMeta() {
-        if (metadata == null) {
-            metadata = new CanaryCompoundTag();
-            metadata.put("FirstJoin", DateUtils.longToDateTime(System.currentTimeMillis()));
-            metadata.put("LastJoin", DateUtils.longToDateTime(System.currentTimeMillis()));
-            metadata.put("TimePlayed", 1L); // Initialize to 1
-        }
-    }
-
-    /**
-     * Gets if sleeping is ignored
-     */
-    public boolean isSleepIgnored(){
-        return this.sleepIgnored;
-    }
-
-    /**
-     * Sets if sleeping is ignored
-     */
-    public void setSleepIgnored(boolean ignored){
-        this.sleepIgnored = ignored;
     }
 }

@@ -129,10 +129,6 @@ public class EntityAITasks {
         return (entityaitasks_entityaitaskentry.a.j() & entityaitasks_entityaitaskentry1.a.j()) == 0;
     }
 
-    public CanaryAIManager getAIManager() {
-        return this.manager;
-    }
-
     public class EntityAITaskEntry { // CanaryMod: protected>>public
 
         public EntityAIBase a;
@@ -143,4 +139,15 @@ public class EntityAITasks {
             this.a = p_i1627_3_;
         }
     }
+
+    // CanaryMod
+    public CanaryAIManager getAIManager() {
+        return this.manager;
+    }
+
+    public void clear() {
+        this.b.clear();
+        this.c.clear();
+    }
+
 }

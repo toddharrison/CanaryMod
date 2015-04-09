@@ -4,7 +4,6 @@ import net.canarymod.Canary;
 import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.api.world.blocks.Block;
 import net.canarymod.api.world.blocks.BlockType;
-import net.canarymod.api.world.blocks.CanaryBlock;
 import net.canarymod.api.world.position.BlockPosition;
 import net.canarymod.api.world.position.Position;
 import net.minecraft.network.play.server.S23PacketBlockChange;
@@ -16,6 +15,7 @@ import net.minecraft.util.BlockPos;
  * @author Jason (darkdiplomat)
  */
 public class CanaryBlockChangePacket extends CanaryPacket implements BlockChangePacket {
+    // TODO: This whole class needs updated properly
 
     public CanaryBlockChangePacket(S23PacketBlockChange packet) {
         super(packet);
@@ -109,7 +109,7 @@ public class CanaryBlockChangePacket extends CanaryPacket implements BlockChange
 
     @Override
     public Block getBlock() {
-        return new CanaryBlock((short)getTypeId(), (short)getData(), getX(), getY(), getZ(), Canary.getServer().getDefaultWorld());
+        return null; //new CanaryBlock((short)getTypeId(), (short)getData(), getX(), getY(), getZ(), Canary.getServer().getDefaultWorld());
     }
 
     @Override

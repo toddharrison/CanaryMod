@@ -28,6 +28,7 @@ import java.util.UUID;
 public abstract class CanaryEntity implements Entity {
 
     protected net.minecraft.entity.Entity entity;
+    protected CanaryCompoundTag metadata = new CanaryCompoundTag();
 
     public CanaryEntity(net.minecraft.entity.Entity entity) {
         this.entity = entity;
@@ -406,7 +407,7 @@ public abstract class CanaryEntity implements Entity {
 
     @Override
     public CompoundTag getMetaData() {
-        return entity.getMetaData();
+        return metadata;
     }
 
     @Override
@@ -453,7 +454,7 @@ public abstract class CanaryEntity implements Entity {
     }
 
     @Override
-    public boolean showingDisplayName() { // TODO: checkthat this is actually right
+    public boolean showingDisplayName() {
         return getHandle().aM();
     }
 
@@ -532,6 +533,7 @@ public abstract class CanaryEntity implements Entity {
      */
     public NBTTagCompound writeCanaryNBT(NBTTagCompound nbttagcompound) {
         nbttagcompound.a("LevelName", getWorld().getName()); // CanaryMod add level name
+        nbttagcompound.a("Canary", metadata.getHandle());
         return nbttagcompound;
     }
 
@@ -539,6 +541,15 @@ public abstract class CanaryEntity implements Entity {
      * Reads Canary added NBT tags (Not inside the Canary meta tag)
      */
     public void readCanaryNBT(NBTTagCompound nbttagcompound) {
+        if (nbttagcompound.c("Canary")) {
+            this.metadata = new CanaryCompoundTag(nbttagcompound.m("Canary"));
+        }
+        else {
+            initializeMetaData();
+        }
+    }
+
+    public void initializeMetaData() {
     }
 
     @Override

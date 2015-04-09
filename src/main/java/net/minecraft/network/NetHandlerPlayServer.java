@@ -713,7 +713,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, IUpdatePlaye
 
     public void a(IChatComponent ichatcomponent) {
         c.info(this.b.d_() + " lost connection: " + ichatcomponent.e());
-        this.b.storeLastJoin(lastJoin); // Respawning could push this around, so save at a true disconnect
+        this.b.getPlayer().getMetaData().put("LastJoin", lastJoin); // Respawning could push this around, so save at a true disconnect
         this.d.aF();
         ChatComponentTranslation chatcomponenttranslation = new ChatComponentTranslation("multiplayer.player.left", new Object[]{this.b.e_()});
         chatcomponenttranslation.b().a(EnumChatFormatting.YELLOW);

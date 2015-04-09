@@ -234,7 +234,6 @@ public abstract class ServerConfigurationManager {
 
         // CanaryMod: Send Message of the Day
         Canary.motd().sendMOTD(entityplayermp.getPlayer());
-        entityplayermp.getDisplayName(); // initialize display name
         //
     }
 
@@ -541,11 +540,8 @@ public abstract class ServerConfigurationManager {
         // CanaryMod: Start: Meta Initialize
         EntityPlayerMP toRet = new EntityPlayerMP(this.j, this.j.getWorld(worldName, 0), gameprofile, (ItemInWorldManager)object);
         // Making sure some stuff is there before attempting to read it (if the player has no nbt, then the usual route is skipped)
-        if (playertag != null && playertag.c("Canary")) {
-            toRet.setMetaData(new CanaryCompoundTag(playertag.m("Canary")));
-        }
-        else {
-            toRet.initializeNewMeta();
+        if (playertag == null || !playertag.c("Canary")) {
+            toRet.getPlayer().initializeMetaData();
         }
         return toRet;
         //
@@ -623,8 +619,6 @@ public abstract class ServerConfigurationManager {
         newPlayer.d(entityplayermp.F());
         newPlayer.o(entityplayermp);
 
-        // CanaryMod: metadata persistance
-        entityplayermp.saveMeta();
         short currentHealth = (short)entityplayermp.bm();
         // make sure player won't come out dead but also don't gift him extra health
         if (currentHealth > 0) {
@@ -633,8 +627,6 @@ public abstract class ServerConfigurationManager {
             entityplayermp.b(nbtdata); // Save old data from old player
             newPlayer.a(nbtdata); // Apply old data to new player
         }
-
-        newPlayer.setMetaData(entityplayermp.getMetaData());
         //
 
         this.a(newPlayer, entityplayermp, targetWorld); // GameMode changing

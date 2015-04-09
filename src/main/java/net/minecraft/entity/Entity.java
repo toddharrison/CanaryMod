@@ -6,8 +6,6 @@ import net.canarymod.api.entity.CanaryEntity;
 import net.canarymod.api.entity.EntityType;
 import net.canarymod.api.entity.living.LivingBase;
 import net.canarymod.api.entity.vehicle.Vehicle;
-import net.canarymod.api.nbt.CanaryCompoundTag;
-import net.canarymod.api.nbt.CompoundTag;
 import net.canarymod.api.world.CanaryWorld;
 import net.canarymod.api.world.position.Location;
 import net.canarymod.api.world.position.Vector3D;
@@ -142,7 +140,6 @@ public abstract class Entity implements ICommandSender {
 
     // CanaryMod
     protected CanaryEntity entity;
-    protected CompoundTag metadata = null;
     //
 
     public int F() {
@@ -1153,12 +1150,6 @@ public abstract class Entity implements ICommandSender {
             nbttagcompound.a("UUIDMost", this.aJ().getMostSignificantBits());
             nbttagcompound.a("UUIDLeast", this.aJ().getLeastSignificantBits());
 
-            this.b(nbttagcompound); //  this method should remain before metadata saving. EntityPlayer has an update to add before saving is to be completed
-            getCanaryEntity().writeCanaryNBT(nbttagcompound); // CanaryMod: Write out our added NBT (that isn't part of the Canary meta)
-            // CanaryMod: allow the saving of persistent metadata
-            if (metadata != null) {
-                nbttagcompound.a("Canary", ((CanaryCompoundTag) metadata).getHandle());
-            } // CanaryMod end
             if (this.aL() != null && this.aL().length() > 0) {
                 nbttagcompound.a("CustomName", this.aL());
                 nbttagcompound.a("CustomNameVisible", this.aM());
@@ -1177,6 +1168,9 @@ public abstract class Entity implements ICommandSender {
                     nbttagcompound.a("Riding", (NBTBase) nbttagcompound1);
                 }
             }
+            // CanaryMod: Write out our added NBT data
+            getCanaryEntity().writeCanaryNBT(nbttagcompound);
+            //
         } catch (Throwable throwable) {
             CrashReport crashreport = CrashReport.a(throwable, "Saving entity NBT");
             CrashReportCategory crashreportcategory = crashreport.a("Entity being saved");
@@ -1227,10 +1221,6 @@ public abstract class Entity implements ICommandSender {
 
             this.b(this.s, this.t, this.u);
             this.b(this.y, this.z);
-            getCanaryEntity().readCanaryNBT(nbttagcompound); // CanaryMod: Read our added NBT Tags (not part of meta)
-            // CanaryMod: allow the saving of persistent metadata
-            this.metadata = nbttagcompound.c("Canary") ? new CanaryCompoundTag(nbttagcompound.m("Canary")) : new CanaryCompoundTag();
-            // CanaryMod: END
             if (nbttagcompound.b("CustomName", 8) && nbttagcompound.j("CustomName").length() > 0) {
                 this.a(nbttagcompound.j("CustomName"));
             }
@@ -1242,6 +1232,9 @@ public abstract class Entity implements ICommandSender {
             if (this.af()) {
                 this.b(this.s, this.t, this.u);
             }
+            // CanaryMod: Read our added NBT Tags (not part of meta)
+            getCanaryEntity().readCanaryNBT(nbttagcompound);
+            //
         } catch (Throwable throwable) {
             CrashReport crashreport = CrashReport.a(throwable, "Loading entity NBT");
             CrashReportCategory crashreportcategory = crashreport.a("Entity being loaded");
@@ -2017,10 +2010,6 @@ public abstract class Entity implements ICommandSender {
             z = (double) MathHelper.a((int) z, -29999872, 29999872);
         }
         return new Location(worldserverTo.getCanaryWorld(), x, y, z, rotY, rotX);
-    }
-
-    public CompoundTag getMetaData() {
-        return this.metadata;
     }
 
     protected boolean hasMovedOneBlockOrMore() {

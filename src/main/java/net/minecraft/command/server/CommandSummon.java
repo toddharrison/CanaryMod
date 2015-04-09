@@ -13,6 +13,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Blocks;
 import net.minecraft.nbt.JsonToNBT;
 import net.minecraft.nbt.NBTException;
 import net.minecraft.nbt.NBTTagCompound;
@@ -47,7 +48,7 @@ public class CommandSummon extends CommandBase {
             Vec3 vec3 = icommandsender.d();
 
             // CanaryMod: Inject some LineTracer
-            CanaryBlock targetBlock = new CanaryBlock(BlockType.Air, 0, 0, 0, icommandsender.e().getCanaryWorld());
+            CanaryBlock targetBlock = new CanaryBlock(Blocks.a.P());
             if (icommandsender instanceof EntityPlayerMP) {
                 BlockIterator iterator = new BlockIterator(((EntityPlayerMP)icommandsender).getPlayer());
                 while (iterator.hasNext() && targetBlock.getType() == BlockType.Air) {

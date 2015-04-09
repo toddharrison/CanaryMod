@@ -228,7 +228,7 @@ public class WorldServer extends World implements IThreadListener {
                     ++i0;
                 }
                 // CanaryMod: sleeping ignored check added
-                else if (entityplayer.bI() || entityplayer.isSleepIgnored()) {
+                else if (entityplayer.bI() || entityplayer.getCanaryHuman().isSleepingIgnored()) {
                     ++i1;
                 }
             }
@@ -286,7 +286,8 @@ public class WorldServer extends World implements IThreadListener {
                 if (entityplayer.ce()) {
                     deepSleepersFound = true;
                 }
-            } while (entityplayer.v() || entityplayer.bI() || entityplayer.isSleepIgnored());
+            }
+            while (entityplayer.v() || entityplayer.bI() || entityplayer.getCanaryHuman().isSleepingIgnored());
             //
 
             return false;

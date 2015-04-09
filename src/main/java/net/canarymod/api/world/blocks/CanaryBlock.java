@@ -54,40 +54,6 @@ public class CanaryBlock implements Block {
         return block;
     }
 
-    @Deprecated
-    public CanaryBlock(short typeId, short data, int x, int y, int z, World world) {
-        this(BlockType.fromIdAndData(typeId, data), x, y, z, world);
-    }
-
-    @Deprecated
-    public CanaryBlock(net.minecraft.block.Block nmsBlock, short data, int x, int y, int z, World world) {
-        this.position = new BlockPosition(x, y, z);
-        this.world = world;
-        this.type = BlockType.fromStringAndData(machineNameOfBlock(nmsBlock), data);
-        this.data = data;
-    }
-
-    @Deprecated
-    public CanaryBlock(BlockType type, int x, int y, int z, World world) {
-        this.position = new BlockPosition(x, y, z);
-        this.world = world;
-        this.type = type;
-        this.data = type.getData();
-    }
-
-    @Deprecated
-    public CanaryBlock(BlockType type, int data, int x, int y, int z, World world) {
-        this.position = new BlockPosition(x, y, z);
-        this.world = world;
-        this.type = type;
-        this.data = (short)data;
-    }
-
-    @Deprecated
-    public CanaryBlock(BlockType type, int data, Position position, World world) {
-        this(type, data, position.getBlockX(), position.getBlockY(), position.getBlockZ(), world);
-    }
-
     private CanaryBlock(IBlockState state, BlockPos blockpos, net.minecraft.world.World world) {
         this(state, new BlockPosition(blockpos), world.getCanaryWorld(), (byte)0);
     }

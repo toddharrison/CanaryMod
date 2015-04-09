@@ -59,6 +59,7 @@ import net.canarymod.hook.system.PermissionCheckHook;
 import net.canarymod.permissionsystem.PermissionProvider;
 import net.canarymod.user.Group;
 import net.canarymod.user.UserAndGroupsProvider;
+import net.canarymod.util.NMSToolBox;
 import net.canarymod.warp.Warp;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -72,15 +73,20 @@ import net.minecraft.inventory.ContainerHopper;
 import net.minecraft.inventory.ContainerHorseInventory;
 import net.minecraft.inventory.ContainerRepair;
 import net.minecraft.inventory.ContainerWorkbench;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.S02PacketChat;
 import net.minecraft.network.play.server.S05PacketSpawnPosition;
+import net.minecraft.network.play.server.S0CPacketSpawnPlayer;
+import net.minecraft.network.play.server.S13PacketDestroyEntities;
 import net.minecraft.network.play.server.S2BPacketChangeGameState;
 import net.minecraft.network.play.server.S38PacketPlayerListItem;
 import net.minecraft.network.play.server.S39PacketPlayerAbilities;
 import net.minecraft.network.play.server.S45PacketTitle;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.world.WorldSettings;
+import net.visualillusionsent.utils.DateUtils;
 import net.visualillusionsent.utils.StringUtils;
 
 import java.util.HashMap;
@@ -105,6 +111,9 @@ public class CanaryPlayer extends CanaryHuman implements Player {
     private boolean muted;
     private String[] allowedIPs;
     private HashMap<String, String> defaultChatpattern = new HashMap<String, String>();
+
+    private long currentSessionStart = ToolBox.getUnixTimestamp();
+
     //Global chat format setting
     private static String chatFormat = Configuration.getServerConfig().getChatFormat().replace("&", ChatFormat.MARKER.toString());
 
@@ -1025,7 +1034,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
      */
     @Override
     public void updateCapabilities() {
-        this.sendRawPacket(new S39PacketPlayerAbilities(((CanaryHumanCapabilities) getCapabilities()).getHandle()));
+        this.sendRawPacket(new S39PacketPlayerAbilities(((CanaryHumanCapabilities)getCapabilities()).getHandle()));
     }
 
     /**
@@ -1111,7 +1120,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
 
     @Override
     public void openSignEditWindow(Sign sign) {
-        getHandle().a(((CanarySign) sign).getTileEntity());
+        getHandle().a(((CanarySign)sign).getTileEntity());
     }
 
     @Override
@@ -1123,17 +1132,19 @@ public class CanaryPlayer extends CanaryHuman implements Player {
 
     @Override
     public String getFirstJoined() {
-        return getHandle().getFirstJoined();
+        return metadata.getString("FirstJoin");
     }
 
     @Override
     public String getLastJoined() {
-        return getHandle().getLastJoined();
+        return metadata.getString("LastJoin");
     }
 
     @Override
     public long getTimePlayed() {
-        return getHandle().getTimePlayed();
+        metadata.getString("PreviousIP");
+
+        return metadata.getLong("TimePlayed") + (ToolBox.getUnixTimestamp() - currentSessionStart);
     }
 
     @Override
@@ -1143,7 +1154,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
 
     @Override
     public void sendChatComponent(ChatComponent chatComponent) {
-        this.sendRawPacket(new S02PacketChat(((CanaryChatComponent) chatComponent).getNative()));
+        this.sendRawPacket(new S02PacketChat(((CanaryChatComponent)chatComponent).getNative()));
     }
 
     public void resetNativeEntityReference(EntityPlayerMP entityPlayerMP) {
@@ -1216,18 +1227,8 @@ public class CanaryPlayer extends CanaryHuman implements Player {
     }
 
     @Override
-    public ChatComponent getDisplayNameComponent() {
-        return getHandle().E() == null ? null : getHandle().E().getWrapper();
-    }
-
-    @Override
-    public void setDisplayNameComponent(ChatComponent chatComponent){
-        getHandle().setDisplayNameComponent(chatComponent != null ? ((CanaryChatComponent) chatComponent).getNative() : null);
-    }
-
-    @Override
     public void setStat(Stat stat, int value) {
-        getHandle().A().a(getHandle(), ((CanaryStat) stat).getHandle(), value);
+        getHandle().A().a(getHandle(), ((CanaryStat)stat).getHandle(), value);
     }
 
     @Override
@@ -1238,7 +1239,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
     @Override
     public void increaseStat(Stat stat, int value) {
         if (value < 0) return;
-        getHandle().a(((CanaryStat) stat).getHandle(), value);
+        getHandle().a(((CanaryStat)stat).getHandle(), value);
     }
 
     @Override
@@ -1291,7 +1292,7 @@ public class CanaryPlayer extends CanaryHuman implements Player {
                 removeAchievement(child);
             }
         }
-        getHandle().A().a(getHandle(), ((CanaryAchievement) achievement).getHandle(), 0);
+        getHandle().A().a(getHandle(), ((CanaryAchievement)achievement).getHandle(), 0);
     }
 
     @Override
@@ -1334,6 +1335,53 @@ public class CanaryPlayer extends CanaryHuman implements Player {
             }
             else {
                 sendRawPacket(new S45PacketTitle(S45PacketTitle.Type.TITLE, titleNative));
+            }
+        }
+    }
+
+    /**
+     * Writes Canary added NBT tags (Not inside the Canary meta tag)
+     */
+    public NBTTagCompound writeCanaryNBT(NBTTagCompound nbttagcompound) {
+        metadata.put("TimePlayed", metadata.getLong("TimePlayed") + (ToolBox.getUnixTimestamp() - currentSessionStart));
+        currentSessionStart = ToolBox.getUnixTimestamp(); // When saving, reset the start time so there isnt a duplicate addition of time stored
+        metadata.put("PreviousIP", getIP());
+
+        return super.writeCanaryNBT(nbttagcompound);
+    }
+
+    /**
+     * Reads Canary added NBT tags (Not inside the Canary meta tag)
+     */
+    public void readCanaryNBT(NBTTagCompound nbttagcompound) {
+        super.readCanaryNBT(nbttagcompound);
+    }
+
+    @Override
+    public void initializeMetaData() {
+        metadata.put("FirstJoin", DateUtils.longToDateTime(System.currentTimeMillis()));
+        metadata.put("LastJoin", DateUtils.longToDateTime(System.currentTimeMillis()));
+        metadata.put("TimePlayed", 1L); // Initialize to 1
+    }
+
+    public void setDisplayNameComponent(ChatComponent displayName) {
+        super.setDisplayNameComponent(displayName);
+
+        if (getDisplayName() != null && !getDisplayName().isEmpty()) {
+            IChatComponent iChatComponent = ((CanaryChatComponent)displayName).getNative();
+            MinecraftServer.M().an().a(new S38PacketPlayerListItem(S38PacketPlayerListItem.Action.REMOVE_PLAYER, getHandle()));
+            for (Player player : Canary.getServer().getPlayerList()) {
+                if (!player.equals(this)) {
+                    player.sendPacket(new CanaryPacket(new S13PacketDestroyEntities(getHandle().F())));
+                }
+            }
+            PlayerListData data = getPlayerListData(PlayerListAction.ADD_PLAYER);
+            data.setProfile(NMSToolBox.spoofNameAndTexture(getHandle().cc(), iChatComponent.e()));
+            MinecraftServer.M().an().a(new S38PacketPlayerListItem(PlayerListAction.ADD_PLAYER, data));
+            for (Player player : Canary.getServer().getPlayerList()) {
+                if (!player.equals(this)) {
+                    player.sendPacket(new CanaryPacket(new S0CPacketSpawnPlayer(getHandle())));
+                }
             }
         }
     }

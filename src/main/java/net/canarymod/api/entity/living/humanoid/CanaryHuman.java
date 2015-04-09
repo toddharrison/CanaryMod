@@ -1,12 +1,17 @@
 package net.canarymod.api.entity.living.humanoid;
 
+import net.canarymod.Canary;
+import net.canarymod.api.chat.CanaryChatComponent;
+import net.canarymod.api.chat.ChatComponent;
 import net.canarymod.api.entity.EntityItem;
-import net.canarymod.api.entity.EntityType;
 import net.canarymod.api.entity.living.CanaryLivingBase;
 import net.canarymod.api.inventory.Item;
 import net.canarymod.api.inventory.PlayerInventory;
+import net.canarymod.api.world.position.Location;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.IChatComponent;
 
 /**
  * Human implementation
@@ -15,6 +20,10 @@ import net.minecraft.item.EnumAction;
  */
 public abstract class CanaryHuman extends CanaryLivingBase implements Human {
     protected String prefix = null;
+    private boolean sleepIgnored; // Fake Sleeping
+    protected ChatComponent displayName;
+
+    public Location canaryRespawn; // Temporary until respawning is reworked properly
 
     public CanaryHuman(EntityPlayer entity) {
         super(entity);
@@ -27,13 +36,12 @@ public abstract class CanaryHuman extends CanaryLivingBase implements Human {
 
     @Override
     public String getDisplayName() {
-        String displayName = getHandle().getDisplayName();
-        return displayName != null ? displayName : getName();
+        return displayName != null ? displayName.getFullText() : null;
     }
 
     @Override
     public void setDisplayName(String name) {
-        getHandle().setDisplayName(name);
+        this.setDisplayNameComponent(name != null && !name.isEmpty() ? Canary.factory().getChatComponentFactory().newChatComponent(name) : null);
     }
 
     @Override
@@ -128,12 +136,12 @@ public abstract class CanaryHuman extends CanaryLivingBase implements Human {
 
     @Override
     public boolean isSleepingIgnored() {
-        return getHandle().isSleepIgnored();
+        return sleepIgnored;
     }
 
     @Override
     public void setSleepingIgnored(boolean ignored) {
-        getHandle().setSleepIgnored(ignored);
+        this.sleepIgnored = ignored;
     }
 
     @Override
@@ -144,6 +152,37 @@ public abstract class CanaryHuman extends CanaryLivingBase implements Human {
     @Override
     public Item getItemInUse(){
         return getHandle().g != null ? getHandle().g.getCanaryItem() : null;
+    }
+
+    public ChatComponent getDisplayNameComponent() {
+        return this.displayName;
+    }
+
+    public void setDisplayNameComponent(ChatComponent displayName) {
+        this.displayName = displayName;
+        String serial = "";
+        if (displayName != null) {
+            serial = IChatComponent.Serializer.a(((CanaryChatComponent)displayName).getNative());
+        }
+        metadata.put("displayName", serial);
+    }
+
+    /**
+     * Writes Canary added NBT tags (Not inside the Canary meta tag)
+     */
+    public NBTTagCompound writeCanaryNBT(NBTTagCompound nbttagcompound) {
+        nbttagcompound.a("SleepingIgnored", this.sleepIgnored);
+        return super.writeCanaryNBT(nbttagcompound);
+    }
+
+    /**
+     * Reads Canary added NBT tags (Not inside the Canary meta tag)
+     */
+    public void readCanaryNBT(NBTTagCompound nbttagcompound) {
+        if (nbttagcompound.c("SleepingIgnored")) {
+            this.sleepIgnored = nbttagcompound.n("SleepingIgnored");
+        }
+        super.readCanaryNBT(nbttagcompound);
     }
 
     @Override
