@@ -82,14 +82,18 @@
         <url>https://github.com/CanaryModTeam/CanaryMod</url>
         <developerConnection>scm:git:git@github.com:CanaryModTeam/CanaryMod.git</developerConnection>
     </scm>
+    -->
+
     <repositories>
         <repository>
-            <id>vi-repo</id>
-            <name>Visual Illusions Repository</name>
-            <url>http://repo.visualillusionsent.net/repository/public/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>bintray-toddharrison-CanaryMod</id>
+            <name>bintray</name>
+            <url>http://dl.bintray.com/toddharrison/CanaryMod</url>
         </repository>
     </repositories>
-    -->
 
     <distributionManagement>
         <repository>
