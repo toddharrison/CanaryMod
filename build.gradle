@@ -83,7 +83,7 @@ repositories {
 }
 
 dependencies {
-    compile 'net.canarymod:CanaryLib:1.2.1.1'
+    compile 'net.canarymod:CanaryLib:1.2.1.+'
     compile 'net.minecraft:server:1.8.0_01-SNAPSHOT'
     compile 'jline:jline:2.11'
 
