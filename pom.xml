@@ -10,7 +10,7 @@
     <groupId>net.canarymod</groupId>
     <artifactId>CanaryMod</artifactId>
     <packaging>jar</packaging>
-    <version>1.8.0-1.2.1-SNAPSHOT</version>
+    <version>1.8.0-1.2.1</version>
 
     <name>CanaryMod</name>
     <!--
@@ -90,6 +90,13 @@
         </repository>
     </repositories>
     -->
+
+    <distributionManagement>
+        <repository>
+            <id>bintray-repo-CanaryMod</id>
+            <url>https://api.bintray.com/maven/toddharrison/CanaryMod/CanaryMod</url>
+        </repository>
+    </distributionManagement>
 
     <dependencies>
         <dependency>
