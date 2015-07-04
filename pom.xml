@@ -6,20 +6,26 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <groupId>net.canarymod</groupId>
     <artifactId>CanaryMod</artifactId>
     <packaging>jar</packaging>
     <version>1.8.0-1.2.1-SNAPSHOT</version>
+
     <name>CanaryMod</name>
+    <!--
     <url>http://www.canarymod.net</url>
     <inceptionYear>2012</inceptionYear>
+    -->
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <minecraft.server.version>1.8.0_01-SNAPSHOT</minecraft.server.version>
-        <api.version>1.2.1-SNAPSHOT</api.version>
+        <api.version>1.2.1</api.version>
         <build.number/>
         <maven.build.timestamp.format>dd MMMM yyyy HH:mm z</maven.build.timestamp.format>
     </properties>
+
     <licenses>
         <license>
             <name>BSD 3-Clause License</name>
@@ -63,6 +69,14 @@
             </comments>
         </license>
     </licenses>
+
+    <scm>
+        <connection>scm:git:git://github.com/toddharrison/CanaryMod.git</connection>
+        <url>https://github.com/toddharrison/CanaryMod</url>
+        <developerConnection>scm:git:git@github.com:toddharrison/CanaryMod.git</developerConnection>
+    </scm>
+
+    <!--
     <scm>
         <connection>scm:git:git://github.com/CanaryModTeam/CanaryMod.git</connection>
         <url>https://github.com/CanaryModTeam/CanaryMod</url>
@@ -75,6 +89,8 @@
             <url>http://repo.visualillusionsent.net/repository/public/</url>
         </repository>
     </repositories>
+    -->
+
     <dependencies>
         <dependency>
             <groupId>net.canarymod</groupId>
@@ -98,6 +114,7 @@
             <version>2.11</version>
         </dependency>
     </dependencies>
+
     <build>
         <sourceDirectory>${basedir}/src/main/java/</sourceDirectory>
         <resources>
@@ -214,7 +231,7 @@
     </build>
 
     <profiles>
-        <!-- Add Build number to a Jenkins build -->
+        <!-- Add Build number to a Jenkins build - ->
         <profile>
             <id>jenkins</id>
             <activation>
@@ -226,6 +243,7 @@
                 <build.number>${BUILD_NUMBER}</build.number>
             </properties>
         </profile>
+        -->
         <profile>
             <id>attach-sources-javadoc</id>
             <build>
