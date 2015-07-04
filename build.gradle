@@ -68,6 +68,16 @@ repositories {
     mavenLocal()
 
     maven {
+        url "https://libraries.minecraft.net"
+    }
+    maven {
+        url "http://repo.mcstats.org/content/repositories/releases/"
+    }
+    maven {
+        url "http://repo.mcstats.org/content/repositories/snapshots/"
+    }
+
+    maven {
         url "http://dl.bintray.com/toddharrison/CanaryMod"
     }
 }
