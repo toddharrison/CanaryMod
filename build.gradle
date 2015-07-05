@@ -83,11 +83,16 @@ repositories {
 }
 
 dependencies {
-    compile 'net.canarymod:CanaryLib:1.2.1.+'
+    compile 'net.canarymod:CanaryLib:[1.2.1,1.3)'
     compile 'net.minecraft:server:1.8.0_01-SNAPSHOT'
     compile 'jline:jline:2.11'
 
-    testCompile 'junit:junit:4.+'
+    // Dependency of minecraft server
+    compile 'io.netty:netty-all:4.0.20.Final'
+    compile 'io.netty:netty-common:4.0.20.Final'
+    compile 'trove:trove:1.1-beta-5'
+
+    testCompile 'junit:junit:[4,5)'
 }
 
 shadowJar {
